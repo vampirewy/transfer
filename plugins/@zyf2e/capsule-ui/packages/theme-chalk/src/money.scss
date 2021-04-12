@@ -1,0 +1,46 @@
+@import 'mixins/mixins';
+@import 'common/var';
+
+@include b(money) {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  .el-money-util {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 2em;
+    text-align: center;
+    height: $--input-medium-height;
+    line-height: $--input-medium-height;
+    @include m(medium) {
+      height: $--input-medium-height;
+      line-height: $--input-medium-height;
+    }
+    @include m(small) {
+      height: $--input-small-height;
+      line-height: $--input-small-height;
+    }
+  }
+  &.el-money-unit-outer {
+    padding-right: 2em;
+    box-sizing: border-box;
+  }
+
+  &.el-money-unit-prefix {
+    .el-input__inner {
+      padding-left: 2em;
+    }
+    .el-money-util {
+      left: 0;
+    }
+  }
+  &.el-money-unit-suffix {
+    .el-input__inner {
+      padding-right: 2em;
+    }
+    .el-money-util {
+      right: 0;
+    }
+  }
+}

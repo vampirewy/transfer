@@ -1,0 +1,321 @@
+.flex {
+  display: flex;
+}
+
+.flex,
+.inline-flex {
+  &.column {
+    flex-direction: column;
+  }
+
+  &.align-center,
+  &.center {
+    align-items: center;
+  }
+
+  &.align-start {
+    align-items: flex-start;
+  }
+
+  &.space-between {
+    justify-content: space-between;
+  }
+
+  &.justify-center,
+  &.center {
+    justify-content: center;
+  }
+
+  &.wrap {
+    flex-wrap: wrap;
+  }
+
+  .align-self-end {
+    align-self: flex-end;
+  }
+
+  &.no-shrink {
+    flex-shrink: 0;
+  }
+
+  &.justify-end {
+    justify-content: flex-end;
+  }
+}
+.selectP{
+  width: 205px;
+  height: 40px;
+  background: #FFFFFF;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px 0 15px;
+  cursor: pointer;
+  .selectName{
+    color: #333333;
+    font-size: 14px;
+  }
+  .selectPlaceHolder{
+    color: #999999;
+    font-size: 14px;
+  }
+  .selectIcon{
+    width: 16px;
+    height: 16px;
+  }
+}
+.cancelBtn,.resetBtn{
+  width: 80px;
+  height: 40px;
+  color: white;
+  background: #97A6BD;
+  border-radius: 8px;
+  border: none;
+  &:hover {
+    color: white;
+    border-color: #97A6BD;
+    background-color: #97A6BD;
+  }
+}
+.sureBtn{
+  width: 80px;
+  height: 40px;
+  color: white;
+  background: #4991FD;
+  border-radius: 8px;
+}
+.normalBtn{
+  width: 80px;
+  height: 40px;
+  color: #4991FD;
+  background: white;
+  border: 1px solid #4991FD;
+  border-radius: 8px;
+}
+.btnTransfer {
+  width: 120px;
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid #F4F4F6;
+  font-size: 14px;
+  color: #333333;
+  line-height: 40px;
+  padding: 0;
+  span{
+    img{
+      width: 16px;
+      margin: 12px 10px 11px -2px;
+      vertical-align: top;
+    }
+  }
+}
+.btnAdd,.btnReset,.btnDel{
+  width: 90px;
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid #F4F4F6;
+  font-size: 14px;
+  color: #333333;
+  line-height: 40px;
+  padding: 0;
+  span{
+    img{
+      width: 16px;
+      margin: 12px 10px 11px -2px;
+      vertical-align: top;
+    }
+  }
+}
+// 搜索按钮
+.searchInputFormItem{
+  position: relative;
+  /deep/ .el-input__inner{
+    padding-right: 40px;
+  }
+  .searchBtnImgSpan{
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    width: 36px;
+    height: 36px;
+    line-height: 38px;
+    background: #4991FD;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    &:hover{
+      background: #55AAFF;
+    }
+    .searchBtnImg{
+      width: 16px;
+    }
+  }
+}
+/*表格头部操作栏*/
+.tableTopDoDiv{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: -10px;
+  .divRightTitleDiv{
+    .divRightTitle{
+      font-size: 18px;
+      color: #333333;
+      font-weight: bold;
+      span{
+        color: #4991FD;
+        font-size: 18px;
+        margin-right: 9px;
+      }
+    }
+  }
+}
+// 点 title
+.formSearchTitle{
+  font-size: 18px;
+  color: #333333;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  margin: 20px 0 15px 0;
+  &.setTimeText{
+    font-size: 14px;
+    font-weight: 400;
+    margin-top: 0;
+  }
+  .dianBlue{
+    width: 5px;
+    height: 5px;
+    background: #4991FD;
+    border-radius: 50px;
+    display: inline-block;
+    margin-right: 5px;
+  }
+  .dianLv{
+    width: 5px;
+    height: 5px;
+    background: #31C529;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+  }
+}
+.inputCommon{
+  /deep/ .el-input__inner,/deep/ .el-textarea__inner, /deep/ .el-input.is-disabled .el-input__inner, /deep/ .el-textarea.is-disabled .el-textarea__inner{
+    background-color: #F4F4F6;
+    color: #333333;
+    border: none;
+    resize: none;
+    &::placeholder {
+      color: #666666;
+    }
+  }
+ /deep/ .el-input.is-disabled .el-input__inner, /deep/ .el-textarea.is-disabled .el-textarea__inner{
+   color: #999999;
+ }
+}
+// 侧边选择栏
+.intvTmpl_left{
+  width: 160px;
+  max-height: 685px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #F4F4F6;
+  border-radius: 5px;
+  text-align: center;
+  margin-right: 20px;
+  min-height: 600px;
+  .intvTmpl_left_title{
+    position: absolute;
+    width: 160px;
+    height: 60px;
+    line-height: 60px;
+    background: #4991FD;
+    font-weight: bold;
+    color: #FFFFFF;
+    font-size: 16px;
+    border-radius: 5px;
+  }
+  .intv_menulist{
+    width: 160px;
+    margin-top: 60px;
+    li{
+      padding: 0 10px;
+      font-size: 14px;
+      color: #333333;
+      height: 60px;
+      line-height: 60px;
+      font-weight: normal;
+      cursor: pointer;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      &.active{
+        font-weight: bold;
+        background: white;
+        border-left: 2px solid #4991FD;
+      }
+      &:hover{
+        background-color: #FAFAFD;
+      }
+    }
+  }
+}
+.redToday{
+  color: $--color-today;
+}
+.overToday{
+  color: #E6B058;
+}
+.buttonsSelectOpen {
+  text-align: right;
+  margin-top: 20px;
+  .el-button {
+    width: 80px;
+    height: 40px;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;
+    + .el-button {
+      margin-left: 20px;
+    }
+    &:not(.el-button--primary) {
+      background: #97A6BD;
+      color: #fff;
+    }
+  }
+}
+/*tab*/
+.two-tab {
+  margin-top: 20px;
+  background: #ffffff;
+  padding-bottom: 32px;
+  /deep/ .el-tabs__content {
+    padding: 5px 0 0 0;
+  }
+  /deep/ .el-tabs__item{
+    color: #97A6BD;
+    &.is-active{
+      color: #333333;
+      font-weight: bold;
+      font-size: 16px;
+    }
+  }
+}
+.clientName{
+  color: #4991FD;
+  cursor: pointer;
+}
+// select表格
+.select-user-trigger {
+  .el-input__suffix{
+    right: 15px;
+  }
+  input, i {
+    cursor: pointer;
+    &::placeholder{
+      color: #666666;
+    }
+  }
+}

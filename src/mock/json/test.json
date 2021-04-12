@@ -1,0 +1,46 @@
+{
+  "data": [
+    {
+      "id": "001",
+      "name": "张三",
+      "configMode": 1,
+      "value": 24,
+      "phoneNum": "18601467000",
+      "headUrl": "https://www.mantoufan.com/a/8/201409/14120511913762.jpg"
+    },
+    {
+      "id": "002",
+      "name": "李四",
+      "configMode": 1,
+      "value": 20,
+      "phoneNum": "15852606222",
+      "headUrl": "https://www.mantoufan.com/a/8/201409/14120511921076.jpg"
+    },
+    {
+      "id": "003",
+      "name": "王五",
+      "configMode": 1,
+      "value": 32,
+      "phoneNum": "17775272333",
+      "headUrl": "https://www.mantoufan.com/a/8/201409/14120511924099.jpg"
+    },
+    {
+      "id": "004",
+      "name": "赵六",
+      "configMode": 1,
+      "value": 35,
+      "phoneNum": "13083262666",
+      "headUrl": "https://www.mantoufan.com/a/8/201409/14120511921182.jpg"
+    },
+    {
+      "id": "005",
+      "name": "小美",
+      "configMode": 0,
+      "value": 18,
+      "phoneNum": "17775272333",
+      "headUrl": "https://www.mantoufan.com/a/8/201409/14120511927628.jpg"
+    }
+  ],
+  "retMsg": "测试接口成功！",
+  "success": true
+}

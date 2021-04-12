@@ -1,0 +1,40 @@
+// See https://github.com/ice-lab/iceworks/blob/master/extensions/iceworks-app/docs/debug.md 
+// for the documentation about the Iceworks debug 
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "dev",
+      "problemMatcher": [],
+      "label": "npm: dev",
+      "detail": "cross-env target=manager node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server --host 0.0.0.0 --inline --config build/webpack.dev.conf.js"
+    },
+    {
+      "label": "Iceworks Start Background Tasks",
+      "command": "npm",
+      "args": [
+        "run",
+        "start"
+      ],
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "ERROR in .*"
+        },
+        "background": {
+          "beginsPattern": ".*(@alib/build-scripts|ice\\.js|rax\\.js).*",
+          "endsPattern": ".*http://localhost:3333.*"
+        }
+      }
+    },
+    {
+      "label": "Iceworks Stop Background Tasks",
+      "type": "process",
+      "command": [
+        "${command:workbench.action.tasks.terminate}",
+        "${command:workbench.action.acceptSelectedQuickOpenItem}"
+      ]
+    }
+  ]
+}

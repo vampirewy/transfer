@@ -1,0 +1,38 @@
+.el-date-editor {
+  .el-input__inner {
+    padding-left: 12px;
+  }
+  .el-input__prefix {
+    .el-input__icon {
+      display: none;
+    }
+  }
+  .el-input__suffix {
+    .el-input__icon {
+      font-family: 'element-icons' !important;
+      speak: none;
+      font-style: normal;
+      font-weight: normal;
+      font-variant: normal;
+      text-transform: none;
+      line-height: 1;
+      vertical-align: baseline;
+      display: inline-block;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    .el-input__icon:before {
+      content: '\E78E';
+    }
+    .el-input__icon:after {
+      content: '';
+      height: 100%;
+      width: 0;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .el-input__validateIcon {
+      display: none;
+    }
+  }
+}

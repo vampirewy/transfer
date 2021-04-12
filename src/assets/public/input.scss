@@ -1,0 +1,17 @@
+.el-input.is-disabled .el-input__inner {
+  cursor: default;
+}
+
+.el-textarea.is-disabled .el-textarea__inner {
+  cursor: default;
+}
+
+.el-select .el-input.is-disabled .el-input__inner {
+  cursor: default;
+}
+input:-webkit-autofill {
+  box-shadow: 0 0 0px 1000px #F4F4F6 inset !important;
+}
+input:-webkit-autofill:focus {
+  box-shadow: 0 0 0px 1000px #F4F4F6 inset !important;
+}

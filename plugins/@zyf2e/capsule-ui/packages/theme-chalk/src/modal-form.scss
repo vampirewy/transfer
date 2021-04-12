@@ -1,0 +1,113 @@
+@import 'mixins/mixins';
+@import 'common/var';
+
+@include b(modal-form) {
+  .el-modal-form__footer {
+    width: 100%;
+
+    &.is-left {
+      text-align: left;
+    }
+
+    &.is-center {
+      text-align: center;
+    }
+
+    &.is-right {
+      text-align: right;
+    }
+  }
+}
+
+@include b(modal-form-warp) {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+
+  &.is-inline {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  @include e(subtitle) {
+    width: 100%;
+    line-height: 50px;
+    color: #333;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  @include e(lay) {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+
+    &.is-inline {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+  &.is-search {
+    .el-form-item {
+      width: 50%;
+    }
+  }
+}
+
+@include b(modal-form-item) {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+
+  @include e(right) {
+    margin-right: 30px;
+  }
+
+  @include e(unit) {
+    width: 100% !important;
+  }
+
+  @include e(lay) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  @include e(divide) {
+    font-size: 15px;
+    color: #666;
+    display: inline-block;
+    padding: 0 6px;
+  }
+
+  @include m(range) {
+    width: 365px !important;
+    border: 1px solid #d7dde4;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  @include e(specs) {
+    margin-left: 10px;
+    color: #666;
+    font-size: 14px;
+    display: inline-block;
+  }
+}
+
+@include b(modal-form-search) {
+  color: #666;
+  font-size: 15px;
+
+  @include e(img) {
+    width: 100px;
+    height: 100px;
+    display: inline-block;
+  }
+}

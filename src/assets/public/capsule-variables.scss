@@ -1,0 +1,41 @@
+// 本次 ui 规范
+$gray-1: rgba(0, 0, 0, 0.85); // 标题
+$gray-2: rgba(0, 0, 0, 0.65); // 正文
+$gray-3: rgba(0, 0, 0, 0.45); // 次要文字
+$gray-4: rgba(0, 0, 0, 0.25); // 禁用/未输入
+$gray-5: rgba(0, 0, 0, 0.15); // 描边
+$gray-6: rgba(0, 0, 0, 0.06); // 分隔线
+$gray-7: rgba(0, 0, 0, 0.04); // 表头/块头边线
+$gray-8: #f7f8fa; // 背景颜色
+
+$--color-primary: #4991fd;
+$--color-warning: #fea640;
+$--color-danger: #f94242;
+$--color-success: #93d61e;
+$--color-price: #ff5500;
+$--color-today: #FE2B2A;
+
+// Padding
+$padding-base: 4px;
+$padding-xs: $padding-base * 2;
+$padding-sm: $padding-base * 3;
+$padding-md: $padding-base * 4;
+$padding-lg: $padding-base * 6;
+$padding-xl: $padding-base * 8;
+
+// Font
+$font-size-mi: 10px;
+$font-size-xs: 12px;
+$font-size-sm: 14px;
+$font-size-md: 16px;
+$font-size-lg: 16px;
+$font-size-bg: 18px;
+$font-weight-bold: 500;
+/* 改变 icon 字体路径变量，必需 */
+$--font-path: '../../../plugins/@zyf2e/capsule-ui/lib/theme-chalk/fonts';
+@import '../../../plugins/@zyf2e/capsule-ui/packages/theme-chalk/src/index';
+@import './common';
+@import './mixins';
+body {
+  margin: 0;
+}

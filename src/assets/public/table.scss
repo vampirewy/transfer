@@ -1,0 +1,71 @@
+.el-table {
+  &::before {
+    background-color: transparent !important;
+  }
+  .el-table__body{
+    td {
+      border-bottom: none;
+    }
+  }
+  .el-table__header-wrapper {
+    border-radius: 5px;
+    th {
+      background: #F4F4F6;
+      padding: 18px 0;
+      &.is-leaf{
+        border-bottom: none;
+      }
+      .cell {
+        color: #333333;
+        font-weight: 500;
+        line-height: 22px;
+        font-size: 16px;
+      }
+    }
+  }
+  .cell {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    color: #666666;
+    white-space: nowrap !important;
+    word-break: normal !important;
+  }
+  td {
+    padding: 18px 0;
+    border-bottom: none;
+  }
+  /deep/ .hide-expand-column .el-icon{
+    visibility:hidden;
+  }
+  &.has-expand-table .el-table__expanded-cell {
+    padding: 0 !important;
+    .expand-table {
+      .el-table__header-wrapper th {
+        background: rgba(108, 108, 229, 0.6);
+        padding: 9px 0;
+        .cell {
+          color: #fff;
+          font-size: 14px;
+        }
+      }
+      td {
+        padding: 4px 0;
+      }
+      .el-table__body td {
+        background-color: #f7f7fd;
+      }
+      tr:hover > td {
+        background-color: #E8E8FA !important;
+      }
+    }
+  }
+}
+
+.el-table--enable-row-hover .el-table__body tr:hover > td {
+  background-color: #ecf4fe;
+}
+
+.el-table .el-table__header-wrapper th .cell {
+  font-weight: normal;
+}
+
