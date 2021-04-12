@@ -1,9 +1,9 @@
 /**
- * @Author: jrucker
+ * @Author: csx
  * @Description 启动一个express服务，用于访问dist生成后的资源
- * @Date: 2020/8/20 10:41
- * @Last Modified by: jrucker
- * @Last Modified time: 2020/8/20 10:41
+ * @Date: 2021/4/15 10:41
+ * @Last Modified by: csx
+ * @Last Modified time: 2021/4/15 10:41
  */
 
 const fs = require('fs');

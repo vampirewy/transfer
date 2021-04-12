@@ -1,9 +1,9 @@
 /**
- * @Author: jrucker
+ * @Author: csx
  * @Description
- * @Date: 2020/10/23 下午11:47
- * @Last Modified by: jrucker
- * @Last Modified time: 2020/10/23 下午11:47
+ * @Date: 2021/4/15 下午11:47
+ * @Last Modified by: csx
+ * @Last Modified time: 2021/4/15下午11:47
  */
 
 export const typeList = [

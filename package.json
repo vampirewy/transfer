@@ -2,7 +2,7 @@
   "name": "health-static",
   "version": "1.0.0",
   "description": "A Vue.js project",
-  "author": "jrucker",
+  "author": "csx",
   "private": true,
   "scripts": {
     "dev": "cross-env node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server --host 0.0.0.0 --inline --config build/webpack.dev.conf.js",

@@ -1,9 +1,9 @@
 /**
- * @Author: jrucker
+ * @Author: csx
  * @Description 生产注入脚本
- * @Date: 2020/8/19 19:06
- * @Last Modified by: jrucker
- * @Last Modified time: 2020/8/19 19:06
+ * @Date: 2021/4/15 19:06
+ * @Last Modified by: csx
+ * @Last Modified time: 2021/4/15 19:06
  */
 
 const config = require('../config');
@@ -25,7 +25,7 @@ module.exports = class ProdScript {
       title: '健康管理系统',
       name: 'manage',
       main: './main.js',
-      author: 'jrucker',
+      author: 'csx',
       inject: 'body',
       template: `!!ejs-loader!${path.resolve(
         __dirname,
@@ -51,7 +51,7 @@ module.exports = class ProdScript {
       title: '后台管理',
       name: 'admin',
       main: './main.js',
-      author: 'jrucker',
+      author: 'csx',
       inject: 'body',
       template: `!!ejs-loader!${path.resolve(
         __dirname,
