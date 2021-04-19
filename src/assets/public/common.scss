@@ -1,7 +1,6 @@
 .flex {
   display: flex;
 }
-
 .flex,
 .inline-flex {
   &.column {
@@ -318,4 +317,69 @@
       color: #666666;
     }
   }
+}
+// 顶部搜索
+.divTop{
+  .divTitle {
+    align-self: start;
+    font-size: 18px;
+    color: #333333;
+    font-weight: bold;
+    span {
+      color: #4991fd;
+      font-size: 18px;
+      margin-right: 9px;
+      img{
+        width: 7px;
+        margin-bottom: 2px;
+      }
+    }
+  }
+  .searchCondition{
+    display: flex;
+    width: 100%;
+    height: 80px;
+    align-items: center;
+    border-bottom: 1px solid #EEF1F5;
+    div{
+      margin-right: 10px;
+      .timing{
+        margin-right: 10px;
+      }
+    }
+    .searchInputFormItem{
+      width: 200px;
+    }
+    .searchFor{
+      width:40px;
+      height: 40px;
+      img{
+        width: 100%;
+      }
+    }
+    .resetAll{
+      width: 60px;
+      height: 40px;
+      background: #DDE0E6;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #333;
+      font-weight: 400;
+    }
+  }
+  .searchInputFormItem {
+    .searchBtnImgSpan{
+      background: #fff;
+      .searchBtnImg{
+        width: 36px;
+      }
+    }
+  } 
+}
+.btnAdd, .btnReset, .btnDel {
+  border-radius: 20px;
+  background: #F6F8FC;
 }
