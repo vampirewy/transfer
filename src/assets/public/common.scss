@@ -1,6 +1,9 @@
 .flex {
   display: flex;
 }
+a{
+  text-decoration: none;
+}
 .flex,
 .inline-flex {
   &.column {
@@ -385,7 +388,7 @@
         width: 36px;
       }
     }
-  } 
+  }
 }
 .btnAdd, .btnReset, .btnDel {
   border-radius: 20px;

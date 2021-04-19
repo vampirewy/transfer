@@ -16,7 +16,7 @@ import {
   routeEqual,
   getRouteTitleHandled,
 } from '~/src/libs/util';
-
+import Cookies from 'js-cookie';
 import router from '../../router';
 import routers from '../../router/routers';
 
@@ -35,6 +35,9 @@ const initState = {
   tagNavList: [],
   homeRoute: {},
   siteTitle: '健康管理系统',
+  sidebar: {
+    opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
+  },
 };
 
 const gettersToProps = {
@@ -42,9 +45,22 @@ const gettersToProps = {
     getMenuByRouter(routers, rootState.user.access, rootState.user.superAdmin),
 };
 
-const actions = {};
+const actions = {
+  toggleSideBar({ commit }) {
+    commit('TOGGLE_SIDEBAR');
+  },
+};
 
 const mutations = {
+  TOGGLE_SIDEBAR: (state) => {
+    console.log(state.sidebar);
+    state.sidebar.opened = !state.sidebar.opened;
+    if (state.sidebar.opened) {
+      Cookies.set('sidebarStatus', 1);
+    } else {
+      Cookies.set('sidebarStatus', 0);
+    }
+  },
   [types.SET_HOME_ROUTE](state, routes) {
     state.homeRoute = getHomeRoute(routes, homeName);
   },

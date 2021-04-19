@@ -11,6 +11,7 @@ import Vuex from 'vuex';
 import app from './app';
 import user from './user';
 import intervention from './intervention';
+import getters from './getters';
 
 Vue.use(Vuex);
 
@@ -20,6 +21,7 @@ const modules = {
     user,
     intervention,
   },
+  getters,
 };
 
 const store = new Vuex.Store(modules);

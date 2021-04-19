@@ -14,7 +14,7 @@
     font-weight: 600;
     color: #333333;
     line-height: 25px;
-    padding-left: 10px;
+    padding-left: 14px;
     position: relative;
     flex: 1;
     &:after {
@@ -23,10 +23,16 @@
       left: 0;
       top: 50%;
       transform: translateY(-50%);
-      width: 2px;
+      /*width: 2px;
       height: 18px;
       background: #4991FD;
-      border-radius: 1px;
+      border-radius: 1px;*/
+      border-radius: 10px;
+      width: 0;
+      height: 0;
+      border-top: 7px solid transparent;
+      border-bottom: 7px solid transparent;
+      border-left: 7px solid #36BF2F;
     }
   }
 }
@@ -38,7 +44,7 @@
     }
   }
 }
-.el-pagination__jump{
+/*.el-pagination__jump{
   margin: 0 10px 0 10px!important;
 }
 .el-pagination.is-background {
@@ -59,7 +65,7 @@
       margin-left: 4px !important;
     }
   }
-}
+}*/
 .el-table{
   .el-table__header-wrapper{
     th{
@@ -162,6 +168,7 @@ body .el-table th.gutter{
   border-radius: 10px;
   min-width: 140px;
   padding: 0;
+  overflow: hidden;
 }
 .el-menu--horizontal .el-menu .el-menu-item{
   text-align: center;
@@ -335,6 +342,11 @@ body .el-table th.gutter{
 .el-dropdown-menu {
   padding: 0;
   border-radius: 10px;
+  overflow: hidden;
+}
+.el-dropdown-menu__item:not(.is-disabled):hover, .el-dropdown-menu__item:focus{
+  background-color: #edf4ff!important;
+  color: #3154AC;
 }
 /*日期控件*/
 .el-date-table{
@@ -392,6 +404,9 @@ body .el-table th.gutter{
     }
   }
 }
+.el-select-dropdown__item.selected{
+  color: #3154AC!important;
+}
 .el-form-item__content{
   /deep/ .el-textarea__inner{
     color: #333333 !important;
@@ -441,10 +456,138 @@ textarea::-moz-placeholder {
 textarea:-ms-input-placeholder {
   color: #333333 !important;
 }
-.el-dropdown-menu__item{
-  border-radius: 10px;
-}
 // 日期光标
 .el-input.is-disabled .el-input__icon{
   cursor: default;
 }
+/* 分页 */
+.el-pagination {
+  text-align: right;
+  padding: 0 5px;
+  margin-right: -9px;
+  .btn-prev{
+    background-color: white!important;
+    &:hover {
+      color: #2F49D1;
+      background: #EAECFA;
+    }
+  }
+  .btn-next{
+    background-color: white!important;
+    &:hover {
+      color: #2F49D1;
+      background: #EAECFA;
+    }
+  }
+}
+
+.el-pagination__jump {
+  margin-left: 14px;
+  margin-right: 15px;
+  .el-input__inner{
+    background: #F8FAFF;
+    border-radius: 16px;
+    border: 1px solid #EEF1F5;
+    &:hover,&:focus{
+      border-radius: 16px!important;
+      border: 1px solid #2F49D1!important;
+    }
+  }
+}
+
+.el-pagination .el-pagination__rightwrapper {
+  float: left !important;
+}
+
+.el-pagination .btn-prev {
+  width: 32px;
+  height: 32px;
+  color: #333333;
+  border-radius: 5px;
+  margin-right: 10px;
+  padding-right: 6px;
+}
+
+.el-pagination .btn-next {
+  width: 32px;
+  height: 32px;
+  padding-left: 6px;
+  color: #333333;
+  border-radius: 5px;
+}
+.el-pager li {
+  margin-right: 10px;
+  border-radius: 5px;
+  color: #666666;
+  width: 32px;
+  height: 31px;
+  line-height: 32px;
+  font-weight: 400;
+  font-size: 14px;
+  padding: 0;
+  min-width: 30px;
+  background-color: rgba(255,255,255,0) !important;
+  &:not(.disabled){
+    &:hover{
+      color: #3154AC!important;
+    }
+  }
+}
+.el-pager li.active {
+  color: #3154AC!important;
+  cursor: default;
+  width: 32px;
+  height: 32px;
+  line-height: 31px;
+  border: 1px solid #3154AC;
+  background: rgba(49, 84, 172, 0.1)!important;
+  border-radius: 8px!important;
+}
+
+.el-pager li.active:hover {
+  background: #EAECFA;
+}
+
+.el-pager .number:hover {
+  background: #EAECFA;
+  color: #2F49D1;
+}
+
+.el-pagination__sizes {
+  margin-right: 0;
+}
+.el-pagination__total{
+  margin-right: 0!important;
+}
+.el-pagination__sizes .el-input .el-input__inner {
+  width: 88px;
+  height: auto;
+  background: #F8FAFF!important;
+  border-radius: 16px!important;
+  border: 1px solid #EEF1F5!important;
+}
+
+.el-pager li.btn-quicknext, .el-pager li.btn-quickprev {
+  color: #666666;
+}
+
+/* --------------------- */
+.sidebar{
+  .el-submenu__icon-arrow {
+    display: inline-block;
+    right: 56px;
+    color: white;
+  }
+  &.el-menu--collapse {
+    .el-submenu__icon-arrow {
+      display: none;
+    }
+  }
+}
+.el-menu--popup{
+  .el-menu-item{
+    background-color: rgba(255,255,255,0)!important;
+  }
+}
+
+

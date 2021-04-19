@@ -160,6 +160,9 @@ export default {
   /deep/ .el-menu{
     background-color: transparent;
   }
+  .el-submenu__title{
+    color: black!important;
+  }
   .menu-collapsed {
     padding-top: 10px;
 

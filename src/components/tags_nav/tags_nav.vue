@@ -262,14 +262,17 @@ export default {
   position: relative;
   /*border-top: 1px solid #f0f0f0;
   border-bottom: 1px solid #f0f0f0;*/
+  .scroll-outer{
+    top: -2px!important;
+  }
   height: 100%;
   .close-con {
     position: absolute;
-    right: 10px;
-    top: 7px;
-    width: 18px;
-    height: 18px;
-    line-height: 18px;
+    right: 8px;
+    top: 6px;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
     border: 1px solid rgba(255,255,255,0.5);
     border-radius: 5px;
     // background: #fff;
@@ -283,22 +286,23 @@ export default {
       padding: 7px 6px;
     }
     img{
-      width: 12px;
-      height: 12px;
+      width: 24px;
+      height: 24px;
     }
   }
   .btn-con {
     position: absolute;
     top: 7px;
-    width: 18px;
-    height: 18px;
-    line-height: 18px;
-    border: 1px solid rgba(255,255,255,0.5);
-    border-radius: 5px;
-    // background: #fff;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
     z-index: 10;
     text-align: center;
     cursor: pointer;
+    img{
+      width: 24px!important;
+      height: 24px!important;
+    }
     button {
       padding: 6px 4px;
       line-height: 14px;
@@ -323,7 +327,7 @@ export default {
     top: 0;
     bottom: 0;
     /*box-shadow: 0 0 3px 0 rgba(100, 100, 100, 0.1) inset;*/
-    padding: 2px 0;
+    padding: 0;
     // background: #fff;
     overflow-y: hidden;
     overflow-x: hidden;
@@ -337,13 +341,13 @@ export default {
       transition: left 0.3s ease;
       .el-tag { // 选中
         cursor: pointer;
-        background: white;
-        border-color: transparent;
+        background: #F6F8FC;
+        /*border-color: transparent;*/
         /*border-top-right-radius: 205px 209px;
         border-top-left-radius: 50px 50px;*/
-        color: #333333;
+        color: #3154AC;
         position: relative;
-        &:after {
+        /*&:after {
           content: '';
           display: block;
           width: 20px;
@@ -354,7 +358,7 @@ export default {
           border-top-right-radius: 8px;
           top: -1px;
           right: -12px;
-        }
+        }*/
         /*&:after {
           content: '';
           display: block;
@@ -383,13 +387,13 @@ export default {
           content: '';
         }
         &.el-tag--info { // 未选中
-          color: rgba(255,255,255,0.85);
-          background: #66b2ff;
-          border-color: transparent;
+          color: #848991;
+          background: white;
+          /*border-color: transparent;
           border-top-right-radius: 205px 209px;
-          border-top-left-radius: 50px 50px;
+          border-top-left-radius: 50px 50px;*/
           position: relative;
-          &:after {
+          /*&:after {
             content: '';
             display: block;
             width: 20px;
@@ -400,15 +404,15 @@ export default {
             border-top-right-radius: 8px;
             top: -1px;
             right: -12px;
-          }
+          }*/
           /deep/ .el-tag__close{
             color: white;
-            background: url("../../assets/images/body/closeTab.png") no-repeat;
+            background: url("../../assets/images/body/closeChooseTab.png") no-repeat;
             background-size: 100% 100%;
             width: 20px;
             height: 20px;
             margin-top: -1px;
-            opacity: 0.5;
+            opacity: 0.7;
             //transform: rotate(180deg);
             &:hover {
               opacity: 1;
@@ -419,11 +423,12 @@ export default {
           }
         }
         &.el-tag--small{
-          height: 32px;
-          padding: 0 10px 0 24px;
-          line-height: 31px;
-          margin-right: 17px;
-          border-radius: 10px 4px 4px 0;
+          height: 41px;
+          padding: 0 15px 0 15px;
+          line-height: 40px;
+          margin-right: 0;
+          border-radius: 0;
+          border: none;
         }
       }
       .ivu-tag-dot-inner {
