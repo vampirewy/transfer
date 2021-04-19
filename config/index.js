@@ -31,7 +31,7 @@ module.exports = {
                 target: 'http://182.61.43.226:9001/api',//'http://116.62.9.135:5124', // nginx测试环境，配置了/api转发及图片访问 //'http://admin.ngrok.ggithub.cn',//
                 changeOrigin: true,
                 pathRewrite: {
-                    "/api": ""
+                    "/api": "/"
                 }
             },
             '/uploadFiles': {

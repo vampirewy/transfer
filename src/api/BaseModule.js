@@ -37,7 +37,7 @@ class BaseModule {
           if (code === 10003) {
             // Cookies.remove('token'); // token过期,清除
             // window.localStorage.removeItem('USER_INFO');
-            window.location.href = '/#/login';
+            // window.location.href = '/#/login';
           } else {
             CapsuleUI.Message.warning(response.data.message);
           }

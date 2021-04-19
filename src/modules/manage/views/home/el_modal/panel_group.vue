@@ -2,7 +2,7 @@
   <el-row
     :gutter="20"
     class="panel-group"
-    style="margin: 0 0 20px 0;display: flex"
+    style="margin: 0 0 20px 0;display: flex;width: 100%;"
   >
     <el-col class="card-panel-col" style="padding-left: 0">
       <div class="card-panel" @click="toRouterPage(1)">
@@ -60,7 +60,7 @@
         <div class="cardDian"><p></p><p></p></div>
       </div>
     </el-col>
-    <el-col class="card-panel-col"  style="padding-right: 0">
+    <!-- <el-col class="card-panel-col"  style="padding-right: 0">
       <div class="card-panel" @click="toRouterPage(5)">
         <div class="card-panel-icon-wrapper">
           <img class="card-panel-icon" :src="home5" />
@@ -73,7 +73,7 @@
         </div>
         <div class="cardDian"><p></p><p></p></div>
       </div>
-    </el-col>
+    </el-col> -->
   </el-row>
 </template>
 
@@ -107,7 +107,7 @@ export default {
 <style lang="scss" scoped>
 .panel-group {
   background-color: white;
-  padding-top: 20px;
+  // padding-top: 20px;
 
   .card-panel {
     height: 110px;

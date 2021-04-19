@@ -9,9 +9,89 @@
 .el-select .el-input.is-disabled .el-input__inner {
   cursor: default;
 }
+
 input:-webkit-autofill {
   box-shadow: 0 0 0px 1000px #F4F4F6 inset !important;
 }
+
 input:-webkit-autofill:focus {
   box-shadow: 0 0 0px 1000px #F4F4F6 inset !important;
+}
+
+// element组件修改
+.el-radio__input.is-checked .el-radio__inner {
+  background: #3154AC !important;
+}
+
+.el-radio__input.is-checked .el-radio__inner::after {
+  background: #fff !important;
+}
+
+.el-radio__input.is-checked+.el-radio__label {
+  color: #3154AC;
+}
+
+.user-edit .el-input__inner,
+.user-edit .el-textarea__inner {
+  background: #fff !important;
+}
+.el-input input:hover{
+  border-color: #3154AC !important;
+}
+.el-popper .popper__arrow{
+  display: none;
+}
+.el-select-dropdown .el-scrollbar .el-scrollbar__wrap .el-select-dropdown__list .el-select-dropdown__item.hover {
+  background: #3154AC !important;
+  color: #fff;
+}
+
+.el-popper .popper__arrow::after {
+  border-width: 0px;
+}
+
+.el-popper .popper__arrow {
+  border-bottom-color: #fff !important;
+  top: -8px !important;
+}
+
+.el-select-dropdown .el-scrollbar .el-scrollbar__wrap,
+.el-select-dropdown .el-scrollbar {
+  border-radius: 5px !important;
+}
+
+.el-select-dropdown {
+  border: 1px solid #3154AC;
+}
+.el-date-table td.today span{
+  border-radius: 5px !important;
+  background: #3154AC;
+  color: #fff;
+}
+.el-date-table td.available:hover{
+  color: #3154AC;
+}
+.cancelBtn,
+.resetBtn,
+.sureBtn {
+  width: 90px;
+  height: 40px;
+  border-radius: 20px;
+  border: 1px solid #3154AC;
+}
+.sureBtn{
+  background: #3154AC;
+  color: #fff;
+}
+.cancelBtn{
+  background: rgba(49, 84, 172, 0.1);
+  color: #3154AC;
+}
+.cancelBtn:hover{
+  background: rgba(49, 84, 172, 0.3);
+  color: #3154AC;
+}
+.sureBtn:hover{
+  background: #24499D;
+  color: #FFFFFF;
 }
