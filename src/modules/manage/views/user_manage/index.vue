@@ -53,7 +53,7 @@
         <div class="divTop">
           <div class="divTitle">
             <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
-            客户池</div>
+            我的客户</div>
           <div class="searchCondition">
           <div class="searchInputFormItem">
             <el-input placeholder="姓名/手机号/企业单位" v-model="formData.keywords">
@@ -149,31 +149,45 @@
                 </span>
               </template>
             </el-table-column>
-            <el-table-column label="性别" prop="gender" width="60">
+            <el-table-column label="性别" prop="gender" width="80">
               <template slot-scope="scope">
                 {{ scope.row.gender === 1 ? '男' : '女' }}
               </template>
             </el-table-column>
-            <el-table-column label="年龄" prop="age" width="60"></el-table-column>
-            <el-table-column label="人员类别" prop="gridName" show-overflow-tooltip>
-              <template slot-scope="scope">
-                <span>{{ scope.row.gridName || '-'}}</span>
-              </template>
-            </el-table-column>
+            <el-table-column label="年龄" prop="age" width="80"></el-table-column>
             <el-table-column label="企业单位" prop="workUnitName" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>{{ scope.row.workUnitName || '-'}}</span>
               </template>
             </el-table-column>
-            <el-table-column label="是否认领" prop="state">
+            <el-table-column label="人员类别" prop="gridName" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{ scope.row.gridName || '-'}}</span>
+              </template>
+            </el-table-column>
+            <!-- <el-table-column label="是否认领" prop="state">
               <template slot-scope="scope">
                 {{ scope.row.healthManageId === '1' ? '已认领' : '未认领' }}
               </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column label="建档时间" prop="createTime" show-overflow-tooltip />
-            <el-table-column label="附件" prop="attachment" width="55">
+            <el-table-column label="是否启用" prop="state">
               <template slot-scope="scope">
-                <div @click="
+                <el-switch
+                  v-model="scope.row.state "
+                  active-value="1"
+                  inactive-value="2"
+                  active-color="#13ce66"
+                  @change="changeStatus(scope, '1')"
+                  >
+                </el-switch>
+              </template>
+            </el-table-column>
+            <el-table-column label="附件" prop="attachment" width="80">
+              <template slot-scope="scope">
+                <div
+                class="elbutton"
+                @click="
                   $router.push({
                     name: 'user_edit',
                     params: {
@@ -181,11 +195,13 @@
                     },
                   })
                 ">
-                  <img class="attachment-btn" src="@/assets/images/common/attachmentBtn.png" />
+                  <!-- <img class="attachment-btn"
+                  src="@/assets/images/common/attachmentBtn.png" /> -->
+                  查看
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="操作" prop="index" width="150">
+            <el-table-column label="操作" prop="index" width="120">
               <template slot-scope="scope">
                 <el-button
                         type="text"
@@ -200,6 +216,14 @@
                 "
                         v-if="getAccess('customer_pool_edit')"
                 >编辑</el-button>
+                <el-button type="text"
+                        size="small"
+                        style="color:#DDE0E6"
+                        v-if="
+                  (getAccess('customer_pool_claim')) &&
+                    scope.row.state === '1' && scope.row.healthManageId === '0'
+                "
+                        >|</el-button>
                 <el-button
                         type="text"
                         size="small"
@@ -210,7 +234,7 @@
                 "
                 >认领</el-button
                 >
-                <el-button
+                <!-- <el-button
                         class="font-enable"
                         type="text"
                         size="small"
@@ -231,7 +255,7 @@
                     getAccess('customer_pool_on_off')
                 "
                 >禁用</el-button
-                >
+                > -->
               </template>
             </el-table-column>
           </el-table>
@@ -278,6 +302,7 @@ export default {
   },
   data() {
     return {
+      value: true,
       total: 0,
       gridList: [],
       dataSource: [],
@@ -436,29 +461,39 @@ export default {
 
     changeStatus({ row = {} }, status) {
       const setRow = row;
-      this.$confirm(
-        `<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>您确定要改变该病人状态吗？</span></div>`,
-        '提示',
-        {
-          dangerouslyUseHTMLString: true,
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          customClass: 'message-box-customize',
-          showClose: true,
-        },
-      ).then(() => {
-        this.$api.userManagerInterface
-          .editUserStatus({
-            id: setRow.id,
-            state: status,
-          })
-          .then(({ data }) => {
-            if (data.code === 200) {
-              this.$message.success('操作成功');
-              setRow.state = status;
-            }
-          });
+      this.$api.userManagerInterface.editUserStatus({
+        id: setRow.id,
+        state: status,
+      }).then(({ data }) => {
+        if (data.code === 200) {
+          this.$message.success('操作成功');
+          setRow.state = status;
+        }
       });
+      // this.$confirm(
+      // `<div class="delete-text-content"><img class="delete-icon"
+      // src="${deleteIcon}"/><span>您确定要改变该病人状态吗？</span></div>`,
+      //   '提示',
+      //   {
+      //     dangerouslyUseHTMLString: true,
+      //     confirmButtonText: '确定',
+      //     cancelButtonText: '取消',
+      //     customClass: 'message-box-customize',
+      //     showClose: true,
+      //   },
+      // ).then(() => {
+      //   this.$api.userManagerInterface
+      //     .editUserStatus({
+      //       id: setRow.id,
+      //       state: status,
+      //     })
+      //     .then(({ data }) => {
+      //       if (data.code === 200) {
+      //         this.$message.success('操作成功');
+      //         setRow.state = status;
+      //       }
+      //     });
+      // });
     },
     getUserList() {
       this.$api.userManagerInterface

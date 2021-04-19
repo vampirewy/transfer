@@ -23,7 +23,7 @@ export default [
         path: '/user_manage',
         name: 'user_manage',
         meta: {
-          title: '客户池',
+          title: '我的客户',
           access: 'customer_pool',
         },
         component: () => import('../../views/user_manage'),
