@@ -47,11 +47,11 @@ export default {
     background: #f4f4f6;
     border-radius: 10px;
     margin-right: 30px;
-    min-height: 600px;
+    min-height: 500px;
     .query-content {
       width: 220px;
       min-width: 220px;
-      min-height: 700px;
+      min-height: 500px;
       box-sizing: border-box;
       padding: 20px;
       background: #f4f4f6;

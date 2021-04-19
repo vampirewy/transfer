@@ -21,11 +21,13 @@
           <el-dropdown-item command="back" v-if="showBackButton">返回首页</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <span class="userNameSpan" v-else>
+      <span class="quitSpan" v-else>
         <a href="javascript:;" class="name">{{ userName }}</a>
       </span>
+      <span class="ge">|</span>
+      <span class="quitSpan" @click="logout">修改密码</span>
     <span class="ge">|</span>
-    <span class="quitSpan" @click="logout"><img src="@/assets/images/body/quit.png"/>退出</span>
+    <span class="quitSpan" @click="logout">退出登录</span>
   </div>
 </template>
 
@@ -106,9 +108,10 @@ export default {
 
 <style lang="scss" scoped>
   .user-avatar-dropdown{
-    width: 220px;
-    margin-top: 15px;
+    width: 260px;
+    margin-top: 14px;
     text-align: right;
+      margin-right: 15px;
     /deep/ .el-dropdown{
       color: white;
     }
@@ -121,11 +124,16 @@ export default {
     font-size: 14px;
   }
   .ge{
-    color: #F5F5F5;
-    opacity: 0.5;
+    color: #DDE0E6;
+    opacity: 1;
+      font-size: 12px;
+      display: inline-block;
+      margin-top: -4px;
+      vertical-align: middle;
+      margin-right: 5px;
   }
   .quitSpan{
-    color: white;
+    color: #333333;
     font-size: 14px;
     display: inline-block;
     margin-right: 5px;
@@ -142,7 +150,7 @@ export default {
     display: inline-block;
     .name {
       text-decoration: none;
-      color: white;
+      color: #333333;
     }
     /deep/ .el-avatar--medium {
         width: 30px;

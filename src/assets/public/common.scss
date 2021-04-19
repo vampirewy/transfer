@@ -1,7 +1,9 @@
 .flex {
   display: flex;
 }
-
+a{
+  text-decoration: none;
+}
 .flex,
 .inline-flex {
   &.column {

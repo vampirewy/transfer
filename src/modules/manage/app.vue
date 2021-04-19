@@ -17,7 +17,7 @@ export default {
 
 <style>
   body{
-    min-width: 1300px;
+    /*min-width: 1300px;*/
   }
 .el-message-box__content {
   display: flex;
