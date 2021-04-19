@@ -1,17 +1,19 @@
 <template>
+<div>
+<div style="display: flex;">
   <div class="dashboard-editor-container">
-    <search-group @searchData="getSearchData" />
+    <!-- <search-group @searchData="getSearchData" /> -->
     <panel-group :formData="homeFindCountData" @toRouterPage="toRouterPage" />
     <el-row :gutter="40" style="margin-left: 0">
-      <el-col :span="15" class="echartBody">
+      <el-col :span="15" class="echartBody" style="width:96%;height:320px">
         <div class="rowTitleParent" style="padding-bottom: 5px">
-          <p class="rowTitle" style="margin-left: 0">随访任务</p>
-          <div class="rowTitleParentRight">
+          <p class="rowTitle" style="margin-left: 0">近15天新增客户趋势（人）</p>
+          <!-- <div class="rowTitleParentRight">
             <span style="background-color: #4991FD"></span>
             <label>随访计划</label>
             <span style="background-color: #31C529"></span>
             <label>随访记录</label>
-          </div>
+          </div> -->
         </div>
         <div class="noDataLine" v-if="intervenePlanXList.length === 0">
           <img src="@/assets/images/noDataLine.png"/>
@@ -24,7 +26,7 @@
                     :sectionName="intervenePlanName"
                     :sectionXList="intervenePlanXList" v-else/>
       </el-col>
-      <el-col :span="9">
+      <!-- <el-col :span="9">
         <el-row>
           <el-col class="echartBody">
             <div class="rowTitleParent">
@@ -73,7 +75,7 @@
             </div>
           </el-col>
         </el-row>
-      </el-col>
+      </el-col> -->
       <!--<el-col :xs="24" :sm="24" :lg="8">
         <p class="rowTitle">服务订单</p>
         <div class="chart-wrapper">
@@ -104,31 +106,127 @@
     <!--</el-col>-->
     <!--</el-row>-->
   </div>
+  <div style="width:30%;">
+      <!-- <el-col :span="9"> -->
+        <el-row>
+          <el-col class="echartBody">
+            <div class="rowTitleParent">
+              <p class="rowTitle">{{listQuery.planType === '4' ? '随访计划' : '随访记录'}}
+                <span class="top5">TOP5</span></p>
+              <el-radio-group
+                      v-model="listQuery.planType"
+                      @change="choosePlanType"
+                      style="margin-right: 20px"
+              >
+                <el-radio-button label="4">随访计划</el-radio-button>
+                <el-radio-button label="5">随访记录</el-radio-button>
+              </el-radio-group>
+            </div>
+            <div class="noDataLine" v-if="intervenePlanPieXList.length === 0" style="height: 215px">
+              <img src="@/assets/images/noDataLine.png" style="width: 100px;margin-top: 50px"/>
+              <span>暂无数据</span>
+            </div>
+            <div class="chart-wrapper" style="display: flex" v-else>
+              <div class="pieDiv" style="margin:0 3% 0 2%;overflow: hidden">
+                <pie-chart :xList="intervenePlanPieXList" :yList="intervenePlanPieYList" />
+              </div>
+              <div class="pieDiv">
+                <div class="pieDivTips" v-for="(item, index) in dianPieList" :key="item.name">
+                  <div class="pieDivTipsLeft">
+                    <p class="dian" :style="{'background-color': dianColorList[index]}"></p>
+                    <p class="dianSize">{{item.name}}</p>
+                  </div>
+                  <p class="dianNum">{{item.value}}个</p>
+                </div>
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+  </div>
+</div>
+<div>
+  <div class="TabBars">
+    <div v-for="(item,index) in tabbor" :key="index">
+      <span :class="Tabactive === index?'TabBarsName':'TabBarsNames'" @click="TabbarBtn(index)">
+        {{item}}
+        <div class="Tabunread">3</div>
+      </span>
+    </div>
+    <!-- <div><span>阳性跟踪</span></div>
+    <div><span>随访任务</span></div> -->
+
+  </div>
+  <div class="TabListcss">
+    <!-- <tab-list></tab-list> -->
+      <el-table style="width: 100%" align="center"
+               :data="dataSource">
+        <!-- <el-table-column type="selection" width="150"></el-table-column> -->
+        <el-table-column label="姓名" prop="clientName" max-width="200" show-overflow-tooltip>
+          <!-- <template slot-scope="scope">
+                <span class="clientName"
+                      @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
+                  {{ scope.row.clientName | getResult}}
+                </span>
+          </template> -->
+        </el-table-column>
+        <el-table-column label="客户编号" prop="clientNo" max-width="180" show-overflow-tooltip>
+          <!-- <template slot-scope="scope">
+            <span>{{ scope.row.clientNo | getResult}}</span>
+          </template> -->
+        </el-table-column>
+        <el-table-column prop="gender" label="性别" max-width="180px">
+          <!-- <template slot-scope="scope">
+            <span>{{scope.row.gender | getResultGender}}</span>
+          </template> -->
+        </el-table-column>
+        <el-table-column label="年龄" prop="age" max-width="180">
+          <!-- <template slot-scope="scope">
+            <span>{{ scope.row.age | getResult}}</span>
+          </template> -->
+        </el-table-column>
+        <el-table-column label="任务名称" prop="createTime" max-width="180" show-overflow-tooltip>
+          <!-- <template slot-scope="scope">
+            <span>{{ scope.row.createTime | getResultDate}}</span>
+          </template> -->
+        </el-table-column>
+        <el-table-column label="任务提示" prop="index" max-width="200">
+          <!-- <template slot-scope="scope">
+            <span>{{ scope.row.createTime | getResultDate}}</span>
+          </template> -->
+        </el-table-column>
+      </el-table>
+
+  </div>
+</div>
+</div>
 </template>
 
 <script>
-import SearchGroup from './el_modal/search.vue';
+// import SearchGroup from './el_modal/search.vue';
 import PanelGroup from './el_modal/panel_group.vue';
 import PieChart from './el_modal/pie_chart.vue';
 import PieChartKong from './el_modal/pie_chart_kong.vue';
 import BarChart from './el_modal/bar_chart.vue';
 import LineChart from './el_modal/line_chart.vue';
+// import TabList from './el_modal/tab-list.vue';
 const BarChartLine = () => import('./el_modal/bar_chart.vue'); // 为了解决eslint报错，和组件相互干扰的问题
 
 export default {
   name: 'index',
   components: {
-    SearchGroup,
+    // SearchGroup,
     PanelGroup,
     PieChart,
     PieChartKong,
     BarChart,
     BarChartLine, // 折线图的柱形显示
     LineChart,
+    // TabList,
   },
 
   data() {
     return {
+      dataSource: [],
       searchData: {},
       listQuery: {
         planType: '4',
@@ -146,9 +244,15 @@ export default {
       intervenePlanXList: [],
       dianPieList: [],
       dianColorList: ['#5B8FF9', '#5AD8A6', '#6C6CE5', '#F6BD16', '#E8684A', '#6DC8EC', '#31C529', '#54c9b6', '#F53626', '#f5c8be'],
+      tabbor: ['当日任务', '阳性跟踪', '随访任务'],
+      Tabactive: 0,
     };
   },
   methods: {
+    TabbarBtn(index) {
+      this.Tabactive = index;
+      // console.log(index);
+    },
     getSearchData(data) {
       this.searchData = data;
       this.getHomeFindCount(data); // 查询五数据
@@ -302,6 +406,9 @@ export default {
 <style lang="scss" scoped>
 .dashboard-editor-container {
   position: relative;
+  // width: 70%;
+  flex: 1;
+}
   .rowTitleParent{
     display: flex;
     justify-content: space-between;
@@ -326,10 +433,11 @@ export default {
     }
   }
   .noDataLine{
-    height: 490px;
+    // height: 490px;
+    height: 300px;
     text-align: center;
     img{
-      margin-top: 135px;
+      // margin-top: 135px;
       width: 200px;
     }
     span{
@@ -355,6 +463,7 @@ export default {
     }
   }
   .echartBody{
+    height: 450px;
     box-shadow: 0px 0px 50px 0px rgba(151, 166, 189, 0.2);
     border-radius: 15px;
     background-color: white;
@@ -380,6 +489,7 @@ export default {
     background: #fff;
     padding: 5px 20px 20px 20px;
     border-radius: 15px;
+    margin-top: 24px;
     /*margin-bottom: 32px;*/
     /*  p{
       font-size: 15px;
@@ -418,8 +528,89 @@ export default {
       }
     }
   }
+// }
+.TabBars{
+  display: flex;
+  margin-top: 25px;
+  div{
+    // width: 100px;
+    // height: 40px;
+    // line-height: 40px;
+    // text-align: center;
+    // background: red;
+  }
+  .TabBarsNames{
+    cursor: pointer;
+    background: #EEF1F5;
+    border-color: transparent;
+    color: #666666;
+    position: relative;
+    margin-right: 20px;
+    padding: 10px 14px 10px 16px;
+    font-size: 14px;
+    border-radius: 8px 5px 0 0;
+  }
+  .TabBarsNames:after{
+    content: '';
+    display: block;
+    width: 25px;
+    height: 40px;
+    position: absolute;
+    -webkit-transform: skewX(23deg);
+    transform: skewX(23deg);
+    background: #EEF1F5;
+    border-top-right-radius: 8px;
+    top: 0px;
+    right: -13px;
+  }
+  .TabBarsName{
+    cursor: pointer;
+    background: #ffffff;
+    border-color: transparent;
+    color: #333333;
+    font-weight: 500;
+    position: relative;
+    margin-right: 20px;
+    padding: 10px 14px 10px 16px;
+    font-size: 14px;
+    border-radius: 8px 5px 0 0;
+  }
+  .TabBarsName:after{
+    content: '';
+    display: block;
+    width: 25px;
+    height: 40px;
+    position: absolute;
+    -webkit-transform: skewX(23deg);
+    transform: skewX(23deg);
+    background: white;
+    border-top-right-radius: 8px;
+    top: 0px;
+    right: -13px;
+  }
+  .Tabunread{
+    display: inline-block;
+    background: red;
+    padding: 3px;
+    color: #ffffff;
+    width: 12px;
+    height: 12px;
+    line-height: 12px;
+    text-align: center;
+    border-radius: 10px;
+    margin-left: 5px;
+    font-size: 12px;
+  }
 }
-
+.TabListcss{
+  height: 380px;
+  width: 100%;
+  background: #ffffff;
+  box-shadow: 0px 6px 24px 0px rgba(14, 37, 87, 0.06);
+  border-radius: 0px 0px 8px 8px;
+  padding: 20px;
+  margin-top: 10px;
+}
 /*@media (max-width: 1024px) {
   .chart-wrapper {
     padding: 8px;
