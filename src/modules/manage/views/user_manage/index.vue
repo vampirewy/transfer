@@ -1,7 +1,8 @@
 <template>
   <div class="userManage">
-    <query-page @reset="reset" @search="search">
-      <template slot="left">
+    <div>
+    <!-- <query-page @reset="reset" @search="search"> -->
+      <!-- <template slot="left">
         <search>
           <div class="searchInputFormItem">
             <el-input placeholder="姓名/手机号/企业单位" v-model="formData.keywords">
@@ -46,15 +47,76 @@
           >
           </el-date-picker>
         </query-filter>
-      </template>
-      <template slot="right">
+      </template> -->
+      <!-- <template slot="right"> -->
+        </div>
+        <div class="divTop">
+          <div class="divTitle">
+            <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
+            客户池</div>
+          <div class="searchCondition">
+          <div class="searchInputFormItem">
+            <el-input placeholder="姓名/手机号/企业单位" v-model="formData.keywords">
+            </el-input>
+            <span class="searchBtnImgSpan" @click="search">
+                <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
+            </span>
+          </div>
+          <div>
+            <span>客户性别：</span>
+           <el-select
+                  v-model="formData.gender"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option label="男" value="1" key="1"></el-option>
+            <el-option label="女" value="2" key="2"></el-option>
+          </el-select>
+          </div>
+          <div>
+            <span>客户类别：</span>
+            <el-select
+                  v-model="formData.gridId"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+                       :key="index"></el-option>
+          </el-select>
+          </div>
+          <div>
+            <span>建档日期：</span>
+            <el-date-picker
+                  v-model="formData.startTime"
+                  type="date"
+                  :max-date="formData.endTime"
+                  placeholder="选择开始日期"
+                  style="width: 140px"
+          >
+          </el-date-picker>
+          <span class="timing">-</span>
+          <el-date-picker
+                  v-model="formData.endTime"
+                  type="date"
+                  :min-date="formData.startTime"
+                  placeholder="选择结束日期"
+                  style="width: 140px"
+          >
+          </el-date-picker>
+          </div>
+          <div class="searchFor" @click="search">
+            <img src="@/assets/images/common/topsearchblue.png" alt="">
+          </div>
+          <div class="resetAll">重置</div>
+          </div>
+        </div>
         <div class="divRightTitleDiv">
-          <div class="divRightTitle"><span>|</span>客户池</div>
+          <!-- <div class="divRightTitle"><span>|</span>客户池</div> -->
           <div>
             <el-button
                     class="btn-new btnAdd"
                     size="small"
-                    style="margin-bottom: 16px"
+                    style="margin: 16px 0"
                     @click="$router.push('user_edit')"
                     v-if="getAccess('customer_pool_add')"
             ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
@@ -185,13 +247,7 @@
             ></el-pagination>
           </div>
         </div>
-      </template>
-    </query-page>
-    <!-- <assign-dialog
-      :visible="dialogTableVisible"
-      @cancel="dialogTableVisible = false"
-      @change="submitAssign"
-    ></assign-dialog> -->
+      <!-- </template> -->
     <doctor-Select
             :isRadio="false"
       :visible="dialogTableVisible"
@@ -498,7 +554,7 @@ export default {
       }
     }
   }
-  .divRightTitleDiv {
+  .divRightTop {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
@@ -515,4 +571,5 @@ export default {
     }
   }
 }
+
 </style>
