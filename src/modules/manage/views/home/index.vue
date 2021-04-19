@@ -17,7 +17,7 @@
         </div>
         <div class="noDataLine" v-if="intervenePlanXList.length === 0">
           <img src="@/assets/images/noDataLine.png"/>
-          <span>暂无数据</span>
+          <span>暂无数据12</span>
         </div>
         <bar-chart-line :xList="intervenePlanName" :yList="intervenePlanYList" :height="'490px'"
                    :colorListProp="['#4991FD', '#31C529']" key="1"
