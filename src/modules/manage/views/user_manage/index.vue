@@ -54,7 +54,9 @@
           <div class="divTitle">
             <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
             我的客户</div>
+
           <div class="searchCondition">
+          <div class="searchLeft">
           <div class="searchInputFormItem">
             <el-input placeholder="姓名/手机号/企业单位" v-model="formData.keywords">
             </el-input>
@@ -95,7 +97,9 @@
                        :key="index"></el-option>
           </el-select>
           </div>
-          <div class="buttones">
+            </div>
+            <div class="searchRight">
+            <div class="buttones">
             <div class="searchFor" @click="search">
             <img src="@/assets/images/common/topsearchblue.png" alt="">
           </div>
@@ -106,9 +110,11 @@
           <div class="more noMore" v-else @click="upMore">
             <span>></span>收起筛选</div>
           </div>
+            </div>
           </div>
         </div>
         <div v-if="!isTrue" class="searchCondition" style="width:80%;">
+          <div class="searchLeft" style="padding-left:5px;">
           <div>
             <span>体检报告：</span>
             <el-select
@@ -192,6 +198,7 @@
                   style="width: 140px"
           >
           </el-date-picker>
+          </div>
           </div>
         </div>
         <div class="topbottomborder"></div>
