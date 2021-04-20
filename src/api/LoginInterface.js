@@ -36,6 +36,10 @@ class LoginInterface extends BaseModule {
   resetPassword(data, config) {
     return this.post('/user/password/reset', data, config);
   }
+  // 当前登录人权限
+  getCheckedMenu(data = {}) {
+    return this.get('/role/get_checked_menu', data);
+  }
 }
 
 export default new LoginInterface();

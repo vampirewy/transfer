@@ -8,6 +8,7 @@
 
 import axios from 'axios';
 import CapsuleUI from '~/plugins/@zyf2e/capsule-ui/lib';
+import { getToken } from '~/src/libs/util';
 
 class BaseModule {
   constructor() {
@@ -15,8 +16,9 @@ class BaseModule {
     this.dataMethodDefaults = {
       headers: {
         'Content-Type': 'application/json',
+        token: getToken(),
       },
-      withCredentials: true, // 跨域cookie
+      // withCredentials: true, // 跨域cookie
     };
 
     // request拦截器
@@ -32,15 +34,16 @@ class BaseModule {
     // respone拦截器
     this.$http.interceptors.response.use(
       (response) => {
-        const code = response.data.code;
-        if (code !== 200) {
+        const code = response.data.rc;
+        if (code !== 0) {
           if (code === 10003) {
             // Cookies.remove('token'); // token过期,清除
-            // window.localStorage.removeItem('USER_INFO');
+            // window.localStorage.removeItem('HK_USER_INFO');
             // window.location.href = '/#/login';
           } else {
-            CapsuleUI.Message.warning(response.data.message);
+            // CapsuleUI.Message.warning(response.data.message);
           }
+          CapsuleUI.Message.warning(response.data.msg);
           return Promise.reject(response);
         }
         return response;
@@ -53,7 +56,7 @@ class BaseModule {
   }
 
   get(url, config = {}) {
-    return this.$http.get(url, config);
+    return this.$http.get(url, { ...this.dataMethodDefaults, ...config });
   }
 
   post(url, data = undefined, config = {}) {

@@ -35,16 +35,17 @@ const turnTo = (to, user, next) => {
 };
 
 router.beforeEach((to, from, next) => {
-  const userInfo = localRead('USER_INFO');
+  const userInfo = localRead('HK_USER_INFO');
+  const accessInfo = JSON.parse(localRead('HK_ACCESS'));
   if (['login', 'forget_password'].includes(to.name) && !userInfo) {
     next();
   } else if (userInfo) {
     const user = JSON.parse(userInfo);
+    store.commit('user/SET_ACCESS', accessInfo);
     store.commit('user/SET_AVATAR', user.headImage);
     store.commit('user/SET_USER_NAME', user.realName);
     store.commit('user/SET_USER_ID', user.userId);
     store.commit('user/SET_SUPER_ADMIN', user.isSuperAdmin);
-    store.commit('user/SET_ACCESS', user.menuIds);
     store.commit('user/SET_HAS_GET_INFO', true);
     turnTo(to, store.state.user, next);
   } else {

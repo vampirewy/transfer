@@ -13,7 +13,7 @@ export const MAX_PAGESIZE = 10000; // 最大页数请求全部
 
 const cookieExpires = 1;
 
-export const TOKEN_KEY = 'token';
+export const TOKEN_KEY = 'hk_token';
 
 export const setToken = (token) => {
   Cookies.set(TOKEN_KEY, token, { expires: cookieExpires || 1 });

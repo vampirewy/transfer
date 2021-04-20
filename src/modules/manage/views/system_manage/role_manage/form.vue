@@ -10,7 +10,7 @@
     >
       <div class="title">{{detail ? '查看' : (id ? '编辑' : '新增')}}-角色</div>
       <el-row>
-        <el-col :span="6">
+        <el-col :span="12">
           <el-form-item label="角色名称" prop="name">
             <el-input
               type="text"
@@ -20,7 +20,7 @@
               v-model="roleForm.name"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="12">
           <el-form-item label="是否管理员" prop="adminFlag">
             <el-radio-group :disabled="detail" v-model="roleForm.adminFlag">
               <el-radio :label="1">是</el-radio>
@@ -34,7 +34,7 @@
           :disabled="detail"
           type="textarea"
           v-model="roleForm.remark"
-          :rows="3"
+          :rows="4"
           :placeholder="detail ? '' : '请输入'"
           maxlength="300"
           show-word-limit
@@ -48,10 +48,11 @@
         @change="val => (roleForm.menuIds = val)"
       ></permission>
       <div class="form-buttons">
-        <el-button size="small" plain @click="$emit('cancel')">
+        <el-button size="small" class="cancelBtn" @click="$emit('cancel')">
           {{detail ? '返回' : '取消'}}
         </el-button>
         <el-button
+          class="sureBtn"
           size="small"
           v-if="!detail"
           type="primary"
@@ -137,10 +138,9 @@ export default {
 <style lang="scss" scoped>
 .role-form {
   .title {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     color: #333333;
-    padding-left: 10px;
     line-height: 25px;
     position: relative;
     margin-bottom: 20px;
@@ -148,12 +148,13 @@ export default {
       content: '';
       position: absolute;
       left: 0;
-      top: 50%;
+      bottom: 2px;
       transform: translateY(-50%);
-      width: 2px;
-      height: 18px;
-      background: #4991FD;
-      border-radius: 1px
+      width: 32px;
+      height: 4px;
+      background: #3154AC;
+      border-radius: 3px;
+      opacity: 0.5;
     }
     &.permission-title {
       margin-top: 10px;
@@ -162,20 +163,11 @@ export default {
   .form-buttons {
     text-align: center;
     margin-top: 30px;
-    button {
-      width: 80px;
-      border-radius: 8px;
-      border: none;
-    }
     button + button {
       margin-left: 20px;
     }
-    /deep/ .is-plain {
-      background: #97A6BD;
-      color: #fff;
-    }
   }
-  /deep/ .el-radio__input.is-disabled {
+  /*/deep/ .el-radio__input.is-disabled {
     cursor: auto;
     .el-radio__inner {
       cursor: auto;
@@ -183,8 +175,8 @@ export default {
     + span.el-radio__label {
       color: #333;
       cursor: auto;
-    }
-    &.is-checked .el-radio__inner {
+    }*/
+  /*  &.is-checked .el-radio__inner {
       background-color: #fff;
       border-color: #4991fd;
       cursor: auto;
@@ -192,7 +184,7 @@ export default {
         cursor: auto;
         background: #4991fd;
       }
-    }
-  }
+    }*/
+  /*}*/
 }
 </style>

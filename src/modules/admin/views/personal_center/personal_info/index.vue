@@ -195,10 +195,10 @@ export default {
             this.$message.success('操作成功');
             this.getUsercenterInfo();
             this.$store.commit('user/SET_AVATAR', this.personalForm.headImage);
-            const userInfo = localRead('USER_INFO');
+            const userInfo = localRead('HK_USER_INFO');
             const user = JSON.parse(userInfo);
             user.headImage = this.personalForm.headImage;
-            localSave('USER_INFO', JSON.stringify(user));// 重置头像字段后重新存储
+            localSave('HK_USER_INFO', JSON.stringify(user));// 重置头像字段后重新存储
           });
         }
       });

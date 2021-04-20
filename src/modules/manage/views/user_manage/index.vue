@@ -472,6 +472,8 @@ export default {
     },
   },
   mounted() {
+    console.log(9999999);
+    console.log(this.$store.state.user.access);
     this.getUserList();
     this.getGridList(); // 获取人员列类别
   },

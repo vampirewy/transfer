@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { localSave } from '~/src/libs/util';
+import { localSave, setToken } from '~/src/libs/util';
 import { mapState, mapMutations } from 'vuex';
 
 export default {
@@ -101,8 +101,9 @@ export default {
         })
         .then((res) => {
           const { data } = res;
+          console.log(res);
           this.loginResult = data.data || {};
-          this.$store.commit('user/SET_TOKEN', this.loginResult.sid);
+          // this.$store.commit('user/SET_TOKEN', this.loginResult.token);
           this.redirectHome();
         });
     },
@@ -113,7 +114,8 @@ export default {
     },
     storeLoginInfo() {
       // 保存登录信息
-      localSave('USER_INFO', JSON.stringify(this.loginResult));
+      setToken(this.loginResult.token);
+      localSave('HK_USER_INFO', JSON.stringify(this.loginResult));
       // this.$store.commit('user/SET_TOKEN', this.loginResult.sid);
       this.$store.commit('user/SET_AVATAR', this.loginResult.headImage);
       this.$store.commit('user/SET_USER_NAME', this.loginResult.realName);

@@ -1,8 +1,19 @@
 <template>
   <div class="health_questionnaire_edit">
+    <div class="tabBars">
+      <div v-for="(item,index) in tabbor" :key="index">
+      <span :class="active === index?'TabBarsName':'TabBarsNames'" @click="TabbarBtn(index)">
+        {{item}}
+        <!--<div class="Tabunread">3</div>-->
+      </span>
+      </div>
+      <!-- <div><span>阳性跟踪</span></div>
+      <div><span>随访任务</span></div> -->
+
+    </div>
     <div class="intvTmpl_left" id="intvTmpl_left" v-if="$route.params.qusType === 1"
          :class="{ 'isFixed': searchBarFixed === true }"
-         style="max-height: 30000px;height: auto;margin-right: 30px">
+         style="max-height: 30000px;height: auto;margin-right: 30px;display: none">
       <div class="intvTmpl_left_title">生活方式问卷</div>
       <ul class="intv_menulist">
         <li :class="{'active':active === index}" @click="clickMenu(index, '#questions-' + index)"
@@ -101,6 +112,7 @@ export default {
   data() {
     return {
       active: 0,
+      tabbor: ['当日任务', '阳性跟踪', '随访任务'],
       title: '',
       qusTypeName: '',
       formData: {
@@ -416,6 +428,93 @@ export default {
 </script>
 
 <style lang="scss">
+  .tabBars{
+    display: flex;
+    margin-top: 25px;
+    div{
+      // width: 100px;
+      // height: 40px;
+      // line-height: 40px;
+      // text-align: center;
+      // background: red;
+    }
+    .TabBarsNames{
+      cursor: pointer;
+      background: #EEF1F5;
+      border-color: transparent;
+      color: #666666;
+      position: relative;
+      margin-right: 15px;
+      padding: 10px 10px 10px 10px;
+      font-size: 12px;
+      border-radius: 8px 5px 0 0;
+      margin-left: 13px;
+      &:before{
+        content: '';
+        display: block;
+        width: 18px;
+        height: 36px;
+        position: absolute;
+        -webkit-transform: skewX(165deg);
+        transform: skewX(163deg);
+        background: #EEF1F5;
+        border-top-left-radius: 8px;
+        top: 0px;
+        left: -8px;
+      }
+      &:after{
+        content: '';
+        display: block;
+        width: 15px;
+        height: 36px;
+        position: absolute;
+        -webkit-transform: skewX(23deg);
+        transform: skewX(23deg);
+        background: #EEF1F5;
+        border-top-right-radius: 8px;
+        top: 0px;
+        right: -7px;
+      }
+    }
+    .TabBarsName{
+      cursor: pointer;
+      background: #ffffff;
+      border-color: transparent;
+      color: #333333;
+      font-weight: 500;
+      position: relative;
+      margin-right: 20px;
+      padding: 10px 14px 10px 16px;
+      font-size: 14px;
+      border-radius: 8px 5px 0 0;
+      &:after{
+        content: '';
+        display: block;
+        width: 25px;
+        height: 40px;
+        position: absolute;
+        -webkit-transform: skewX(23deg);
+        transform: skewX(23deg);
+        background: white;
+        border-top-right-radius: 8px;
+        top: 0px;
+        right: -13px;
+      }
+    }
+    .Tabunread{
+      display: inline-block;
+      background: red;
+      padding: 3px;
+      color: #ffffff;
+      width: 12px;
+      height: 12px;
+      line-height: 12px;
+      text-align: center;
+      border-radius: 10px;
+      margin-left: 5px;
+      font-size: 12px;
+    }
+  }
   .health_questionnaire_edit{
     #intvTmpl_left{
       &.isFixed{
@@ -444,7 +543,6 @@ export default {
         transform: translateY(-50%);
       }
     }
-    display: flex;
     .editWarn{
       display: flex;
       height: 80px;
