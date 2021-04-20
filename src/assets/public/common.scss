@@ -137,13 +137,13 @@ a{
   }
   .searchBtnImgSpan{
     position: absolute;
-    right: 2px;
-    top: 2px;
+    right: 10px;
+    top: 5px;
     width: 36px;
-    height: 36px;
+    height: 38px;
     line-height: 38px;
     background: #4991FD;
-    border-radius: 5px;
+    border-radius: 0 5px 5px 0;
     text-align: center;
     cursor: pointer;
     &:hover{
@@ -172,6 +172,14 @@ a{
       }
     }
   }
+}
+.titleBiao{
+  width: 32px;
+  height: 4px;
+  background: #3154AC;
+  border-radius: 3px;
+  opacity: 0.5;
+  margin-top: -6px;
 }
 // 点 title
 .formSearchTitle{
@@ -338,51 +346,118 @@ a{
       }
     }
   }
-  .searchCondition{
-    display: flex;
-    width: 100%;
-    height: 80px;
-    align-items: center;
-    border-bottom: 1px solid #EEF1F5;
-    div{
-      margin-right: 10px;
-      .timing{
-        margin-right: 10px;
-      }
-    }
-    .searchInputFormItem{
-      width: 200px;
-    }
-    .searchFor{
-      width:40px;
-      height: 40px;
-      img{
-        width: 100%;
-      }
-    }
-    .resetAll{
-      width: 60px;
-      height: 40px;
-      background: #DDE0E6;
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      color: #333;
-      font-weight: 400;
-    }
-  }
   .searchInputFormItem {
     .searchBtnImgSpan{
       background: #fff;
+      border: 1px solid #f4f4f6;
       .searchBtnImg{
         width: 36px;
       }
     }
   }
 }
+.searchCondition{
+  display: flex;
+  .searchLeft{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  div{
+    margin: 5px 5px 0 0;
+    .timing{
+      margin-right: 10px;
+    }
+    span{
+      font-size: 14px;
+      color: #333333;
+    }
+    div{
+      div{
+        .el-input__suffix{
+          right: 0px;
+        }
+      }
+    }
+  }
+}
+  .more{
+    span{
+      font-size: 14px;
+      color: #666;
+      margin-right: 5px;
+      transform: rotate(90deg);
+    }
+  }
+  .noMore{
+    background: #7CA7FF;
+    color: #fff !important;
+    span{
+      transform: rotate(-90deg);
+      color: #fff !important;
+    }
+  }
+  .more:hover{
+    cursor: pointer;
+    background: #7CA7FF;
+    color: #fff !important;
+    span{
+      color: #fff;
+    }
+  }
+  .buttones{
+    display: flex;
+    div{
+      margin: 15px 5px 0 0;
+    }
+    .more{
+      width: 110px;
+      height: 40px;
+      border-radius: 5px;
+      border: 1px solid #DDE0E6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #666;
+      img{
+        width: 16px;
+      }
+    }
+  }
+  .searchInputFormItem{
+    width: 225px;
+    .el-input{
+      width: 85%;
+    }
+  }
+  .searchFor{
+    width:40px;
+    height: 40px;
+    img{
+      width: 100%;
+    }
+  }
+  .resetAll{
+    width: 60px;
+    height: 40px;
+    background: #DDE0E6;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #333;
+    font-weight: 400;
+  }
+}
 .btnAdd, .btnReset, .btnDel {
   border-radius: 20px;
   background: #F6F8FC;
+}
+.el-select .el-input .el-select__caret{
+  border-right:1px solid #f4f4f6;
+  border-left:1px solid #f4f4f6;
+}
+.el-input__suffix{
+  right: 0;
 }

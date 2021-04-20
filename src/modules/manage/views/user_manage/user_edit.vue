@@ -5,8 +5,9 @@
         <el-col :span="12">
           <div class="divRight">
             <div class="divRightTitleDiv">
-              <div class="divRightTitle"><span>|</span>
+              <div class="divRightTitle">
                 {{ $route.params.userId ? '编辑客户' : '新增客户'}}
+                <div class="titleBiao"></div>
               </div>
             </div>
           </div>
@@ -208,6 +209,7 @@
                 </el-col>
                 <el-col :span="4">
                   <el-button
+                          class="addbutton"
                           style="height: 40px;marginLeft: 15px"
                           :disabled="!formData.tag"
                           @click="addNewTag"
@@ -232,17 +234,17 @@
                       rows="4"
                       type="textarea"
                       placeholder="输入备注内容"
-                      :maxlength="400"
+                      :maxlength="300"
                       show-word-limit
                       v-model="formData.remark">
               </el-input>
             </el-form-item>
           </el-form>
         </el-col>
-        <el-col :span="12" v-if="$route.params.userId" style="padding-left: 20px;">
+        <el-col :span="12"  style="padding-left: 20px;">
           <div class="divRight">
             <div class="divRightTitleDiv">
-              <div class="divRightTitle"><span>|</span>附件列表</div>
+              <div class="divRightTitle">附件列表<div class="titleBiao"></div></div>
               <div>
                 <el-button
                         class="btn-new btnAdd"

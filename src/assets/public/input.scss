@@ -95,3 +95,43 @@ input:-webkit-autofill:focus {
   background: #24499D;
   color: #FFFFFF;
 }
+.el-button--text,.elbutton{
+  color: #3154AC;
+}
+.elbutton:hover{
+  cursor: pointer;
+}
+.el-textarea{
+  border: 1px solid #DDE0E6;
+  border-radius: 5px;
+}
+.addbutton{
+  width: 90px;
+  height: 40px;
+  background: #36BF2F;
+  border-radius: 5px;
+  color: #fff;
+}
+.addbutton:hover{
+  color: #fff;
+  background: #36BF2F;
+}
+
+.el-button.is-disabled, .el-button.is-disabled:hover, .el-button.is-disabled:focus {
+  background: #DDE0E6;
+  color: #B4BBC9;
+}
+// 顶部搜索
+.topbottomborder{
+  width: 100%;
+  height: 1px;
+  background: #EEF1F5;
+  margin-top: 20px;
+}
+.el-input__icon{
+  width: 35px;
+}
+// .el-icon-arrow-up:before{
+//   margin-right: 5px;
+// }
+

@@ -53,8 +53,10 @@
         <div class="divTop">
           <div class="divTitle">
             <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
-            客户池</div>
+            我的客户</div>
+
           <div class="searchCondition">
+          <div class="searchLeft">
           <div class="searchInputFormItem">
             <el-input placeholder="姓名/手机号/企业单位" v-model="formData.keywords">
             </el-input>
@@ -74,7 +76,47 @@
           </el-select>
           </div>
           <div>
-            <span>客户类别：</span>
+            <span>人员类别：</span>
+            <el-select
+                  v-model="formData.gridId"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+                       :key="index"></el-option>
+          </el-select>
+          </div>
+            <div>
+            <span>管理医生：</span>
+            <el-select
+                  v-model="formData.gridId"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+                       :key="index"></el-option>
+          </el-select>
+          </div>
+            </div>
+            <div class="searchRight">
+            <div class="buttones">
+            <div class="searchFor" @click="search">
+            <img src="@/assets/images/common/topsearchblue.png" alt="">
+          </div>
+          <div class="resetAll">重置</div>
+          <div class="more" v-if="isTrue"  @click="upMore">
+            <span>></span>
+            展开更多</div>
+          <div class="more noMore" v-else @click="upMore">
+            <span>></span>收起筛选</div>
+          </div>
+            </div>
+          </div>
+        </div>
+        <div v-if="!isTrue" class="searchCondition" style="width:80%;">
+          <div class="searchLeft" style="padding-left:5px;">
+          <div>
+            <span>体检报告：</span>
             <el-select
                   v-model="formData.gridId"
                   placeholder="请选择"
@@ -85,6 +127,59 @@
           </el-select>
           </div>
           <div>
+            <span>基础问卷：</span>
+            <el-select
+                  v-model="formData.gridId"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+                       :key="index"></el-option>
+          </el-select>
+          </div>
+          <div>
+            <span>个人报告：</span>
+            <el-select
+                  v-model="formData.gridId"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+                       :key="index"></el-option>
+          </el-select>
+          </div>
+          <div>
+            <span style="margin-left:28px;">附件：</span>
+            <el-select
+                  v-model="formData.gridId"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+                       :key="index"></el-option>
+          </el-select>
+          </div>
+          <div>
+            <span>证件类型：</span>
+            <el-select
+                  v-model="formData.gridId"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+                       :key="index"></el-option>
+          </el-select>
+          </div>
+          <div>
+            <span>证件类型：</span>
+            <el-input
+                  v-model="formData.gridId"
+                  placeholder="请输入"
+                  style="width: 140px"
+          >
+            </el-input>
+          </div>
+           <div>
             <span>建档日期：</span>
             <el-date-picker
                   v-model="formData.startTime"
@@ -104,12 +199,9 @@
           >
           </el-date-picker>
           </div>
-          <div class="searchFor" @click="search">
-            <img src="@/assets/images/common/topsearchblue.png" alt="">
-          </div>
-          <div class="resetAll">重置</div>
           </div>
         </div>
+        <div class="topbottomborder"></div>
         <div class="divRightTitleDiv">
           <!-- <div class="divRightTitle"><span>|</span>客户池</div> -->
           <div>
@@ -149,31 +241,45 @@
                 </span>
               </template>
             </el-table-column>
-            <el-table-column label="性别" prop="gender" width="60">
+            <el-table-column label="性别" prop="gender" width="80">
               <template slot-scope="scope">
                 {{ scope.row.gender === 1 ? '男' : '女' }}
               </template>
             </el-table-column>
-            <el-table-column label="年龄" prop="age" width="60"></el-table-column>
-            <el-table-column label="人员类别" prop="gridName" show-overflow-tooltip>
-              <template slot-scope="scope">
-                <span>{{ scope.row.gridName || '-'}}</span>
-              </template>
-            </el-table-column>
+            <el-table-column label="年龄" prop="age" width="80"></el-table-column>
             <el-table-column label="企业单位" prop="workUnitName" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>{{ scope.row.workUnitName || '-'}}</span>
               </template>
             </el-table-column>
-            <el-table-column label="是否认领" prop="state">
+            <el-table-column label="人员类别" prop="gridName" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{ scope.row.gridName || '-'}}</span>
+              </template>
+            </el-table-column>
+            <!-- <el-table-column label="是否认领" prop="state">
               <template slot-scope="scope">
                 {{ scope.row.healthManageId === '1' ? '已认领' : '未认领' }}
               </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column label="建档时间" prop="createTime" show-overflow-tooltip />
-            <el-table-column label="附件" prop="attachment" width="55">
+            <el-table-column label="是否启用" prop="state">
               <template slot-scope="scope">
-                <div @click="
+                <el-switch
+                  v-model="scope.row.state "
+                  active-value="1"
+                  inactive-value="2"
+                  active-color="#13ce66"
+                  @change="changeStatus(scope, '1')"
+                  >
+                </el-switch>
+              </template>
+            </el-table-column>
+            <el-table-column label="附件" prop="attachment" width="80">
+              <template slot-scope="scope">
+                <div
+                class="elbutton"
+                @click="
                   $router.push({
                     name: 'user_edit',
                     params: {
@@ -181,11 +287,13 @@
                     },
                   })
                 ">
-                  <img class="attachment-btn" src="@/assets/images/common/attachmentBtn.png" />
+                  <!-- <img class="attachment-btn"
+                  src="@/assets/images/common/attachmentBtn.png" /> -->
+                  查看
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="操作" prop="index" width="150">
+            <el-table-column label="操作" prop="index" width="120">
               <template slot-scope="scope">
                 <el-button
                         type="text"
@@ -200,6 +308,14 @@
                 "
                         v-if="getAccess('customer_pool_edit')"
                 >编辑</el-button>
+                <el-button type="text"
+                        size="small"
+                        style="color:#DDE0E6"
+                        v-if="
+                  (getAccess('customer_pool_claim')) &&
+                    scope.row.state === '1' && scope.row.healthManageId === '0'
+                "
+                        >|</el-button>
                 <el-button
                         type="text"
                         size="small"
@@ -210,7 +326,7 @@
                 "
                 >认领</el-button
                 >
-                <el-button
+                <!-- <el-button
                         class="font-enable"
                         type="text"
                         size="small"
@@ -231,7 +347,7 @@
                     getAccess('customer_pool_on_off')
                 "
                 >禁用</el-button
-                >
+                > -->
               </template>
             </el-table-column>
           </el-table>
@@ -278,6 +394,8 @@ export default {
   },
   data() {
     return {
+      isTrue: true,
+      value: true,
       total: 0,
       gridList: [],
       dataSource: [],
@@ -301,6 +419,10 @@ export default {
     };
   },
   methods: {
+    // 展开更多
+    upMore() {
+      this.isTrue = !this.isTrue;
+    },
     async getGridList() {
       const res = await this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
       const { data } = res.data;
@@ -436,29 +558,39 @@ export default {
 
     changeStatus({ row = {} }, status) {
       const setRow = row;
-      this.$confirm(
-        `<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>您确定要改变该病人状态吗？</span></div>`,
-        '提示',
-        {
-          dangerouslyUseHTMLString: true,
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          customClass: 'message-box-customize',
-          showClose: true,
-        },
-      ).then(() => {
-        this.$api.userManagerInterface
-          .editUserStatus({
-            id: setRow.id,
-            state: status,
-          })
-          .then(({ data }) => {
-            if (data.code === 200) {
-              this.$message.success('操作成功');
-              setRow.state = status;
-            }
-          });
+      this.$api.userManagerInterface.editUserStatus({
+        id: setRow.id,
+        state: status,
+      }).then(({ data }) => {
+        if (data.code === 200) {
+          this.$message.success('操作成功');
+          setRow.state = status;
+        }
       });
+      // this.$confirm(
+      // `<div class="delete-text-content"><img class="delete-icon"
+      // src="${deleteIcon}"/><span>您确定要改变该病人状态吗？</span></div>`,
+      //   '提示',
+      //   {
+      //     dangerouslyUseHTMLString: true,
+      //     confirmButtonText: '确定',
+      //     cancelButtonText: '取消',
+      //     customClass: 'message-box-customize',
+      //     showClose: true,
+      //   },
+      // ).then(() => {
+      //   this.$api.userManagerInterface
+      //     .editUserStatus({
+      //       id: setRow.id,
+      //       state: status,
+      //     })
+      //     .then(({ data }) => {
+      //       if (data.code === 200) {
+      //         this.$message.success('操作成功');
+      //         setRow.state = status;
+      //       }
+      //     });
+      // });
     },
     getUserList() {
       this.$api.userManagerInterface

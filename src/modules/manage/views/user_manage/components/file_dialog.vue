@@ -1,7 +1,13 @@
 <template>
-  <el-dialog title="新增档案" :visible.sync="visible" @close="cancel">
+  <el-dialog title="新增附件" :visible.sync="visible" @close="cancel">
     <el-form :model="formData" label-width="90px" ref="form" :rules="rules">
       <el-form-item label="附件格式">
+        <el-input
+                v-model="formData.route"
+                placeholded="请输入"
+                autocomplete="off"
+                maxlength="30">
+        </el-input>
         <upload
           ref="upload"
           type="userAuth"
@@ -12,9 +18,9 @@
         >
           <el-button size="small" type="primary" v-if="!formData.filePath">点击上传</el-button>
           <el-button size="small" type="primary" v-else>重新上传</el-button>
-          <div class="el-upload__tip">支持格式：txt、docx、xlsx、jpg、png、jpeg、zip、rar、pdf</div>
         </upload>
       </el-form-item>
+      <div class="el-upload__tip">支持格式：txt、docx、xlsx、jpg、png、jpeg、zip、rar、pdf</div>
       <el-form-item label="附件标题" prop="title">
         <el-input
                 v-model="formData.title"
@@ -62,10 +68,12 @@ export default {
         remark: '',
         uploadDate: dayjs(new Date()).format('YYYY-MM-DD hh:mm:ss'),
         filePath: '',
+        route: '',
       },
       fileList: [],
       rules: {
         title: [{ required: true, message: '请输入附件标题' }],
+        route: [{ required: true, message: '请上传附件' }],
       },
     };
   },
@@ -131,7 +139,7 @@ export default {
 
 <style lang="scss" scoped>
   .dialog-footer {
-    text-align: right;
+    text-align: center;
     padding: 0 26px;
   }
   /deep/ .el-upload {
