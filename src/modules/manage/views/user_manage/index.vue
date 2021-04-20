@@ -74,7 +74,43 @@
           </el-select>
           </div>
           <div>
-            <span>客户类别：</span>
+            <span>人员类别：</span>
+            <el-select
+                  v-model="formData.gridId"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+                       :key="index"></el-option>
+          </el-select>
+          </div>
+            <div>
+            <span>管理医生：</span>
+            <el-select
+                  v-model="formData.gridId"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+                       :key="index"></el-option>
+          </el-select>
+          </div>
+          <div class="buttones">
+            <div class="searchFor" @click="search">
+            <img src="@/assets/images/common/topsearchblue.png" alt="">
+          </div>
+          <div class="resetAll">重置</div>
+          <div class="more" v-if="isTrue"  @click="upMore">
+            <span>></span>
+            展开更多</div>
+          <div class="more noMore" v-else @click="upMore">
+            <span>></span>收起筛选</div>
+          </div>
+          </div>
+        </div>
+        <div v-if="!isTrue" class="searchCondition" style="width:80%;">
+          <div>
+            <span>体检报告：</span>
             <el-select
                   v-model="formData.gridId"
                   placeholder="请选择"
@@ -85,6 +121,59 @@
           </el-select>
           </div>
           <div>
+            <span>基础问卷：</span>
+            <el-select
+                  v-model="formData.gridId"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+                       :key="index"></el-option>
+          </el-select>
+          </div>
+          <div>
+            <span>个人报告：</span>
+            <el-select
+                  v-model="formData.gridId"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+                       :key="index"></el-option>
+          </el-select>
+          </div>
+          <div>
+            <span style="margin-left:28px;">附件：</span>
+            <el-select
+                  v-model="formData.gridId"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+                       :key="index"></el-option>
+          </el-select>
+          </div>
+          <div>
+            <span>证件类型：</span>
+            <el-select
+                  v-model="formData.gridId"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+                       :key="index"></el-option>
+          </el-select>
+          </div>
+          <div>
+            <span>证件类型：</span>
+            <el-input
+                  v-model="formData.gridId"
+                  placeholder="请输入"
+                  style="width: 140px"
+          >
+            </el-input>
+          </div>
+           <div>
             <span>建档日期：</span>
             <el-date-picker
                   v-model="formData.startTime"
@@ -104,12 +193,8 @@
           >
           </el-date-picker>
           </div>
-          <div class="searchFor" @click="search">
-            <img src="@/assets/images/common/topsearchblue.png" alt="">
-          </div>
-          <div class="resetAll">重置</div>
-          </div>
         </div>
+        <div class="topbottomborder"></div>
         <div class="divRightTitleDiv">
           <!-- <div class="divRightTitle"><span>|</span>客户池</div> -->
           <div>
@@ -302,6 +387,7 @@ export default {
   },
   data() {
     return {
+      isTrue: true,
       value: true,
       total: 0,
       gridList: [],
@@ -326,6 +412,10 @@ export default {
     };
   },
   methods: {
+    // 展开更多
+    upMore() {
+      this.isTrue = !this.isTrue;
+    },
     async getGridList() {
       const res = await this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
       const { data } = res.data;

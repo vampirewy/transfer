@@ -330,13 +330,18 @@ body .el-table th.gutter{
   opacity: .9;
 }
 .el-tag{
-  background: rgba(73, 145, 253, 0.1);
-  border-radius: 5px;
-  border: 1px solid #4991FD;
+  background: rgba(49, 84, 172, 0.1);
+  border-radius: 16px;
+  border: 1px solid #3154AC;
+  color: #3154AC;
   .el-tag__close{
-    background: #4991fd;
+    background: #3154AC;
     color: #fff;
   }
+}
+.el-tag .el-tag__close:hover{
+  background: #3154AC;
+    color: #fff;
 }
 /*dropDown 栏目*/
 .el-dropdown-menu {
