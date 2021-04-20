@@ -380,8 +380,6 @@ a{
     }
   }
 }
-.searchRight{
-}
   .more{
     span{
       font-size: 14px;
@@ -459,4 +457,7 @@ a{
 .el-select .el-input .el-select__caret{
   border-right:1px solid #f4f4f6;
   border-left:1px solid #f4f4f6;
+}
+.el-input__suffix{
+  right: 0;
 }
