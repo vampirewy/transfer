@@ -1,34 +1,36 @@
 <template>
   <div>  <!--v-if="!item.hidden"-->
-    <template v-if="hasOneShowingChild(item.children,item) &&
-    (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
+    <template v-if="hasOneShowingChild(item.roleMenuList,item) &&
+    (!onlyOneChild.roleMenuList || onlyOneChild.noShowingChildren)">
       <!--<app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.name)">-->
-        <!--<el-menu-item :index="resolvePath(onlyOneChild.name)"
+        <el-menu-item :index="resolvePath(onlyOneChild.route)"
                       :class="{'submenu-title-noDropdown':!isNest}"
-                      @click="turnToPage(item.name)">
-          &lt;!&ndash;<item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
-                :title="onlyOneChild.meta.title" />&ndash;&gt;
-          <img v-if="!onlyOneChild.noShowingChildren" src="@/assets/images/body/sideBarImg.png"/>
-          {{onlyOneChild.meta.title}}
-        </el-menu-item>-->
+                      @click="turnToPage(item.route)">
+          <!--<item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
+                :title="onlyOneChild.meta.title" />-->
+          <img v-if="!onlyOneChild.noShowingChildren || item.menuType ===1"
+               src="@/assets/images/body/sideBarImg.png"/>
+          <!--{{onlyOneChild.meta.title}}-->{{onlyOneChild.name}}
+        </el-menu-item>
       <!--</app-link>-->
     </template>
 
-    <el-submenu v-else ref="subMenu" :index="resolvePath(item.name)" popper-append-to-body>
+    <el-submenu v-else ref="subMenu"
+                :index="resolvePath(onlyOneChild.route)" popper-append-to-body>
       <template slot="title">
         <!--<item v-if="item.meta" :icon="item.meta && item.meta.icon"
         :title="item.meta.title" />-->
         <img src="@/assets/images/body/sideBarImg.png"/>
-        {{item.meta.title}}
+        <!--{{item.meta.title}}-->{{item.name}}
       </template>
-      <sidebar-item
-        v-for="child in item.children"
-        :key="child.name"
+     <!-- <sidebar-item
+        v-for="child in item.roleMenuList"
+        :key="child.menuCode"
         :is-nest="true"
         :item="child"
-        :base-path="resolvePath(child.name)"
+        :base-path="resolvePath(child.route)"
         class="nest-menu"
-      />
+      />-->
     </el-submenu>
   </div>
 </template>
@@ -66,7 +68,7 @@ export default {
     hasOneShowingChild(children = [], parent) {
       const showingChildren = children.filter((item) => {
         let bool;
-        if (item.hidden) {
+        if (item.menuType === 3) { // item.hidden 如果是按钮级别就不展示
           bool = false;
         } else {
           // Temp set(will be used if only has one showing child)
@@ -75,7 +77,7 @@ export default {
         }
         return bool;
       });
-
+      console.log(showingChildren);
       // When there is only one child router, the child router is displayed by default
       if (showingChildren.length === 1) { // 子集就是一集
         return true;
@@ -100,7 +102,7 @@ export default {
     },
     turnToPage(route) {
       let { name, params, query } = {};
-      if (typeof route === 'string') name = route;
+      if (typeof route === 'string') name = route.split('/')[1];
       else {
         name = route.name;
         params = route.params;
@@ -110,7 +112,12 @@ export default {
         window.open(name.split('_')[1]);
         return;
       }
-
+      console.log(name);
+      console.log({
+        name,
+        params,
+        query,
+      });
       this.$router.push({
         name,
         params,

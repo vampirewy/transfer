@@ -13,8 +13,8 @@
         :collapse-transition="false"
         mode="vertical"
       >
-        <sidebar-item v-for="route in menuList" :key="route.name"
-        :item="route" :base-path="route.name" />
+        <sidebar-item v-for="route in menuList" :key="route.menuCode"
+        :item="route" :base-path="route.route" />
       </el-menu>
     </el-scrollbar>
   </div>
@@ -47,7 +47,7 @@ export default {
       /* if (meta.activeMenu) {
         return meta.activeMenu;
       } */
-      return path.split('/')[1];
+      return path;
     },
     showLogo() {
       return true; // this.$store.state.settings.sidebarLogo;
@@ -59,6 +59,9 @@ export default {
 };
 </script>
 <style scoped>
+  /deep/ .el-scrollbar__bar{
+    display: none;
+  }
   /deep/ .el-menu{
     border-right: none!important;
   }

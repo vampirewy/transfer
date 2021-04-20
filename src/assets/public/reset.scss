@@ -225,6 +225,7 @@ body .el-table th.gutter{
       border-radius: 8px;
       width: 80px;
       border: none;
+      font-size: 12px;
       &.el-button--default:not(.el-button--primary) {
         color: #fff;
         background: #97A6BD;
@@ -244,8 +245,12 @@ body .el-table th.gutter{
 }
 .el-textarea__inner{
   font-family: 微软雅黑;
-  border: none;
+  border: 1px solid #DDE0E6;
   padding: 10px 20px;
+  color: #333333;
+  &::placeholder{
+    color: #666666!important;
+  }
 }
 .el-input{
   input{
@@ -284,21 +289,26 @@ body .el-table th.gutter{
 .el-checkbox__input{
   &.is-checked{
     .el-checkbox__inner{
-      background: #edf4fe;
-      &::after{
-        border: 1px solid #4991FD;
+      background: #3154AC;
+      border-color: #3154AC;
+      &:after{
+        border: 1px solid white;
         border-left: 0;
         border-top: 0;
       }
     }
   }
 }
+.el-checkbox__input.is-checked + .el-checkbox__label{
+  color: #3154AC;
+}
 .el-radio__input{
   &.is-checked{
     .el-radio__inner{
       background: #fff;
+      border-color: #3154AC;
       &::after{
-        background: #4991FD;
+        background: #3154AC;
         width: 5px;
         height: 5px;
       }

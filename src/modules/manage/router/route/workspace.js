@@ -20,8 +20,8 @@ export default [
     component: Main,
     children: [
       {
-        path: '/workspace',
-        name: 'workspace',
+        path: '/my_task',
+        name: 'my_task',
         meta: {
           title: '我的任务',
           access: 'my_task',
@@ -29,8 +29,8 @@ export default [
         component: () => import('../../views/workspace'),
       },
       {
-        path: '/statistics_index',
-        name: 'statistics_index',
+        path: '/work_statistics',
+        name: 'work_statistics',
         meta: {
           title: '工作绩效统计',
           access: 'work_statistics',

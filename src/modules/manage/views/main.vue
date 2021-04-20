@@ -71,9 +71,8 @@ import User from '~/src/components/user';
 import TagsNav from '~/src/components/tags_nav/tags_nav.vue';
 import Content from '~/src/components/layout/content.vue';
 import SideMenu from '~/src/components/side_menu/side_menu.vue';
-import { getNewTagList, routeEqual } from '~/src/libs/util';
+import { getNewTagList, routeEqual, localSave } from '~/src/libs/util';
 import routers from '../router/routers';
-
 export default {
   name: 'main',
   components: {
@@ -96,7 +95,7 @@ export default {
       superAdmin: state => state.user.superAdmin,
     }),
     ...mapGetters({
-      menuList: 'app/menuList',
+      // menuList: 'app/menuList',
     }),
     classObj() {
       return {
@@ -108,6 +107,7 @@ export default {
   data() {
     return {
       opened: true, // 侧边栏是否展开
+      menuList: [],
       contentMarginTop: 0,
       personalHealthPage: this.$route.meta.title === '个人管理中心', // 判断是否是个人健康管理页
     };
@@ -129,6 +129,7 @@ export default {
      * 初始化设置标签导航
      * @description
      */
+    this.getCheckMenuList();
     console.log(this.menuList);
     this.setTagNavList();
     this.setHomeRoute(routers);
@@ -163,6 +164,15 @@ export default {
       } else {
         this.personalHealthPage = false;
       }
+    },
+    async getCheckMenuList() { // 获取当前登录人权限
+      const res = await this.$api.loginInterface.getCheckedMenu({});
+      const { data } = res.data;
+      console.log(data);
+      this.menuList = data.synthesisMenuList;
+      console.log(this.menuList);
+      localSave('HK_ACCESS', JSON.stringify(data.checkList));
+      this.$store.commit('user/SET_ACCESS', data.checkList);
     },
     setContentMarginTop() {
       /* const headerHeight = this.$refs.sideMenuHeader.$el.offsetHeight;

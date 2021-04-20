@@ -17,7 +17,7 @@ app.use(express.static(path.resolve(__dirname, '../dist'))); // 静态资源路�
 // 代理服务
 const proxyTable = {
   '/api': {
-    target: 'http://182.61.43.226:9001/api', //'http://116.62.9.135:5124',
+    target: 'http://182.61.43.226:9002/api', //'http://116.62.9.135:5124',
     changeOrigin: true,
     pathRewrite: {
       "/api": ""

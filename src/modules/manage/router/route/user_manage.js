@@ -20,8 +20,8 @@ export default [
     component: Main,
     children: [
       {
-        path: '/user_manage',
-        name: 'user_manage',
+        path: '/customer_pool',
+        name: 'customer_pool',
         meta: {
           title: '我的客户',
           access: 'customer_pool',

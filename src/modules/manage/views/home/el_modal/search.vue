@@ -98,8 +98,8 @@ export default {
     };
   },
   mounted() {
-    if (localStorage.getItem('USER_INFO')) {
-      if (JSON.parse(localStorage.getItem('USER_INFO')).dataRange === 0) {
+    if (localStorage.getItem('HK_USER_INFO')) {
+      if (JSON.parse(localStorage.getItem('HK_USER_INFO')).dataRange === 0) {
         this.dataRange = true;
       } else {
         this.dataRange = false;

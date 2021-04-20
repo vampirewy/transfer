@@ -32,12 +32,12 @@ const turnTo = (to, user, next) => {
 };
 
 router.beforeEach((to, from, next) => {
-  const userInfo = localRead('USER_INFO');
+  const userInfo = localRead('HK_USER_INFO');
   if (to.name === 'login' && !userInfo) {
     next();
   } else if (userInfo) {
     const user = JSON.parse(userInfo);
-    store.commit('user/SET_TOKEN', user.sid);
+    store.commit('user/SET_TOKEN', user.token);
     store.commit('user/SET_AVATAR', user.headImage);
     store.commit('user/SET_USER_NAME', user.realName);
     store.commit('user/SET_USER_ID', user.userId);
@@ -72,7 +72,7 @@ router.beforeEach((to, from, next) => {
   } else if (store.state.user.hasGetInfo) {
     turnTo(to, store.state.user, next);
   } else {
-    const userInfo = localRead('USER_INFO');
+    const userInfo = localRead('HK_USER_INFO');
     if (userInfo) {
       const user = JSON.parse(userInfo);
       store.commit('user/SET_TOKEN', user.sid);
