@@ -2,7 +2,7 @@
   <el-row
     :gutter="20"
     class="panel-group"
-    style="margin: 0 0 20px 0;display: flex;width: 100%;"
+    style="margin: 10px 0 20px 0;display: flex;width: 99%;"
   >
     <el-col class="card-panel-col" style="padding-left: 0">
       <div class="card-panel" @click="toRouterPage(1)">
@@ -10,12 +10,12 @@
           <img class="card-panel-icon" :src="home1" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-number">
-            {{ formData.clientInfoCount || 0 }}<span>人</span>
-          </div>
           <div class="card-panel-text">客户总数</div>
+          <div class="card-panel-number">
+            {{ formData.clientInfoCount || 0 }}
+          </div>
         </div>
-        <div class="cardDian"><p></p><p></p></div>
+        <!-- <div class="cardDian"><p></p><p></p></div> -->
       </div>
     </el-col>
     <el-col class="card-panel-col">
@@ -24,12 +24,12 @@
           <img class="card-panel-icon" :src="home2" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-number">
-            {{ formData.reportInfoCount || 0 }}<span>人</span>
-          </div>
           <div class="card-panel-text">体检总数</div>
+          <div class="card-panel-number">
+            {{ formData.reportInfoCount || 0 }}
+          </div>
         </div>
-        <div class="cardDian"><p></p><p></p></div>
+        <!-- <div class="cardDian"><p></p><p></p></div> -->
       </div>
     </el-col>
     <el-col class="card-panel-col">
@@ -38,12 +38,12 @@
           <img class="card-panel-icon" :src="home3" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-number">
-            {{ formData.questionInfoCount || 0 }}<span>份</span>
-          </div>
           <div class="card-panel-text">问卷总数</div>
+          <div class="card-panel-number">
+            {{ formData.questionInfoCount || 0 }}
+          </div>
         </div>
-        <div class="cardDian"><p></p><p></p></div>
+        <!-- <div class="cardDian"><p></p><p></p></div> -->
       </div>
     </el-col>
     <el-col class="card-panel-col">
@@ -52,12 +52,12 @@
           <img class="card-panel-icon" :src="home4" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-number">
-            {{ formData.assessReportCount || 0 }}<span>份</span>
-          </div>
           <div class="card-panel-text">评估报告总数</div>
+          <div class="card-panel-number">
+            {{ formData.assessReportCount || 0 }}
+          </div>
         </div>
-        <div class="cardDian"><p></p><p></p></div>
+        <!-- <div class="cardDian"><p></p><p></p></div> -->
       </div>
     </el-col>
     <!-- <el-col class="card-panel-col"  style="padding-right: 0">
@@ -78,10 +78,10 @@
 </template>
 
 <script>
-import _home1 from '~/src/assets/images/home/home1.png';
-import _home2 from '~/src/assets/images/home/home2.png';
-import _home3 from '~/src/assets/images/home/home3.png';
-import _home4 from '~/src/assets/images/home/home4.png';
+import _home1 from '~/src/assets/images/home/home11.png';
+import _home2 from '~/src/assets/images/home/home22.png';
+import _home3 from '~/src/assets/images/home/home33.png';
+import _home4 from '~/src/assets/images/home/home44.png';
 import _home5 from '~/src/assets/images/home/home5.png';
 
 export default {
@@ -110,7 +110,7 @@ export default {
   // padding-top: 20px;
 
   .card-panel {
-    height: 110px;
+    height: 90px;
     cursor: pointer;
     font-size: 12px;
     position: relative;
@@ -136,13 +136,13 @@ export default {
     }
 
     .card-panel-icon {
-      width: 50px;
+      width: 40px;
     }
     .card-panel-number {
       font-size: 32px;
       font-weight: bold;
       text-align: left;
-      margin: -10px 0 -2px 0;
+      margin: -5px 0 -2px 0;
       span{
         font-size: 16px;
         font-weight: bold;
@@ -152,7 +152,7 @@ export default {
     }
     .card-panel-text {
       line-height: 18px;
-      color: #97A6BD;
+      color: #B4BBC9;
       font-size: 12px;
     }
     .cardDian{

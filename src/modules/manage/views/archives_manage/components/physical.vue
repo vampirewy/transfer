@@ -17,6 +17,21 @@
             </el-select>
           </el-form-item>
         </el-col>
+           <el-col :span="6">
+          <el-form-item label="体检库">
+            <el-select
+              v-model="formData.reportTemplateId"
+              @change="templateDetail"
+              placeholder="请选择">
+              <el-option
+                v-for="template in templateList"
+                :key="template.id"
+                :label="template.name"
+                :value="template.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
         <!-- <el-col :span="6">
           <el-form-item label="体检库" prop="libraryId">
             <el-select v-model="formData.libraryId" placeholder="请选择">
@@ -214,7 +229,7 @@
       </div>
       <div class="text-add-abnormal" v-else>点击右上角添加体检异常信息</div>
 
-      <div class="sub-title">
+      <div class="sub-title" style="background:#ffffff;color:#333333">
         <span>总检建议</span>
       </div>
       <div class="suggest-item">
@@ -269,6 +284,7 @@ export default {
         sectionConclusionList: [],
         summarize: '',
         advice: '',
+        physicalExamination: '',
       },
       abnormalModalVisible: false,
       abnormalLevelMap: {
@@ -282,6 +298,9 @@ export default {
         // libraryId: [
         //   { required: true, message: '请选择体检库', trigger: 'change' },
         // ],
+        physicalExamination: [
+          { required: true, message: '请选择体检库', trigger: 'change' },
+        ],
       },
     };
   },
@@ -569,7 +588,7 @@ export default {
     margin-bottom: 30px;
     .top {
       padding: 10px;
-      background: #4991FD;
+      background: #3154AC;
       border-radius: 5px;
       display: flex;
       align-items: center;
@@ -692,7 +711,7 @@ export default {
   }
   /deep/ .sub-title {
     height: 60px;
-    background: #4991FD;
+    background: #7CA7FF;
     border-radius: 5px;
     display: flex;
     justify-content: space-between;

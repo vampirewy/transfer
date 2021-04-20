@@ -53,10 +53,10 @@
         <template >
           <div class="table-operate-buttonss" style="margin-top: -8px">
             <!-- <span class="page-name">就医记录</span> -->
-          <div class="divTop">
+            <div class="divTop">
             <div class="divTitle">
               <span><img src="@/assets/images/common/titleLeft.png" alt="" /></span>
-              我的客户
+              单项检查
             </div>
             <div class="searchCondition">
               <div class="searchLeft">
@@ -99,21 +99,26 @@
                     ></el-option>
                   </el-select>
                 </div>
-                <div>
-                  <span>是否总检：</span>
-                  <el-select
-                    v-model="formData.TotalTest"
-                    placeholder="请选择"
-                    style="width: 140px"
-                  >
-                    <el-option
-                      :label="item.gridName"
-                      :value="item.id"
-                      v-for="(item, index) in gridList"
-                      :key="index"
-                    ></el-option>
-                  </el-select>
-                </div>
+               <div>
+                <span>体检日期：</span>
+                <el-date-picker
+                  v-model="formData.physicalstartTime"
+                  type="date"
+                  :max-date="formData.endTime"
+                  placeholder="选择开始日期"
+                  style="width: 100px"
+                >
+                </el-date-picker>
+                <span class="timing">-</span>
+                <el-date-picker
+                  v-model="formData.physicalendTime"
+                  type="date"
+                  :min-date="formData.startTime"
+                  placeholder="选择结束日期"
+                  style="width: 100px"
+                >
+                </el-date-picker>
+              </div>
               </div>
                <div class="searchRight">
                 <div class="buttones">
@@ -121,18 +126,18 @@
                     <img src="@/assets/images/common/topsearchblue.png" alt="" />
                   </div>
                   <div class="resetAll">重置</div>
-                  <div class="more" v-if="isTrue" @click="upMore">
+                  <!-- <div class="more" v-if="isTrue" @click="upMore">
                     <span>></span>
                     展开更多
                   </div>
                   <div class="more noMore" v-if="!isTrue" @click="upMore">
                     <span>></span>收起筛选
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
           </div>
-           <div v-if="!isTrue" class="searchCondition" style="width: 100%">
+           <!-- <div v-if="!isTrue" class="searchCondition" style="width: 100%">
             <div class="searchLeft" style="padding-left: 5px">
               <div>
                 <span>体检日期：</span>
@@ -190,7 +195,7 @@
                   </el-select>
                 </div>
             </div>
-          </div>
+          </div> -->
           <div class="topbottomborder"></div>
             <div class="operates">
               <operate-button
@@ -263,62 +268,55 @@
                 </span>
                 </template>
               </el-table-column>
-              <el-table-column label="姓名" prop="gender" align="center">
-                <template slot-scope="scope">
-                  {{scope.row.gender === 1 ? '男' : (scope.row.gender === 2 ? '女' : '')}}
-                </template>
-              </el-table-column>
-              <el-table-column label="性别" prop="age" align="center"></el-table-column>
               <el-table-column
-                label="年龄"
+                label="姓名"
                 align="center"
                 prop="workUnitName"
                 show-overflow-tooltip>
               </el-table-column>
-              <el-table-column
-                label="就医类型"
-                align="center"
-                prop="clientGridName"
-                show-overflow-tooltip>
+                <el-table-column label="性别" prop="gender" align="center">
+                <template slot-scope="scope">
+                  {{scope.row.gender === 1 ? '男' : (scope.row.gender === 2 ? '女' : '')}}
+                </template>
               </el-table-column>
                 <el-table-column
-                label="医疗机构"
+                label="年龄"
                 align="center"
                 prop="hospital"
                 show-overflow-tooltip>
               </el-table-column>
                <el-table-column
-                label="科室"
-                align="center"
-                prop="workUnitName"
-                show-overflow-tooltip>
-              </el-table-column>
-               <el-table-column
-                label="诊断"
+                label="检查单号"
                 align="center"
                 prop="workUnitName"
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
-                label="就医日期"
+                label="检查机构"
                 align="center"
                 prop="inDate"
                 show-overflow-tooltip>
               </el-table-column>
             <el-table-column
-                label="出院日期"
+                label="检查日期"
                 align="center"
                 prop="inDate"
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
-                label="当前状态"
+                label="检查项目"
+                align="center"
+                prop="workUnitName"
+                show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column
+                label="项目库"
                 align="center"
                 prop="diagnosis"
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
-                label="就医次数"
+                label="次数"
                 align="center"
                 prop="result"
                 show-overflow-tooltip>
@@ -361,8 +359,8 @@
 </template>
 
 <script>
-import MedicalHistoryForm from './medical_history_form.vue';
-import DetailDialog from './medical_history_detail.vue';
+import MedicalHistoryForm from '../medical_history_form.vue';
+import DetailDialog from '../medical_history_detail.vue';
 import QueryPage from '~/src/components/query_page/index.vue';
 import Search from '~/src/components/query_page/search.vue';
 import QueryFilter from '~/src/components/query_page/query_filter.vue';

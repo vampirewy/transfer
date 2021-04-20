@@ -1,6 +1,6 @@
 <template>
   <div class="report-page">
-    <report-edit
+    <!-- <report-edit
       v-if="view === 2"
       :id="currentId"
       @close="handleClose">
@@ -10,8 +10,9 @@
       :id="currentId"
       @close="handleClose">
     </report-detail>
-    <query-page v-else @reset="reset" @search="search()">
-      <template slot="left">
+    <query-page v-else @reset="reset" @search="search()"> -->
+      <!-- slot="left" -->
+      <!-- <template >
         <search>
           <div class="searchInputFormItem">
             <el-input v-model="formData.keywords" placeholder="姓名/手机号/企业单位"></el-input>
@@ -25,7 +26,6 @@
             <el-option label="男" :value="1"></el-option>
             <el-option label="女" :value="2"></el-option>
           </el-select>
-          <!-- <el-input placeholder="企业单位" v-model="formData.workUnitName"></el-input> -->
           <el-input placeholder="体检编号" v-model="formData.reportNo"></el-input>
           <div class="filter-item-title">体检日期</div>
           <el-date-picker
@@ -45,12 +45,138 @@
             placeholder="选择结束时间">
           </el-date-picker>
         </query-filter>
-      </template>
-      <template slot="right">
+      </template> -->
+       <!-- slot="right" -->
+      <template>
         <div>
-          <div class="table-operate-buttons" style="margin-top: -8px">
-            <span class="page-name">体检报告</span>
-            <div>
+          <div class="table-operate-buttonss" style="margin-top: -8px">
+            <!-- <span class="page-name">体检报告</span> -->
+          <div class="divTop">
+            <div class="divTitle">
+              <span><img src="@/assets/images/common/titleLeft.png" alt="" /></span>
+              我的客户
+            </div>
+            <div class="searchCondition">
+              <div class="searchLeft">
+                <div class="searchInputFormItem">
+                  <el-input
+                    placeholder="姓名/手机号/企业单位"
+                    v-model="formData.keywords"
+                  >
+                  </el-input>
+                  <span class="searchBtnImgSpan" @click="search">
+                    <img
+                      class="searchBtnImg"
+                      src="@/assets/images/common/topsearch.png"
+                    />
+                  </span>
+                </div>
+                <div>
+                  <span>客户性别：</span>
+                  <el-select
+                    v-model="formData.gender"
+                    placeholder="请选择"
+                    style="width: 140px"
+                  >
+                    <el-option label="男" value="1" key="1"></el-option>
+                    <el-option label="女" value="2" key="2"></el-option>
+                  </el-select>
+                </div>
+                <div>
+                  <span>人员类别：</span>
+                  <el-select
+                    v-model="formData.gridId"
+                    placeholder="请选择"
+                    style="width: 140px"
+                  >
+                    <el-option
+                      :label="item.gridName"
+                      :value="item.id"
+                      v-for="(item, index) in gridList"
+                      :key="index"
+                    ></el-option>
+                  </el-select>
+                </div>
+                <div>
+                  <span>是否总检：</span>
+                  <el-select
+                    v-model="formData.TotalTest"
+                    placeholder="请选择"
+                    style="width: 140px"
+                  >
+                    <el-option
+                      :label="item.gridName"
+                      :value="item.id"
+                      v-for="(item, index) in gridList"
+                      :key="index"
+                    ></el-option>
+                  </el-select>
+                </div>
+              </div>
+               <div class="searchRight">
+                <div class="buttones">
+                  <div class="searchFor" @click="search">
+                    <img src="@/assets/images/common/topsearchblue.png" alt="" />
+                  </div>
+                  <div class="resetAll">重置</div>
+                  <div class="more" v-if="isTrue" @click="upMore">
+                    <span>></span>
+                    展开更多
+                  </div>
+                  <div class="more noMore" v-if="!isTrue" @click="upMore">
+                    <span>></span>收起筛选
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+           <div v-if="!isTrue" class="searchCondition" style="width: 80%">
+            <div class="searchLeft" style="padding-left: 5px">
+              <div>
+                <span>体检日期：</span>
+                <el-date-picker
+                  v-model="formData.physicalstartTime"
+                  type="date"
+                  :max-date="formData.pickerStartTime"
+                  placeholder="选择开始日期"
+                  style="width: 140px"
+                >
+                </el-date-picker>
+                <span class="timing">-</span>
+                <el-date-picker
+                  v-model="formData.physicalendTime"
+                  type="date"
+                  :min-date="formData.pickerEndTime"
+                  placeholder="选择结束日期"
+                  style="width: 140px"
+                >
+                </el-date-picker>
+              </div>
+              <div>
+                <span>采集日期：</span>
+                <el-date-picker
+                  v-model="formData.gatherstartTime"
+                  type="date"
+                  :max-date="formData.pickerStartTime"
+                  placeholder="选择开始日期"
+                  style="width: 140px"
+                >
+                </el-date-picker>
+                <span class="timing">-</span>
+                <el-date-picker
+                  v-model="formData.gatherendTime"
+                  type="date"
+                  :min-date="formData.pickerEndTime"
+                  placeholder="选择结束日期"
+                  style="width: 140px"
+                >
+                </el-date-picker>
+              </div>
+            </div>
+          </div>
+          <div class="topbottomborder"></div>
+
+            <div class="operates">
               <operate-button
                 type="add"
                 @click="handleAdd"
@@ -59,6 +185,11 @@
                 type="delete"
                 @click="handleDelete"
                 v-if="getAccess('physical_examination_report_batch_delete')
+                "></operate-button>
+                <operate-button
+                type="editGray"
+                @click="handleeditGray"
+                v-if="getAccess('physical_examination_report_batch_editGray')
                 "></operate-button>
             </div>
           </div>
@@ -70,7 +201,7 @@
               @selection-change="handleSelectionChange"
               :row-key="getRowKeys"
               @expand-change="handleExpandChange">
-              <el-table-column type="expand" width="1" class-name="hide-expand-column">
+              <!-- <el-table-column type="expand" width="1" class-name="hide-expand-column">
                 <el-table :data="expandData.list" class="expand-table">
                   <el-table-column
                     label="体检编号"
@@ -78,12 +209,12 @@
                     align="center"
                     show-overflow-tooltip></el-table-column>
                   <el-table-column
-                    label="体检日期"
+                    label="姓名"
                     prop="reportDate"
                     align="center"
                     show-overflow-tooltip></el-table-column>
                   <el-table-column
-                    label="体检机构"
+                    label="性别"
                     prop="examinationOrgan"
                     align="center"
                     show-overflow-tooltip>
@@ -111,8 +242,13 @@
                     layout="prev, pager, next, jumper, total, sizes"
                   ></el-pagination>
                 </div>
-              </el-table-column>
+              </el-table-column> -->
               <el-table-column type="selection" width="40" align="center"></el-table-column>
+              <el-table-column
+                label="体检编号"
+                prop="age"
+                align="center"
+                show-overflow-tooltip></el-table-column>
               <el-table-column
                 label="姓名"
                 prop="clientName"
@@ -139,44 +275,46 @@
                 align="center"
                 show-overflow-tooltip></el-table-column>
               <el-table-column
-                label="企业单位"
+                label="人员类别"
                 prop="workUnitName"
-                align="center"
-                show-overflow-tooltip></el-table-column>
-              <el-table-column
-                label="体检编号"
-                prop="reportNo"
                 align="center"
                 show-overflow-tooltip></el-table-column>
               <el-table-column
                 label="体检日期"
                 prop="reportDate"
-                min-width="120"
+                min-width="100"
                 show-overflow-tooltip
                 align="center">
               </el-table-column>
+               <el-table-column
+                label="总检日期"
+                prop="reportDate"
+                min-width="100"
+                show-overflow-tooltip
+                align="center">
+              </el-table-column>
+                 <el-table-column
+                label="总检"
+                prop="reportNo"
+                align="center"
+                show-overflow-tooltip></el-table-column>
               <el-table-column
-                label="关注指标"
+                label="采集日期"
                 prop="followReportItemTotal"
                 align="center"
                 show-overflow-tooltip></el-table-column>
               <el-table-column
-                label="关注疾病"
+                label="体检次数"
                 prop="reportAbnormalTotal"
                 align="center"
                 show-overflow-tooltip></el-table-column>
-              <!--<el-table-column
-                label="体检次数"
+              <el-table-column
+                label="企业单位"
                 prop="reportCount"
                 align="center"
-                show-overflow-tooltip>
-                <template slot-scope="scope">
-                  <el-button type="text" @click="expandsHandle(scope.row)">
-                    {{scope.row.reportCount}}
-                  </el-button>
-                </template>
-              </el-table-column>-->
-              <el-table-column label="操作" prop="index" width="160" align="center">
+                min-width="100"
+                show-overflow-tooltip></el-table-column>
+              <el-table-column label="操作" prop="index" width="120" align="center">
                 <template slot-scope="scope">
                   <el-button
                     type="text"
@@ -191,12 +329,12 @@
                     @click="handleDetail(scope.row.id)"
                     v-if="getAccess('physical_examination_report_view')"
                   >查看</el-button>
-                  <el-button
+                  <!-- <el-button
                     type="text"
                     size="small"
                     @click="remove([scope.row.id])"
                     v-if="getAccess('physical_examination_report_delete')"
-                  >删除</el-button>
+                  >删除</el-button> -->
                 </template>
               </el-table-column>
             </el-table>
@@ -215,7 +353,7 @@
           </div>
         </div>
       </template>
-    </query-page>
+    <!-- </query-page> -->
   </div>
 </template>
 
@@ -229,6 +367,7 @@ import ReportEdit from './report_edit.vue';
 import ReportDetail from './report_detail.vue';
 
 export default {
+  isTrue: true,
   name: 'index',
   components: {
     QueryPage,
@@ -247,10 +386,13 @@ export default {
       formData: {
         keywords: '',
         gender: '',
-        workUnitName: '',
-        reportNo: '',
-        minReportDate: undefined,
-        maxReportDate: undefined,
+        gridId: '',
+        TotalTest: '',
+        gridName: '',
+        physicalstartTime: '',
+        physicalendTime: '',
+        gatherstartTime: '',
+        gatherendTime: '',
       },
       params: {
         pageNo: 1,
@@ -298,6 +440,10 @@ export default {
     localStorage.removeItem('homeSearchData');
   },
   methods: {
+    upMore() {
+      this.isTrue = !this.isTrue;
+      this.$forceUpdate();
+    },
     handleClose() { // refresh
       this.view = 1;
       this.fetch();
@@ -446,5 +592,15 @@ export default {
       margin: 0;
     }
   }
+}
+.table-operate-buttonss{
+  .page-name{
+    font-size: 16px;
+    color: #333333;
+    font-weight: 600;
+  }
+}
+.operates{
+  margin: 20px 0 10px 0;
 }
 </style>

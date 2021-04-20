@@ -1,6 +1,6 @@
 <template>
   <div class="medication-history">
-    <query-page @reset="onReset" @search="onSearch">
+    <!-- <query-page @reset="onReset" @search="onSearch">
       <template slot="left">
         <search>
           <div class="searchInputFormItem">
@@ -53,11 +53,122 @@
             placeholder="选择结束时间"
           ></el-date-picker>
         </query-filter>
-      </template>
-      <template slot="right">
-        <div class="table-operate-buttons" style="margin-top: -8px;">
-          <span class="page-name">用药历史</span>
-          <div>
+      </template> -->
+      <!-- slot="right" -->
+      <template >
+        <div class="table-operate-buttonss" style="margin-top: -8px;">
+          <!-- <span class="page-name">用药记录</span> -->
+
+          <div class="divTop">
+            <div class="divTitle">
+              <span><img src="@/assets/images/common/titleLeft.png" alt="" /></span>
+              用药记录
+            </div>
+            <div class="searchCondition">
+              <div class="searchLeft">
+                <div class="searchInputFormItem">
+                  <el-input
+                    placeholder="姓名/手机号/企业单位"
+                    v-model="form.keyWord"
+                  >
+                  </el-input>
+                  <span class="searchBtnImgSpan" @click="search">
+                    <img
+                      class="searchBtnImg"
+                      src="@/assets/images/common/topsearch.png"
+                    />
+                  </span>
+                </div>
+                <div>
+                  <span>客户性别：</span>
+                  <el-select
+                    v-model="form.gender"
+                    placeholder="请选择"
+                    style="width: 140px"
+                  >
+                    <el-option label="男" value="1" key="1"></el-option>
+                    <el-option label="女" value="2" key="2"></el-option>
+                  </el-select>
+                </div>
+                <div>
+                <span>结束日期：</span>
+                <el-date-picker
+                  v-model="form.startTime"
+                  type="date"
+                  :max-date="form.endTime"
+                  placeholder="选择开始日期"
+                  style="width: 140px"
+                >
+                </el-date-picker>
+                <span class="timing">-</span>
+                <el-date-picker
+                  v-model="form.endTime"
+                  type="date"
+                  :min-date="form.startTime"
+                  placeholder="选择结束日期"
+                  style="width: 140px"
+                >
+                </el-date-picker>
+              </div>
+              </div>
+               <div class="searchRight">
+                <div class="buttones">
+                  <div class="searchFor" @click="search">
+                    <img src="@/assets/images/common/topsearchblue.png" alt="" />
+                  </div>
+                  <div class="resetAll">重置</div>
+                  <div class="more" v-if="isTrue" @click="upMore">
+                    <span>></span>
+                    展开更多
+                  </div>
+                  <div class="more noMore" v-if="!isTrue" @click="upMore">
+                    <span>></span>收起筛选
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div v-if="!isTrue" class="searchCondition" style="width: 100%">
+            <div class="searchLeft" style="padding-left: 5px">
+               <div>
+                  <span>是否总检：</span>
+                  <el-select
+                    v-model="form.drugsName"
+                    placeholder="请选择"
+                    style="width: 140px"
+                  >
+                    <el-option
+                      :label="item.gridName"
+                      :value="item.id"
+                      v-for="(item, index) in gridList"
+                      :key="index"
+                    ></el-option>
+                  </el-select>
+                </div>
+              <div>
+                <span>结束日期：</span>
+                <el-date-picker
+                  v-model="form.startTime"
+                  type="date"
+                  :max-date="form.endTime"
+                  placeholder="选择开始日期"
+                  style="width: 140px"
+                >
+                </el-date-picker>
+                <span class="timing">-</span>
+                <el-date-picker
+                  v-model="form.endTime"
+                  type="date"
+                  :min-date="form.startTime"
+                  placeholder="选择结束日期"
+                  style="width: 140px"
+                >
+                </el-date-picker>
+              </div>
+            </div>
+          </div>
+
+          <div class="operates">
             <operate-button
               type="add"
               @click="$router.push('medication_history_add')"
@@ -80,6 +191,11 @@
             align="center"
           >
             <el-table-column type="selection"> </el-table-column>
+            <el-table-column label="客户编号" prop="clientGridName" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{ scope.row.clientGridName | getResult }}</span>
+              </template>
+            </el-table-column>
             <el-table-column label="姓名" prop="clientName" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span class="clientName"
@@ -99,7 +215,7 @@
               </template>
             </el-table-column>
             <el-table-column
-              label="企业单位"
+              label="人员类别"
               prop="workUnitName"
               show-overflow-tooltip
             >
@@ -107,18 +223,18 @@
                 <span>{{ scope.row.workUnitName | getResult }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="人员类别" prop="clientGridName" show-overflow-tooltip>
-              <template slot-scope="scope">
-                <span>{{ scope.row.clientGridName | getResult }}</span>
-              </template>
-            </el-table-column>
             <el-table-column label="药品名称" prop="drugName" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>{{ scope.row.drugName | getResult }}</span>
               </template>
             </el-table-column>
+            <el-table-column label="针对问题" prop="clientGridName" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{ scope.row.clientGridName | getResult }}</span>
+              </template>
+            </el-table-column>
             <el-table-column
-              label="开始用药时间"
+              label="就医时间"
               prop="startDate"
               show-overflow-tooltip
             >
@@ -126,9 +242,14 @@
                 <span>{{ scope.row.startDate | getResult }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="结束用药时间" prop="endDate" show-overflow-tooltip>
+            <el-table-column label="出院时间" prop="endDate" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>{{ scope.row.endDate | getResult }}</span>
+              </template>
+            </el-table-column>
+             <el-table-column label="用药记录" prop="clientGridName" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{ scope.row.clientGridName | getResult }}</span>
               </template>
             </el-table-column>
             <el-table-column label="操作" prop="index" width="150px">
@@ -170,7 +291,7 @@
           </div>
         </div>
       </template>
-    </query-page>
+    <!-- </query-page> -->
     <detail
       :visible="detailModalVisible"
       :value="currentValue"
@@ -199,6 +320,7 @@ export default {
   },
   data() {
     return {
+      isTrue: false,
       form: {
         keyWord: '',
         gender: '',
@@ -240,6 +362,13 @@ export default {
     this.queryList();
   },
   methods: {
+    upMore() {
+      this.isTrue = !this.isTrue;
+      this.$forceUpdate();
+    },
+    search() {
+
+    },
     async getGridList() {
       const res = await this.$api.medicalHistoryInterface.clientTypeList({
         pageNo: 1,
@@ -431,5 +560,15 @@ export default {
     text-align: right;
     padding: 0;
   }
+  .table-operate-buttonss{
+  .page-name{
+    font-size: 16px;
+    color: #333333;
+    font-weight: 600;
+  }
+}
+.operates{
+  margin: 20px 0 10px 0;
+}
 }
 </style>
