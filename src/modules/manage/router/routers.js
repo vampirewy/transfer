@@ -25,7 +25,7 @@ import planCenter from './route/plan_center';
 import systemManage from './route/system_manage';
 import personalCenter from './route/personal_center';
 import errorRoute from './route/error';
-
+import dietManage from './route/diet_manage';
 export default [
   ...loginRoute,
   ...homeRoute,
@@ -40,4 +40,5 @@ export default [
   ...systemManage,
   ...personalCenter,
   ...errorRoute,
+  ...dietManage,
 ];

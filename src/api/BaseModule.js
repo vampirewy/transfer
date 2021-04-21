@@ -25,6 +25,7 @@ class BaseModule {
     this.$http.interceptors.request.use(
       (request) => {
         const opt = request;
+        opt.headers.token = getToken();
         opt.url = `${process.env.api.common_url}${opt.url}`;
         return opt;
       },
