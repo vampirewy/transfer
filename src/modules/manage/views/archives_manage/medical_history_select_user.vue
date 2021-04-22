@@ -1,9 +1,9 @@
 <template>
   <div class="medical-history-select-user">
-    <div class="searchInputFormItem">
+    <div class="searchInputFormItemOpen">
       <el-input v-model="keyword" placeholder="输入条件搜索"></el-input>
       <span class="searchBtnImgSpan" @click="search">
-        <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
+        <img class="searchBtnImg" src="@/assets/images/common/searchBlack.png"/>
       </span>
     </div>
     <el-table :data="tableData" @row-click="handleRowClick">
@@ -76,7 +76,7 @@ export default {
       });
       const { data } = res.data;
       if (data) {
-        this.tableData = data.list || [];
+        this.tableData = data.data || [];
         this.total = data.total;
       }
     },
@@ -87,9 +87,6 @@ export default {
 <style lang="scss" scoped>
 .medical-history-select-user {
   padding: 13px 18px 21px 18px;
-  .searchInputFormItem {
-    margin-bottom: 20px;
-  }
   .el-table::before {
     background: none;
   }

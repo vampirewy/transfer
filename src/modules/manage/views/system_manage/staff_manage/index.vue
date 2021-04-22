@@ -1,8 +1,8 @@
 <template>
   <div class="staff-page">
     <template v-if="viewIndex === 1">
-      <query-page @reset="reset" @search="search">
-        <template v-slot:left>
+      <!--<query-page @reset="reset" @search="search">-->
+        <!--<template v-slot:left>
           <search>
             <div class="searchInputFormItem">
               <el-input placeholder="输入手机号/姓名搜索" v-model="query"></el-input>
@@ -25,18 +25,64 @@
               </el-option>
             </el-select>
           </query-filter>
-        </template>
-        <template v-slot:right>
-          <div class="table-operate-buttons" style="margin-top: -8px">
-            <span class="page-name">员工列表</span>
+        </template>-->
+      <div class="divTop">
+        <div class="divTitle">
+          <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
+          员工列表</div>
+
+        <div class="searchCondition">
+          <div class="searchLeft">
+            <div class="searchInputFormItem">
+              <el-input placeholder="输入手机号/姓名搜索" v-model="query">
+              </el-input>
+              <span class="searchBtnImgSpan" @click="search">
+                <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
+            </span>
+            </div>
             <div>
-              <operate-button
-                type="add"
-                @click="add"
-                v-if="getAccess('staff_list_add')">
-              </operate-button>
+              <span>是否启用：</span>
+              <el-select v-model="status" placeholder="选择状态" clearable style="width: 150px">
+                <el-option label="启用" :value="1"></el-option>
+                <el-option label="未启用" :value="0"></el-option>
+              </el-select>
+            </div>
+            <div>
+              <span>角色：</span>
+              <el-select v-model="role" placeholder="选择角色" clearable style="width: 150px">
+                <el-option
+                        v-for="item in roleOptions"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id">
+                </el-option>
+              </el-select>
             </div>
           </div>
+          <div class="searchRight">
+            <div class="buttones">
+              <div class="searchFor" @click="search">
+                <img src="@/assets/images/common/topsearchblue.png" alt="">
+              </div>
+              <div class="resetAll" @click="reset">重置</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="topbottomborder"></div>
+      <div class="divRightTitleDiv">
+        <!-- <div class="divRightTitle"><span>|</span>客户池</div> -->
+        <div>
+          <el-button
+                  class="btn-new btnAdd"
+                  size="small"
+                  style="margin: 16px 0"
+                  @click="add"
+                  v-if="getAccess('staff_list_add')"
+          ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
+        </div>
+      </div>
+        <!--<template v-slot:right>-->
           <el-table :data="tableData" align="center">
             <el-table-column
               prop="realName"
@@ -118,8 +164,8 @@
             :page-size="pageSize"
             @current-change="handleCurrentChange"
           ></el-pagination>
-        </template>
-      </query-page>
+        <!--</template>
+      </query-page>-->
     </template>
     <template v-else-if="viewIndex !== 1">
       <staff-form
@@ -164,7 +210,7 @@ export default {
       roleOptions: [],
     };
   },
-  mounted() {
+  activated() {
     // 查询条件： 角色
     this.queryRoleList();
     // 员工列表
@@ -201,7 +247,7 @@ export default {
         .then((res) => {
           const { data } = res;
           const result = data.data || {};
-          this.tableData = result.list || [];
+          this.tableData = result.data || [];
           this.total = result.total || 0;
         });
     },

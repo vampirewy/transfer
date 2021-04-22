@@ -17,7 +17,7 @@
         </div>
         <div class="noDataLine" v-if="intervenePlanXList.length === 0">
           <img src="@/assets/images/noDataLine.png"/>
-          <span>暂无数据12</span>
+          <span>暂无数据</span>
         </div>
         <bar-chart-line :xList="intervenePlanName" :yList="intervenePlanYList" :height="'490px'"
                    :colorListProp="['#4991FD', '#31C529']" key="1"
@@ -276,7 +276,7 @@ export default {
       } else if (type === 2) {
         this.$router.push('report');
       } else if (type === 3) {
-        this.$router.push('health_questionnaire');
+        this.$router.push('life_style_questionnaire');
       } else if (type === 4) {
         this.$router.push('estimate_report');
       } else if (type === 5) {

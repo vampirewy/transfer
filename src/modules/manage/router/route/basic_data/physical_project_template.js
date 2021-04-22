@@ -13,6 +13,7 @@ export default [
     meta: {
       title: '体检项目模版',
       access: 'physical_project_template',
+      keepAlive: true,
     },
     component: () =>
       import('../../../views/basic_data/physical_project_template'),

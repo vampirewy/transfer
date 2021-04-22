@@ -42,12 +42,20 @@ export default {
     activeMenu() {
       const route = this.$route;
       const { meta, path } = route;
+      let ReturnPath;
       // if set path, the sidebar will highlight the path you set
       console.log(meta, path);
       /* if (meta.activeMenu) {
         return meta.activeMenu;
       } */
-      return path;
+      if (path.indexOf('/') > -1) {
+        if (path.split('/').length === 3) {
+          ReturnPath = `/${path.split('/')[2]}`;
+        } else {
+          ReturnPath = path;
+        }
+      }
+      return ReturnPath;
     },
     showLogo() {
       return true; // this.$store.state.settings.sidebarLogo;

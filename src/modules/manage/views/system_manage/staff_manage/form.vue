@@ -8,7 +8,7 @@
       label-width="90px"
       label-suffix="："
     >
-      <div class="title">{{detail ? '查看' : (id ? '编辑' : '新增')}}-客户</div>
+      <div class="title">{{detail ? '查看' : (id ? '编辑' : '新增')}}员工</div>
       <el-row>
         <el-col :span="6">
           <el-form-item label="账号" prop="mobileNo">
@@ -43,8 +43,8 @@
               :disabled="detail"
               v-model="staffForm.roleId"
               placeholder="请选择"
-              @change="roleChange"
             >
+              <!--@change="roleChange"-->
               <el-option
                 v-for="item in newRoleOptions"
                 :key="item.id"
@@ -69,7 +69,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <template v-if="staffForm.type !== 0">
+      <!--<template v-if="staffForm.type !== 0">
         <div class="title permission-title">权限管理</div>
         <permission
           :roleData="roleMenuIds"
@@ -78,7 +78,7 @@
           isFilter
           @change="val => (staffForm.menuIds = val)"
         ></permission>
-      </template>
+      </template>-->
       <div class="form-buttons">
         <el-button size="small" class="cancelBtn" @click="$emit('cancel')">{{
           detail ? '返回' : '取消'
@@ -123,7 +123,7 @@ export default {
         sex: '',
         roleId: '',
         dataRange: '',
-        menuIds: [],
+        // menuIds: [],
       },
       staffRules: {
         mobileNo: [{ required: true, message: '账号不能为空' }],

@@ -764,7 +764,7 @@ export default {
         align-items: baseline;
         justify-content: space-between;
         .divRightTitle{
-          font-size: 18px;
+          font-size: 16px;
           color: #333333;
           font-weight: bold;
           span{
