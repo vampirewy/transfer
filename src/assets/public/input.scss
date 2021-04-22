@@ -130,7 +130,13 @@ input:-webkit-autofill:focus {
 .el-input__icon{
   width: 35px;
 }
-// .el-icon-arrow-up:before{
-//   margin-right: 5px;
+// .el-checkbox{
+//   margin-bottom: 20px;
 // }
+.el-checkbox__input.is-disabled.is-checked + span.el-checkbox__label{
+  color: #333333 !important;
+}
+.el-input.is-disabled .el-input__inner{
+  background: #fff !important;
+}
 

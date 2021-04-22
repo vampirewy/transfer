@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="选择客户" :visible.sync="visible" @close="cancel">
+  <el-dialog title="选择客户" :modal-append-to-body="false" :visible.sync="visible" @close="cancel">
     <el-input
       placeholder="请输入内容"
       v-model="formData.keywords"

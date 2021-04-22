@@ -27,7 +27,7 @@ export default {
     },
     headers: {
       type: Object,
-      default: () => ({ sid: getToken() }),
+      default: () => ({ token: getToken() }),
     },
     onSuccess: {
       type: Function,

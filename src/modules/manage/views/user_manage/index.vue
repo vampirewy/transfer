@@ -89,11 +89,11 @@
             <div>
             <span>管理医生：</span>
             <el-select
-                  v-model="formData.gridId"
+                  v-model="formData.doctorId"
                   placeholder="请选择"
                   style="width: 140px"
           >
-            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+            <el-option :label="item.realName" :value="item.id" v-for="(item, index) in doctorList"
                        :key="index"></el-option>
           </el-select>
           </div>
@@ -218,12 +218,18 @@
                     @click="handleSomeRemove"
                     v-if="getAccess('customer_pool_batch_delete')"
             ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
-            <el-button
+            <!-- <el-button
                     @click="assign({})"
                     size="small"
                     class="btn-new btnDel"
                     v-if="getAccess('customer_pool_distribute')"
-            ><img src="@/assets/images/common/deliverBtn.png" />分配</el-button>
+            ><img src="@/assets/images/common/deliverBtn.png" />分配</el-button> -->
+            <el-button
+            style="width:120px;"
+                    size="small"
+                    class="btn-new btnDel"
+                    v-if="getAccess('customer_pool_distribute')"
+            ><img src="@/assets/images/common/createReport.png" />生成报告</el-button>
           </div>
         </div>
         <div>
@@ -232,21 +238,29 @@
                   @selection-change="handleSelectionChange"
                   ref="multipleTable"
                   align="center"
+                  show-overflow-tooltip
           >
-            <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column label="姓名" prop="name" width="80" show-overflow-tooltip>
+            <el-table-column type="selection" width="40"></el-table-column>
+            <el-table-column label="客户编号" prop="clientNo" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>
+                  {{ scope.row.clientNo }}
+                </span>
+              </template>
+            </el-table-column>
+            <el-table-column label="姓名" prop="name" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span style="color:#3154AC;">
                   {{ scope.row.name }}
                 </span>
               </template>
             </el-table-column>
-            <el-table-column label="性别" prop="gender" width="80">
+            <el-table-column label="性别" prop="gender" width="60">
               <template slot-scope="scope">
-                {{ scope.row.gender === 1 ? '男' : '女' }}
+                {{ scope.row.gender === 1 ? '男' :scope.row.gender === 1?'不限': '女' }}
               </template>
             </el-table-column>
-            <el-table-column label="年龄" prop="age" width="80"></el-table-column>
+            <el-table-column label="年龄" prop="age" width="60"></el-table-column>
             <el-table-column label="企业单位" prop="workUnitName" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>{{ scope.row.workUnitName || '-'}}</span>
@@ -262,20 +276,52 @@
                 {{ scope.row.healthManageId === '1' ? '已认领' : '未认领' }}
               </template>
             </el-table-column> -->
+            <el-table-column label="体检报告" prop="reportTotal" width="80" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span style="color:#36BF2F;">{{ scope.row.reportTotal || '-'}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="基础问卷"
+            prop="lifeStyleQuestionTotal" width="80" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span style="color:#36BF2F;">{{ scope.row.lifeStyleQuestionTotal || '0'}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="个人报告" prop="assessReportTotal" width="80" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span style="color:#36BF2F;">{{ scope.row.assessReportTotal || '-'}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="管理医生" prop="doctorNames" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{ scope.row.doctorNames || '0'}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="干预计划" prop="unExecutePlanTotal" width="80">
+              <template slot-scope="scope">
+                <span style="color:#36BF2F;">
+                  {{ scope.row.unExecutePlanTotal || '0'}}</span>
+              </template>
+            </el-table-column>
             <el-table-column label="建档时间" prop="createTime" show-overflow-tooltip />
+            <el-table-column label="附件" prop="annexTotal"  width="60" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span style="color:#36BF2F;">{{ scope.row.annexTotal || '0'}}</span>
+              </template>
+            </el-table-column>
             <el-table-column label="是否启用" prop="state">
               <template slot-scope="scope">
                 <el-switch
                   v-model="scope.row.state "
                   active-value="1"
-                  inactive-value="2"
+                  inactive-value="0"
                   active-color="#13ce66"
-                  @change="changeStatus(scope, '1')"
+                  @change=changeStatus(scope,scope.row.state)
                   >
                 </el-switch>
               </template>
             </el-table-column>
-            <el-table-column label="附件" prop="attachment" width="80">
+            <!-- <el-table-column label="附件" prop="attachment">
               <template slot-scope="scope">
                 <div
                 class="elbutton"
@@ -287,44 +333,31 @@
                     },
                   })
                 ">
-                  <!-- <img class="attachment-btn"
-                  src="@/assets/images/common/attachmentBtn.png" /> -->
                   查看
                 </div>
               </template>
-            </el-table-column>
-            <el-table-column label="操作" prop="index" width="120">
+            </el-table-column> -->
+            <el-table-column label="操作" prop="index"  width="100">
               <template slot-scope="scope">
                 <el-button
                         type="text"
                         size="small"
                         @click="
-                  $router.push({
-                    name: 'user_edit',
-                    params: {
-                      userId: scope.row.id,
-                    },
-                  })
+                  $router.push(
+                     `/user_edit/${scope.row.id}`
+                  )
                 "
                         v-if="getAccess('customer_pool_edit')"
                 >编辑</el-button>
                 <el-button type="text"
                         size="small"
                         style="color:#DDE0E6"
-                        v-if="
-                  (getAccess('customer_pool_claim')) &&
-                    scope.row.state === '1' && scope.row.healthManageId === '0'
-                "
                         >|</el-button>
                 <el-button
                         type="text"
                         size="small"
                         @click="claim(scope)"
-                        v-if="
-                  (getAccess('customer_pool_claim')) &&
-                    scope.row.state === '1' && scope.row.healthManageId === '0'
-                "
-                >认领</el-button
+                >删除</el-button
                 >
                 <!-- <el-button
                         class="font-enable"
@@ -365,7 +398,7 @@
         </div>
       <!-- </template> -->
     <doctor-Select
-            :isRadio="false"
+      :isRadio="false"
       :visible="dialogTableVisible"
       :clientId="clientId"
       @cancel="dialogTableVisible = false"
@@ -380,7 +413,7 @@ import doctorSelect from '~/src/components/doctor_select/index.vue';
 import QueryPage from '~/src/components/query_page/index.vue';
 import Search from '~/src/components/query_page/search.vue';
 import QueryFilter from '~/src/components/query_page/query_filter.vue';
-import deleteIcon from '~/src/assets/images/message-box-delete@2x.png';
+import deleteIcon from '~/src/assets/images/deleteicon.png';
 import * as dayjs from 'dayjs';
 
 export default {
@@ -398,12 +431,14 @@ export default {
       value: true,
       total: 0,
       gridList: [],
+      doctorList: [],
       dataSource: [],
       chooseUserList: [],
       dialogTableVisible: false,
       clientId: '',
       formData: {
         gridId: '',
+        doctorId: '',
         keywords: '',
         gender: '',
         genderType: '',
@@ -423,12 +458,22 @@ export default {
     upMore() {
       this.isTrue = !this.isTrue;
     },
+    // 获取人员列表
     async getGridList() {
-      const res = await this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
+      const res = await
+      this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
       const { data } = res.data;
-      this.gridList = data.list;
+      this.gridList = data.data;
+    },
+    // 获取医生列表
+    async getDoctor() {
+      const res = await
+      this.$api.doctorInterface.getDoctorList({ pageNo: 1, pageSize: 10000 });
+      const { data } = res.data;
+      this.doctorList = data.data;
     },
     handleEditCheck() {},
+    // 批量删除
     handleSomeRemove() {
       if (!this.chooseUserList.length) {
         this.$message.error('请选择需要删除客户');
@@ -525,9 +570,8 @@ export default {
       } else {
         this.chooseUserList = [row];
       }
-
       this.$confirm(
-        `<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>您确定要认领该病人吗？</span></div>`,
+        `<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>您确定要删除该病人吗？</span></div>`,
         '提示',
         {
           dangerouslyUseHTMLString: true,
@@ -537,14 +581,24 @@ export default {
           showClose: true,
         },
       ).then(() => {
-        this.submit({
-          clientIdList: this.chooseUserList.map(val => val.id),
-          userIdList: [this.$store.state.user.userId],
-          type: 1,
+        const params = {
+          clientIdList: this.chooseUserList.map(user => user.id),
+        };
+        this.$api.userManagerInterface.deleteClientInfo(params).then(({ data }) => {
+          if (data.code === 200) {
+            this.$message.success('操作成功');
+            this.getUserList();
+            this.chooseUserList = [];
+            this.$refs.multipleTable.clearSelection();
+          }
         });
+        // this.submit({
+        //   clientIdList: this.chooseUserList.map(val => val.id),
+        //   userIdList: [this.$store.state.user.userId],
+        //   type: 1,
+        // });
       });
     },
-
     submit(params) {
       this.$api.userManagerInterface.claim(params).then(({ data }) => {
         if (data.code === 200) {
@@ -598,14 +652,15 @@ export default {
         .then(({ data }) => {
           if (data.success) {
             this.total = data.data.total;
-            this.dataSource = data.data.list;
+            this.dataSource = data.data.data;
           }
         });
     },
   },
-  activated() {
+  mounted() {
     this.getUserList();
     this.getGridList(); // 获取人员列类别
+    this.getDoctor(); // 获取医生列表
   },
 };
 </script>
