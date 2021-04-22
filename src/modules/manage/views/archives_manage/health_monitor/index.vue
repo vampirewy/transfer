@@ -1,6 +1,6 @@
 <template>
   <div class="health-monitor">
-    <query-page @reset="reset" @search="search" v-if="!trendStatus">
+    <!-- <query-page @reset="reset" @search="search" v-if="!trendStatus">
       <template slot="left">
         <search>
           <div class="searchInputFormItem">
@@ -15,10 +15,10 @@
             <el-option label="男" :value="1"></el-option>
             <el-option label="女" :value="2"></el-option>
           </el-select>
-          <!-- <el-input placeholder="企业单位" v-model="form.workUnitName"></el-input> -->
         </query-filter>
-      </template>
-      <template slot="right">
+      </template> -->
+      <!-- slot="right" -->
+      <template >
         <el-tabs v-model="tabIndex" @tab-click="handleTabIndexChange" style="margin-top: -12px;">
           <el-tab-pane label="血压" name="BP"></el-tab-pane>
           <el-tab-pane label="血糖" name="BG"></el-tab-pane>
@@ -68,8 +68,9 @@
           ></el-pagination>
         </div>
       </template>
-    </query-page>
-    <template v-else>
+    <!-- </query-page> -->
+    <!-- v-else -->
+    <template >
       <bp-trend
         v-if="tabIndex === 'BP'"
         :id="currentId"

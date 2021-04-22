@@ -57,7 +57,7 @@
               style="width: 200px;"
             ></el-input>
           </el-form-item>
-          <el-form-item label="人员类别" prop="gridName" style="width:25%">
+          <el-form-item label="客户编号" prop="gridName" style="width:25%">
             <el-input
               v-model="infoSource.gridName"
               disabled
@@ -67,14 +67,14 @@
       </div>
       </div>
 
-      <div class="form-title">
+      <!-- <div class="form-title">
         <div class="line"></div>
         <h3 class="name">就医信息</h3>
-      </div>
+      </div> -->
 
-      <div class="medicate-info mt20">
+      <div class="medicate-info mt20" style="margin-top:0">
         <div class="row">
-            <el-form-item label="就医编号" prop="drugsName" style="width:25%">
+            <el-form-item label="检查编号" prop="drugsName" style="width:25%">
               <el-input
                 v-model="infoSource.drugsName"
                 placeholder="请输入"
@@ -82,7 +82,7 @@
                 style="width: 200px"
               ></el-input>
             </el-form-item>
-            <el-form-item label="就医类型" prop="result" style="width:25%">
+            <!-- <el-form-item label="就医类型" prop="result" style="width:25%">
               <el-select
                 style="width: 200px"
                 placeholder="请选择"
@@ -95,7 +95,7 @@
                   :value="item.paramValue">
                 </el-option>
               </el-select>
-            </el-form-item>
+            </el-form-item> -->
             <!-- <el-form-item label="针对问题" prop="mainIndication" style="width:25%">
               <el-input
                 v-model="infoSource.mainIndication"
@@ -112,7 +112,18 @@
                 style="width: 200px"
               ></el-input>
             </el-form-item>
-            <el-form-item label="就医机构" prop="countDay" style="width:25%">
+             <el-form-item label="检查时间" prop="endDate" style="width:25%">
+              <el-date-picker
+                class="end-date"
+                v-model="infoSource.endDate"
+                type="date"
+                :min-date="infoSource.startDate"
+                value-format="yyyy-MM-dd"
+                placeholder="请选择"
+                style="width: 200px"
+              ></el-date-picker>
+            </el-form-item>
+            <!-- <el-form-item label="就医机构" prop="countDay" style="width:25%">
               <el-input
                 v-model="infoSource.countDay"
                 placeholder="请输入"
@@ -120,10 +131,10 @@
                 number
                 style="width: 200px"
               ></el-input>
-            </el-form-item>
+            </el-form-item> -->
         </div>
 
-        <div class="row">
+        <!-- <div class="row">
             <el-form-item label="就医科室" prop="dose" style="width:25%">
               <el-input
                 v-model="infoSource.dose"
@@ -168,8 +179,8 @@
                 style="width: 200px"
               ></el-date-picker>
             </el-form-item>
-        </div>
-         <div class="row">
+        </div> -->
+         <!-- <div class="row">
             <el-form-item label="就医金额" prop="dose" style="width:25%">
               <el-input
                 v-model="infoSource.dose"
@@ -192,10 +203,10 @@
                 </el-option>
               </el-select>
             </el-form-item>
-         </div>
+         </div> -->
 
         <div class="row">
-            <el-form-item label="现病史" prop="ingrenient" style="width:100%">
+            <el-form-item label="检查描述" prop="ingrenient" style="width:100%">
               <el-input
                 type="textarea"
                 :rows="5"
@@ -206,82 +217,77 @@
               ></el-input>
             </el-form-item>
         </div>
-
-        <div class="row">
-            <el-form-item label="主诉" prop="resoures" style="width:100%">
-              <el-input
-                type="textarea"
-                :rows="5"
-                v-model="infoSource.resoures"
-                placeholder="请输入"
-                :maxlength="300"
-                show-word-limit
-              ></el-input>
-            </el-form-item>
-        </div>
-        <div class="row">
-            <el-form-item label="检查" prop="resoures" style="width:100%">
-              <el-input
-                type="textarea"
-                :rows="5"
-                v-model="infoSource.resoures"
-                placeholder="请输入"
-                :maxlength="300"
-                show-word-limit
-              ></el-input>
-            </el-form-item>
-        </div>
-        <div class="row">
-            <el-form-item label="诊断" prop="resoures" style="width:100%">
-              <el-input
-                type="textarea"
-                :rows="5"
-                v-model="infoSource.resoures"
-                placeholder="请输入"
-                :maxlength="300"
-                show-word-limit
-              ></el-input>
-            </el-form-item>
-        </div>
-        <div class="row">
-            <el-form-item label="方案" prop="resoures" style="width:100%">
-              <el-input
-                type="textarea"
-                :rows="5"
-                v-model="infoSource.resoures"
-                placeholder="请输入"
-                :maxlength="300"
-                show-word-limit
-              ></el-input>
-            </el-form-item>
-        </div>
-        <!-- <div class="handle-btn mt10 mb30">
-          <el-button class="reset-btn" size="small" @click="clear"
-            >清空</el-button
-          >
-          <el-button
-            class="add-btn"
-            type="primary"
-            size="small"
-            @click="addRecord"
-            >添加</el-button
-          >
-        </div> -->
       </div>
-
-      <!-- <div class="form-title">
+       <div class="form-title">
         <div class="line"></div>
-        <h3 class="name">已添加药品</h3>
-      </div> -->
-
-      <!-- <el-table class="medicate-list mt20" :data="drugsList" align="center">
-        <el-table-column label="药品名称" prop="drugsName" show-overflow-tooltip>
+        <h3 class="name">检查项目</h3>
+      </div>
+        <div class="row">
+          <el-form-item label="体检库" prop="clientName" style="width:30%;background:#ffffff">
+            <el-popover
+              ref="userPopover"
+              placement="bottom-start"
+              width="650"
+              trigger="click"
+              @show="popoverStatus = true"
+              @hide="handlePopoperClose"
+            >
+              <select-user
+                v-if="popoverStatus"
+                @change="onSelectUser"
+              ></select-user>
+              <el-input
+                :class="`select-user-trigger ${id ? 'disabled' : ''}`"
+                slot="reference"
+                disabled
+                v-model="infoSource.clientName"
+                placeholder="请选择客户"
+                style="width: 232px;"
+              >
+                <i
+                  :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
+                  slot="suffix"
+                ></i>
+              </el-input>
+            </el-popover>
+          </el-form-item>
+          <el-form-item label="检查项目" prop="clientName" style="width:25%">
+            <el-popover
+              ref="userPopover"
+              placement="bottom-start"
+              width="650"
+              trigger="click"
+              @show="popoverStatus = true"
+              @hide="handlePopoperClose"
+            >
+              <select-user
+                v-if="popoverStatus"
+                @change="onSelectUser"
+              ></select-user>
+              <el-input
+                :class="`select-user-trigger ${id ? 'disabled' : ''}`"
+                slot="reference"
+                disabled
+                v-model="infoSource.clientName"
+                placeholder="请选择客户"
+                style="width: 232px;"
+              >
+                <i
+                  :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
+                  slot="suffix"
+                ></i>
+              </el-input>
+            </el-popover>
+          </el-form-item>
+        </div>
+     <el-table class="medicate-list mt20" :data="drugsList" align="center">
+        <el-table-column label="科室" prop="drugsName" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.drugsName | getResult }}</span>
           </template>
         </el-table-column>
         <el-table-column
-          label="主要成分"
+          label="项目"
           prop="ingrenient"
           show-overflow-tooltip
         >
@@ -290,7 +296,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="开始时间"
+          label="结果"
           prop="startDate"
           show-overflow-tooltip
         >
@@ -298,27 +304,27 @@
             <span>{{ scope.row.startDate | getResult }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="结束时间" prop="endDate" show-overflow-tooltip>
+        <el-table-column label="正常参考" prop="endDate" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.endDate | getResult }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="规格" prop="specification" show-overflow-tooltip>
+        <el-table-column label="单位" prop="specification" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.specification | getResult }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="每次剂量" prop="dose" show-overflow-tooltip>
+        <el-table-column label="建议" prop="dose" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.dose | getResult }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="每日次数" prop="countDay" show-overflow-tooltip>
+        <!-- <el-table-column label="每日次数" prop="countDay" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.countDay | getResult }}</span>
           </template>
-        </el-table-column>
-        <el-table-column
+        </el-table-column> -->
+        <!-- <el-table-column
           label="针对情况"
           prop="mainIndication"
           show-overflow-tooltip
@@ -326,8 +332,8 @@
           <template slot-scope="scope">
             <span>{{ scope.row.mainIndication | getResult }}</span>
           </template>
-        </el-table-column>
-        <el-table-column
+        </el-table-column> -->
+        <!-- <el-table-column
           label="用药情况"
           prop="resoures"
           show-overflow-tooltip
@@ -335,14 +341,24 @@
           <template slot-scope="scope">
             <span>{{ scope.row.resoures | getResult }}</span>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column label="操作" prop="index">
           <template slot-scope="scope">
             <el-button type="text" @click="remove(scope)">删除</el-button>
           </template>
         </el-table-column>
-      </el-table> -->
-
+      </el-table>
+      <el-pagination
+              style="margin-top: 15px"
+              background
+              :total="total"
+              :page-size="15"
+              :current-page="formData.pageNo"
+              @current-change="handleCurrentChange"
+              @size-change="handleSizeChange"
+              :page-sizes="[15]"
+              layout="prev, pager, next, jumper, total, sizes"
+            ></el-pagination>
       <div class="handle-btn mt30 mb30">
         <el-button class="reset-btn" size="small" @click="goBack"
           >返回</el-button
@@ -355,8 +371,8 @@
   </div>
 </template>
 <script>
-import detail from './components/detail.vue';
-import selectUser from './components/select_user.vue';
+import detail from '../components/detail.vue';
+import selectUser from '../components/select_user.vue';
 
 export default {
   name: 'medication_history_add',
@@ -367,6 +383,7 @@ export default {
   data() {
     return {
       popoverStatus: false,
+      total: 0,
       infoSource: {
         drugsName: '',
         mainIndication: '',
@@ -392,6 +409,9 @@ export default {
         startDate: [{ required: true, message: '开始时间不能为空' }],
         endDate: [{ required: true, message: '结束时间不能为空' }],
         result: [{ required: true, message: '当前状态不能为空' }],
+      },
+      formData: {
+        pageNo: 1,
       },
     };
   },
@@ -457,6 +477,14 @@ export default {
     },
     goBack() {
       this.$router.go(-1);
+    },
+    handleCurrentChange(page) {
+      this.formData.pageNo = page;
+      this.queryList();
+    },
+    handleSizeChange(size) {
+      this.formData.pageSize = size;
+      this.queryList();
     },
     submit() {
       const reqBody = {
@@ -569,6 +597,9 @@ export default {
       border: 1px solid #3154AC;
       text-align:center;
     }
+  }
+  .el-input.is-disabled .el-input__inner{
+      background: #ffffff !important;
   }
 }
 </style>

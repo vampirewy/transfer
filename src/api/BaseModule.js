@@ -36,8 +36,8 @@ class BaseModule {
         if (code !== 0) {
           if (code === 10003) {
             // Cookies.remove('token'); // token过期,清除
-            // window.localStorage.removeItem('HK_USER_INFO');
-            // window.location.href = '/#/login';
+            // window.localStorage.removeItem('USER_INFO');
+            window.location.href = '/#/login';
           } else {
             // CapsuleUI.Message.warning(response.data.message);
           }

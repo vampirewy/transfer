@@ -44,7 +44,7 @@ export default [
         path: '/medical_history',
         name: 'medical_history',
         meta: {
-          title: '就医历史',
+          title: '就医记录',
           access: 'medical_history',
           keepAlive: true,
         },
@@ -55,7 +55,7 @@ export default [
         path: '/medication_history',
         name: 'medication_history',
         meta: {
-          title: '用药历史',
+          title: '用药记录',
           access: 'medication_history',
           keepAlive: true,
         },
@@ -153,6 +153,30 @@ export default [
         },
         component: () =>
           import('../../views/archives_manage/health_questionnaire_detail.vue'),
+      },
+      {
+        path: '/inspection_index',
+        name: 'inspection_index',
+        meta: {
+          title: '单项检查',
+          access: 'Single_inspection',
+          hideInMenu: true,
+          hideInTag: true,
+        },
+        component: () =>
+          import('../../views/archives_manage/single_inspection/inspection_index.vue'),
+      },
+      {
+        path: '/inspection_index_add',
+        name: 'inspection_index_add',
+        meta: {
+          title: '单项检查-新增',
+          access: 'Single_inspection',
+          hideInMenu: true,
+          hideInTag: true,
+        },
+        component: () =>
+          import('../../views/archives_manage/single_inspection/inspection_index_add.vue'),
       },
     ],
   },

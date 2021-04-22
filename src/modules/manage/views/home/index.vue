@@ -5,7 +5,7 @@
     <!-- <search-group @searchData="getSearchData" /> -->
     <panel-group :formData="homeFindCountData" @toRouterPage="toRouterPage" />
     <el-row :gutter="40" style="margin-left: 0">
-      <el-col :span="15" class="echartBody" style="width:96%;height:320px">
+      <el-col :span="15" class="echartBody" style="width:96%;height:340px">
         <div class="rowTitleParent" style="padding-bottom: 5px">
           <p class="rowTitle" style="margin-left: 0">近15天新增客户趋势（人）</p>
           <!-- <div class="rowTitleParentRight">
@@ -106,24 +106,25 @@
     <!--</el-col>-->
     <!--</el-row>-->
   </div>
-  <div style="width:30%;">
+  <div style="width:30%;margin-top:10px">
       <!-- <el-col :span="9"> -->
         <el-row>
           <el-col class="echartBody">
             <div class="rowTitleParent">
-              <p class="rowTitle">{{listQuery.planType === '4' ? '随访计划' : '随访记录'}}
-                <span class="top5">TOP5</span></p>
-              <el-radio-group
+              <!-- <p class="rowTitle">{{listQuery.planType === '4' ? '随访计划' : '随访记录'}}
+                <span class="top5">TOP5</span></p> -->
+                <p class="rowTitle">随访计划</p>
+              <!-- <el-radio-group
                       v-model="listQuery.planType"
                       @change="choosePlanType"
                       style="margin-right: 20px"
               >
                 <el-radio-button label="4">随访计划</el-radio-button>
                 <el-radio-button label="5">随访记录</el-radio-button>
-              </el-radio-group>
+              </el-radio-group> -->
             </div>
             <div class="noDataLine" v-if="intervenePlanPieXList.length === 0" style="height: 215px">
-              <img src="@/assets/images/noDataLine.png" style="width: 100px;margin-top: 50px"/>
+              <img src="@/assets/images/noDataLine.png" style="width: 200px;margin-top: 100px"/>
               <span>暂无数据</span>
             </div>
             <div class="chart-wrapper" style="display: flex" v-else>
@@ -158,7 +159,7 @@
   </div>
   <div class="TabListcss">
     <!-- <tab-list></tab-list> -->
-      <el-table style="width: 100%" align="center"
+      <el-table style="width: 100%;text-align: center" align="center"
                :data="dataSource">
         <!-- <el-table-column type="selection" width="150"></el-table-column> -->
         <el-table-column label="姓名" prop="clientName" max-width="200" show-overflow-tooltip>
@@ -484,6 +485,9 @@ export default {
     /deep/ .el-radio-button:first-child .el-radio-button__inner{
       border-radius: 8px 0 0 8px;
     }
+    /deep/ .el-table .el-table__header-wrapper th .cell{
+    text-align: center !important;
+    }
   }
   .chart-wrapper {
     background: #fff;
@@ -531,7 +535,7 @@ export default {
 // }
 .TabBars{
   display: flex;
-  margin-top: 25px;
+  margin-top: 30px;
   div{
     // width: 100px;
     // height: 40px;
@@ -604,7 +608,7 @@ export default {
 }
 .TabListcss{
   height: 380px;
-  width: 100%;
+  width: 97%;
   background: #ffffff;
   box-shadow: 0px 6px 24px 0px rgba(14, 37, 87, 0.06);
   border-radius: 0px 0px 8px 8px;
