@@ -139,7 +139,7 @@
       // }
     // }
     .el-dialog__close{
-      color: white;
+      // color: white;
       font-size: 27px;
       opacity: 0.8;
       &:hover{
@@ -244,7 +244,7 @@ body .el-table th.gutter{
   }
 }
 .el-textarea__inner{
-  font-family: 微软雅黑;
+  font-family: Microsoft YaHei;
   border: 1px solid #DDE0E6;
   padding: 10px 20px;
   color: #333333;
@@ -285,6 +285,20 @@ body .el-table th.gutter{
   /deep/ input{
     border: 1px solid #f94242 !important;
   }
+}
+.el-checkbox__input.is-indeterminate .el-checkbox__inner{
+  background: #3154AC;
+}
+.message-box-customize .el-message-box__btns .el-button.el-button--default:not(.el-button--primary){
+  color: #3154AC;
+  background: rgba(49, 84, 172, 0.1);
+border-radius: 20px;
+border: 1px solid #3154AC;
+}
+.el-button--primary{
+  background: #3154AC;
+  border-radius: 20px !important;
+  color: #fff;
 }
 .el-checkbox__input{
   &.is-checked{

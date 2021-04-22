@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="选择医生" :visible.sync="visible" @close="cancel">
+  <el-dialog title="选择医生" :modal-append-to-body="false" :visible.sync="visible" @close="cancel">
     <el-input
       placeholder="请输入姓名"
       v-model="params.search"

@@ -119,7 +119,7 @@
             </el-row>
             <el-row>
               <el-col :span="12">
-                <el-form-item label="身份证">
+                <el-form-item label="身份证" prop="cardNo">
                   <el-input @blur="synchronousAge()" v-model="formData.cardNo"></el-input>
                 </el-form-item>
               </el-col>
@@ -315,7 +315,7 @@
 import File from './components/file_dialog.vue';
 import FileDetail from './components/file_detail.vue';
 import doctorSelect from '@/components/doctor_select/index.vue';
-import deleteIcon from '~/src/assets/images/message-box-delete@2x.png';
+import deleteIcon from '~/src/assets/images/deleteicon.png';
 import * as dayjs from 'dayjs';
 
 export default {
@@ -417,8 +417,8 @@ export default {
         ],
         cardNo: [
           {
-            // required: true,
-            // message: '请输入身份证',
+            required: true,
+            message: '请输入正确的身份证',
             trigger: 'blur',
             validator: validateIDCard,
           },
@@ -465,7 +465,7 @@ export default {
     async getGridList() {
       const res = await this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
       const { data } = res.data;
-      this.gridList = data.list.filter(t => t.state === '1');
+      this.gridList = data.data.filter(t => t.state === '1');
     },
     async getSystemParamByCode(code, fieldName) {
       const res = await this.$api.userManagerInterface.getSystemParamByCode(code);
@@ -521,12 +521,11 @@ export default {
             this.formData.userIdList.push(this.$store.state.user.userId);
             // this.formData.userIdList = [this.$route.query.owner];
           }
-
+          // this.formData.birthday = dayjs(this.formData.birthday).format('YYYY-MM-DD');
           this.formData = {
             ...this.formData,
             birth: dayjs(this.formData.birth).format('YYYY-MM-DD'),
           };
-
           this.formData.annexParams =
               this.dataSource.filter(t => t.time && t.deleted === 0).map(t => ({
                 title: t.title,
@@ -543,7 +542,7 @@ export default {
           this.$api.userManagerInterface
             .saveOrEditUser(this.formData)
             .then(({ data }) => {
-              if (data.code === 200) {
+              if (data) {
                 this.$message.success('操作成功');
                 this.$router.go(-1);
               }
@@ -627,7 +626,7 @@ export default {
     },
     fetch(userId) {
       this.$api.userManagerInterface.getDetail(userId).then(({ data }) => {
-        if (data.code === 200) {
+        if (data) {
           let result = data.data;
           // eslint-disable-next-line no-param-reassign
           result.birth = result.birth || this.getAge(result.cardNo);
@@ -678,18 +677,19 @@ export default {
       });
     },
     fetchFileList(userId) {
-      this.$api.userManagerInterface
+      const thates = this;
+      thates.$api.userManagerInterface
         .fetchFileList({
           clientId: userId,
-          ...this.params,
+          ...thates.params,
         })
         .then(({ data }) => {
-          if (data.code === 200) {
-            this.dataSource = data.data.list;
-            this.dataSource.forEach((it) => {
+          if (data) {
+            thates.dataSource = data.data.data;
+            thates.dataSource.forEach((it) => {
               it.deleted = 0;
             });
-            this.params.total = data.data.total;
+            thates.params.total = data.data.total;
           }
         });
     },
