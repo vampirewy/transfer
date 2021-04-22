@@ -52,7 +52,7 @@ module.exports = {
         cacheBusting: true,
         cssSourceMap: true,
         showEslintErrorsInOverlay: false,
-        useEslint: true,
+        useEslint: false,
     },
 
     build: {

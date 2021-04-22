@@ -1,0 +1,323 @@
+.diet-form{
+    display: flex;
+}
+.item-title{
+    font-size: 15px;
+    font-weight: 600;
+    color: #333333;
+    line-height: 20px;
+    position: relative;
+    padding-left: 15px;
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      border: 1px solid #b4bbc9;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+}
+.diet-form_left {
+    width: 300px;
+    background-color: #dde0e6;
+    padding: 22px 19px 19px 21px;
+    border-radius: 8px 0px 0px 10px;
+    .diet-form_left-item {
+      .table {
+        width: 100%;
+        border-radius: 5px;
+        border: 1px solid #dde0e6;
+        margin: 10px 0 22px;
+        overflow: hidden;
+        .table-column {
+          display: flex;
+          height: 40px;
+          font-size: 12px;
+          font-weight: 400;
+          color: #333333;
+          line-height: 14px;
+          div {
+            color: #333333;
+            line-height: 40px;
+          }
+        }
+        .table-column div:first-child {
+          flex: 1;
+          padding: 0 9px;
+          background-color: #eef1f5;
+          box-sizing: border-box;
+        }
+        .table-column div:last-child {
+          text-align: center;
+          background-color: #ffffff;
+          width: 30%;
+        }
+      }
+    }
+  }
+.diet-form_center{
+      flex: 1;
+      padding: 40px 19px 0;
+      box-sizing: border-box;
+      overflow: hidden;
+      .diet-type{
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        margin-bottom: 31px;
+        .diet-type-item{
+            width: 25%;
+            background-color: #F6F8FC;
+            border-radius: 8px;
+            padding: 30px 16px 16px;
+            position: relative;
+            img{
+                position: absolute;
+                width: 81px;
+                height: 95px;
+                left: 10px;
+                bottom: 16px;
+            }
+            div{
+                margin-left: 90px;
+            }
+            .title{
+              font-size: 12px;
+              font-weight: 400;
+              color: #B4BBC9;
+              line-height: 16px;
+            }
+            .desc{
+              font-size: 14px;
+              font-weight: 400;
+              color: #333333;
+              line-height: 16px;
+              margin-top: 2px;
+            }
+        }
+    }
+    .diet-plan-box{
+        .title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333333;
+            line-height: 25px;
+            position: relative;
+            margin-bottom: 20px;
+            &:after {
+              content: '';
+              position: absolute;
+              left: 0;
+              bottom: 2px;
+              transform: translateY(-50%);
+              width: 32px;
+              height: 4px;
+              background: #3154AC;
+              border-radius: 3px;
+              opacity: 0.5;
+            }
+            &.permission-title {
+              margin-top: 10px;
+            }
+          }
+     }
+     .selected-box{
+         display: flex;
+         flex-wrap: wrap;
+         margin-top: -5px;
+         .selected-item{
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             width: 90px;
+             height: 32px;
+             text-align: center;
+             background-color: #EAEDF6;
+             font-size: 12px;
+             font-weight: 400;
+            color: #3154AC;
+            border-radius: 16px;
+            margin: 10px 10px 0 0;
+            i{
+                font-size: 16px;
+                margin-left: 8px;
+                cursor: pointer;
+            }
+         }
+     }
+     .diet-formulate{
+         margin-bottom: 20px;
+         .diet-formulate-head{
+             display: flex;
+             align-items: center;
+             .in_out-put{
+                 display: flex;
+                 justify-content: flex-end;
+                 flex: 1;
+                 div{
+                     padding: 10px 17px;
+                     background-color: #F6F8FC;
+                     border-radius: 20px;
+                     text-align: center;
+                     font-size: 14px;
+                      font-weight: 400;
+                        color: #333333;
+                        cursor: pointer;
+                    &+div{
+                        margin-left: 20px;
+                    }
+                 }
+                 img{
+                     width: 14px;
+                     height: 14px;
+                     margin-right: 10px;
+                     transform: translateY(2px);
+                 }
+             }
+         }
+     }
+}
+.dashed-border{
+    border-bottom: 1px dashed #DDE0E6;
+    padding-bottom: 20px;
+}
+.diet-form_right{
+    width: 350px;
+    height: 100px;
+}
+.el-tabs{
+    /deep/ .el-tabs__nav{
+        background: none!important;
+        border:none!important;
+    }
+    /deep/ .el-tabs__nav-wrap {
+        margin-bottom: -4px;
+    }
+    /deep/ .el-tabs__item{
+        border-radius: 8px 8px 0px 0px!important;
+        background-color: #F6F8FC;
+        color:#333333;
+        border: none!important;
+        overflow: hidden;
+        font-size: 12px;
+        &.is-active{
+            color:#ffffff!important;
+             background-color: #3154AC!important;
+        }   
+    }
+    /deep/ .el-icon-plus{
+        color:#36BF2F;
+    }
+    /deep/ .el-tabs__new-tab {
+        background: #F6F8FC!important;
+        border: none!important;
+    }
+    .food-collapse{
+        .food-item{
+            height: 70px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #DDE0E6;
+        }
+        .food-title{
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+             font-weight: 500;
+             flex: 1;
+             color: #333333;
+             img{
+                margin-right: 10px;
+                cursor: pointer;
+            }
+         }
+         .input-box {
+             display: flex;
+             align-items: center;
+             margin-right: 100px;
+            /deep/ .el-input{
+                 width: 140px;
+                 margin-right: 10px;
+                 input{
+                    color: #999999!important;
+                    text-align: center!important;
+                 }
+             }
+         }
+         .food-del{
+             width: 27px;
+         }
+         .food-list{
+            height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            &.is_active{
+                height: auto;
+            }
+            .foot-list_item{
+              padding-left: 66px;
+            }
+            p{
+                flex: 1;
+                font-size: 12px;
+                  font-weight: 400;
+                color: #333333;
+            }
+            .input-box{
+                margin-right: 127px;
+            }
+         }
+
+         
+    }
+}
+/deep/ .el-collapse-item__header .el-collapse-item__arrow{
+    display: none;
+}
+/deep/ .el-collapse-item__header.is-active{
+    .header{
+        .el-icon-arrow-down{
+            transform: rotate(180deg);
+        }
+    }
+}
+.header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background: #F6F8FC;
+    padding: 0 10px;
+    span{
+        font-size: 14px;
+        font-weight: 500;  
+        color: #333333;
+        flex: 1;
+        .el-icon-arrow-down{
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+    }
+    .el-icon-plus{
+        font-size: 16px;
+        color:#DDE0E6;
+    }
+}
+.diet-rule{
+    .diet-rule_textarea{
+        font-size: 12px;
+        font-weight: 400;
+        color: #333333;
+    line-height: 18px;
+    }
+}
+.form-buttons {
+    text-align: center;
+    margin-top: 30px;
+    button + button {
+      margin-left: 20px;
+    }
+}
