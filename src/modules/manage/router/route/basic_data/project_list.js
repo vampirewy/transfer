@@ -13,6 +13,7 @@ export default [
     meta: {
       title: '项目匹配',
       access: 'project_list',
+      keepAlive: true,
     },
     component: () => import('../../../views/basic_data/project_list'),
   },

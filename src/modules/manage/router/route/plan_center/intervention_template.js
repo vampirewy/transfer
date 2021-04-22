@@ -13,6 +13,7 @@ export default [
     meta: {
       title: '干预模版',
       access: 'intervention_template',
+      keepAlive: true,
     },
     component: () => import('../../../views/plan_center/intervention_template'),
   },

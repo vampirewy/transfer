@@ -7,12 +7,12 @@
       class="permission-container"
       :data="permission"
       :show-checkbox="!disabled"
-      node-key="access"
+      node-key="menuCode"
       ref="tree"
       highlight-current
       check-strictly
       :props="{
-        children: 'child',
+        children: 'roleMenuList',
         label: 'name',
       }"
       @check="handleCheckChange"
@@ -48,7 +48,7 @@ export default {
   },
   data() {
     return {
-      permission: JSON.parse(JSON.stringify(ACCESS)),
+      permission: [], // JSON.parse(JSON.stringify(ACCESS)),
       selectAll: false,
     };
   },
@@ -77,20 +77,35 @@ export default {
       ) {
         this.permission.forEach((item) => {
           this.$refs.tree.setChecked(item, newValue);
-          if (item.child && item.child.length > 0) {
-            this.setChildTreeNode(newValue, item.child);
+          if (item.roleMenuList && item.roleMenuList.length > 0) {
+            this.setChildTreeNode(newValue, item.roleMenuList);
           }
         });
       }
       const newChecked = this.$refs.tree.getCheckedNodes(false, true);
-      const res = newChecked.map(node => node.access);
+      const res = newChecked.map(node => node.menuCode);
       this.$emit('change', res);
     },
   },
+  mounted() {
+    this.menuList();
+  },
   methods: {
+    menuList() {
+      // 角色列表
+      this.$api.systemManageInterface
+        .getMenu({})
+        .then((res) => {
+          const { data } = res;
+          const result = data.data || {};
+          console.log(result);
+          console.log(JSON.parse(JSON.stringify(ACCESS)));
+          this.permission = result.synthesisMenuList;
+        });
+    },
     filterTree(data) {
       this.permission = this.filterArray(
-        JSON.parse(JSON.stringify(ACCESS)),
+        this.permission,
         data,
       );
       const nodes = this.$refs.tree.store.nodesMap;
@@ -101,10 +116,10 @@ export default {
     filterArray(arr, data) {
       const res = [];
       arr.forEach((item) => {
-        if (data.includes(item.access)) {
+        if (data.includes(item.menuCode)) {
           res.push(item);
-          if (item.child && item.child.length > 0) {
-            this.$set(item, 'child', this.filterArray(item.child, data));
+          if (item.roleMenuList && item.roleMenuList.length > 0) {
+            this.$set(item, 'roleMenuList', this.filterArray(item.roleMenuList, data));
           }
         }
       });
@@ -112,7 +127,7 @@ export default {
     },
     handleCheckChange(data, checkedRes) {
       const { checkedKeys } = checkedRes;
-      const checked = checkedKeys.includes(data.access);
+      const checked = checkedKeys.includes(data.menuCode);
       // 选中节点，父节点选中
       if (checked) {
         let node = this.$refs.tree.getNode(data);
@@ -126,19 +141,19 @@ export default {
         }
       }
       // 同步子节点
-      if (data.child && data.child.length > 0) {
-        this.setChildTreeNode(checked, data.child);
+      if (data.roleMenuList && data.roleMenuList.length > 0) {
+        this.setChildTreeNode(checked, data.roleMenuList);
       }
       const checkedData = this.$refs.tree.getCheckedNodes(false, true);
-      const res = checkedData.map(node => node.access);
+      const res = checkedData.map(node => node.menuCode);
       this.$emit('change', res);
       this.setSelectAll();
     },
     setChildTreeNode(checked, nodes) {
       nodes.forEach((node) => {
-        this.$refs.tree.setChecked(node.access, checked, false);
-        if (node.child && node.child.length > 0) {
-          this.setChildTreeNode(checked, node.child);
+        this.$refs.tree.setChecked(node.menuCode, checked, false);
+        if (node.roleMenuList && node.roleMenuList.length > 0) {
+          this.setChildTreeNode(checked, node.roleMenuList);
         }
       });
     },

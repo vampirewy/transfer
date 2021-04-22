@@ -154,22 +154,53 @@ a{
     }
   }
 }
+// 弹框搜索按钮
+.searchInputFormItemOpen{
+  position: relative;
+  margin-bottom: 20px;
+  /deep/ .el-input__inner{
+    padding-right: 40px;
+  }
+  .searchBtnImgSpan{
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    width: 36px;
+    height: 38px;
+    line-height: 38px;
+    border-radius: 0 5px 5px 0;
+    text-align: center;
+    cursor: pointer;
+    .searchBtnImg{
+      width: 36px;
+    }
+  }
+}
 /*表格头部操作栏*/
 .tableTopDoDiv{
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   margin-top: -10px;
-  .divRightTitleDiv{
-    .divRightTitle{
-      font-size: 18px;
-      color: #333333;
-      font-weight: bold;
-      span{
-        color: #4991FD;
-        font-size: 18px;
-        margin-right: 9px;
-      }
+}
+.divRightTitleDiv{
+  position: relative;
+  .divRightTitle{
+    font-size: 16px;
+    color: #333333;
+    font-weight: bold;
+    margin: 20px 0;
+    &:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 4px;
+      background: #3154AC;
+      border-radius: 3px;
+      opacity: 0.5;
     }
   }
 }
@@ -333,13 +364,13 @@ a{
 .divTop{
   .divTitle {
     align-self: start;
-    font-size: 18px;
+    font-size: 16px;
     color: #333333;
     font-weight: bold;
     span {
       color: #4991fd;
       font-size: 18px;
-      margin-right: 9px;
+      margin-right: 3px;
       img{
         width: 7px;
         margin-bottom: 2px;
@@ -407,7 +438,7 @@ a{
   .buttones{
     display: flex;
     div{
-      margin: 15px 5px 0 0;
+      margin: 15px 10px 0 0;
     }
     .more{
       width: 110px;

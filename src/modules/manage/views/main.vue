@@ -52,7 +52,10 @@
               />
             </div>-->
             <Content class="content-wrapper">
-              <router-view />
+              <keep-alive>
+                <router-view v-if="$route.meta.keepAlive"></router-view>
+              </keep-alive>
+              <router-view v-if="!$route.meta.keepAlive"></router-view>
             </Content>
           </Layout>
         </Content>
@@ -73,6 +76,7 @@ import Content from '~/src/components/layout/content.vue';
 import SideMenu from '~/src/components/side_menu/side_menu.vue';
 import { getNewTagList, routeEqual, localSave } from '~/src/libs/util';
 import routers from '../router/routers';
+import ResizeMixin from '../../../libs/util/ResizeHandler';
 export default {
   name: 'main',
   components: {
@@ -85,6 +89,7 @@ export default {
     Content,
     SideMenu,
   },
+  mixins: [ResizeMixin],
   computed: {
     ...mapState({
       sidebar: state => state.app.sidebar,
@@ -106,7 +111,6 @@ export default {
   },
   data() {
     return {
-      opened: true, // 侧边栏是否展开
       menuList: [],
       contentMarginTop: 0,
       personalHealthPage: this.$route.meta.title === '个人管理中心', // 判断是否是个人健康管理页
@@ -192,7 +196,6 @@ export default {
       }*/
     },
     toggleSidebar() {
-      this.opened = !this.opened;
       this.$store.dispatch('app/toggleSideBar');
     },
     turnToPage(route) {

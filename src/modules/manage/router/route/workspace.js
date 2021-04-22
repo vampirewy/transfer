@@ -25,6 +25,7 @@ export default [
         meta: {
           title: '我的任务',
           access: 'my_task',
+          keepAlive: true,
         },
         component: () => import('../../views/workspace'),
       },
@@ -34,6 +35,7 @@ export default [
         meta: {
           title: '工作绩效统计',
           access: 'work_statistics',
+          keepAlive: true,
         },
         component: () => import('../../views/statistics/index'),
       },

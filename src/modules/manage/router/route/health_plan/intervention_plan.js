@@ -13,6 +13,7 @@ export default [
     meta: {
       title: '干预方案',
       access: 'intervention_plan',
+      keepAlive: true,
     },
     component: () => import('../../../views/health_plan/intervention_plan'),
   },

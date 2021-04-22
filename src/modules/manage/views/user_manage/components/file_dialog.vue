@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="新增附件" :visible.sync="visible" @close="cancel">
+  <el-dialog title="新增附件" :visible.sync="visible" :modal-append-to-body="false" @close="cancel">
     <el-form :model="formData" label-width="90px" ref="form" :rules="rules">
       <el-form-item label="附件格式">
         <el-input

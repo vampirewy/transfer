@@ -25,9 +25,11 @@
         </el-form-item>
       </el-col>
       <el-col :span="6">
-        <el-form-item label="问卷日期" prop="createTime">
-          <el-date-picker v-model="formData.createTime" style="width: 100%"
-                          placeholder="" disabled></el-date-picker>
+        <el-form-item label="性别" prop="gender">
+          <el-radio-group :disabled="true" v-model="formData.gender">
+            <el-radio :label="1">男</el-radio>
+            <el-radio :label="2">女</el-radio>
+          </el-radio-group>
         </el-form-item>
       </el-col>
       <el-col :span="6">
@@ -86,11 +88,6 @@
         </el-form-item>
       </el-col>
       <el-col :span="6">
-        <el-form-item label="性别" prop="genderName">
-          <el-input v-model="formData.genderName" disabled></el-input>
-        </el-form-item>
-      </el-col>
-      <el-col :span="6">
         <el-form-item label="工作单位" prop="workUnitName">
           <el-input v-model="formData.workUnitName" disabled></el-input>
         </el-form-item>
@@ -98,6 +95,12 @@
       <el-col :span="6">
         <el-form-item label="现居地址" prop="address">
           <el-input v-model="formData.address" disabled></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="6">
+        <el-form-item label="问卷日期" prop="createTime">
+          <el-date-picker v-model="formData.createTime" style="width: 100%"
+                          placeholder="" disabled></el-date-picker>
         </el-form-item>
       </el-col>
     </el-row>
@@ -139,10 +142,8 @@ export default {
     },
     getClientUserInfo(id) {
       this.$api.userManagerInterface.getDetail(id).then(({ data }) => {
-        if (data.code === 200) {
-          this.setData(data.data);
-          this.$emit('change', this.formData.clientId);
-        }
+        this.setData(data.data);
+        this.$emit('change', this.formData.clientId);
       });
     },
     setData(data) {
@@ -155,13 +156,7 @@ export default {
       this.formData.professionName = data.professionName;
       this.formData.workUnitName = data.workUnitName;
       this.formData.address = data.address;
-      if (data.gender === 2) {
-        this.formData.genderName = '女';
-      } else if (data.gender === 1) {
-        this.formData.genderName = '男';
-      } else {
-        this.formData.genderName = '未知';
-      }
+      this.formData.gender = data.gender;
     },
   },
 };

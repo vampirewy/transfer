@@ -8,11 +8,12 @@
 
 export default [
   {
-    path: '/health_plan/user_follow_record',
-    name: 'user_follow_record',
+    path: '/health_plan/visited_record',
+    name: 'visited_record',
     meta: {
       title: '随访记录',
       access: 'visited_record',
+      keepAlive: true,
     },
     component: () => import('../../../views/health_plan/user_follow_record'),
   },

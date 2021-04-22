@@ -20,11 +20,12 @@ export default [
     component: Main,
     children: [
       {
-        path: '/estimate_report',
-        name: 'estimate_report',
+        path: '/assessment_report',
+        name: 'assessment_report',
         meta: {
           title: '评估报告',
           access: 'assessment_report',
+          keepAlive: true,
         },
         component: () => import('../../views/estimate_report'),
       },

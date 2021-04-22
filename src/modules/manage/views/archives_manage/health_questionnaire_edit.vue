@@ -1,10 +1,16 @@
 <template>
-  <div class="health_questionnaire_edit">
-    <div class="tabBars">
-      <div v-for="(item,index) in tabbor" :key="index">
-      <span :class="active === index?'TabBarsName':'TabBarsNames'" @click="TabbarBtn(index)">
-        {{item}}
-        <!--<div class="Tabunread">3</div>-->
+  <div class="health_questionnaire_edit" ref="health_questionnaire_edit">
+    <div class="tabBars" ref="tabBars">
+      <div class="firstTitleTabBar">
+        <span :class="active === -1 ? 'TabBarsNameFirstActive' : 'TabBarsFirstNames'"
+              @click="clickToTop">
+          生活方式问卷
+        </span>
+      </div>
+      <div v-for="(item,index) in templateList" :key="item.name">
+      <span :class="active === index ? 'TabBarsNameActive' : 'TabBarsNames'"
+            @click="clickMenu(index, '#questions-' + index)">
+        {{item.name}}
       </span>
       </div>
       <!-- <div><span>阳性跟踪</span></div>
@@ -22,8 +28,11 @@
         </li>
       </ul>
     </div>
-    <div class="health_questionnaire_form" :class="{ 'isFixedForm': searchBarFixed === true }">
-    <div class="title">{{title}}问卷-基本信息</div>
+    <div class="health_questionnaire_form" :class="{ 'isFixedForm': searchBarFixed === true }"
+         :style="{'padding-top': contentPaddingTop + 'px'}">
+      <div class="divRightTitleDiv">
+        <div class="divRightTitle">{{title}}问卷-基本信息</div>
+      </div>
     <client-info :id="$route.params.id" :propsData="formData"
                  @change="data => formData.clientId = data"></client-info>
       <div class="editWarn" v-if="$route.params.qusType === 1">
@@ -38,6 +47,7 @@
       label-suffix="："
       label-width="90px"
       class="health_questionnaire_form"
+      style="padding-top: 0"
       :rules="rules"
     >
       <div class="title" v-if="$route.params.qusType !== 1">填写{{qusTypeName}}问卷</div>
@@ -111,7 +121,8 @@ export default {
   },
   data() {
     return {
-      active: 0,
+      active: -1,
+      contentPaddingTop: 20,
       tabbor: ['当日任务', '阳性跟踪', '随访任务'],
       title: '',
       qusTypeName: '',
@@ -145,9 +156,12 @@ export default {
     clickMenu(index, selector) {
       this.active = index;
       const anchor = this.$el.querySelector(selector);
-      document.documentElement.scrollTop = anchor.offsetTop - 140;
+      this.$refs.health_questionnaire_edit.parentNode.scrollTop = anchor.offsetTop - 50;
     },
-    handleClick() {},
+    clickToTop() {
+      this.active = -1;
+      this.$refs.health_questionnaire_edit.parentNode.scrollTop = 0;
+    },
     onAnswerChange(row, answer) {
       console.log(row);
       console.log(answer);
@@ -210,18 +224,9 @@ export default {
     },
     fetch(id, questionType) {
       this.$api.health.getDetail(id).then(({ data }) => {
-        if (data.code === 200) {
-          this.formData = data.data;
-          if (data.data.gender === 2) {
-            this.formData.genderName = '女';
-          } else if (data.data.gender === 1) {
-            this.formData.genderName = '男';
-          } else {
-            this.formData.genderName = '未知';
-          }
-          this.answerList = [...this.formData.answerList];
-          this.onTypeChange(questionType);
-        }
+        this.formData = data.data;
+        this.answerList = [...this.formData.answerList];
+        this.onTypeChange(questionType);
       });
     },
     groupBy(list) {
@@ -269,32 +274,36 @@ export default {
       const EV = ev; // ev; 1生活方式 2 中医 3 心理
       this.$set(this, 'answerOptionsList', []);
       this.$api.health.getQuestions(EV).then(({ data }) => {
-        if (data.code === 200) {
-          this.questions = data.data;
-          this.questions.forEach((val, index) => {
-            this.templateList.push({ name: val.name, sort: index });
-            val.questionSubjectDTOList.forEach((valOptions) => {
-              if (!this.answerMap[valOptions.id]) {
-                this.$set(this.answerMap, valOptions.id, []);
-                if (valOptions.subectType === 1) {
-                  // 单选的话默认有一个选项
-                  this.answerMap[valOptions.id].push({
-                    optionId: '',
-                  });
-                }
+        // if (data.code === 200) {
+        this.questions = data.data;
+        this.questions.forEach((val, index) => {
+          this.templateList.push({ name: val.name, sort: index });
+          val.questionSubjectDTOList.forEach((valOptions) => {
+            if (!this.answerMap[valOptions.id]) {
+              this.$set(this.answerMap, valOptions.id, []);
+              if (valOptions.subectType === 1) {
+                // 单选的话默认有一个选项
+                this.answerMap[valOptions.id].push({
+                  optionId: '',
+                });
               }
-              this.allQuestion.push(valOptions);
-              valOptions.optionList.forEach((item) => {
-                this.answerOptionMap[item.id] = item;
-                // eslint-disable-next-line no-param-reassign
-                item.subectType = valOptions.subectType;
-              });
+            }
+            this.allQuestion.push(valOptions);
+            valOptions.optionList.forEach((item) => {
+              this.answerOptionMap[item.id] = item;
+              // eslint-disable-next-line no-param-reassign
+              item.subectType = valOptions.subectType;
             });
           });
-          console.log(this.answerOptionMap);
-          console.log(this.formData.answerList);
-          this.groupBy(this.formData.answerList);
-        }
+        });
+        console.log(this.allQuestion);
+        console.log(this.answerOptionMap);
+        console.log(this.formData.answerList);
+        this.groupBy(this.formData.answerList);
+        setTimeout(() => {
+          this.setContentPaddingTop(); // 请求成功后设置PaddingTop
+        }, 100);
+        // }
       });
     },
     removeSplice(arr, val) {
@@ -356,8 +365,8 @@ export default {
         console.log(anchor);
         if (this.$route.params.qusType === 1) {
           // 父级与body + 与父级 加起来的offsetTop
-          document.documentElement.scrollTop =
-            (anchor.parentNode.offsetTop + anchor.offsetTop) - 130;
+          this.$refs.health_questionnaire_edit.parentNode.scrollTop =
+            (anchor.parentNode.offsetTop + anchor.offsetTop) - 50;
         } else {
           document.documentElement.scrollTop = anchor.offsetTop + 290;
         }
@@ -370,39 +379,51 @@ export default {
       if (this.$route.params.id) {
         sendData.id = this.$route.params.id;
       }
-      this.$api.health.add(sendData).then(({ data }) => {
-        if (data.code === 200) {
-          this.$message.success('操作成功');
-          this.$router.go(-1);
-        }
+      this.$api.health.add(sendData).then(() => {
+        this.$message.success('操作成功');
+        this.$router.go(-1);
       });
     },
     handleScroll() {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop
-        || document.body.scrollTop;
-      const offsetTop = document.querySelector('#intvTmpl_left').offsetTop;
+      const scrollTop = document.querySelectorAll('.content-wrapper')[0].scrollTop;
+      // window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      /* const offsetTop = document.querySelector('#intvTmpl_left').offsetTop;
       if (scrollTop > offsetTop - 140 && scrollTop > 140) {
         this.searchBarFixed = true;
       } else {
         this.searchBarFixed = false;
-      }
+      } */
       const article = document.querySelectorAll('.articleTitle');
       article.forEach((item, index) => {
-        if (scrollTop >= item.offsetTop - 200) {
+        if (scrollTop >= item.offsetTop - 450) {
           this.active = index;
         }
       });
+      if (scrollTop < 50) { // 小于50就设置标题栏选中
+        this.active = -1;
+      }
+    },
+    setContentPaddingTop() { // 设置距离顶部高度， 防止头部标签换行
+      const headerHeight = this.$refs.tabBars.offsetHeight;
+      if (headerHeight <= 40) { // 一层
+        this.contentPaddingTop = 20;
+      } else if (headerHeight > 40) { // 两层
+        this.contentPaddingTop = 60;
+      }
     },
   },
   destroyed() {
-    window.removeEventListener('scroll', this.handleScroll);
+    document.querySelectorAll('.content-wrapper')[0].removeEventListener('scroll', this.handleScroll);
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       const VM = vm;
       if (to.params.qusType === 1) {
         VM.qusTypeName = '常规';
-        window.addEventListener('scroll', vm.handleScroll);
+        // window.addEventListener('scroll', vm.handleScroll);
+        console.log(document.querySelectorAll('.content-wrapper'));
+        console.log(VM.$refs.health_questionnaire_edit.parentNode);
+        document.querySelectorAll('.content-wrapper')[0].addEventListener('scroll', vm.handleScroll);
       } else if (to.params.qusType === 2) {
         VM.qusTypeName = '中医';
       } else if (to.params.qusType === 3) {
@@ -422,6 +443,9 @@ export default {
         VM.title = '添加';
         document.title = '新增健康问卷';
       }
+      window.onresize = () => { // 60 120  180  240 头部导航栏固定高度
+        VM.setContentPaddingTop();
+      };
     });
   },
 };
@@ -430,7 +454,14 @@ export default {
 <style lang="scss">
   .tabBars{
     display: flex;
-    margin-top: 25px;
+    align-items: flex-end;
+    background-color: #F6F8FC;
+    margin: -20px -20px 0 -20px;
+    flex-wrap: wrap;
+    position: absolute;
+    top: 20px;
+    z-index: 1;
+    width: calc(100% - 40px);
     div{
       // width: 100px;
       // height: 40px;
@@ -438,21 +469,119 @@ export default {
       // text-align: center;
       // background: red;
     }
+    .firstTitleTabBar{
+      .TabBarsNameFirstActive{
+        cursor: pointer;
+        background: #ffffff;
+        border-color: transparent;
+        color: #333333;
+        font-weight: 500;
+        position: relative;
+        margin-right: 10px;
+        padding: 0 10px 0 16px;
+        height: 40px;
+        line-height: 40px;
+        font-size: 14px;
+        border-radius: 8px 5px 0 0;
+        display: inline-block;
+        &:after{
+          content: '';
+          display: block;
+          width: 15px;
+          height: 40px;
+          position: absolute;
+          -webkit-transform: skewX(18deg);
+          transform: skewX(18deg);
+          background: white;
+          border-top-right-radius: 8px;
+          top: 0px;
+          right: -8px;
+        }
+      }
+      .TabBarsFirstNames{
+        cursor: pointer;
+        background: #EEF1F5;
+        border-color: transparent;
+        color: #666666;
+        position: relative;
+        margin-right: 10px;
+        padding: 10px 10px 10px 16px;
+        font-size: 12px;
+        border-radius: 8px 5px 0 0;
+        display: inline-block;
+        &:after{
+          content: '';
+          display: block;
+          width: 15px;
+          height: 36px;
+          position: absolute;
+          -webkit-transform: skewX(18deg);
+          transform: skewX(18deg);
+          background: #EEF1F5;
+          border-top-right-radius: 8px;
+          top: 0px;
+          right: -7px;
+        }
+      }
+    }
+    .TabBarsNameActive{
+      cursor: pointer;
+      background: #ffffff;
+      border-color: transparent;
+      color: #333333;
+      font-weight: 500;
+      position: relative;
+      margin-right: 9px;
+      margin-left: 13px;
+      padding: 0 8px 0 8px;
+      height: 40px;
+      line-height: 40px;
+      font-size: 14px;
+      border-radius: 8px 5px 0 0;
+      display: inline-block;
+      &:before{
+          content: '';
+          display: block;
+          width: 10px;
+          height: 40px;
+          position: absolute;
+          -webkit-transform: skewX(165deg);
+          transform: skewX(163deg);
+          background: white;
+          border-top-left-radius: 8px;
+          top: 0px;
+          left: -4px;
+      }
+      &:after{
+        content: '';
+        display: block;
+        width: 10px;
+        height: 40px;
+        position: absolute;
+        -webkit-transform: skewX(18deg);
+        transform: skewX(18deg);
+        background: white;
+        border-top-right-radius: 8px;
+        top: 0px;
+        right: -5px;
+      }
+    }
     .TabBarsNames{
       cursor: pointer;
       background: #EEF1F5;
       border-color: transparent;
       color: #666666;
       position: relative;
-      margin-right: 15px;
-      padding: 10px 10px 10px 10px;
+      margin-right: 8px;
+      padding: 10px 8px 10px 8px;
       font-size: 12px;
       border-radius: 8px 5px 0 0;
       margin-left: 13px;
-      &:before{
+      display: inline-block;
+      &:before {
         content: '';
         display: block;
-        width: 18px;
+        width: 10px;
         height: 36px;
         position: absolute;
         -webkit-transform: skewX(165deg);
@@ -460,45 +589,20 @@ export default {
         background: #EEF1F5;
         border-top-left-radius: 8px;
         top: 0px;
-        left: -8px;
+        left: -4px;
       }
       &:after{
         content: '';
         display: block;
-        width: 15px;
+        width: 10px;
         height: 36px;
         position: absolute;
-        -webkit-transform: skewX(23deg);
-        transform: skewX(23deg);
+        -webkit-transform: skewX(18deg);
+        transform: skewX(18deg);
         background: #EEF1F5;
         border-top-right-radius: 8px;
         top: 0px;
-        right: -7px;
-      }
-    }
-    .TabBarsName{
-      cursor: pointer;
-      background: #ffffff;
-      border-color: transparent;
-      color: #333333;
-      font-weight: 500;
-      position: relative;
-      margin-right: 20px;
-      padding: 10px 14px 10px 16px;
-      font-size: 14px;
-      border-radius: 8px 5px 0 0;
-      &:after{
-        content: '';
-        display: block;
-        width: 25px;
-        height: 40px;
-        position: absolute;
-        -webkit-transform: skewX(23deg);
-        transform: skewX(23deg);
-        background: white;
-        border-top-right-radius: 8px;
-        top: 0px;
-        right: -13px;
+        right: -5px;
       }
     }
     .Tabunread{
@@ -545,12 +649,12 @@ export default {
     }
     .editWarn{
       display: flex;
-      height: 80px;
-      background: #FFFFFF;
+      min-height: 40px;
+      padding: 20px 0;
       font-size: 14px;
-      color: #E6B058;
+      color: #FA912B;
+      background: #fef4e9;
       border-radius: 5px;
-      border: 1px dashed #E6B058;
       align-items: center;
       margin: 10px 0 30px 0;
       img{
@@ -561,6 +665,7 @@ export default {
     }
     .health_questionnaire_form{
       flex: 1;
+      padding-top: 20px;
       .footer {
         margin-top: 10px;
         text-align: center;
@@ -573,23 +678,23 @@ export default {
     }
 
     .title {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 600;
       color: #333333;
       line-height: 25px;
-      padding-left: 10px;
       position: relative;
       margin-bottom: 20px;
       &:after {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 2px;
-        height: 18px;
-        background: #4991FD;
-        border-radius: 1px;
+          content: '';
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          transform: translateY(-50%);
+          width: 32px;
+          height: 4px;
+          background: #3154AC;
+          border-radius: 3px;
+          opacity: 0.5;
       }
     }
     .el-radio-button + .el-radio-button {
@@ -597,9 +702,9 @@ export default {
       margin-bottom: 20px;
     }
     .el-radio-button__inner {
-      background-color: #F4F4F6;
+      background-color: #FFFFFF;
       color: #333333;
-      border: 1px solid #97A6BD;
+      border: 1px solid #B4BBC9;
     }
     /deep/ .el-radio-button__orig-radio:disabled + .el-radio-button__inner{
       border-left: 1px solid #f5f5f5!important;
@@ -609,12 +714,22 @@ export default {
         min-width: 100px;
         height: 48px;
         line-height: 21px;
-        border-radius: 8px;
+        border-radius: 24px;
         box-shadow: none;
       }
+      &.is-active .el-radio-button__inner{
+        color: #3154AC;
+        background: rgba(49, 84, 172, 0.1);
+        border-radius: 24px;
+        border: 1px solid rgba(49, 84, 172, 0.3)!important;
+        box-shadow: none!important;
+      }
       &:first-child .el-radio-button__inner{
-        border-left: 1px solid #97A6BD;
+        border-left: 1px solid #B4BBC9;
         margin-right: 20px;
+      }
+      &.is-disabled .el-radio-button__inner{
+        border: 1px solid #f5f5f5;
       }
     }
     .containerOtherCheckBox{
@@ -638,9 +753,9 @@ export default {
       margin-bottom: 20px;
     }
     .el-checkbox-button__inner{
-      background-color: #F4F4F6;
+      background-color: #FFFFFF;
       color: #333333;
-      border: 1px solid #97A6BD;
+      border: 1px solid #B4BBC9;
     }
     /deep/ .el-checkbox-button.is-disabled:first-child .el-checkbox-button__inner{
       border-left-color: #f5f5f5!important;
@@ -653,16 +768,21 @@ export default {
         min-width: 100px;
         height: 48px;
         line-height: 21px;
-        border-radius: 8px;
+        border-radius: 24px;
       }
-      .is-checked .el-checkbox-button__inner{
-        background-color: #4991FD;
-        color: white;
-        border: 1px solid #4991FD!important;
+      &.is-checked .el-checkbox-button__inner{
+        color: #3154AC;
+        background: rgba(49, 84, 172, 0.1);
+        border-radius: 24px;
+        border: 1px solid rgba(49, 84, 172, 0.3)!important;
+        box-shadow: none!important;
       }
       &:first-child .el-checkbox-button__inner{
-        border-left: 1px solid #97A6BD;
+        border-left: 1px solid #B4BBC9;
         margin-right: 20px;
+      }
+      &.is-disabled .el-checkbox-button__inner{
+        border: 1px solid #f5f5f5;
       }
     }
   }

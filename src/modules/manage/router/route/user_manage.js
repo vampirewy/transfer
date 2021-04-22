@@ -25,6 +25,7 @@ export default [
         meta: {
           title: '我的客户',
           access: 'customer_pool',
+          keepAlive: true,
         },
         component: () => import('../../views/user_manage'),
       },
@@ -39,11 +40,12 @@ export default [
         component: () => import('../../views/user_manage/user_edit.vue'),
       },
       {
-        path: '/user_duty',
-        name: 'user_duty',
+        path: '/customers',
+        name: 'customers',
         meta: {
           title: '负责客户',
           access: 'customers',
+          keepAlive: true,
         },
         component: () => import('../../views/user_manage/duty.vue'),
       },
@@ -53,15 +55,17 @@ export default [
         meta: {
           title: '企业管理',
           access: 'company_manage',
+          keepAlive: true,
         },
         component: () => import('../../views/company_manage'),
       },
       {
-        path: '/category_manage',
-        name: 'category_manage',
+        path: '/type_manage',
+        name: 'type_manage',
         meta: {
           title: '类别管理',
           access: 'type_manage',
+          keepAlive: true,
         },
         component: () => import('../../views/category_manage'),
       },
@@ -70,7 +74,8 @@ export default [
         name: 'esuser_manageassessment',
         meta: {
           title: '效价评估',
-          access: '',
+          access: 'esuser_manageassessment',
+          keepAlive: true,
         },
         component: () => import('../../views/user_manageassessment'),
       },

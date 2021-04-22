@@ -8,7 +8,7 @@
       label-width="110px"
       label-suffix="："
     >
-      <div class="title">{{detail ? '查看' : (id ? '编辑' : '新增')}}-角色</div>
+      <div class="title">{{detail ? '查看' : (id ? '编辑' : '新增')}}角色</div>
       <el-row>
         <el-col :span="12">
           <el-form-item label="角色名称" prop="name">
@@ -97,6 +97,7 @@ export default {
     };
   },
   mounted() {
+    console.log(this.roleForm);
     if (this.id) {
       // 角色详情
       this.$api.systemManageInterface.roleDetail(this.id).then((res) => {

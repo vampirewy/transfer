@@ -9,22 +9,20 @@
 import axios from 'axios';
 import CapsuleUI from '~/plugins/@zyf2e/capsule-ui/lib';
 import { getToken } from '~/src/libs/util';
-
 class BaseModule {
   constructor() {
     this.$http = axios.create();
     this.dataMethodDefaults = {
       headers: {
         'Content-Type': 'application/json',
-        token: getToken(),
       },
       // withCredentials: true, // 跨域cookie
     };
-
     // request拦截器
     this.$http.interceptors.request.use(
       (request) => {
         const opt = request;
+        opt.headers.token = getToken();
         opt.url = `${process.env.api.common_url}${opt.url}`;
         return opt;
       },

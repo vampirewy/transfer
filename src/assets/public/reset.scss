@@ -70,14 +70,13 @@
   .el-table__header-wrapper{
     th{
       &.is-leaf{
-        text-align: left;
+        text-align: center;
       }
     }
   }
   .el-table__body {
     td {
       border-bottom: 1px solid #f4f4f6;
-      text-align: left!important;
     }
   }
 }
@@ -254,7 +253,7 @@ body .el-table th.gutter{
 }
 .el-input{
   input{
-    border: 1px solid #f4f4f6 !important;
+    border: 1px solid #DDE0E6 !important;
     color: #333333;
     &:hover{
       transition: border .2s;
@@ -317,8 +316,8 @@ body .el-table th.gutter{
 }
 
 .el-radio__input.is-disabled.is-checked .el-radio__inner {
-  background-color: #ffffff !important;
-  border-color: #4991fd !important;
+  /*background-color: #ffffff !important;
+  border-color: #4991fd !important;*/
 }
 .el-radio__input.is-disabled.is-checked .el-radio__inner::after {
   background-color: #4991FD;
