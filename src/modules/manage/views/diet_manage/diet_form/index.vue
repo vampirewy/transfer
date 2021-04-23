@@ -121,16 +121,15 @@
           <div>
             <div class="item-title" style="margin-bottom: 20px">适用人员</div>
           </div>
-          <el-form-item label="添加人员: " label-width="80px">
-            <el-select
-              multiple
+          <el-form-item style="position: relative;" label="添加人员: " label-width="80px">
+            <div @click="isShowPeopleSelect=true" class="select-mask">
+                <el-select
               style="width: 100%"
               placeholder="请选择（多选）"
-              clearable
             >
-              <el-option label="男" :value="1"></el-option>
-              <el-option label="女" :value="0"></el-option>
             </el-select>
+            </div>
+            <el-people-select :active.sync="isShowPeopleSelect" class="el-people-select"></el-people-select>
           </el-form-item>
           <el-form-item
             class="dashed-border"
@@ -145,20 +144,21 @@
             </div>
           </el-form-item>
           <div class="diet-formulate">
-            <div class="diet-formulate-head" style="margin-bottom: 20px">
-              <div class="item-title">适用人员</div>
+            <div class="diet-formulate-head" style="margin-bottom: 20px;position:relative">
+              <div class="item-title">制定食谱</div>
               <div class="in_out-put">
-                <div>
-                  <img src="@/assets/images/edit@2x.png" alt="" />
+                <div @click="isShowTemplateInput=true">
+                  <img src="@/assets/images/common/import.png" alt="" />
                   从模版导入
                 </div>
-                <div>
-                  <img src="@/assets/images/edit@2x.png" alt="" />
+                <div @click="isShowTmplateSave=true">
+                  <img src="@/assets/images/common/export.png" alt="" />
                   保存为模版
                 </div>
               </div>
+              <el-template-input class="el-template-input" :active.sync="isShowTemplateInput"></el-template-input>
             </div>
-            <el-tabs type="card" editable v-model="editableTabsValue">
+            <el-tabs type="card" editable @tab-remove="removeTab" @tab-add="addTab" v-model="editableTabsValue">
               <el-tab-pane
                 :key="item.title"
                 v-for="item in editableTabs"
@@ -170,7 +170,7 @@
                     <template slot="title">
                       <div class="header">
                         <span><i class="el-icon-arrow-down"></i>早餐</span>
-                        <i class="el-icon-plus"></i>
+                        <i class="el-icon-plus" @click.stop="foodAdd"></i>
                       </div>
                     </template>
                     <div class="food-collapse" v-for="item in 2" :key="item">
@@ -213,7 +213,7 @@
                     <template slot="title">
                       <div class="header">
                         <span><i class="el-icon-arrow-down"></i>午餐</span>
-                        <i class="el-icon-plus"></i>
+                        <i class="el-icon-plus" @click.stop="foodAdd"></i>
                       </div>
                     </template>
                     <div class="food-collapse" v-for="item in 2" :key="item">
@@ -256,7 +256,7 @@
                     <template slot="title">
                       <div class="header">
                         <span><i class="el-icon-arrow-down"></i>晚餐</span>
-                        <i class="el-icon-plus"></i>
+                        <i class="el-icon-plus" @click.stop="foodAdd"></i>
                       </div>
                     </template>
                     <div class="food-collapse" v-for="item in 2" :key="item">
@@ -299,7 +299,7 @@
                     <template slot="title">
                       <div class="header">
                         <span><i class="el-icon-arrow-down"></i>加餐</span>
-                        <i class="el-icon-plus"></i>
+                        <i class="el-icon-plus" @click.stop="foodAdd"></i>
                       </div>
                     </template>
                     <div class="food-collapse" v-for="item in 2" :key="item">
@@ -363,35 +363,99 @@
             <el-input type="textarea" :rows="4" class="diet-rule_textarea" />
           </div>
         </el-form>
-         <div class="form-buttons">
-            <el-button
-              size="small"
-              class="cancelBtn"
-              @click="$emit('cancel')"
-              >{{ detail ? '返回' : '取消' }}</el-button
-            >
-            <el-button
-              size="small"
-              v-if="!detail"
-              class="sureBtn"
-              type="primary"
-              @click="submit"
-              >保存</el-button
-            >
-          </div>
+        <div class="form-buttons">
+          <el-button size="small" class="cancelBtn" @click="back"> 返回 </el-button>
+          <el-button size="small" class="sureBtn" type="primary"
+            >保存</el-button
+          >
+        </div>
       </div>
     </div>
-    <div class="diet-form_right">1111</div>
+    <div class="diet-form_right">
+      <el-tabs v-model="tabActive"   stretch type="border-card">
+        <el-tab-pane name="1" label="食谱营养素分析">
+          <div class="sign">
+            <span class="sign-high">指标过高</span>
+            <span class="sign-low">指标过低</span>
+          </div>
+          <el-table
+            row-class-name="table-row"
+            header-row-class-name="table-row"
+            :data="analysisData"
+          >
+            <el-table-column align="center" prop="title" label="成分">
+            </el-table-column>
+            <el-table-column align="center" prop="title2" label="推荐量">
+              <template slot-scope="scope">
+                <span class="analysis-high">{{ scope.row.title2 }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column align="center" prop="title3" label="提供量">
+              <template slot-scope="scope">
+                <span class="analysis-low">{{ scope.row.title3 }}</span>
+              </template>
+            </el-table-column> 
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane name="2" label="物质及能量分配">
+          <div class="chart-box">
+            <p class="item-title">三大营养素供能比</p>
+            <div id="diet-proportion"></div>
+            <p class="chart-desc">
+              三大营养素推荐比值：蛋白质10%~15%，脂肪20%~30%，碳水化合物55%~65%
+            </p>
+          </div>
+          <div class="chart-box">
+            <p class="item-title">动物性及豆类蛋白质占总蛋白质比例</p>
+            <div id="diet-protein-proportion"></div>
+            <p class="chart-desc">
+              一般推荐动物性蛋白质和豆类蛋白质占膳食蛋白质总量30%~50%。
+            </p>
+          </div>
+          <div class="chart-box">
+            <p class="item-title">三餐能量分配比</p>
+            <div id="diet-distribution"></div>
+             <p class="chart-desc">
+              三餐推荐分配比：早餐30%，午餐40%，晚餐30%。
+            </p>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
+    <el-template-save :visible.sync="isShowTmplateSave"></el-template-save>
+    <el-food-op  :visible.sync="isShowFoodOp"></el-food-op>
   </div>
 </template>
 
 <script>
+import * as echarts from 'echarts';
+import dietProportionData from './chart_data/diet_proportion.js'; //三大营养素供能比
+import dietProteinroportionData from './chart_data/diet_protein_proportion.js'; //动物性及豆类蛋白质占总蛋白质比例
+import dietDistributionData from './chart_data/diet_distribution.js'; //三餐能量分配比
+import elPeopleSelect from './el_modal/el_people_selecet.vue';
+import elTemplateInput from './el_modal/el_template_input.vue'
+import elTemplateSave from './el_modal/el_template_save.vue';
+import elFoodOp from './el_modal/el_food_op.vue';
+
 export default {
   name: 'diet_form',
-  components: {},
+  components: {
+    elPeopleSelect,
+    elTemplateInput,
+    elTemplateSave,
+    elFoodOp
+  },
   data() {
     return {
+      isShowFoodOp:false,
+      isShowTmplateSave:false,
+      isShowTemplateInput:false,
+      isShowPeopleSelect:false,
+      tabActive:'1',
       isActive: false,
+      analysisData: [
+        { title: '能量', title2: '2205.23 kcal', title3: '2203.23 kcal' },
+      ],
       activeNames: '1',
       editableTabsValue: '2',
       editableTabs: [
@@ -400,8 +464,49 @@ export default {
       ],
     };
   },
-  mounted() {},
-  methods: {},
+  watch:{
+    tabActive(e){
+      if(e==='2' && !this.initChart)
+      {
+        this.$nextTick(()=>{
+          this.initDietChart();
+        })
+        this.initChart=true;
+      }
+    }
+  },
+  methods: {
+    back(){
+      this.$parent.viewIndex=1;
+    },
+    removeTab(name){
+      this.editableTabs.splice(name-1,1);
+    },
+    addTab(){
+        let len=this.editableTabs.length+1;
+        this.editableTabs.push({title:`第${len}天`,name:len});
+    },
+    foodAdd(){
+      this.isShowFoodOp=true;
+    },
+    initDietChart() {
+      this.initDietProportion();
+      this.initDietProteinroportion();
+      this.initDietDistribution();
+    },
+    initDietProportion() {
+      let myChart = echarts.init(document.getElementById('diet-proportion'));
+      myChart.setOption(dietProportionData);
+    },
+    initDietProteinroportion(){
+         let myChart = echarts.init(document.getElementById('diet-protein-proportion'));
+         myChart.setOption(dietProteinroportionData);
+    },
+    initDietDistribution(){
+       let myChart = echarts.init(document.getElementById('diet-distribution'));
+        myChart.setOption(dietDistributionData);
+     },
+    }
 };
 </script>
 

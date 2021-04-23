@@ -208,7 +208,7 @@
 </template>
 
 <script>
-import dietForm from './diet_form/diet_form.vue';
+import dietForm from './diet_form/index.vue';
 export default {
   name: 'diet_programme',
   components: {
@@ -216,7 +216,7 @@ export default {
   },
   data() {
     return {
-      viewIndex: 2,
+      viewIndex: 1,
       currentPage: 1,
       pageSize: 15,
       tableData: [],

@@ -55,7 +55,7 @@ let webpackConfig = {
     },
     module: { // 解析规则
         rules: [
-            ...(process.env.NODE_ENV !== 'production' ? [createLintingRule()] : []),
+            ...(process.env.NODE_ENV !== 'production' ? [] : []),
             { // 加载vue-loader插件
                 test: /\.vue$/,
                 loader: 'vue-loader',
