@@ -5,12 +5,12 @@
     :modal-append-to-body="false"
     top="20px"
     width="1000px"
-    :visible.sync="visible"
+    :visible.sync="visibles"
     @close="visibles = false"
   >
     <p class="item-title">已选择食物</p>
     <div class="selected-food">
-      <div class="selected-food-item">
+      <div class="selected-food-item" v-for="item in 10">
         菠萝鸡片
         <img src="@/assets/images/body/closeChooseTab.png" alt="" />
       </div>
@@ -91,14 +91,14 @@
           </el-table-column>
         </el-table>
         <el-pagination
-        background
-        layout="prev, pager, next, jumper, total, sizes"
-        :total="total"
-        :page-sizes="[15]"
-        :current-page="currentPage"
-        :page-size="pageSize"
-        @current-change="handleCurrentChange"
-      ></el-pagination>
+          background
+          layout="prev, pager, next, jumper, total, sizes"
+          :total="total"
+          :page-sizes="[15]"
+          :current-page="currentPage"
+          :page-size="pageSize"
+          @current-change="handleCurrentChange"
+        ></el-pagination>
       </div>
     </div>
     <div slot="footer" class="dialog-footer">
@@ -127,9 +127,9 @@ export default {
   },
   data() {
     return {
-      currentPage:1,
-      total:0,
-      pageSize:15,
+      currentPage: 1,
+      total: 0,
+      pageSize: 15,
       foodTableData: [{ title: '干烧冬笋', title2: '午餐、晚餐' }],
     };
   },
@@ -144,7 +144,7 @@ export default {
     },
   },
   methods: {
-    handleCurrentChange(){},
+    handleCurrentChange() {},
     async submit() {
       await this.$api.companyManageInterface.updateWorkUnit({
         id: this.value.id,
@@ -199,18 +199,23 @@ export default {
   background: #ffffff;
   border-radius: 8px;
   border: 1px solid #dde0e6;
-  padding: 20px;
+  padding: 20px 20px 0 20px;
   box-sizing: border-box;
-  margin: 16px 0;
+  margin: 16px 0; 
+  overflow-y: auto;
   .selected-food-item {
     display: inline-flex;
     align-items: center;
     background: #f6f8fc;
     border-radius: 16px;
-    padding: 8px 13px;
+    padding: 0 13px;
+    line-height: 32px;
+    height: 32px;
     font-size: 12px;
     font-weight: 400;
     color: #333333;
+    margin:0 10px 10px 0;
+    box-sizing: border-box;
     img {
       width: 16px;
       height: 16px;
@@ -240,9 +245,15 @@ export default {
     /deep/.table-row {
       height: 44px;
     }
-    /deep/.el-pagination{
+    /deep/.el-pagination {
       text-align: center;
     }
+  }
+  .searchCondition .searchInputFormItem {
+    width: 100% !important;
+  }
+  .searchCondition .searchInputFormItem .el-input {
+    width: 95%;
   }
 }
 .el-tabs {
@@ -316,11 +327,5 @@ export default {
 }
 .searchLeft {
   flex: 1;
-}
-.searchCondition .searchInputFormItem {
-  width: 100% !important;
-}
-.searchCondition .searchInputFormItem .el-input {
-  width: 95%;
 }
 </style>

@@ -4,7 +4,7 @@
     class="dialog-detail"
     :modal-append-to-body="false"
     width="570px"
-    :visible.sync="visible"
+    :visible.sync="visibles"
     @close="visibles = false"
   >
     <el-form inline label-width="90px" :model="value" class="form-content">

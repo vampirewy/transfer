@@ -77,7 +77,12 @@ export default {
   data() {
     return {
       tableData: [
-        { title: 345347357, title2: '一般食谱100kcal', title3: '疾病风险', title4: '3' },
+        {
+          title: 345347357,
+          title2: '一般食谱100kcal',
+          title3: '疾病风险',
+          title4: '3',
+        },
       ],
       currentPage: 1,
       total: 0,
@@ -111,17 +116,27 @@ export default {
   box-shadow: 0px 0px 30px 0px rgba(151, 166, 189, 0.3);
   border-radius: 5px;
 }
-/deep/ .table-row {
-  height: 44px;
-}
+
 .el-pagination {
   text-align: center;
-}
-.el-table {
-  margin: 20px 0;
 }
 .form-buttons {
   margin-top: 23px;
   text-align: center;
+}
+/deep/ .el-table {
+  margin: 20px 0;
+  .table-row {
+    height: 44px;
+  }
+  .el-checkbox__inner {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    &::after {
+      top: 2px;
+      left: 5px;
+    }
+  }
 }
 </style>

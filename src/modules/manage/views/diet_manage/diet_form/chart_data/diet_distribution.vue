@@ -1,3 +1,8 @@
+<template>
+  <div id="diet-distribution"></div>
+</template>
+<script>
+import * as echarts from 'echarts';
 const options = {
     tooltip: {
         trigger: 'item',
@@ -13,7 +18,7 @@ const options = {
     },
     series: [
         {
-            name: '三大营养素供能比',
+            name: '三餐能量分配比',
             type: 'pie',
             radius: ['45%', '70%'],
             avoidLabelOverlap: false,
@@ -33,11 +38,23 @@ const options = {
                 show: false,
             },
             data: [
-                { value: 15, name: '蛋白质',itemStyle:{color:'#806CE5'} },
-                { value: 30, name: '脂肪',itemStyle:{color:'#36BF2F'} },
-                { value: 55, name: '碳水化合物',itemStyle:{color:'#3154AC'}}
+                { value: 30, name: '早餐',itemStyle:{color:'#806CE5'} },
+                { value: 40, name: '午餐',itemStyle:{color:'#3154AC'} },
+                { value: 30, name: '晚餐',itemStyle:{color:'#36BF2F'}}
             ]
         }
     ]
 };
-export default options;
+export default {
+  mounted() {
+      let myChart = echarts.init(document.getElementById('diet-distribution'));
+      myChart.setOption(options);
+  },
+};
+</script>
+<style lang="scss" scoped>
+#diet-distribution {
+  width: 100%;
+  height: 270px;
+}
+</style>

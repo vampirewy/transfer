@@ -21,7 +21,7 @@
                   </span>
                 </div>
                 <div>
-                  <span>客户性别：</span>
+                  <span class="label">客户性别：</span>
                   <el-select
                     v-model="status"
                     placeholder="选择"
@@ -33,7 +33,7 @@
                   </el-select>
                 </div>
                 <div>
-                  <span>人员类别：</span>
+                  <span class="label">人员类别：</span>
                   <el-select
                     v-model="status"
                     placeholder="选择"
@@ -45,7 +45,7 @@
                   </el-select>
                 </div>
                 <div>
-                  <span>饮食异常：</span>
+                  <span class="label">饮食异常：</span>
                   <el-select
                     v-model="status"
                     placeholder="选择"
@@ -66,20 +66,20 @@
                     />
                   </div>
                   <div class="resetAll" @click="reset">重置</div>
-                  <div class="more" v-if="isTrue" @click="upMore">
+                  <div class="more" v-if="isTrue" @click="isTrue = !isTrue">
                     <span>></span>
                     展开更多
                   </div>
-                  <div class="more noMore" v-else @click="upMore">
+                  <div class="more noMore" v-else @click="isTrue = !isTrue">
                     <span>></span>收起筛选
                   </div>
                 </div>
               </div>
             </div>
-            <div class="searchCondition">
+            <div class="searchCondition" v-show="!isTrue">
               <div class="searchLeft">
                 <div>
-                  <span>不良习惯</span>
+                  <span class="label">不良习惯</span>
                   <el-select
                     v-model="status"
                     placeholder="选择"
@@ -91,7 +91,7 @@
                   </el-select>
                 </div>
                 <div>
-                  <span>方案周期：</span>
+                  <span class="label">方案周期：</span>
                   <el-select
                     v-model="status"
                     placeholder="选择"
@@ -103,7 +103,7 @@
                   </el-select>
                 </div>
                 <div>
-                  <span>创建日期：</span>
+                  <span class="label">创建日期：</span>
                   <el-date-picker
                     type="date"
                     value-format="yyyy-MM-dd"
@@ -138,11 +138,7 @@
             @click="add"
             ><img src="@/assets/images/common/addBtn.png" />新增</el-button
           >
-          <el-button
-            class="btn-new btnAdd"
-            size="small"
-            style="margin: 16px 0"
-            @click="add"
+          <el-button class="btn-new btnAdd" size="small" style="margin: 16px 0"
             ><img src="@/assets/images/common/delBtn.png" />删除</el-button
           >
         </div>
@@ -209,6 +205,7 @@
 
 <script>
 import dietForm from './diet_form/index.vue';
+
 export default {
   name: 'diet_programme',
   components: {
@@ -221,7 +218,7 @@ export default {
       pageSize: 15,
       tableData: [],
       total: 0,
-      isTrue: true,
+      isTrue: false,
       roleOptions: '',
       role: '',
       status: '',
@@ -232,7 +229,7 @@ export default {
             const endTime = new Date(this.form.endTime);
             return (
               time.getTime() >
-              new Date(endTime).getTime() - (3600 * 1000 * 23 * 1)
+              new Date(endTime).getTime() - 3600 * 1000 * 23 * 1
             );
           }
         },
@@ -243,14 +240,13 @@ export default {
             const startTime = new Date(this.form.startTime);
             return (
               time.getTime() <
-              new Date(startTime).getTime() - (3600 * 1000 * 23 * 1)
+              new Date(startTime).getTime() - 3600 * 1000 * 23 * 1
             );
           }
         },
       },
     };
   },
-  mounted() {},
   methods: {
     handleCurrentChange() {},
     add() {
@@ -271,10 +267,17 @@ export default {
   color: #333333;
   line-height: 22px;
 }
+.label {
+  font-weight: 400 !important;
+}
+.divTop .divTitle {
+  font-weight: normal;
+}
 .query-container {
   margin-bottom: 40px;
   display: flex;
   justify-content: space-between;
+
   .left {
     .el-input {
       display: inline-block;
@@ -291,10 +294,13 @@ export default {
 .table-buttons {
   margin-bottom: 16px;
 }
-/deep/ .el-input__suffix{
-  margin-right: 0!important;
+/deep/ .el-input__suffix {
+  margin-right: 0 !important;
 }
-/deep/ .el-input__suffix .el-input__suffix-inner{
-  margin-right: 0!important;
+/deep/ .el-input__suffix .el-input__suffix-inner {
+  margin-right: 0 !important;
+}
+.el-pagination {
+  margin-top: 20px;
 }
 </style>

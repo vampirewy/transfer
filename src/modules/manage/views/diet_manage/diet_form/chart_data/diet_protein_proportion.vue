@@ -1,3 +1,8 @@
+<template>
+  <div id="diet-protein-proportion"></div>
+</template>
+<script>
+import * as echarts from 'echarts';
 const options = {
     tooltip: {
         trigger: 'item',
@@ -26,4 +31,16 @@ const options = {
         }
     ]
 };
-export default options;
+export default {
+  mounted() {
+      let myChart = echarts.init(document.getElementById('diet-protein-proportion'));
+      myChart.setOption(options);
+  },
+};
+</script>
+<style lang="scss" scoped>
+#diet-protein-proportion {
+  width: 100%;
+  height: 270px;
+}
+</style>
