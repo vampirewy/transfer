@@ -10,7 +10,7 @@
   >
     <p class="item-title">已选择食物</p>
     <div class="selected-food">
-      <div class="selected-food-item" v-for="item in 10">
+      <div class="selected-food-item" v-for="item in 10" :key="item">
         菠萝鸡片
         <img src="@/assets/images/body/closeChooseTab.png" alt="" />
       </div>
@@ -201,7 +201,7 @@ export default {
   border: 1px solid #dde0e6;
   padding: 20px 20px 0 20px;
   box-sizing: border-box;
-  margin: 16px 0; 
+  margin: 16px 0;
   overflow-y: auto;
   .selected-food-item {
     display: inline-flex;

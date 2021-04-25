@@ -457,16 +457,16 @@
 </template>
 
 <script>
-import dietProportionChart from './chart_data/diet_proportion.vue'; //三大营养素供能比
-import dietProteinroportionChart from './chart_data/diet_protein_proportion.vue'; //动物性及豆类蛋白质占总蛋白质比例
-import dietDistributionChart from './chart_data/diet_distribution.vue'; //三餐能量分配比
-import elPeopleSelect from './el_modal/el_people_selecet.vue';//人员选择组件
-import elTemplateInput from './el_modal/el_template_input.vue';//食谱模版导入
-import elTemplateSave from './el_modal/el_template_save.vue';//食谱模版保存
-import elFoodOp from './el_modal/el_food_op.vue';//食物操作
-import elDietRule from './el_modal/el_diet_rule.vue';//食谱原则
-import elCooking from './el_modal/el_cooking.vue';//食谱烹饪方式
-import elDietPagoda from './el_modal/el_diet_pagoda.vue';//膳食宝塔
+import dietProportionChart from './chart_data/diet_proportion.vue'; // 三大营养素供能比
+import dietProteinroportionChart from './chart_data/diet_protein_proportion.vue'; // 动物性及豆类蛋白质占总蛋白质比例
+import dietDistributionChart from './chart_data/diet_distribution.vue'; // 三餐能量分配比
+import elPeopleSelect from './el_modal/el_people_selecet.vue'; // 人员选择组件
+import elTemplateInput from './el_modal/el_template_input.vue'; // 食谱模版导入
+import elTemplateSave from './el_modal/el_template_save.vue'; // 食谱模版保存
+import elFoodOp from './el_modal/el_food_op.vue'; // 食物操作
+import elDietRule from './el_modal/el_diet_rule.vue'; // 食谱原则
+import elCooking from './el_modal/el_cooking.vue'; // 食谱烹饪方式
+import elDietPagoda from './el_modal/el_diet_pagoda.vue'; // 膳食宝塔
 
 export default {
   name: 'diet_form',
@@ -509,9 +509,9 @@ export default {
     back() {
       this.$parent.viewIndex = 1;
     },
-    removeTab(name) {
-      this.editableTabs.splice(name - 1, 1);
-      this.editableTabs.slice(name - 1).forEach((item) => {
+    removeTab(index) {
+      this.editableTabs.splice(index - 1, 1);
+      this.editableTabs.slice(index - 1).forEach((item) => {
         let { name } = item;
         name--;
         item.title = `第${name}天`;
@@ -519,7 +519,7 @@ export default {
       });
     },
     addTab() {
-      let len = this.editableTabs.length + 1;
+      const len = this.editableTabs.length + 1;
       this.editableTabs.push({ title: `第${len}天`, name: len.toString() });
     },
     foodAdd() {

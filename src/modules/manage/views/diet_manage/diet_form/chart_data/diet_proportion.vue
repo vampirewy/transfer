@@ -47,8 +47,8 @@ const options = {
 };
 export default {
   mounted() {
-      let myChart = echarts.init(document.getElementById('diet-proportion'));
-      myChart.setOption(options);
+    const myChart = echarts.init(document.getElementById('diet-proportion'));
+    myChart.setOption(options);
   },
 };
 </script>

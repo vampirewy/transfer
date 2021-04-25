@@ -229,7 +229,7 @@ export default {
             const endTime = new Date(this.form.endTime);
             return (
               time.getTime() >
-              new Date(endTime).getTime() - 3600 * 1000 * 23 * 1
+              new Date(endTime).getTime() - (3600 * 1000 * 23 * 1)
             );
           }
         },
@@ -240,7 +240,7 @@ export default {
             const startTime = new Date(this.form.startTime);
             return (
               time.getTime() <
-              new Date(startTime).getTime() - 3600 * 1000 * 23 * 1
+              new Date(startTime).getTime() - (3600 * 1000 * 23 * 1)
             );
           }
         },

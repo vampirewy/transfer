@@ -1,7 +1,7 @@
 
 import BaseModule from '../BaseModule';
 
-class dietManageInterface extends BaseModule {
+class DietManageInterface extends BaseModule {
 }
 
-export default new dietManageInterface();
+export default new DietManageInterface();

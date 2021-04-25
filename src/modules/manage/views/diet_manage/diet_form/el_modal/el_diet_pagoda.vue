@@ -8,7 +8,11 @@
     :visible.sync="visibles"
     @close="visibles = false"
   >
-    <img style="width:100%;" src="https://scdn.qiqiangkeji.com/Fpok-G86Z4ehbpM94GOBD9HrSRFw" alt="">
+    <img
+      style="width: 100%"
+      src="https://scdn.qiqiangkeji.com/Fpok-G86Z4ehbpM94GOBD9HrSRFw"
+      alt=""
+    />
   </el-dialog>
 </template>
 <script>
@@ -26,8 +30,7 @@ export default {
     },
   },
   data() {
-    return {
-    };
+    return {};
   },
   computed: {
     visibles: {
@@ -39,10 +42,8 @@ export default {
       },
     },
   },
-  methods: {
-  },
+  methods: {},
 };
 </script>
 <style lang="scss" scoped>
-
 </style>
