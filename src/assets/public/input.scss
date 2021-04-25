@@ -74,7 +74,7 @@ input:-webkit-autofill:focus {
 .cancelBtn,
 .resetBtn,
 .sureBtn {
-  width: 90px;
+  min-width: 90px;
   height: 40px;
   border-radius: 20px;
   border: 1px solid #3154AC;
