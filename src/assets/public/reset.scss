@@ -522,7 +522,18 @@ textarea:-ms-input-placeholder {
     }
   }
 }
-
+.el-button--primary:hover{
+  background: #24499D;
+}
+.el-tabs__item:hover{
+  color: #24499D;
+}
+.el-tabs__item.is-active{
+  color: #24499D;
+}
+.el-tabs__active-bar{
+  background: #24499D;
+}
 .el-pagination .el-pagination__rightwrapper {
   float: left !important;
 }

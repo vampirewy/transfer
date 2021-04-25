@@ -123,7 +123,7 @@ export default {
       cursor: pointer;
     }
     &.expand .exception-header {
-      background: #4991FD;
+      background: #3154AC;
       color: #fff;
     }
   }
@@ -136,7 +136,7 @@ export default {
       .el-form-item__label {
         font-size: 14px;
         font-weight: 400;
-        color: #4991FD !important;
+        color: #36BF2F !important;
         line-height: 20px;
         margin-bottom: 8px;
       }
@@ -173,12 +173,16 @@ export default {
     text-align: center;
     margin-top: 30px;
     .el-button {
-      width: 80px;
+      width: 90px;
       height: 40px;
-      border-radius: 8px;
-      border: none;
-      background: #97A6BD;
-      color: #fff;
+      background: rgba(49, 84, 172, 0.1);
+      border-radius: 20px;
+      border: 1px solid #3154AC;
+      &:hover {
+        color: #3154AC;
+        border-color: #3154AC;
+        background: rgba(49, 84, 172, 0.3);
+      }
     }
   }
 }

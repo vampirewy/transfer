@@ -536,13 +536,6 @@ export default {
 .TabBars{
   display: flex;
   margin-top: 30px;
-  div{
-    // width: 100px;
-    // height: 40px;
-    // line-height: 40px;
-    // text-align: center;
-    // background: red;
-  }
   .TabBarsNames{
     cursor: pointer;
     background: #EEF1F5;

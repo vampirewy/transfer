@@ -462,7 +462,7 @@ export default {
 
   .doctor-select-component {
     /deep/.el-tabs__item.is-active {
-      color: #4991fd !important;
+      color: #3154AC !important;
     }
     /deep/.el-tabs__item {
       color: #97A6BD !important;

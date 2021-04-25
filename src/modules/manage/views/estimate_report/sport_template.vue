@@ -127,7 +127,7 @@ export default {
       });
       const { data } = res.data;
       if (data) {
-        this.tableData = data.list || [];
+        this.tableData = data.data || [];
         this.total = data.total;
       }
     },
@@ -163,16 +163,20 @@ export default {
     text-align: right;
     margin-top: 10px;
     .el-button {
-      width: 80px;
+      width: 90px;
       height: 40px;
-      border-radius: 8px;
-      border: none;
+      background: #3154AC;
+      border-radius: 20px;
+      border: 1px solid #3154AC;
       + .el-button {
         margin-left: 20px;
       }
-      &:not(.el-button--primary) {
-        background: #97A6BD;
-        color: #fff;
+      &:not(.el-button--primary){
+        background: rgba(49, 84, 172, 0.1);
+      }
+      &:not(.el-button--primary):hover{
+        background: rgba(49, 84, 172, 0.3);
+        color: #3154AC;
       }
     }
   }
