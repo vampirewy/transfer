@@ -24,7 +24,14 @@ export default [
         title: '膳食方案',
         // access: 'service_order',
       },
-      component: () => import('../../views/diet_manage/index'),
+      component: () => import('../../views/diet_manage/diet_programme/index'),
+    }, {
+      path: '/diet_finished_dish',
+      name: 'diet_finished_dish',
+      meta: {
+        title: '成品菜',
+      },
+      component: () => import('../../views/diet_manage/diet_finished_dish/index'),
     }],
   },
 ];

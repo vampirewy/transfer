@@ -204,7 +204,7 @@
 </template>
 
 <script>
-import dietForm from './diet_form/index.vue';
+import dietForm from './edit_form/index.vue';
 
 export default {
   name: 'diet_programme',

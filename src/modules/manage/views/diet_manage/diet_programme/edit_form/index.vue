@@ -530,5 +530,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import './diet_form.scss';
+@import './index.scss';
 </style>
