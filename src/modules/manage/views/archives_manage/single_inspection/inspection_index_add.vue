@@ -12,9 +12,9 @@
     >
       <div class="form-title">
         <div class="line"></div>
-        <h3 class="name">新增-就医用户信息</h3>
+        <h3 v-if="id != ''" class="name">编辑-就医用户信息</h3>
+        <h3 v-else class="name">新增-就医用户信息</h3>
       </div>
-
       <div class="medicate-record mt20">
       <div class="row">
           <el-form-item label="姓名" prop="clientName" style="width:25%">
@@ -82,28 +82,6 @@
                 style="width: 200px"
               ></el-input>
             </el-form-item>
-            <!-- <el-form-item label="就医类型" prop="result" style="width:25%">
-              <el-select
-                style="width: 200px"
-                placeholder="请选择"
-                v-model="infoSource.result"
-              >
-                <el-option
-                  v-for="item in resultList"
-                  :key="item.paramValue"
-                  :label="item.name"
-                  :value="item.paramValue">
-                </el-option>
-              </el-select>
-            </el-form-item> -->
-            <!-- <el-form-item label="针对问题" prop="mainIndication" style="width:25%">
-              <el-input
-                v-model="infoSource.mainIndication"
-                placeholder="请输入"
-                :maxlength="30"
-                style="width: 200px"
-              ></el-input>
-            </el-form-item> -->
             <el-form-item label="医保卡号" prop="specification" style="width:25%">
               <el-input
                 v-model="infoSource.specification"
@@ -223,53 +201,41 @@
         <h3 class="name">检查项目</h3>
       </div>
         <div class="row">
-          <el-form-item label="体检库" prop="clientName" style="width:30%;background:#ffffff">
-            <el-popover
-              ref="userPopover"
-              placement="bottom-start"
-              width="650"
-              trigger="click"
-              @show="popoverStatus = true"
-              @hide="handlePopoperClose"
-            >
-              <select-user
-                v-if="popoverStatus"
-                @change="onSelectUser"
-              ></select-user>
-              <el-input
-                :class="`select-user-trigger ${id ? 'disabled' : ''}`"
-                slot="reference"
-                disabled
-                v-model="infoSource.clientName"
-                placeholder="请选择客户"
-                style="width: 232px;"
-              >
-                <i
-                  :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
-                  slot="suffix"
-                ></i>
-              </el-input>
-            </el-popover>
-          </el-form-item>
+            <div>
+                <span>体检库：</span>
+                <el-select
+                v-model="formData.gridId"
+                placeholder="请选择"
+                style="width: 140px"
+                >
+                <el-option
+                    v-for="(item, index) in gridList"
+                    :label="item.name"
+                    :value="item.id"
+                    :key="index"
+                ></el-option>
+                </el-select>
+            </div>
           <el-form-item label="检查项目" prop="clientName" style="width:25%">
             <el-popover
-              ref="userPopover"
+              ref="userPopoverCheck"
               placement="bottom-start"
               width="650"
               trigger="click"
-              @show="popoverStatus = true"
-              @hide="handlePopoperClose"
+              @show="popoverStatusCheck = true"
+              @hide="handlePopoperCloseCheck"
             >
-              <select-user
-                v-if="popoverStatus"
-                @change="onSelectUser"
-              ></select-user>
+              <select-examination
+                v-if="popoverStatusCheck"
+                @change="onSelectUserCheck"
+                :examination="formData.gridId"
+              ></select-examination>
               <el-input
                 :class="`select-user-trigger ${id ? 'disabled' : ''}`"
                 slot="reference"
                 disabled
-                v-model="infoSource.clientName"
-                placeholder="请选择客户"
+                v-model="infoSource.clientNameCheck"
+                placeholder="请选择"
                 style="width: 232px;"
               >
                 <i
@@ -279,6 +245,9 @@
               </el-input>
             </el-popover>
           </el-form-item>
+          <div class="inspectionAdd">
+              <div>添加</div>
+          </div>
         </div>
      <el-table class="medicate-list mt20" :data="drugsList" align="center">
         <el-table-column label="科室" prop="drugsName" show-overflow-tooltip>
@@ -373,17 +342,21 @@
 <script>
 import detail from '../components/detail.vue';
 import selectUser from '../components/select_user.vue';
+import selectExamination from '../components/select_examination.vue';
 
 export default {
   name: 'medication_history_add',
   components: {
     detail,
     selectUser,
+    selectExamination,
   },
   data() {
     return {
       popoverStatus: false,
+      popoverStatusCheck: false,
       total: 0,
+      id: this.$route.query.id,
       infoSource: {
         drugsName: '',
         mainIndication: '',
@@ -400,9 +373,11 @@ export default {
         age: '',
         gender: '',
         gridName: '',
+        clientNameCheck: '', // 检查项目
       },
       drugsList: [],
       resultList: [],
+      gridList: [],
       rules: {
         clientName: [{ required: true, message: '客户不能为空' }],
         drugsName: [{ required: true, message: '药品名称不能为空' }],
@@ -412,12 +387,15 @@ export default {
       },
       formData: {
         pageNo: 1,
+        gridId: '',
       },
     };
   },
   mounted() {
+    console.log(this.id);
     window.vm = this;
     this.getResultList();
+    this.queryList();
   },
   methods: {
     async getResultList() {
@@ -425,8 +403,25 @@ export default {
       const { data } = res;
       this.resultList = data.data;
     },
+    async queryList() {
+      const res = await this.$api.physicalProjectListInterface.listOrganItemLibrary();
+      //   const res = await this.$api.PhysicalProjectListInterface.listOrganItemLibrary({
+      //     keywords: this.keyword,
+      //     pageNo: this.currentPage,
+      //     pageSize: this.pageSize,
+      //   });
+      console.log(res.data);
+      const { data } = res.data;
+      if (data) {
+        this.gridList = data || [];
+      }
+      console.log(this.formData.gridId, 'qweqwewwqwqwe');
+    },
     handlePopoperClose() {
       this.popoverStatus = false;
+    },
+    handlePopoperCloseCheck() {
+      this.popoverStatusCheck = false;
     },
     onSelectUser(data) {
       this.$refs.userPopover.doClose();
@@ -436,6 +431,15 @@ export default {
       this.infoSource.age = data.age;
       this.infoSource.gender = data.gender;
       this.infoSource.gridName = data.gridName;
+    },
+    onSelectUserCheck() {
+      this.$refs.userPopoverCheck.doClose();
+      this.popoverStatusCheck = false;
+    //   this.infoSource.clientName = data.name;
+    //   this.infoSource.clientId = data.id;
+    //   this.infoSource.age = data.age;
+    //   this.infoSource.gender = data.gender;
+    //   this.infoSource.gridName = data.gridName;
     },
     addRecord() {
       this.$refs.form.validate((valid) => {
@@ -601,5 +605,16 @@ export default {
   .el-input.is-disabled .el-input__inner{
       background: #ffffff !important;
   }
+}
+.inspectionAdd{
+    width: 70px;
+    height: 40px;
+    background: #36BF2F;
+    border-radius: 5px;
+    margin-left: 45px;
+    text-align: center;
+    line-height: 40px;
+    color: #ffffff;
+    font-size: 14px;
 }
 </style>

@@ -3,7 +3,15 @@
     <el-form :model="formData" label-width="90px" label-suffix="：" ref="form" :rules="rules">
       <el-row>
         <el-col :span="6">
-          <el-form-item label="录入模板">
+           <el-form-item label="检查编号" prop="drugsName">
+              <el-input
+                v-model="formData.reportNo"
+                placeholder="请输入"
+                :maxlength="100"
+                style="width: 200px"
+              ></el-input>
+            </el-form-item>
+          <!-- <el-form-item label="录入模板">
             <el-select
               v-model="formData.reportTemplateId"
               @change="templateDetail"
@@ -15,10 +23,18 @@
                 :value="template.id">
               </el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
         </el-col>
            <el-col :span="6">
-          <el-form-item label="体检库">
+            <el-form-item label="检查机构" prop="specification">
+              <el-input
+                v-model="formData.examinationOrgan"
+                placeholder="请输入"
+                :maxlength="30"
+                style="width: 200px"
+              ></el-input>
+            </el-form-item>
+          <!-- <el-form-item label="体检库">
             <el-select
               v-model="formData.reportTemplateId"
               @change="templateDetail"
@@ -30,10 +46,21 @@
                 :value="template.id">
               </el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
         </el-col>
-        <!-- <el-col :span="6">
-          <el-form-item label="体检库" prop="libraryId">
+        <el-col :span="6">
+           <el-form-item label="体检时间" prop="endDate">
+              <el-date-picker
+                class="end-date"
+                v-model="formData.reportDate"
+                type="date"
+                :min-date="formData.startDate"
+                value-format="yyyy-MM-dd"
+                placeholder="请选择"
+                style="width: 200px"
+              ></el-date-picker>
+            </el-form-item>
+          <!-- <el-form-item label="体检库" prop="libraryId">
             <el-select v-model="formData.libraryId" placeholder="请选择">
               <el-option
                 v-for="library in libraryList"
@@ -42,8 +69,25 @@
                 :value="library.id">
               </el-option>
             </el-select>
-          </el-form-item>
-        </el-col> -->
+          </el-form-item> -->
+        </el-col>
+        <el-col :span="6">
+          <div>
+            <span style="font-size:14px;margin-left: 25px;color:#666666">是否总检：</span>
+            <el-select
+              v-model="formData.reportState"
+              placeholder="请选择"
+              style="width: 140px"
+            >
+              <el-option
+                :label="item.gridName"
+                :value="item.id"
+                v-for="(item, index) in gridList"
+                :key="index"
+              ></el-option>
+            </el-select>
+          </div>
+        </el-col>
       </el-row>
       <div class="title physical-examination-info">体检信息</div>
       <div class="add-department" @click="addDepartment">
@@ -285,6 +329,10 @@ export default {
         summarize: '',
         advice: '',
         physicalExamination: '',
+        gridId: '',
+        specification: '', // 检查机构
+        drugsName: '', // 检查编号
+        endDate: '', // 体检时间
       },
       abnormalModalVisible: false,
       abnormalLevelMap: {
@@ -704,8 +752,14 @@ export default {
         margin-left: 20px;
       }
       &:not(.el-button--primary) {
-        background: #97A6BD;
-        color: #fff;
+        background: rgba(49, 84, 172, 0.1);
+          border-radius: 20px;
+          border: 1px solid #3154AC;
+          &:hover {
+            color: #3154AC;
+            border-color: #3154AC;
+            background: rgba(49, 84, 172, 0.3);
+          }
       }
     }
   }

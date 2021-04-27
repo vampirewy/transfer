@@ -20,6 +20,8 @@
       display: inline-block;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      width: 30px;
+      border-radius: 5px;
     }
     .el-input__icon:before {
       content: '\E78E';

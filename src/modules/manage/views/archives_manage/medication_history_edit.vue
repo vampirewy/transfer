@@ -190,6 +190,7 @@ export default {
       const res = await this.$api.medication.getResultList();
       const { data } = res;
       this.resultList = data.data;
+      console.log(this.resultList, 'resultListresultList');
     },
     submit() {
       this.$refs.form.validate((valid) => {
@@ -204,7 +205,7 @@ export default {
     },
     fetch(id) {
       this.$api.medication.getDetail(id).then(({ data }) => {
-        if (data.code === 200) {
+        if (data) {
           this.dataSource = {
             ...this.dataSource,
             ...data.data,

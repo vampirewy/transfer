@@ -1,69 +1,20 @@
 <template>
   <div class="medical-history">
-    <!-- <template v-if="viewIndex === 2 || viewIndex === 3">
-      <medical-history-form
-        :id="currentId"
-        @cancel="viewIndex = 1"
-        @afterSubmit="handleAfterSubmit"
-      ></medical-history-form>
-    </template> -->
-    <!-- v-else -->
     <template >
-      <!-- <query-page @reset="reset" @search="search">
-        <template v-slot:left>
-          <search>
-            <div class="searchInputFormItem">
-              <el-input placeholder="姓名/手机号/企业单位" v-model="formData.keyWord"></el-input>
-              <span class="searchBtnImgSpan" @click="search">
-                <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
-              </span>
-            </div>
-          </search>
-          <query-filter>
-            <el-select placeholder="人员类别" v-model="formData.clientGrid" clearable>
-              <el-option
-                v-for="item in clientTypeList"
-                :key="item.id"
-                :label="item.gridName"
-                :value="item.id">
-              </el-option>
-            </el-select>
-            <el-input placeholder="就诊科室" v-model="formData.department"></el-input>
-            <el-input placeholder="医疗机构" v-model="formData.hospital"></el-input>
-            <div class="filter-item-title">就医日期</div>
-            <el-date-picker
-              v-model="formData.startTime"
-              type="date"
-              format="yyyy-MM-dd"
-              value-format="yyyy-MM-dd"
-              :picker-options="pickerStartTime"
-              placeholder="选择开始时间">
-              </el-date-picker>
-            <el-date-picker
-              v-model="formData.endTime"
-              type="date"
-              format="yyyy-MM-dd"
-              value-format="yyyy-MM-dd"
-              :picker-options="pickerEndTime"
-              placeholder="选择结束时间">
-            </el-date-picker>
-          </query-filter>
-        </template> -->
-        <!-- v-slot:right -->
         <template >
           <div class="table-operate-buttonss" style="margin-top: -8px">
             <!-- <span class="page-name">就医记录</span> -->
           <div class="divTop">
             <div class="divTitle">
               <span><img src="@/assets/images/common/titleLeft.png" alt="" /></span>
-              我的客户
+              就医记录
             </div>
             <div class="searchCondition">
               <div class="searchLeft">
                 <div class="searchInputFormItem">
                   <el-input
                     placeholder="姓名/手机号/企业单位"
-                    v-model="formData.keywords"
+                    v-model="formData.keyWord"
                   >
                   </el-input>
                   <span class="searchBtnImgSpan" @click="search">
@@ -76,7 +27,7 @@
                 <div>
                   <span>客户性别：</span>
                   <el-select
-                    v-model="formData.gender"
+                    v-model="formData.clientGrid"
                     placeholder="请选择"
                     style="width: 140px"
                   >
@@ -87,7 +38,7 @@
                 <div>
                   <span>人员类别：</span>
                   <el-select
-                    v-model="formData.gridId"
+                    v-model="formData.Category"
                     placeholder="请选择"
                     style="width: 140px"
                   >
@@ -102,7 +53,7 @@
                 <div>
                   <span>是否总检：</span>
                   <el-select
-                    v-model="formData.TotalTest"
+                    v-model="formData.isTotalTest"
                     placeholder="请选择"
                     style="width: 140px"
                   >
@@ -120,7 +71,7 @@
                   <div class="searchFor" @click="search">
                     <img src="@/assets/images/common/topsearchblue.png" alt="" />
                   </div>
-                  <div class="resetAll">重置</div>
+                  <div class="resetAll" @click="reset()">重置</div>
                   <div class="more" v-if="isTrue" @click="upMore">
                     <span>></span>
                     展开更多
@@ -175,9 +126,9 @@
                 </el-date-picker>
               </div>
               <div>
-                  <span>是否总检：</span>
+                  <span>当前状态：</span>
                   <el-select
-                    v-model="formData.TotalTest"
+                    v-model="formData.CurrentStatus"
                     placeholder="请选择"
                     style="width: 140px"
                   >
@@ -253,32 +204,32 @@
               <el-table-column type="selection" align="center"></el-table-column>
               <el-table-column
                 label="客户编号"
-                prop="clientName"
+                prop="clientNo"
                 align="center"
                 show-overflow-tooltip>
-                <template slot-scope="scope">
+                <!-- <template slot-scope="scope">
                 <span class="clientName"
                       @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
                   {{ scope.row.clientName || '-'}}
                 </span>
-                </template>
+                </template> -->
               </el-table-column>
-              <el-table-column label="姓名" prop="gender" align="center">
+              <el-table-column label="性名" prop="clientName" align="center"></el-table-column>
+              <el-table-column label="性别" prop="gender" align="center">
                 <template slot-scope="scope">
                   {{scope.row.gender === 1 ? '男' : (scope.row.gender === 2 ? '女' : '')}}
                 </template>
               </el-table-column>
-              <el-table-column label="性别" prop="age" align="center"></el-table-column>
               <el-table-column
                 label="年龄"
                 align="center"
-                prop="workUnitName"
+                prop="age"
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
                 label="就医类型"
                 align="center"
-                prop="clientGridName"
+                prop="medicalType"
                 show-overflow-tooltip>
               </el-table-column>
                 <el-table-column
@@ -290,13 +241,13 @@
                <el-table-column
                 label="科室"
                 align="center"
-                prop="workUnitName"
+                prop="department"
                 show-overflow-tooltip>
               </el-table-column>
                <el-table-column
                 label="诊断"
                 align="center"
-                prop="workUnitName"
+                prop="diagnosis"
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
@@ -314,27 +265,28 @@
               <el-table-column
                 label="当前状态"
                 align="center"
-                prop="diagnosis"
+                prop="result"
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
                 label="就医次数"
                 align="center"
-                prop="result"
+                prop="medicalCount"
                 show-overflow-tooltip>
                 <template slot-scope="scope">{{ statusMap[scope.row.result] }}</template>
               </el-table-column>
               <el-table-column label="操作" prop="id" width="120" align="center">
                 <template slot-scope="scope">
+                  <el-button type="text" size="small" @click="edit(scope.row)" v-if="
+                  getAccess('medical_history_edit')
+                  ">编辑</el-button>
+                  <span style="color:#DDE0E6">|</span>
                   <el-button
                     type="text"
                     size="small"
                     @click="detail(scope.row)"
                     v-if="getAccess('medical_history_view')"
                   >查看</el-button>
-                  <el-button type="text" size="small" @click="edit(scope.row)" v-if="
-                  getAccess('medical_history_edit')
-                  ">编辑</el-button>
                   <!-- <el-button type="text" size="small" @click="remove(scope.row.id)" v-if="
                   getAccess('medical_history_delete')
                   ">删除</el-button> -->
@@ -386,9 +338,15 @@ export default {
       total: 0,
       tableData: [],
       formData: {
-        keyWord: '',
-        workUnitName: '',
-        clientGrid: '',
+        keyWord: '', // 姓名
+        Category: '', // 人员类别
+        clientGrid: '', // 性别
+        isTotalTest: '', // 是否总检
+        physicalstartTime: '', // 体检日期开始
+        physicalendTime: '', // 体检日期结束
+        gatherstartTime: '', // 采集日期开始
+        gatherendTime: '', // 采集日期结束
+        CurrentStatus: '', // 当前状态
         department: '',
         hospital: '',
         startTime: '',
@@ -422,7 +380,7 @@ export default {
         list: [],
       },
       loading: false,
-      pickerStartTime: {
+      endTime: {
         disabledDate: (time) => {
           if (this.formData.endTime) {
             const endTime = new Date(this.formData.endTime);
@@ -430,7 +388,7 @@ export default {
           }
         },
       },
-      pickerEndTime: {
+      startTime: {
         disabledDate: (time) => {
           if (this.formData.startTime) {
             const startTime = new Date(this.formData.startTime);
@@ -511,15 +469,25 @@ export default {
       this.$api.medicalHistoryInterface
         .medicalHistoryPageList({ ...this.formData })
         .then((res) => {
-          const { data } = res;
-          if (data.code === 200) {
-            const result = data.data || {};
-            this.tableData = result.list || [];
-            this.total = result.total || 0;
-          }
+          // const { data } = res;
+          // if (data.code === 200) {
+          const result = res.data || {};
+          this.tableData = result.data.data || [];
+          this.total = result.total || 0;
+          console.log(this.tableData, 'list');
+          // }
         });
     },
     reset() {
+      // this.formData.keyWord = ''; // 姓名
+      // this.formData.Category = ''; // 人员类别
+      // this.formData.clientGrid = ''; // 性别
+      // this.formData.isTotalTest = ''; // 是否总检
+      // this.formData.physicalstartTime = ''; // 体检日期开始
+      // this.formData.physicalendTime = ''; // 体检日期结束
+      // this.formData.gatherstartTime = ''; // 采集日期开始
+      // this.formData.gatherendTime = ''; // 采集日期结束
+      // this.formData.CurrentStatus = ''; // 当前状态
       this.formData.keyWord = '';
       this.formData.workUnitName = '';
       this.formData.clientGrid = '';
@@ -549,12 +517,28 @@ export default {
       this.queryList();
     },
     add() {
+      // this.$router.push('/medication_history_add');
+      this.$router.push({
+        path: '/medical_history_form',
+        query: {
+          id: '',
+        },
+      });
+      // this.$router.push({
+      //   path: `/medication_history_add${row.id}`,
+      // });
       this.viewIndex = 2;
       this.currentId = '';
     },
     detail(data) {
-      this.viewIndex = 4;
-      this.currentId = data.id;
+      this.$router.push({
+        path: '/medication_history_info',
+        query: {
+          id: data.id,
+        },
+      });
+      // this.viewIndex = 4;
+      // this.currentId = data.id;
     },
     handleEdit() {
       if (this.multipleSelection.length === 0) {
@@ -570,6 +554,12 @@ export default {
     edit(data) {
       this.viewIndex = 3;
       this.currentId = data.id;
+      this.$router.push({
+        path: '/medical_history_form',
+        query: {
+          id: data.id,
+        },
+      });
     },
     handleDelete() {
       if (this.multipleSelection.length === 0) {

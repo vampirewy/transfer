@@ -1,6 +1,7 @@
 <template>
   <el-dialog
     class="comment-dialog"
+    :modal-append-to-body="false"
     title="点评"
     top="5vh"
     :visible="true"
@@ -215,12 +216,16 @@ export default {
         }
         .el-button {
           margin-left: 19px;
-          width: 80px;
+          width: 90px;
           height: 40px;
-          background: #FFFFFF;
-          border-radius: 8px;
-          border: 1px solid #4991FD;
-          color: #4991FD;
+          background: rgba(49, 84, 172, 0.1);
+          border-radius: 20px;
+          border: 1px solid #3154AC;
+          &:hover {
+            color: #3154AC;
+            border-color: #3154AC;
+            background: rgba(49, 84, 172, 0.3);
+          }
         }
       }
       .sport-table {
@@ -265,16 +270,24 @@ export default {
     padding-right: 26px;
     text-align: right;
     button {
-      width: 80px;
-      border-radius: 8px;
+      width: 90px;
+      border-radius: 20px;
       border: none;
     }
     button + button {
       margin-left: 20px;
     }
     .is-plain {
-      background: #97A6BD;
-      color: #fff;
+      width: 90px;
+          height: 40px;
+          background: rgba(49, 84, 172, 0.1);
+          border-radius: 20px;
+          border: 1px solid #3154AC;
+          &:hover {
+            color: #3154AC;
+            border-color: #3154AC;
+            background: rgba(49, 84, 172, 0.3);
+          }
     }
   }
   /deep/ .select-template-trigger input {

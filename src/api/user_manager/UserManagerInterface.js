@@ -75,6 +75,12 @@ class UserManagerInterface extends BaseModule {
       params: data,
     });
   }
+  // // 查询医生管理列表
+  // getList(data = {}) {
+  //   return this.get('/crm/doctor/list', {
+  //     params: data,
+  //   });
+  // }
 }
 
 export default new UserManagerInterface();

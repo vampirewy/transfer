@@ -104,9 +104,10 @@ export default {
       this.$api.reportInterface
         .getAbnormalAliasList(Object.assign(this.params, this.formData))
         .then(({ data }) => {
-          if (data.code === 200) {
+          if (data) {
             this.params.total = data.data.total;
-            this.dataSource = data.data.list;
+            this.dataSource = data.data.data;
+            console.log(this.dataSource, 'sfsdfsdfsd');
             this.dataSource.forEach((val) => {
               this.$set(this.map, val.id, val);
             });
@@ -176,8 +177,14 @@ export default {
         margin-left: 20px;
       }
       &:not(.el-button--primary) {
-        background: #97A6BD;
-        color: #fff;
+        background: rgba(49, 84, 172, 0.1);
+          border-radius: 20px;
+          border: 1px solid #3154AC;
+          &:hover {
+            color: #3154AC;
+            border-color: #3154AC;
+            background: rgba(49, 84, 172, 0.3);
+          }
       }
     }
   }

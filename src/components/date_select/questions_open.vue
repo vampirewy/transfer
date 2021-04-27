@@ -80,7 +80,7 @@ export default {
       });
       const { data } = res.data;
       if (data) {
-        this.tableData = data.list || [];
+        this.tableData = data.data || [];
         this.total = data.total;
       }
     },

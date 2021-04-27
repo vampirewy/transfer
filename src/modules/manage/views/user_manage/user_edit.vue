@@ -119,7 +119,7 @@
             </el-row>
             <el-row>
               <el-col :span="12">
-                <el-form-item label="身份证">
+                <el-form-item label="身份证" prop="cardNo">
                   <el-input @blur="synchronousAge()" v-model="formData.cardNo"></el-input>
                 </el-form-item>
               </el-col>
@@ -145,18 +145,21 @@
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="工作地址">
-                  <el-input v-model="formData.workUnitAddress" placeholder="请填写"></el-input>
+                <el-form-item label="部门">
+                  <!-- <el-select
+                          v-model="formData.workUnitDepartment"
+                          placeholder="请选择"
+                          style="width: 100%;"
+                  >
+                    <el-option :label="item.name"
+                               :value="item.paramValue"
+                               v-for="(item, index) in professionList"
+                               :key="index"></el-option>
+                  </el-select> -->
+                  <el-input v-model="formData.workUnitDepartment"></el-input>
                 </el-form-item>
               </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="居住地址">
-                  <el-input v-model="formData.address" placeholder="请填写"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
+              <el-col :span="24">
                 <el-form-item label="管理医生">
                   <el-popover
                           ref="popover1"
@@ -189,7 +192,57 @@
                   </el-popover>
                 </el-form-item>
               </el-col>
+              <el-col :span="24">
+                <el-form-item label="工作地址">
+                  <el-input v-model="formData.workUnitAddress" placeholder="请填写"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="24">
+                <el-form-item label="居住地址">
+                  <el-input v-model="formData.address" placeholder="请填写"></el-input>
+                </el-form-item>
+              </el-col>
             </el-row>
+            <!-- <el-row>
+              <el-col :span="24">
+                <el-form-item label="居住地址">
+                  <el-input v-model="formData.address" placeholder="请填写"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="24">
+                <el-form-item label="管理医生">
+                  <el-popover
+                          ref="popover1"
+                          placement="bottom"
+                          popper-class="user-edit-popper"
+                          width="650"
+                          trigger="click"
+                          @show="handlePopoperShow"
+                          @hide="handlePopoperClose">
+                    <doctor-select
+                            v-if="popoverStatus"
+                            mode="normal"
+                            :isRadio="false"
+                            :clientId="$route.params.userId"
+                            :selectedDoctor="formData.selectedDoctors"
+                            :selectedDoctorIds="selectedDoctorIds"
+                            @cancel="$refs.popover1.showPopper = false"
+                            @change="submitAssign"
+                    />
+                    <el-input
+                            slot="reference"
+                            class="select-user-trigger"
+                            disabled
+                            v-model="formData.userRealName"
+                            placeholder="请选择"
+                    >
+                      <i :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
+                         slot="suffix" ></i>
+                    </el-input>
+                  </el-popover>
+                </el-form-item>
+              </el-col>
+            </el-row> -->
             <!-- <el-form-item label="用户类型">
               <el-select v-model="formData.region" placeholder="请选择活动区域">
                 <el-option label="区域一" value="shanghai"></el-option>
@@ -210,7 +263,7 @@
                 <el-col :span="4">
                   <el-button
                           class="addbutton"
-                          style="height: 40px;marginLeft: 15px"
+                          style="height: 40px;marginLeft: 5px;width:80px;"
                           :disabled="!formData.tag"
                           @click="addNewTag"
                   >添加</el-button>
@@ -235,6 +288,7 @@
                       type="textarea"
                       placeholder="输入备注内容"
                       :maxlength="300"
+                      style="1px solid #DDE0E6 !important"
                       show-word-limit
                       v-model="formData.remark">
               </el-input>
@@ -315,7 +369,7 @@
 import File from './components/file_dialog.vue';
 import FileDetail from './components/file_detail.vue';
 import doctorSelect from '@/components/doctor_select/index.vue';
-import deleteIcon from '~/src/assets/images/message-box-delete@2x.png';
+import deleteIcon from '~/src/assets/images/deleteicon.png';
 import * as dayjs from 'dayjs';
 
 export default {
@@ -372,6 +426,7 @@ export default {
         userIdList: [],
         workIdList: [],
         selectedDoctors: [],
+        workUnitDepartment: '',
       },
       rules: {
         name: [
@@ -417,8 +472,8 @@ export default {
         ],
         cardNo: [
           {
-            // required: true,
-            // message: '请输入身份证',
+            required: true,
+            message: '请输入正确的身份证',
             trigger: 'blur',
             validator: validateIDCard,
           },
@@ -465,7 +520,7 @@ export default {
     async getGridList() {
       const res = await this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
       const { data } = res.data;
-      this.gridList = data.list.filter(t => t.state === '1');
+      this.gridList = data.data.filter(t => t.state === '1');
     },
     async getSystemParamByCode(code, fieldName) {
       const res = await this.$api.userManagerInterface.getSystemParamByCode(code);
@@ -521,12 +576,11 @@ export default {
             this.formData.userIdList.push(this.$store.state.user.userId);
             // this.formData.userIdList = [this.$route.query.owner];
           }
-
+          // this.formData.birthday = dayjs(this.formData.birthday).format('YYYY-MM-DD');
           this.formData = {
             ...this.formData,
             birth: dayjs(this.formData.birth).format('YYYY-MM-DD'),
           };
-
           this.formData.annexParams =
               this.dataSource.filter(t => t.time && t.deleted === 0).map(t => ({
                 title: t.title,
@@ -543,7 +597,7 @@ export default {
           this.$api.userManagerInterface
             .saveOrEditUser(this.formData)
             .then(({ data }) => {
-              if (data.code === 200) {
+              if (data) {
                 this.$message.success('操作成功');
                 this.$router.go(-1);
               }
@@ -627,7 +681,7 @@ export default {
     },
     fetch(userId) {
       this.$api.userManagerInterface.getDetail(userId).then(({ data }) => {
-        if (data.code === 200) {
+        if (data) {
           let result = data.data;
           // eslint-disable-next-line no-param-reassign
           result.birth = result.birth || this.getAge(result.cardNo);
@@ -678,18 +732,19 @@ export default {
       });
     },
     fetchFileList(userId) {
-      this.$api.userManagerInterface
+      const thates = this;
+      thates.$api.userManagerInterface
         .fetchFileList({
           clientId: userId,
-          ...this.params,
+          ...thates.params,
         })
         .then(({ data }) => {
-          if (data.code === 200) {
-            this.dataSource = data.data.list;
-            this.dataSource.forEach((it) => {
+          if (data) {
+            thates.dataSource = data.data.data;
+            thates.dataSource.forEach((it) => {
               it.deleted = 0;
             });
-            this.params.total = data.data.total;
+            thates.params.total = data.data.total;
           }
         });
     },
@@ -749,7 +804,6 @@ export default {
       padding-right: 8px !important;
     }
     /deep/.el-input__inner, /deep/.el-textarea__inner {
-      border: 0;
       background-color: #F4F4F6;
     }
     .user-edit-form {

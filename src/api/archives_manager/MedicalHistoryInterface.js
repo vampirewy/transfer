@@ -1,6 +1,14 @@
 import BaseModule from '../BaseModule';
 
 class MedicalHistoryInterface extends BaseModule {
+  // 单项检查分页列表
+  singleinspectionPageList(data) {
+    return this.post('/inspect/get_list_page', data);
+  }
+  // 批量删除
+  singleinspectionDelete(ids) {
+    return this.post('/inspect/deleted', ids);
+  }
   // 就医史分页列表
   medicalHistoryPageList(data) {
     return this.post('/medical_info/list_page', data);

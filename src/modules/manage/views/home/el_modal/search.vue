@@ -9,7 +9,7 @@
       <el-radio-button label="2">近7天</el-radio-button>
       <el-radio-button label="3">近30天</el-radio-button>
     </el-radio-group>-->
-      <div class="dateChooseDiv">
+      <!-- <div class="dateChooseDiv">
           <label :class="{'active': listQuery.type === '1'}"
                  @click="runningTabChecked('1')">今天
             <span v-if="listQuery.type === '1'">一</span>
@@ -22,8 +22,8 @@
                  @click="runningTabChecked('3')">近30天
               <span v-if="listQuery.type === '3'">一</span>
           </label>
-      </div>
-      <div style="display: flex">
+      </div> -->
+      <!-- <div style="display: flex">
             <el-date-picker
               v-model="chooseDateDay"
               type="daterange"
@@ -43,7 +43,7 @@
                   <el-radio-button label="6">我的</el-radio-button>
                   <el-radio-button label="7">平台</el-radio-button>
               </el-radio-group>
-      </div>
+      </div> -->
     <!--<el-button
       class="filter-item"
       type="primary"
@@ -196,7 +196,7 @@ export default {
 .filter-container {
     background-color: white;
     padding: 0;
-    height: 50px;
+    // height: 50px;
     display: flex;
     align-items: center;
     justify-content: space-between;

@@ -22,15 +22,18 @@
     border-radius: 5px;
     th {
       background: #F6F8FC;
-      padding: 18px 0;
+      padding: 10px 0;
       &.is-leaf{
         border-bottom: none;
       }
       .cell {
         color: #333333;
-        font-weight: 500;
+        font-weight: 600 !important;
         line-height: 22px;
-        font-size: 16px;
+        font-size: 14px;
+        .el-checkbox{
+          margin: 10px 0;
+        }
       }
     }
   }
@@ -42,7 +45,7 @@
     word-break: normal !important;
   }
   td {
-    padding: 18px 0;
+    padding: 3px 0;
     border-bottom: none;
   }
   /deep/ .hide-expand-column .el-icon{
