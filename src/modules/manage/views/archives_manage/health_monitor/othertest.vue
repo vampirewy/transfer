@@ -12,9 +12,9 @@
     >
       <div class="form-title">
         <div class="line"></div>
-        <h3 v-if="id != ''" class="name">编辑-就医用户信息</h3>
-        <h3 v-else class="name">新增-就医用户信息</h3>
+        <h3 class="name">新增-其他检测</h3>
       </div>
+
       <div class="medicate-record mt20">
       <div class="row">
           <el-form-item label="姓名" prop="clientName" style="width:25%">
@@ -65,6 +65,18 @@
             ></el-input>
           </el-form-item>
       </div>
+      <div class="row" >
+        <el-form-item label="时间" prop="startDate" style="width:25%">
+        <el-date-picker
+            class="start-date"
+            v-model="infoSource.startDate"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="请选择时间"
+            style="width: 180px"
+        ></el-date-picker>
+        </el-form-item>
+    </div>
       </div>
 
       <!-- <div class="form-title">
@@ -73,7 +85,7 @@
       </div> -->
 
       <div class="medicate-info mt20" style="margin-top:0">
-        <div class="row">
+        <!-- <div class="row">
             <el-form-item label="检查编号" prop="drugsName" style="width:25%">
               <el-input
                 v-model="infoSource.drugsName"
@@ -101,88 +113,7 @@
                 style="width: 200px"
               ></el-date-picker>
             </el-form-item>
-            <!-- <el-form-item label="就医机构" prop="countDay" style="width:25%">
-              <el-input
-                v-model="infoSource.countDay"
-                placeholder="请输入"
-                :maxlength="30"
-                number
-                style="width: 200px"
-              ></el-input>
-            </el-form-item> -->
-        </div>
-
-        <!-- <div class="row">
-            <el-form-item label="就医科室" prop="dose" style="width:25%">
-              <el-input
-                v-model="infoSource.dose"
-                placeholder="请输入"
-                :maxlength="30"
-                style="width: 200px"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="主管医生" prop="result" style="width:25%">
-              <el-select
-                style="width: 200px"
-                placeholder="请选择"
-                v-model="infoSource.result"
-              >
-                <el-option
-                  v-for="item in resultList"
-                  :key="item.paramValue"
-                  :label="item.name"
-                  :value="item.paramValue">
-                </el-option>
-              </el-select>
-            </el-form-item>
-              <el-form-item label="就医时间" prop="startDate" style="width:25%">
-              <el-date-picker
-                class="start-date"
-                v-model="infoSource.startDate"
-                type="date"
-                :max-date="infoSource.endDate"
-                value-format="yyyy-MM-dd"
-                placeholder="请选择开始用药时间"
-                style="width: 200px"
-              ></el-date-picker>
-            </el-form-item>
-            <el-form-item label="出院时间" prop="endDate" style="width:25%">
-              <el-date-picker
-                class="end-date"
-                v-model="infoSource.endDate"
-                type="date"
-                :min-date="infoSource.startDate"
-                value-format="yyyy-MM-dd"
-                placeholder="请选择结束用药时间"
-                style="width: 200px"
-              ></el-date-picker>
-            </el-form-item>
         </div> -->
-         <!-- <div class="row">
-            <el-form-item label="就医金额" prop="dose" style="width:25%">
-              <el-input
-                v-model="infoSource.dose"
-                placeholder="请输入"
-                :maxlength="30"
-                style="width: 200px"
-              ></el-input>
-            </el-form-item>
-             <el-form-item label="当前状态" prop="result" style="width:25%">
-              <el-select
-                style="width: 200px"
-                placeholder="请选择"
-                v-model="infoSource.result"
-              >
-                <el-option
-                  v-for="item in resultList"
-                  :key="item.paramValue"
-                  :label="item.name"
-                  :value="item.paramValue">
-                </el-option>
-              </el-select>
-            </el-form-item>
-         </div> -->
-
         <div class="row">
             <el-form-item label="检查描述" prop="ingrenient" style="width:100%">
               <el-input
@@ -201,41 +132,55 @@
         <h3 class="name">检查项目</h3>
       </div>
         <div class="row">
-            <div>
-                <span>体检库：</span>
-                <el-select
-                v-model="formData.gridId"
-                placeholder="请选择"
-                style="width: 140px"
-                >
-                <el-option
-                    v-for="(item, index) in gridList"
-                    :label="item.name"
-                    :value="item.id"
-                    :key="index"
-                ></el-option>
-                </el-select>
-            </div>
-          <el-form-item label="检查项目" prop="clientName" style="width:25%">
+          <el-form-item label="检测项目" prop="clientName" style="width:40%;background:#ffffff">
             <el-popover
-              ref="userPopoverCheck"
+              ref="userPopovers"
               placement="bottom-start"
               width="650"
               trigger="click"
-              @show="popoverStatusCheck = true"
-              @hide="handlePopoperCloseCheck"
+              @show="detectionpopoverStatus = true"
+              @hide="detectionhandlePopoperClose"
             >
-              <select-examination
-                v-if="popoverStatusCheck"
-                @change="onSelectUserCheck"
-                :examination="formData.gridId"
-              ></select-examination>
+              <detectionuser
+                v-if="detectionpopoverStatus"
+                @change="detectiononSelectUser"
+              ></detectionuser>
               <el-input
                 :class="`select-user-trigger ${id ? 'disabled' : ''}`"
                 slot="reference"
                 disabled
-                v-model="infoSource.clientNameCheck"
-                placeholder="请选择"
+                v-model="detectioninfoSource.clientName"
+                placeholder="请选择(可多选)"
+              >
+                <i
+                  :class="`el-icon-caret-${detectionpopoverStatus ? 'top' : 'bottom'}`"
+                  slot="suffix"
+                ></i>
+              </el-input>
+            </el-popover>
+          </el-form-item>
+          <div class="othertest">
+              <div @click="othertestAdd">添加</div>
+          </div>
+          <!-- <el-form-item label="检查项目" prop="clientName" style="width:25%">
+            <el-popover
+              ref="userPopover"
+              placement="bottom-start"
+              width="650"
+              trigger="click"
+              @show="popoverStatus = true"
+              @hide="handlePopoperClose"
+            >
+              <select-user
+                v-if="popoverStatus"
+                @change="onSelectUser"
+              ></select-user>
+              <el-input
+                :class="`select-user-trigger ${id ? 'disabled' : ''}`"
+                slot="reference"
+                disabled
+                v-model="infoSource.clientName"
+                placeholder="请选择客户"
                 style="width: 232px;"
               >
                 <i
@@ -244,36 +189,40 @@
                 ></i>
               </el-input>
             </el-popover>
-          </el-form-item>
-          <div class="inspectionAdd">
-              <div>添加</div>
-          </div>
+          </el-form-item> -->
         </div>
-     <el-table class="medicate-list mt20" :data="drugsList" align="center">
-        <el-table-column label="科室" prop="drugsName" show-overflow-tooltip>
-          <template slot-scope="scope">
+     <el-table class="medicate-list mt20" :data="detectionInfos" align="center">
+        <el-table-column label="检测项目" prop="name" show-overflow-tooltip>
+          <!-- <template slot-scope="scope">
             <span>{{ scope.row.drugsName | getResult }}</span>
-          </template>
+          </template> -->
         </el-table-column>
         <el-table-column
-          label="项目"
-          prop="ingrenient"
+          label="检测结果"
+          prop="consequences"
           show-overflow-tooltip
         >
           <template slot-scope="scope">
-            <span>{{ scope.row.ingrenient | getResult }}</span>
+              <input type="text" class="elinputs" v-model="scope.row.consequences" name="" id="">
+              <!-- <el-input
+                type="input"
+                v-model="scope.row.consequences"
+                placeholder="请输入"
+                :maxlength="150"
+                show-word-limit
+              ></el-input> -->
           </template>
         </el-table-column>
         <el-table-column
-          label="结果"
-          prop="startDate"
+          label="计量单位"
+          prop="unit"
           show-overflow-tooltip
         >
-          <template slot-scope="scope">
+          <!-- <template slot-scope="scope">
             <span>{{ scope.row.startDate | getResult }}</span>
-          </template>
+          </template> -->
         </el-table-column>
-        <el-table-column label="正常参考" prop="endDate" show-overflow-tooltip>
+        <!-- <el-table-column label="正常参考" prop="endDate" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.endDate | getResult }}</span>
           </template>
@@ -287,7 +236,7 @@
           <template slot-scope="scope">
             <span>{{ scope.row.dose | getResult }}</span>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <!-- <el-table-column label="每日次数" prop="countDay" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.countDay | getResult }}</span>
@@ -313,7 +262,26 @@
         </el-table-column> -->
         <el-table-column label="操作" prop="index">
           <template slot-scope="scope">
-            <el-button type="text" @click="remove(scope)">删除</el-button>
+            <el-button type="text">
+              <img
+                class="icon-delete"
+                src="@/assets/images/service/compile.png"
+                @click="operates(scope.$index, scope.row.id)"
+              />
+            </el-button>
+            <!-- <el-button type="text">
+              <img
+                class="icon-delete"
+                src="@/assets/images/service/allergic.png"
+                @click="deleteField(idx)"
+              />
+            </el-button> -->
+            <el-button type="text" @click="remove(scope.$index,)">
+              <img
+                class="icon-delete"
+                src="@/assets/images/service/deletes.png"
+              />
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -329,7 +297,7 @@
               layout="prev, pager, next, jumper, total, sizes"
             ></el-pagination>
       <div class="handle-btn mt30 mb30">
-        <el-button class="reset-btn" size="small" @click="goBack"
+        <el-button class="reset-btn" size="small" @click="blackReturn"
           >返回</el-button
         >
         <el-button class="add-btn" type="primary" size="small" @click="submit"
@@ -341,22 +309,21 @@
 </template>
 <script>
 import detail from '../components/detail.vue';
+import detectionuser from '../components/detection_user.vue';
 import selectUser from '../components/select_user.vue';
-import selectExamination from '../components/select_examination.vue';
 
 export default {
   name: 'medication_history_add',
   components: {
     detail,
     selectUser,
-    selectExamination,
+    detectionuser,
   },
   data() {
     return {
       popoverStatus: false,
-      popoverStatusCheck: false,
+      detectionpopoverStatus: false,
       total: 0,
-      id: this.$route.query.id,
       infoSource: {
         drugsName: '',
         mainIndication: '',
@@ -365,19 +332,28 @@ export default {
         startDate: '',
         endDate: '',
         dose: '',
-        ingrenient: '',
+        ingrenient: '', // 检测描述
         resoures: '',
         result: '',
         clientName: '',
-        clientId: '',
+        clientId: '', // 客户id
         age: '',
         gender: '',
         gridName: '',
-        clientNameCheck: '', // 检查项目
+        startDates: ' 00:00:00',
       },
+      detectioninfoSource: {
+        Customer: '', // 客户id
+        clientName: '',
+        clientId: '', // 检测项目id
+        age: '',
+        gender: '',
+        gridName: '',
+      },
+      detectionInfo: [], // 检测项目选中数据
+      detectionInfos: [], // 渲染选中的项目
       drugsList: [],
       resultList: [],
-      gridList: [],
       rules: {
         clientName: [{ required: true, message: '客户不能为空' }],
         drugsName: [{ required: true, message: '药品名称不能为空' }],
@@ -387,59 +363,66 @@ export default {
       },
       formData: {
         pageNo: 1,
-        gridId: '',
       },
     };
   },
   mounted() {
-    console.log(this.id);
     window.vm = this;
     this.getResultList();
-    this.queryList();
   },
   methods: {
+    operates(index) {
+      this.$set(this.detectionInfos[index], 'isshow', true);
+      console.log(this.detectionInfos);
+      this.$forceUpdate();
+    },
+    othertestAdd() {
+      if (this.detectioninfoSource.Customer !== '') {
+        for (let i = 0; i < this.detectionInfo.length; i++) {
+          this.detectionInfos.push(this.detectionInfo[i]);
+        }
+        console.log(this.detectionInfos, 'dfafdsfsdfds12312');
+        this.detectionInfo = [];
+      } else {
+        return this.$message.warning('请先选择客户');
+      }
+    },
     async getResultList() {
       const res = await this.$api.medication.getResultList();
       const { data } = res;
-      this.resultList = data.data;
-    },
-    async queryList() {
-      const res = await this.$api.physicalProjectListInterface.listOrganItemLibrary();
-      //   const res = await this.$api.PhysicalProjectListInterface.listOrganItemLibrary({
-      //     keywords: this.keyword,
-      //     pageNo: this.currentPage,
-      //     pageSize: this.pageSize,
-      //   });
-      console.log(res.data);
-      const { data } = res.data;
-      if (data) {
-        this.gridList = data || [];
-      }
-      console.log(this.formData.gridId, 'qweqwewwqwqwe');
+      this.resultList = data.data.data;
     },
     handlePopoperClose() {
       this.popoverStatus = false;
     },
-    handlePopoperCloseCheck() {
-      this.popoverStatusCheck = false;
+    detectionhandlePopoperClose() {
+      this.detectionpopoverStatus = false;
     },
+    // 选择客户
     onSelectUser(data) {
       this.$refs.userPopover.doClose();
       this.popoverStatus = false;
       this.infoSource.clientName = data.name;
+      this.detectioninfoSource.Customer = data.id;
       this.infoSource.clientId = data.id;
       this.infoSource.age = data.age;
       this.infoSource.gender = data.gender;
       this.infoSource.gridName = data.gridName;
     },
-    onSelectUserCheck() {
-      this.$refs.userPopoverCheck.doClose();
-      this.popoverStatusCheck = false;
-    //   this.infoSource.clientName = data.name;
-    //   this.infoSource.clientId = data.id;
-    //   this.infoSource.age = data.age;
-    //   this.infoSource.gender = data.gender;
-    //   this.infoSource.gridName = data.gridName;
+    // 选择检测项目
+    detectiononSelectUser(data) {
+      data.clientId = this.infoSource.clientId;
+      data.ingrenient = this.infoSource.ingrenient;
+      data.consequences = '123132';
+      this.detectionInfo.push(data);
+      console.log(data, '选择检测项目');
+      this.$refs.userPopovers.doClose();
+      this.detectionpopoverStatus = false;
+      this.detectioninfoSource.clientName += data.name;
+      this.detectioninfoSource.clientId = data.id;
+      this.detectioninfoSource.age = data.age;
+      this.detectioninfoSource.gender = data.gender;
+      this.detectioninfoSource.gridName = data.gridName;
     },
     addRecord() {
       this.$refs.form.validate((valid) => {
@@ -455,7 +438,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning',
       }).then(() => {
-        this.drugsList.splice(index, 1);
+        this.detectionInfos.splice(index, 1);
       });
     },
     clear() {
@@ -491,25 +474,37 @@ export default {
       this.queryList();
     },
     submit() {
-      const reqBody = {
-        clientId: this.infoSource.clientId,
-        organId: '',
-        paramList: this.drugsList,
-      };
-
-      if (!this.infoSource.clientId) {
+      console.log(this.detectionInfos, 'qweqweqweqwe');
+      if (!this.infoSource.clientId === '') {
         return this.$message.warning('请选择客户');
       }
 
-      if (!this.drugsList.length) {
-        return this.$message.warning('请添加药品');
+      if (!this.detectioninfoSource.clientId === '') {
+        return this.$message.warning('请添加检测项目');
       }
-
-      this.$api.medication.add(reqBody).then(({ data }) => {
-        if (data.code === 200) {
-          this.$router.go(-1);
+      const json = {};
+      const arrars = [];
+      for (let i = 0; i < this.detectionInfos.length; i++) {
+        json.clientId = this.detectionInfos[i].clientId;
+        json.result = this.detectionInfos[i].consequences;
+        json.healthDataItemId = this.detectionInfos[i].id;
+        json.detectDate = this.infoSource.startDate + this.infoSource.startDates;
+        arrars.push(json);
+      }
+      console.log(arrars, '结果');
+      this.$api.healthMonitorInterface.saveHealthDataOther(arrars).then(({ data }) => {
+        if (data.success) {
+          this.$message.success('操作成功');
         }
       });
+    //   this.$api.medication.add(reqBody).then(({ data }) => {
+    //     if (data.code === 200) {
+    //       this.$router.go(-1);
+    //     }
+    //   });
+    },
+    blackReturn() {
+      this.$emit('messageData', true, true);
     },
   },
 };
@@ -553,6 +548,7 @@ export default {
       display: flex;
       align-items: center;
       position: relative;
+      margin-top: 20px;
       .line {
         width: 36px;
         height: 4px;
@@ -603,18 +599,28 @@ export default {
     }
   }
   .el-input.is-disabled .el-input__inner{
-      background: #ffffff !important;
+    //   background: #ffffff !important;
   }
-}
-.inspectionAdd{
+  .othertest{
     width: 70px;
     height: 40px;
     background: #36BF2F;
     border-radius: 5px;
-    margin-left: 45px;
     text-align: center;
     line-height: 40px;
     color: #ffffff;
-    font-size: 14px;
+    margin-left: 20px;
+  }
+}
+.icon-delete{
+    width: 30px;
+}
+.elinputs{
+    width: 150px;
+    height: 32px;
+    border: solid 1px #DDE0E6;
+    padding-left: 10px;
+    color: #333333;
+    border-radius: 5px;
 }
 </style>

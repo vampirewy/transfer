@@ -54,7 +54,7 @@
           <div class="divTop">
             <div class="divTitle">
               <span><img src="@/assets/images/common/titleLeft.png" alt="" /></span>
-              我的客户
+              体检报告
             </div>
             <div class="searchCondition">
               <div class="searchLeft">
@@ -189,7 +189,7 @@
                 <operate-button
                 type="editGray"
                 @click="handleeditGray"
-                v-if="getAccess('physical_examination_report_batch_editGray')
+                v-if="getAccess('physical_examination_report_batch_delete')
                 "></operate-button>
             </div>
           </div>
@@ -384,19 +384,24 @@ export default {
       total: 0,
       dataSource: [],
       formData: {
-        keywords: '',
-        gender: '',
-        gridId: '',
-        TotalTest: '',
-        gridName: '',
-        physicalstartTime: '',
-        physicalendTime: '',
-        gatherstartTime: '',
-        gatherendTime: '',
+        keywords: '', // 搜索客户姓名/企业名称/体检医院
+        gender: '', // 性别0-男1-女
+        // gridId: '',
+        // TotalTest: '',
+        // gridName: '',
+        // physicalstartTime: '',
+        // physicalendTime: '',
+        // gatherstartTime: '',
+        // gatherendTime: '',
+        minReportDate: null, // 体检日期搜索 最小体检日期搜索
+        maxReportDate: null, // 体检日期搜索 最大体检日期搜索
+        workUnitName: '', // 所属企业名字
+        reportNo: '', // 体检编号
+        clientId: '', // 客户id
       },
       params: {
-        pageNo: 1,
-        pageSize: 15,
+        pageNo: 1, // 页码
+        pageSize: 15, // 页数 默认10
       },
       multipleSelection: [],
       expands: [],
@@ -451,6 +456,12 @@ export default {
     handleEdit(id) {
       this.view = 2;
       this.currentId = id;
+      this.$router.push({
+        path: '/report_edit',
+        query: {
+          id: this.currentId,
+        },
+      });
     },
     handleDetail(id) {
       this.view = 3;
@@ -459,6 +470,12 @@ export default {
     handleAdd() {
       this.view = 2;
       this.currentId = '';
+      this.$router.push({
+        path: '/report_edit',
+        query: {
+          id: '',
+        },
+      });
     },
     handleExpandPageChange(page) {
       this.expandData.pageNo = page;
@@ -495,7 +512,7 @@ export default {
         pageSize: this.expandData.pageSize,
         clientId: this.expandData.clientId,
       }).then(({ data }) => {
-        this.expandData.list = data.data.list;
+        this.expandData.list = data.data.data;
         this.expandData.total = data.data.total;
         this.loading = false;
         // 展开的table的渲染更新依赖外层table数据，如果外层数据没变，展开的内容不会更新渲染，所以这里更新一下dataSource
@@ -542,7 +559,7 @@ export default {
         this.$api.reportInterface.batchRemove({
           reportIdList: list,
         }).then(({ data }) => {
-          if (data.code === 200) {
+          if (data.success) {
             this.$message.success('操作成功');
             this.fetch();
           }
@@ -565,7 +582,7 @@ export default {
         .then(({ data }) => {
           if (data.success) {
             this.total = data.data.total;
-            this.dataSource = data.data.list;
+            this.dataSource = data.data.data;
           }
         });
     },

@@ -26,18 +26,28 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="体检编号" prop="reportNo">
-            <el-input v-model="formData.reportNo" @input="replace"></el-input>
+          <el-form-item label="性别" prop="gender" style="width:100%">
+            <el-radio v-model="formData.gender" :label="1" disabled>男</el-radio>
+            <el-radio v-model="formData.gender" :label="2" disabled>女</el-radio>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="体检日期" prop="reportDate">
-            <el-date-picker v-model="formData.reportDate"></el-date-picker>
+          <el-form-item label="年龄" prop="age" style="width:25%">
+            <el-input
+              v-model="formData.age"
+              disabled
+              class="age-input"
+              style="width: 200px;"
+            ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="体检机构" prop="examinationOrgan">
-            <el-input v-model="formData.examinationOrgan"></el-input>
+          <el-form-item label="客户编号" prop="gridName" style="width:25%">
+            <el-input
+              v-model="formData.cardNo"
+              disabled
+              style="width: 200px;"
+            ></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -65,7 +75,7 @@ import SelectUser from './medical_history_select_user.vue';
 
 export default {
   name: 'reportEdit',
-  props: ['id'],
+  // props: ['id'],
   components: {
     SelectUser,
     physical: Physical,
@@ -73,6 +83,7 @@ export default {
   },
   data() {
     return {
+      id: this.$route.query.id || '',
       popoverStatus: false,
       selectUser: null,
       activeName: 'first',
@@ -82,6 +93,9 @@ export default {
         reportNo: '',
         reportDate: '',
         examinationOrgan: '',
+        gender: 1,
+        age: '',
+        cardNo: '',
       },
       dialogFormVisible: false,
       clientDialogVisible: false,
@@ -129,13 +143,18 @@ export default {
     if (this.id) {
       this.fetch(this.id);
     }
+    console.log(this.id, '接受id');
   },
   methods: {
     handleSelectUser(data) {
+      console.log(data, '接收的数据');
       this.$refs.userPopover.doClose();
       this.popoverStatus = false;
       this.formData.clientName = data.name;
       this.formData.clientId = data.id;
+      this.formData.gender = data.gender;
+      this.formData.age = data.age;
+      this.formData.cardNo = data.cardNo;
       this.$refs.form.validateField('clientId');
     },
     onVisibleChange(value) {
@@ -181,9 +200,10 @@ export default {
             );
           }
           request(formData).then(({ data }) => {
-            if (data.code === 200) {
+            if (data) {
               this.$message.success('操作成功');
               this.$emit('close', true);
+              this.$router.go(-1);
             }
           });
         }

@@ -2,7 +2,7 @@
 <div>
 <div style="display: flex;">
   <div class="dashboard-editor-container">
-    <!-- <search-group @searchData="getSearchData" /> -->
+    <search-group @searchData="getSearchData" />
     <panel-group :formData="homeFindCountData" @toRouterPage="toRouterPage" />
     <el-row :gutter="40" style="margin-left: 0">
       <el-col :span="15" class="echartBody" style="width:96%;height:340px">
@@ -153,9 +153,6 @@
         <div class="Tabunread">3</div>
       </span>
     </div>
-    <!-- <div><span>阳性跟踪</span></div>
-    <div><span>随访任务</span></div> -->
-
   </div>
   <div class="TabListcss">
     <!-- <tab-list></tab-list> -->
@@ -203,7 +200,7 @@
 </template>
 
 <script>
-// import SearchGroup from './el_modal/search.vue';
+import SearchGroup from './el_modal/search.vue';
 import PanelGroup from './el_modal/panel_group.vue';
 import PieChart from './el_modal/pie_chart.vue';
 import PieChartKong from './el_modal/pie_chart_kong.vue';
@@ -215,7 +212,7 @@ const BarChartLine = () => import('./el_modal/bar_chart.vue'); // 为了解决es
 export default {
   name: 'index',
   components: {
-    // SearchGroup,
+    SearchGroup,
     PanelGroup,
     PieChart,
     PieChartKong,

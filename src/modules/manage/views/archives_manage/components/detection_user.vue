@@ -7,18 +7,19 @@
       </el-button>
     </div>
     <el-table :data="tableData" @row-click="rowClick">
-      <el-table-column width="80">
+      <!-- <el-table-column width="80">
         <template slot-scope="scope">
           <el-radio v-model="selectRadio" :label="scope.row.id">&nbsp;</el-radio>
         </template>
-      </el-table-column>
+      </el-table-column> -->
+      <el-table-column type="selection" width="40" align="center"></el-table-column>
       <el-table-column prop="name" label="姓名"></el-table-column>
-      <el-table-column prop="age" label="年龄"></el-table-column>
-      <el-table-column prop="gender" label="性别">
-        <template slot-scope="scope">
+      <el-table-column prop="unit" label="单位"></el-table-column>
+      <el-table-column prop="intro" label="内容">
+        <!-- <template slot-scope="scope">
           <span v-if="scope.row.gender === 1">男</span>
           <span v-if="scope.row.gender === 2">女</span>
-        </template>
+        </template> -->
       </el-table-column>
     </el-table>
     <el-pagination
@@ -32,6 +33,16 @@
       @current-change="handleCurrentChange"
       @size-change="handleSizeChange"
     ></el-pagination>
+    <div>
+      <div class="handle-btn mt30 mb30">
+        <el-button class="reset-btn" size="small" @click="goBack"
+          >返回</el-button
+        >
+        <el-button class="add-btn" type="primary" size="small" @click="submit"
+          >保存</el-button
+        >
+      </div>
+    </div>
   </div>
 </template>
 
@@ -70,8 +81,8 @@ export default {
       this.queryList();
     },
     async queryList() {
-      const res = await this.$api.userFollowInterface.getClientInfoListPage({
-        keywords: this.keyword,
+      const res = await this.$api.healthMonitorInterface.healthDataItemGetAll({
+        projectName: this.keyword,
         pageNo: this.currentPage,
         pageSize: this.pageSize,
       });
@@ -79,6 +90,7 @@ export default {
       const { data } = res.data;
       if (data) {
         this.tableData = data.data || [];
+        console.log(this.tableData);
         this.total = data.total;
       }
     },
@@ -130,5 +142,28 @@ export default {
       display: none;
     }
   }
+
 }
+    .handle-btn {
+    text-align: center;
+    margin-top: 20px;
+    .reset-btn {
+      width: 90px;
+      height: 40px;
+      background: rgba(49, 84, 172, 0.1);
+      border-radius: 20px;
+      border: 1px solid #3154AC;
+      text-align:center;
+      color: #3154AC;
+    }
+    .add-btn {
+      width: 90px;
+      height: 40px;
+      background: rgba(49, 84, 172, 0.1);
+      border-radius: 20px;
+      background: #3154AC;
+      border: 1px solid #3154AC;
+      text-align:center;
+    }
+  }
 </style>

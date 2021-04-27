@@ -1,6 +1,24 @@
 <template>
   <div class="health-monitor-trend">
-    <div class="title">体重-查看趋势</div>
+    <div class="lines"></div>
+    <div class="titless">查看-体重</div>
+    <div class="lookPressure">
+      <div><span>姓名：</span><span>{{queryInfo.clientName}}</span></div>
+      <div><span>性别：</span><span>{{queryInfo.gender}}</span></div>
+      <div><span>年龄：</span><span>{{queryInfo.age}}</span></div>
+      <div><span>客户编号：</span><span>{{queryInfo.clientNo}}</span></div>
+    </div>
+    <div class="lookPressure">
+      <div><span>身高：</span><span>{{queryInfo.height}}</span></div>
+      <div><span>体重：</span><span>{{queryInfo.weight}}</span></div>
+      <div><span>腰围：</span><span>{{queryInfo.wc}}</span></div>
+      <div><span>体脂率：</span><span>{{queryInfo.bdPercent}}</span></div>
+    </div>
+    <div class="lookPressure">
+      <div><span>备注：</span><span>{{queryInfo.result}}</span></div>
+    </div>
+    <div class="lines"></div>
+    <div class="titless">体重-查看趋势</div>
     <div class="chart-legend">
       <span>体重</span>
     </div>
@@ -38,7 +56,7 @@
       ></el-pagination>
     </div>
     <div class="buttons">
-      <el-button plain size="small" @click="$emit('close')">返回</el-button>
+      <el-button plain size="small" @click="blackReturn()">返回</el-button>
     </div>
   </div>
 </template>
@@ -48,7 +66,7 @@ import LineChart from '../components/line_chart.vue';
 import * as dayjs from 'dayjs';
 export default {
   name: 'WeightTrend',
-  props: ['id'],
+  props: ['id', 'ids'],
   components: {
     LineChart,
   },
@@ -62,6 +80,7 @@ export default {
           { label: '体重', prop: 'weight' },
           { label: '腰围', prop: 'wc' },
           { label: '体脂率', prop: 'bdPercent' },
+          { label: '备注', prop: 'bdPercent' },
         ],
         list: [],
         total: 0,
@@ -70,11 +89,13 @@ export default {
       },
       xData: [],
       yData: [],
+      queryInfo: {},
     };
   },
   mounted() {
     this.queryChartData();
     this.queryPageList();
+    this.queryChartInfo();
   },
   methods: {
     queryChartData() {
@@ -102,7 +123,13 @@ export default {
         pageSize: this.table.pageSize,
       }).then(({ data }) => {
         this.table.total = data.data.total;
-        this.table.list = data.data.list;
+        this.table.list = data.data.data;
+      });
+    },
+    queryChartInfo() {
+      this.$api.healthMonitorInterface.getDetailHealthWeight(this.ids).then(({ data }) => {
+        this.queryInfo = data.data;
+        console.log(this.queryInfo, '12313123123');
       });
     },
     handlePageChange(page) {
@@ -113,10 +140,45 @@ export default {
       this.table.pageSize = size;
       this.queryPageList();
     },
+    blackReturn() {
+      this.$emit('messageData', true, true);
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-
+.health-monitor-trend{
+  position: relative;
+  margin-top: 20px;
+}
+.lookPressure{
+  display: flex;
+  margin:20px 0 20px 0;
+  div{
+    width: 25%;
+    padding-left: 20px;
+    font-size: 14px;
+    color: #666666;
+  }
+}
+.titless {
+    position: relative;
+    padding-left: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333333;
+    line-height: 25px;
+    margin-bottom: 20px;
+}
+ .lines {
+    width: 36px;
+    height: 4px;
+    background: #3154AC;
+    margin-left: 10px;
+    border-radius: 1px;
+    position: absolute;
+    margin-top: 17px;
+    opacity: 0.5;
+  }
 </style>

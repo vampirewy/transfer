@@ -171,7 +171,7 @@
           <div class="operates">
             <operate-button
               type="add"
-              @click="$router.push('medication_history_add')"
+              @click="$router.push('medication_history_edit')"
               v-if="getAccess('medication_history_add')"
             >
             </operate-button>
@@ -234,7 +234,7 @@
               </template>
             </el-table-column>
             <el-table-column
-              label="就医时间"
+              label="用药时间"
               prop="startDate"
               show-overflow-tooltip
             >
@@ -242,7 +242,7 @@
                 <span>{{ scope.row.startDate | getResult }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="出院时间" prop="endDate" show-overflow-tooltip>
+            <el-table-column label="用药时间" prop="endDate" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>{{ scope.row.endDate | getResult }}</span>
               </template>
@@ -266,13 +266,13 @@
                 <el-button type="text" size="small" @click="handleDetailRow(scope.row)"
                   >查看</el-button
                 >
-                <el-button
+                <!-- <el-button
                   type="text"
                   size="small"
                   @click="remove(scope)"
                   v-if="getAccess('medication_history_delete')"
                   >删除
-                </el-button>
+                </el-button> -->
               </template>
             </el-table-column>
           </el-table>
@@ -411,7 +411,7 @@ export default {
       });
       const { data } = res;
       const result = data.data || {};
-      this.table.list = result.list || [];
+      this.table.list = result.data || [];
       this.table.list.forEach((it) => {
         const t = it;
         t.children = [];

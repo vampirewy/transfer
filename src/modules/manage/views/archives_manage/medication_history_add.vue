@@ -393,6 +393,7 @@ export default {
         endDate: [{ required: true, message: '结束时间不能为空' }],
         result: [{ required: true, message: '当前状态不能为空' }],
       },
+      id: '',
     };
   },
   mounted() {
@@ -400,10 +401,17 @@ export default {
     this.getResultList();
   },
   methods: {
+
     async getResultList() {
-      const res = await this.$api.medication.getResultList();
-      const { data } = res;
-      this.resultList = data.data;
+      console.log('sdfsfsdf');
+      this.$api.medicalHistoryInterface.medicalInfoDetail(this.id).then((res) => {
+        const { data } = res;
+        this.data = data.data || {};
+        console.log(this.data, 'zzzzzzzzz');
+      });
+      // const res = await this.$api.medication.getResultList();
+      // const { data } = res;
+      // this.resultList = data.data;
     },
     handlePopoperClose() {
       this.popoverStatus = false;
@@ -541,13 +549,6 @@ export default {
   .handle-btn {
     text-align: center;
     .reset-btn {
-      // -webkit-border-radius: 8px;
-      // -moz-border-radius: 8px;
-      // border-radius: 8px;
-      // background: #97a6bd;
-      // color: #ffffff;
-      // font-weight: 400;
-      // padding: 12px 26px;
       width: 90px;
       height: 40px;
       background: rgba(49, 84, 172, 0.1);
@@ -557,10 +558,6 @@ export default {
       color: #3154AC;
     }
     .add-btn {
-      // -webkit-border-radius: 8px;
-      // -moz-border-radius: 8px;
-      // border-radius: 8px;
-      // padding: 12px 25px;
       width: 90px;
       height: 40px;
       background: rgba(49, 84, 172, 0.1);

@@ -174,7 +174,8 @@ export default {
               },
             },
           },
-          smooth: true, // 线段是否平滑
+          // smooth: true, // 线段是否平滑
+          smooth: false, // 线段是否平滑
           type: 'line',
           areaStyle: {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [ // 渐变由上至下

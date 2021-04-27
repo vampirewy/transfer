@@ -104,9 +104,10 @@ export default {
       this.$api.reportInterface
         .getAbnormalAliasList(Object.assign(this.params, this.formData))
         .then(({ data }) => {
-          if (data.code === 200) {
+          if (data) {
             this.params.total = data.data.total;
-            this.dataSource = data.data.list;
+            this.dataSource = data.data.data;
+            console.log(this.dataSource, 'sfsdfsdfsd');
             this.dataSource.forEach((val) => {
               this.$set(this.map, val.id, val);
             });
