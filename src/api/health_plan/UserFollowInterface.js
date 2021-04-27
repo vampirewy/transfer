@@ -50,8 +50,12 @@ class UserFollowInterface extends BaseModule {
   }
 
   // 用户随访列表
-  getIntervenePlanPageList(data = {}) {
+  /* getIntervenePlanPageList(data = {}) {
     return this.post('/intervene_plan/get_intervene_plan_page_list', data);
+  } */
+  // 用户创建计划 - 随访列表lvb copy
+  getIntervenePlanPageList(data = {}) {
+    return this.post('/client_info/get_client_info_create_plan_list_page', data);
   }
   // 待随访计划 / 随访记录
   getIntervenePlanListPage(data = {}) {
