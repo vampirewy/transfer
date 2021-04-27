@@ -106,7 +106,7 @@ export default {
       display: flex;
       button {
         flex: 1;
-        border-radius: 8px;
+        border-radius: 20px;
         border: none;
         + button {
           margin-left: 20px;
@@ -123,6 +123,14 @@ export default {
     &.query-hide {
       width: calc(100% - 30px);
     }
+  }
+  .buttons button {
+    width: 80px;
+    border-radius: 20px;
+    border: none;
+    background: #3154AC30;
+    color: #3154AC;
+    border: 1px solid #3154AC;
   }
 }
 </style>

@@ -1,14 +1,15 @@
 <template>
-  <div class="tableTopDoDiv" style="display: block">
+  <div class="tableTopDoDiv"
+       style="display: block;border-right: 1px dashed #DDE0E6;padding-right: 20px">
     <div class="divRightTitleDiv">
-      <div class="divRightTitle"><span>|</span>选择模板</div>
+      <div class="divRightTitle" style="margin-top: 15px;margin-bottom: 10px">选择模板</div>
     </div>
     <div class="bottom">
       <div class="action">
-        <span class="name">选择模版</span>
-        <el-popover style="display: inline-block;margin-left: 15px;flex: 1"
+        <span class="name">选择模版：</span>
+        <el-popover style="display: inline-block;flex: 1"
                 ref="abnormalPopover"
-                placement="left"
+                placement="bottom-start"
                 width="545"
                 trigger="click"
                 @show="openCheckVisible = true"
@@ -25,6 +26,7 @@
         </el-popover>
       </div>
       <div class="actionInput">
+        <span class="name">已选模版：</span>
         <div class="sport-form sportTag">
           <el-tag
                   class="unusual-tag"
@@ -33,19 +35,18 @@
           >
             <span>{{ it.name }}</span>
             <img @click="delinterventionTplOne(index)"
-                 src="@/assets/images/healthPlan/closeTag.png"/>
+                 src="@/assets/images/healthPlan/closeTagBlue.png"/>
           </el-tag>
-          <p class="noneText" v-if="form.interventionTpl.length === 0"
-             style="margin-top: 5px;text-align: center">
+          <!--<p class="noneText" v-if="form.interventionTpl.length === 0">
             <img src="@/assets/images/noData.png"/>
             <span>暂未选择任何模板</span>
-          </p>
+          </p>-->
         </div>
       </div>
     </div>
     <div class="divRightTitleDiv">
-      <div class="divRightTitle"><span>|</span>
-        已选客户（<span style="color: #4991FD;margin-right: 0">{{tableData.length}}人</span>）</div>
+      <div class="divRightTitle" style="margin-top: -10px">
+        已选客户（<span style="margin-right: 0">{{tableData.length}}人</span>）</div>
     </div>
     <div class="follow-plan">
       <el-table :data="tableData" style="width: 100%" align="center">
@@ -59,14 +60,14 @@
             <span>{{ scope.row.clientName | getResult }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="age" label="年龄" width="60px">
-          <template slot-scope="scope">
-            <span>{{ scope.row.age | getResult }}</span>
-          </template>
-        </el-table-column>
         <el-table-column prop="gender" label="性别" width="60px">
           <template slot-scope="scope">
             <span>{{ scope.row.gender | getResultGender }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="age" label="年龄" width="60px">
+          <template slot-scope="scope">
+            <span>{{ scope.row.age | getResult }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="gridName" label="人员类别" show-overflow-tooltip>
@@ -74,7 +75,7 @@
             <span>{{ scope.row.gridName | getResult}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="workUnitName" label="工作单位" show-overflow-tooltip>
+        <el-table-column prop="workUnitName" label="单位" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.workUnitName | getResult }}</span>
           </template>
@@ -145,7 +146,7 @@ export default {
         reqBody,
       );
       const { data } = res.data;
-      const tableData = data.list || [];
+      const tableData = data.data || [];
       tableData.forEach((it) => {
         const t = it;
         /* t.planTime = `${new Date().getFullYear()}-${it.month}-${it.day} ${
@@ -227,20 +228,17 @@ export default {
 <style lang="scss" scoped>
   .bottom{
     margin-bottom: 30px;
-    margin-top: 20px;
+    margin-top: 15px;
     .action {
       height: 60px;
-      background: #4991FD;
       border-radius: 5px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-right: 10px;
       .name{
-        font-size: 16px;
-        color: white;
-        padding-left: 15px;
-        font-weight: bold;
+        font-size: 14px;
+        color: #333333;
+        padding-left: 10px;
       }
       a {
         color: #4991fd;
@@ -251,10 +249,12 @@ export default {
       }
       /deep/ .select-user-trigger {
         line-height: 37px;
+        input{
+          border:1px solid #DDE0E6!important;
+        }
         input, i {
           cursor: pointer;
           background-color: white!important;
-          border-color: white;
           color: #333333;
         }
         &.disabled {
@@ -269,10 +269,16 @@ export default {
     }
     .actionInput{
       display: flex;
-      padding: 20px 10px 28px 20px;
-      border: 1px solid #F4F4F6;
-      border-radius: 5px;
+      /*padding: 20px 10px 28px 20px;*/
+      /*border: 1px solid #F4F4F6;
+      border-radius: 5px;*/
       margin-top: 10px;
+      .name{
+        font-size: 14px;
+        color: #333333;
+        padding-left: 10px;
+        padding-top: 5px;
+      }
       .life-advice{
         color: #666666;
         width: 78px;
@@ -280,7 +286,7 @@ export default {
       }
       .sport-form {
         width: 100%;
-        min-height: 90px;
+        /*min-height: 90px;*/
         /*padding: 10px 20px 10px 20px;*/
         /* background: #F4F4F6;*/
         border-radius: 5px;
@@ -293,6 +299,7 @@ export default {
           color: #333333;
         }
         &.sportTag{
+          flex: 1 1 0;
           .noneText{
             img{
               position: relative;
@@ -304,33 +311,32 @@ export default {
               color: #97A6BD;
               font-size: 14px;
               margin-top: 10px;
-              text-align: center;
+              text-align: left;
             }
 
           }
           .unusual-tag {
-            margin-right: 22px;
-            height: 48px;
-            line-height: 45px;
-            background-color: white;
-            border-radius: 8px;
-            border-width: 2px;
-            padding: 0 40px 0 40px;
-            margin-bottom: 20px;
-            border-color: #97A6BD;
+            margin-right: 10px;
+            height: 32px;
+            line-height: 32px;
+            background-color: #eaedf6;
+            border-radius: 16px;
+            padding: 0 29px 0 15px;
+            margin-bottom: 10px;
             position: relative;
+            border: none;
           }
           img{
             width: auto;
             height: 16px;
             position: absolute;
-            right: 10px;
-            top: 14px;
+            right: 8px;
+            top: 8px;
             cursor: pointer;
           }
           span{
-            font-size: 14px;
-            color: #333333;
+            font-size: 12px;
+            color: #3154AC;
           }
         }
       }
@@ -340,7 +346,6 @@ export default {
     width: 100%;
     /*   flex: 1;
        width: 75%;*/
-    margin-top: 25px;
     .el-table{
       width: 99.99%!important;
     }

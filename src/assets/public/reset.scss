@@ -40,7 +40,7 @@
   .el-tabs__nav-wrap{
     &:after{
       height: 1px;
-      background-color: #F4F4F6;
+      background-color: #DDE0E6;
     }
   }
 }
@@ -276,8 +276,8 @@ body .el-table th.gutter{
     }
   }
   &.is-disabled .el-input__inner {
-    color: #999999;
-    background-color: #E7E7ED !important;
+    color: #B4BBC9;
+    background-color: #EEF1F5 !important;
   }
 }
 .is-error{
@@ -522,7 +522,18 @@ textarea:-ms-input-placeholder {
     }
   }
 }
-
+.el-button--primary:hover{
+  background: #24499D;
+}
+.el-tabs__item:hover{
+  color: #24499D;
+}
+.el-tabs__item.is-active{
+  color: #24499D;
+}
+.el-tabs__active-bar{
+  background: #24499D;
+}
 .el-pagination .el-pagination__rightwrapper {
   float: left !important;
 }

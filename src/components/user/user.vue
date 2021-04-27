@@ -90,6 +90,7 @@ export default {
     logout() {
       this.$api.loginInterface.logout().then(() => {
         localSave('HK_USER_INFO', '');
+        localSave('HK_ACCESS', '');
         window.location.href = '/#/login';
       });
     },

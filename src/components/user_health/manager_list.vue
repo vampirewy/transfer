@@ -1,13 +1,34 @@
 <template>
   <div class="abnormal-popoper">
-    <div class="query searchInputFormItem">
+    <!--<div class="query searchInputFormItem">
       <el-input v-model="params.keywords" placeholder="输入姓名搜索"></el-input>
-      <!--<el-button class="search-button" @click="search()">
+      &lt;!&ndash;<el-button class="search-button" @click="search()">
         <i class="el-icon-search"></i>
-      </el-button>-->
+      </el-button>&ndash;&gt;
       <span class="searchBtnImgSpan" @click="search(1)">
             <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
       </span>
+    </div>-->
+    <div class="divTop" style="margin: -15px 0 15px 0">
+      <div class="searchCondition">
+        <div class="searchLeft">
+          <div class="searchInputFormItem">
+            <el-input placeholder="输入姓名搜索" v-model="params.keywords">
+            </el-input>
+            <span class="searchBtnImgSpan" @click="search(1)">
+                  <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
+              </span>
+          </div>
+        </div>
+        <div class="searchRight">
+          <div class="buttones">
+            <div class="searchFor" @click="search(1)">
+              <img src="@/assets/images/common/topsearchblue.png" alt="">
+            </div>
+            <div class="resetAll" @click="reset">重置</div>
+          </div>
+        </div>
+      </div>
     </div>
     <el-table
       @selection-change="handleSelectionChange"
@@ -97,6 +118,7 @@ export default {
       this.$refs.multipleTable.clearSelection();
     },
     fetch() {
+      console.log(this.propsType);
       if (this.propsType === 'doctor') {
         this.$api.userFollowInterface
           .healthDoctorList({
@@ -105,15 +127,13 @@ export default {
             keywords: this.params.keywords,
             clientIds: this.clientIds,
           }).then(({ data }) => {
-            if (data.code === 200) {
-              // console.log(data.data);
-              this.params.total = data.data.total;
-              this.tableData = data.data.list;
-              this.tableData.forEach((val) => {
-                this.$set(this.map, val.id, val);
-              });
-              console.log(this.map);
-            }
+            console.log(data.data);
+            this.params.total = data.data.total;
+            this.tableData = data.data.data;
+            this.tableData.forEach((val) => {
+              this.$set(this.map, val.id, val);
+            });
+            console.log(this.map);
           });
       } else {
         this.$api.systemManageInterface
@@ -125,7 +145,7 @@ export default {
             if (data.code === 200) {
               // console.log(data.data);
               this.params.total = data.data.total;
-              this.tableData = data.data.list;
+              this.tableData = data.data.data;
               this.tableData.forEach((val) => {
                 this.$set(this.map, val.id, val);
               });
@@ -138,7 +158,11 @@ export default {
       this.params.pageNo = current;
       this.fetch();
     },
-
+    reset() {
+      this.params.keywords = '';
+      this.params.pageNo = 1;
+      this.fetch();
+    },
     handleSelectionChange(val) {
       this.multipleSelection = val;
       this.$emit('change', [...this.multipleSelection]);

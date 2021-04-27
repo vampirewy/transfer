@@ -102,7 +102,7 @@
                <div>
                 <span>体检日期：</span>
                 <el-date-picker
-                  v-model="formData.physicalstartTime"
+                  v-model="formData.startTime"
                   type="date"
                   :max-date="formData.endTime"
                   placeholder="选择开始日期"
@@ -111,7 +111,7 @@
                 </el-date-picker>
                 <span class="timing">-</span>
                 <el-date-picker
-                  v-model="formData.physicalendTime"
+                  v-model="formData.endTime"
                   type="date"
                   :min-date="formData.startTime"
                   placeholder="选择结束日期"
@@ -258,7 +258,7 @@
               <el-table-column type="selection" align="center"></el-table-column>
               <el-table-column
                 label="客户编号"
-                prop="clientName"
+                prop="inspectionNo"
                 align="center"
                 show-overflow-tooltip>
                 <template slot-scope="scope">
@@ -271,7 +271,7 @@
               <el-table-column
                 label="姓名"
                 align="center"
-                prop="workUnitName"
+                prop="clientName"
                 show-overflow-tooltip>
               </el-table-column>
                 <el-table-column label="性别" prop="gender" align="center">
@@ -288,19 +288,19 @@
                <el-table-column
                 label="检查单号"
                 align="center"
-                prop="workUnitName"
+                prop="clientId"
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
                 label="检查机构"
                 align="center"
-                prop="inDate"
+                prop="inspectionOrg"
                 show-overflow-tooltip>
               </el-table-column>
             <el-table-column
                 label="检查日期"
                 align="center"
-                prop="inDate"
+                prop="inspectionDate"
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
@@ -324,15 +324,16 @@
               </el-table-column>
               <el-table-column label="操作" prop="id" width="120" align="center">
                 <template slot-scope="scope">
+                  <el-button type="text" size="small" @click="edit(scope.row)" v-if="
+                  getAccess('medical_history_edit')
+                  " style="color:#3154AC">编辑</el-button>
+                  <span style="color:#DDE0E6">|</span>
                   <el-button
                     type="text"
                     size="small"
                     @click="detail(scope.row)"
                     v-if="getAccess('medical_history_view')"
-                  >查看</el-button>
-                  <el-button type="text" size="small" @click="edit(scope.row)" v-if="
-                  getAccess('medical_history_edit')
-                  ">编辑</el-button>
+                   style="color:#3154AC">查看</el-button>
                   <!-- <el-button type="text" size="small" @click="remove(scope.row.id)" v-if="
                   getAccess('medical_history_delete')
                   ">删除</el-button> -->
@@ -384,11 +385,7 @@ export default {
       total: 0,
       tableData: [],
       formData: {
-        keyWord: '',
-        workUnitName: '',
-        clientGrid: '',
-        department: '',
-        hospital: '',
+        keywords: '',
         startTime: '',
         endTime: '',
         pageNo: 1,
@@ -507,12 +504,12 @@ export default {
         return false;
       }
       this.$api.medicalHistoryInterface
-        .medicalHistoryPageList({ ...this.formData })
+        .singleinspectionPageList({ ...this.formData })
         .then((res) => {
           const { data } = res;
-          if (data.code === 200) {
+          if (data) {
             const result = data.data || {};
-            this.tableData = result.list || [];
+            this.tableData = result.data || [];
             this.total = result.total || 0;
           }
         });
@@ -549,6 +546,12 @@ export default {
     add() {
       this.viewIndex = 2;
       this.currentId = '';
+      this.$router.push({
+        path: '/inspection_index_add',
+        query: {
+          id: '',
+        },
+      });
     },
     detail(data) {
       this.viewIndex = 4;
@@ -566,8 +569,15 @@ export default {
       this.edit(this.multipleSelection[0]);
     },
     edit(data) {
+      console.log(data);
       this.viewIndex = 3;
       this.currentId = data.id;
+      this.$router.push({
+        path: '/inspection_index_add',
+        query: {
+          id: data.id,
+        },
+      });
     },
     handleDelete() {
       if (this.multipleSelection.length === 0) {
@@ -578,6 +588,7 @@ export default {
       this.remove(this.multipleSelection.map(item => item.id), true);
     },
     remove(params, batch = false) {
+      console.log(params, batch, '删除');
       this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认${batch ? '批量' : ''}删除！</span></div>`, '删除提示', {
         dangerouslyUseHTMLString: true,
         confirmButtonText: '确定',
@@ -587,13 +598,14 @@ export default {
       }).then(() => {
         let p;
         if (batch) {
-          p = this.$api.medicalHistoryInterface.batchDeleteMedicalInfo(params);
+          p = this.$api.medicalHistoryInterface.singleinspectionDelete(params);
         } else {
-          p = this.$api.medicalHistoryInterface.deleteMedicalInfo(params);
+          p = this.$api.medicalHistoryInterface.singleinspectionDelete(params);
+          // p = this.$api.medicalHistoryInterface.deleteMedicalInfo(params);
         }
         p.then((res) => {
           const { data } = res;
-          if (data.code === 200) {
+          if (data) {
             this.$message.success('操作成功');
             this.queryList();
           }

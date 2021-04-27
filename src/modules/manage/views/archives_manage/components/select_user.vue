@@ -75,9 +75,10 @@ export default {
         pageNo: this.currentPage,
         pageSize: this.pageSize,
       });
+      console.log(res.data);
       const { data } = res.data;
       if (data) {
-        this.tableData = data.list || [];
+        this.tableData = data.data || [];
         this.total = data.total;
       }
     },

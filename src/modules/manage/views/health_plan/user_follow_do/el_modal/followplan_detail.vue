@@ -1,8 +1,10 @@
 <template>
   <div class="create-edit">
     <el-row>
-      <el-col :span="10">
-        <div class="divRightTitle"><span>|</span>执行-计划信息</div>
+      <el-col :span="12" style="border-right: 1px dashed #DDE0E6;">
+        <div class="divRightTitleDiv">
+          <div class="divRightTitle" style="margin-top: 5px">执行-随访计划信息</div>
+        </div>
         <div class="ge">
           <el-form :inline="false" :model="formGet"
                    label-width="85px"
@@ -18,7 +20,12 @@
                   <span>{{formGet.planWayName | getResult}}</span>
                 </el-form-item>
               </el-col>
-              <el-col :span="24">
+              <el-col :span="12">
+                <el-form-item label="随访医生：">
+                  <span>{{formGet.planUserName | getResult}}</span>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
                 <el-form-item label="随访标题：">
                   <span>{{formGet.planTitle | getResult}}</span>
                 </el-form-item>
@@ -32,12 +39,14 @@
               </el-col>
             </el-row>
           </el-form>
-          <div class="divRightTitle"><span>|</span>操作</div>
+          <div class="divRightTitleDiv">
+            <div class="divRightTitle" style="margin-top: 5px">执行-随访计划信息</div>
+          </div>
           <el-form :inline="false" :model="form"
                    label-width="85px"
                    :rules="rules"
                    ref="form"
-                   class="form-inline inputCommon">
+                   class="form-inline inputCommon baseInfo" >
             <el-row>
               <el-col :span="12">
                 <el-form-item label="执行时间：" :prop="questionType === 1 ? 'planDate' : ''">
@@ -107,12 +116,32 @@
               </el-col>
             </el-row>
             <el-row>
+              <el-col :span="12">
+                <el-form-item label="满意度：" prop="manyi">
+                  <el-select v-model="form.manyi" placeholder="请选择">
+                    <el-option :label="it.name" :value="it.paramValue" :key="it.paramValue"
+                               v-for="it in manyiList">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="依从度：" prop="yicong">
+                  <el-select v-model="form.yicong" placeholder="请选择">
+                    <el-option :label="it.name" :value="it.paramValue" :key="it.paramValue"
+                               v-for="it in yicongList">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
               <el-col :span="24">
                 <el-form-item label="随访结果：">
                   <el-input
                           type="textarea"
                           v-model="form.planContent"
-                          :rows="5"
+                          :rows="4"
                           :disabled="questionType === 3"
                           :placeholder="questionType === 1 ? '请输入' : ''"
                           :maxlength="400"
@@ -122,8 +151,8 @@
               </el-col>
             </el-row>
           </el-form>
-          <div class="divRightTitle" v-if="form.templateQuestionId">
-            <span>|</span>随访问卷
+          <div class="divRightTitleDiv" v-if="form.templateQuestionId">
+            <div class="divRightTitle" style="margin-top: 5px">随访问卷</div>
           </div>
           <el-form :inline="false" :model="form"
                    label-width="85px"
@@ -140,28 +169,29 @@
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="是否填写：">
-                  <el-select v-model="form.checkInput" placeholder="请选择">
+                <el-form-item label="是否填写：" class="switch">
+                  <!--<el-select v-model="form.checkInput" placeholder="请选择">
                     <el-option label="是" :value="1"></el-option>
                     <el-option label="否" :value="0"></el-option>
-                  </el-select>
+                  </el-select>-->
+                  <el-switch
+                          v-model="form.checkInput "
+                          :active-value="1"
+                          :inactive-value="0"
+                          active-color="#13ce66"
+                  >
+                  </el-switch>
                 </el-form-item>
               </el-col>
             </el-row>
           </el-form>
-          <div class="footer">
-            <el-button size="small" class="cancelBtn" @click="cancel">返回</el-button>
-            <el-button type="primary" v-if="questionType === 1"
-                       class="sureBtn" size="small" @click="save">
-              保存
-            </el-button>
-          </div>
         </div>
       </el-col>
-      <el-col :span="14">
-        <div class="divRightTitle" style="margin-bottom: 30px">
-          <span>|</span>填写随访问卷</div>
-        <div v-show="form.templateQuestionId">
+      <el-col :span="12">
+        <div class="divRightTitleDiv" style="margin-left: 20px">
+          <div class="divRightTitle"  style="margin-top: 5px">填写健康问卷</div>
+        </div>
+        <div v-show="form.templateQuestionId" style="margin-left: 20px">
           <question-edit ref="questionEdit"
                          :propsType="questionType"
                          :propsQuestionSubjectist="questionSubjectist"
@@ -175,6 +205,13 @@
         </div>
       </el-col>
     </el-row>
+    <div class="footer">
+      <el-button size="small" class="cancelBtn" @click="cancel">返回</el-button>
+      <el-button type="primary" v-if="questionType === 1"
+                 class="sureBtn" size="small" @click="save">
+        保存
+      </el-button>
+    </div>
   </div>
 </template>
 
@@ -211,6 +248,8 @@ export default {
         planDoctorName: '',
         planTitle: '',
         planContent: '',
+        manyi: '',
+        yicong: '',
         startTime: '', // 开始时间
         checkInput: 1,
         templateQuestionId: '', // 问卷id
@@ -218,10 +257,14 @@ export default {
         batchNo: '', // 问卷批次号
       },
       planWayList: [],
+      yicongList: [],
+      manyiList: [],
       rules: {
         planDate: [{ required: true, message: '请选择执行时间' }],
         planWay: [{ required: true, message: '请选择随访形式' }],
         planDoctorName: [{ required: true, message: '请选择干预人' }],
+        manyi: [{ required: true, message: '请选择满意度' }],
+        yicong: [{ required: true, message: '请选择依从度' }],
       },
     };
   },
@@ -232,6 +275,8 @@ export default {
   methods: {
     onLoad() {
       this.getPlanWayList(); // 随访方式
+      this.getSystemParamByYicong('HM012');
+      this.getSystemParamByCodeManyi('HM013');
       this.getDetail();
     },
     /**
@@ -246,14 +291,15 @@ export default {
       this.checkClintIds = [data.clientId];
       this.formGet.planDate = data.planDate;
       this.formGet.planWayName = data.planWayName;
+      this.formGet.planUserName = data.planUserName;
       this.formGet.planTitle = data.planTitle;
       this.formGet.planContent = data.planContent;
       if (this.questionType === 1) {
         this.form.planDate = data.planDate ? data.planDate.split(' ')[0] : '';
         this.form.planWay = data.planWay;
         this.form.planTitle = data.planTitle;
-        this.form.planDoctor = this.$store.state.user.userId;
-        this.form.planDoctorName = this.$store.state.user.userName;
+        this.form.planDoctor = 1; // this.$store.state.user.userId;
+        this.form.planDoctorName = 'csx'; // this.$store.state.user.userName;
       } else if (this.questionType === 3) {
         this.form.planDate = data.executeTime ? data.executeTime.split(' ')[0] : '';
         this.form.planWayName = data.executePlanWayName;
@@ -285,6 +331,16 @@ export default {
       });
       // list.unshift({ name: '全部', value: '' });
       this.planWayList = list;
+    },
+    async getSystemParamByYicong(code) {
+      const res = await this.$api.userManagerInterface.getSystemParamByCode(code);
+      const { data } = res.data;
+      this.yicongList = data;
+    },
+    async getSystemParamByCodeManyi(code) {
+      const res = await this.$api.userManagerInterface.getSystemParamByCode(code);
+      const { data } = res.data;
+      this.manyiList = data;
     },
     // 关闭弹窗选择列表 push数组
     handlePopoperClose() {
@@ -338,6 +394,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .switch{
+    /deep/ .el-form-item__content{
+      margin-top: 10px;
+    }
+  }
+  .headerPlan{
+    margin-bottom: 20px;
+    /deep/ .el-form-item{
+      margin-bottom: 15px;
+      .el-form-item__label{
+        line-height: 30px;
+      }
+      .el-form-item__content{
+        line-height: 30px;
+      }
+    }
+  }
 .create-edit /deep/ {
   .noneText{
     height: 100%;
@@ -358,32 +431,7 @@ export default {
     }
   }
   .ge{
-    border-right: 1px solid #F4F4F6;
     padding-right: 20px;
-    margin-right: 20px;
-  }
-  .divRightTitle{
-    font-size: 18px;
-    color: #333333;
-    font-weight: bold;
-    margin-bottom: 20px;
-    span{
-      color: #4991FD;
-      font-size: 18px;
-      margin-right: 9px;
-    }
-  }
-  .headerPlan{
-    margin-bottom: 20px;
-    /deep/ .el-form-item{
-      margin-bottom: 5px;
-      .el-form-item__label{
-        line-height: 30px;
-      }
-      .el-form-item__content{
-        line-height: 30px;
-      }
-    }
   }
   .el-form-item__content{
     display: flex;
@@ -406,7 +454,99 @@ export default {
     text-align: right;
   }
   .footer {
-    text-align: right;
+    text-align: center;
+    margin-top: 20px;
+  }
+  .el-radio-button + .el-radio-button {
+    margin-right: 20px;
+    margin-bottom: 20px;
+  }
+  .el-radio-button__inner {
+    background-color: #FFFFFF;
+    color: #333333;
+    border: 1px solid #B4BBC9;
+  }
+  /deep/ .el-radio-button__orig-radio:disabled + .el-radio-button__inner{
+    border-left: 1px solid #f5f5f5!important;
+  }
+  .el-radio-button {
+    .el-radio-button__inner {
+      min-width: 100px;
+      height: 48px;
+      line-height: 21px;
+      border-radius: 24px;
+      box-shadow: none;
+    }
+    &.is-active .el-radio-button__inner{
+      color: #3154AC;
+      background: rgba(49, 84, 172, 0.1);
+      border-radius: 24px;
+      border: 1px solid rgba(49, 84, 172, 0.3)!important;
+      box-shadow: none!important;
+    }
+    &:first-child .el-radio-button__inner{
+      border-left: 1px solid #B4BBC9;
+      margin-right: 20px;
+    }
+    &.is-disabled .el-radio-button__inner{
+      border: 1px solid #f5f5f5;
+    }
+  }
+  .containerOtherCheckBox{
+    .el-form-item{
+      margin-bottom: 0;
+    }
+    .el-radio-button {
+      .el-radio-button__inner {
+        min-width: 100px;
+      }
+      &:first-child .el-radio-button__inner{
+        margin-right: 30px;
+      }
+      &:last-child .el-radio-button__inner{
+        margin-right: 0;
+      }
+    }
+    .el-radio-button + .el-radio-button {
+      margin-right: 30px;
+    }
+  }
+  .el-checkbox-button + .el-checkbox-button {
+    margin-right: 20px;
+    margin-bottom: 20px;
+  }
+  .el-checkbox-button__inner{
+    background-color: #FFFFFF;
+    color: #333333;
+    border: 1px solid #B4BBC9;
+  }
+  /deep/ .el-checkbox-button.is-disabled:first-child .el-checkbox-button__inner{
+    border-left-color: #f5f5f5!important;
+  }
+  /deep/ .el-checkbox-button.is-focus .el-checkbox-button__inner{
+    border-color: #97A6BD;
+  }
+  .el-checkbox-button {
+    .el-checkbox-button__inner {
+      min-width: 100px;
+      height: 48px;
+      line-height: 21px;
+      border-radius: 24px;
+    }
+    &.is-checked .el-checkbox-button__inner{
+      color: #3154AC;
+      background: rgba(49, 84, 172, 0.1);
+      border-radius: 24px;
+      border: 1px solid rgba(49, 84, 172, 0.3)!important;
+      box-shadow: none!important;
+    }
+    &:first-child .el-checkbox-button__inner{
+      border-left: 1px solid #B4BBC9;
+      margin-right: 20px;
+    }
+    &.is-disabled .el-checkbox-button__inner{
+      border: 1px solid #f5f5f5;
+    }
   }
 }
 </style>

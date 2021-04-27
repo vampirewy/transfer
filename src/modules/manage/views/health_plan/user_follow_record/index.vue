@@ -1,88 +1,124 @@
 <template>
-    <query-page @reset="onReset" @search="onSearch">
-      <template v-slot:left>
-        <search>
+  <div>
+    <div class="divTop">
+      <div class="divTitle">
+        <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
+        随访记录
+      </div>
+      <div class="searchCondition">
+        <div class="searchLeft">
           <div class="searchInputFormItem">
-            <el-input placeholder="姓名/手机号/企业单位" v-model="form.keywords">
-              <!-- <el-button slot="append" icon="el-icon-search" @click="onSearch"></el-button>-->
+            <el-input placeholder="姓名/编号" v-model="form.keywords">
             </el-input>
-            <span class="searchBtnImgSpan" @click="onSearch">
-            <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
-          </span>
+            <span class="searchBtnImgSpan" @click="onSearch(1)">
+                  <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
+              </span>
           </div>
-        </search>
-        <query-filter>
-          <el-select placeholder="性别" v-model="form.gender" clearable>
-            <el-option label="男" :value="1"></el-option>
-            <el-option label="女" :value="2"></el-option>
-          </el-select>
-          <!--<el-input placeholder="企业单位" v-model="form.workUnitName"></el-input>-->
-          <el-select placeholder="人员类别" v-model="form.gridId" clearable>
-            <el-option :label="item.gridName" :value="item.id" v-for="item in gridList"
-                       :key="item.id"></el-option>
-          </el-select>
-          <el-date-picker
-                  v-model="form.startTime"
-                  type="date"
-                  value-format="yyyy-MM-dd"
-                  :picker-options="pickerStartTime"
-                  placeholder="选择开始日期"
-                  style="width: 180px"
+          <div>
+            <span>客户性别：</span>
+            <el-select
+                    v-model="form.gender"
+                    placeholder="请选择"
+                    style="width: 140px"
+                    clearable
+            >
+              <el-option label="男" value="1" key="1"></el-option>
+              <el-option label="女" value="2" key="2"></el-option>
+            </el-select>
+          </div>
+          <div>
+            <span>人员类别：</span>
+            <el-select
+                    v-model="form.gridId"
+                    placeholder="请选择"
+                    style="width: 140px"
+                    clearable
+            >
+              <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+                         :key="index"></el-option>
+            </el-select>
+          </div>
+          <div>
+            <span>随访形式：</span>
+            <el-select
+                    v-model="form.planWay"
+                    placeholder="请选择"
+                    style="width: 140px"
+                    clearable
+            >
+              <el-option :label="item.name" :value="item.id" v-for="item in planWayList"
+                         :key="item.id"></el-option>
+            </el-select>
+          </div>
+        </div>
+        <div class="searchRight">
+          <div class="buttones">
+            <div class="searchFor" @click="onSearch(1)">
+              <img src="@/assets/images/common/topsearchblue.png" alt="">
+            </div>
+            <div class="resetAll" @click="onReset">重置</div>
+            <div class="more" v-if="isTrue"  @click="upMore">
+              <span>></span>
+              展开更多</div>
+            <div class="more noMore" v-else @click="upMore">
+              <span>></span>收起筛选</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-if="!isTrue" class="searchCondition" style="width:80%;">
+      <div class="searchLeft" style="padding-left:5px;">
+        <div>
+          <span>依从度：</span>
+          <el-select
+                  v-model="form.yicong"
+                  placeholder="请选择"
+                  style="width: 140px"
+                  clearable
           >
-          </el-date-picker>
-          <el-date-picker
-                  v-model="form.endTime"
-                  type="date"
-                  value-format="yyyy-MM-dd"
-                  :picker-options="pickerEndTime"
-                  placeholder="选择结束日期"
-                  style="width: 180px"
-          >
-          </el-date-picker>
-          <el-select placeholder="随访形式" v-model="form.planWay" clearable>
-            <el-option :label="item.name" :value="item.id" v-for="item in planWayList"
-                       :key="item.id"></el-option>
+            <el-option :label="item.name" :value="item.paramValue" v-for="item in yicongList"
+                       :key="item.paramValue"></el-option>
           </el-select>
-          <el-popover
-                  ref="userPopover"
-                  placement="top-start"
-                  width="545"
-                  trigger="click"
-                  @show="planuserModalVisible = true"
-                  @hide="planuserModalVisible = false"
+        </div>
+        <div>
+          <span>满意度：</span>
+          <el-select
+                  v-model="form.manyi"
+                  placeholder="请选择"
+                  style="width: 140px"
+                  clearable
           >
-            <manager-list v-if="planuserModalVisible"
-                          @change="handlePlanuserClose"></manager-list>
-            <el-input class="select-user-trigger" slot="reference"
-                      :disabled="form.planUserId !== '' ? false : true"
-                      v-model="form.planUserName" placeholder="干预人">
-              <i :class="`el-icon-arrow-${planuserModalVisible ? 'up' : 'down'}`"
-                 slot="suffix"></i>
-            </el-input>
-          </el-popover>
-        </query-filter>
-      </template>
-      <template v-slot:right>
+            <el-option :label="item.name" :value="item.paramValue" v-for="item in manyiList"
+                       :key="item.paramValue"></el-option>
+          </el-select>
+        </div>
+      </div>
+    </div>
+    <div class="topbottomborder"></div>
+    <div class="divRightTitleDiv">
+      <div>
+        <el-button
+                size="small"
+                style="margin: 16px 0"
+                class="btn-new btnDel"
+                @click="handleSomeRemove"
+                v-if="getAccess('visited_record_batch_delete')"
+        ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
+      </div>
+    </div>
         <div class="user-follow">
-          <div class="tableTopDoDiv">
-            <div class="divRightTitleDiv">
-              <div class="divRightTitle"><span>|</span>随访记录</div>
-            </div>
-            <div class="table-operate-buttons">
-              <operate-button
-                      type="delete"
-                      @click="handleSomeRemove"
-                      v-if="getAccess('visited_record_batch_delete')
-              "></operate-button>
-            </div>
-          </div>
           <el-table :data="table.list" style="width: 100%" align="center" ref="table"
                     @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="40"></el-table-column>
+            <el-table-column prop="clientNo" label="客户编号" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{ scope.row.clientNo | getResult }}</span>
+              </template>
+            </el-table-column>
             <el-table-column
                     prop="clientName"
                     label="姓名"
-                    width="100"
+                    width="90"
                     show-overflow-tooltip
             >
               <template slot-scope="scope">
@@ -92,14 +128,14 @@
              </span>
               </template>
             </el-table-column>
-            <el-table-column prop="clientNo" label="客户编号" show-overflow-tooltip>
-              <template slot-scope="scope">
-          <span>{{ scope.row.clientNo | getResult }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column prop="gender" label="性别" width="60px">
+            <el-table-column prop="gender" label="性别" width="55px">
               <template slot-scope="scope">
                 <span>{{scope.row.gender | getResultGender}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="age" label="年龄" width="55px">
+              <template slot-scope="scope">
+                <span>{{scope.row.age | getResult}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="gridName" label="人员类别" show-overflow-tooltip>
@@ -107,19 +143,14 @@
           <span>{{ scope.row.gridName | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="executeTime" label="执行时间" width="120px" show-overflow-tooltip>
+            <el-table-column prop="executePlanUserName" label="干预人" show-overflow-tooltip>
               <template slot-scope="scope">
-                <span>{{ scope.row.executeTime | getResultDate }}</span>
+                <span>{{ scope.row.executePlanUserName | getResult}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="executePlanWayName" label="随访形式" show-overflow-tooltip>
               <template slot-scope="scope">
-          <span>{{ scope.row.executePlanWayName | getResult}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column prop="executePlanUserName" label="干预人" show-overflow-tooltip>
-              <template slot-scope="scope">
-                <span>{{ scope.row.executePlanUserName | getResult}}</span>
+                <span>{{ scope.row.executePlanWayName | getResult}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="planUserName" label="随访标题" show-overflow-tooltip>
@@ -127,17 +158,32 @@
           <span>{{ scope.row.executePlanTitle | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="planUserName" label="随访结果" show-overflow-tooltip>
+           <!-- <el-table-column prop="planUserName" label="随访结果" show-overflow-tooltip>
               <template slot-scope="scope">
           <span>{{ scope.row.executePlanContent | getResult}}</span>
               </template>
+            </el-table-column>-->
+            <el-table-column prop="executeTime" label="执行日期" width="100px" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{ scope.row.executeTime | getResultDate }}</span>
+              </template>
             </el-table-column>
-            <el-table-column prop="templateQuestionName" label="随访问卷" show-overflow-tooltip>
+            <!--<el-table-column prop="templateQuestionName" label="随访问卷" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{ scope.row.templateQuestionName | getResult}}</span>
+              </template>
+            </el-table-column>-->
+            <el-table-column prop="templateQuestionName" label="*依从度" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>{{ scope.row.templateQuestionName | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column label="操作" width="110">
+            <el-table-column prop="templateQuestionName" label="*满意度" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{ scope.row.templateQuestionName | getResult}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="100">
               <template slot-scope="scope">
                 <el-button type="text" size="small"
                            v-if="getAccess('visited_record_view')"
@@ -156,8 +202,7 @@
           >
           </el-pagination>
         </div>
-      </template>
-    </query-page>
+  </div>
 </template>
 
 <script>
@@ -179,6 +224,7 @@ export default {
   },
   data() {
     return {
+      isTrue: true,
       form: {
         keywords: '', // 关键字
         gender: '', // 性别
@@ -191,6 +237,8 @@ export default {
         endTime: '',
         executeState: '1', // 状态
         gridId: '', // 客户类型
+        yicong: '',
+        manyi: '',
         genderList,
         executeStateList,
       },
@@ -198,6 +246,8 @@ export default {
       planuserModalVisible: false, // 干预人人列表弹窗
       gridList: [], // 人员类别下拉框
       planWayList: [], // 随访形式下拉框
+      yicongList: [],
+      manyiList: [],
       table: {
         list: [],
         totalCount: 0,
@@ -223,7 +273,7 @@ export default {
       },
     };
   },
-  mounted() {
+  activated() {
     this.onLoad();
   },
   methods: {
@@ -231,10 +281,15 @@ export default {
       // table组件选中事件,
       this.multipleSelection = val;
     },
+    upMore() {
+      this.isTrue = !this.isTrue;
+    },
     onLoad() {
       this.getList();
       this.getPlanWayList();
       this.getGridList(); // 获取人员列类别
+      this.getSystemParamByYicong('HM012');
+      this.getSystemParamByCodeManyi('HM013');
     },
     // 关闭干预人列表
     handlePlanuserClose(data) {
@@ -267,7 +322,7 @@ export default {
       );
       const { data } = res.data;
       if (data) {
-        this.table.list = data.list || [];
+        this.table.list = data.data || [];
         this.table.totalCount = data.total;
       }
     },
@@ -282,7 +337,6 @@ export default {
         const { id, name } = it;
         return { id, name };
       });
-      // list.unshift({ name: '全部', value: '' });
       this.planWayList = list;
     },
     /**
@@ -292,12 +346,17 @@ export default {
     async getGridList() {
       const res = await this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
       const { data } = res.data;
-      /* const list = data.map((it) => {
-         const { id, name } = it;
-         return { id, name };
-       }); */
-      // list.unshift({ name: '全部', value: '' });
-      this.gridList = data.list;
+      this.gridList = data.data;
+    },
+    async getSystemParamByYicong(code) {
+      const res = await this.$api.userManagerInterface.getSystemParamByCode(code);
+      const { data } = res.data;
+      this.yicongList = data;
+    },
+    async getSystemParamByCodeManyi(code) {
+      const res = await this.$api.userManagerInterface.getSystemParamByCode(code);
+      const { data } = res.data;
+      this.manyiList = data;
     },
     /**
      * 批量删除

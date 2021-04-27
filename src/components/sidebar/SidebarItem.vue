@@ -3,15 +3,15 @@
     <template v-if="hasOneShowingChild(item.roleMenuList,item) &&
     (!onlyOneChild.roleMenuList || onlyOneChild.noShowingChildren)">
       <!--<app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.name)">-->
-        <!--<el-menu-item :index="resolvePath(onlyOneChild.route)"
+        <el-menu-item :index="resolvePath(onlyOneChild.route)"
                       :class="{'submenu-title-noDropdown':!isNest}"
                       @click="turnToPage(item.route)">
-          &lt;!&ndash;<item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
-                :title="onlyOneChild.meta.title" />&ndash;&gt;
+          <!--<item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
+                :title="onlyOneChild.meta.title" />-->
           <img v-if="!onlyOneChild.noShowingChildren || item.menuType ===1"
                src="@/assets/images/body/sideBarImg.png"/>
-          &lt;!&ndash;{{onlyOneChild.meta.title}}&ndash;&gt;{{onlyOneChild.name}}
-        </el-menu-item>-->
+          <!--{{onlyOneChild.meta.title}}-->{{onlyOneChild.name}}
+        </el-menu-item>
       <!--</app-link>-->
     </template>
 
@@ -146,7 +146,15 @@ export default {
       background-color: #24499D!important;
       opacity: 1!important;
       &:before{
+        width: 8px!important;
+        // background: url("../../assets/images/body/chooseSidebarIcon.png") !important;
+        // background-repeat: no-repeat;
+        // background-size: 100% 100%;
+        content: url("../../assets/images/body/chooseSidebarIcon.png")!important;
+        right: 22px;
+        left: auto!important;
         background-color: rgba(255,255,255,0)!important;
+        top: 13%;
       }
     }
   }
@@ -186,6 +194,9 @@ export default {
         .el-menu-item{
           background-color: #274EA7!important;
           &.is-active{
+            background-color: #24499D!important;
+          }
+          &:hover{
             background-color: #24499D!important;
           }
         }

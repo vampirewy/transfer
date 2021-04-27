@@ -50,7 +50,7 @@
         <div class="searchInputFormItem">
           <el-input placeholder="姓名/编号/单位" v-model="formData.keyWord">
           </el-input>
-          <span class="searchBtnImgSpan" @click="search">
+          <span class="searchBtnImgSpan" @click="search(1)">
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
               </span>
         </div>
@@ -60,6 +60,7 @@
                   v-model="formData.gender"
                   placeholder="请选择"
                   style="width: 140px"
+                  clearable
           >
             <el-option label="男" value="1" key="1"></el-option>
             <el-option label="女" value="2" key="2"></el-option>
@@ -68,9 +69,10 @@
         <div>
           <span>人员类别：</span>
           <el-select
-                  v-model="formData.gridId"
+                  v-model="formData.clientGrid"
                   placeholder="请选择"
                   style="width: 140px"
+                  clearable
           >
             <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
                        :key="index"></el-option>
@@ -79,18 +81,18 @@
         <div>
           <span>生活方式：</span>
           <el-select
-                  v-model="formData.gridId"
+                  v-model="formData.lifeStyleLv"
                   placeholder="请选择"
                   style="width: 140px"
           >
-            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
-                       :key="index"></el-option>
+            <el-option :label="item.name" :value="item.paramValue"
+                       v-for="(item, index) in lifeStyleList" :key="index"></el-option>
           </el-select>
         </div>
       </div>
       <div class="searchRight">
         <div class="buttones">
-          <div class="searchFor" @click="search">
+          <div class="searchFor" @click="search(1)">
             <img src="@/assets/images/common/topsearchblue.png" alt="">
           </div>
           <div class="resetAll" @click="reset">重置</div>
@@ -108,12 +110,13 @@
         <div>
           <span>问卷来源：</span>
           <el-select
-                  v-model="formData.gridId"
+                  v-model="formData.source"
                   placeholder="请选择"
                   style="width: 140px"
+                  clearable
           >
-            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
-                       :key="index"></el-option>
+            <el-option :label="item.name" :value="item.paramValue"
+                       v-for="(item, index) in questionFromList" :key="index"></el-option>
           </el-select>
         </div>
         <div>
@@ -121,18 +124,22 @@
           <el-date-picker
                   v-model="formData.startTime"
                   type="date"
+                  value-format="yyyy-MM-dd"
                   :max-date="formData.endTime"
                   placeholder="选择开始日期"
                   style="width: 140px"
+                  clearable
           >
           </el-date-picker>
           <span class="timing">-</span>
           <el-date-picker
                   v-model="formData.endTime"
                   type="date"
+                  value-format="yyyy-MM-dd"
                   :min-date="formData.startTime"
                   placeholder="选择结束日期"
                   style="width: 140px"
+                  clearable
           >
           </el-date-picker>
         </div>
@@ -158,7 +165,7 @@
       </div>
     </div>
       <div class="user-follow">
-        <div class="tableTopDoDiv">
+        <!--<div class="tableTopDoDiv">
           <div class="table-operate-buttons">
             <el-dropdown @command="handleAddCheck">
               <operate-button
@@ -172,7 +179,7 @@
               </el-dropdown-menu>
             </el-dropdown>
           </div>
-        </div>
+        </div>-->
       <el-table style="width: 100%" :data="dataSource" align="center"
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="40"></el-table-column>
@@ -199,29 +206,29 @@
             <span>{{ scope.row.age | getResult}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="gridName" label="人员类别" show-overflow-tooltip>
+        <el-table-column prop="clientGridName" label="人员类别" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.clientGridName | getResult}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="gridName" label="生活方式" show-overflow-tooltip>
+        <el-table-column prop="lifeStyleLvName" label="生活方式" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{ scope.row.clientGridName | getResult}}</span>
+            <span>{{ scope.row.lifeStyleLvName | getResult}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="gridName" label="单位" show-overflow-tooltip>
+        <el-table-column prop="workUnitName" label="单位" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{ scope.row.clientGridName | getResult}}</span>
+            <span>{{ scope.row.workUnitName | getResult}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="填写日期" prop="createTime" show-overflow-tooltip>
+        <el-table-column label="填写日期" prop="questionDate" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{ scope.row.createTime | getResultDate}}</span>
+            <span>{{ scope.row.questionDate | getResultDate}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="问卷来源" prop="questionType" show-overflow-tooltip>
+        <el-table-column label="问卷来源" prop="sourceName" show-overflow-tooltip>
           <template slot-scope="scope">
-            {{ options[scope.row.questionType] | getResult}}
+            {{ scope.row.sourceName | getResult}}
           </template>
         </el-table-column>
         <el-table-column prop="gender" label="份数" width="60px">
@@ -287,7 +294,7 @@ import QueryPage from '~/src/components/query_page/index.vue';
 import Search from '~/src/components/query_page/search.vue';
 import QueryFilter from '~/src/components/query_page/query_filter.vue';
 import OperateButton from '~/src/components/query_page/operate_button.vue';
-import * as dayjs from 'dayjs';
+// import * as dayjs from 'dayjs';
 import report from './components/question_report.vue';
 import deleteIcon from '~/src/assets/images/message-box-delete@2x.png';
 
@@ -306,14 +313,17 @@ export default {
       total: 0,
       dataSource: [],
       gridList: [],
+      lifeStyleList: [], // 生活方式
+      questionFromList: [], // 问卷来源
       formData: {
-        range: [],
         keyWord: '',
         gender: '',
-        gridId: '',
+        clientGrid: '',
+        lifeStyleLv: '',
+        source: '',
         startTime: undefined,
         endTime: undefined,
-        questionType: '',
+        questionType: 1,
       },
       visible: false,
       current: {},
@@ -342,7 +352,10 @@ export default {
       },
     };
   },
-  mounted() {
+  activated() {
+    this.getGridList();
+    this.getQuestionFromList();
+    this.getLifeStyleList();
     if (localStorage.getItem('homeSearchData')) {
       const HomeSearchData = JSON.parse(localStorage.getItem('homeSearchData'));
       this.formData.startTime = HomeSearchData.startDate;
@@ -360,6 +373,16 @@ export default {
       const { data } = res.data;
       this.gridList = data.data;
     },
+    async getQuestionFromList() {
+      const res = await this.$api.health.getQuestionFromList({ pageNo: 1, pageSize: 10000 });
+      const { data } = res.data;
+      this.questionFromList = data;
+    },
+    async getLifeStyleList() {
+      const res = await this.$api.health.getLifeStyleList({ pageNo: 1, pageSize: 10000 });
+      const { data } = res.data;
+      this.lifeStyleList = data;
+    },
     handleSelectionChange(val) {
       // table组件选中事件,
       this.multipleSelection = val;
@@ -368,20 +391,15 @@ export default {
       this.params.pageNo = 1;
       this.formData.keyWord = '';
       this.formData.gender = '';
-      this.formData.gridId = '';
+      this.formData.clientGrid = '';
+      this.formData.lifeStyleLv = '';
+      this.formData.source = '';
       this.formData.startTime = undefined;
       this.formData.endTime = undefined;
       // this.getQuestionType();
       this.fetch();
     },
     search(current = 1) {
-      if (this.formData.range.length) {
-        this.formData.time = `${dayjs(this.formData.range[0]).format(
-          'YYYY-MM-DD',
-        )},${dayjs(this.formData.range[1]).format('YYYY-MM-DD')}`;
-      } else {
-        this.formData.time = undefined;
-      }
       this.params.pageNo = current;
       this.fetch();
     },
@@ -466,7 +484,10 @@ export default {
     },
     fetch() {
       if (this.formData.startTime) {
-        this.formData.time = `${this.formData.startTime} 00:00:00,${this.formData.endTime} 23:59:59`;
+        this.formData.startTime = `${this.formData.startTime} 00:00:00`;
+      }
+      if (this.formData.endTime) {
+        this.formData.endTime = `${this.formData.endTime} 23:59:59`;
       }
       this.$api.health
         .fetch(Object.assign(this.params, this.formData))
@@ -495,7 +516,6 @@ export default {
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       // vm.getQuestionType();
-      vm.getGridList();
       vm.fetch();
     });
   },

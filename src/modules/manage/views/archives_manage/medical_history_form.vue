@@ -32,18 +32,18 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="年龄" prop="age">
-            <el-input v-model="currentUser.age" disabled></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
           <el-form-item label="性别" prop="gender">
             <el-radio v-model="currentUser.gender" :label="2" disabled>女</el-radio>
             <el-radio v-model="currentUser.gender" :label="1" disabled>男</el-radio>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="人员类别" prop="customerType">
+          <el-form-item label="年龄" prop="age">
+            <el-input v-model="currentUser.age" disabled></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="客户编号" prop="customerType">
             <el-input v-model="currentUser.gridName" disabled></el-input>
           </el-form-item>
         </el-col>
@@ -51,13 +51,8 @@
       <div class="main-info-title">就医信息</div>
       <el-row>
         <el-col :span="6">
-          <el-form-item label="医疗机构" prop="hospital">
+          <el-form-item label="就医编号" prop="hospital">
             <el-input v-model="form.hospital" placeholder="请输入"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="就诊科室" prop="department">
-            <el-input v-model="form.department" placeholder="请输入"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -73,8 +68,23 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="就医卡号" prop="patientNo">
+          <el-form-item label="医保卡号" prop="department">
+            <el-input v-model="form.department" placeholder="请输入"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="就医机构" prop="patientNo">
             <el-input v-model="form.patientNo" placeholder="请输入" @input="replace"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="就医科室" prop="doctorName">
+            <el-input v-model="form.doctorName" placeholder="请输入"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="主管医生" prop="hpi">
+            <el-input v-model="form.hpi" placeholder="请输入" :maxlength="300"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -101,8 +111,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="主管医生" prop="doctorName">
-            <el-input v-model="form.doctorName" placeholder="请输入"></el-input>
+          <el-form-item label="就医金额" prop="complaint">
+            <el-input v-model="form.complaint" placeholder="请输入" :maxlength="300"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -117,17 +127,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
-          <el-form-item label="主诉" prop="complaint">
-            <el-input v-model="form.complaint" placeholder="请输入" :maxlength="300"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="现病史" prop="hpi">
-            <el-input v-model="form.hpi" placeholder="请输入" :maxlength="300"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
+        <!-- <el-col :span="6">
           <el-form-item label="检查" prop="examination">
             <el-input v-model="form.examination" placeholder="请输入" :maxlength="300"></el-input>
           </el-form-item>
@@ -136,9 +136,57 @@
           <el-form-item label="诊断" prop="diagnosis">
             <el-input v-model="form.diagnosis" placeholder="请输入" :maxlength="300"></el-input>
           </el-form-item>
+        </el-col> -->
+        <el-col :span="24">
+          <el-form-item label="现病史" prop="therapy">
+            <el-input
+              type="textarea"
+              v-model="form.hpi"
+              :rows="5"
+              placeholder="请输入"
+              :maxlength="4000"
+              show-word-limit
+            ></el-input>
+          </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="治疗方案" prop="therapy">
+          <el-form-item label="主诉" prop="therapy">
+            <el-input
+              type="textarea"
+              v-model="form.complaint"
+              :rows="5"
+              placeholder="请输入"
+              :maxlength="4000"
+              show-word-limit
+            ></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="检查" prop="therapy">
+            <el-input
+              type="textarea"
+              v-model="form.examination"
+              :rows="5"
+              placeholder="请输入"
+              :maxlength="4000"
+              show-word-limit
+            ></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="诊断" prop="therapy">
+            <el-input
+              type="textarea"
+              v-model="form.diagnosis"
+              :rows="5"
+              placeholder="请输入"
+              :maxlength="4000"
+              show-word-limit
+            ></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="方案" prop="therapy">
             <el-input
               type="textarea"
               v-model="form.therapy"
@@ -150,9 +198,15 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <div class="form-buttons">
+      <!-- <div class="form-buttons">
         <el-button plain @click="$emit('cancel')" size="small">取消</el-button>
         <el-button type="primary" @click="submit" size="small">保存</el-button>
+      </div> -->
+       <div class="handle-btn mt30 mb30">
+        <el-button class="reset-btn" size="small" @click="goBack"
+          >返回</el-button>
+        <el-button class="add-btn" type="primary" size="small" @click="submit"
+          >保存</el-button>
       </div>
     </el-form>
   </div>
@@ -193,11 +247,12 @@ export default {
         outDate: '',
         doctorName: '',
         result: '',
-        complaint: '',
-        hpi: '',
-        examination: '',
-        diagnosis: '',
-        therapy: '',
+        complaint: '主诉', // 主诉
+        hpi: '现病史', // 现病史
+        examination: '检查', // 检查
+        diagnosis: '诊断', // 诊断
+        therapy: '方案', // 方案
+        orgCode: '',
       },
       options: {
         inDate: {
@@ -249,12 +304,14 @@ export default {
         { value: 2, label: '住院' },
       ],
       currentUser: {},
+      ids: this.$route.query.id,
     };
   },
   mounted() {
-    if (this.id) {
-      this.$api.medicalHistoryInterface.medicalInfoDetail(this.id).then((res) => {
+    if (this.ids) {
+      this.$api.medicalHistoryInterface.medicalInfoDetail(this.ids).then((res) => {
         const { data } = res;
+        console.log(data, '撒打算大的');
         this.form = Object.assign(this.form, data.data || {});
         this.currentUser = {
           id: this.form.clientInfoId,
@@ -302,19 +359,24 @@ export default {
             diagnosis: this.form.diagnosis,
             therapy: this.form.therapy,
             hpi: this.form.hpi,
+            orgCode: this.form.orgCode,
+            organId: this.form.organId,
           };
           if (this.id) {
             params.id = this.id;
           }
           this.$api.medicalHistoryInterface.medicalInfo(params).then((res) => {
             const { data } = res;
-            if (data.code === 200) {
+            if (data.success) {
               this.$message.success('操作成功');
               this.$emit('afterSubmit');
             }
           });
         }
       });
+    },
+    goBack() {
+      this.$router.go(-1);
     },
   },
 };
@@ -403,4 +465,25 @@ export default {
     }
   }
 }
+ .handle-btn {
+    text-align: center;
+    .reset-btn {
+      width: 90px;
+      height: 40px;
+      background: rgba(49, 84, 172, 0.1);
+      border-radius: 20px;
+      border: 1px solid #3154AC;
+      text-align:center;
+      color: #3154AC;
+    }
+    .add-btn {
+      width: 90px;
+      height: 40px;
+      background: rgba(49, 84, 172, 0.1);
+      border-radius: 20px;
+      background: #3154AC;
+      border: 1px solid #3154AC;
+      text-align:center;
+    }
+  }
 </style>

@@ -145,18 +145,21 @@
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="工作地址">
-                  <el-input v-model="formData.workUnitAddress" placeholder="请填写"></el-input>
+                <el-form-item label="部门">
+                  <!-- <el-select
+                          v-model="formData.workUnitDepartment"
+                          placeholder="请选择"
+                          style="width: 100%;"
+                  >
+                    <el-option :label="item.name"
+                               :value="item.paramValue"
+                               v-for="(item, index) in professionList"
+                               :key="index"></el-option>
+                  </el-select> -->
+                  <el-input v-model="formData.workUnitDepartment"></el-input>
                 </el-form-item>
               </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="居住地址">
-                  <el-input v-model="formData.address" placeholder="请填写"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
+              <el-col :span="24">
                 <el-form-item label="管理医生">
                   <el-popover
                           ref="popover1"
@@ -189,7 +192,57 @@
                   </el-popover>
                 </el-form-item>
               </el-col>
+              <el-col :span="24">
+                <el-form-item label="工作地址">
+                  <el-input v-model="formData.workUnitAddress" placeholder="请填写"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="24">
+                <el-form-item label="居住地址">
+                  <el-input v-model="formData.address" placeholder="请填写"></el-input>
+                </el-form-item>
+              </el-col>
             </el-row>
+            <!-- <el-row>
+              <el-col :span="24">
+                <el-form-item label="居住地址">
+                  <el-input v-model="formData.address" placeholder="请填写"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="24">
+                <el-form-item label="管理医生">
+                  <el-popover
+                          ref="popover1"
+                          placement="bottom"
+                          popper-class="user-edit-popper"
+                          width="650"
+                          trigger="click"
+                          @show="handlePopoperShow"
+                          @hide="handlePopoperClose">
+                    <doctor-select
+                            v-if="popoverStatus"
+                            mode="normal"
+                            :isRadio="false"
+                            :clientId="$route.params.userId"
+                            :selectedDoctor="formData.selectedDoctors"
+                            :selectedDoctorIds="selectedDoctorIds"
+                            @cancel="$refs.popover1.showPopper = false"
+                            @change="submitAssign"
+                    />
+                    <el-input
+                            slot="reference"
+                            class="select-user-trigger"
+                            disabled
+                            v-model="formData.userRealName"
+                            placeholder="请选择"
+                    >
+                      <i :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
+                         slot="suffix" ></i>
+                    </el-input>
+                  </el-popover>
+                </el-form-item>
+              </el-col>
+            </el-row> -->
             <!-- <el-form-item label="用户类型">
               <el-select v-model="formData.region" placeholder="请选择活动区域">
                 <el-option label="区域一" value="shanghai"></el-option>
@@ -210,7 +263,7 @@
                 <el-col :span="4">
                   <el-button
                           class="addbutton"
-                          style="height: 40px;marginLeft: 15px"
+                          style="height: 40px;marginLeft: 5px;width:80px;"
                           :disabled="!formData.tag"
                           @click="addNewTag"
                   >添加</el-button>
@@ -235,6 +288,7 @@
                       type="textarea"
                       placeholder="输入备注内容"
                       :maxlength="300"
+                      style="1px solid #DDE0E6 !important"
                       show-word-limit
                       v-model="formData.remark">
               </el-input>
@@ -372,6 +426,7 @@ export default {
         userIdList: [],
         workIdList: [],
         selectedDoctors: [],
+        workUnitDepartment: '',
       },
       rules: {
         name: [
@@ -749,7 +804,6 @@ export default {
       padding-right: 8px !important;
     }
     /deep/.el-input__inner, /deep/.el-textarea__inner {
-      border: 0;
       background-color: #F4F4F6;
     }
     .user-edit-form {

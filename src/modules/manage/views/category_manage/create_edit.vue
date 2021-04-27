@@ -68,7 +68,7 @@
             </el-select>
           </el-form-item>
         </div>
-        <div style="display: inline-block; width: calc(100% - 170px)">
+        <div style="display: inline-block;">
           <div class="form-title">
             <h3 class="name">内容<div class="titleBiao"></div></h3>
           </div>
@@ -78,6 +78,7 @@
               <span>{{item.name}}</span>
             </div>
             <el-checkbox
+                    style="width:25%;margin:20px 0 !important;"
                     v-for="it in item.contentList"
                     :key="it.id"
                     v-model="it.checked"
@@ -89,7 +90,7 @@
         </div>
         <div class="handle-btn mt10 mb30">
           <el-button
-            class="reset-btn"
+            class="canelBtn"
             size="small"
             @click="cancel"
             >返回</el-button

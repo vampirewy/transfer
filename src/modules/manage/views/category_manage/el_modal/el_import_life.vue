@@ -1,5 +1,6 @@
 <template>
   <el-dialog
+  :modal-append-to-body="false"
     class="el-import-tpl-mdl"
     :title="modalTitle"
     :visible.sync="show"

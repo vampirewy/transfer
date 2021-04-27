@@ -97,15 +97,13 @@ export default {
           pageSize: 5,
           name: this.params.name,
         }).then(({ data }) => {
-          if (data.code === 200) {
-            // console.log(data.data);
-            this.params.total = data.data.total;
-            this.tableData = data.data.list;
-            this.tableData.forEach((val) => {
-              this.$set(this.map, val.id, val);
-            });
-            console.log(this.map);
-          }
+          // console.log(data.data);
+          this.params.total = data.data.total;
+          this.tableData = data.data.data;
+          this.tableData.forEach((val) => {
+            this.$set(this.map, val.id, val);
+          });
+          console.log(this.map);
         });
     },
     search(current = 1) {

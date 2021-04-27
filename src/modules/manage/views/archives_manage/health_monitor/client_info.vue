@@ -174,12 +174,15 @@ export default {
       .el-input__suffix{
         right: 15px;
       }
+      input{
+        border: 1px solid #DDE0E6!important;
+      }
       input, i {
-        background-color: #F4F4F6!important;
+        background-color: white!important;
         cursor: pointer;
         color: #333333;
         &::placeholder{
-          color: #666666!important;
+          color: #999999!important;
         }
       }
       &.disabled {

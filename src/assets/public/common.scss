@@ -68,24 +68,23 @@ a{
   }
 }
 .cancelBtn,.resetBtn{
-  width: 80px;
+  width: 90px;
   height: 40px;
-  color: white;
-  background: #97A6BD;
-  border-radius: 8px;
-  border: none;
+  background: rgba(49, 84, 172, 0.1);
+  border-radius: 20px;
+  border: 1px solid #3154AC;
   &:hover {
-    color: white;
-    border-color: #97A6BD;
-    background-color: #97A6BD;
+    color: #3154AC;
+    border-color: #3154AC;
+    background: rgba(49, 84, 172, 0.3);
   }
 }
 .sureBtn{
   min-width: 90px;
   height: 40px;
   color: white;
-  background: #4991FD;
-  border-radius: 8px;
+  background: #3154AC;
+  border-radius: 20px;
 }
 .normalBtn{
   width: 80px;
@@ -93,7 +92,7 @@ a{
   color: #4991FD;
   background: white;
   border: 1px solid #4991FD;
-  border-radius: 8px;
+  border-radius: 20px;
 }
 .btnTransfer {
   width: 120px;
@@ -130,6 +129,32 @@ a{
   }
 }
 // 搜索按钮
+.searchCondition{
+  .searchLeft{
+    position: relative;
+    /deep/ .el-input__inner{
+      padding-right: 40px;
+    }
+    .searchBtnImgSpan{
+      position: absolute;
+      right: 0px;
+      top: 5px;
+      width: 36px;
+      height: 38px;
+      line-height: 38px;
+      background: #3154AC;
+      border-radius: 0 5px 5px 0;
+      text-align: center;
+      cursor: pointer;
+      &:hover{
+        background: #24499D;
+      }
+      .searchBtnImg{
+        width: 16px;
+      }
+    }
+  }
+}
 .searchInputFormItem{
   position: relative;
   /deep/ .el-input__inner{
@@ -137,17 +162,17 @@ a{
   }
   .searchBtnImgSpan{
     position: absolute;
-    right: 10px;
-    top: 5px;
+    right: 0px;
+    top: 0px;
     width: 36px;
-    height: 38px;
-    line-height: 38px;
-    background: #4991FD;
+    height: 40px;
+    line-height: 40px;
+    background: #3154AC;
     border-radius: 0 5px 5px 0;
     text-align: center;
     cursor: pointer;
     &:hover{
-      background: #55AAFF;
+      background: #24499D;
     }
     .searchBtnImg{
       width: 16px;
@@ -166,8 +191,8 @@ a{
     right: 1px;
     top: 1px;
     width: 36px;
-    height: 38px;
-    line-height: 38px;
+    height: 39px;
+    line-height: 39px;
     border-radius: 0 5px 5px 0;
     text-align: center;
     cursor: pointer;
@@ -190,18 +215,18 @@ a{
     color: #333333;
     font-weight: bold;
     margin: 20px 0;
-    &:after {
-      content: '';
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      transform: translateY(-50%);
-      width: 32px;
-      height: 4px;
-      background: #3154AC;
-      border-radius: 3px;
-      opacity: 0.5;
-    }
+    // &:after {
+    //   content: '';
+    //   position: absolute;
+    //   left: 0;
+    //   bottom: 0;
+    //   transform: translateY(-50%);
+    //   width: 32px;
+    //   height: 4px;
+    //   background: #3154AC;
+    //   border-radius: 3px;
+    //   opacity: 0.5;
+    // }
   }
 }
 .titleBiao{
@@ -258,47 +283,47 @@ a{
 }
 // 侧边选择栏
 .intvTmpl_left{
-  width: 160px;
+  width: 150px;
   max-height: 685px;
   overflow-y: auto;
   overflow-x: hidden;
-  background: #F4F4F6;
-  border-radius: 5px;
+  border-radius: 8px;
   text-align: center;
   margin-right: 20px;
   min-height: 600px;
+  border: 1px solid #E5E7EF;
+  border-top: none;
   .intvTmpl_left_title{
     position: absolute;
-    width: 160px;
-    height: 60px;
-    line-height: 60px;
-    background: #4991FD;
-    font-weight: bold;
-    color: #FFFFFF;
-    font-size: 16px;
-    border-radius: 5px;
+    width: 150px;
+    height: 48px;
+    line-height: 48px;
+    background: #DDE0E6;
+    color: #333333;
+    font-size: 14px;
+    border-radius: 8px 8px 0 0;
   }
   .intv_menulist{
-    width: 160px;
-    margin-top: 60px;
+    width: 150px;
+    margin-top: 48px;
     li{
       padding: 0 10px;
-      font-size: 14px;
+      font-size: 12px;
       color: #333333;
-      height: 60px;
-      line-height: 60px;
-      font-weight: normal;
+      height: 48px;
+      line-height: 48px;
       cursor: pointer;
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
+      text-align: left;
       &.active{
-        font-weight: bold;
-        background: white;
-        border-left: 2px solid #4991FD;
+        background: #3154AC;
+        color: white;
       }
       &:hover{
-        background-color: #FAFAFD;
+        color: white;
+        background: #3154AC;
       }
     }
   }
@@ -313,17 +338,29 @@ a{
   text-align: right;
   margin-top: 20px;
   .el-button {
-    width: 80px;
+    width: 90px;
     height: 40px;
-    border-radius: 8px;
+    border-radius: 20px;
     border: none;
     font-size: 14px;
+    background: #3154AC;
+    color: #fff;
+    &:hover {
+      background: #24499D;
+      color: #FFFFFF;
+    }
     + .el-button {
       margin-left: 20px;
     }
     &:not(.el-button--primary) {
-      background: #97A6BD;
-      color: #fff;
+      background: rgba(49, 84, 172, 0.1);
+          border-radius: 20px;
+          border: 1px solid #3154AC;
+          &:hover {
+            color: #3154AC;
+            border-color: #3154AC;
+            background: rgba(49, 84, 172, 0.3);
+          }
     }
   }
 }
@@ -345,7 +382,7 @@ a{
   }
 }
 .clientName{
-  color: #4991FD;
+  color: #3154AC;
   cursor: pointer;
 }
 // select表格
@@ -359,6 +396,10 @@ a{
       color: #666666;
     }
   }
+}
+.el-input__suffix{
+  right: 0;
+  border-radius: 5px;
 }
 // 顶部搜索
 .divTop{
@@ -489,6 +530,175 @@ a{
   border-right:1px solid #f4f4f6;
   border-left:1px solid #f4f4f6;
 }
-.el-input__suffix{
-  right: 0;
+// .el-input__suffix{
+//   right: 0;
+// }
+
+// tabbar
+.tabBars{
+  display: flex;
+  align-items: flex-end;
+  background-color: #F6F8FC;
+  margin: -20px -20px 0 -20px;
+  flex-wrap: wrap;
+  position: absolute;
+  top: 20px;
+  z-index: 1;
+  width: calc(100% - 40px);
+  div{
+    // width: 100px;
+    // height: 40px;
+    // line-height: 40px;
+    // text-align: center;
+    // background: red;
+  }
+  .firstTitleTabBar{
+    .TabBarsNameFirstActive{
+      cursor: pointer;
+      background: #ffffff;
+      border-color: transparent;
+      color: #333333;
+      font-weight: 500;
+      position: relative;
+      margin-right: 12px;
+      padding: 0 10px 0 16px;
+      height: 40px;
+      line-height: 40px;
+      font-size: 14px;
+      border-radius: 8px 5px 0 0;
+      display: inline-block;
+      &:after{
+        content: '';
+        display: block;
+        width: 15px;
+        height: 40px;
+        position: absolute;
+        -webkit-transform: skewX(18deg);
+        transform: skewX(18deg);
+        background: white;
+        border-top-right-radius: 8px;
+        top: 0px;
+        right: -8px;
+      }
+    }
+    .TabBarsFirstNames{
+      cursor: pointer;
+      background: #EEF1F5;
+      border-color: transparent;
+      color: #666666;
+      position: relative;
+      margin-right: 10px;
+      padding: 10px 10px 10px 16px;
+      font-size: 12px;
+      border-radius: 8px 5px 0 0;
+      display: inline-block;
+      &:after{
+        content: '';
+        display: block;
+        width: 15px;
+        height: 36px;
+        position: absolute;
+        -webkit-transform: skewX(18deg);
+        transform: skewX(18deg);
+        background: #EEF1F5;
+        border-top-right-radius: 8px;
+        top: 0px;
+        right: -7px;
+      }
+    }
+  }
+  .TabBarsNameActive{
+    cursor: pointer;
+    background: #ffffff;
+    border-color: transparent;
+    color: #333333;
+    font-weight: 500;
+    position: relative;
+    margin-right: 9px;
+    margin-left: 13px;
+    padding: 0 8px 0 8px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    border-radius: 8px 5px 0 0;
+    display: inline-block;
+    &:before{
+      content: '';
+      display: block;
+      width: 10px;
+      height: 40px;
+      position: absolute;
+      -webkit-transform: skewX(165deg);
+      transform: skewX(163deg);
+      background: white;
+      border-top-left-radius: 8px;
+      top: 0px;
+      left: -4px;
+    }
+    &:after{
+      content: '';
+      display: block;
+      width: 10px;
+      height: 40px;
+      position: absolute;
+      -webkit-transform: skewX(18deg);
+      transform: skewX(18deg);
+      background: white;
+      border-top-right-radius: 8px;
+      top: 0px;
+      right: -5px;
+    }
+  }
+  .TabBarsNames{
+    cursor: pointer;
+    background: #EEF1F5;
+    border-color: transparent;
+    color: #666666;
+    position: relative;
+    margin-right: 8px;
+    padding: 10px 8px 10px 8px;
+    font-size: 12px;
+    border-radius: 8px 5px 0 0;
+    margin-left: 13px;
+    display: inline-block;
+    &:before {
+      content: '';
+      display: block;
+      width: 10px;
+      height: 36px;
+      position: absolute;
+      -webkit-transform: skewX(165deg);
+      transform: skewX(163deg);
+      background: #EEF1F5;
+      border-top-left-radius: 8px;
+      top: 0px;
+      left: -4px;
+    }
+    &:after{
+      content: '';
+      display: block;
+      width: 10px;
+      height: 36px;
+      position: absolute;
+      -webkit-transform: skewX(18deg);
+      transform: skewX(18deg);
+      background: #EEF1F5;
+      border-top-right-radius: 8px;
+      top: 0px;
+      right: -5px;
+    }
+  }
+  .Tabunread{
+    display: inline-block;
+    background: red;
+    padding: 3px;
+    color: #ffffff;
+    width: 12px;
+    height: 12px;
+    line-height: 12px;
+    text-align: center;
+    border-radius: 10px;
+    margin-left: 5px;
+    font-size: 12px;
+  }
 }
