@@ -1,12 +1,44 @@
 <template>
   <div class="medical-history-select-user">
-    <div class="searchInputFormItemOpen">
+    <!--<div class="searchInputFormItemOpen">
       <el-input v-model="keyword" placeholder="输入条件搜索"></el-input>
       <span class="searchBtnImgSpan" @click="search">
         <img class="searchBtnImg" src="@/assets/images/common/searchBlack.png"/>
       </span>
+    </div>-->
+    <div class="divTop" style="margin: -15px 0 15px 0">
+    <div class="searchCondition">
+      <div class="searchLeft">
+        <div class="searchInputFormItem">
+          <el-input placeholder="姓名/编号/单位" v-model="keyword">
+          </el-input>
+          <span class="searchBtnImgSpan" @click="search">
+                  <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
+              </span>
+        </div>
+        <!--<div>
+          <span>客户性别：</span>
+          <el-select
+                  v-model="formData.gender"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option label="男" value="1" key="1"></el-option>
+            <el-option label="女" value="2" key="2"></el-option>
+          </el-select>
+        </div>-->
+      </div>
+      <div class="searchRight">
+        <div class="buttones">
+          <div class="searchFor" @click="search">
+            <img src="@/assets/images/common/topsearchblue.png" alt="">
+          </div>
+          <div class="resetAll" @click="reset">重置</div>
+        </div>
+      </div>
     </div>
-    <el-table :data="tableData" @row-click="handleRowClick">
+  </div>
+    <el-table :data="tableData" @row-click="handleRowClick" class="openTable">
       <el-table-column width="80">
         <template slot-scope="scope">
           <el-radio v-model="selectRadio" :label="scope.row.id">&nbsp;</el-radio>
@@ -65,6 +97,11 @@ export default {
       this.queryList();
     },
     search() {
+      this.keyword = '';
+      this.currentPage = 1;
+      this.queryList();
+    },
+    reset() {
       this.currentPage = 1;
       this.queryList();
     },
@@ -87,8 +124,10 @@ export default {
 <style lang="scss" scoped>
 .medical-history-select-user {
   padding: 13px 18px 21px 18px;
-  .el-table::before {
-    background: none;
+  .el-table{
+    &:before {
+      background: none;
+    }
   }
   .el-pagination {
     margin-top: 20px;

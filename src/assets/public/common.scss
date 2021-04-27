@@ -283,47 +283,47 @@ a{
 }
 // 侧边选择栏
 .intvTmpl_left{
-  width: 160px;
+  width: 150px;
   max-height: 685px;
   overflow-y: auto;
   overflow-x: hidden;
-  background: #F4F4F6;
-  border-radius: 5px;
+  border-radius: 8px;
   text-align: center;
   margin-right: 20px;
   min-height: 600px;
+  border: 1px solid #E5E7EF;
+  border-top: none;
   .intvTmpl_left_title{
     position: absolute;
-    width: 160px;
-    height: 60px;
-    line-height: 60px;
-    background: #4991FD;
-    font-weight: bold;
-    color: #FFFFFF;
-    font-size: 16px;
-    border-radius: 5px;
+    width: 150px;
+    height: 48px;
+    line-height: 48px;
+    background: #DDE0E6;
+    color: #333333;
+    font-size: 14px;
+    border-radius: 8px 8px 0 0;
   }
   .intv_menulist{
-    width: 160px;
-    margin-top: 60px;
+    width: 150px;
+    margin-top: 48px;
     li{
       padding: 0 10px;
-      font-size: 14px;
+      font-size: 12px;
       color: #333333;
-      height: 60px;
-      line-height: 60px;
-      font-weight: normal;
+      height: 48px;
+      line-height: 48px;
       cursor: pointer;
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
+      text-align: left;
       &.active{
-        font-weight: bold;
-        background: white;
-        border-left: 2px solid #4991FD;
+        background: #3154AC;
+        color: white;
       }
       &:hover{
-        background-color: #FAFAFD;
+        color: white;
+        background: #3154AC;
       }
     }
   }
@@ -343,6 +343,12 @@ a{
     border-radius: 20px;
     border: none;
     font-size: 14px;
+    background: #3154AC;
+    color: #fff;
+    &:hover {
+      background: #24499D;
+      color: #FFFFFF;
+    }
     + .el-button {
       margin-left: 20px;
     }
@@ -551,6 +557,167 @@ color: #333333;
 .el-select{
   .el-input{
   width: 100%;
+  }
+}
+
+.tabBars{
+  display: flex;
+  align-items: flex-end;
+  background-color: #F6F8FC;
+  margin: -20px -20px 0 -20px;
+  flex-wrap: wrap;
+  position: absolute;
+  top: 20px;
+  z-index: 1;
+  width: calc(100% - 40px);
+  .firstTitleTabBar{
+    .TabBarsNameFirstActive{
+      cursor: pointer;
+      background: #ffffff;
+      border-color: transparent;
+      color: #333333;
+      font-weight: 500;
+      position: relative;
+      margin-right: 12px;
+      padding: 0 10px 0 16px;
+      height: 40px;
+      line-height: 40px;
+      font-size: 14px;
+      border-radius: 8px 5px 0 0;
+      display: inline-block;
+      &:after{
+        content: '';
+        display: block;
+        width: 15px;
+        height: 40px;
+        position: absolute;
+        -webkit-transform: skewX(18deg);
+        transform: skewX(18deg);
+        background: white;
+        border-top-right-radius: 8px;
+        top: 0px;
+        right: -8px;
+      }
+    }
+    .TabBarsFirstNames{
+      cursor: pointer;
+      background: #EEF1F5;
+      border-color: transparent;
+      color: #666666;
+      position: relative;
+      margin-right: 10px;
+      padding: 10px 10px 10px 16px;
+      font-size: 12px;
+      border-radius: 8px 5px 0 0;
+      display: inline-block;
+      &:after{
+        content: '';
+        display: block;
+        width: 15px;
+        height: 36px;
+        position: absolute;
+        -webkit-transform: skewX(18deg);
+        transform: skewX(18deg);
+        background: #EEF1F5;
+        border-top-right-radius: 8px;
+        top: 0px;
+        right: -7px;
+      }
+    }
+  }
+  .TabBarsNameActive{
+    cursor: pointer;
+    background: #ffffff;
+    border-color: transparent;
+    color: #333333;
+    font-weight: 500;
+    position: relative;
+    margin-right: 9px;
+    margin-left: 13px;
+    padding: 0 8px 0 8px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    border-radius: 8px 5px 0 0;
+    display: inline-block;
+    &:before{
+      content: '';
+      display: block;
+      width: 10px;
+      height: 40px;
+      position: absolute;
+      -webkit-transform: skewX(165deg);
+      transform: skewX(163deg);
+      background: white;
+      border-top-left-radius: 8px;
+      top: 0px;
+      left: -4px;
+    }
+    &:after{
+      content: '';
+      display: block;
+      width: 10px;
+      height: 40px;
+      position: absolute;
+      -webkit-transform: skewX(18deg);
+      transform: skewX(18deg);
+      background: white;
+      border-top-right-radius: 8px;
+      top: 0px;
+      right: -5px;
+    }
+  }
+  .TabBarsNames{
+    cursor: pointer;
+    background: #EEF1F5;
+    border-color: transparent;
+    color: #666666;
+    position: relative;
+    margin-right: 8px;
+    padding: 10px 8px 10px 8px;
+    font-size: 12px;
+    border-radius: 8px 5px 0 0;
+    margin-left: 13px;
+    display: inline-block;
+    &:before {
+      content: '';
+      display: block;
+      width: 10px;
+      height: 36px;
+      position: absolute;
+      -webkit-transform: skewX(165deg);
+      transform: skewX(163deg);
+      background: #EEF1F5;
+      border-top-left-radius: 8px;
+      top: 0px;
+      left: -4px;
+    }
+    &:after{
+      content: '';
+      display: block;
+      width: 10px;
+      height: 36px;
+      position: absolute;
+      -webkit-transform: skewX(18deg);
+      transform: skewX(18deg);
+      background: #EEF1F5;
+      border-top-right-radius: 8px;
+      top: 0px;
+      right: -5px;
+    }
+  }
+  .Tabunread{
+    display: inline-block;
+    background: red;
+    padding: 3px;
+    color: #ffffff;
+    width: 12px;
+    height: 12px;
+    line-height: 12px;
+    text-align: center;
+    border-radius: 10px;
+    margin-left: 5px;
+    font-size: 12px;
   }
 }
 }

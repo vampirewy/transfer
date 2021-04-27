@@ -457,9 +457,9 @@
 </template>
 
 <script>
-import dietProportionChart from './chart_data/diet_proportion.vue'; // 三大营养素供能比
-import dietProteinroportionChart from './chart_data/diet_protein_proportion.vue'; // 动物性及豆类蛋白质占总蛋白质比例
-import dietDistributionChart from './chart_data/diet_distribution.vue'; // 三餐能量分配比
+import dietProportionChart from '../../chart_data/diet_proportion.vue'; // 三大营养素供能比
+import dietProteinroportionChart from '../../chart_data/diet_protein_proportion.vue'; // 动物性及豆类蛋白质占总蛋白质比例
+import dietDistributionChart from '../../chart_data/diet_distribution.vue'; // 三餐能量分配比
 import elPeopleSelect from './el_modal/el_people_selecet.vue'; // 人员选择组件
 import elTemplateInput from './el_modal/el_template_input.vue'; // 食谱模版导入
 import elTemplateSave from './el_modal/el_template_save.vue'; // 食谱模版保存

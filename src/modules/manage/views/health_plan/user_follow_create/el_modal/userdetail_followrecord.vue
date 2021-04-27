@@ -30,7 +30,9 @@
         </el-table-column>
         <el-table-column label="操作" width="150">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="handleViewPlan(scope.row)">查看</el-button>
+            <el-button type="text" size="small"
+                       v-if="getAccess('visited_record_view')"
+                       @click="handleViewPlan(scope.row)">查看</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -91,7 +93,7 @@ export default {
         reqBody,
       );
       const { data } = res.data;
-      this.tableData = data.list || [];
+      this.tableData = data.data || [];
       this.total = data.total;
     },
     /**

@@ -83,10 +83,17 @@
           <el-table :data="table.list" style="width: 100%" align="center" ref="table"
                     @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="40"></el-table-column>
+            <el-table-column prop="clientNo" label="客户编号" min-width="90" show-overflow-tooltip>
+              <template slot-scope="scope">
+          <span :class="{'redToday': scope.row.todayPlanDate === 1,
+                          'overToday': scope.row.executeState === 3}">
+            {{ scope.row.clientNo | getResult }}</span>
+              </template>
+            </el-table-column>
             <el-table-column
                     prop="clientName"
                     label="姓名"
-                    width="100"
+                    width="70"
                     show-overflow-tooltip
             >
               <template slot-scope="scope">
@@ -96,18 +103,18 @@
                 </span>
               </template>
             </el-table-column>
-            <el-table-column prop="clientNo" label="客户编号" show-overflow-tooltip>
-              <template slot-scope="scope">
-          <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}">
-            {{ scope.row.clientNo | getResult }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column prop="gender" label="性别" width="60px">
+            <el-table-column prop="gender" label="性别" width="55px">
               <template slot-scope="scope">
                 <span :class="{'redToday': scope.row.todayPlanDate === 1,
                           'overToday': scope.row.executeState === 3}"
                       >{{scope.row.gender | getResultGender}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="age" label="年龄" width="60px">
+              <template slot-scope="scope">
+                <span :class="{'redToday': scope.row.todayPlanDate === 1,
+                          'overToday': scope.row.executeState === 3}">
+              {{ scope.row.age | getResult }}</span>
               </template>
             </el-table-column>
             <el-table-column prop="gridName" label="人员类别" show-overflow-tooltip>
@@ -117,18 +124,18 @@
             {{ scope.row.gridName | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="executeTime" label="计划随访时间" width="120px" show-overflow-tooltip>
+            <el-table-column prop="workUnitName" label="单位">
               <template slot-scope="scope">
-          <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}"
-                >{{ scope.row.planDate | getResultDate}}</span>
+                <span :class="{'redToday': scope.row.todayPlanDate === 1,
+                          'overToday': scope.row.executeState === 3}">
+            {{ scope.row.workUnitName | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="planUserName" label="随访形式" show-overflow-tooltip>
+            <el-table-column prop="mobile" label="手机号码" width="90px" show-overflow-tooltip>
               <template slot-scope="scope">
-          <span :class="{'redToday': scope.row.todayPlanDate === 1,
+                <span :class="{'redToday': scope.row.todayPlanDate === 1,
                           'overToday': scope.row.executeState === 3}">
-            {{ scope.row.planWayName | getResult}}</span>
+            {{ scope.row.mobile | getResult}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="planUserName" label="干预人" show-overflow-tooltip>
@@ -136,6 +143,13 @@
           <span :class="{'redToday': scope.row.todayPlanDate === 1,
                           'overToday': scope.row.executeState === 3}">
             {{ scope.row.planUserName | getResult}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="planUserName" label="随访形式" show-overflow-tooltip>
+              <template slot-scope="scope">
+          <span :class="{'redToday': scope.row.todayPlanDate === 1,
+                          'overToday': scope.row.executeState === 3}">
+            {{ scope.row.planWayName | getResult}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="planUserName" label="随访标题" show-overflow-tooltip>
@@ -157,6 +171,20 @@
           <span :class="{'redToday': scope.row.todayPlanDate === 1,
                           'overToday': scope.row.executeState === 3}">
             {{ scope.row.templateQuestionName | getResult}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="executeTime" label="计划日期" width="120px" show-overflow-tooltip>
+              <template slot-scope="scope">
+          <span :class="{'redToday': scope.row.todayPlanDate === 1,
+                          'overToday': scope.row.executeState === 3}"
+          >{{ scope.row.planDate | getResultDate}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="executeTime" label="*创建人" show-overflow-tooltip>
+              <template slot-scope="scope">
+          <span :class="{'redToday': scope.row.todayPlanDate === 1,
+                          'overToday': scope.row.executeState === 3}"
+          >{{ scope.row.planUserName | getResultDate}}</span>
               </template>
             </el-table-column>
             <el-table-column label="操作" width="110">
@@ -261,7 +289,7 @@ export default {
       },
     };
   },
-  mounted() {
+  activated() {
     this.onLoad();
   },
   methods: {
@@ -306,7 +334,7 @@ export default {
       );
       const { data } = res.data;
       if (data) {
-        this.table.list = data.list || [];
+        this.table.list = data.data || [];
         this.table.totalCount = data.total;
       }
     },

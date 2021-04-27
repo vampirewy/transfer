@@ -47,8 +47,8 @@ export default {
     width: 100%;
     height: 60px;
     line-height: 60px;
-    background: #4991FD;
-    border-radius: 5px;
+    background: #7CA7FF;
+    border-radius: 8px 8px 0 0;
     padding-left: 22px;
     font-size: 16px;
     text-align: left;
@@ -62,10 +62,10 @@ export default {
     }
   }
   /deep/ .el-form-item__content {
-    border-radius: 5px;
+    border-radius: 0 0 8px 8px;
     border: 1px solid #F4F4F6;
+    border-top: none;
     padding: 20px 20px 0 20px;
-    margin-top: 12px;
     min-height: 134px;
   }
   .unusual-list {
@@ -74,29 +74,24 @@ export default {
       height: 48px;
       line-height: 45px;
       background-color: white;
-      border-radius: 8px;
+      border-radius: 80px;
       border-width: 2px;
       padding: 0 40px 0 26px;
       margin-bottom: 20px;
       &.unusual-tag1{
-        border-color: #31C529;
-        box-shadow: 0px 0px 15px 0px rgba(49, 197, 41, 0.2);
+        border-color: #36BF2F;
       }
       &.unusual-tag2{
-        border-color: #4991FD;
-        box-shadow: 0px 0px 15px 0px rgba(73, 145, 253, 0.2);
+        border-color: #3154AC;
       }
       &.unusual-tag3{
-        border-color: #6C6CE5;
-        box-shadow: 0px 0px 15px 0px rgba(108, 108, 229, 0.2);
+        border-color: #806CE5;
       }
       &.unusual-tag4{
-        border-color: #E6B058;
-        box-shadow: 0px 0px 15px 0px rgba(230, 176, 88, 0.2);
+        border-color: #FA912B;
       }
       &.unusual-tag5{
-        border-color: #FE2B2A;
-        box-shadow: 0px 0px 15px 0px rgba(254, 43, 42, 0.2);
+        border-color: #F33D21;
       }
       img{
         width: auto;

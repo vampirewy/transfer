@@ -1,10 +1,31 @@
 <template>
   <div class="abnormal-popoper">
-    <div class="query searchInputFormItem">
+    <!--<div class="query searchInputFormItem">
       <el-input v-model="formData.keywords" placeholder="输入模板名称搜索"></el-input>
       <span class="searchBtnImgSpan" @click="search(1)">
             <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
       </span>
+    </div>-->
+    <div class="divTop" style="margin: -15px 0 15px 0">
+      <div class="searchCondition">
+        <div class="searchLeft">
+          <div class="searchInputFormItem">
+            <el-input placeholder="输入模板名称搜索" v-model="formData.keywords">
+            </el-input>
+            <span class="searchBtnImgSpan" @click="search(1)">
+                  <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
+              </span>
+          </div>
+        </div>
+        <div class="searchRight">
+          <div class="buttones">
+            <div class="searchFor" @click="search(1)">
+              <img src="@/assets/images/common/topsearchblue.png" alt="">
+            </div>
+            <div class="resetAll" @click="reset">重置</div>
+          </div>
+        </div>
+      </div>
     </div>
     <el-table
       @selection-change="handleSelectionChange"
@@ -37,9 +58,9 @@
       @size-change="handleSizeChange"
       :pager-count="5"
     ></el-pagination>
-    <div class="buttonsSelectOpen">
-      <el-button plain @click="cancel">取消</el-button>
-      <el-button type="primary" @click="submit">确定</el-button>
+    <div class="footer" style="text-align: right;margin-top: 20px">
+      <el-button class="cancelBtn" size="small" @click="cancel">取消</el-button>
+      <el-button type="primary" size="small" class="sureBtn" @click="submit">确定</el-button>
     </div>
   </div>
 </template>
@@ -93,21 +114,24 @@ export default {
       this.$api.interventionTemplateInterface
         .getInterveneTemplateListPage(Object.assign(this.params, this.formData))
         .then(({ data }) => {
-          if (data.code === 200) {
-            this.params.total = data.data.total;
-            this.tableData = data.data.list;
-            this.tableData.forEach((val) => {
-              this.$set(this.map, val.id, val);
-            });
-            setTimeout(() => {
-              this.setSelectRow();
-            }, 100);
-          }
+          this.params.total = data.data.total;
+          this.tableData = data.data.data;
+          this.tableData.forEach((val) => {
+            this.$set(this.map, val.id, val);
+          });
+          setTimeout(() => {
+            this.setSelectRow();
+          }, 100);
         });
     },
     search(current = 1) {
       this.changePageCoreRecordData();
       this.params.pageNo = current;
+      this.fetch();
+    },
+    reset() {
+      this.formData.keywords = '';
+      this.params.pageNo = 1;
       this.fetch();
     },
     // 设置选中的方法
@@ -194,9 +218,8 @@ export default {
     font-size: 12px;
     color: #666666;
   }
-  padding: 13px 18px 21px 18px;
+  padding: 13px 18px 15px 18px;
   /deep/ .el-table__header-wrapper th{
-    padding: 11px 0;
     .cell{
       font-size: 14px;
       color: #333333;
@@ -229,6 +252,9 @@ export default {
         color: #fff;
       }
     }
+  }
+  /deep/ .el-table td {
+   padding:11.5px 0;
   }
   .el-table::before {
     background: none;

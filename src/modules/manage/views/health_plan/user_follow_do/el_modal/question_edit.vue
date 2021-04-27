@@ -52,16 +52,6 @@
                 <el-form-item :key="item.id" class="questionTextarea"
                               :label="`${index + 1}. ${item.name} (填空)`"
                               v-else-if="item.subjectType === 3">
-                  <!--<el-checkbox-group v-model="answerMap[item.id]" size="small"
-                                     @change="ev => onCheckboxChange(item, ev)">
-                    <el-checkbox-button
-                           v-for="val in item.questionSubjectOptionList"
-                            :label="val.id"
-                            :key="val.id"
-                            :disabled="val.disabled">
-                      {{ val.name }}
-                    </el-checkbox-button>
-                  </el-checkbox-group>-->
                   <div v-for="val in item.questionSubjectOptionList" :key="val.id"
                        style="width: 100%;display: flex;margin-bottom: 20px;">
                     <span style="display: inline-block;width: 85px;">填写答案：</span>
@@ -196,7 +186,7 @@ export default {
         subjectId: row.subjectId,
       });
     },
-    fetch(id, questionType) {
+    /* fetch(id, questionType) {
       this.$api.health.getDetail(id).then(({ data }) => {
         if (data.code === 200) {
           this.formData = data.data;
@@ -211,7 +201,7 @@ export default {
           this.onTypeChange(questionType);
         }
       });
-    },
+    },*/
     groupBy(list) {
       const map = this.answerMap;
       list.forEach((val) => {
@@ -359,7 +349,10 @@ export default {
           document.documentElement.scrollTop =
             (anchor.parentNode.offsetTop + anchor.offsetTop) - 130;
         } else {*/
-        document.documentElement.scrollTop = anchor.offsetTop + 60;
+        /* document.documentElement.scrollTop = anchor.offsetTop + 60; */
+        if (document.querySelectorAll('.content-wrapper').length > 0) {
+          document.querySelectorAll('.content-wrapper')[0].scrollTop = anchor.offsetTop + 60;
+        }
         this.$message.warning('请填写完整随访问卷');
         // }
         return false;
@@ -405,7 +398,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .health_questionnaire_edit{
     #intvTmpl_left{
       &.isFixed{
@@ -417,11 +410,11 @@ export default {
     .isFixedForm{
       margin-left: 190px;
     }
-    /deep/.el-form-item__content .el-textarea__inner{
+    /*/deep/.el-form-item__content .el-textarea__inner{
       background-color: #F4F4F6 !important;
-    }
+    }*/
     /deep/ .el-form--label-top .el-form-item__label{
-      font-size: 16px;
+      font-size: 14px;
       color: #333333!important;
       position: relative;
       font-weight: bold;
@@ -429,7 +422,8 @@ export default {
         content: '';
         width: 5px;
         height: 5px;
-        background: #31C529;
+        border: 1px solid #B4BBC9;
+        background: white;
         border-radius: 3px;
         position: absolute;
         left: -14px;
@@ -461,13 +455,13 @@ export default {
         text-align: center;
       }
       .health_questionnaire_formQus{
-        margin-left: 25px;
+        margin-left: 15px;
         display: flex;
         flex-wrap: wrap;
       }
     }
 
-    .title {
+   /* .title {
       font-size: 18px;
       font-weight: 600;
       color: #333333;
@@ -559,6 +553,6 @@ export default {
         border-left: 1px solid #97A6BD;
         margin-right: 20px;
       }
-    }
+    }*/
   }
 </style>

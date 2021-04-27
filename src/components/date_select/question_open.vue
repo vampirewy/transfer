@@ -97,15 +97,13 @@ export default {
           pageSize: 5,
           name: this.params.name,
         }).then(({ data }) => {
-          if (data.code === 200) {
-            // console.log(data.data);
-            this.params.total = data.data.total;
-            this.tableData = data.data.list;
-            this.tableData.forEach((val) => {
-              this.$set(this.map, val.id, val);
-            });
-            console.log(this.map);
-          }
+          // console.log(data.data);
+          this.params.total = data.data.total;
+          this.tableData = data.data.data;
+          this.tableData.forEach((val) => {
+            this.$set(this.map, val.id, val);
+          });
+          console.log(this.map);
         });
     },
     search(current = 1) {
@@ -135,7 +133,6 @@ export default {
   }
   padding: 13px 18px 21px 18px;
   /deep/ .el-table__header-wrapper th{
-    padding: 11px 0;
     .cell{
       font-size: 14px;
       color: #333333;
@@ -150,10 +147,6 @@ export default {
     margin-bottom: 20px;
     /deep/ .el-input {
       flex: 1;
-      .el-input__inner {
-        background: transparent;
-        border: none;
-      }
     }
     .search-button {
       width: 36px;
@@ -167,6 +160,11 @@ export default {
         font-size: 18px;
         color: #fff;
       }
+    }
+  }
+  /deep/ .el-table{
+    td{
+      padding: 11.5px 0;
     }
   }
   .el-table::before {

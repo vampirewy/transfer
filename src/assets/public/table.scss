@@ -1,3 +1,13 @@
+.openTable{
+  .el-table__header-wrapper{
+    th{
+      padding: 11px 0!important;
+    }
+  }
+  td{
+    padding: 11.5px 0!important;
+  }
+}
 .el-table {
   &::before {
     background-color: transparent !important;
@@ -5,6 +15,7 @@
   .el-table__body{
     td {
       border-bottom: none;
+      text-align: center;
     }
   }
   .el-table__header-wrapper {

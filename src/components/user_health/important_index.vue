@@ -55,10 +55,8 @@ export default {
         .getReportItem(this.clientId)
         .then((res) => {
           const { data } = res;
-          if (data.code === 200) {
-            const result = data.data;
-            this.tableData = result || [];
-          }
+          const result = data.data;
+          this.tableData = result || [];
         });
     },
   },

@@ -297,7 +297,7 @@ export default {
 <style lang="scss" scoped>
 .el-plan-setting-mdl {
   /deep/ .el-dialog__body{
-    padding: 30px 26px 10px 26px !important;
+    padding: 20px 26px 10px 26px !important;
   }
   /deep/ .el-input__inner,/deep/ .el-textarea__inner{
     background-color: #F4F4F6;

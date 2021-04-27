@@ -101,7 +101,7 @@ export default {
       tableData: [],
       total: 0,
       currentPage: 1,
-      pageSize: 1,
+      pageSize: 5,
       selectRadio: '',
     };
   },
@@ -135,7 +135,7 @@ export default {
       });
       const { data } = res.data;
       if (data) {
-        this.tableData = data.list || [];
+        this.tableData = data.data || [];
         this.total = data.total;
       }
     },

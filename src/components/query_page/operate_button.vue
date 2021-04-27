@@ -6,11 +6,11 @@
 </template>
 
 <script>
-import iconAdd from '~/src/assets/images/add@2x.png';
+import iconAdd from '~/src/assets/images/common/addBtn.png';
 import iconEdit from '~/src/assets/images/edit@2x.png';
-import iconDelete from '~/src/assets/images/delete@2x.png';
+import iconDelete from '~/src/assets/images/common/delBtn.png';
 import iconAccurate from '~/src/assets/images/accurate@2x.png'; // 精准
-import iconTogether from '~/src/assets/images/together@2x.png'; // 合并
+import iconTogether from '~/src/assets/images/together.png'; // 合并
 import iconGenerateReport from '~/src/assets/images/generateReport@2x.png'; // 合并
 import iconEditGray from '~/src/assets/images/editGray.png'; // 导入
 export default {
@@ -40,11 +40,12 @@ export default {
 
 <style lang="scss" scoped>
  button {
-   width: auto;
-   padding: 11px 14px;
-   border-radius: 8px;
    border: 1px solid #F4F4F6;
+   border-radius: 20px;
+   background: #F6F8FC;
    color: #333333;
+   min-width: 90px;
+   padding: 11px 15px;
    /deep/ span {
      display: flex;
      align-items: center;
@@ -53,7 +54,7 @@ export default {
      width: 16px;
      height: 16px;
      vertical-align: middle;
-     margin-right: 8px;
+     margin-right: 6px;
    }
  }
 </style>

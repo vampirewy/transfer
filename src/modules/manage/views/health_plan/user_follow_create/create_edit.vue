@@ -1,20 +1,36 @@
 <template>
   <div class="create-edit">
     <el-row v-if="viewIndex === 1">
-      <el-col :span="$route.params.type === '1' ? 9 : 14"> <!--9-->
+      <el-col :span="14" style="margin-top: -35px;"
+              v-if="$route.params.type === '1'"> <!--单个创建-->
+        <el-tabs v-model="activeName" class="two-tab">
+          <el-tab-pane label="干预模板" name="first">
+            <intervention-tab-mdl ref="InterventionTabMdl"></intervention-tab-mdl>
+          </el-tab-pane>
+          <el-tab-pane label="客户的主要健康状况" name="second">
+            <intervention-tab-userdetail-mdl @read="viewiInterventionDetail">
+            </intervention-tab-userdetail-mdl>
+          </el-tab-pane>
+        </el-tabs>
+      </el-col>
+      <el-col :span="11" v-if="$route.params.type === '2'">
+        <intervention-somecreate-mdl></intervention-somecreate-mdl> <!--批量创建-->
+      </el-col>
+      <el-col :span="$route.params.type === '1' ? 10 : 13"  style="padding-left: 20px;"> <!--9-->
         <div class="tableTopDoDiv" style="display: block">
           <div class="divRightTitleDiv">
-            <div class="divRightTitle"><span>|</span>新增计划列表</div>
+            <div class="divRightTitle" style="margin-top: 14px">
+              {{$route.params.type === '2' ? '批量创建' : '计划列表'}}</div>
           </div>
-          <div class="table-operate-buttons" style="justify-content: flex-start;margin-top: 12px">
+          <div class="table-operate-buttons">
             <operate-button
                     type="add"
                     @click="handleCreatePlan"
                 ></operate-button>
-            <operate-button
+            <!--<operate-button
                     type="edit"
                     @click="handleEditPlan"
-            ></operate-button>
+            ></operate-button>-->
             <operate-button
                     type="delete"
                     @click="handleDeletePlan"
@@ -84,65 +100,23 @@
                 <span>{{ scope.row.planContent }}</span>
               </template>
             </el-table-column>
-
-            <!--<el-table-column prop="planRemarrk" label="备注">
-              <template slot-scope="scope">
-                <span v-if="!scope.row.edit">{{ scope.row.planRemarrk }}</span>
-                <el-input
-                        type="textarea"
-                        :rows="1"
-                        v-model="scope.row.planRemarrk"
-                        maxlength="400"
-                        show-word-limit
-                        v-if="scope.row.edit"
-                        placeholder="请输入备注"
-                ></el-input>
-              </template>
-            </el-table-column>-->
-
-            <!--<el-table-column prop="action" label="操作" width="120">
+            <el-table-column prop="action" label="操作" width="70">
               <template slot-scope="scope">
                 <el-button
                         type="text"
                         size="small"
-                        v-if="!scope.row.edit"
-                        @click="handleEdit(scope)"
+                        @click="handleEditOnePlan(scope.row)"
                 >编辑
                 </el-button>
-                <el-button
-                        type="text"
-                        size="small"
-                        v-if="scope.row.edit"
-                        @click="handleSave(scope)"
-                >保存
-                </el-button>
-                <el-button type="text" size="small" @click="handleRemove(scope)"
-                >删除</el-button
-                >
               </template>
-            </el-table-column>-->
+            </el-table-column>
           </el-table>
 
           <div class="footer">
             <el-button size="small" class="cancelBtn" @click="cancel">返回</el-button>
-            <el-button class="sureBtn" type="primary" size="small" @click="save">确定</el-button>
+            <el-button class="sureBtn" type="primary" size="small" @click="save">保存</el-button>
           </div>
         </el-form>
-      </el-col>
-      <el-col :span="15" style="padding-left: 20px;margin-top: -35px;"
-              v-if="$route.params.type === '1'"> <!--单个创建-->
-        <el-tabs v-model="activeName" class="two-tab">
-          <el-tab-pane label="干预模板" name="first">
-            <intervention-tab-mdl ref="InterventionTabMdl"></intervention-tab-mdl>
-          </el-tab-pane>
-          <el-tab-pane label="客户的主要健康状况" name="second">
-            <intervention-tab-userdetail-mdl @read="viewiInterventionDetail">
-            </intervention-tab-userdetail-mdl>
-          </el-tab-pane>
-        </el-tabs>
-      </el-col>
-      <el-col :span="10" style="padding-left: 20px;" v-if="$route.params.type === '2'">
-        <intervention-somecreate-mdl></intervention-somecreate-mdl> <!--批量创建-->
       </el-col>
     </el-row>
     <template v-else-if="viewIndex === 2">
@@ -292,7 +266,60 @@ export default {
       });
     },
     /**
-     * 编辑计划
+     * 单个编辑计划
+     */
+    handleEditOnePlan(row) {
+      /* if (this.checkPlanList.length !== 1) {
+        this.$message({
+          message: '请选择一条记录编辑',
+          type: 'warning',
+        });
+        return;
+      } */
+      this.$jDynamic.show({// 有planId的都是自己新增/编辑的
+        component: 'InterventionAddMdl',
+        data: {
+          modalType: 2,
+          addType: this.$route.params.type, // 个人创建 / 批量创建
+          modalTitle: '编辑',
+          planId: row.planId,
+          id: row.id,
+          propsData: row,
+          confirmfunc: async (value) => {
+            const getStateTplList = [...this.$store.state.intervention.tplList];
+            const resetStateTplList = [];
+            const doID = [];
+            getStateTplList.forEach((valueOld) => {
+              const ValueOld = Object.assign({}, valueOld);
+              if (ValueOld.id === value.id && !ValueOld.planId) {
+                doID.push(value.id);
+              }
+              if (ValueOld.planId === value.planId ||
+                (ValueOld.id === value.id && value.id !== undefined)) { // 勾选数据等于以前数据 且不是空
+                ValueOld.planId = value.planId;
+                ValueOld.planTime = value.planTime;
+                ValueOld.planWay = value.planWay;
+                ValueOld.planDoctor = value.planDoctor;
+                ValueOld.planDoctorName = value.planDoctorName;
+                ValueOld.planTitle = value.planTitle;
+                ValueOld.planContent = value.planContent;
+                ValueOld.templateQuestionId = value.templateQuestionId;
+                ValueOld.templateQuestionName = value.templateQuestionName;
+                delete ValueOld.id; // 防止重新勾选不push
+              }
+              resetStateTplList.push(ValueOld);
+            });
+            this.$store.dispatch('intervention/setTplList', resetStateTplList);
+            if (this.$route.params.type === '1') {
+              this.$refs.InterventionTabMdl.resetMultipleSelectionAll(doID);
+            }
+          },
+        },
+        render: h => h(InterventionAddMdl),
+      });
+    },
+    /**
+     * 批量编辑计划
      */
     handleEditPlan() {
       if (this.checkPlanList.length !== 1) {
@@ -302,7 +329,7 @@ export default {
         });
         return;
       }
-      this.$jDynamic.show({// 有planId的都是自己编辑的
+      this.$jDynamic.show({// 有planId的都是自己新增/编辑的
         component: 'InterventionAddMdl',
         data: {
           modalType: 2,
@@ -432,7 +459,7 @@ export default {
     cancel() {
       this.$store.dispatch('intervention/setTplList', []);
       this.$router.push({
-        path: '/health_plan/user_follow_create',
+        path: '/health_plan/create_plan',
       });
     },
     /**
@@ -492,12 +519,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.create-edit /deep/ {
+.create-edit {
+  .table-operate-buttons{
+    z-index: 9;
+    position: relative;
+    margin: -48px 0 15px 0;
+    float: right;
+    justify-content: flex-start;
+  }
   // padding: 10px;
-  .el-textarea__inner {
+  /deep/ .el-textarea__inner {
     min-height: 40px !important;
   }
-  .el-table .warning-row {
+  /deep/ .el-table .warning-row {
     background: #fdf5e6;
   }
   .footer {
@@ -507,16 +541,22 @@ export default {
     padding: 10px 0;
   }
   .two-tab {
-    margin-top: 20px;
+    margin-top: 30px;
     background: #ffffff;
-    padding-bottom: 32px;
+    padding-bottom: 0;
     /deep/ .el-tabs__nav-wrap{
-      margin-left: 20px;
+      .el-tabs__active-bar{
+        width: 35px!important;
+        background-color: #3154AC;
+      }
+      &:after{
+        width: calc(100% - 20px);
+      }
     }
     /deep/ .el-tabs__content {
-      padding: 12px 0 0 20px;
-      margin-top: -7px;
-      border-left: 2px solid #F4F4F6;
+      padding: 12px 20px 0 0 ;
+      margin-top: -10px;
+      border-right: 1px dashed #DDE0E6;
     }
     /deep/ .el-tabs__item{
       color: #97A6BD;

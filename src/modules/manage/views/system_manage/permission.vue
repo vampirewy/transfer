@@ -54,11 +54,11 @@ export default {
   },
   watch: {
     data(newValue) {
-      this.$refs.tree.setCheckedKeys(newValue);
-      if (this.disabled) {
+      this.$refs.tree.setCheckedKeys(newValue); // 编辑的时候设置，查看放在加载菜单完后设置
+      /* if (this.disabled) {
         this.filterTree(newValue);
       }
-      this.setSelectAll();
+      this.setSelectAll(); */
     },
     roleData(newValue) {
       if (this.isFilter && !this.disabled) {
@@ -101,6 +101,10 @@ export default {
           console.log(result);
           console.log(JSON.parse(JSON.stringify(ACCESS)));
           this.permission = result.synthesisMenuList;
+          if (this.disabled) {
+            this.filterTree(this.data); // 查看的情况下，筛选出选中的
+          }
+          this.setSelectAll();
         });
     },
     filterTree(data) {
@@ -108,7 +112,9 @@ export default {
         this.permission,
         data,
       );
+      console.log(this.permission);
       const nodes = this.$refs.tree.store.nodesMap;
+      console.log(nodes);
       Object.keys(nodes).forEach((i) => {
         nodes[i].expanded = false;
       });
@@ -126,8 +132,10 @@ export default {
       return res;
     },
     handleCheckChange(data, checkedRes) {
+      console.log(data, checkedRes);
       const { checkedKeys } = checkedRes;
       const checked = checkedKeys.includes(data.menuCode);
+      console.log(checked);
       // 选中节点，父节点选中
       if (checked) {
         let node = this.$refs.tree.getNode(data);
@@ -138,6 +146,16 @@ export default {
         ) {
           this.$refs.tree.setChecked(node.parent.data, true, false);
           node = node.parent;
+        }
+      } else {
+        const node = this.$refs.tree.getNode(data);
+        console.log(node);
+        if (node.data.menuType === 2) {
+          const nodeMenuType2CheckTrue = node.parent.childNodes.filter(val => val.checked === true);
+          console.log(nodeMenuType2CheckTrue.length);
+          if (nodeMenuType2CheckTrue.length === 0) { // 如果第二集的兄弟级没有选中的，就父级也设false
+            this.$refs.tree.setChecked(node.parent.data, false, false);
+          }
         }
       }
       // 同步子节点

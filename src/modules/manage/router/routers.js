@@ -6,6 +6,7 @@
  *     hideInTag: (false) 设为true后此级路由将不会出现在标签栏中
  *     hideInMenu: (false) 设为true后在菜单栏不会显示该页面选项
  *     access: (null) 可访问该页面的权限数组
+ *     keepAlive: 页面缓存
  * }
  * @Date: 2021/4/15 19:06
  * @Last Modified by: csx

@@ -1,6 +1,6 @@
 <template>
   <div class="userManage">
-    <query-page @reset="reset" @search="search">
+    <!--<query-page @reset="reset" @search="search">
       <template slot="left">
         <search>
           <div class="searchInputFormItem">
@@ -26,33 +26,87 @@
           </el-select>
         </query-filter>
       </template>
-      <template slot="right">
-        <div class="divRightTitleDiv">
-          <div class="divRightTitle"><span>|</span>随访问卷</div>
+      <template slot="right">-->
+    <div class="divTop">
+      <div class="divTitle">
+        <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
+        随访问卷
+      </div>
+      <div class="searchCondition">
+        <div class="searchLeft">
+          <div class="searchInputFormItem">
+            <el-input placeholder="输入问卷名称搜索" v-model="formData.name">
+            </el-input>
+            <span class="searchBtnImgSpan" @click="search(1)">
+                  <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
+              </span>
+          </div>
+          <div style="margin-top: 10px;">
+            <span>问卷类型：</span>
+            <el-select
+                    v-model="formData.sortType"
+                    placeholder="请选择"
+                    style="width: 140px"
+            >
+              <el-option :label="item.name" :value="item.paramValue"
+                         v-for="item in sortTypeList"
+                         :key="item.paramValue"></el-option>
+            </el-select>
+          </div>
           <div>
-            <el-button
-                    class="btn-new btnAdd"
-                    size="small"
-                    style="margin-bottom: 16px"
-                    v-if="getAccess('visited_questionaire_add')"
-                    @click="$router.push('user_follow_questionnaire_add')"
-            ><img src="@/assets/images/common/addBtn.png" />新增</el-button
+            <span>创建日期：</span>
+            <el-date-picker
+                    v-model="formData.startTime"
+                    type="date"
+                    value-format="yyyy-MM-dd"
+                    :max-date="formData.endTime"
+                    placeholder="选择开始日期"
+                    style="width: 140px"
+                    clearable
             >
-            <!--<el-button
-                    @click="handleEditCheck"
-                    size="small"
-                    class="btn-new btnDel"
-            ><img src="@/assets/images/common/edit.png" />编辑</el-button
-            >-->
-            <el-button
-                    size="small"
-                    class="btn-new btnDel"
-                    v-if="getAccess('visited_questionaire_batch_delete')"
-                    @click="handleSomeRemove"
-            ><img src="@/assets/images/common/delBtn.png" />删除</el-button
+            </el-date-picker>
+            <span class="timing">-</span>
+            <el-date-picker
+                    v-model="formData.endTime"
+                    type="date"
+                    value-format="yyyy-MM-dd"
+                    :min-date="formData.startTime"
+                    placeholder="选择结束日期"
+                    style="width: 140px"
+                    clearable
             >
+            </el-date-picker>
           </div>
         </div>
+        <div class="searchRight">
+          <div class="buttones">
+            <div class="searchFor" @click="search">
+              <img src="@/assets/images/common/topsearchblue.png" alt="">
+            </div>
+            <div class="resetAll" @click="reset">重置</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="topbottomborder"></div>
+    <div class="divRightTitleDiv">
+      <!-- <div class="divRightTitle"><span>|</span>客户池</div> -->
+      <div>
+        <el-button
+                class="btn-new btnAdd"
+                size="small"
+                style="margin: 16px 0"
+                @click="$router.push('user_follow_questionnaire_add')"
+                v-if="getAccess('visited_questionaire_add')"
+        ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
+        <el-button
+                size="small"
+                class="btn-new btnDel"
+                @click="handleSomeRemove"
+                v-if="getAccess('visited_questionaire_batch_delete')"
+        ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
+      </div>
+    </div>
         <div>
           <el-table
                   :data="dataSource"
@@ -66,19 +120,29 @@
                 {{ scope.row.name | getResult }}
               </template>
             </el-table-column>
-            <el-table-column label="问卷类型" prop="questionTypeName" >
+            <el-table-column label="问卷类型" prop="sortTypeName" >
               <template slot-scope="scope">
-                {{ scope.row.questionTypeName | getResult }}
+                {{ scope.row.sortTypeName | getResult }}
               </template>
             </el-table-column>
             <el-table-column label="是否启用" prop="state">
               <template slot-scope="scope">
                 {{ scope.row.state | getResultState }}
               </template>
+              <!--<template slot-scope="scope">
+                <el-switch
+                        v-model="scope.row.state "
+                        :active-value="1"
+                        :inactive-value="0"
+                        active-color="#13ce66"
+                        @change="changeStatus(scope, '1')"
+                >
+                </el-switch>
+              </template>-->
             </el-table-column>
-            <el-table-column label="创建日期" prop="createTime" show-overflow-tooltip>
+            <el-table-column label="创建日期" prop="createdTime" show-overflow-tooltip>
               <template slot-scope="scope">
-                {{ scope.row.createTime | getResultDate }}
+                {{ scope.row.createdTime | getResultDate }}
               </template>
             </el-table-column>
             <el-table-column label="操作" prop="index" width="200">
@@ -115,8 +179,8 @@
             ></el-pagination>
           </div>
         </div>
-      </template>
-    </query-page>
+      <!--</template>
+    </query-page>-->
   </div>
 </template>
 
@@ -140,8 +204,11 @@ export default {
       formData: {
         name: '',
         state: '',
-        questionType: '',
+        sortType: '',
+        startTime: '',
+        endTime: '',
       },
+      sortTypeList: [],
       params: {
         pageNo: 1,
         pageSize: 15,
@@ -190,6 +257,25 @@ export default {
         });
       });
     },
+    changeStatus({ row = {} }, status) {
+      console.log(row);
+      console.log(status);
+      /* const setRow = row;
+      this.$api.userManagerInterface.editUserStatus({
+        id: setRow.id,
+        state: status,
+      }).then(({ data }) => {
+        if (data.code === 200) {
+          this.$message.success('操作成功');
+          setRow.state = status;
+        }
+      }); */
+    },
+    async getSystemParamByCode(code) {
+      const res = await this.$api.userManagerInterface.getSystemParamByCode(code);
+      const { data } = res.data;
+      this.sortTypeList = data;
+    },
     reset() {
       Object.assign(this.$data, this.$options.data());
       this.getTemplateQuestionList();
@@ -203,17 +289,24 @@ export default {
       this.getTemplateQuestionList();
     },
     getTemplateQuestionList() {
+      if (this.formData.startTime) {
+        this.formData.startTime = `${this.formData.startTime} 00:00:00`;
+      }
+      if (this.formData.endTime) {
+        this.formData.endTime = `${this.formData.endTime} 23:59:59`;
+      }
       this.$api.userFollowInterface
         .getTemplateQuestionListPage(Object.assign(this.params, this.formData))
         .then(({ data }) => {
           if (data.success) {
             this.params.total = data.data.total;
-            this.dataSource = data.data.list;
+            this.dataSource = data.data.data;
           }
         });
     },
   },
-  mounted() {
+  activated() {
+    this.getSystemParamByCode('ZY007');
     this.getTemplateQuestionList();
   },
 };

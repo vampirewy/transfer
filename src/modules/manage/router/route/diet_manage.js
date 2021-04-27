@@ -32,6 +32,34 @@ export default [
         title: '成品菜',
       },
       component: () => import('../../views/diet_manage/diet_finished_dish/index'),
+    }, {
+      path: '/diet_raw_material',
+      name: 'diet_raw_material',
+      meta: {
+        title: '原料库',
+      },
+      component: () => import('../../views/diet_manage/diet_raw_material/index'),
+    }, {
+      path: '/diet_menu_template',
+      name: 'diet_menu_template',
+      meta: {
+        title: '菜谱模版',
+      },
+      component: () => import('../../views/diet_manage/diet_menu_template/index'),
+    }, {
+      path: '/diet_tyerapy_chinese',
+      name: 'diet_tyerapy_chinese',
+      meta: {
+        title: '中医食疗',
+      },
+      component: () => import('../../views/diet_manage/diet_tyerapy_chinese/index'),
+    }, {
+      path: '/diet_principle',
+      name: 'diet_principle',
+      meta: {
+        title: '膳食原则',
+      },
+      component: () => import('../../views/diet_manage/diet_principle/index'),
     }],
   },
 ];

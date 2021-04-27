@@ -4,6 +4,9 @@
 
 .el-textarea.is-disabled .el-textarea__inner {
   cursor: default;
+  background-color: #EEF1F5;
+  border-color: #EEF1F5;
+  color: #B4BBC9;
 }
 
 .el-select .el-input.is-disabled .el-input__inner {

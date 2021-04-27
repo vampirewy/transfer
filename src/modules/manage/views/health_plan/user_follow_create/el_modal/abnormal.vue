@@ -1,16 +1,38 @@
 <template>
   <div class="abnormal-popoper">
-    <div class="query searchInputFormItem">
+    <!--<div class="query searchInputFormItem">
       <el-input v-model="formData.name" placeholder="输入异常名称搜索"></el-input>
       <span class="searchBtnImgSpan" @click="search(1)">
             <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
       </span>
+    </div>-->
+    <div class="divTop" style="margin: -15px 0 15px 0">
+      <div class="searchCondition">
+        <div class="searchLeft">
+          <div class="searchInputFormItem">
+            <el-input placeholder="输入异常名称搜索" v-model="formData.name">
+            </el-input>
+            <span class="searchBtnImgSpan" @click="search(1)">
+                  <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
+              </span>
+          </div>
+        </div>
+        <div class="searchRight">
+          <div class="buttones">
+            <div class="searchFor" @click="search(1)">
+              <img src="@/assets/images/common/topsearchblue.png" alt="">
+            </div>
+            <div class="resetAll" @click="reset">重置</div>
+          </div>
+        </div>
+      </div>
     </div>
     <el-table
       @selection-change="handleSelectionChange"
       :data="dataSource"
       ref="multipleTable"
       align="center"
+      class="openTable"
     >
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column label="异常名称" prop="abnormalName"></el-table-column>
@@ -27,9 +49,9 @@
       @current-change="handleCurrentChange"
       @size-change="handleSizeChange"
     ></el-pagination>
-    <div class="buttonsSelectOpen">
-      <el-button plain @click="cancel">取消</el-button>
-      <el-button type="primary" @click="submit">确定</el-button>
+    <div class="footer">
+      <el-button size="small" class="cancelBtn" @click="cancel">取消</el-button>
+      <el-button type="primary" size="small" class="sureBtn" @click="submit">确定</el-button>
     </div>
   </div>
 </template>
@@ -77,20 +99,22 @@ export default {
       this.$api.reportInterface
         .getAbnormalList(Object.assign(this.params, this.formData))
         .then(({ data }) => {
-          if (data.code === 200) {
-            this.params.total = data.data.total;
-            this.dataSource = data.data.list;
-            this.dataSource.forEach((val) => {
-              this.$set(this.map, val.id, val);
-            });
-          }
+          this.params.total = data.data.total;
+          this.dataSource = data.data.data;
+          this.dataSource.forEach((val) => {
+            this.$set(this.map, val.id, val);
+          });
         });
     },
     search(current = 1) {
       this.params.pageNo = current;
       this.fetch();
     },
-
+    reset() {
+      this.formData.name = '';
+      this.params.pageNo = 1;
+      this.fetch();
+    },
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
@@ -145,6 +169,10 @@ export default {
         color: #fff;
       }
     }
+  }
+  .footer{
+    margin-top: 20px;
+    text-align: right;
   }
   .el-table::before {
     background: none;

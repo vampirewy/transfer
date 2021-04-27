@@ -44,6 +44,6 @@ export default [
       hideInMenu: true,
       hideInTag: true,
     },
-    component: () => import('../../../views/health_plan/user_follow_questionnaire/questionnaire_edit'),
+    component: () => import('../../../views/health_plan/user_follow_questionnaire/questionnaire_detail'),
   },
 ];

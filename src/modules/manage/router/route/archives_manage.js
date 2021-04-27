@@ -41,6 +41,39 @@ export default [
           import('../../views/archives_manage/life_style_questionnaire'),
       },
       {
+        path: '/china_constitution_questionnaire',
+        name: 'china_constitution_questionnaire',
+        meta: {
+          title: '中医体质问卷',
+          access: 'china_constitution_questionnaire',
+          keepAlive: true,
+        },
+        component: () =>
+          import('../../views/archives_manage/china_constitution_questionnaire'),
+      },
+      {
+        path: '/psychology_questionnaire',
+        name: 'psychology_questionnaire',
+        meta: {
+          title: 'SCL90心理问卷',
+          access: 'psychology_questionnaire',
+          keepAlive: true,
+        },
+        component: () =>
+          import('../../views/archives_manage/psychology_questionnaire'),
+      },
+      {
+        path: '/custom_questionnaire',
+        name: 'custom_questionnaire',
+        meta: {
+          title: '自定义问卷',
+          access: 'custom_questionnaire',
+          keepAlive: true,
+        },
+        component: () =>
+          import('../../views/archives_manage/custom_questionnaire'),
+      },
+      {
         path: '/medical_history',
         name: 'medical_history',
         meta: {
@@ -115,6 +148,18 @@ export default [
         },
         component: () =>
           import('../../views/archives_manage/health_questionnaire_edit'),
+      },
+      {
+        path: '/custom_questionnaire_edit/:type/:qusType/:templateQuestionId?/:id?',
+        name: 'custom_questionnaire_edit',
+        meta: {
+          title: '新增自定义问卷',
+          access: 'custom_questionnaire_add',
+          hideInMenu: true,
+          hideInTag: true,
+        },
+        component: () =>
+          import('../../views/archives_manage/custom_questionnaire_edit'),
       },
       // {
       //   path: "/medical_history_edit/:id?",

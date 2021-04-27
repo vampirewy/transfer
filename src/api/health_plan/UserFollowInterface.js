@@ -88,6 +88,11 @@ class UserFollowInterface extends BaseModule {
   getTemplateQuestionDetail(id) {
     return this.get(`/template_question/detail/${id}`);
   }
+  // 获取已填写的问卷-问卷题目
+  getAlreadyAnwserQuestionDetail(id) {
+    return this.get(`/template_question/question_detail/${id}`);
+  }
+
   // 随访问卷批量删除
   deleteTemplateQuestion(data = {}) {
     return this.post('/template_question/batch/delete', data);

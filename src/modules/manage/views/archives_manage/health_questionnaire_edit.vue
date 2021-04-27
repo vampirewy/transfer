@@ -4,7 +4,7 @@
       <div class="firstTitleTabBar">
         <span :class="active === -1 ? 'TabBarsNameFirstActive' : 'TabBarsFirstNames'"
               @click="clickToTop">
-          生活方式问卷
+          {{qusTypeName}}问卷
         </span>
       </div>
       <div v-for="(item,index) in templateList" :key="item.name">
@@ -13,11 +13,8 @@
         {{item.name}}
       </span>
       </div>
-      <!-- <div><span>阳性跟踪</span></div>
-      <div><span>随访任务</span></div> -->
-
     </div>
-    <div class="intvTmpl_left" id="intvTmpl_left" v-if="$route.params.qusType === 1"
+    <!--<div class="intvTmpl_left" id="intvTmpl_left" v-if="$route.params.qusType === 1"
          :class="{ 'isFixed': searchBarFixed === true }"
          style="max-height: 30000px;height: auto;margin-right: 30px;display: none">
       <div class="intvTmpl_left_title">生活方式问卷</div>
@@ -27,7 +24,7 @@
           {{item.name}}
         </li>
       </ul>
-    </div>
+    </div>-->
     <div class="health_questionnaire_form" :class="{ 'isFixedForm': searchBarFixed === true }"
          :style="{'padding-top': contentPaddingTop + 'px'}">
       <div class="divRightTitleDiv">
@@ -35,10 +32,10 @@
       </div>
     <client-info :id="$route.params.id" :propsData="formData"
                  @change="data => formData.clientId = data"></client-info>
-      <div class="editWarn" v-if="$route.params.qusType === 1">
+      <div class="editWarn">
         <img src="@/assets/images/common/editIcon.png"/>
         <span>答案选项中频率表示天数，“从不”表示0天，“偶尔”表示每周1-2天，“有时”表示每周3-4天，“经常”表示每周5-6天，“总是”表示每周7天。
-        <br/>家族病史部分，“兄”代表兄弟姐妹.</span>
+        家族病史部分，“兄”代表兄弟姐妹.</span>
       </div>
     <el-form
       ref="form"
@@ -50,7 +47,7 @@
       style="padding-top: 0"
       :rules="rules"
     >
-      <div class="title" v-if="$route.params.qusType !== 1">填写{{qusTypeName}}问卷</div>
+      <div class="title" v-if="$route.params.qusType !== 1">问卷内容</div>
       <div class="container" :class="{'containerOtherCheckBox': $route.params.qusType !== 1}">
         <div v-for="(item, index) in questions" :key="item.paramSort">
           <div class="title articleTitle" :id="'questions-' + index"
@@ -123,7 +120,6 @@ export default {
     return {
       active: -1,
       contentPaddingTop: 20,
-      tabbor: ['当日任务', '阳性跟踪', '随访任务'],
       title: '',
       qusTypeName: '',
       formData: {
@@ -131,7 +127,7 @@ export default {
         createTime: new Date(),
         mobile: '',
       },
-      templateList: [],
+      templateList: [{ name: '基本信息' }, { name: '问卷内容' }],
       questions: [],
       answerList: [],
       answerOptionsList: [],
@@ -154,9 +150,16 @@ export default {
   watch: {},
   methods: {
     clickMenu(index, selector) {
+      const Index = index;
       this.active = index;
-      const anchor = this.$el.querySelector(selector);
-      this.$refs.health_questionnaire_edit.parentNode.scrollTop = anchor.offsetTop - 50;
+      if (this.$route.params.qusType === 1) {
+        const anchor = this.$el.querySelector(selector);
+        this.$refs.health_questionnaire_edit.parentNode.scrollTop = anchor.offsetTop - 50;
+      } else if (Index === 0) { // 不是生活方式问卷，但是点了标题
+        this.$refs.health_questionnaire_edit.parentNode.scrollTop = 51;
+      } else {
+        this.$refs.health_questionnaire_edit.parentNode.scrollTop = 350;
+      }
     },
     clickToTop() {
       this.active = -1;
@@ -276,8 +279,11 @@ export default {
       this.$api.health.getQuestions(EV).then(({ data }) => {
         // if (data.code === 200) {
         this.questions = data.data;
+        if (this.$route.params.qusType === 1) this.templateList = []; // 如果是生活方式问卷 就清空标题数组
         this.questions.forEach((val, index) => {
-          this.templateList.push({ name: val.name, sort: index });
+          if (this.$route.params.qusType === 1) {
+            this.templateList.push({ name: val.name, sort: index });
+          }
           val.questionSubjectDTOList.forEach((valOptions) => {
             if (!this.answerMap[valOptions.id]) {
               this.$set(this.answerMap, valOptions.id, []);
@@ -368,7 +374,8 @@ export default {
           this.$refs.health_questionnaire_edit.parentNode.scrollTop =
             (anchor.parentNode.offsetTop + anchor.offsetTop) - 50;
         } else {
-          document.documentElement.scrollTop = anchor.offsetTop + 290;
+          console.log(anchor.offsetTop);
+          this.$refs.health_questionnaire_edit.parentNode.scrollTop = anchor.offsetTop + 400;
         }
         return;
       }
@@ -402,9 +409,19 @@ export default {
       if (scrollTop < 50) { // 小于50就设置标题栏选中
         this.active = -1;
       }
+      if (this.$route.params.qusType !== 1) {
+        if (scrollTop > 50 && scrollTop < 300) { // 小于50就设置标题栏选中
+          this.active = 0;
+        } else if (scrollTop >= 300) {
+          this.active = 1;
+        }
+      }
     },
     setContentPaddingTop() { // 设置距离顶部高度， 防止头部标签换行
-      const headerHeight = this.$refs.tabBars.offsetHeight;
+      let headerHeight = 0;
+      if (this.$refs.tabBars) {
+        headerHeight = this.$refs.tabBars.offsetHeight;
+      }
       if (headerHeight <= 40) { // 一层
         this.contentPaddingTop = 20;
       } else if (headerHeight > 40) { // 两层
@@ -419,15 +436,16 @@ export default {
     next((vm) => {
       const VM = vm;
       if (to.params.qusType === 1) {
-        VM.qusTypeName = '常规';
-        // window.addEventListener('scroll', vm.handleScroll);
-        console.log(document.querySelectorAll('.content-wrapper'));
-        console.log(VM.$refs.health_questionnaire_edit.parentNode);
-        document.querySelectorAll('.content-wrapper')[0].addEventListener('scroll', vm.handleScroll);
+        VM.qusTypeName = '生活方式';
       } else if (to.params.qusType === 2) {
-        VM.qusTypeName = '中医';
+        VM.qusTypeName = '中医体质';
       } else if (to.params.qusType === 3) {
-        VM.qusTypeName = '心理';
+        VM.qusTypeName = 'SCL90心理';
+      }
+      // window.addEventListener('scroll', vm.handleScroll);
+      console.log(document.querySelectorAll('.content-wrapper'));
+      if (document.querySelectorAll('.content-wrapper').length > 0) {
+        document.querySelectorAll('.content-wrapper')[0].addEventListener('scroll', vm.handleScroll);
       }
       if (to.params.id) { // 如果有id就是编辑 先获取详情
         VM.fetch(to.params.id, to.params.qusType);
@@ -440,7 +458,7 @@ export default {
         }
       } else {
         VM.onTypeChange(to.params.qusType);
-        VM.title = '添加';
+        VM.title = '新增';
         document.title = '新增健康问卷';
       }
       window.onresize = () => { // 60 120  180  240 头部导航栏固定高度
@@ -452,173 +470,6 @@ export default {
 </script>
 
 <style lang="scss">
-  .tabBars{
-    display: flex;
-    align-items: flex-end;
-    background-color: #F6F8FC;
-    margin: -20px -20px 0 -20px;
-    flex-wrap: wrap;
-    position: absolute;
-    top: 20px;
-    z-index: 1;
-    width: calc(100% - 40px);
-    div{
-      // width: 100px;
-      // height: 40px;
-      // line-height: 40px;
-      // text-align: center;
-      // background: red;
-    }
-    .firstTitleTabBar{
-      .TabBarsNameFirstActive{
-        cursor: pointer;
-        background: #ffffff;
-        border-color: transparent;
-        color: #333333;
-        font-weight: 500;
-        position: relative;
-        margin-right: 10px;
-        padding: 0 10px 0 16px;
-        height: 40px;
-        line-height: 40px;
-        font-size: 14px;
-        border-radius: 8px 5px 0 0;
-        display: inline-block;
-        &:after{
-          content: '';
-          display: block;
-          width: 15px;
-          height: 40px;
-          position: absolute;
-          -webkit-transform: skewX(18deg);
-          transform: skewX(18deg);
-          background: white;
-          border-top-right-radius: 8px;
-          top: 0px;
-          right: -8px;
-        }
-      }
-      .TabBarsFirstNames{
-        cursor: pointer;
-        background: #EEF1F5;
-        border-color: transparent;
-        color: #666666;
-        position: relative;
-        margin-right: 10px;
-        padding: 10px 10px 10px 16px;
-        font-size: 12px;
-        border-radius: 8px 5px 0 0;
-        display: inline-block;
-        &:after{
-          content: '';
-          display: block;
-          width: 15px;
-          height: 36px;
-          position: absolute;
-          -webkit-transform: skewX(18deg);
-          transform: skewX(18deg);
-          background: #EEF1F5;
-          border-top-right-radius: 8px;
-          top: 0px;
-          right: -7px;
-        }
-      }
-    }
-    .TabBarsNameActive{
-      cursor: pointer;
-      background: #ffffff;
-      border-color: transparent;
-      color: #333333;
-      font-weight: 500;
-      position: relative;
-      margin-right: 9px;
-      margin-left: 13px;
-      padding: 0 8px 0 8px;
-      height: 40px;
-      line-height: 40px;
-      font-size: 14px;
-      border-radius: 8px 5px 0 0;
-      display: inline-block;
-      &:before{
-          content: '';
-          display: block;
-          width: 10px;
-          height: 40px;
-          position: absolute;
-          -webkit-transform: skewX(165deg);
-          transform: skewX(163deg);
-          background: white;
-          border-top-left-radius: 8px;
-          top: 0px;
-          left: -4px;
-      }
-      &:after{
-        content: '';
-        display: block;
-        width: 10px;
-        height: 40px;
-        position: absolute;
-        -webkit-transform: skewX(18deg);
-        transform: skewX(18deg);
-        background: white;
-        border-top-right-radius: 8px;
-        top: 0px;
-        right: -5px;
-      }
-    }
-    .TabBarsNames{
-      cursor: pointer;
-      background: #EEF1F5;
-      border-color: transparent;
-      color: #666666;
-      position: relative;
-      margin-right: 8px;
-      padding: 10px 8px 10px 8px;
-      font-size: 12px;
-      border-radius: 8px 5px 0 0;
-      margin-left: 13px;
-      display: inline-block;
-      &:before {
-        content: '';
-        display: block;
-        width: 10px;
-        height: 36px;
-        position: absolute;
-        -webkit-transform: skewX(165deg);
-        transform: skewX(163deg);
-        background: #EEF1F5;
-        border-top-left-radius: 8px;
-        top: 0px;
-        left: -4px;
-      }
-      &:after{
-        content: '';
-        display: block;
-        width: 10px;
-        height: 36px;
-        position: absolute;
-        -webkit-transform: skewX(18deg);
-        transform: skewX(18deg);
-        background: #EEF1F5;
-        border-top-right-radius: 8px;
-        top: 0px;
-        right: -5px;
-      }
-    }
-    .Tabunread{
-      display: inline-block;
-      background: red;
-      padding: 3px;
-      color: #ffffff;
-      width: 12px;
-      height: 12px;
-      line-height: 12px;
-      text-align: center;
-      border-radius: 10px;
-      margin-left: 5px;
-      font-size: 12px;
-    }
-  }
   .health_questionnaire_edit{
     #intvTmpl_left{
       &.isFixed{
@@ -738,10 +589,13 @@ export default {
       }
       .el-radio-button {
         .el-radio-button__inner {
-          min-width: 220px;
+          min-width: 180px;
         }
         &:first-child .el-radio-button__inner{
           margin-right: 30px;
+        }
+        &:last-child .el-radio-button__inner{
+          margin-right: 0;
         }
       }
       .el-radio-button + .el-radio-button {
