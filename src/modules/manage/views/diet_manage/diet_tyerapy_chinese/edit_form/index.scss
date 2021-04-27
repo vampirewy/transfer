@@ -1,0 +1,53 @@
+.diet-form_center{
+    .diet-plan-box{
+        .title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333333;
+            line-height: 25px;
+            position: relative;
+            margin-bottom: 20px;
+            &:after {
+              content: '';
+              position: absolute;
+              left: 0;
+              bottom: 2px;
+              transform: translateY(-50%);
+              width: 32px;
+              height: 4px;
+              background: #3154AC;
+              border-radius: 3px;
+              opacity: 0.5;
+            }
+            &.permission-title {
+              margin-top: 10px;
+            }
+          }
+     }
+}
+.block-div{
+ display: flex;
+ /deep/ .el-form-item{
+   width: 100%;
+   display: flex;
+   .el-form-item__content{
+     flex: 1;
+   }
+   .el-checkbox{
+     width: 20%;
+   }
+ }
+}
+.btn-box{
+  text-align: center;
+  img{
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    margin: 0 5px;
+  }
+}
+.form-buttons{
+  text-align: center;
+  margin-top: 100px;
+}
