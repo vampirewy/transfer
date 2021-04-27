@@ -473,7 +473,7 @@ export default {
   },
   computed: {
     filterTableList() {
-      return this.dataSource.filter((it) => it.deleted === 0);
+      return this.dataSource.filter(it => it.deleted === 0);
     },
   },
   data() {
@@ -560,8 +560,8 @@ export default {
       });
       const { data } = res.data;
       this.formData.userRealName = (data.list || [])
-        .filter((item) => item.selected)
-        .map((item) => item.realName)
+        .filter(item => item.selected)
+        .map(item => item.realName)
         .join(',');
     },
     async getGridList() {
@@ -570,7 +570,7 @@ export default {
         pageSize: 10000,
       });
       const { data } = res.data;
-      this.gridList = data.data.filter((t) => t.state === '1');
+      this.gridList = data.data.filter(t => t.state === '1');
     },
     async getSystemParamByCode(code, fieldName) {
       const res = await this.$api.userManagerInterface.getSystemParamByCode(
@@ -594,9 +594,9 @@ export default {
         customClass: 'message-box-customize',
         showClose: true,
       }).then(() => {
-        const ids = this.chooseFileList.map((f) => f.id);
+        const ids = this.chooseFileList.map(f => f.id);
         for (let i = ids.length - 1; i >= 0; i--) {
-          const idx = this.dataSource.findIndex((t) => t.id === ids[i]);
+          const idx = this.dataSource.findIndex(t => t.id === ids[i]);
           this.$set(
             this.dataSource,
             idx,
@@ -611,13 +611,13 @@ export default {
     submitAssign(rows) {
       this.$refs.popover1.showPopper = false;
       this.formData.userIdList = rows
-        .filter((t) => t.selectType === 1)
-        .map((t) => t.id);
+        .filter(t => t.selectType === 1)
+        .map(t => t.id);
       this.formData.workIdList = rows
-        .filter((t) => t.selectType === 2)
-        .map((t) => t.id);
+        .filter(t => t.selectType === 2)
+        .map(t => t.id);
 
-      this.formData.userRealName = rows.map((item) => item.realName).join(',');
+      this.formData.userRealName = rows.map(item => item.realName).join(',');
     },
     handlePopoperShow() {
       this.popoverStatus = true;
@@ -640,8 +640,8 @@ export default {
             birth: dayjs(this.formData.birth).format('YYYY-MM-DD'),
           };
           this.formData.annexParams = this.dataSource
-            .filter((t) => t.time && t.deleted === 0)
-            .map((t) => ({
+            .filter(t => t.time && t.deleted === 0)
+            .map(t => ({
               title: t.title,
               remark: t.remark,
               createTime: t.createTime,
@@ -649,8 +649,8 @@ export default {
             }));
 
           this.formData.annexIdList = this.dataSource
-            .filter((t) => t.id && t.deleted === 1)
-            .map((t) => t.id);
+            .filter(t => t.id && t.deleted === 1)
+            .map(t => t.id);
 
           console.log('formData', this.formData);
 
@@ -735,7 +735,7 @@ export default {
         customClass: 'message-box-customize',
         showClose: true,
       }).then(() => {
-        const idx = this.dataSource.findIndex((t) => t.id === row.id);
+        const idx = this.dataSource.findIndex(t => t.id === row.id);
         this.$set(
           this.dataSource,
           idx,
@@ -766,26 +766,25 @@ export default {
               result.educationLevel === 0 ? '' : result.educationLevel,
           };
           this.selectedDoctorIds = (result.userList || []).map(
-            (doctor) => doctor.id,
+            doctor => doctor.id,
           );
 
           const nameList = [];
           if (result.userList && result.userList.length) {
-            result.userList.map((t) => nameList.push(t.realName));
+            result.userList.map(t => nameList.push(t.realName));
           }
 
           if (result.workHomeDOList && result.workHomeDOList.length) {
-            result.workHomeDOList.map((t) => nameList.push(t.name));
+            result.workHomeDOList.map(t => nameList.push(t.name));
           }
 
           this.formData.userRealName = nameList.join(',');
 
           this.formData.userIdList = (result.userList || []).map(
-            (row) => row.id,
+            row => row.id,
           );
-
           this.formData.workIdList = (result.workHomeDOList || []).map(
-            (row) => row.id,
+            row => row.id,
           );
 
           (result.userList || []).forEach((t) => {

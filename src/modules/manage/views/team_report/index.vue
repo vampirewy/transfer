@@ -1,5 +1,4 @@
 <template>
-
   <div class="extimate-report">
     <match-exception
       v-if="view === 4"
@@ -482,15 +481,15 @@ export default {
     generateReport() {
       if (this.multipleSelection.length === 0) {
         this.$message.warning('请先选择数据');
-      } else if(this.multipleSelection.length > 1) {
+      } else if (this.multipleSelection.length > 1) {
         this.$message.warning('请选择一条数据');
       } else {
         this.$router.push({
           path: '/team_configure',
           query: {
-            id: this.multipleSelection[0].reportId
-          }
-        })
+            id: this.multipleSelection[0].reportId,
+          },
+        });
       }
       // if (this.multipleSelection.length === 0) {
       //   this.$message.warning('请先选择数据');
@@ -513,15 +512,15 @@ export default {
     createReport() {
       if (this.multipleSelection.length === 0) {
         this.$message.warning('请先选择数据');
-      } else if(this.multipleSelection.length > 1) {
+      } else if (this.multipleSelection.length > 1) {
         this.$message.warning('请选择一条数据');
       } else {
         this.$router.push({
           path: '/team_create',
           query: {
-            id: this.multipleSelection[0].reportId
-          }
-        })
+            id: this.multipleSelection[0].reportId,
+          },
+        });
       }
       // const params = this.multipleSelection.map(({ clientId, lifeQuestionId, reportId }) => {
       //   const data = {
