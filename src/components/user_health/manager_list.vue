@@ -185,7 +185,6 @@ export default {
   }
   padding: 13px 18px 21px 18px;
   /deep/ .el-table__header-wrapper th{
-    padding: 11px 0;
     .cell{
       font-size: 14px;
       color: #333333;
@@ -217,6 +216,11 @@ export default {
         font-size: 18px;
         color: #fff;
       }
+    }
+  }
+  .el-table{
+    td{
+      padding: 11.5px 0;
     }
   }
   .el-table::before {
