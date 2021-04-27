@@ -43,7 +43,7 @@
   <div class="divTop">
     <div class="divTitle">
       <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
-      生活方式问卷
+      自定义问卷
     </div>
     <div class="searchCondition">
       <div class="searchLeft">
@@ -79,14 +79,15 @@
           </el-select>
         </div>
         <div>
-          <span>生活方式：</span>
+          <span>问卷来源：</span>
           <el-select
-                  v-model="formData.lifeStyleLv"
+                  v-model="formData.source"
                   placeholder="请选择"
                   style="width: 140px"
+                  clearable
           >
             <el-option :label="item.name" :value="item.paramValue"
-                       v-for="(item, index) in lifeStyleList" :key="index"></el-option>
+                       v-for="(item, index) in questionFromList" :key="index"></el-option>
           </el-select>
         </div>
       </div>
@@ -108,15 +109,16 @@
     <div v-if="!isTrue" class="searchCondition" style="width:80%;">
       <div class="searchLeft" style="padding-left:5px;">
         <div>
-          <span>问卷来源：</span>
+          <span>问卷类型：</span>
           <el-select
-                  v-model="formData.source"
+                  v-model="formData.sortType"
                   placeholder="请选择"
                   style="width: 140px"
                   clearable
           >
             <el-option :label="item.name" :value="item.paramValue"
-                       v-for="(item, index) in questionFromList" :key="index"></el-option>
+                       v-for="item in sortTypeList"
+                       :key="item.paramValue"></el-option>
           </el-select>
         </div>
         <div>
@@ -128,7 +130,6 @@
                   :max-date="formData.endTime"
                   placeholder="选择开始日期"
                   style="width: 140px"
-                  clearable
           >
           </el-date-picker>
           <span class="timing">-</span>
@@ -139,7 +140,6 @@
                   :min-date="formData.startTime"
                   placeholder="选择结束日期"
                   style="width: 140px"
-                  clearable
           >
           </el-date-picker>
         </div>
@@ -148,19 +148,38 @@
     <div class="topbottomborder"></div>
     <div class="divRightTitleDiv">
       <!-- <div class="divRightTitle"><span>|</span>客户池</div> -->
-      <div>
-        <el-button
-                class="btn-new btnAdd"
-                size="small"
-                style="margin: 16px 0"
-                @click="handleAddCheck(1)"
-                v-if="getAccess('life_style_questionnaire_add')"
-        ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
+      <div style="margin: 16px 0">
+        <el-popover
+                v-if="getAccess('custom_questionnaire_add')"
+                ref="userPopover"
+                placement="bottom-start"
+                width="650"
+                trigger="click"
+                @show="popoverStatus = true"
+                @hide="popoverStatus = false"
+        >
+          <visited-questionaire-open v-if="popoverStatus" @change="handlePopoperClose">
+          </visited-questionaire-open>
+          <!--<el-input
+                  class="select-user-trigger"
+                  slot="reference"
+                  disabled
+                  v-model="formData.clientName"
+                  placeholder="请选择客户">
+            <i :class="`el-icon-arrow-${popoverStatus ? 'up' : 'down'}`" slot="suffix"></i>
+          </el-input>-->
+          <el-button
+                  class="btn-new btnAdd"
+                  size="small"
+                  slot="reference"
+          ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
+        </el-popover>
         <el-button
                 size="small"
                 class="btn-new btnDel"
+                style="margin-left: 12px"
                 @click="handleSomeRemove"
-                v-if="getAccess('life_style_questionnaire_deleted')"
+                v-if="getAccess('custom_questionnaire_deleted')"
         ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
       </div>
     </div>
@@ -211,14 +230,14 @@
             <span>{{ scope.row.clientGridName | getResult}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="lifeStyleLvName" label="生活方式" show-overflow-tooltip>
+        <el-table-column prop="sortTypeName" label="问卷类型" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{ scope.row.lifeStyleLvName | getResult}}</span>
+            <span>{{ scope.row.sortTypeName | getResult}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="workUnitName" label="单位" show-overflow-tooltip>
+        <el-table-column prop="name" label="问卷名称" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{ scope.row.workUnitName | getResult}}</span>
+            <span>{{ scope.row.name | getResult}}</span>
           </template>
         </el-table-column>
         <el-table-column label="填写日期" prop="questionDate" show-overflow-tooltip>
@@ -243,16 +262,17 @@
               size="small"
               @click="
                 $router.push({
-                  name: 'health_questionnaire_edit',
+                  name: 'custom_questionnaire_edit',
                   params: {
                     type: 'edit',
-                    qusType: scope.row.questionType,
+                    qusType: 4,
+                    templateQuestionId: '1386567482646433793',
                     id: scope.row.id,
                   },
                 })
               "
-              v-if="getAccess('life_style_questionnaire_edit') && scope.row.questionType !== 4"
-            >编辑</el-button>
+              v-if="getAccess('custom_questionnaire_edit')"
+            >编辑</el-button>  <!-- scope.row.templateQuestionId-->
             <el-button
               type="text"
               size="small"
@@ -265,7 +285,7 @@
                   },
                 })
               "
-              v-if="getAccess('life_style_questionnaire_view')
+              v-if="getAccess('custom_questionnaire_view')
               "
             >查看</el-button>
           </template>
@@ -297,6 +317,7 @@ import OperateButton from '~/src/components/query_page/operate_button.vue';
 // import * as dayjs from 'dayjs';
 import report from './components/question_report.vue';
 import deleteIcon from '~/src/assets/images/message-box-delete@2x.png';
+import VisitedQuestionaireOpen from '@/components/date_select/visited_questionaire_open.vue';
 
 export default {
   name: 'question',
@@ -306,6 +327,7 @@ export default {
     Search,
     QueryFilter,
     OperateButton,
+    VisitedQuestionaireOpen,
   },
   data() {
     return {
@@ -313,18 +335,19 @@ export default {
       total: 0,
       dataSource: [],
       gridList: [],
-      lifeStyleList: [], // 生活方式
-      questionFromList: [], // 问卷来源
       formData: {
         keyWord: '',
         gender: '',
         clientGrid: '',
-        lifeStyleLv: '',
         source: '',
+        sortType: '',
         startTime: undefined,
         endTime: undefined,
-        questionType: 1,
+        questionType: 4,
       },
+      questionFromList: [], // 问卷来源
+      sortTypeList: [], // 问卷类型
+      popoverStatus: false,
       visible: false,
       current: {},
       params: {
@@ -355,7 +378,7 @@ export default {
   activated() {
     this.getGridList();
     this.getQuestionFromList();
-    this.getLifeStyleList();
+    this.getSystemParamByCode('ZY007');
     if (localStorage.getItem('homeSearchData')) {
       const HomeSearchData = JSON.parse(localStorage.getItem('homeSearchData'));
       this.formData.startTime = HomeSearchData.startDate;
@@ -378,22 +401,35 @@ export default {
       const { data } = res.data;
       this.questionFromList = data;
     },
-    async getLifeStyleList() {
-      const res = await this.$api.health.getLifeStyleList({ pageNo: 1, pageSize: 10000 });
+    async getSystemParamByCode(code) {
+      const res = await this.$api.userManagerInterface.getSystemParamByCode(code);
       const { data } = res.data;
-      this.lifeStyleList = data;
+      this.sortTypeList = data;
     },
     handleSelectionChange(val) {
       // table组件选中事件,
       this.multipleSelection = val;
+    },
+    handlePopoperClose(data) {
+      this.$refs.userPopover.doClose();
+      this.popoverStatus = false;
+      console.log(data);
+      this.$router.push({
+        name: 'custom_questionnaire_edit',
+        params: {
+          type: 'edit',
+          qusType: 4,
+          templateQuestionId: data.id,
+        },
+      });
     },
     reset() {
       this.params.pageNo = 1;
       this.formData.keyWord = '';
       this.formData.gender = '';
       this.formData.clientGrid = '';
-      this.formData.lifeStyleLv = '';
       this.formData.source = '';
+      this.formData.sortType = '';
       this.formData.startTime = undefined;
       this.formData.endTime = undefined;
       // this.getQuestionType();

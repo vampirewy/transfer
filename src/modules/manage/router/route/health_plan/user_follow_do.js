@@ -39,6 +39,6 @@ export default [
       hideInTag: true,
     },
     component: () =>
-      import('../../../views/health_plan/user_follow_do/el_modal/followplan_detail'),
+      import('../../../views/health_plan/user_follow_record/el_modal/followplan_detail'),
   },
 ];

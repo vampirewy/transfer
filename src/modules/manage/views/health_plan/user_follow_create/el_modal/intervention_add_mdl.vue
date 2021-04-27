@@ -349,26 +349,26 @@ export default {
     border: 1px solid #f94242 !important;
   }
   /deep/ .el-dialog__body{
-    padding: 30px 26px 10px 26px !important;
+    padding: 20px 26px 10px 26px !important;
   }
   /deep/ .el-input__inner,/deep/ .el-textarea__inner{
-    background-color: #F4F4F6;
+    // background-color: #F4F4F6;
   }
   .body {
     .search-title {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 600;
       color: #333333;
       line-height: 25px;
-      padding-left: 10px;
-      margin-bottom: 10px;
+      padding-left: 15px;
+      margin-bottom: 15px;
       position: relative;
       &:before {
         content: '';
         width: 5px;
         height: 5px;
-        background: #4991FD;
-        border-radius: 3px;
+        border: 1px solid #B4BBC9;
+        border-radius: 50px;
         position: absolute;
         left: 0;
         top: 50%;
@@ -395,10 +395,13 @@ export default {
     // 下拉弹框
     /deep/ .select-user-trigger {
       line-height: 37px;
+      input{
+        border: 1px solid #DDE0E6 !important;
+      }
       input, i {
         color: #333333;
         cursor: pointer;
-        background-color: #F4F4F6!important;
+        background-color: white!important;
       }
       &.disabled {
         input, i {

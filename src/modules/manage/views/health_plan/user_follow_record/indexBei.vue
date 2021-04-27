@@ -1,10 +1,12 @@
 <template>
-    <query-page @reset="onReset" @search="onSearch">
+  <div>
+    <!--<query-page @reset="onReset" @search="onSearch">
       <template v-slot:left>
         <search>
           <div class="searchInputFormItem">
             <el-input placeholder="姓名/手机号/企业单位" v-model="form.keywords">
-              <!-- <el-button slot="append" icon="el-icon-search" @click="onSearch"></el-button>-->
+              &lt;!&ndash; <el-button slot="append" icon="el-icon-search" @click="onSearch">
+              </el-button>&ndash;&gt;
             </el-input>
             <span class="searchBtnImgSpan" @click="onSearch">
             <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
@@ -16,7 +18,7 @@
             <el-option label="男" :value="1"></el-option>
             <el-option label="女" :value="2"></el-option>
           </el-select>
-          <!--<el-input placeholder="企业单位" v-model="form.workUnitName"></el-input>-->
+          &lt;!&ndash;<el-input placeholder="企业单位" v-model="form.workUnitName"></el-input>&ndash;&gt;
           <el-select placeholder="人员类别" v-model="form.gridId" clearable>
             <el-option :label="item.gridName" :value="item.id" v-for="item in gridList"
                        :key="item.id"></el-option>
@@ -62,152 +64,214 @@
           </el-popover>
         </query-filter>
       </template>
-      <template v-slot:right>
+      <template v-slot:right>-->
+    <div class="divTop">
+      <div class="divTitle">
+        <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
+        随访记录
+      </div>
+      <div class="searchCondition">
+        <div class="searchLeft">
+          <div class="searchInputFormItem">
+            <el-input placeholder="姓名/编号" v-model="form.keywords">
+            </el-input>
+            <span class="searchBtnImgSpan" @click="onSearch(1)">
+                  <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
+              </span>
+          </div>
+          <div>
+            <span>客户性别：</span>
+            <el-select
+                    v-model="form.gender"
+                    placeholder="请选择"
+                    style="width: 140px"
+                    clearable
+            >
+              <el-option label="男" value="1" key="1"></el-option>
+              <el-option label="女" value="2" key="2"></el-option>
+            </el-select>
+          </div>
+          <div>
+            <span>人员类别：</span>
+            <el-select
+                    v-model="form.gridId"
+                    placeholder="请选择"
+                    style="width: 140px"
+                    clearable
+            >
+              <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+                         :key="index"></el-option>
+            </el-select>
+          </div>
+          <div>
+            <span>随访形式：</span>
+            <el-select
+                    v-model="form.planWay"
+                    placeholder="请选择"
+                    style="width: 140px"
+            >
+              <el-option :label="item.name" :value="item.id" v-for="item in planWayList"
+                         :key="item.id"></el-option>
+            </el-select>
+          </div>
+        </div>
+        <div class="searchRight">
+          <div class="buttones">
+            <div class="searchFor" @click="onSearch(1)">
+              <img src="@/assets/images/common/topsearchblue.png" alt="">
+            </div>
+            <div class="resetAll" @click="onReset">重置</div>
+            <div class="more" v-if="isTrue"  @click="upMore">
+              <span>></span>
+              展开更多</div>
+            <div class="more noMore" v-else @click="upMore">
+              <span>></span>收起筛选</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-if="!isTrue" class="searchCondition" style="width:80%;">
+      <div class="searchLeft" style="padding-left:5px;">
+        <div>
+          <span>依从度：</span>
+          <el-select
+                  v-model="form.planWay"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option :label="item.name" :value="item.id" v-for="item in planWayList"
+                       :key="item.id"></el-option>
+          </el-select>
+        </div>
+        <div>
+          <span>满意度：</span>
+          <el-select
+                  v-model="form.planWay"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option :label="item.name" :value="item.id" v-for="item in planWayList"
+                       :key="item.id"></el-option>
+          </el-select>
+        </div>
+      </div>
+    </div>
+    <div class="topbottomborder"></div>
+    <div class="divRightTitleDiv">
+      <!-- <div class="divRightTitle"><span>|</span>客户池</div> -->
+      <div>
+        <el-button
+                class="btn-new btnAdd"
+                size="small"
+                style="margin: 16px 0"
+                @click="handleAddCheck(1)"
+                v-if="getAccess('life_style_questionnaire_add')"
+        ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
+        <el-button
+                size="small"
+                class="btn-new btnDel"
+                @click="handleSomeRemove"
+                v-if="getAccess('life_style_questionnaire_deleted')"
+        ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
+      </div>
+    </div>
         <div class="user-follow">
           <div class="tableTopDoDiv">
             <div class="divRightTitleDiv">
-              <div class="divRightTitle"><span>|</span>待随访计划</div>
+              <div class="divRightTitle"><span>|</span>随访记录</div>
             </div>
             <div class="table-operate-buttons">
-              <!--<operate-button
-                      type="edit"
-                      @click="handleEditPlan"
-              ></operate-button>-->
               <operate-button
                       type="delete"
                       @click="handleSomeRemove"
-                      v-if="getAccess('wait_visit_plan_batch_delete')
+                      v-if="getAccess('visited_record_batch_delete')
               "></operate-button>
             </div>
           </div>
           <el-table :data="table.list" style="width: 100%" align="center" ref="table"
                     @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="40"></el-table-column>
-            <el-table-column prop="clientNo" label="客户编号" min-width="90" show-overflow-tooltip>
+            <el-table-column prop="clientNo" label="客户编号" show-overflow-tooltip>
               <template slot-scope="scope">
-          <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}">
-            {{ scope.row.clientNo | getResult }}</span>
+                <span>{{ scope.row.clientNo | getResult }}</span>
               </template>
             </el-table-column>
             <el-table-column
                     prop="clientName"
                     label="姓名"
-                    width="70"
+                    width="90"
                     show-overflow-tooltip
             >
               <template slot-scope="scope">
-                <span class="clientName"
-                      @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
-                  {{ scope.row.clientName | getResult}}
-                </span>
+             <span class="clientName"
+                   @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
+               {{ scope.row.clientName | getResult}}
+             </span>
               </template>
             </el-table-column>
             <el-table-column prop="gender" label="性别" width="55px">
               <template slot-scope="scope">
-                <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}"
-                      >{{scope.row.gender | getResultGender}}</span>
+                <span>{{scope.row.gender | getResultGender}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="age" label="年龄" width="60px">
+            <el-table-column prop="age" label="年龄" width="55px">
               <template slot-scope="scope">
-                <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}">
-              {{ scope.row.age | getResult }}</span>
+                <span>{{scope.row.age | getResult}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="gridName" label="人员类别" show-overflow-tooltip>
               <template slot-scope="scope">
-          <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}">
-            {{ scope.row.gridName | getResult}}</span>
+          <span>{{ scope.row.gridName | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="workUnitName" label="单位">
+            <el-table-column prop="executePlanUserName" label="干预人" show-overflow-tooltip>
               <template slot-scope="scope">
-                <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}">
-            {{ scope.row.workUnitName | getResult}}</span>
+                <span>{{ scope.row.executePlanUserName | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="mobile" label="手机号码" width="90px" show-overflow-tooltip>
+            <el-table-column prop="executePlanWayName" label="随访形式" show-overflow-tooltip>
               <template slot-scope="scope">
-                <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}">
-            {{ scope.row.mobile | getResult}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column prop="planUserName" label="干预人" show-overflow-tooltip>
-              <template slot-scope="scope">
-          <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}">
-            {{ scope.row.planUserName | getResult}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column prop="planUserName" label="随访形式" show-overflow-tooltip>
-              <template slot-scope="scope">
-          <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}">
-            {{ scope.row.planWayName | getResult}}</span>
+                <span>{{ scope.row.executePlanWayName | getResult}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="planUserName" label="随访标题" show-overflow-tooltip>
               <template slot-scope="scope">
-          <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}">
-            {{ scope.row.planTitle | getResult}}</span>
+          <span>{{ scope.row.executePlanTitle | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="planUserName" label="随访内容" show-overflow-tooltip>
+           <!-- <el-table-column prop="planUserName" label="随访结果" show-overflow-tooltip>
               <template slot-scope="scope">
-          <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}">
-            {{ scope.row.planContent | getResult}}</span>
+          <span>{{ scope.row.executePlanContent | getResult}}</span>
+              </template>
+            </el-table-column>-->
+            <el-table-column prop="executeTime" label="执行日期" width="100px" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{ scope.row.executeTime | getResultDate }}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="templateQuestionName" label="随访问卷" show-overflow-tooltip>
+            <!--<el-table-column prop="templateQuestionName" label="随访问卷" show-overflow-tooltip>
               <template slot-scope="scope">
-          <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}">
-            {{ scope.row.templateQuestionName | getResult}}</span>
+                <span>{{ scope.row.templateQuestionName | getResult}}</span>
+              </template>
+            </el-table-column>-->
+            <el-table-column prop="templateQuestionName" label="*依从度" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{ scope.row.templateQuestionName | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="executeTime" label="计划日期" width="120px" show-overflow-tooltip>
+            <el-table-column prop="templateQuestionName" label="*满意度" show-overflow-tooltip>
               <template slot-scope="scope">
-          <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}"
-          >{{ scope.row.planDate | getResultDate}}</span>
+                <span>{{ scope.row.templateQuestionName | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="executeTime" label="*创建人" show-overflow-tooltip>
+            <el-table-column label="操作" width="100">
               <template slot-scope="scope">
-          <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}"
-          >{{ scope.row.planUserName | getResultDate}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="操作" width="110">
-              <template slot-scope="scope">
-                <el-button
-                        type="text"
-                        size="small"
-                        @click="handleEditPlan(scope.row)"
-                        v-if="getAccess('wait_visit_plan_edit')"
-                >编辑</el-button
-                >
                 <el-button type="text" size="small"
-                           v-if="getAccess('wait_visit_plan_exec')"
-                           @click="viewiFollowPlanDetail(scope.row)">执行</el-button>
+                           v-if="getAccess('visited_record_view')"
+                           @click="viewiFollowPlanDetail(scope.row)">查看</el-button>
               </template>
             </el-table-column>
           </el-table>
-          <div class="warn">
-            注：表格内红色文字代表当天计划
-          </div>
-          <div class="over">
-            注：表格内橙色文字代表已逾期计划
-          </div>
           <el-pagination
                   background
                   @current-change="handleChange"
@@ -216,12 +280,10 @@
                   layout="prev, pager, next, jumper, total, sizes"
                   :total="table.totalCount"
                   :pageSizes="[15]"
-                  :pager-count="4"
           >
           </el-pagination>
         </div>
-      </template>
-    </query-page>
+  </div>
 </template>
 
 <script>
@@ -232,16 +294,14 @@ import QueryFilter from '~/src/components/query_page/query_filter.vue';
 import OperateButton from '~/src/components/query_page/operate_button.vue';
 import ManagerList from '@/components/user_health/manager_list.vue';
 import deleteIcon from '~/src/assets/images/message-box-delete@2x.png';
-import InterventionAddMdl from '../user_follow_create/el_modal/intervention_add_mdl.vue';
 export default {
-  name: 'user_follow_do',
+  name: 'user_follow_record',
   components: {
     QueryPage,
     Search,
     QueryFilter,
     OperateButton,
     ManagerList,
-    InterventionAddMdl,
   },
   data() {
     return {
@@ -255,7 +315,7 @@ export default {
         planWay: '', // 随访方式
         startTime: '',
         endTime: '',
-        executeState: '2', // 状态
+        executeState: '1', // 状态
         gridId: '', // 客户类型
         genderList,
         executeStateList,
@@ -317,13 +377,12 @@ export default {
       const reqBody = {
         planWay: this.form.planWay,
         executeState: this.form.executeState,
-        overdueExecuteState: 3,
         workbenchSort: 'workbenchSort',
         gender: this.form.gender,
         startTime: this.form.startTime,
         endTime: this.form.endTime,
         gridId: this.form.gridId,
-        planUserId: this.form.planUserId,
+        executePlanUserId: this.form.planUserId,
         keywords: this.form.keywords,
         workUnitName: this.form.workUnitName,
         pageNo: this.table.currentPage,
@@ -367,69 +426,6 @@ export default {
       this.gridList = data.list;
     },
     /**
-     * 新增随访
-     * @return {Promise<ElMessageComponent>}
-     */
-    async editUserFollow(value) {
-      const clientIds = [value.clientId];
-      const intervenePlans = [Object.assign({}, value)];
-      intervenePlans.forEach((it) => {
-        const setIt = it;
-        setIt.ignore = false;
-        setIt.planUserId = it.planDoctor;
-        if (it.planTime.split(' ').length === 1) {
-          setIt.planDate = `${it.planTime} 00:00:00`; // 编辑重选时间要重新设
-        } else if (it.planTime.split(' ').length === 2) {
-          setIt.planDate = it.planTime;
-        }
-      });
-      const result = intervenePlans.filter(it => !it.ignore);
-      const reqBody = {
-        // id: value.id,
-        organId: '', // 区域id
-        clientIds, // 客户id
-        intervenePlans: result,
-        // executeState: '2', // 执行状态-值为1已执行，2待执行
-      };
-      await this.$api.userFollowInterface.saveIntervenePlan(reqBody);
-      this.$message.success('操作成功');
-      return this.getList();
-    },
-    /**
-     * 编辑计划
-     */
-    handleEditPlan(row) {
-      /* if (this.multipleSelection.length !== 1) {
-        this.$message({
-          message: '请选择一条记录编辑',
-          type: 'warning',
-        });
-        return;
-      }*/
-      // console.log(this.multipleSelection[0]);
-      const Row = row;
-      Row.planTime = Row.planDate;
-      this.$jDynamic.show({// 有planId的都是自己编辑的
-        component: 'InterventionAddMdl',
-        data: {
-          modalType: 2,
-          addType: '2', // 个人创建 / 批量创建
-          editType: 2, // 计划重新编辑
-          modalTitle: '编辑',
-          // planId: this.multipleSelection[0].planId,
-          // id: this.checkPlanList[0].id,
-          propsData: Row,
-          confirmfunc: async (value) => {
-            const Value = value;
-            Value.id = Row.id;
-            Value.clientId = Row.clientId;
-            this.editUserFollow(Value);
-          },
-        },
-        render: h => h(InterventionAddMdl),
-      });
-    },
-    /**
      * 批量删除
      */
     handleSomeRemove() {
@@ -463,7 +459,7 @@ export default {
     },
     viewiFollowPlanDetail(row) {
       this.$router.push({
-        path: `/health_plan/user_follow_do/do/${row.id}`,
+        path: `/health_plan/user_follow_do/view/${row.id}`,
       });
     },
     /**
@@ -553,31 +549,6 @@ export default {
   }
   .user-follow {
     /*padding: 20px 32px 15px 32px;*/
-    .warn{
-      padding: 0 10px;
-      height: 32px;
-      line-height: 32px;
-      background-color: #fee9e9;
-      border-radius: 5px;
-      text-align: center;
-      font-size: 12px;
-      color: #FE2B2A;
-      margin-top: 10px;
-      float: left;
-    }
-    .over{
-      padding: 0 10px;
-      height: 32px;
-      line-height: 32px;
-      background-color: #FCF7EE;
-      border-radius: 5px;
-      text-align: center;
-      font-size: 12px;
-      color: #fd9d00;
-      margin-top: 10px;
-      margin-left: 15px;
-      float: left;
-    }
     .tool-button {
       margin-bottom: 16px;
     }

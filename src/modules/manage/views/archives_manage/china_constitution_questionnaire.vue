@@ -43,7 +43,7 @@
   <div class="divTop">
     <div class="divTitle">
       <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
-      生活方式问卷
+      中医体质问卷
     </div>
     <div class="searchCondition">
       <div class="searchLeft">
@@ -79,14 +79,15 @@
           </el-select>
         </div>
         <div>
-          <span>生活方式：</span>
+          <span>问卷来源：</span>
           <el-select
-                  v-model="formData.lifeStyleLv"
+                  v-model="formData.source"
                   placeholder="请选择"
                   style="width: 140px"
+                  clearable
           >
             <el-option :label="item.name" :value="item.paramValue"
-                       v-for="(item, index) in lifeStyleList" :key="index"></el-option>
+                       v-for="(item, index) in questionFromList" :key="index"></el-option>
           </el-select>
         </div>
       </div>
@@ -107,18 +108,6 @@
   </div>
     <div v-if="!isTrue" class="searchCondition" style="width:80%;">
       <div class="searchLeft" style="padding-left:5px;">
-        <div>
-          <span>问卷来源：</span>
-          <el-select
-                  v-model="formData.source"
-                  placeholder="请选择"
-                  style="width: 140px"
-                  clearable
-          >
-            <el-option :label="item.name" :value="item.paramValue"
-                       v-for="(item, index) in questionFromList" :key="index"></el-option>
-          </el-select>
-        </div>
         <div>
           <span>填写日期：</span>
           <el-date-picker
@@ -153,33 +142,24 @@
                 class="btn-new btnAdd"
                 size="small"
                 style="margin: 16px 0"
-                @click="handleAddCheck(1)"
-                v-if="getAccess('life_style_questionnaire_add')"
+                @click="handleAddCheck(2)"
+                v-if="getAccess('china_constitution_questionnaire_add')"
         ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
         <el-button
                 size="small"
                 class="btn-new btnDel"
                 @click="handleSomeRemove"
-                v-if="getAccess('life_style_questionnaire_deleted')"
+                v-if="getAccess('china_constitution_questionnaire_deleted')"
         ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
+        <el-button
+                class="btn-new btnAdd"
+                size="small"
+                style="width: 120px"
+                v-if="getAccess('china_constitution_questionnaire_report')"
+        ><img src="@/assets/images/common/getReportBtn.png" />生成报告</el-button>
       </div>
     </div>
       <div class="user-follow">
-        <!--<div class="tableTopDoDiv">
-          <div class="table-operate-buttons">
-            <el-dropdown @command="handleAddCheck">
-              <operate-button
-                      type="add"
-                      v-if="getAccess('life_style_questionnaire_add')
-              "></operate-button>
-              <el-dropdown-menu slot="dropdown" class="qusDrop">
-                <el-dropdown-item command="1">生活方式问卷</el-dropdown-item>
-                <el-dropdown-item command="2">中医问卷</el-dropdown-item>
-                <el-dropdown-item command="3">心理问卷</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </div>
-        </div>-->
       <el-table style="width: 100%" :data="dataSource" align="center"
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="40"></el-table-column>
@@ -211,11 +191,6 @@
             <span>{{ scope.row.clientGridName | getResult}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="lifeStyleLvName" label="生活方式" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{ scope.row.lifeStyleLvName | getResult}}</span>
-          </template>
-        </el-table-column>
         <el-table-column prop="workUnitName" label="单位" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.workUnitName | getResult}}</span>
@@ -236,6 +211,24 @@
             <span>{{scope.row.questionCount | getResult}}</span>
           </template>
         </el-table-column>
+        <el-table-column label="查看报告" prop="index" width="90">
+          <template slot-scope="scope">
+            <el-button style="color: #36BF2F"
+                    type="text"
+                    size="small"
+                    @click="
+                $router.push({
+                  name: 'health_questionnaire_detail',
+                  params: {
+                    qusType: scope.row.questionType,
+                    id: scope.row.id,
+                  },
+                })
+              " v-if="getAccess('china_constitution_questionnaire_view')
+              "
+            >查看</el-button>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" prop="index" width="120">
           <template slot-scope="scope">
             <el-button
@@ -251,7 +244,7 @@
                   },
                 })
               "
-              v-if="getAccess('life_style_questionnaire_edit') && scope.row.questionType !== 4"
+              v-if="getAccess('china_constitution_questionnaire_edit')"
             >编辑</el-button>
             <el-button
               type="text"
@@ -265,7 +258,7 @@
                   },
                 })
               "
-              v-if="getAccess('life_style_questionnaire_view')
+              v-if="getAccess('china_constitution_questionnaire_view')
               "
             >查看</el-button>
           </template>
@@ -313,17 +306,15 @@ export default {
       total: 0,
       dataSource: [],
       gridList: [],
-      lifeStyleList: [], // 生活方式
       questionFromList: [], // 问卷来源
       formData: {
         keyWord: '',
         gender: '',
         clientGrid: '',
-        lifeStyleLv: '',
         source: '',
         startTime: undefined,
         endTime: undefined,
-        questionType: 1,
+        questionType: 2,
       },
       visible: false,
       current: {},
@@ -355,7 +346,6 @@ export default {
   activated() {
     this.getGridList();
     this.getQuestionFromList();
-    this.getLifeStyleList();
     if (localStorage.getItem('homeSearchData')) {
       const HomeSearchData = JSON.parse(localStorage.getItem('homeSearchData'));
       this.formData.startTime = HomeSearchData.startDate;
@@ -378,11 +368,6 @@ export default {
       const { data } = res.data;
       this.questionFromList = data;
     },
-    async getLifeStyleList() {
-      const res = await this.$api.health.getLifeStyleList({ pageNo: 1, pageSize: 10000 });
-      const { data } = res.data;
-      this.lifeStyleList = data;
-    },
     handleSelectionChange(val) {
       // table组件选中事件,
       this.multipleSelection = val;
@@ -392,7 +377,6 @@ export default {
       this.formData.keyWord = '';
       this.formData.gender = '';
       this.formData.clientGrid = '';
-      this.formData.lifeStyleLv = '';
       this.formData.source = '';
       this.formData.startTime = undefined;
       this.formData.endTime = undefined;

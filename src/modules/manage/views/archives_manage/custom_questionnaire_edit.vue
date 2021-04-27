@@ -1,10 +1,10 @@
 <template>
-  <div class="health_questionnaire_edit" ref="health_questionnaire_edit">
+  <div class="custom_questionnaire_edit" ref="health_questionnaire_edit">
     <div class="tabBars" ref="tabBars">
       <div class="firstTitleTabBar">
         <span :class="active === -1 ? 'TabBarsNameFirstActive' : 'TabBarsFirstNames'"
               @click="clickToTop">
-          {{qusTypeName}}问卷
+          自定义问卷
         </span>
       </div>
       <div v-for="(item,index) in templateList" :key="item.name">
@@ -14,17 +14,6 @@
       </span>
       </div>
     </div>
-    <!--<div class="intvTmpl_left" id="intvTmpl_left" v-if="$route.params.qusType === 1"
-         :class="{ 'isFixed': searchBarFixed === true }"
-         style="max-height: 30000px;height: auto;margin-right: 30px;display: none">
-      <div class="intvTmpl_left_title">生活方式问卷</div>
-      <ul class="intv_menulist">
-        <li :class="{'active':active === index}" @click="clickMenu(index, '#questions-' + index)"
-            v-for="(item, index) in templateList" :key="item.name">
-          {{item.name}}
-        </li>
-      </ul>
-    </div>-->
     <div class="health_questionnaire_form" :class="{ 'isFixedForm': searchBarFixed === true }"
          :style="{'padding-top': contentPaddingTop + 'px'}">
       <div class="divRightTitleDiv">
@@ -48,53 +37,11 @@
       :rules="rules"
     >
       <div class="title" v-if="$route.params.qusType !== 1">问卷内容</div>
-      <div class="container" :class="{'containerOtherCheckBox': $route.params.qusType !== 1}">
-        <div v-for="(item, index) in questions" :key="item.paramSort">
-          <div class="title articleTitle" :id="'questions-' + index"
-               v-if="$route.params.qusType === 1">{{ item.name }}
-          </div>
-            <el-row class="health_questionnaire_formQus">
-              <el-col :span="$route.params.qusType !== 1 ? 24 :
-              item.name === '既往情况' || item.name === '患病情况' ? 24 :
-              item.name === '家族病史' ? 8 : 12" :id="'questionitem-' + itemList.code"
-              v-for="(itemList, indexList) in item.questionSubjectDTOList" :key="itemList.id">
-                <el-form-item
-                  :key="itemList.id"
-                  :label="`${indexList + 1}. ${itemList.name} (单选)`"
-                  v-if="itemList.subectType === 1"
-                >
-                  <el-radio-group
-                    v-if="answerMap[itemList.id]"
-                    v-model="answerMap[itemList.id][0].optionId"
-                    size="small"
-                    @change="row => onAnswerChange(itemList, row)"
-                    :disabled="itemList.disabled">
-                    <el-radio-button
-                      v-for="val in itemList.optionList"
-                      :label="val.id"
-                      :value="val.id"
-                      :key="val.id">
-                      {{ val.name }}
-                    </el-radio-button>
-                  </el-radio-group>
-                </el-form-item>
-                 <el-form-item :key="itemList.id"
-                     :label="`${indexList + 1}. ${itemList.name} (多选)`"
-                         v-else>
-                  <el-checkbox-group v-model="answerMap[itemList.id]" size="small"
-                                     @change="ev => onCheckboxChange(itemList, ev)">
-                    <el-checkbox-button
-                      v-for="val in itemList.optionList"
-                      :label="val.id"
-                      :key="val.id"
-                      :disabled="val.disabled">
-                      {{ val.name }}
-                    </el-checkbox-button>
-                  </el-checkbox-group>
-                </el-form-item>
-              </el-col>
-           </el-row>
-        </div>
+      <div>
+        <question-edit ref="questionEdit"
+                       :propsType="questionType"
+                       :propsQuestionSubjectist="questionSubjectist"
+                       :propsQuestionAnswerList="questionAnswerList"></question-edit>
       </div>
       <div class="footer">
         <el-button @click="$router.go(-1)" class="cancelBtn"
@@ -110,18 +57,21 @@
 </template>
 <script>
 import ClientInfo from './health_monitor/client_info.vue';
-
+import QuestionEdit from './custom_question_edit.vue';
 export default {
   name: 'ClientEdit',
   components: {
     ClientInfo,
+    QuestionEdit,
   },
   data() {
     return {
       active: -1,
       contentPaddingTop: 20,
       title: '',
-      qusTypeName: '',
+      questionType: 1, // 1新增 2编辑 3查看
+      questionSubjectist: [], // 问卷题目
+      questionAnswerList: [], // 问卷答案
       formData: {
         answerList: [],
         createTime: new Date(),
@@ -225,11 +175,15 @@ export default {
         subjectId: row.subjectId,
       });
     },
-    fetch(id, questionType) {
+    fetch(id) {
+      console.log(this.questionSubjectist);
       this.$api.health.getDetail(id).then(({ data }) => {
+        console.log(this.questionSubjectist);
         this.formData = data.data;
         this.answerList = [...this.formData.answerList];
-        this.onTypeChange(questionType);
+        this.questionAnswerList = [...this.formData.answerList];
+        console.log(this.questionAnswerList);
+        // this.onTypeChange(questionType);
       });
     },
     groupBy(list) {
@@ -319,8 +273,8 @@ export default {
       }
     },
     submit() {
-      this.$set(this.formData, 'answerList', []);
-      Object.keys(this.answerMap).forEach((key) => {
+      // this.$set(this.formData, 'answerList', []);
+      /* Object.keys(this.answerMap).forEach((key) => {
         if (this.answerMap[key] && this.answerMap[key].length) {
           this.answerMap[key].forEach((val) => {
             let row;
@@ -378,18 +332,47 @@ export default {
           this.$refs.health_questionnaire_edit.parentNode.scrollTop = anchor.offsetTop + 400;
         }
         return;
+      }*/
+      const AnswerList = this.$refs.questionEdit.submit();
+      if (AnswerList === false) { // 错的不提交
+        return;
+      } else if (AnswerList !== false) { // 对了才提交
+        this.formData.answerList = this.$refs.questionEdit.submit();
       }
       const sendData = {};
       sendData.answerList = this.formData.answerList;
       sendData.clientId = this.formData.clientId;
       sendData.questionType = this.$route.params.qusType;
+      sendData.tempalteQuestionId = this.$route.params.templateQuestionId;
       if (this.$route.params.id) {
         sendData.id = this.$route.params.id;
       }
+      console.log(sendData);
       this.$api.health.add(sendData).then(() => {
         this.$message.success('操作成功');
         this.$router.go(-1);
       });
+    },
+    /**
+     * 获取自定义问卷题目
+     */
+    async getQuestionSubject() {
+      const reqBody = this.$route.params.templateQuestionId;
+      const res = await this.$api.userFollowInterface.getTemplateQuestionDetail(reqBody);
+      const { data } = res.data;
+      this.questionSubjectist = data.subjectDTOList;
+      // this.questionAnswerList = data.questionInfoAnswerList || [];
+    },
+    /**
+     * 获取已填写的自定义问卷题目
+     */
+    async getAlreadyAnwserQuestionDetail() {
+      const reqBody = this.$route.params.id;
+      const res = await this.$api.userFollowInterface.getAlreadyAnwserQuestionDetail(reqBody);
+      const { data } = res.data;
+      this.questionSubjectist = data.subjectDTOList;
+      this.fetch(this.$route.params.id, this.$route.params.qusType);
+      // this.questionAnswerList = data.questionInfoAnswerList || [];
     },
     handleScroll() {
       const scrollTop = document.querySelectorAll('.content-wrapper')[0].scrollTop;
@@ -435,31 +418,28 @@ export default {
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       const VM = vm;
-      if (to.params.qusType === 1) {
-        VM.qusTypeName = '生活方式';
-      } else if (to.params.qusType === 2) {
-        VM.qusTypeName = '中医体质';
-      } else if (to.params.qusType === 3) {
-        VM.qusTypeName = 'SCL90心理';
-      }
       // window.addEventListener('scroll', vm.handleScroll);
       console.log(document.querySelectorAll('.content-wrapper'));
       if (document.querySelectorAll('.content-wrapper').length > 0) {
         document.querySelectorAll('.content-wrapper')[0].addEventListener('scroll', vm.handleScroll);
       }
       if (to.params.id) { // 如果有id就是编辑 先获取详情
-        VM.fetch(to.params.id, to.params.qusType);
         if (to.params.type === 'edit') {
+          VM.questionType = 2;
+          VM.getAlreadyAnwserQuestionDetail(); // 编辑 - 获取题目
           VM.title = '编辑';
-          document.title = '编辑健康问卷';
+          document.title = '编辑自定义问卷';
         } else if (to.params.type === 'view') {
+          VM.questionType = 3;
           VM.title = '查看';
-          document.title = '查看健康问卷';
+          document.title = '查看自定义问卷';
         }
       } else {
-        VM.onTypeChange(to.params.qusType);
+        VM.questionType = 1;
+        VM.getQuestionSubject(); // 新增 - 获取题目
+        // VM.onTypeChange(to.params.qusType);
         VM.title = '新增';
-        document.title = '新增健康问卷';
+        document.title = '新增自定义问卷';
       }
       window.onresize = () => { // 60 120  180  240 头部导航栏固定高度
         VM.setContentPaddingTop();
@@ -469,8 +449,8 @@ export default {
 };
 </script>
 
-<style lang="scss">
-  .health_questionnaire_edit{
+<style lang="scss" scoped>
+  .custom_questionnaire_edit{
     #intvTmpl_left{
       &.isFixed{
         position:fixed;
@@ -490,7 +470,7 @@ export default {
         content: '';
         width: 5px;
         height: 5px;
-        background: #31C529;
+        border: 1px solid #B4BBC9;
         border-radius: 3px;
         position: absolute;
         left: -14px;
@@ -562,7 +542,7 @@ export default {
     }
     .el-radio-button {
       .el-radio-button__inner {
-        min-width: 100px;
+        min-width: 180px;
         height: 48px;
         line-height: 21px;
         border-radius: 24px;
@@ -619,7 +599,7 @@ export default {
     }
     .el-checkbox-button {
       .el-checkbox-button__inner {
-        min-width: 100px;
+        min-width: 180px;
         height: 48px;
         line-height: 21px;
         border-radius: 24px;

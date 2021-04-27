@@ -57,6 +57,14 @@ class HealthInterface extends BaseModule {
   getClientAssessDetail(id) {
     return this.get(`/assess_report/get_client_assess/${id}`);
   }
+  // 问卷来源
+  getQuestionFromList() {
+    return this.get('/system_param_value/SE009');
+  }
+  // 生活方式
+  getLifeStyleList() {
+    return this.get('/system_param_value/SC001');
+  }
 }
 
 export default new HealthInterface();

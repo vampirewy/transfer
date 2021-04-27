@@ -1,10 +1,12 @@
 <template>
-  <query-page @reset="onReset" @search="onSearch">
+  <div>
+  <!--<query-page @reset="onReset" @search="onSearch">
     <template slot="left">
       <search>
         <div class="searchInputFormItem">
           <el-input placeholder="姓名/手机号/企业单位" v-model="form.keywords">
-            <!-- <el-button slot="append" icon="el-icon-search" @click="onSearch"></el-button>-->
+            &lt;!&ndash; <el-button slot="append" icon="el-icon-search" @click="onSearch">
+            </el-button>&ndash;&gt;
           </el-input>
           <span class="searchBtnImgSpan" @click="onSearch">
             <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
@@ -16,7 +18,7 @@
           <el-option label="男" :value="1"></el-option>
           <el-option label="女" :value="2"></el-option>
         </el-select>
-        <!--<el-input placeholder="企业单位" v-model="form.workUnitName"></el-input>-->
+        &lt;!&ndash;<el-input placeholder="企业单位" v-model="form.workUnitName"></el-input>&ndash;&gt;
         <el-select placeholder="人员类别" v-model="form.gridId" clearable>
           <el-option :label="item.gridName" :value="item.id" v-for="item in gridList"
                      :key="item.id"></el-option>
@@ -57,9 +59,209 @@
         </el-popover>
       </query-filter>
     </template>
-    <template slot="right">
+    <template slot="right">-->
+  <div class="divTop">
+    <div class="divTitle">
+      <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
+      创建计划
+    </div>
+    <div class="searchCondition">
+      <div class="searchLeft">
+        <div class="searchInputFormItem">
+          <el-input placeholder="姓名/编号/单位" v-model="form.keywords">
+          </el-input>
+          <span class="searchBtnImgSpan" @click="onSearch">
+                  <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
+              </span>
+        </div>
+        <div>
+          <span>客户性别：</span>
+          <el-select
+                  v-model="form.gender"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option label="男" value="1" key="1"></el-option>
+            <el-option label="女" value="2" key="2"></el-option>
+          </el-select>
+        </div>
+        <div>
+          <span>人员类别：</span>
+          <el-select
+                  v-model="form.gridId"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+                       :key="index"></el-option>
+          </el-select>
+        </div>
+        <div>
+          <span>异常名称：</span>
+          <el-popover
+                  ref="abnormalPopover"
+                  placement="top-start"
+                  width="590"
+                  trigger="click"
+                  @show="abnormalModalVisible = true"
+                  @hide="handleAbnormalClose">
+            <abnormal v-if="abnormalModalVisible"
+                      @change="handleAbnormalSelectChange"
+                      @cancel="handleAbnormalClose"></abnormal>
+            <el-input class="select-user-trigger" slot="reference" style="width: 140px"
+                      :disabled="form.abnormalName !== '' ? false : true"
+                      v-model="form.abnormalName" placeholder="请选择">
+              <i :class="`el-icon-arrow-${abnormalModalVisible ? 'up' : 'down'}`"
+                 slot="suffix"></i>
+            </el-input>
+          </el-popover>
+        </div>
+      </div>
+      <div class="searchRight">
+        <div class="buttones">
+          <div class="searchFor" @click="onSearch(1)">
+            <img src="@/assets/images/common/topsearchblue.png" alt="">
+          </div>
+          <div class="resetAll" @click="onReset">重置</div>
+          <div class="more" v-if="isTrue"  @click="upMore">
+            <span>></span>
+            展开更多</div>
+          <div class="more noMore" v-else @click="upMore">
+            <span>></span>收起筛选</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div v-if="!isTrue" class="searchCondition">
+    <div class="searchLeft" style="padding-left:5px;">
+      <div>
+        <span>剩余计划：</span>
+        <el-select
+                v-model="form.gridId"
+                placeholder="请选择"
+                style="width: 140px"
+        >
+          <el-option :label="item.name" :value="item.paramValue"
+                     v-for="(item, index) in gridList" :key="index"></el-option>
+        </el-select>
+      </div>
+      <div>
+        <span>体检报告：</span>
+        <el-select
+                v-model="form.gridId"
+                placeholder="请选择"
+                style="width: 140px"
+        >
+          <el-option :label="item.name" :value="item.paramValue"
+                     v-for="(item, index) in gridList" :key="index"></el-option>
+        </el-select>
+      </div>
+      <div>
+        <span>主要项目：</span>
+        <el-select
+                v-model="form.gridId"
+                placeholder="请选择"
+                style="width: 140px"
+        >
+          <el-option :label="item.name" :value="item.paramValue"
+                     v-for="(item, index) in gridList" :key="index"></el-option>
+        </el-select>
+      </div>
+      <div>
+        <span>客户标签：</span>
+        <el-select
+                v-model="form.gridId"
+                placeholder="请选择"
+                style="width: 140px"
+        >
+          <el-option :label="item.name" :value="item.paramValue"
+                     v-for="(item, index) in gridList" :key="index"></el-option>
+        </el-select>
+      </div>
+      <div>
+        <span>建档日期：</span>
+        <el-date-picker
+                v-model="form.startTime"
+                type="date"
+                :max-date="form.endTime"
+                placeholder="开始时间"
+                style="width: 120px"
+        >
+        </el-date-picker>
+        <span class="timing">-</span>
+        <el-date-picker
+                v-model="form.endTime"
+                type="date"
+                :min-date="form.startTime"
+                placeholder="结束时间"
+                style="width: 120px"
+        >
+        </el-date-picker>
+      </div>
+      <div>
+        <span>体检日期：</span>
+        <el-date-picker
+                v-model="form.startTime"
+                type="date"
+                :max-date="form.endTime"
+                placeholder="开始时间"
+                style="width: 120px"
+        >
+        </el-date-picker>
+        <span class="timing">-</span>
+        <el-date-picker
+                v-model="form.endTime"
+                type="date"
+                :min-date="form.startTime"
+                placeholder="结束时间"
+                style="width: 120px"
+        >
+        </el-date-picker>
+      </div>
+      <div>
+        <span>采集日期：</span>
+        <el-date-picker
+                v-model="form.startTime"
+                type="date"
+                :max-date="form.endTime"
+                placeholder="开始时间"
+                style="width: 120px"
+        >
+        </el-date-picker>
+        <span class="timing">-</span>
+        <el-date-picker
+                v-model="form.endTime"
+                type="date"
+                :min-date="form.startTime"
+                placeholder="结束时间"
+                style="width: 120px"
+        >
+        </el-date-picker>
+      </div>
+    </div>
+  </div>
+    <div class="topbottomborder"></div>
+    <div class="divRightTitleDiv">
+      <!-- <div class="divRightTitle"><span>|</span>客户池</div> -->
+      <div>
+        <el-button
+                class="btn-new btnAdd"
+                size="small"
+                style="margin: 16px 0;width: 110px"
+                @click="handleCreate"
+                v-if="getAccess('create_plan_personal_create')"
+        ><img src="@/assets/images/common/addBtn.png" />自动创建</el-button>
+        <el-button
+                size="small"
+                class="btn-new btnDel"
+                style="width: 140px"
+                @click="handleCreateTogether"
+                v-if="getAccess('create_plan_batch_create')"
+        ><img src="@/assets/images/healthPlan/togetherAdd.png" />智能匹配创建</el-button>
+      </div>
+    </div>
   <div class="user-follow">
-    <div class="tableTopDoDiv">
+   <!-- <div class="tableTopDoDiv">
       <div class="divRightTitleDiv">
         <div class="divRightTitle"><span>|</span>创建计划</div>
       </div>
@@ -75,7 +277,7 @@
                 v-if="getAccess('create_plan_batch_create')
               "></operate-button>
       </div>
-    </div>
+    </div>-->
     <el-table :data="table.list" style="width: 100%" align="center" ref="table"
               @selection-change="handleSelectionChange"
               :row-key="getRowKeys"
@@ -127,6 +329,11 @@
       </el-table-column>
 
       <el-table-column type="selection" width="40"></el-table-column>
+      <el-table-column prop="gender" label="客户编号" width="100px">
+        <template slot-scope="scope">
+          <span>{{scope.row.clientNo | getResult}}</span>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="clientName"
         label="姓名"
@@ -149,36 +356,41 @@
           <span>{{ scope.row.age | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="workUnitName" label="企业单位">
-        <template slot-scope="scope">
-          <span>{{ scope.row.workUnitName | getResult }}</span>
-        </template>
-      </el-table-column>
       <el-table-column prop="gridName" label="人员类别" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{ scope.row.gridName | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="planUserName" label="管理医生" show-overflow-tooltip>
+      <el-table-column prop="workUnitName" label="单位">
+        <template slot-scope="scope">
+          <span>{{ scope.row.workUnitName | getResult }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="planUserName" label="*建档日期" show-overflow-tooltip>
+        <!--管理医生-->
         <template slot-scope="scope">
           <span>{{ scope.row.planUserName | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="noExecuteCount" label="随访计划" show-overflow-tooltip>
+      <el-table-column prop="planUserName" label="*最新体检日期" show-overflow-tooltip>
+        <!--管理医生-->
         <template slot-scope="scope">
-          <el-button type="text"
-                     @click="expandsHandle(scope.row, 2)" style="color: #31C529;font-size: 14px">
-            {{scope.row.noExecuteCount | getResult}}</el-button>
+          <span>{{ scope.row.planUserName | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="executeCount" label="随访记录" show-overflow-tooltip>
+      <el-table-column prop="noExecuteCount" label="干预计划" show-overflow-tooltip>
         <template slot-scope="scope">
           <el-button type="text"
-                     @click="expandsHandle(scope.row, 1)" style="color: #4991FD;font-size: 14px">
+                     @click="expandsHandle(scope.row, 2)" style="color: #3154AC;font-size: 14px">
+            {{scope.row.noExecuteCount | getResult}}</el-button>
+          <span style="color: #3154AC;font-size: 14px">/</span>
+          <el-button type="text"
+                     @click="expandsHandle(scope.row, 1)" style="color: #3154AC;font-size: 14px">
             {{scope.row.executeCount | getResult}}</el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="executeTime" label="最后一次随访计划日期" width="200px" show-overflow-tooltip>
+      <el-table-column prop="executeTime" label="*标签" width="200px" show-overflow-tooltip>
+        <!--最后一次随访时间-->
         <template slot-scope="scope">
           <span>{{ scope.row.executeTime | getResultDate }}</span>
         </template>
@@ -196,8 +408,9 @@
     >
     </el-pagination>
   </div>
-    </template>
-  </query-page>
+    <!--</template>
+  </query-page>-->
+  </div>
 </template>
 
 <script>
@@ -221,19 +434,22 @@ export default {
   },
   data() {
     return {
+      isTrue: true,
       form: {
         keywords: '', // 关键字
         gender: '', // 性别
+        gridId: '', // 人员类别
         workUnitName: '', // 企业单位
         planUserId: '',
         planUserName: '',
         planWay: '', // 随访方式
         executeState: '', // 状态
-        gridId: '', // 客户类型
         selectTime: [], // 选择时间
         planWayList: [],
         genderList,
         executeStateList,
+        startTime: '',
+        endTime: '',
       },
       abnormalModalVisible: false, // 异常列表弹窗
       selectPlanuser: [],
@@ -278,7 +494,7 @@ export default {
       idKey: 'clientId', // 标识列表数据中每一行的唯一键的名称(需要按自己的数据改一下)
     };
   },
-  mounted() {
+  activated() {
     this.onLoad();
   },
   methods: {
@@ -386,6 +602,9 @@ export default {
       this.form.planUserId = data.id;
       this.form.planUserName = data.realName;
     },
+    upMore() {
+      this.isTrue = !this.isTrue;
+    },
     /**
      * 获取随访列表
      * @return {Promise<void>}
@@ -419,7 +638,7 @@ export default {
       );
       const { data } = res.data;
       if (data) {
-        this.table.list = data.list || [];
+        this.table.list = data.data || [];
         this.table.totalCount = data.total;
         setTimeout(() => {
           this.setSelectRow();
@@ -447,12 +666,7 @@ export default {
     async getGridList() {
       const res = await this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
       const { data } = res.data;
-      /* const list = data.map((it) => {
-        const { id, name } = it;
-        return { id, name };
-      }); */
-      // list.unshift({ name: '全部', value: '' });
-      this.gridList = data.list;
+      this.gridList = data.data;
     },
     handleExpandPageChange(page) {
       this.expandData.pageNo = page;
@@ -494,10 +708,10 @@ export default {
         executeState: Type,
       }).then(({ data }) => {
         if (Type === 2) {
-          this.expandData.list = data.data.list;
+          this.expandData.list = data.data.data;
         } else if (Type === 1) {
           this.expandData.list = [];
-          data.data.list.forEach((value) => {
+          data.data.data.forEach((value) => {
             const Value = value;
             Value.planDate = Value.executeTime;
             Value.planWayName = Value.executePlanWayName;

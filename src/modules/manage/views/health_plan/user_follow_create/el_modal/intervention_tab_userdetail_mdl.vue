@@ -1,15 +1,15 @@
 <template>
   <div class="intervention_tab_div">
-    <div class="formSearchTitle" style="font-size: 14px;margin-top: -3px;">
+    <!--<div class="formSearchTitle" style="font-size: 14px;margin-top: -3px;">
       <span class="dianLv"></span>干预方案
     </div>
-    <userdetai-intervene @read="read"></userdetai-intervene>
-    <div class="formSearchTitle" style="font-size: 14px;margin-top: 50px;">
-      <span class="dianLv"></span>主要疾病
+    <userdetai-intervene @read="read"></userdetai-intervene>-->
+    <div class="formSearchTitle" style="font-size: 14px;margin-top: -3px;">
+      <span class="dianLv"></span>异常信息
     </div>
     <disease :reportAbnormalList="form.reportAbnormalList"></disease>
     <div class="formSearchTitle" style="font-size: 14px;">
-      <span class="dianLv"></span>生活方式
+      <span class="dianLv"></span>生活方式情况
     </div>
     <lift-style :questionLifestyle="form.questionLifestyle"></lift-style>
     <div class="formSearchTitle" style="font-size: 14px;">
@@ -171,5 +171,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-  .intervention_tab_div{}
+  .dianLv{
+    width: 5px;
+    height: 5px;
+    border: 1px solid #B4BBC9;
+    background-color: white;
+  }
 </style>

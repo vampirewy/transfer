@@ -3,9 +3,7 @@
       <el-row>
         <el-col :span="8">
           <div class="divRightTitleDiv">
-            <div class="divRightTitle">{{ routeType === 1 ? '新增-随访问卷' :
-              routeType === 2 ? '编辑-随访问卷' :
-              routeType === 3 ? '查看-随访问卷' : '' }}</div>
+            <div class="divRightTitle">查看-随访问卷</div>
           </div>
           <el-form
                   ref="form"
@@ -16,32 +14,22 @@
           >
             <el-row>
               <el-col :span="24">
-                <el-form-item label="问卷名称：" prop="name">
-                  <el-input v-model="formData.name" :maxlength="30" placeholder="请输入"></el-input>
+                <el-form-item label="问卷名称：">
+                  {{formData.name}}
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="24">
-                <el-form-item label="问卷类型：" prop="questionType">
-                  <el-select v-model="formData.questionType" placeholder="请选择" style="width: 100%">
-                    <el-option :label="'随访问卷'" :value="4" :key="4"></el-option>
-                  </el-select>
+                <el-form-item label="问卷类型：">
+                  {{formData.questionTypeName}}
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="24">
-                <el-form-item label="问卷分类：" prop="sortType">
-                  <el-select
-                          v-model="formData.sortType"
-                          placeholder="请选择"
-                          style="width: 100%"
-                  >
-                    <el-option :label="item.name" :value="item.paramValue"
-                               v-for="item in sortTypeList"
-                               :key="item.paramValue"></el-option>
-                  </el-select>
+                <el-form-item label="问卷分类：">
+                  {{formData.sortTypeName}}
                 </el-form-item>
               </el-col>
               <!--<el-col :span="12">
@@ -53,21 +41,14 @@
             </el-row>
             <el-row>
               <el-col :span="24">
-              <el-form-item label="问卷说明：">
-                <el-input
-                        rows="4"
-                        type="textarea"
-                        placeholder="请输入"
-                        :maxlength="400"
-                        show-word-limit
-                        v-model="formData.intro">
-                </el-input>
+              <el-form-item label="问卷说明：" class="intro">
+                {{formData.intro}}
               </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="12">
-               <el-form-item label="是否启用：" prop="state">
+               <el-form-item label="是否启用：">
                  <!--<el-select v-model="formData.state" placeholder="是否启用">
                    <el-option label="是" :value="1" :key="1"></el-option>
                    <el-option label="否" :value="0" :key="0"></el-option>
@@ -83,36 +64,10 @@
              </el-col>
             </el-row>
           </el-form>
-          <div v-if="routeType !== 3">
-            <div class="divRightTitleDiv">
-              <div class="divRightTitle" style="margin-top: 5px">添加问卷题目</div>
-            </div>
-            <div class="tool-button">
-              <el-button
-                      size="small"
-                      class="btn-new btnAdd"
-                      @click="handleCreate(1)"
-              ><img src="@/assets/images/common/addBtn.png"/>添加单选</el-button
-              >
-              <el-button
-                      size="small"
-                      class="btn-new btnReset"
-                      @click="handleCreate(2)"
-              ><img src="@/assets/images/common/addBtn.png"/>添加多选</el-button
-              >
-              <!--<el-button
-                      size="small"
-                      class="btn-new btnDel"
-                      @click="handleCreate(3)"
-              ><img src="@/assets/images/common/addBtn.png"/>添加填空</el-button
-              >-->
-            </div>
-          </div>
         </el-col>
         <el-col :span="16" style="padding-left: 20px;">
           <div class="divRightTitleDiv">
-            <div class="divRightTitle">{{ routeType !== 3 ? '已添加题目' :
-              routeType === 3 ? '题目' : '' }}</div>
+            <div class="divRightTitle">题目</div>
           </div>
           <el-form
                   class="user-edit-form-questions"
@@ -129,14 +84,12 @@
               <el-row>
                 <el-col :span="17">
                   <el-form-item label="题目标题：">
-                    <el-input v-model="item.name" :maxlength="30" placeholder="请输入"></el-input>
+                    <el-input v-model="item.name" disabled></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="7">
                   <el-form-item label="标题编码：">
-                    <el-input v-model="item.code" :maxlength="6"
-                              onkeyup="value = value.replace(/[\u4e00-\u9fa5]/ig,'')"
-                              placeholder="请输入"></el-input>
+                    <el-input v-model="item.code" disabled></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -144,24 +97,22 @@
                    v-for="(itemOne, indexOne) in item.optionParamList"
                    :key="indexOne">
                 <el-row v-if="item.subjectType !== 3" style="display: flex"><!--不是填空题-->
-                  <el-col :span="11">
+                  <el-col :span="14">
                     <el-form-item :label="`选项标题${indexOne + 1}：`">
-                      <el-input v-model="itemOne.name" :maxlength="30" placeholder="请输入"></el-input>
+                      <el-input v-model="itemOne.name" disabled></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="4">
+                  <el-col :span="5">
                     <el-form-item label="编码：" label-width="55px">
-                      <el-input v-model="itemOne.code" :maxlength="6"
-                                onkeyup="value = value.replace(/[\u4e00-\u9fa5]/ig,'')"
-                                placeholder="请输入"></el-input>
+                      <el-input v-model="itemOne.code" disabled></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="4">
+                  <el-col :span="5">
                     <el-form-item label="分数：" label-width="55px">
-                      <el-input v-model="itemOne.score" placeholder="请输入"></el-input>
+                      <el-input v-model="itemOne.score" disabled></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="5" v-if="routeType !== 3" style="width: 170px">
+                  <el-col :span="7" v-if="routeType !== 3" style="width: 234px">
                     <div class="questionOneImg">
                       <img @click="questionOneDelelte(item.optionParamList, indexOne)"
                            src="@/assets/images/healthPlan/questions/questionDelete.png"/>
@@ -173,7 +124,7 @@
                             src="@/assets/images/healthPlan/questions/questionNextLast.png"/>
                       <img @click="questionOneNext(item.optionParamList, indexOne)" v-else
                            src="@/assets/images/healthPlan/questions/questionNext.png"/>
-                      <!--<el-popover
+                      <el-popover
                               :ref="`popover-${index}-${indexOne}`"
                               placement="bottom-start"
                               width="570"
@@ -183,12 +134,12 @@
                       >
                         <danger-open v-if="popoverStatus"
                                      @change="handlePopoperClose"></danger-open>
-                        &lt;!&ndash;v-if="popoverStatus"&ndash;&gt;
+                        <!--v-if="popoverStatus"-->
                         <img slot="reference" v-if="!itemOne.warn"
                              src="@/assets/images/healthPlan/questions/questionOneWarn.png"/>
                         <img slot="reference" v-else :title="'不吃早饭'"
                              src="@/assets/images/healthPlan/questions/questionOneWarnData.png"/>
-                      </el-popover>-->
+                      </el-popover>
                     </div>
                   </el-col>
                 </el-row>
@@ -226,7 +177,6 @@
                            class="normalBtn" size="small">
                   <img src="@/assets/images/common/addBtnWhite.png"/>
                   添加选项</el-button>
-                <div v-else></div>
                 <div>
                 <img @click="questionOneDelelte(formData.subjectParamList, index)"
                      src="@/assets/images/healthPlan/questions/questionDelete.png"/>
@@ -304,9 +254,9 @@ export default {
       const res = await this.$api.userFollowInterface.getTemplateQuestionDetail(reqBody);
       const { data } = res.data;
       this.formData.name = data.name;
-      this.formData.questionType = data.questionType;
+      this.formData.questionTypeName = data.questionTypeName;
+      this.formData.sortTypeName = data.sortTypeName;
       this.formData.state = data.state;
-      this.formData.sortType = data.sortType;
       this.formData.code = data.code;
       this.formData.intro = data.intro;
       const getQuestionsList = [];
@@ -579,6 +529,12 @@ export default {
           cursor: pointer;
         }
       }
+    }
+  }
+  .intro{
+    /deep/ .el-form-item__content{
+      line-height: 22px;
+      margin-top: 10px;
     }
   }
 </style>

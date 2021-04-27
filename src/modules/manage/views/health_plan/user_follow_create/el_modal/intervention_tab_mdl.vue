@@ -184,7 +184,7 @@ export default {
       );
       const { data } = res.data;
       if (data) {
-        this.form.templateList = data.list || [];
+        this.form.templateList = data.data || [];
         if (this.form.templateList.length > 0) {
           this.form.templateId = this.form.templateList[0].id;
           this.getList();
@@ -205,7 +205,7 @@ export default {
         reqBody,
       );
       const { data } = res.data;
-      this.tableData = data.list || [];
+      this.tableData = data.data || [];
       this.tableData.forEach((it) => {
         const t = it;
         /* t.planTime = `${new Date().getFullYear()}-${it.month}-${it.day} ${
@@ -260,13 +260,18 @@ export default {
 <style lang="scss" scoped>
   .intervention_tab_div{
     display: flex;
+    .intvTmpl_left{
+      min-width: 150px;
+      max-height: calc(100vh - 235px);
+      min-height: calc(100vh - 235px);
+  }
     .intvTmpl_left_title{
       z-index: 1;
     }
     .intv_menulist{
       li{
         position: relative;
-        padding: 0 15px 0 20px;
+        padding: 0 5px 0 20px;
         img{
           width: 14px;
           left: 8px;
@@ -277,7 +282,7 @@ export default {
     }
     .follow-plan {
       flex: 1;
-      width: 75%;
+      width: 45%;
       .el-table{
         width: 99.99%!important;
       }

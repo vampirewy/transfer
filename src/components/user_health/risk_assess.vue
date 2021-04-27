@@ -97,25 +97,29 @@ export default {
           display: inline-block;
           text-align: center;
           height: 40px;
-          border-radius: 8px;
           font-size: 12px;
           color: #333333;
           line-height: 40px;
-          min-width: 117px;
+          min-width: 60px;
           padding: 0 10px;
           margin-bottom: 10px;
           margin-right: 5px;
+          border-radius: 20px;
           &.level1{
-            background-color: #FEE9E9;
+            color: #F33D21;
+            border: 1px solid #F33D21;
           }
           &.level2{
-            background-color: #FCF7EE;
+            color: #FA912B;
+            border: 1px solid #FA912B;
           }
           &.level3{
-            background-color: #ECF4FE;
+            color: #806CE5;
+            border: 1px solid #806CE5;
           }
           &.level4{
-            background-color: #EAF9E9;
+            color: #36BF2F;
+            border: 1px solid #36BF2F;
           }
         }
       }

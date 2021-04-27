@@ -6,27 +6,26 @@
         <img class="searchBtnImg" src="@/assets/images/common/searchBlack.png"/>
       </span>
     </div>-->
-    <div class="divTop" style="margin: -10px 0 10px 0">
+    <div class="divTop" style="margin: -5px 0 5px 0">
     <div class="searchCondition">
       <div class="searchLeft">
-        <div class="searchInputFormItem" style="margin-top: 0!important;">
-          <el-input placeholder="姓名/编号/单位" v-model="keyword">
+        <div>
+          <span>问卷类型：</span>
+          <el-select
+                  v-model="questionType"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option label="随访问卷" value="4" key="4"></el-option>
+          </el-select>
+        </div>
+        <div class="searchInputFormItem">
+          <el-input placeholder="输入问卷名称搜索" v-model="keyword">
           </el-input>
           <span class="searchBtnImgSpan" @click="search">
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
               </span>
         </div>
-        <!--<div>
-          <span>客户性别：</span>
-          <el-select
-                  v-model="formData.gender"
-                  placeholder="请选择"
-                  style="width: 140px"
-          >
-            <el-option label="男" value="1" key="1"></el-option>
-            <el-option label="女" value="2" key="2"></el-option>
-          </el-select>
-        </div>-->
       </div>
       <div class="searchRight">
         <div class="buttones">
@@ -44,14 +43,10 @@
           <el-radio v-model="selectRadio" :label="scope.row.id">&nbsp;</el-radio>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="姓名"></el-table-column>
-      <el-table-column prop="age" label="年龄"></el-table-column>
-      <el-table-column prop="gender" label="性别">
-        <template slot-scope="scope">
-          <span v-if="scope.row.gender === 1">男</span>
-          <span v-if="scope.row.gender === 2">女</span>
-        </template>
-      </el-table-column>
+      <el-table-column prop="name" label="问卷名称"></el-table-column>
+      <el-table-column prop="sortTypeName" label="问卷分类"></el-table-column>
+      <el-table-column prop="createdByName" label="创建人"></el-table-column>
+      <el-table-column prop="writeTotal" min-width="150" label="已填人数"></el-table-column>
     </el-table>
     <el-pagination
       background
@@ -73,6 +68,7 @@ export default {
   data() {
     return {
       keyword: '',
+      questionType: '',
       tableData: [],
       total: 0,
       currentPage: 1,
@@ -106,8 +102,9 @@ export default {
       this.queryList();
     },
     async queryList() {
-      const res = await this.$api.userFollowInterface.getClientInfoListPage({
-        keywords: this.keyword,
+      const res = await this.$api.userFollowInterface.getTemplateQuestionListPage({
+        name: this.keyword,
+        questionType: this.questionType,
         pageNo: this.currentPage,
         pageSize: this.pageSize,
       });

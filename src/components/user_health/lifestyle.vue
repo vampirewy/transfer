@@ -56,7 +56,7 @@ export default {
       display: flex;
       flex-wrap: wrap;
       .nameP{
-        width: 33%;
+        width: 50%;
         font-size: 14px;
         color: #333333;
         margin-bottom: 10px;

@@ -4,6 +4,9 @@
 
 .el-textarea.is-disabled .el-textarea__inner {
   cursor: default;
+  background-color: #EEF1F5;
+  border-color: #EEF1F5;
+  color: #B4BBC9;
 }
 
 .el-select .el-input.is-disabled .el-input__inner {
@@ -125,7 +128,7 @@ input:-webkit-autofill:focus {
   width: 100%;
   height: 1px;
   background: #EEF1F5;
-  margin-top: 20px;
+  margin-top: 5px;
 }
 .el-input__icon{
   width: 35px;

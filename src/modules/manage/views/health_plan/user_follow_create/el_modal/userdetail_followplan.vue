@@ -28,13 +28,13 @@
             <span>{{scope.row.planUserName | getResult }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="150">
+        <el-table-column label="操作" width="100">
           <template slot-scope="scope">
-                <el-button
+                <!--<el-button
                         v-if="personal && getAccess('wait_visit_plan_exec')"
                         type="text"
                         @click="handleShow(scope.row)"
-                >执行</el-button>
+                >执行</el-button>-->
             <el-button type="text"
                        v-if="getAccess('visited_record_view')"
                        size="small" @click="handleViewPlan(scope.row)">查看</el-button>
@@ -95,7 +95,7 @@ export default {
         reqBody,
       );
       const { data } = res.data;
-      this.tableData = data.list || [];
+      this.tableData = data.data || [];
       this.total = data.total;
     },
     // 显示执行状态弹窗

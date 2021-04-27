@@ -1,5 +1,5 @@
 <template>
-  <div class="health_questionnaire_edit">
+  <div class="health_questionnaire_edit" ref="health_questionnaire_edit_child">
     <div class="health_questionnaire_form" :class="{ 'isFixedForm': searchBarFixed === true }">
       <el-form
               ref="form"
@@ -13,49 +13,49 @@
         <div class="container" :class="{'containerOtherCheckBox': $route.params.qusType !== 1}">
           <div>
             <el-row class="health_questionnaire_formQus">
-              <el-col :span="24" :id="'questionitem-' + item.id"
-                v-for="(item, index) in questionSubjectist" :key="item.id">
+              <el-col :span="24" :id="'questionitem-' + item.subjectId"
+                v-for="(item, index) in questionSubjectist" :key="item.subjectId">
                 <el-form-item
-                        :key="item.id"
+                        :key="item.subjectId"
                         :label="`${index + 1}. ${item.name} (单选)`"
                         v-if="item.subjectType === 1"
                 >
                   <el-radio-group
-                          v-if="answerMap[item.id]"
-                          v-model="answerMap[item.id][0].optionId"
+                          v-if="answerMap[item.subjectId]"
+                          v-model="answerMap[item.subjectId][0].optionId"
                           size="small"
                           @change="row => onAnswerChange(item, row)"
                           :disabled="item.disabled">
                     <el-radio-button
-                            v-for="val in item.questionSubjectOptionList"
-                            :label="val.id"
-                            :value="val.id"
-                            :key="val.id">
+                            v-for="val in item.optionDTOList"
+                            :label="val.optionId"
+                            :value="val.optionId"
+                            :key="val.optionId">
                       {{ val.name }}
                     </el-radio-button>
                   </el-radio-group>
                 </el-form-item>
-                <el-form-item :key="item.id"
+                <el-form-item :key="item.subjectId"
                               :label="`${index + 1}. ${item.name} (多选)`"
                               v-else-if="item.subjectType === 2">
-                  <el-checkbox-group v-model="answerMap[item.id]" size="small"
+                  <el-checkbox-group v-model="answerMap[item.subjectId]" size="small"
                                      @change="ev => onCheckboxChange(item, ev)">
                     <el-checkbox-button
-                            v-for="val in item.questionSubjectOptionList"
-                            :label="val.id"
-                            :key="val.id"
+                            v-for="val in item.optionDTOList"
+                            :label="val.optionId"
+                            :key="val.optionId"
                             :disabled="val.disabled">
                       {{ val.name }}
                     </el-checkbox-button>
                   </el-checkbox-group>
                 </el-form-item>
-                <el-form-item :key="item.id" class="questionTextarea"
+                <el-form-item :key="item.subjectId" class="questionTextarea"
                               :label="`${index + 1}. ${item.name} (填空)`"
                               v-else-if="item.subjectType === 3">
-                  <div v-for="val in item.questionSubjectOptionList" :key="val.id"
+                  <div v-for="val in item.optionDTOList" :key="val.optionId"
                        style="width: 100%;display: flex;margin-bottom: 20px;">
                     <span style="display: inline-block;width: 85px;">填写答案：</span>
-                    <el-input v-model.trim="answerMap[item.id][0].optionCode"
+                    <el-input v-model.trim="answerMap[item.subjectId][0].optionCode"
                               type="textarea"
                               :rows="5"
                               :maxlength="100"
@@ -117,20 +117,33 @@ export default {
   watch: {
     propsQuestionSubjectist(val) {
       this.questionSubjectist = val; // 所有题目
-      if (this.propsType === 3) { // 如果是查看 先获取详情
-        this.formData.answerList = [...this.propsQuestionAnswerList];
-        // this.fetch(this.$route.params.id, this.$route.params.qusType);
+      // if (this.propsType === 3) { // 如果是查看 先获取详情
+      // this.formData.answerList = [...this.propsQuestionAnswerList];
+      // console.log(this.formData.answerList);
+      // this.fetch(this.$route.params.id, this.$route.params.qusType);
+      // }
+      if (this.propsType === 1) {
+        this.onTypeChange(); // 先设置题目
       }
-      this.onTypeChange(); // 先设置题目
+    },
+    propsQuestionAnswerList() {
+      // this.questionSubjectist = val; // 所有题目
+      // if (this.propsType === 3) { // 如果是查看 先获取详情
+      this.formData.answerList = [...this.propsQuestionAnswerList];
+      console.log(this.formData.answerList);
+      // this.fetch(this.$route.params.id, this.$route.params.qusType);
+      // }
+      if (this.propsType !== 1) {
+        this.onTypeChange(); // 先设置题目
+      }
     },
   },
   methods: {
-    clickMenu(index, selector) {
+    /* clickMenu(index, selector) {
       this.active = index;
       const anchor = this.$el.querySelector(selector);
       document.documentElement.scrollTop = anchor.offsetTop - 140;
-    },
-    handleClick() {},
+    },*/
     onAnswerChange(row, answer) {
       const SMOKE = 'eeeee000001';
       const DRINK = 'fffff000001';
@@ -160,15 +173,15 @@ export default {
       }
     },
     onCheckboxChange(row, checkedList = []) {
-      const optionList = row.questionSubjectOptionList;
+      const optionList = row.optionDTOList;
       const no = optionList.find(val => val.code === 'n');
       if (no) {
-        const item = checkedList.find(val => val === no.id);
+        const item = checkedList.find(val => val === no.optionId);
         if (item) {
           optionList
             .filter(val => val !== no)
             .forEach(val => this.$set(val, 'disabled', true));
-          this.answerMap[row.id] = [item];
+          this.answerMap[row.subjectId] = [item];
         } else {
           optionList.forEach(val => this.$set(val, 'disabled', false));
         }
@@ -214,14 +227,16 @@ export default {
           map[val.subjectId] = [];
         }
         const row = this.answerOptionMap[val.optionId];
-        if (row.subjectType === 1) {
-          map[val.subjectId].splice(0, 1, {
-            optionId: val.optionId,
-          });
-        } else if (row.subjectType === 3) {
-          map[val.subjectId][0].optionCode = val.optionCode;
-        } else {
-          map[val.subjectId].push(val.optionId);
+        if (row) {
+          if (row.subjectType === 1) {
+            map[val.subjectId].splice(0, 1, {
+              optionId: val.optionId,
+            });
+          } else if (row.subjectType === 3) {
+            map[val.subjectId][0].optionCode = val.optionCode;
+          } else {
+            map[val.subjectId].push(val.optionId);
+          }
         }
       });
       this.$set(this, 'answerMap', map);
@@ -236,7 +251,7 @@ export default {
             } if (valOptions.code === 'f01') {
               this.onAnswerChange(valOptions, '322');
             } else {
-              valOptions.questionSubjectOptionList
+              valOptions.optionDTOList
                 .filter(valItem => valItem.code !== 'n')
                 .forEach(valObj => this.$set(valObj, 'disabled', true));
             }
@@ -248,36 +263,36 @@ export default {
       this.$set(this, 'answerOptionsList', []);
       if (this.questionSubjectist) {
         this.questionSubjectist.forEach((valOptions) => {
-          if (!this.answerMap[valOptions.id]) {
-            this.$set(this.answerMap, valOptions.id, []);
+          if (!this.answerMap[valOptions.subjectId]) {
+            this.$set(this.answerMap, valOptions.subjectId, []);
             if (valOptions.subjectType === 1) { // 1单选 2 多选 3 填空
               // 单选的话默认有一个选项
-              this.answerMap[valOptions.id].push({
+              this.answerMap[valOptions.subjectId].push({
                 optionId: '',
               });
             } else if (valOptions.subjectType === 3) { // 1单选 2 多选 3 填空
               // 单选的话默认有一个选项
-              /* this.answerMap[valOptions.id].push({
+              /* this.answerMap[valOptions.subjectId].push({
                 optionId: '',
               });*/
-              this.answerMap[valOptions.id].push({
+              this.answerMap[valOptions.subjectId].push({
                 optionCode: '',
                 subjectType: 3,
-                subjectId: valOptions.id,
+                subjectId: valOptions.subjectId,
               });
-              valOptions.questionSubjectOptionList.push({ code: '', id: '' });
+              valOptions.optionDTOList.push({ code: '', optionId: '' });
             }
           }
           this.allQuestion.push(valOptions); // 所有题目push进一个数组，为了判断后面哪个没选过
-          valOptions.questionSubjectOptionList.forEach((item) => {
+          valOptions.optionDTOList.forEach((item) => {
             if (valOptions.subjectType === 3) {
-              this.answerOptionMap[valOptions.id] = item; // 填空没有答案id 输入题目id
+              this.answerOptionMap[valOptions.subjectId] = item; // 填空没有答案id 输入题目id
             } else {
-              this.answerOptionMap[item.id] = item; // 存入所有的答案选项，最后根据选项id取内容
+              this.answerOptionMap[item.optionId] = item; // 存入所有的答案选项，最后根据选项id取内容
             }
             // eslint-disable-next-line no-param-reassign
             item.subjectType = valOptions.subjectType;
-            item.subjectId = valOptions.id;
+            item.subjectId = valOptions.subjectId;
             item.subjectCode = valOptions.code;
           });
         });
@@ -308,7 +323,7 @@ export default {
             }
             this.formData.answerList.push({
               optionCode: row.code,
-              optionId: row.id || row.subjectId,
+              optionId: row.optionId || row.subjectId,
               subjectCode: row.subjectCode,
               subjectId: row.subjectId,
             });
@@ -317,21 +332,22 @@ export default {
       });
       this.formData.answerList = this.formData.answerList.filter(
         val => val.optionId,
-      ); //  && val.optionCode
+      ); // && val.optionCode!=='' 加此条件可以让不填的填空题也捕捉到没填写
       console.log(this.formData.answerList); // 将answerList里面的subjectCode 和 题目code 对比
       console.log(this.allQuestion); // 如果没有的话就就push一个新数组
       const noAnswerList = [];
       this.allQuestion.forEach((valQusOne) => {
         let same = false;
         this.formData.answerList.forEach((valAnswer) => {
-          if (valQusOne.id === valAnswer.subjectId) { // 如果有一样 就回答过了
+          if (valQusOne.subjectId === valAnswer.subjectId) { // 如果有一样 就回答过了
             same = true;
           }
         });
         if (same === false) { // 如果没有相同的则push
-          noAnswerList.push(valQusOne.id); // 把未完成的题目push进一个数组
+          noAnswerList.push(valQusOne.subjectId); // 把未完成的题目push进一个数组
         }
       });
+      console.log(noAnswerList);
       /* this.formData.answerList.forEach((valAnswer) => { // 选无
         if (valAnswer.subjectCode === 'e01' && valAnswer.optionId === '293') {
           this.removeSplice(noAnswerList, 'e03');
@@ -349,9 +365,8 @@ export default {
           document.documentElement.scrollTop =
             (anchor.parentNode.offsetTop + anchor.offsetTop) - 130;
         } else {*/
-        /* document.documentElement.scrollTop = anchor.offsetTop + 60; */
         if (document.querySelectorAll('.content-wrapper').length > 0) {
-          document.querySelectorAll('.content-wrapper')[0].scrollTop = anchor.offsetTop + 60;
+          document.querySelectorAll('.content-wrapper')[0].scrollTop = anchor.offsetTop + 400;
         }
         this.$message.warning('请填写完整随访问卷');
         // }
@@ -372,7 +387,7 @@ export default {
         }
       });*/
     },
-    handleScroll() {
+    /* handleScroll() {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop
         || document.body.scrollTop;
       const offsetTop = document.querySelector('#intvTmpl_left').offsetTop;
@@ -387,10 +402,10 @@ export default {
           this.active = index;
         }
       });
-    },
+    },*/
   },
   destroyed() {
-    window.removeEventListener('scroll', this.handleScroll);
+    // window.removeEventListener('scroll', this.handleScroll);
   },
   mounted() {
 
@@ -398,7 +413,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .health_questionnaire_edit{
     #intvTmpl_left{
       &.isFixed{
@@ -410,11 +425,11 @@ export default {
     .isFixedForm{
       margin-left: 190px;
     }
-    /*/deep/.el-form-item__content .el-textarea__inner{
+    /deep/.el-form-item__content .el-textarea__inner{
       background-color: #F4F4F6 !important;
-    }*/
+    }
     /deep/ .el-form--label-top .el-form-item__label{
-      font-size: 14px;
+      font-size: 16px;
       color: #333333!important;
       position: relative;
       font-weight: bold;
@@ -455,30 +470,9 @@ export default {
         text-align: center;
       }
       .health_questionnaire_formQus{
-        margin-left: 15px;
+        margin-left: 25px;
         display: flex;
         flex-wrap: wrap;
-      }
-    }
-
-   /* .title {
-      font-size: 18px;
-      font-weight: 600;
-      color: #333333;
-      line-height: 25px;
-      padding-left: 10px;
-      position: relative;
-      margin-bottom: 20px;
-      &:after {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 2px;
-        height: 18px;
-        background: #4991FD;
-        border-radius: 1px;
       }
     }
     .el-radio-button + .el-radio-button {
@@ -486,9 +480,9 @@ export default {
       margin-bottom: 20px;
     }
     .el-radio-button__inner {
-      background-color: #F4F4F6;
+      background-color: #FFFFFF;
       color: #333333;
-      border: 1px solid #97A6BD;
+      border: 1px solid #B4BBC9;
     }
     /deep/ .el-radio-button__orig-radio:disabled + .el-radio-button__inner{
       border-left: 1px solid #f5f5f5!important;
@@ -498,12 +492,22 @@ export default {
         min-width: 100px;
         height: 48px;
         line-height: 21px;
-        border-radius: 8px;
+        border-radius: 24px;
         box-shadow: none;
       }
+      &.is-active .el-radio-button__inner{
+        color: #3154AC;
+        background: rgba(49, 84, 172, 0.1);
+        border-radius: 24px;
+        border: 1px solid rgba(49, 84, 172, 0.3)!important;
+        box-shadow: none!important;
+      }
       &:first-child .el-radio-button__inner{
-        border-left: 1px solid #97A6BD;
+        border-left: 1px solid #B4BBC9;
         margin-right: 20px;
+      }
+      &.is-disabled .el-radio-button__inner{
+        border: 1px solid #f5f5f5;
       }
     }
     .containerOtherCheckBox{
@@ -517,6 +521,9 @@ export default {
         &:first-child .el-radio-button__inner{
           margin-right: 30px;
         }
+        &:last-child .el-radio-button__inner{
+          margin-right: 0;
+        }
       }
       .el-radio-button + .el-radio-button {
         margin-right: 30px;
@@ -527,9 +534,9 @@ export default {
       margin-bottom: 20px;
     }
     .el-checkbox-button__inner{
-      background-color: #F4F4F6;
+      background-color: #FFFFFF;
       color: #333333;
-      border: 1px solid #97A6BD;
+      border: 1px solid #B4BBC9;
     }
     /deep/ .el-checkbox-button.is-disabled:first-child .el-checkbox-button__inner{
       border-left-color: #f5f5f5!important;
@@ -542,17 +549,22 @@ export default {
         min-width: 100px;
         height: 48px;
         line-height: 21px;
-        border-radius: 8px;
+        border-radius: 24px;
       }
-      .is-checked .el-checkbox-button__inner{
-        background-color: #4991FD;
-        color: white;
-        border: 1px solid #4991FD!important;
+      &.is-checked .el-checkbox-button__inner{
+        color: #3154AC;
+        background: rgba(49, 84, 172, 0.1);
+        border-radius: 24px;
+        border: 1px solid rgba(49, 84, 172, 0.3)!important;
+        box-shadow: none!important;
       }
       &:first-child .el-checkbox-button__inner{
-        border-left: 1px solid #97A6BD;
+        border-left: 1px solid #B4BBC9;
         margin-right: 20px;
       }
-    }*/
+      &.is-disabled .el-checkbox-button__inner{
+        border: 1px solid #f5f5f5;
+      }
+    }
   }
 </style>

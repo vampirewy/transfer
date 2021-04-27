@@ -266,7 +266,7 @@ export default {
         .then(({ data }) => {
           if (data.success) {
             this.params.total = data.data.total;
-            this.dataSource = data.data.list;
+            this.dataSource = data.data.data;
           }
         });
     },
