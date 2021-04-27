@@ -58,7 +58,6 @@
       }
     }
   }
-
   @include when(exceed) {
     .el-textarea__inner {
       border-color: $--color-danger;

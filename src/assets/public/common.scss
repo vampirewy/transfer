@@ -129,6 +129,32 @@ a{
   }
 }
 // 搜索按钮
+.searchCondition{
+  .searchLeft{
+    position: relative;
+    /deep/ .el-input__inner{
+      padding-right: 40px;
+    }
+    .searchBtnImgSpan{
+      position: absolute;
+      right: 0px;
+      top: 5px;
+      width: 36px;
+      height: 38px;
+      line-height: 38px;
+      background: #3154AC;
+      border-radius: 0 5px 5px 0;
+      text-align: center;
+      cursor: pointer;
+      &:hover{
+        background: #24499D;
+      }
+      .searchBtnImg{
+        width: 16px;
+      }
+    }
+  }
+}
 .searchInputFormItem{
   position: relative;
   /deep/ .el-input__inner{
@@ -137,10 +163,10 @@ a{
   .searchBtnImgSpan{
     position: absolute;
     right: 0px;
-    top: 5px;
+    top: 0px;
     width: 36px;
-    height: 38px;
-    line-height: 38px;
+    height: 40px;
+    line-height: 40px;
     background: #3154AC;
     border-radius: 0 5px 5px 0;
     text-align: center;
@@ -189,18 +215,18 @@ a{
     color: #333333;
     font-weight: bold;
     margin: 20px 0;
-    &:after {
-      content: '';
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      transform: translateY(-50%);
-      width: 32px;
-      height: 4px;
-      background: #3154AC;
-      border-radius: 3px;
-      opacity: 0.5;
-    }
+    // &:after {
+    //   content: '';
+    //   position: absolute;
+    //   left: 0;
+    //   bottom: 0;
+    //   transform: translateY(-50%);
+    //   width: 32px;
+    //   height: 4px;
+    //   background: #3154AC;
+    //   border-radius: 3px;
+    //   opacity: 0.5;
+    // }
   }
 }
 .titleBiao{
@@ -350,7 +376,7 @@ a{
   }
 }
 .clientName{
-  color: #4991FD;
+  color: #3154AC;
   cursor: pointer;
 }
 // select表格
@@ -364,6 +390,10 @@ a{
       color: #666666;
     }
   }
+}
+.el-input__suffix{
+  right: 0;
+  border-radius: 5px;
 }
 // 顶部搜索
 .divTop{
@@ -494,6 +524,6 @@ a{
   border-right:1px solid #f4f4f6;
   border-left:1px solid #f4f4f6;
 }
-.el-input__suffix{
-  right: 0;
-}
+// .el-input__suffix{
+//   right: 0;
+// }
