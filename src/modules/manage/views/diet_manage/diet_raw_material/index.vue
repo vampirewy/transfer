@@ -11,7 +11,8 @@
             <div class="searchCondition">
               <div class="searchLeft">
                 <div class="searchInputFormItem">
-                  <el-input placeholder="名称/原料" v-model="query"> </el-input>
+                  <el-input placeholder="名称/原料" v-model="query.names">
+                  </el-input>
                   <span class="searchBtnImgSpan" @click="search">
                     <img
                       class="searchBtnImg"
@@ -22,7 +23,7 @@
                 <div>
                   <span class="label">原料分类：</span>
                   <el-select
-                    v-model="status"
+                    v-model="query.foodSort"
                     placeholder="请选择"
                     clearable
                     style="width: 139px"
@@ -63,35 +64,34 @@
               class="btn-new btnAdd"
               size="small"
               style="margin: 16px 0"
+              @click="deletes"
               ><img src="@/assets/images/common/delBtn.png" />删除</el-button
             >
           </div>
         </div>
-        <el-table :data="tableData" align="center">
+        <el-table :data="tableData" ref="dietRawMaterial" align="center">
           <el-table-column type="selection" width="55"> </el-table-column>
           <el-table-column
-            prop="realName"
+            prop="names"
             label="原料名称"
             show-overflow-tooltip
           ></el-table-column>
           <el-table-column
-            prop="mobileNo"
+            prop="foodSortName"
             label="原料分类"
             show-overflow-tooltip
           ></el-table-column>
           <el-table-column
-            prop="roleName"
+            prop="kcal"
             label="能量 (kcal)"
             show-overflow-tooltip
           ></el-table-column>
-          <el-table-column prop="activated" label="蛋白质 (g)">
-          </el-table-column>
-          <el-table-column prop="activated" label="脂肪 (g)"> </el-table-column>
-          <el-table-column prop="activated" label="碳水化合物 (g)">
-          </el-table-column>
+          <el-table-column prop="protein" label="蛋白质 (g)"> </el-table-column>
+          <el-table-column prop="fat" label="脂肪 (g)"> </el-table-column>
+          <el-table-column prop="cho" label="碳水化合物 (g)"> </el-table-column>
           <el-table-column prop="id" label="操作" width="160px">
             <template slot-scope="scope">
-              <el-button type="text" size="small">编辑</el-button>
+              <el-button type="text" size="small" @click="edit(scope.row.id)">编辑</el-button>
               <el-button type="text" size="small" @click="look">查看</el-button>
             </template>
           </el-table-column>
@@ -103,12 +103,12 @@
           :page-sizes="[15]"
           :current-page="currentPage"
           :page-size="pageSize"
-          @current-change="handleCurrentChange"
+          @current-change="loadData"
         ></el-pagination>
       </div>
     </template>
     <template v-else>
-      <diet-raw-material-form :type="type"></diet-raw-material-form>
+      <diet-raw-material-form :id="id" :type="type"></diet-raw-material-form>
     </template>
   </div>
 </template>
@@ -125,17 +125,23 @@ export default {
       viewIndex: 1,
       currentPage: 1,
       pageSize: 15,
-      tableData: [{ realName: '苹果' }],
+      tableData: [],
       total: 0,
       roleOptions: '',
       role: '',
       status: '',
-      query: '',
+      query: {
+        foodSort: '',
+        names: '',
+      },
+      id: '',
       type: 'add',
     };
   },
+  created() {
+    this.loadData();
+  },
   methods: {
-    handleCurrentChange() {},
     add() {
       this.type = 'add';
       this.viewIndex = 2;
@@ -144,8 +150,44 @@ export default {
       this.type = 'edit';
       this.viewIndex = 2;
     },
-    search() {},
-    reset() {},
+    edit(id) {
+      this.id = id;
+      this.viewIndex = 2;
+    },
+    deletes() {
+      const ids = JSON.stringify(
+        this.$refs.dietRawMaterial.selection.map(item => item.id),
+      );
+      this.$api.dietRawMaterial.deleteDietIngredient(ids).then(() => {
+        this.loadData();
+      });
+    },
+    search() {
+      this.currentPage = 1;
+      this.loadData();
+    },
+    reset() {
+      this.query = {
+        foodSort: '',
+        names: '',
+      };
+      this.currentPage = 1;
+      this.loadData();
+    },
+    loadData() {
+      this.$api.dietRawMaterial
+        .getDietIngredientList({
+          pageNo: this.currentPage,
+          pageSize: this.pageSize,
+          ...this.query,
+        })
+        .then((res) => {
+          if (!res.data.success) return;
+          const { data, total } = res.data.data;
+          this.tableData = data;
+          this.total = total;
+        });
+    },
     upMore() {},
   },
 };
