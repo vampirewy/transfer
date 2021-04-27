@@ -456,25 +456,4 @@ export default {
     }
   }
 }
-.wltitle {
-      font-size: 20px;
-        font-weight: 800;
-        color: #333333;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  .quan {
-    width: 4.5px;
-    height: 4.5px;
-    background: #fff;
-    border-radius: 3px;
-    border: 1px solid #B4BBC9;
-  }
-  span {
-    margin-left: 10px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #333333;
-  }
-}
 </style>
