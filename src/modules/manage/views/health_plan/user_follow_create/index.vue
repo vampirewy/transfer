@@ -80,6 +80,7 @@
                   v-model="form.gender"
                   placeholder="请选择"
                   style="width: 140px"
+                  clearable
           >
             <el-option label="男" value="1" key="1"></el-option>
             <el-option label="女" value="2" key="2"></el-option>
@@ -91,6 +92,7 @@
                   v-model="form.gridId"
                   placeholder="请选择"
                   style="width: 140px"
+                  clearable
           >
             <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
                        :key="index"></el-option>
@@ -137,52 +139,37 @@
       <div>
         <span>剩余计划：</span>
         <el-select
-                v-model="form.gridId"
+                v-model="form.hasIntervenePlan"
                 placeholder="请选择"
                 style="width: 140px"
+                clearable
         >
-          <el-option :label="item.name" :value="item.paramValue"
-                     v-for="(item, index) in gridList" :key="index"></el-option>
+          <el-option label="有" value="1" key="1"></el-option>
+          <el-option label="无" value="2" key="2"></el-option>
         </el-select>
       </div>
       <div>
         <span>体检报告：</span>
         <el-select
-                v-model="form.gridId"
+                v-model="form.hasReport"
                 placeholder="请选择"
                 style="width: 140px"
+                clearable
         >
-          <el-option :label="item.name" :value="item.paramValue"
-                     v-for="(item, index) in gridList" :key="index"></el-option>
-        </el-select>
-      </div>
-      <div>
-        <span>主要项目：</span>
-        <el-select
-                v-model="form.gridId"
-                placeholder="请选择"
-                style="width: 140px"
-        >
-          <el-option :label="item.name" :value="item.paramValue"
-                     v-for="(item, index) in gridList" :key="index"></el-option>
+          <el-option label="有" value="1" key="1"></el-option>
+          <el-option label="无" value="2" key="2"></el-option>
         </el-select>
       </div>
       <div>
         <span>客户标签：</span>
-        <el-select
-                v-model="form.gridId"
-                placeholder="请选择"
-                style="width: 140px"
-        >
-          <el-option :label="item.name" :value="item.paramValue"
-                     v-for="(item, index) in gridList" :key="index"></el-option>
-        </el-select>
+        <el-input placeholder="请输入" style="width: 140px" v-model="form.tag"></el-input>
       </div>
       <div>
         <span>建档日期：</span>
         <el-date-picker
                 v-model="form.startTime"
                 type="date"
+                value-format="yyyy-MM-dd"
                 :max-date="form.endTime"
                 placeholder="开始时间"
                 style="width: 120px"
@@ -192,6 +179,7 @@
         <el-date-picker
                 v-model="form.endTime"
                 type="date"
+                value-format="yyyy-MM-dd"
                 :min-date="form.startTime"
                 placeholder="结束时间"
                 style="width: 120px"
@@ -201,18 +189,20 @@
       <div>
         <span>体检日期：</span>
         <el-date-picker
-                v-model="form.startTime"
+                v-model="form.startReportDate"
                 type="date"
-                :max-date="form.endTime"
+                value-format="yyyy-MM-dd"
+                :max-date="form.endReportDate"
                 placeholder="开始时间"
                 style="width: 120px"
         >
         </el-date-picker>
         <span class="timing">-</span>
         <el-date-picker
-                v-model="form.endTime"
+                v-model="form.endReportDate"
                 type="date"
-                :min-date="form.startTime"
+                value-format="yyyy-MM-dd"
+                :min-date="form.startReportDate"
                 placeholder="结束时间"
                 style="width: 120px"
         >
@@ -221,18 +211,20 @@
       <div>
         <span>采集日期：</span>
         <el-date-picker
-                v-model="form.startTime"
+                v-model="form.startCollectionDate"
                 type="date"
-                :max-date="form.endTime"
+                value-format="yyyy-MM-dd"
+                :max-date="form.endCollectionDate"
                 placeholder="开始时间"
                 style="width: 120px"
         >
         </el-date-picker>
         <span class="timing">-</span>
         <el-date-picker
-                v-model="form.endTime"
+                v-model="form.endCollectionDate"
                 type="date"
-                :min-date="form.startTime"
+                value-format="yyyy-MM-dd"
+                :min-date="form.startCollectionDate"
                 placeholder="结束时间"
                 style="width: 120px"
         >
@@ -335,14 +327,14 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="clientName"
+        prop="name"
         label="姓名"
         width="100"
       >
         <template slot-scope="scope">
              <span class="clientName"
                    @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
-               {{ scope.row.clientName | getResult}}
+               {{ scope.row.name | getResult}}
              </span>
         </template>
       </el-table-column>
@@ -366,33 +358,33 @@
           <span>{{ scope.row.workUnitName | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="planUserName" label="*建档日期" show-overflow-tooltip>
+      <el-table-column prop="createdTime" label="建档日期" show-overflow-tooltip>
         <!--管理医生-->
         <template slot-scope="scope">
-          <span>{{ scope.row.planUserName | getResult}}</span>
+          <span>{{ scope.row.createdTime | getResultDate}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="planUserName" label="*最新体检日期" show-overflow-tooltip>
+      <el-table-column prop="newstReportDate" label="最新体检日期" show-overflow-tooltip>
         <!--管理医生-->
         <template slot-scope="scope">
-          <span>{{ scope.row.planUserName | getResult}}</span>
+          <span>{{ scope.row.newstReportDate | getResultDate}}</span>
         </template>
       </el-table-column>
       <el-table-column prop="noExecuteCount" label="干预计划" show-overflow-tooltip>
         <template slot-scope="scope">
           <el-button type="text"
                      @click="expandsHandle(scope.row, 2)" style="color: #3154AC;font-size: 14px">
-            {{scope.row.noExecuteCount | getResult}}</el-button>
+            {{scope.row.unExecutePlanTotal | getResult}}</el-button>
           <span style="color: #3154AC;font-size: 14px">/</span>
           <el-button type="text"
                      @click="expandsHandle(scope.row, 1)" style="color: #3154AC;font-size: 14px">
-            {{scope.row.executeCount | getResult}}</el-button>
+            {{scope.row.executePlanTotal | getResult}}</el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="executeTime" label="*标签" width="200px" show-overflow-tooltip>
+      <el-table-column prop="tags" label="标签" show-overflow-tooltip>
         <!--最后一次随访时间-->
         <template slot-scope="scope">
-          <span>{{ scope.row.executeTime | getResultDate }}</span>
+          <span>{{ scope.row.tags | getResult }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -439,6 +431,13 @@ export default {
         keywords: '', // 关键字
         gender: '', // 性别
         gridId: '', // 人员类别
+        hasIntervenePlan: '', // 剩余计划
+        hasReport: '', // 体检报告
+        tag: '', // 客户标签
+        startReportDate: '', // 体检日期
+        endReportDate: '', // 体检日期
+        startCollectionDate: '', // 采集日期
+        endCollectionDate: '', // 采集日期
         workUnitName: '', // 企业单位
         planUserId: '',
         planUserName: '',
@@ -610,15 +609,25 @@ export default {
      * @return {Promise<void>}
      */
     async getList() {
-      const startTime =
-        this.form.selectTime && this.form.selectTime.length
-          ? this.form.selectTime[0]
-          : '';
-      const endTime =
-        this.form.selectTime && this.form.selectTime.length
-          ? this.form.selectTime[1]
-          : '';
-
+      console.log(this.form);
+      if (this.form.startTime) {
+        this.form.startTime = `${this.form.startTime.split(' ')[0]} 00:00:00`;
+      }
+      if (this.form.endTime) {
+        this.form.endTime = `${this.form.endTime.split(' ')[0]} 23:59:59`;
+      }
+      if (this.form.startReportDate) {
+        this.form.startReportDate = `${this.form.startReportDate.split(' ')[0]} 00:00:00`;
+      }
+      if (this.form.endReportDate) {
+        this.form.endReportDate = `${this.form.endReportDate.split(' ')[0]} 23:59:59`;
+      }
+      if (this.form.startCollectionDate) {
+        this.form.startCollectionDate = `${this.form.startCollectionDate.split(' ')[0]} 00:00:00`;
+      }
+      if (this.form.endCollectionDate) {
+        this.form.endCollectionDate = `${this.form.endCollectionDate.split(' ')[0]} 23:59:59`;
+      }
       const reqBody = {
         planWay: this.form.planWay,
         executeState: this.form.executeState,
@@ -626,9 +635,16 @@ export default {
         gridId: this.form.gridId,
         planUserId: this.form.planUserId,
         reportAbnormalCodes: this.form.abnormalId,
+        hasIntervenePlan: this.form.hasIntervenePlan,
+        hasReport: this.form.hasReport,
+        /* tag: this.form.tag,*/
+        startReportDate: this.form.startReportDate,
+        endReportDate: this.form.endReportDate,
+        startCollectionDate: this.form.startCollectionDate,
+        endCollectionDate: this.form.endCollectionDate,
         workUnitName: this.form.workUnitName,
-        startTime,
-        endTime,
+        startTime: this.form.startTime,
+        endTime: this.form.endTime,
         keywords: this.form.keywords,
         pageNo: this.table.pageNo,
         pageSize: this.table.pageSize,

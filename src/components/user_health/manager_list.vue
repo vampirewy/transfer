@@ -36,6 +36,7 @@
       ref="multipleTable"
       align="center"
       @row-click="handleRowClick"
+      class="openTable"
     >
       <el-table-column width="80">
         <template slot-scope="scope">
@@ -216,11 +217,6 @@ export default {
         font-size: 18px;
         color: #fff;
       }
-    }
-  }
-  .el-table{
-    td{
-      padding: 11.5px 0;
     }
   }
   .el-table::before {
