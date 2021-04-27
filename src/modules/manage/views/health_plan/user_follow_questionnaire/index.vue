@@ -41,7 +41,7 @@
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
               </span>
           </div>
-          <div>
+          <div style="margin-top: 10px;">
             <span>问卷类型：</span>
             <el-select
                     v-model="formData.sortType"
@@ -53,7 +53,7 @@
                          :key="item.paramValue"></el-option>
             </el-select>
           </div>
-          <div style="margin-bottom: 10px;">
+          <div>
             <span>创建日期：</span>
             <el-date-picker
                     v-model="formData.startTime"
