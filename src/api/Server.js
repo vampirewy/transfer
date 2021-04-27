@@ -40,6 +40,10 @@ import ServiceManagerInterface from './service_manager/ServiceManagerInterface';
 import statics from './statistics/Statics';
 import serviceItemsInterface from './service_items_manage/ServiceItemsInterface';
 import dietManageInterface from './diet_manage/DietManageInterface';
+import dietFinishedDishInterface from './diet_manage/DietFinishedDishInterface';
+import dietRawMaterial from './diet_manage/DietRawMaterial';
+
+
 export default {
   loginInterface,
   systemManageInterface,
@@ -74,4 +78,6 @@ export default {
   statics,
   serviceItemsInterface,
   dietManageInterface,
+  dietFinishedDishInterface,
+  dietRawMaterial,
 };
