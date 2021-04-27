@@ -5,14 +5,12 @@
         <div class="title">新增菜名</div>
       </div>
     </div>
-    <el-form inline label-width="90px" :model="value" class="form-content">
+    <el-form inline label-width="90px"  class="form-content">
       <el-form-item required label="菜品名称：">
         <el-input style="width: 189px" placeholder="请输入"></el-input>
       </el-form-item>
       <el-form-item required style="position: relative" label="菜品分类：">
-        <el-select placeholder="请选择 (可多选)" clearable style="width: 189px">
-          <el-option label="男" :value="1"></el-option>
-          <el-option label="女" :value="0"></el-option>
+        <el-select placeholder="请选择 (可多选)" value=""  clearable style="width: 189px">
         </el-select>
         <div class="mask" @click="isShowDishSelect = true"></div>
         <el-dish-select :active.sync="isShowDishSelect"></el-dish-select>
@@ -39,7 +37,10 @@
       </div>
     </div>
     <div class="divRightTitleDiv">
-      <el-button class="btn-new btnAdd" size="small" @click="isShowDishRawMaterial=true"
+      <el-button
+        class="btn-new btnAdd"
+        size="small"
+        @click="isShowDishRawMaterial = true"
         ><img src="@/assets/images/common/addBtn.png" />添加原料</el-button
       >
       <el-button type="primary" class="btn">主要营养成分</el-button>
@@ -124,7 +125,7 @@ export default {
   methods: {
     search() {},
     back() {
-      this.$router.back();
+      this.$parent.viewIndex = 1;
     },
   },
 };

@@ -1,79 +1,5 @@
 <template>
   <div class="diet-form">
-    <div class="diet-form_left">
-      <div class="diet-form_left-item">
-        <p class="item-title">推荐摄入</p>
-        <div class="table">
-          <div class="table-column">
-            <div>高</div>
-            <div>0人</div>
-          </div>
-          <div class="table-column">
-            <div>高</div>
-            <div>0人</div>
-          </div>
-        </div>
-      </div>
-      <div class="diet-form_left-item">
-        <p class="item-title">体型</p>
-        <div class="table">
-          <div class="table-column">
-            <div>未知</div>
-            <div>0人</div>
-          </div>
-          <div class="table-column">
-            <div>偏瘦</div>
-            <div>0人</div>
-          </div>
-          <div class="table-column">
-            <div>正常</div>
-            <div>0人</div>
-          </div>
-          <div class="table-column">
-            <div>超重</div>
-            <div>0人</div>
-          </div>
-          <div class="table-column">
-            <div>肥胖</div>
-            <div>0人</div>
-          </div>
-        </div>
-        <div class="diet-form_left-item">
-          <p class="item-title">膳食相关问题</p>
-          <div class="table">
-            <div class="table-column">
-              <div>吃饭过饱</div>
-              <div>0人</div>
-            </div>
-            <div class="table-column">
-              <div>经常吃夜宵</div>
-              <div>0人</div>
-            </div>
-          </div>
-        </div>
-        <div class="diet-form_left-item">
-          <p class="item-title">MNA营养评定</p>
-          <div class="table">
-            <div class="table-column">
-              <div>营养状况良好</div>
-              <div>0人</div>
-            </div>
-            <div class="table-column">
-              <div>存在营养风险</div>
-              <div>0人</div>
-            </div>
-            <div class="table-column">
-              <div>营养不良</div>
-              <div>0人</div>
-            </div>
-            <div class="table-column">
-              <div>未评</div>
-              <div>0人</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="diet-form_center">
       <div class="diet-type">
         <div class="diet-type-item" @click="isShowDietPagoda = true">
@@ -99,78 +25,13 @@
         </div>
       </div>
       <div class="diet-plan-box">
-        <div class="title">新增膳食方案</div>
-        <el-form label-position="left">
-          <el-form-item label="日期范围: " label-width="80px">
-            <el-date-picker
-              type="date"
-              value-format="yyyy-MM-dd"
-              placeholder="开始时间"
-              style="width: 121px"
-            >
-            </el-date-picker>
-            <span style="margin: 0 9px">-</span>
-            <el-date-picker
-              type="date"
-              value-format="yyyy-MM-dd"
-              placeholder="结束时间"
-              style="width: 121px"
-            >
-            </el-date-picker>
-          </el-form-item>
-          <div>
-            <div class="item-title" style="margin-bottom: 20px">适用人员</div>
-          </div>
-          <el-form-item
-            style="position: relative"
-            label="添加人员: "
-            label-width="80px"
-          >
-            <div @click="isShowPeopleSelect = true" class="select-mask">
-              <el-select
-                value=""
-                style="width: 100%"
-                placeholder="请选择（多选）"
-              >
-              </el-select>
-            </div>
-            <el-people-select
-              :active.sync="isShowPeopleSelect"
-              class="el-people-select"
-            ></el-people-select>
-          </el-form-item>
-          <el-form-item
-            class="dashed-border"
-            label="已选人员: "
-            label-width="80px"
-          >
-            <div class="selected-box">
-              <div class="selected-item" v-for="item in 10" :key="item">
-                <span>谢小妞</span>
-                <i class="el-icon-error"></i>
-              </div>
-            </div>
-          </el-form-item>
+        <el-form>
           <div class="diet-formulate">
             <div
               class="diet-formulate-head"
               style="margin-bottom: 20px; position: relative"
             >
               <div class="item-title">制定食谱</div>
-              <div class="in_out-put">
-                <div @click="isShowTemplateInput = true">
-                  <img src="@/assets/images/common/import.png" alt="" />
-                  从模版导入
-                </div>
-                <div @click="isShowTmplateSave = true">
-                  <img src="@/assets/images/common/export.png" alt="" />
-                  保存为模版
-                </div>
-              </div>
-              <el-template-input
-                class="el-template-input"
-                :active.sync="isShowTemplateInput"
-              ></el-template-input>
             </div>
             <el-tabs
               type="card"
@@ -366,26 +227,6 @@
               </el-tab-pane>
             </el-tabs>
           </div>
-          <div class="diet-formulate diet-rule">
-            <div class="diet-formulate-head" style="margin-bottom: 20px">
-              <div class="item-title">膳食原则</div>
-              <div class="in_out-put">
-                <div @click="isShowDietRule = true">
-                  <img src="@/assets/images/common/addBtn.png" alt="" />
-                  添加
-                </div>
-                <div>
-                  <img src="@/assets/images/common/editBtn.png" alt="" />
-                  编辑
-                </div>
-                <div>
-                  <img src="@/assets/images/common/delBtn.png" alt="" />
-                  删除
-                </div>
-              </div>
-            </div>
-            <div class="diet-rule_textarea"></div>
-          </div>
         </el-form>
         <div class="form-buttons">
           <el-button size="small" class="cancelBtn" @click="back">
@@ -448,9 +289,7 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-    <el-template-save :visible.sync="isShowTmplateSave"></el-template-save>
     <el-food-op :visible.sync="isShowFoodOp"></el-food-op>
-    <el-diet-rule :visible.sync="isShowDietRule"></el-diet-rule>
     <el-cooking :visible.sync="isShowCooking"></el-cooking>
     <el-diet-pagoda :visible.sync="isShowDietPagoda"></el-diet-pagoda>
   </div>
@@ -460,22 +299,14 @@
 import dietProportionChart from '../../chart_data/diet_proportion.vue'; // 三大营养素供能比
 import dietProteinroportionChart from '../../chart_data/diet_protein_proportion.vue'; // 动物性及豆类蛋白质占总蛋白质比例
 import dietDistributionChart from '../../chart_data/diet_distribution.vue'; // 三餐能量分配比
-import elPeopleSelect from './el_modal/el_people_selecet.vue'; // 人员选择组件
-import elTemplateInput from './el_modal/el_template_input.vue'; // 食谱模版导入
-import elTemplateSave from './el_modal/el_template_save.vue'; // 食谱模版保存
-import elFoodOp from './el_modal/el_food_op.vue'; // 食物操作
-import elDietRule from './el_modal/el_diet_rule.vue'; // 食谱原则
-import elCooking from './el_modal/el_cooking.vue'; // 食谱烹饪方式
-import elDietPagoda from './el_modal/el_diet_pagoda.vue'; // 膳食宝塔
+import elFoodOp from '../../diet_programme/edit_form/el_modal/el_food_op.vue'; // 食物操作
+import elCooking from '../../diet_programme/edit_form/el_modal/el_cooking.vue'; // 食谱烹饪方式
+import elDietPagoda from '../../diet_programme/edit_form/el_modal/el_diet_pagoda.vue'; // 膳食宝塔
 
 export default {
   name: 'diet_form',
   components: {
-    elPeopleSelect,
-    elTemplateInput,
-    elTemplateSave,
     elFoodOp,
-    elDietRule,
     elCooking,
     elDietPagoda,
     dietProportionChart,

@@ -179,7 +179,7 @@ export default {
   },
   data() {
     return {
-      viewIndex: 2,
+      viewIndex: 1,
       currentPage: 1,
       pageSize: 15,
       tableData: [],

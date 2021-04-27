@@ -1,0 +1,238 @@
+<template>
+  <div class="diet-manage">
+    <template v-if="viewIndex === 1">
+      <div class="divTop">
+        <div class="divTitle">
+          <div class="diet-search">
+            <div class="search-title">
+              <img src="@/assets/images/common/titleLeft.png" alt="" />
+              菜谱模版
+            </div>
+            <div class="searchCondition">
+              <div class="searchLeft">
+                <div class="searchInputFormItem">
+                  <el-input placeholder="名称" v-model="query"> </el-input>
+                  <span class="searchBtnImgSpan" @click="search">
+                    <img
+                      class="searchBtnImg"
+                      src="@/assets/images/common/topsearch.png"
+                    />
+                  </span>
+                </div>
+                <div>
+                  <span class="label">模版周期：</span>
+                  <el-select
+                    v-model="status"
+                    placeholder="请选择"
+                    clearable
+                    style="width: 139px"
+                  >
+                    <el-option label="男" :value="1"></el-option>
+                    <el-option label="女" :value="0"></el-option>
+                  </el-select>
+                </div>
+                <div>
+                  <span class="label">模版分类：</span>
+                  <el-select
+                    v-model="status"
+                    placeholder="请选择"
+                    clearable
+                    style="width: 139px"
+                  >
+                    <el-option label="男" :value="1"></el-option>
+                    <el-option label="女" :value="0"></el-option>
+                  </el-select>
+                </div>
+              </div>
+              <div class="searchRight">
+                <div class="buttones">
+                  <div class="searchFor" @click="search">
+                    <img
+                      src="@/assets/images/common/topsearchblue.png"
+                      alt=""
+                    />
+                  </div>
+                  <div class="resetAll" @click="reset">重置</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="topbottomborder"></div>
+      <div class="diet_dish_flex">
+        <div class="divRightTitleDiv">
+          <!-- <div class="divRightTitle"><span>|</span>客户池</div> -->
+          <div>
+            <el-button
+              class="btn-new btnAdd"
+              size="small"
+              style="margin: 16px 0"
+              @click="add"
+              ><img src="@/assets/images/common/addBtn.png" />新增</el-button
+            >
+            <el-button
+              class="btn-new btnAdd"
+              size="small"
+              style="margin: 16px 0"
+              ><img src="@/assets/images/common/delBtn.png" />删除</el-button
+            >
+            <el-button
+              class="btn-new btnAdd btnEdit"
+              size="small"
+              style="margin: 16px 0"
+              @click="menuTemOp"
+              ><img
+                src="@/assets/images/common/editBtn.png"
+              />模版分类</el-button
+            >
+          </div>
+        </div>
+        <el-table :data="tableData" align="center">
+          <el-table-column type="selection" width="55"> </el-table-column>
+          <el-table-column
+            prop="realName"
+            label="模版名称"
+            show-overflow-tooltip
+          ></el-table-column>
+          <el-table-column
+            prop="mobileNo"
+            label="参考范围"
+            show-overflow-tooltip
+          ></el-table-column>
+          <el-table-column
+            prop="roleName"
+            label="分类"
+            show-overflow-tooltip
+          ></el-table-column>
+          <el-table-column prop="activated" label="模版周期 (天)">
+          </el-table-column>
+          <el-table-column prop="activated" label="介绍"> </el-table-column>
+          <el-table-column prop="id" label="操作" width="160px">
+            <template slot-scope="scope">
+              <el-button type="text" size="small">编辑</el-button>
+              <el-button type="text" size="small" @click="config"
+                >配置</el-button
+              >
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+          background
+          layout="prev, pager, next, jumper, total, sizes"
+          :total="total"
+          :page-sizes="[15]"
+          :current-page="currentPage"
+          :page-size="pageSize"
+          @current-change="handleCurrentChange"
+        ></el-pagination>
+      </div>
+      <el-menu-template
+        :visible.sync="isShowDietMenuTemplate"
+      ></el-menu-template>
+      <el-menu-template-type
+        :visible.sync="isShowDietMenuTemplateType"
+      ></el-menu-template-type>
+    </template>
+    <template v-else>
+      <dist-menu-config-form></dist-menu-config-form>
+    </template>
+  </div>
+</template>
+
+<script>
+import elMenuTemplate from './el_modal/el_menu_template.vue';
+import elMenuTemplateType from './el_modal/el_menu_template_type.vue';
+import distMenuConfigForm from './edit_form/index.vue';
+export default {
+  name: 'diet_menu_template',
+  components: {
+    elMenuTemplate,
+    elMenuTemplateType,
+    distMenuConfigForm,
+  },
+  data() {
+    return {
+      viewIndex: 1,
+      isShowDietMenuTemplate: false,
+      isShowDietMenuTemplateType: false,
+      currentPage: 1,
+      pageSize: 15,
+      tableData: [{ realName: '苹果' }],
+      total: 0,
+      roleOptions: '',
+      role: '',
+      status: '',
+      query: '',
+    };
+  },
+  methods: {
+    handleCurrentChange() {},
+    add() {
+      this.isShowDietMenuTemplate = true;
+    },
+    menuTemOp() {
+      this.isShowDietMenuTemplateType = true;
+    },
+    config() {
+      this.viewIndex = 2;
+    },
+    look() {},
+    search() {},
+    reset() {},
+    upMore() {},
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.search-title {
+  height: 22px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333333;
+  line-height: 22px;
+}
+.label {
+  font-weight: 400 !important;
+}
+.divTop .divTitle {
+  font-weight: normal;
+}
+.query-container {
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: space-between;
+
+  .left {
+    .el-input {
+      display: inline-block;
+      width: 266px;
+    }
+  }
+  .right {
+    display: flex;
+    .el-button + .el-button {
+      margin-left: 8px;
+    }
+  }
+}
+.diet_dish_flex {
+  margin-top: 20px;
+}
+.table-buttons {
+  margin-bottom: 16px;
+}
+/deep/ .el-input__suffix {
+  margin-right: 0 !important;
+}
+/deep/ .el-input__suffix .el-input__suffix-inner {
+  margin-right: 0 !important;
+}
+.el-pagination {
+  margin-top: 20px;
+}
+.btnEdit {
+  width: 110px;
+}
+</style>
