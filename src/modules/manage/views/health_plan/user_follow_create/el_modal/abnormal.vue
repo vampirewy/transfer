@@ -32,6 +32,7 @@
       :data="dataSource"
       ref="multipleTable"
       align="center"
+      class="openTable"
     >
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column label="异常名称" prop="abnormalName"></el-table-column>
@@ -48,9 +49,9 @@
       @current-change="handleCurrentChange"
       @size-change="handleSizeChange"
     ></el-pagination>
-    <div class="buttonsSelectOpen">
-      <el-button size="small" @click="cancel">取消</el-button>
-      <el-button type="primary" size="small" @click="submit">确定</el-button>
+    <div class="footer">
+      <el-button size="small" class="cancelBtn" @click="cancel">取消</el-button>
+      <el-button type="primary" size="small" class="sureBtn" @click="submit">确定</el-button>
     </div>
   </div>
 </template>
@@ -168,6 +169,10 @@ export default {
         color: #fff;
       }
     }
+  }
+  .footer{
+    margin-top: 20px;
+    text-align: right;
   }
   .el-table::before {
     background: none;
