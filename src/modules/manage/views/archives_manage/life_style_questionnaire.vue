@@ -1,10 +1,13 @@
 <template>
-  <query-page @reset="reset" @search="search">
-    <template v-slot:left>
+  <div>
+  <!--<query-page @reset="reset" @search="search">-->
+    <!--<template v-slot:left>
       <search>
         <div class="searchInputFormItem">
-          <el-input placeholder="姓名/手机号搜索" v-model="formData.keyWord">
-            <!-- <el-button slot="append" icon="el-icon-search" @click="onSearch"></el-button>-->
+          <el-input placeholder="姓名/手机号搜索"
+          v-model="formData.keyWord">
+            &lt;!&ndash; <el-button slot="append" icon="el-icon-search"
+            @click="onSearch"></el-button>&ndash;&gt;
           </el-input>
           <span class="searchBtnImgSpan"  @click="search(1)">
             <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
@@ -35,18 +38,132 @@
         >
         </el-date-picker>
       </query-filter>
-    </template>
-    <template v-slot:right>
+    </template>-->
+    <!--<template v-slot:right>-->
+  <div class="divTop">
+    <div class="divTitle">
+      <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
+      生活方式问卷
+    </div>
+    <div class="searchCondition">
+      <div class="searchLeft">
+        <div class="searchInputFormItem">
+          <el-input placeholder="姓名/编号/单位" v-model="formData.keyWord">
+          </el-input>
+          <span class="searchBtnImgSpan" @click="search">
+                  <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
+              </span>
+        </div>
+        <div>
+          <span>客户性别：</span>
+          <el-select
+                  v-model="formData.gender"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option label="男" value="1" key="1"></el-option>
+            <el-option label="女" value="2" key="2"></el-option>
+          </el-select>
+        </div>
+        <div>
+          <span>人员类别：</span>
+          <el-select
+                  v-model="formData.gridId"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+                       :key="index"></el-option>
+          </el-select>
+        </div>
+        <div>
+          <span>生活方式：</span>
+          <el-select
+                  v-model="formData.gridId"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+                       :key="index"></el-option>
+          </el-select>
+        </div>
+      </div>
+      <div class="searchRight">
+        <div class="buttones">
+          <div class="searchFor" @click="search">
+            <img src="@/assets/images/common/topsearchblue.png" alt="">
+          </div>
+          <div class="resetAll" @click="reset">重置</div>
+          <div class="more" v-if="isTrue"  @click="upMore">
+            <span>></span>
+            展开更多</div>
+          <div class="more noMore" v-else @click="upMore">
+            <span>></span>收起筛选</div>
+        </div>
+      </div>
+    </div>
+  </div>
+    <div v-if="!isTrue" class="searchCondition" style="width:80%;">
+      <div class="searchLeft" style="padding-left:5px;">
+        <div>
+          <span>问卷来源：</span>
+          <el-select
+                  v-model="formData.gridId"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+                       :key="index"></el-option>
+          </el-select>
+        </div>
+        <div>
+          <span>填写日期：</span>
+          <el-date-picker
+                  v-model="formData.startTime"
+                  type="date"
+                  :max-date="formData.endTime"
+                  placeholder="选择开始日期"
+                  style="width: 140px"
+          >
+          </el-date-picker>
+          <span class="timing">-</span>
+          <el-date-picker
+                  v-model="formData.endTime"
+                  type="date"
+                  :min-date="formData.startTime"
+                  placeholder="选择结束日期"
+                  style="width: 140px"
+          >
+          </el-date-picker>
+        </div>
+      </div>
+    </div>
+    <div class="topbottomborder"></div>
+    <div class="divRightTitleDiv">
+      <!-- <div class="divRightTitle"><span>|</span>客户池</div> -->
+      <div>
+        <el-button
+                class="btn-new btnAdd"
+                size="small"
+                style="margin: 16px 0"
+                @click="handleAddCheck(1)"
+                v-if="getAccess('life_style_questionnaire_add')"
+        ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
+        <el-button
+                size="small"
+                class="btn-new btnDel"
+                @click="handleSomeRemove"
+                v-if="getAccess('life_style_questionnaire_deleted')"
+        ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
+      </div>
+    </div>
       <div class="user-follow">
         <div class="tableTopDoDiv">
-          <div class="divRightTitleDiv">
-            <div class="divRightTitle"><span>|</span>健康问卷</div>
-          </div>
           <div class="table-operate-buttons">
             <el-dropdown @command="handleAddCheck">
               <operate-button
                       type="add"
-                      v-if="getAccess('health_questionnaire_add')
+                      v-if="getAccess('life_style_questionnaire_add')
               "></operate-button>
               <el-dropdown-menu slot="dropdown" class="qusDrop">
                 <el-dropdown-item command="1">生活方式问卷</el-dropdown-item>
@@ -54,28 +171,22 @@
                 <el-dropdown-item command="3">心理问卷</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <operate-button
-                    style="margin-left: 12px"
-                    type="delete"
-                    @click="handleSomeRemove"
-                    v-if="getAccess('health_questionnaire_batch_delete')
-              "></operate-button>
           </div>
         </div>
       <el-table style="width: 100%" :data="dataSource" align="center"
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="40"></el-table-column>
+        <el-table-column label="客户编号" prop="clientNo" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{ scope.row.clientNo | getResult}}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="姓名" prop="clientName" show-overflow-tooltip>
           <template slot-scope="scope">
                 <span class="clientName"
                       @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
                   {{ scope.row.clientName | getResult}}
                 </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="客户编号" prop="clientNo" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{ scope.row.clientNo | getResult}}</span>
           </template>
         </el-table-column>
         <el-table-column prop="gender" label="性别" width="60px">
@@ -93,14 +204,24 @@
             <span>{{ scope.row.clientGridName | getResult}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="问卷类型" prop="questionType" show-overflow-tooltip>
+        <el-table-column prop="gridName" label="生活方式" show-overflow-tooltip>
           <template slot-scope="scope">
-            {{ options[scope.row.questionType] | getResult}}
+            <span>{{ scope.row.clientGridName | getResult}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="gridName" label="单位" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{ scope.row.clientGridName | getResult}}</span>
           </template>
         </el-table-column>
         <el-table-column label="填写日期" prop="createTime" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.createTime | getResultDate}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="问卷来源" prop="questionType" show-overflow-tooltip>
+          <template slot-scope="scope">
+            {{ options[scope.row.questionType] | getResult}}
           </template>
         </el-table-column>
         <el-table-column prop="gender" label="份数" width="60px">
@@ -123,7 +244,7 @@
                   },
                 })
               "
-              v-if="getAccess('health_questionnaire_edit') && scope.row.questionType !== 4"
+              v-if="getAccess('life_style_questionnaire_edit') && scope.row.questionType !== 4"
             >编辑</el-button>
             <el-button
               type="text"
@@ -137,7 +258,7 @@
                   },
                 })
               "
-              v-if="getAccess('health_questionnaire_view')
+              v-if="getAccess('life_style_questionnaire_view')
               "
             >查看</el-button>
           </template>
@@ -156,8 +277,9 @@
       </div>
       <report :visible="visible" :id="current.id" @cancel="visible = false"></report>
       </div>
-    </template>
-  </query-page>
+    <!--</template>
+  </query-page>-->
+  </div>
 </template>
 
 <script>
@@ -180,10 +302,15 @@ export default {
   },
   data() {
     return {
+      isTrue: true,
       total: 0,
       dataSource: [],
+      gridList: [],
       formData: {
         range: [],
+        keyWord: '',
+        gender: '',
+        gridId: '',
         startTime: undefined,
         endTime: undefined,
         questionType: '',
@@ -228,6 +355,11 @@ export default {
     localStorage.removeItem('homeSearchData');
   },
   methods: {
+    async getGridList() {
+      const res = await this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
+      const { data } = res.data;
+      this.gridList = data.data;
+    },
     handleSelectionChange(val) {
       // table组件选中事件,
       this.multipleSelection = val;
@@ -235,10 +367,11 @@ export default {
     reset() {
       this.params.pageNo = 1;
       this.formData.keyWord = '';
-      this.formData.questionType = '';
+      this.formData.gender = '';
+      this.formData.gridId = '';
       this.formData.startTime = undefined;
       this.formData.endTime = undefined;
-      this.getQuestionType();
+      // this.getQuestionType();
       this.fetch();
     },
     search(current = 1) {
@@ -338,10 +471,8 @@ export default {
       this.$api.health
         .fetch(Object.assign(this.params, this.formData))
         .then(({ data }) => {
-          if (data.success) {
-            this.total = data.data.total;
-            this.dataSource = data.data.list;
-          }
+          this.total = data.data.total;
+          this.dataSource = data.data.data;
         });
     },
     getReport({ row }) {
@@ -350,16 +481,21 @@ export default {
     },
     async getQuestionType() {
       await this.$api.health.getQuestionType().then((options) => {
+        console.log(options);
         this.types = options;
         options.forEach((val) => {
           this.options[val.paramValue] = val.name;
         });
       });
     },
+    upMore() {
+      this.isTrue = !this.isTrue;
+    },
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
-      vm.getQuestionType();
+      // vm.getQuestionType();
+      vm.getGridList();
       vm.fetch();
     });
   },

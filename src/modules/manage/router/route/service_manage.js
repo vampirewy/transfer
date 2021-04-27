@@ -25,6 +25,7 @@ export default [
         meta: {
           title: '服务订单',
           access: 'service_order',
+          keepAlive: true,
         },
         component: () => import('../../views/service_manage/service_order'),
       },
@@ -73,6 +74,7 @@ export default [
         meta: {
           title: '我的服务',
           access: 'my_service',
+          keepAlive: true,
         },
         component: () => import('../../views/service_manage/my_service'),
       },

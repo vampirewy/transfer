@@ -1,8 +1,8 @@
 <template>
   <div class="role-page">
     <template v-if="viewIndex === 1">
-      <query-page @reset="reset" @search="search">
-        <template v-slot:left>
+      <!--<query-page @reset="reset" @search="search">-->
+        <!--<template v-slot:left>
           <search>
             <div class="searchInputFormItem">
               <el-input placeholder="输入角色名称搜索" v-model="name"></el-input>
@@ -11,18 +11,46 @@
               </span>
             </div>
           </search>
-        </template>
-        <template v-slot:right>
-          <div class="table-operate-buttons" style="margin-top: -8px">
-            <span class="page-name">角色列表</span>
-            <div>
-              <operate-button
-                type="add"
-                @click="add"
-                v-if="getAccess('role_list_add')">
-              </operate-button>
+        </template>-->
+        <!--<template v-slot:right>-->
+      <div class="divTop">
+        <div class="divTitle">
+          <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
+          角色列表</div>
+
+        <div class="searchCondition">
+          <div class="searchLeft">
+            <div class="searchInputFormItem">
+              <el-input placeholder="输入角色名称搜索" v-model="name">
+              </el-input>
+              <span class="searchBtnImgSpan" @click="search">
+                <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
+            </span>
             </div>
           </div>
+          <div class="searchRight">
+            <div class="buttones">
+              <div class="searchFor" @click="search">
+                <img src="@/assets/images/common/topsearchblue.png" alt="">
+              </div>
+              <div class="resetAll" @click="reset">重置</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="topbottomborder"></div>
+      <div class="divRightTitleDiv">
+        <!-- <div class="divRightTitle"><span>|</span>客户池</div> -->
+        <div>
+          <el-button
+                  class="btn-new btnAdd"
+                  size="small"
+                  style="margin: 16px 0"
+                  @click="add"
+                  v-if="getAccess('role_list_add')"
+          ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
+        </div>
+      </div>
           <el-table :data="tableData" align="center">
             <el-table-column
               prop="name"
@@ -81,8 +109,8 @@
             :page-size="pageSize"
             @current-change="handleCurrentChange"
           ></el-pagination>
-        </template>
-      </query-page>
+        <!--</template>
+      </query-page>-->
     </template>
     <template v-else-if="viewIndex !== 1">
       <role-form
@@ -121,7 +149,7 @@ export default {
       currentId: '',
     };
   },
-  mounted() {
+  activated() {
     this.queryList();
   },
   methods: {
@@ -145,7 +173,7 @@ export default {
         .then((res) => {
           const { data } = res;
           const result = data.data || {};
-          this.tableData = result.list || [];
+          this.tableData = result.data || [];
           this.total = result.total || 0;
         });
     },

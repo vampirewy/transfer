@@ -25,6 +25,7 @@ export default [
         meta: {
           title: '员工列表',
           access: 'staff_list',
+          keepAlive: true,
         },
         component: () => import('../../views/system_manage/staff_manage'),
       },
@@ -34,8 +35,19 @@ export default [
         meta: {
           title: '角色列表',
           access: 'role_list',
+          keepAlive: true,
         },
         component: () => import('../../views/system_manage/role_manage'),
+      },
+      {
+        path: '/role_configuration',
+        name: 'role_configuration',
+        meta: {
+          title: '系统配置',
+          access: 'role_configuration',
+          keepAlive: true,
+        },
+        component: () => import('../../views/system_manage/system_configuration'),
       },
     ],
   },

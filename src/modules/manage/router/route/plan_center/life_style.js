@@ -13,6 +13,7 @@ export default [
     meta: {
       title: '生活方式',
       access: 'life_style',
+      keepAlive: true,
     },
     component: () => import('../../../views/plan_center/life_style'),
   },

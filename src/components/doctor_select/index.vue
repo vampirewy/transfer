@@ -6,6 +6,7 @@
             :visible.sync="visible"
             @close="cancel"
             class="doctor-select"
+            :modal-append-to-body="false"
     >
       <div class="dialog-header-content">
         <div>已选择:</div>
@@ -210,7 +211,7 @@
             ></el-pagination>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="工作室" name="second">
+        <!-- <el-tab-pane label="工作室" name="second">
           <el-table
                   :data="dataSourceWork"
                   highlight-current-row ref="table"
@@ -257,7 +258,7 @@
                     :page-sizes="[5]"
             ></el-pagination>
           </div>
-        </el-tab-pane>
+        </el-tab-pane> -->
       </el-tabs>
 
       <div slot="footer" class="dialog-footer">
@@ -325,9 +326,8 @@ export default {
         ...this.params,
         selectedUserIds: selectedUserIdsStr,
       });
-
       const { data } = res.data;
-      this.dataSource = data.list || [];
+      this.dataSource = data.data || [];
       this.params.total = data.total;
       this.$nextTick(() => {
         this.dataSource.forEach((row) => {
@@ -371,8 +371,9 @@ export default {
       this.$api.userManagerInterface
         .getWorkhomes({ ...this.params, clientId: this.clientId })
         .then(({ data }) => {
+          console.log(data, 258);
           if (data.code === 200) {
-            data.data.list.forEach((t) => {
+            data.data.data.forEach((t) => {
               const val = t;
               if (this.userList.map(it => it.id).includes(val.id)) {
                 val.selected = true;
@@ -380,7 +381,7 @@ export default {
                 val.selected = false;
               }
             });
-            this.dataSourceWork = data.data.list;
+            this.dataSourceWork = data.data.data;
             this.params.totalWork = data.data.total;
           }
         });
@@ -461,7 +462,7 @@ export default {
 
   .doctor-select-component {
     /deep/.el-tabs__item.is-active {
-      color: #4991fd !important;
+      color: #3154AC !important;
     }
     /deep/.el-tabs__item {
       color: #97A6BD !important;
@@ -484,6 +485,6 @@ export default {
 
 .dialog-footer {
   padding: 10px 15px 10px 0;
-  text-align: right;
+  text-align: center;
 }
 </style>

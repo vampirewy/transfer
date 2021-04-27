@@ -70,14 +70,13 @@
   .el-table__header-wrapper{
     th{
       &.is-leaf{
-        text-align: left;
+        text-align: center;
       }
     }
   }
   .el-table__body {
     td {
       border-bottom: 1px solid #f4f4f6;
-      text-align: left!important;
     }
   }
 }
@@ -139,7 +138,7 @@
       // }
     // }
     .el-dialog__close{
-      color: white;
+      // color: white;
       font-size: 27px;
       opacity: 0.8;
       &:hover{
@@ -244,7 +243,7 @@ body .el-table th.gutter{
   }
 }
 .el-textarea__inner{
-  font-family: 微软雅黑;
+  font-family: Microsoft YaHei;
   border: 1px solid #DDE0E6;
   padding: 10px 20px;
   color: #333333;
@@ -254,7 +253,7 @@ body .el-table th.gutter{
 }
 .el-input{
   input{
-    border: 1px solid #f4f4f6 !important;
+    border: 1px solid #DDE0E6 !important;
     color: #333333;
     &:hover{
       transition: border .2s;
@@ -285,6 +284,20 @@ body .el-table th.gutter{
   /deep/ input{
     border: 1px solid #f94242 !important;
   }
+}
+.el-checkbox__input.is-indeterminate .el-checkbox__inner{
+  background: #3154AC;
+}
+.message-box-customize .el-message-box__btns .el-button.el-button--default:not(.el-button--primary){
+  color: #3154AC;
+  background: rgba(49, 84, 172, 0.1);
+border-radius: 20px;
+border: 1px solid #3154AC;
+}
+.el-button--primary{
+  background: #3154AC;
+  border-radius: 20px !important;
+  color: #fff;
 }
 .el-checkbox__input{
   &.is-checked{
@@ -317,8 +330,8 @@ body .el-table th.gutter{
 }
 
 .el-radio__input.is-disabled.is-checked .el-radio__inner {
-  background-color: #ffffff !important;
-  border-color: #4991fd !important;
+  /*background-color: #ffffff !important;
+  border-color: #4991fd !important;*/
 }
 .el-radio__input.is-disabled.is-checked .el-radio__inner::after {
   background-color: #4991FD;
@@ -509,7 +522,18 @@ textarea:-ms-input-placeholder {
     }
   }
 }
-
+.el-button--primary:hover{
+  background: #24499D;
+}
+.el-tabs__item:hover{
+  color: #24499D;
+}
+.el-tabs__item.is-active{
+  color: #24499D;
+}
+.el-tabs__active-bar{
+  background: #24499D;
+}
 .el-pagination .el-pagination__rightwrapper {
   float: left !important;
 }

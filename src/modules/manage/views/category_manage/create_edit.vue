@@ -9,36 +9,40 @@
       class="form-inline"
     >
       <div class="form-title">
-        <div class="line"></div>
-        <h3 class="name" v-if="routeType === 1">新增-用户类别</h3>
-        <h3 class="name" v-if="routeType === 2">编辑-用户类别</h3>
-        <h3 class="name" v-if="routeType === 3">查看-用户类别</h3>
+        <!-- <div class="line"></div> -->
+        <h3 class="name" v-if="routeType === 1">新增-用户类别<div class="titleBiao"></div></h3>
+        <h3 class="name" v-if="routeType === 2">编辑-用户类别<div class="titleBiao"></div></h3>
+        <h3 class="name" v-if="routeType === 3">查看-用户类别
+          <div class="titleBiao"></div>
+        </h3>
       </div>
 
       <div class="mt20">
         <div class="row">
           <el-form-item label="类别名称：" style="width:25%" label-width="82px" prop="gridName">
+            <span  v-if="routeType == 3">{{form.gridName}}</span>
             <el-input
             v-model="form.gridName"
             maxlength="30"
-            :disabled="routeType === 3"
+            v-if="routeType != 3"
             style="width: 230px"
             placeholder="请输入">
             </el-input>
           </el-form-item>
           <el-form-item label="报告名称：" style="width:25%" label-width="82px" prop="reportName">
+            <span  v-if="routeType == 3">{{form.reportName}}</span>
             <el-input
             v-model="form.reportName"
             maxlength="30"
-            :disabled="routeType === 3"
+            v-if="routeType != 3"
             style="width: 230px"
             placeholder="请输入">
             </el-input>
           </el-form-item>
-
           <el-form-item label="是否启用：" prop="state" label-width="83px" style="width:25%">
+            <span  v-if="routeType == 3">{{form.state == 0 ? '否':'是'}}</span>
             <el-select v-model="form.state"
-            :disabled="routeType === 3"
+            v-if="routeType != 3"
             style="width: 230px"
             placeholder="请选择是否启用">
               <el-option
@@ -50,8 +54,9 @@
             </el-select>
           </el-form-item>
           <el-form-item label="低危评估：" prop="dangerShow" label-width="83px" style="width:25%">
+            <span  v-if="routeType == 3">{{form.state == 0 ? '不显示':'显示'}}</span>
             <el-select v-model="form.dangerShow"
-            :disabled="routeType === 3"
+            v-if="routeType != 3"
             style="width: 230px"
             placeholder="请选择低危评估">
               <el-option
@@ -63,10 +68,9 @@
             </el-select>
           </el-form-item>
         </div>
-        <div style="display: inline-block; width: calc(100% - 170px)">
+        <div style="display: inline-block;">
           <div class="form-title">
-            <div class="line"></div>
-            <h3 class="name">内容</h3>
+            <h3 class="name">内容<div class="titleBiao"></div></h3>
           </div>
           <div v-for="item in tablest" :key="item.id">
             <div class="wltitle">
@@ -74,6 +78,7 @@
               <span>{{item.name}}</span>
             </div>
             <el-checkbox
+                    style="width:25%;margin:20px 0 !important;"
                     v-for="it in item.contentList"
                     :key="it.id"
                     v-model="it.checked"
@@ -85,7 +90,7 @@
         </div>
         <div class="handle-btn mt10 mb30">
           <el-button
-            class="reset-btn"
+            class="canelBtn"
             size="small"
             @click="cancel"
             >返回</el-button
@@ -459,16 +464,16 @@ export default {
   display: flex;
   align-items: center;
   .quan {
-    width: 5px;
-    height: 5px;
-    background: #4991fd;
-    border-radius: 2.5px;
+    width: 4.5px;
+    height: 4.5px;
+    background: #fff;
+    border-radius: 3px;
+    border: 1px solid #B4BBC9;
   }
   span {
     margin-left: 10px;
     font-size: 16px;
-    font-family: PingFangSC-Medium, PingFang SC;
-    font-weight: 500;
+    font-weight: 600;
     color: #333333;
   }
 }

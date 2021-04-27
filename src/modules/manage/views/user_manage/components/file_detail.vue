@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="查看" :visible.sync="visible" @close="cancel">
+  <el-dialog title="查看" :visible.sync="visible" :modal-append-to-body="false" @close="cancel">
     <ul class="file-detail">
       <li>附件标题: {{ current.title }}</li>
       <li>创建时间: {{ current.createTime }}</li>

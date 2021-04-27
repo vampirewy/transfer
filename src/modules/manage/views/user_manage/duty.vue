@@ -15,7 +15,7 @@
           <el-select
                   v-model="formData.gender"
                   placeholder="请选择性别"
-                  style="width: 180px"
+                  style="width: 180px;"
           >
             <el-option label="男" value="1" key="1"></el-option>
             <el-option label="女" value="2" key="2"></el-option>

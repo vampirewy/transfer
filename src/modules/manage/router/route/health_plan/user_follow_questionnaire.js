@@ -1,11 +1,12 @@
 
 export default [
   {
-    path: '/health_plan/user_follow_questionnaire',
-    name: 'user_follow_questionnaire',
+    path: '/health_plan/visited_questionaire',
+    name: 'visited_questionaire',
     meta: {
       title: '随访问卷',
       access: 'visited_questionaire',
+      keepAlive: true,
     },
     component: () => import('../../../views/health_plan/user_follow_questionnaire'),
   },

@@ -2,6 +2,7 @@
   <el-dialog
     :title="value.type === 1 ? '编辑' : '查看'"
     class="dialog-detail"
+    :modal-append-to-body="false"
     width="570px"
     :visible.sync="visible"
     @close="cancel"
@@ -54,8 +55,8 @@
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer" v-if="value.type === 1">
-      <el-button size="small" @click="cancel" class="reset-btn">取消</el-button>
-      <el-button type="primary" size="small" @click="submit" class="add-btn">确定</el-button>
+      <el-button size="small" @click="cancel" class="cancelBtn">取消</el-button>
+      <el-button type="primary" size="small" @click="submit" class="sureBtn">确定</el-button>
     </div>
   </el-dialog>
 </template>
@@ -122,7 +123,7 @@ export default {
     }
   }
   .dialog-footer {
-    text-align: right;
+    text-align: center;
     padding: 0 32px;
   }
   .reset-btn {

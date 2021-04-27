@@ -68,24 +68,23 @@ a{
   }
 }
 .cancelBtn,.resetBtn{
-  width: 80px;
+  width: 90px;
   height: 40px;
-  color: white;
-  background: #97A6BD;
-  border-radius: 8px;
-  border: none;
+  background: rgba(49, 84, 172, 0.1);
+  border-radius: 20px;
+  border: 1px solid #3154AC;
   &:hover {
-    color: white;
-    border-color: #97A6BD;
-    background-color: #97A6BD;
+    color: #3154AC;
+    border-color: #3154AC;
+    background: rgba(49, 84, 172, 0.3);
   }
 }
 .sureBtn{
-  width: 80px;
+  min-width: 90px;
   height: 40px;
   color: white;
-  background: #4991FD;
-  border-radius: 8px;
+  background: #3154AC;
+  border-radius: 20px;
 }
 .normalBtn{
   width: 80px;
@@ -93,7 +92,7 @@ a{
   color: #4991FD;
   background: white;
   border: 1px solid #4991FD;
-  border-radius: 8px;
+  border-radius: 20px;
 }
 .btnTransfer {
   width: 120px;
@@ -113,7 +112,7 @@ a{
   }
 }
 .btnAdd,.btnReset,.btnDel{
-  width: 90px;
+  min-width: 90px;
   height: 40px;
   border-radius: 8px;
   border: 1px solid #F4F4F6;
@@ -130,6 +129,32 @@ a{
   }
 }
 // 搜索按钮
+.searchCondition{
+  .searchLeft{
+    position: relative;
+    /deep/ .el-input__inner{
+      padding-right: 40px;
+    }
+    .searchBtnImgSpan{
+      position: absolute;
+      right: 0px;
+      top: 5px;
+      width: 36px;
+      height: 38px;
+      line-height: 38px;
+      background: #3154AC;
+      border-radius: 0 5px 5px 0;
+      text-align: center;
+      cursor: pointer;
+      &:hover{
+        background: #24499D;
+      }
+      .searchBtnImg{
+        width: 16px;
+      }
+    }
+  }
+}
 .searchInputFormItem{
   position: relative;
   /deep/ .el-input__inner{
@@ -137,20 +162,42 @@ a{
   }
   .searchBtnImgSpan{
     position: absolute;
-    right: 10px;
-    top: 5px;
+    right: 0px;
+    top: 0px;
     width: 36px;
-    height: 38px;
-    line-height: 38px;
-    background: #4991FD;
+    height: 40px;
+    line-height: 40px;
+    background: #3154AC;
     border-radius: 0 5px 5px 0;
     text-align: center;
     cursor: pointer;
     &:hover{
-      background: #55AAFF;
+      background: #24499D;
     }
     .searchBtnImg{
       width: 16px;
+    }
+  }
+}
+// 弹框搜索按钮
+.searchInputFormItemOpen{
+  position: relative;
+  margin-bottom: 20px;
+  /deep/ .el-input__inner{
+    padding-right: 40px;
+  }
+  .searchBtnImgSpan{
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    width: 36px;
+    height: 39px;
+    line-height: 39px;
+    border-radius: 0 5px 5px 0;
+    text-align: center;
+    cursor: pointer;
+    .searchBtnImg{
+      width: 36px;
     }
   }
 }
@@ -160,17 +207,26 @@ a{
   align-items: baseline;
   justify-content: space-between;
   margin-top: -10px;
-  .divRightTitleDiv{
-    .divRightTitle{
-      font-size: 18px;
-      color: #333333;
-      font-weight: bold;
-      span{
-        color: #4991FD;
-        font-size: 18px;
-        margin-right: 9px;
-      }
-    }
+}
+.divRightTitleDiv{
+  position: relative;
+  .divRightTitle{
+    font-size: 16px;
+    color: #333333;
+    font-weight: bold;
+    margin: 20px 0;
+    // &:after {
+    //   content: '';
+    //   position: absolute;
+    //   left: 0;
+    //   bottom: 0;
+    //   transform: translateY(-50%);
+    //   width: 32px;
+    //   height: 4px;
+    //   background: #3154AC;
+    //   border-radius: 3px;
+    //   opacity: 0.5;
+    // }
   }
 }
 .titleBiao{
@@ -282,17 +338,23 @@ a{
   text-align: right;
   margin-top: 20px;
   .el-button {
-    width: 80px;
+    width: 90px;
     height: 40px;
-    border-radius: 8px;
+    border-radius: 20px;
     border: none;
     font-size: 14px;
     + .el-button {
       margin-left: 20px;
     }
     &:not(.el-button--primary) {
-      background: #97A6BD;
-      color: #fff;
+      background: rgba(49, 84, 172, 0.1);
+          border-radius: 20px;
+          border: 1px solid #3154AC;
+          &:hover {
+            color: #3154AC;
+            border-color: #3154AC;
+            background: rgba(49, 84, 172, 0.3);
+          }
     }
   }
 }
@@ -314,7 +376,7 @@ a{
   }
 }
 .clientName{
-  color: #4991FD;
+  color: #3154AC;
   cursor: pointer;
 }
 // select表格
@@ -329,17 +391,21 @@ a{
     }
   }
 }
+.el-input__suffix{
+  right: 0;
+  border-radius: 5px;
+}
 // 顶部搜索
 .divTop{
   .divTitle {
     align-self: start;
-    font-size: 18px;
+    font-size: 16px;
     color: #333333;
     font-weight: bold;
     span {
       color: #4991fd;
       font-size: 18px;
-      margin-right: 9px;
+      margin-right: 3px;
       img{
         width: 7px;
         margin-bottom: 2px;
@@ -407,7 +473,7 @@ a{
   .buttones{
     display: flex;
     div{
-      margin: 15px 5px 0 0;
+      margin: 15px 10px 0 0;
     }
     .more{
       width: 110px;
@@ -458,6 +524,6 @@ a{
   border-right:1px solid #f4f4f6;
   border-left:1px solid #f4f4f6;
 }
-.el-input__suffix{
-  right: 0;
-}
+// .el-input__suffix{
+//   right: 0;
+// }

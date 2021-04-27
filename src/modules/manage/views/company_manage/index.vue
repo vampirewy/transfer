@@ -1,7 +1,7 @@
 <template>
   <div class="company-manage">
-    <query-page @reset="onReset" @search="onSearch">
-      <template slot="left">
+    <!-- <query-page @reset="onReset" @search="onSearch"> -->
+      <!-- <template slot="left">
         <search>
           <div class="searchInputFormItem">
           <el-input placeholder="输入企业名称" v-model="form.keywords">
@@ -11,11 +11,65 @@
           </span>
           </div>
         </search>
-      </template>
-      <template slot="right">
-        <div class="table-operate-buttons" style="margin: -2px 0 25px 0;">
-          <span class="page-name">企业管理</span>
+      </template> -->
+      <!-- <template slot="right"> -->
+        <div class="divTop">
+          <div class="divTitle">
+            <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
+            企业管理</div>
+
+          <div class="searchCondition">
+          <div class="searchLeft">
+          <div class="searchInputFormItem">
+            <el-input placeholder="姓名/手机号/企业单位" v-model="form.keywords">
+            </el-input>
+            <span class="searchBtnImgSpan" @click="onSearch">
+                <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
+            </span>
+          </div>
+          <div>
+            <span>建档日期：</span>
+            <el-date-picker
+                  v-model="form.startTime"
+                  type="date"
+                  :max-date="form.endTime"
+                  placeholder="选择开始日期"
+                  style="width: 140px"
+          >
+          </el-date-picker>
+          <span class="timing">-</span>
+          <el-date-picker
+                  v-model="form.endTime"
+                  type="date"
+                  :min-date="form.startTime"
+                  placeholder="选择结束日期"
+                  style="width: 140px"
+          >
+          </el-date-picker>
+          </div>
+            </div>
+            <div class="searchRight">
+            <div class="buttones">
+            <div class="searchFor" @click="onSearch">
+            <img src="@/assets/images/common/topsearchblue.png" alt="">
+          </div>
+          <div class="resetAll">重置</div>
+          </div>
+            </div>
+          </div>
         </div>
+        <div class="topbottomborder"></div>
+        <!-- <div class="divRightTitleDiv">
+          <div>
+            <el-button
+                    class="btn-new btnAdd"
+                    size="small"
+                    style="margin: 16px 0"
+                    @click="$router.push('user_edit')"
+                    v-if="getAccess('customer_pool_add')"
+            ><img src="@/assets/images/common/editBtn.png" />编辑</el-button>
+          </div>
+        </div> -->
         <div>
           <el-table
             style="width: 100%"
@@ -100,8 +154,8 @@
             ></el-pagination>
           </div>
         </div>
-      </template>
-    </query-page>
+      <!-- </template> -->
+    <!-- </query-page> -->
     <edit-detail
       :visible="modalVisible"
       :value="currentValue"
@@ -163,10 +217,13 @@ export default {
         pageNo: this.table.currentPage,
         pageSize: this.table.pageSize,
       });
-      const { data } = res;
-      const result = data.data || {};
-      this.table.list = result.list || [];
-      this.table.totalCount = result.total || 0;
+      this.table.list = res.data.data.data;
+      this.table.totalCount = res.data.data.data.total || 0;
+      console.log(this.table, 111);
+      // const { data } = res;
+      // const result = data || {};
+      // this.table.list = result.list || [];
+      // this.table.totalCount = result.total || 0;
     },
     handleEdit() {
       const selection = this.$refs.table.selection;

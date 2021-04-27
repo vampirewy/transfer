@@ -376,7 +376,7 @@ export default [
       },
       {
         name: '健康问卷',
-        access: 'health_questionnaire',
+        access: 'life_style_questionnaire',
         child: [
           {
             name: '新增',

@@ -3,15 +3,15 @@
     <template v-if="hasOneShowingChild(item.roleMenuList,item) &&
     (!onlyOneChild.roleMenuList || onlyOneChild.noShowingChildren)">
       <!--<app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.name)">-->
-        <el-menu-item :index="resolvePath(onlyOneChild.route)"
+        <!--<el-menu-item :index="resolvePath(onlyOneChild.route)"
                       :class="{'submenu-title-noDropdown':!isNest}"
                       @click="turnToPage(item.route)">
-          <!--<item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
-                :title="onlyOneChild.meta.title" />-->
+          &lt;!&ndash;<item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
+                :title="onlyOneChild.meta.title" />&ndash;&gt;
           <img v-if="!onlyOneChild.noShowingChildren || item.menuType ===1"
                src="@/assets/images/body/sideBarImg.png"/>
-          <!--{{onlyOneChild.meta.title}}-->{{onlyOneChild.name}}
-        </el-menu-item>
+          &lt;!&ndash;{{onlyOneChild.meta.title}}&ndash;&gt;{{onlyOneChild.name}}
+        </el-menu-item>-->
       <!--</app-link>-->
     </template>
 
@@ -23,14 +23,14 @@
         <img src="@/assets/images/body/sideBarImg.png"/>
         <!--{{item.meta.title}}-->{{item.name}}
       </template>
-     <!-- <sidebar-item
+      <sidebar-item
         v-for="child in item.roleMenuList"
         :key="child.menuCode"
         :is-nest="true"
         :item="child"
         :base-path="resolvePath(child.route)"
         class="nest-menu"
-      />-->
+      />
     </el-submenu>
   </div>
 </template>
@@ -68,7 +68,7 @@ export default {
     hasOneShowingChild(children = [], parent) {
       const showingChildren = children.filter((item) => {
         let bool;
-        if (item.menuType === 3) { // item.hidden 如果是按钮级别就不展示
+        if (item.menuType === 3) { //  如果是按钮级别就不展示
           bool = false;
         } else {
           // Temp set(will be used if only has one showing child)
@@ -174,8 +174,22 @@ export default {
   /deep/ .el-icon-menu{
     margin-right: 16px!important;
   }
-  /deep/ .el-submenu .el-menu-item{
-    padding-left: 68px!important;
-    font-size: 12px!important;
+  /deep/ .el-menu{
+    .el-menu-item{
+      padding-left: 68px!important;
+      font-size: 12px!important;
+    }
+  }
+  /deep/ .el-submenu{
+    &.is-opened{
+      .el-menu{
+        .el-menu-item{
+          background-color: #274EA7!important;
+          &.is-active{
+            background-color: #24499D!important;
+          }
+        }
+      }
+    }
   }
 </style>

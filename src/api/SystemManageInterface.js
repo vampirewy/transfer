@@ -33,6 +33,10 @@ class SystemManageInterface extends BaseModule {
       params: data,
     });
   }
+  // 基础菜单权限
+  getMenu(data = {}) {
+    return this.get('/role/get_menu', data);
+  }
   // 角色新增
   addRole(data) {
     return this.post('/role/save', data);

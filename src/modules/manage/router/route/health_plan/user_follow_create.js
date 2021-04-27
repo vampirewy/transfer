@@ -8,11 +8,12 @@
 
 export default [
   {
-    path: '/health_plan/user_follow_create',
-    name: 'user_follow_create',
+    path: '/health_plan/create_plan',
+    name: 'create_plan',
     meta: {
       title: '创建计划',
       access: 'create_plan',
+      keepAlive: true,
     },
     component: () => import('../../../views/health_plan/user_follow_create'),
   },

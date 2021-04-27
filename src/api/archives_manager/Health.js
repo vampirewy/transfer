@@ -35,7 +35,7 @@ class HealthInterface extends BaseModule {
       return Promise.resolve(this.reportTypeOptions);
     }
     return this.get('/system_param_value/HM004').then(({ data }) => {
-      if (data.code === 200) {
+      if (data.rc === 0) {
         this.reportTypeOptions = data.data;
         return data.data;
       }

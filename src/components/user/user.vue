@@ -34,7 +34,7 @@
 <script>
 import HeaderImg from '~/src/assets/images/headerImg.png';
 import { localSave } from '~/src/libs/util';
-
+import avatarImg from '@/assets/images/body/avatar.png';
 export default {
   name: 'User',
   props: {
@@ -53,7 +53,7 @@ export default {
   },
   data() {
     return {
-      doUserAvatar: this.handleAvatar(this.userAvatar),
+      doUserAvatar: avatarImg, // this.handleAvatar(this.userAvatar),
     };
   },
   watch: {

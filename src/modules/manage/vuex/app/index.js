@@ -49,17 +49,23 @@ const actions = {
   toggleSideBar({ commit }) {
     commit('TOGGLE_SIDEBAR');
   },
+  closeSideBar({ commit }) {
+    commit('CLOSE_SIDEBAR');
+  },
 };
 
 const mutations = {
-  TOGGLE_SIDEBAR: (state) => {
-    console.log(state.sidebar);
+  TOGGLE_SIDEBAR: (state) => { // 展开收缩侧边栏
     state.sidebar.opened = !state.sidebar.opened;
     if (state.sidebar.opened) {
       Cookies.set('sidebarStatus', 1);
     } else {
       Cookies.set('sidebarStatus', 0);
     }
+  },
+  CLOSE_SIDEBAR: (state) => { // 收掉侧边栏
+    Cookies.set('sidebarStatus', 0);
+    state.sidebar.opened = false;
   },
   [types.SET_HOME_ROUTE](state, routes) {
     state.homeRoute = getHomeRoute(routes, homeName);

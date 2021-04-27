@@ -13,6 +13,7 @@ export default [
     meta: {
       title: '异常库',
       access: 'unusual_list',
+      keepAlive: true,
     },
     component: () => import('../../../views/basic_data/unusual_list'),
   },

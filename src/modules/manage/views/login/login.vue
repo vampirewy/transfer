@@ -110,19 +110,19 @@ export default {
     redirectHome() {
       this.storeLoginInfo();
       this.clearTagsNav();
-      this.$router.push({ name: 'home' });
     },
     storeLoginInfo() {
       // 保存登录信息
       setToken(this.loginResult.token);
       localSave('HK_USER_INFO', JSON.stringify(this.loginResult));
+      this.$router.push({ name: 'home' });
       // this.$store.commit('user/SET_TOKEN', this.loginResult.sid);
-      this.$store.commit('user/SET_AVATAR', this.loginResult.headImage);
-      this.$store.commit('user/SET_USER_NAME', this.loginResult.realName);
-      this.$store.commit('user/SET_USER_ID', this.loginResult.userId);
-      this.$store.commit('user/SET_SUPER_ADMIN', this.loginResult.isSuperAdmin);
-      this.$store.commit('user/SET_ACCESS', this.loginResult.menuIds);
-      this.$store.commit('user/SET_HAS_GET_INFO', true);
+      // this.$store.commit('user/SET_AVATAR', this.loginResult.headImage);
+      // this.$store.commit('user/SET_USER_NAME', this.loginResult.realName);
+      // this.$store.commit('user/SET_USER_ID', this.loginResult.userId);
+      // this.$store.commit('user/SET_SUPER_ADMIN', this.loginResult.isSuperAdmin);
+      // this.$store.commit('user/SET_ACCESS', this.loginResult.menuIds);
+      // this.$store.commit('user/SET_HAS_GET_INFO', true);
     },
     handleKeyUp(e) {
       // 回车事件

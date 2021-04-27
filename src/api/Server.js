@@ -39,8 +39,7 @@ import doctormoney from './doctor_client_management/DoctorMoney';
 import ServiceManagerInterface from './service_manager/ServiceManagerInterface';
 import statics from './statistics/Statics';
 import serviceItemsInterface from './service_items_manage/ServiceItemsInterface';
-
-
+import dietManageInterface from './diet_manage/DietManageInterface';
 export default {
   loginInterface,
   systemManageInterface,
@@ -74,4 +73,5 @@ export default {
   ServiceManagerInterface,
   statics,
   serviceItemsInterface,
+  dietManageInterface,
 };

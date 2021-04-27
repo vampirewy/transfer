@@ -20,23 +20,25 @@ export default [
     component: Main,
     children: [
       {
-        path: '/report',
-        name: 'report',
+        path: '/physical_examination_report',
+        name: 'physical_examination_report',
         meta: {
           title: '体检报告',
           access: 'physical_examination_report',
+          keepAlive: true,
         },
         component: () => import('../../views/archives_manage/report'),
       },
       {
-        path: '/health_questionnaire',
-        name: 'health_questionnaire',
+        path: '/life_style_questionnaire',
+        name: 'life_style_questionnaire',
         meta: {
-          title: '健康问卷',
-          access: 'health_questionnaire',
+          title: '生活方式问卷',
+          access: 'life_style_questionnaire',
+          keepAlive: true,
         },
         component: () =>
-          import('../../views/archives_manage/health_questionnaire'),
+          import('../../views/archives_manage/life_style_questionnaire'),
       },
       {
         path: '/medical_history',
@@ -44,6 +46,7 @@ export default [
         meta: {
           title: '就医记录',
           access: 'medical_history',
+          keepAlive: true,
         },
         component: () =>
           import('../../views/archives_manage/medical_history.vue'),
@@ -74,6 +77,7 @@ export default [
         meta: {
           title: '用药记录',
           access: 'medication_history',
+          keepAlive: true,
         },
         component: () =>
           import('../../views/archives_manage/medication_history.vue'),
@@ -84,6 +88,7 @@ export default [
         meta: {
           title: '健康监测',
           access: 'health_monitor',
+          keepAlive: true,
         },
         component: () =>
           import('../../views/archives_manage/health_monitor/index.vue'),

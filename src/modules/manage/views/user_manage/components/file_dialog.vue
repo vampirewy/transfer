@@ -1,12 +1,11 @@
 <template>
-  <el-dialog title="新增附件" :visible.sync="visible" @close="cancel">
+  <el-dialog title="新增附件" :visible.sync="visible" :modal-append-to-body="false" @close="cancel">
     <el-form :model="formData" label-width="90px" ref="form" :rules="rules">
-      <el-form-item label="附件格式">
+      <el-form-item label="附件上传：" prop="route">
         <el-input
                 v-model="formData.route"
-                placeholded="请输入"
-                autocomplete="off"
-                maxlength="30">
+                placeholded="大小不超过15MB"
+                autocomplete="off">
         </el-input>
         <upload
           ref="upload"
@@ -16,13 +15,15 @@
           :on-exceed="handleLimit"
           :before-upload="beforeUpload"
         >
-          <el-button size="small" type="primary" v-if="!formData.filePath">点击上传</el-button>
-          <el-button size="small" type="primary" v-else>重新上传</el-button>
+          <el-button size="small" class="claickbutton" v-if="!formData.filePath">点击上传</el-button>
+          <el-button size="small" class="claickbutton" v-else>重新上传</el-button>
         </upload>
       </el-form-item>
       <div class="el-upload__tip">支持格式：txt、docx、xlsx、jpg、png、jpeg、zip、rar、pdf</div>
-      <el-form-item label="附件标题" prop="title">
+      <div class="flex">
+        <el-form-item label="附件标题" prop="title">
         <el-input
+                style="width:100%;"
                 v-model="formData.title"
                 placeholded="请输入"
                 autocomplete="off"
@@ -30,8 +31,9 @@
         </el-input>
       </el-form-item>
       <el-form-item label="上传时间">
-        <el-input disabled="true" v-model="formData.uploadDate"></el-input>
+        <el-input style="width:100%;" disabled="true" v-model="formData.uploadDate"></el-input>
       </el-form-item>
+      </div>
       <el-form-item label="备注">
         <el-input
           type="textarea"
@@ -84,6 +86,9 @@ export default {
     handleImageSuccess(file) {
       console.log('handleImageSuccess', file);
       this.formData.filePath = file.data;
+      if (this.formData.filePath) {
+        this.formData.route = '已上传';
+      }
     },
     handleLimit() {
       this.$message.warning('当前限制仅可上传1个文件');
@@ -144,5 +149,22 @@ export default {
   }
   /deep/ .el-upload {
     text-align: left;
+  }
+  /deep/ .el-form-item__content{
+    display: flex;
+    .el-input{
+      width: 43%;
+    }
+  }
+  .el-upload__tip{
+    color: #f94242;
+    margin-top: -5px;
+    padding-left: 90px;
+    margin-bottom: 5px;
+  }
+  .claickbutton{
+    background: #36BF2F;
+    color: #fff;
+    margin-left: 10px;
   }
 </style>

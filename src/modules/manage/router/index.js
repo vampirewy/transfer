@@ -36,7 +36,7 @@ const turnTo = (to, user, next) => {
 
 router.beforeEach((to, from, next) => {
   const userInfo = localRead('HK_USER_INFO');
-  const accessInfo = JSON.parse(localRead('HK_ACCESS'));
+  const accessInfo = localRead('HK_ACCESS') ? JSON.parse(localRead('HK_ACCESS')) : '';
   if (['login', 'forget_password'].includes(to.name) && !userInfo) {
     next();
   } else if (userInfo) {

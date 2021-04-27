@@ -13,6 +13,7 @@ export default [
     meta: {
       title: '运动库',
       access: 'sport_list',
+      keepAlive: true,
     },
     component: () => import('../../../views/plan_center/sport_list'),
   },
