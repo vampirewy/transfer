@@ -9,10 +9,10 @@
             <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
       </span>
     </div>-->
-    <div class="divTop" style="margin: -5px 0 5px 0">
+    <div class="divTop" style="margin: -15px 0 15px 0">
       <div class="searchCondition">
         <div class="searchLeft">
-          <div class="searchInputFormItem" style="margin-top: 0!important;">
+          <div class="searchInputFormItem">
             <el-input placeholder="输入姓名搜索" v-model="params.keywords">
             </el-input>
             <span class="searchBtnImgSpan" @click="search(1)">

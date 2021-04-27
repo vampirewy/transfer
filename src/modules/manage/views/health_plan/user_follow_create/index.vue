@@ -854,6 +854,9 @@ export default {
   .tablePlanColumn{
       background: #f7f7fd;
   }
+  /deep/ .el-table td{
+    padding: 6px 0;
+  }
   /deep/ .el-table__expand-column .el-icon{
     visibility:hidden;
   }

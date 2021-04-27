@@ -6,10 +6,10 @@
         <img class="searchBtnImg" src="@/assets/images/common/searchBlack.png"/>
       </span>
     </div>-->
-    <div class="divTop" style="margin: -10px 0 10px 0">
+    <div class="divTop" style="margin: -15px 0 15px 0">
     <div class="searchCondition">
       <div class="searchLeft">
-        <div class="searchInputFormItem" style="margin-top: 0!important;">
+        <div class="searchInputFormItem">
           <el-input placeholder="姓名/编号/单位" v-model="keyword">
           </el-input>
           <span class="searchBtnImgSpan" @click="search">

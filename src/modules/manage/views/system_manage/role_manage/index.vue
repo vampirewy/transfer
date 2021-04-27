@@ -20,7 +20,7 @@
 
         <div class="searchCondition">
           <div class="searchLeft">
-            <div class="searchInputFormItem" style="margin-top: 0!important;">
+            <div class="searchInputFormItem">
               <el-input placeholder="输入角色名称搜索" v-model="name">
               </el-input>
               <span class="searchBtnImgSpan" @click="search">

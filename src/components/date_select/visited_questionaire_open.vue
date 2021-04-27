@@ -6,7 +6,7 @@
         <img class="searchBtnImg" src="@/assets/images/common/searchBlack.png"/>
       </span>
     </div>-->
-    <div class="divTop" style="margin: -5px 0 5px 0">
+    <div class="divTop" style="margin: -15px 0 15px 0">
     <div class="searchCondition">
       <div class="searchLeft">
         <div>
