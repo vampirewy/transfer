@@ -13,7 +13,7 @@
       <div class="form-title">
         <div class="line"></div>
         <h3 v-if="id != ''" class="name">编辑-就医用户信息</h3>
-        <h3 v-else class="name">新增-就医用户信息</h3>
+        <h3 v-else class="name">新增单项检查</h3>
       </div>
       <div class="medicate-record mt20">
       <div class="row">
@@ -82,7 +82,7 @@
                 style="width: 200px"
               ></el-input>
             </el-form-item>
-            <el-form-item label="医保卡号" prop="specification" style="width:25%">
+            <el-form-item label="检查机构" prop="specification" style="width:25%">
               <el-input
                 v-model="infoSource.specification"
                 placeholder="请输入"
@@ -246,46 +246,36 @@
             </el-popover>
           </el-form-item>
           <div class="inspectionAdd">
-              <div>添加</div>
+              <div @click="inspectionAdd()">添加</div>
           </div>
         </div>
      <el-table class="medicate-list mt20" :data="drugsList" align="center">
-        <el-table-column label="科室" prop="drugsName" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{ scope.row.drugsName | getResult }}</span>
-          </template>
+        <el-table-column label="科室" prop="sectionName" show-overflow-tooltip>
         </el-table-column>
         <el-table-column
           label="项目"
-          prop="ingrenient"
+          prop="itemName"
           show-overflow-tooltip
         >
-          <template slot-scope="scope">
-            <span>{{ scope.row.ingrenient | getResult }}</span>
-          </template>
         </el-table-column>
         <el-table-column
           label="结果"
           prop="startDate"
-          show-overflow-tooltip
         >
-          <template slot-scope="scope">
-            <span>{{ scope.row.startDate | getResult }}</span>
+         <template slot-scope="scope">
+             <input class="Checkinput" type="text" v-model="scope.row.outcome">
           </template>
         </el-table-column>
-        <el-table-column label="正常参考" prop="endDate" show-overflow-tooltip>
+        <el-table-column label="正常参考" prop="refRange" >
           <template slot-scope="scope">
-            <span>{{ scope.row.endDate | getResult }}</span>
+             <input class="Checkinput" type="text" v-model="scope.row.reference">
           </template>
         </el-table-column>
-        <el-table-column label="单位" prop="specification" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{ scope.row.specification | getResult }}</span>
-          </template>
+        <el-table-column label="单位" prop="unit" show-overflow-tooltip>
         </el-table-column>
-        <el-table-column label="建议" prop="dose" show-overflow-tooltip>
+        <el-table-column label="建议" prop="dose" >
           <template slot-scope="scope">
-            <span>{{ scope.row.dose | getResult }}</span>
+             <input class="Checkinput" type="text" v-model="scope.row.Suggestion">
           </template>
         </el-table-column>
         <!-- <el-table-column label="每日次数" prop="countDay" show-overflow-tooltip>
@@ -313,7 +303,19 @@
         </el-table-column> -->
         <el-table-column label="操作" prop="index">
           <template slot-scope="scope">
-            <el-button type="text" @click="remove(scope)">删除</el-button>
+              <el-button type="text" @click="Addoperates(scope.$index, scope.row.id)">
+              <img
+                class="icon-delete"
+                src="@/assets/images/service/compile.png"
+              />
+            </el-button>
+            <el-button type="text" @click="deleteField(scope.$index, scope.row.id)">
+              <img
+                class="icon-delete"
+                src="@/assets/images/service/deletes.png"
+              />
+            </el-button>
+            <!-- <el-button type="text" @click="remove(scope)">删除</el-button> -->
           </template>
         </el-table-column>
       </el-table>
@@ -374,6 +376,7 @@ export default {
         gender: '',
         gridName: '',
         clientNameCheck: '', // 检查项目
+        startDates: ' 00:00:00',
       },
       drugsList: [],
       resultList: [],
@@ -389,6 +392,7 @@ export default {
         pageNo: 1,
         gridId: '',
       },
+      StatusCheck: [],
     };
   },
   mounted() {
@@ -396,6 +400,9 @@ export default {
     window.vm = this;
     this.getResultList();
     this.queryList();
+    if (this.id) {
+      this.saveInspectRecord(this.id);
+    }
   },
   methods: {
     async getResultList() {
@@ -415,7 +422,37 @@ export default {
       if (data) {
         this.gridList = data || [];
       }
-      console.log(this.formData.gridId, 'qweqwewwqwqwe');
+    },
+    saveInspectRecord(id) {
+      this.$api.healthMonitorInterface.SinglegetDetail(id).then(({ data }) => {
+        if (data.success) {
+          this.infoSource.gridName = data.data.clientId;
+          this.id = data.data.id;
+          this.infoSource.endDate = data.data.inspectionDate;
+          this.infoSource.drugsName = data.data.inspectionNo;
+          this.infoSource.specification = data.data.inspectionOrg;
+          this.infoSource.ingrenient = data.data.intro;
+          const json = {};
+          for (let i = 0; i < data.data.inspectionRecordConfigDtos.length; i++) {
+            json.sectionName = data.data.inspectionRecordConfigDtos[i].sectionItem;
+            json.itemName = data.data.inspectionRecordConfigDtos[i].itemName;
+            json.startDate = data.data.inspectionRecordConfigDtos[i].itemValue;
+            json.refRange = data.data.inspectionRecordConfigDtos[i].itemRef;
+            json.unit = data.data.inspectionRecordConfigDtos[i].unit;
+            json.dose = data.data.inspectionRecordConfigDtos[i].advice;
+            this.drugsList.push(json);
+          }
+          console.log(this.drugsList, 'sdfsfsfsdfsdf');
+          this.$message.success('操作成功');
+        }
+      });
+    },
+    inspectionAdd() {
+      if (this.StatusCheck) {
+        for (let i = 0; i < this.StatusCheck.length; i++) {
+          this.drugsList.push(this.StatusCheck[i]);
+        }
+      }
     },
     handlePopoperClose() {
       this.popoverStatus = false;
@@ -432,9 +469,14 @@ export default {
       this.infoSource.gender = data.gender;
       this.infoSource.gridName = data.gridName;
     },
-    onSelectUserCheck() {
+    onSelectUserCheck(data) {
+      data.outcome = '';
+      data.reference = '';
+      data.Suggestion = '';
+      console.log(data, '接收的数据12323');
       this.$refs.userPopoverCheck.doClose();
       this.popoverStatusCheck = false;
+      this.StatusCheck.push(data);
     //   this.infoSource.clientName = data.name;
     //   this.infoSource.clientId = data.id;
     //   this.infoSource.age = data.age;
@@ -491,25 +533,42 @@ export default {
       this.queryList();
     },
     submit() {
-      const reqBody = {
-        clientId: this.infoSource.clientId,
-        organId: '',
-        paramList: this.drugsList,
-      };
-
       if (!this.infoSource.clientId) {
         return this.$message.warning('请选择客户');
       }
 
       if (!this.drugsList.length) {
-        return this.$message.warning('请添加药品');
+        return this.$message.warning('请添加检查项目');
       }
-
-      this.$api.medication.add(reqBody).then(({ data }) => {
-        if (data.code === 200) {
-          this.$router.go(-1);
+      const json = {};
+      const arrars = [];
+      for (let i = 0; i < this.drugsList.length; i++) {
+        json.sectionItem = this.drugsList[i].sectionName;
+        json.itemName = this.drugsList[i].itemName;
+        json.itemValue = this.drugsList[i].drugsList;
+        json.itemRef = this.drugsList[i].reference;
+        json.unit = this.drugsList[i].unit;
+        json.advice = this.drugsList[i].Suggestion;
+        arrars.push(json);
+      }
+      this.$api.healthMonitorInterface.saveInspectRecord({
+        clientId: this.infoSource.clientId,
+        id: this.id,
+        inspectionNo: this.infoSource.drugsName,
+        inspectionOrg: this.infoSource.specification,
+        inspectionDate: this.infoSource.endDate + this.infoSource.startDates,
+        intro: this.infoSource.ingrenient,
+        inspectionRecordConfigRequests: arrars,
+      }).then(({ data }) => {
+        if (data.success) {
+          this.$message.success('操作成功');
         }
       });
+    //   this.$api.medication.add(reqBody).then(({ data }) => {
+    //     if (data.code === 200) {
+    //       this.$router.go(-1);
+    //     }
+    //   });
     },
   },
 };
@@ -616,5 +675,16 @@ export default {
     line-height: 40px;
     color: #ffffff;
     font-size: 14px;
+}
+.Checkinput{
+    width: 140px;
+    height: 40px;
+    border: solid 1px #DDE0E6;
+    border-radius: 5px;
+    text-align: center;
+    color: #333333;
+}
+.icon-delete{
+    width: 30px;
 }
 </style>

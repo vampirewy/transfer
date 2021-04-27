@@ -281,7 +281,7 @@
               </el-table-column>
                 <el-table-column
                 label="年龄"
-                align="center"
+                align="age"
                 prop="hospital"
                 show-overflow-tooltip>
               </el-table-column>
@@ -318,15 +318,15 @@
               <el-table-column
                 label="次数"
                 align="center"
-                prop="result"
+                prop="inspectionCount"
                 show-overflow-tooltip>
-                <template slot-scope="scope">{{ statusMap[scope.row.result] }}</template>
               </el-table-column>
               <el-table-column label="操作" prop="id" width="120" align="center">
                 <template slot-scope="scope">
-                  <el-button type="text" size="small" @click="edit(scope.row)" v-if="
-                  getAccess('medical_history_edit')
-                  " style="color:#3154AC">编辑</el-button>
+                  <el-button type="text" size="small"
+                   @click="add(scope.row)"
+                   v-if="getAccess('medical_history_edit')"
+                   style="color:#3154AC">编辑</el-button>
                   <span style="color:#DDE0E6">|</span>
                   <el-button
                     type="text"
@@ -543,13 +543,13 @@ export default {
       this.formData.pageSize = size;
       this.queryList();
     },
-    add() {
+    add(row) {
       this.viewIndex = 2;
       this.currentId = '';
       this.$router.push({
         path: '/inspection_index_add',
         query: {
-          id: '',
+          id: row.id,
         },
       });
     },

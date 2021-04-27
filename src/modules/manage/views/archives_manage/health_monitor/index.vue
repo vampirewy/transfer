@@ -127,6 +127,7 @@
           :data="table.list"
           @selection-change="handleSelectionChange"
           style="margin-top:10px"
+          :class="tabIndex === 'other'?'openTable':''"
         >
           <el-table-column type="selection" width="40" align="center"></el-table-column>
           <el-table-column
