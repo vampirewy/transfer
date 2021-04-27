@@ -9,107 +9,38 @@
       class="form-inline"
     >
       <div class="form-title">
-        <!-- <div class="line"></div> -->
-        <h3 class="name" v-if="routeType === 1">新增-用户类别<div class="titleBiao"></div></h3>
-        <h3 class="name" v-if="routeType === 2">编辑-用户类别<div class="titleBiao"></div></h3>
-        <h3 class="name" v-if="routeType === 3">查看-用户类别
+        <h3 class="name">
+          团报配置
           <div class="titleBiao"></div>
         </h3>
       </div>
-
       <div class="mt20">
-        <div class="row">
-          <el-form-item label="类别名称：" style="width:25%" label-width="82px" prop="gridName">
-            <span  v-if="routeType == 3">{{form.gridName}}</span>
-            <el-input
-            v-model="form.gridName"
-            maxlength="30"
-            v-if="routeType != 3"
-            style="width: 230px"
-            placeholder="请输入">
-            </el-input>
-          </el-form-item>
-          <el-form-item label="报告名称：" style="width:25%" label-width="82px" prop="reportName">
-            <span  v-if="routeType == 3">{{form.reportName}}</span>
-            <el-input
-            v-model="form.reportName"
-            maxlength="30"
-            v-if="routeType != 3"
-            style="width: 230px"
-            placeholder="请输入">
-            </el-input>
-          </el-form-item>
-          <el-form-item label="是否启用：" prop="state" label-width="83px" style="width:25%">
-            <span  v-if="routeType == 3">{{form.state == 0 ? '否':'是'}}</span>
-            <el-select v-model="form.state"
-            v-if="routeType != 3"
-            style="width: 230px"
-            placeholder="请选择是否启用">
-              <el-option
-                v-for="it in isCompareList"
-                :label="it.name"
-                :value="it.value"
-                :key="it.id"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="低危评估：" prop="dangerShow" label-width="83px" style="width:25%">
-            <span  v-if="routeType == 3">{{form.state == 0 ? '不显示':'显示'}}</span>
-            <el-select v-model="form.dangerShow"
-            v-if="routeType != 3"
-            style="width: 230px"
-            placeholder="请选择低危评估">
-              <el-option
-                v-for="it in isCompareLists"
-                :label="it.name"
-                :value="it.value"
-                :key="it.id"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </div>
         <div style="display: inline-block;">
-          <div class="form-title">
-            <h3 class="name">内容<div class="titleBiao"></div></h3>
-          </div>
           <div v-for="item in tablest" :key="item.id">
             <div class="wltitle">
               <div class="quan"></div>
-              <span>{{item.name}}</span>
+              <span>{{ item.name }}</span>
             </div>
             <el-checkbox
-                    style="width:25%;margin:20px 0 !important;"
-                    v-for="it in item.contentList"
-                    :key="it.id"
-                    v-model="it.checked"
-                    :disabled="routeType === 3"
+              style="width:25%;margin:20px 0 !important;"
+              v-for="it in item.contentList"
+              :key="it.id"
+              v-model="it.checked"
             >
               {{ it.name }}
             </el-checkbox>
           </div>
         </div>
         <div class="handle-btn mt10 mb30">
-          <el-button
-            class="canelBtn"
-            size="small"
-            @click="cancel"
+          <el-button class="cancelBtn" size="small" @click="cancel"
             >返回</el-button
           >
           <el-button
-            class="add-btn"
+            class="sureBtn"
             type="primary"
             size="small"
             @click="save"
-            v-if="routeType === 1"
             >保存</el-button
-          >
-          <el-button
-            class="add-btn"
-            type="primary"
-            size="small"
-            @click="save"
-            v-if="routeType === 2"
-            >修改</el-button
           >
         </div>
       </div>
@@ -281,7 +212,9 @@ export default {
       console.log(data);
       data.forEach((item) => {
         this.tablest[Type - 1].contentList.push({
-          name: item.name, code: item.code, checked: false,
+          name: item.name,
+          code: item.code,
+          checked: false,
         });
       });
     },
@@ -457,9 +390,9 @@ export default {
   }
 }
 .wltitle {
-      font-size: 20px;
-        font-weight: 800;
-        color: #333333;
+  font-size: 20px;
+  font-weight: 800;
+  color: #333333;
   height: 60px;
   display: flex;
   align-items: center;
@@ -468,7 +401,7 @@ export default {
     height: 4.5px;
     background: #fff;
     border-radius: 3px;
-    border: 1px solid #B4BBC9;
+    border: 1px solid #b4bbc9;
   }
   span {
     margin-left: 10px;

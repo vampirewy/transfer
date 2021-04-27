@@ -9,7 +9,7 @@
         <span>{{index + 1}}.{{exception.abnormalName}}</span>
         <i :class="exception.expand ? 'el-icon-caret-top' : 'el-icon-caret-bottom'"></i>
       </div>
-      <div class="detail" v-if="exception.expand">
+      <div class="detail">
         <el-form class="detail-form">
           <el-form-item label="医学解释">
             <el-input

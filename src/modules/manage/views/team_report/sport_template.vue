@@ -136,9 +136,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/deep/ .el-input{
-  width: 93% !important;
-}
 .sport-template {
   padding: 13px 18px 21px 18px;
   /deep/ .el-table {

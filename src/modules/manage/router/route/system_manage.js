@@ -39,6 +39,16 @@ export default [
         },
         component: () => import('../../views/system_manage/role_manage'),
       },
+      {
+        path: '/role_configuration',
+        name: 'role_configuration',
+        meta: {
+          title: '系统配置',
+          access: 'role_configuration',
+          keepAlive: true,
+        },
+        component: () => import('../../views/system_manage/system_configuration'),
+      },
     ],
   },
 ];

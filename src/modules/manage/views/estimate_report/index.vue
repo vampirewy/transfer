@@ -67,7 +67,29 @@
                        :key="index"></el-option>
           </el-select>
           </div>
-            <div>
+          <div v-if="Tabactive == 0">
+            <span>审核状态：</span>
+            <el-select
+                  v-model="form.doctorId"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option :label="item.realName" :value="item.id" v-for="(item, index) in doctorList"
+                       :key="index"></el-option>
+          </el-select>
+          </div>
+          <div v-else-if="Tabactive == 1">
+            <span>总分数段：</span>
+            <el-select
+                  v-model="form.doctorId"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option :label="item.realName" :value="item.id" v-for="(item, index) in doctorList"
+                       :key="index"></el-option>
+          </el-select>
+          </div>
+            <div v-else>
             <span>问卷来源：</span>
             <el-select
                   v-model="form.doctorId"
@@ -138,7 +160,14 @@
                     v-if="getAccess('customer_pool_distribute')"
             ><img src="@/assets/images/common/createReport.png" />生成报告</el-button>
           </div>
-          <div v-if="Tabactive == 1 || Tabactive == 2">
+          <el-button
+            style="width:120px;margin: 16px 0;"
+                    size="small"
+                    @click="generateReport"
+                    class="btn-new btnDel"
+                    v-if="getAccess('customer_pool_distribute')"
+            ><img src="@/assets/images/common/createReport.png" />生成报告</el-button>
+          <!-- <div v-if="Tabactive == 1 || Tabactive == 2">
             <el-button
             style="margin: 16px 0;"
                     size="small"
@@ -146,7 +175,7 @@
                     class="btn-new btnDel"
                     v-if="getAccess('customer_pool_distribute')"
             ><img src="@/assets/images/common/export.png" />导出</el-button>
-          </div>
+          </div> -->
         </div>
         <div class="right">
           <!-- <div class="table-operate-buttons">
@@ -219,6 +248,8 @@
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column label="填写日期" prop="reportDate" min-width="90" show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column label="总分" prop="reportDate" min-width="90" show-overflow-tooltip>
               </el-table-column>
               <el-table-column label="问卷来源" prop="reportDate" min-width="90" show-overflow-tooltip>
               </el-table-column>
@@ -444,7 +475,7 @@
                 </el-table>
               </el-table-column>
               <el-table-column type="selection" width="40"></el-table-column>
-              <el-table-column label="体检编号" prop="reportNo" width="90" show-overflow-tooltip>
+              <el-table-column label="体检编号" prop="reportNo" show-overflow-tooltip>
               </el-table-column>
               <el-table-column label="姓名" prop="clientName" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
@@ -454,9 +485,9 @@
                   </span>
                 </template>
               </el-table-column>
-              <el-table-column label="性别" prop="genderTxt" width="55" show-overflow-tooltip>
+              <el-table-column label="性别" prop="genderTxt" show-overflow-tooltip>
               </el-table-column>
-              <el-table-column label="年龄" prop="age" width="55" show-overflow-tooltip>
+              <el-table-column label="年龄" prop="age" show-overflow-tooltip>
               </el-table-column>
               <el-table-column
                 label="人员类别"
@@ -465,101 +496,18 @@
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
-                label="企业单位"
+                label="单位"
                 prop="workUnitName"
                 min-width="80"
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column label="体检日期" prop="reportDate" min-width="90" show-overflow-tooltip>
               </el-table-column>
-              <el-table-column
-                label="生活方式问卷"
-                prop="lifeQuestionDate"
-                min-width="120"
-                align="center">
-                 <!-- <template slot-scope="scope">
-                  <el-select
-                    v-model="scope.row.lifeQuestionDate"
-                    placeholder="请选择"
-                    style="width: 155px">
-                    <el-option
-                      :label="scope.row.lifeQuestionDate"
-                      :value="scope.row.lifeQuestionDate"
-                      :key="scope.row.lifeQuestionDate">
-                    </el-option>
-                  </el-select>
-                </template> -->
-                <template slot-scope="scope" v-if="scope.row.lifeQuestionDate">
-                  <el-popover
-                          :ref="`popover-${scope.row.reportId}`"
-                          placement="bottom-start"
-                          width="570"
-                          trigger="click"
-                          @show="popoverStatusShow(scope.row)"
-                          @hide="popoverStatus = false"
-                  >
-                    <questions-open
-                      v-if="popoverStatus && popoverRefIndex === scope.row.reportId"
-                      :clientId="scope.row.clientId"
-                      @change="handlePopoperClose"></questions-open>
-                    <!--v-if="popoverStatus"-->
-                    <el-input
-                            class="select-user-trigger disabled"
-                            slot="reference"
-                            disabled
-                            v-model="scope.row.lifeQuestionDate"
-                            placeholder="请选择">
-                      <i :class="`el-icon-arrow-${popoverStatus ? 'up' : 'down'}`"
-                         slot="suffix"></i>
-                    </el-input>
-                  </el-popover>
-                </template>
-              </el-table-column>
-              <el-table-column label="异常" width="60" show-overflow-tooltip>
-                <template slot-scope="scope">
-                  <img
-                    v-if="scope.row.reportAbnormalTotal > 0"
-                    class="exception-explain-img"
-                    @click="handleViewException(scope.row)"
-                    src="../../../../assets/images/exception.png"/>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="未匹配异常"
-                prop="notMatchAbnromalTotal"
-                align="center"
-                width="90" show-overflow-tooltip>
-                <template slot-scope="scope">
-                  <el-button
-                    type='text'
-                    v-if="scope.row.notMatchAbnromalTotal > 0"
-                    @click="expandsHandle(scope.row)">
-                    {{scope.row.notMatchAbnromalTotal}}
-                  </el-button>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="报告状态"
-                prop="assessReportStateTxt"
-                align="center"
-                min-width="90"
-                show-overflow-tooltip>
-              </el-table-column>
-              <el-table-column label="点评" align="center" width="55" show-overflow-tooltip>
-                <template slot-scope="scope">
-                  <img
-                    @click="handleComment(scope.row)"
-                    class="comment-img"
-                    v-if="getAccess('assessment_report_comment')"
-                    src="../../../../assets/images/comment.png"/>
-                </template>
-              </el-table-column>
-              <el-table-column label="操作" align="center" width="60">
+              <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
                   <el-button
                     type='text'
                     size="small"
-                    v-if="scope.row.assessReportName"
                     @click="openPdf(scope.row)">查看</el-button>
                 </template>
               </el-table-column>
@@ -861,6 +809,7 @@ export default {
       this.table.pageSize = size;
       this.queryPageList();
     },
+    // 生成报告
     generateReport() {
       if (this.multipleSelection.length === 0) {
         this.$message.warning('请先选择数据');
@@ -893,101 +842,101 @@ export default {
 .divTop{
   padding-top: 30px;
 }
-.TabBars{
+.TabBars {
   display: flex;
   align-items: center;
   height: 47px;
   width: calc(100% - 40px);
-  background: #F6F8FC;
+  background: #f6f8fc;
   position: absolute;
-  top: 20px;
+  top: 18px;
   margin-top: -20px;
   z-index: 1;
-  div{
-  .TabBarsNames{
-    cursor: pointer;
-    background: #EEF1F5;
-    border-color: transparent;
-    color: #666666;
-    position: relative;
-    margin-right: 20px;
-    padding: 13px 16px;
-    font-size: 14px;
-    border-radius: 8px 8px 0 0;
-    margin: 0 20px;
-  }
-  .fristName:nth-child(1){
-    border-radius: 0px 5px 0 0;
-    margin-left: 0;
-  }
-  .TabBarsNames:after{
-    content: '';
-    display: block;
-    width: 25px;
-    height: 45px;
-    position: absolute;
-    -webkit-transform: skewX(23deg);
-    transform: skewX(23deg);
-    background: #EEF1F5;
-    border-top-right-radius: 8px;
-    top: 0px;
-    right: -13px;
-  }
-  .TabBarsNames:before{
-    content: '';
-    display: block;
-    width: 25px;
-    height: 45px;
-    position: absolute;
-    -webkit-transform: skewX(-23deg);
-    transform: skewX(-23deg);
-    background: #EEF1F5;
-    border-top-left-radius: 8px;
-    top: 0px;
-    left: -13px;
-  }
-  .fristName:nth-child(1)::before{
-    width: 0;
-    height: 0;
-  }
-  .TabBarsName{
-    cursor: pointer;
-    background: #ffffff;
-    border-color: transparent;
-    color: #333333;
-    font-weight: 600;
-    position: relative;
-    margin:0 20px;
-    padding: 13px 16px;
-    font-size: 14px;
-    border-radius: 8px 8px 0 0;
-  }
-  .TabBarsName:after{
-    content: '';
-    display: block;
-    width: 25px;
-    height: 45px;
-    position: absolute;
-    -webkit-transform: skewX(23deg);
-    transform: skewX(23deg);
-    background: white;
-    border-top-right-radius: 8px;
-    top: 0px;
-    right: -13px;
-  }
-  .TabBarsName::before{
-    content: '';
-    display: block;
-    width: 25px;
-    height: 45px;
-    position: absolute;
-    -webkit-transform: skewX(-23deg);
-    transform: skewX(-23deg);
-    background: white;
-    border-top-left-radius: 8px;
-    top: 0px;
-    left: -13px;
-  }
+  div {
+    .TabBarsNames {
+      cursor: pointer;
+      background: #eef1f5;
+      border-color: transparent;
+      color: #666666;
+      position: relative;
+      margin-right: 20px;
+      padding: 14px 16px;
+      font-size: 14px;
+      border-radius: 8px 8px 0 0;
+      margin: 0 20px;
+    }
+    .fristName:nth-child(1) {
+      border-radius: 0px 5px 0 0;
+      margin-left: 0;
+    }
+    .TabBarsNames:after {
+      content: '';
+      display: block;
+      width: 25px;
+      height: 47px;
+      position: absolute;
+      -webkit-transform: skewX(23deg);
+      transform: skewX(23deg);
+      background: #eef1f5;
+      border-top-right-radius: 8px;
+      top: 0px;
+      right: -13px;
+    }
+    .TabBarsNames:before {
+      content: '';
+      display: block;
+      width: 25px;
+      height: 47px;
+      position: absolute;
+      -webkit-transform: skewX(-23deg);
+      transform: skewX(-23deg);
+      background: #eef1f5;
+      border-top-left-radius: 8px;
+      top: 0px;
+      left: -13px;
+    }
+    .fristName:nth-child(1)::before {
+      width: 0;
+      height: 0;
+    }
+    .TabBarsName {
+      cursor: pointer;
+      background: #ffffff;
+      border-color: transparent;
+      color: #333333;
+      font-weight: 600;
+      position: relative;
+      margin: 0 20px;
+      padding: 14px 16px;
+      font-size: 14px;
+      border-radius: 8px 8px 0 0;
+    }
+    .TabBarsName:after {
+      content: '';
+      display: block;
+      width: 25px;
+      height: 47px;
+      position: absolute;
+      -webkit-transform: skewX(23deg);
+      transform: skewX(23deg);
+      background: white;
+      border-top-right-radius: 8px;
+      top: 0px;
+      right: -13px;
+    }
+    .TabBarsName::before {
+      content: '';
+      display: block;
+      width: 25px;
+      height: 47px;
+      position: absolute;
+      -webkit-transform: skewX(-23deg);
+      transform: skewX(-23deg);
+      background: white;
+      border-top-left-radius: 8px;
+      top: 0px;
+      left: -13px;
+    }
   }
 }
 .extimate-report {
