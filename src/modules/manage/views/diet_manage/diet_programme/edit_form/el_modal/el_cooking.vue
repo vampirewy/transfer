@@ -59,14 +59,14 @@ export default {
     font-size: 14px;
     font-weight: 400;
     color: #333333;
-    &~.cooking-item{
-        margin-top: 28px;
+    & ~ .cooking-item {
+      margin-top: 28px;
     }
     .cooking-lable {
       color: #666666;
     }
-    .cooking-content{
-        flex: 1;
+    .cooking-content {
+      flex: 1;
     }
   }
 }

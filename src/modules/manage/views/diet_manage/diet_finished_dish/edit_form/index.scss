@@ -1,0 +1,92 @@
+.diet-form_center{
+    .diet-plan-box{
+        .title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333333;
+            line-height: 25px;
+            position: relative;
+            margin-bottom: 20px;
+            &:after {
+              content: '';
+              position: absolute;
+              left: 0;
+              bottom: 2px;
+              transform: translateY(-50%);
+              width: 32px;
+              height: 4px;
+              background: #3154AC;
+              border-radius: 3px;
+              opacity: 0.5;
+            }
+            &.permission-title {
+              margin-top: 10px;
+            }
+          }
+     }
+}
+.cooking-me{
+  /deep/ {
+    .el-form-item{
+      display: flex;
+      width: 100%;
+      .el-form-item__content{
+        flex: 1;
+      }
+    }
+  }
+}
+.divRightTitleDiv{
+  display: flex;
+  justify-content: space-between;
+  .btnAdd{
+    padding: 0 15px;
+  }
+  .btn{
+    width: 140px;
+    background-color: #36BF2F;
+    border-radius: 5px!important;
+    border: none;
+  }
+}
+.el-table{
+  margin-top: 20px;
+  /deep/ .table-row{
+    height: 40px;
+  }
+ /deep/ .el-input{
+  width:140px;
+  input{
+    text-align:center;
+  }
+ }  
+}
+.btn-box{
+  text-align: center;
+  img{
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    margin: 0 5px;
+  }
+}
+.form-buttons{
+  text-align: center;
+  margin-top: 150px;
+}
+.mask{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+}
+.el-dish-select_content{
+ position: absolute;
+ bottom: 0;
+ left: 0;
+ transform: translateY(102%);
+ z-index: 10;
+ width: 590px;
+}

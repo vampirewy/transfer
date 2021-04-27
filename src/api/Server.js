@@ -73,5 +73,5 @@ export default {
   ServiceManagerInterface,
   statics,
   serviceItemsInterface,
-  dietManageInterface
+  dietManageInterface,
 };

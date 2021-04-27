@@ -1,5 +1,5 @@
 <template>
-  <div id="diet-proportion"></div>
+  <div id="diet-distribution"></div>
 </template>
 <script>
 import * as echarts from 'echarts';
@@ -38,22 +38,22 @@ const options = {
         show: false,
       },
       data: [
-        { value: 15, name: '早餐', itemStyle: { color: '#806CE5' } },
-        { value: 30, name: '午餐', itemStyle: { color: '#3154AC' } },
-        { value: 55, name: '晚餐', itemStyle: { color: '#36BF2F' } },
+        { value: 30, name: '早餐', itemStyle: { color: '#806CE5' } },
+        { value: 40, name: '午餐', itemStyle: { color: '#3154AC' } },
+        { value: 30, name: '晚餐', itemStyle: { color: '#36BF2F' } },
       ],
     },
   ],
 };
 export default {
   mounted() {
-      let myChart = echarts.init(document.getElementById('diet-proportion'));
-      myChart.setOption(options);
+    const myChart = echarts.init(document.getElementById('diet-distribution'));
+    myChart.setOption(options);
   },
 };
 </script>
 <style lang="scss" scoped>
-#diet-proportion {
+#diet-distribution {
   width: 100%;
   height: 270px;
 }

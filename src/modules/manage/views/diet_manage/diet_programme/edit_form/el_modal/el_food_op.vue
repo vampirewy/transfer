@@ -10,7 +10,7 @@
   >
     <p class="item-title">已选择食物</p>
     <div class="selected-food">
-      <div class="selected-food-item" v-for="item in 10">
+      <div class="selected-food-item" v-for="item in 10" :key="item">
         菠萝鸡片
         <img src="@/assets/images/body/closeChooseTab.png" alt="" />
       </div>
@@ -161,6 +161,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../tabs_cus.scss';
 .item-title {
   font-size: 15px;
   font-weight: 600;
@@ -201,7 +202,7 @@ export default {
   border: 1px solid #dde0e6;
   padding: 20px 20px 0 20px;
   box-sizing: border-box;
-  margin: 16px 0; 
+  margin: 16px 0;
   overflow-y: auto;
   .selected-food-item {
     display: inline-flex;
@@ -256,75 +257,7 @@ export default {
     width: 95%;
   }
 }
-.el-tabs {
-  border: none !important;
-  box-shadow: none !important;
-  /deep/ .el-tabs__nav {
-    background: none !important;
-    border: none !important;
-  }
-  /deep/ .el-tabs__nav-wrap {
-    margin-bottom: -4px;
-  }
-  /deep/ .el-tabs__item {
-    border-radius: 8px 8px 0px 0px !important;
-    background-color: #f6f8fc;
-    color: #333333;
-    border: none !important;
-    overflow: hidden;
-    font-size: 12px;
-    &.is-active {
-      color: #ffffff !important;
-      background-color: #3154ac !important;
-    }
-  }
-  /deep/ .el-icon-plus {
-    color: #36bf2f;
-  }
-  /deep/ .el-tabs__new-tab {
-    background: #f6f8fc !important;
-    border: none !important;
-  }
-}
-/deep/ .el-tabs__content {
-  padding: 0;
-  .el-collapse-item__header {
-    padding: 0 30px;
-    font-size: 12px;
-    font-weight: 400;
-    color: #333333;
-    height: 48px;
-  }
-  .el-collapse-item__content {
-    padding: 0;
-  }
-  .el-collapse-item__header.is-active {
-    background-color: #eaedf6;
-    color: #3154ac;
-  }
-  .el-collapse-item__arrow {
-    font-size: 16px;
-  }
-  .el-collapse-item__arrow.is-active {
-    transform: rotate(-90deg);
-  }
-}
-.food-type-list {
-  background-color: #f6f8fc;
-  .food-type-item {
-    height: 48px;
-    line-height: 48px;
-    padding: 0 30px;
-    font-size: 12px;
-    font-weight: 400;
-    color: #333333;
-    cursor: pointer;
-    &.is_active {
-      color: #ffffff;
-      background-color: #3154ac;
-    }
-  }
-}
+
 .searchLeft {
   flex: 1;
 }

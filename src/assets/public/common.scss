@@ -112,7 +112,7 @@ a{
   }
 }
 .btnAdd,.btnReset,.btnDel{
-  width: 90px;
+  min-width: 90px;
   height: 40px;
   border-radius: 8px;
   border: 1px solid #F4F4F6;
