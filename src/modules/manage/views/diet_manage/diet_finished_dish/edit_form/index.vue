@@ -2,32 +2,62 @@
   <div>
     <div class="diet-form_center">
       <div class="diet-plan-box">
-        <div class="title">新增菜名</div>
+        <div class="title">{{ id ? '编辑' : '新增' }}菜名</div>
       </div>
     </div>
-    <el-form inline label-width="90px"  class="form-content">
-      <el-form-item required label="菜品名称：">
-        <el-input style="width: 189px" placeholder="请输入"></el-input>
+    <el-form
+      ref="dietFinishedDishForm"
+      inline
+      label-width="90px"
+      class="form-content"
+      :rules="rules"
+      :model="ruleForms"
+    >
+      <el-form-item prop="name" label="菜品名称：">
+        <el-input
+          style="width: 189px"
+          v-model="ruleForms.name"
+          placeholder="请输入"
+        ></el-input>
       </el-form-item>
-      <el-form-item required style="position: relative" label="菜品分类：">
-        <el-select placeholder="请选择 (可多选)" value=""  clearable style="width: 189px">
+      <el-form-item
+        prop="dietSortIds"
+        style="position: relative"
+        label="菜品分类："
+      >
+        <el-select
+          placeholder="请选择 (可多选)"
+          :value="names"
+          clearable
+          style="width: 189px"
+        >
         </el-select>
         <div class="mask" @click="isShowDishSelect = true"></div>
-        <el-dish-select :active.sync="isShowDishSelect"></el-dish-select>
+        <el-dish-select
+          :active.sync="isShowDishSelect"
+          :value="ruleForms.dietSortIds"
+          @change="handleDishSelect"
+        ></el-dish-select>
       </el-form-item>
       <div>
         <el-form-item label="餐次：">
           <el-checkbox-group style="margin-left: 10px" v-model="type">
-            <el-checkbox label="早餐"></el-checkbox>
-            <el-checkbox label="午餐"></el-checkbox>
-            <el-checkbox label="晚餐"></el-checkbox>
-            <el-checkbox label="其他"></el-checkbox>
+            <el-checkbox label="isBreakfast">早餐</el-checkbox>
+            <el-checkbox label="isLunch">午餐</el-checkbox>
+            <el-checkbox label="isDinner">晚餐</el-checkbox>
+            <el-checkbox label="isOther">其他</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
       </div>
       <div class="cooking-me">
         <el-form-item label="烹饪方法：">
-          <el-input type="textarea" :rows="4" maxlength="300" show-word-limit />
+          <el-input
+            type="textarea"
+            v-model="method"
+            :rows="4"
+            maxlength="300"
+            show-word-limit
+          />
         </el-form-item>
       </div>
     </el-form>
@@ -53,23 +83,16 @@
     >
       <el-table-column
         align="center"
-        prop="title"
+        prop="dietIngredientName"
         label="原料名称"
-        show-overflow-tooltip
       ></el-table-column>
-      <el-table-column
-        align="center"
-        prop="title2"
-        label="重量(g)"
-        show-overflow-tooltip
-      >
+      <el-table-column align="center" prop="weight" label="重量(g)">
         <template slot-scope="scope">
-          <span v-show="scope.$index !== editIndex">{{
-            scope.row.title2
-          }}</span>
+          <span v-if="scope.$index !== editIndex">{{ scope.row.weight }}</span>
           <el-input
-            v-show="scope.$index === editIndex"
-            v-model="scope.row.title2"
+            v-else
+            v-model="scope.row.weight"
+            type="text"
             placeholder="请输入"
           ></el-input>
         </template>
@@ -89,17 +112,24 @@
               src="@/assets/images/diet/table_edit_success_icon.png"
               alt=""
             />
-            <img src="@/assets/images/diet/icon_del.png" alt="" />
+            <img
+              @click="remove(scope.$index)"
+              src="@/assets/images/diet/icon_del.png"
+              alt=""
+            />
           </div>
         </template>
       </el-table-column>
     </el-table>
     <div class="form-buttons">
       <el-button size="small" class="cancelBtn" @click="back"> 返回 </el-button>
-      <el-button size="small" class="sureBtn" type="primary">保存</el-button>
+      <el-button size="small" class="sureBtn" @click="submit" type="primary"
+        >保存</el-button
+      >
     </div>
     <el-dish-raw-material
       :visible.sync="isShowDishRawMaterial"
+      @change="handleDishRawMaterialSelect"
     ></el-dish-raw-material>
   </div>
 </template>
@@ -108,6 +138,12 @@ import elDishSelect from './el_modal/el_dish_selecet.vue';
 import elDishRawMaterial from './el_modal/el_dish_raw_material.vue';
 export default {
   name: 'diet_dish_form',
+  props: {
+    id: {
+      type: String,
+      default: '',
+    },
+  },
   components: {
     elDishSelect,
     elDishRawMaterial,
@@ -117,13 +153,98 @@ export default {
       isShowDishSelect: false,
       isShowDishRawMaterial: false,
       editIndex: -1,
-      query: '',
-      type: '',
-      tableData: [{ title: '小麦粉', title2: '12', isEdit: false }],
+      type: [],
+      tableData: [],
+      method: '',
+      names: '',
+      ruleForms: {
+        name: '',
+        dietSortIds: [],
+      },
+      rules: {
+        name: [
+          { required: true, message: '请输入菜品名称', trigger: 'change' },
+        ],
+        dietSortIds: [
+          {
+            type: 'array',
+            required: true,
+            message: '请至少选择一个分类',
+            trigger: 'change',
+          },
+        ],
+      },
     };
   },
+  created() {
+    if (this.id) {
+      this.loadData();
+    }
+  },
   methods: {
-    search() {},
+    loadData() {
+      this.$api.dietFinishedDishInterface
+        .getDietFinishedDishDetail(this.id)
+        .then((res) => {
+          const {
+            id,
+            name,
+            method,
+            caiIngredientDtos,
+            caiSortDtos: dietSortIds,
+            ...others
+          } = res.data.data;
+          console.log(id);
+          const sortIds = dietSortIds.map(item => item.dietSortId);
+          this.tableData = caiIngredientDtos;
+          this.ruleForms = { name, dietSortIds: sortIds };
+          this.method = method;
+          this.type = Object.entries(others).reduce((obj, [key, value]) => {
+            if (value === 1 || value === '1') {
+              obj.push(key);
+            }
+            return obj;
+          }, []);
+        });
+    },
+    remove(index) {
+      this.tableData.splice(index, 1);
+    },
+    handleDishSelect(ids, names) {
+      this.names = names.join(',');
+      this.ruleForms.dietSortIds = ids;
+    },
+    handleDishRawMaterialSelect(items) {
+      this.tableData = [...items].map(item => ({
+        weight: '0',
+        dietIngredientId: item.id,
+        dietIngredientName: item.names,
+      }));
+    },
+    submit() {
+      this.$refs.dietFinishedDishForm.validate((e) => {
+        if (!e) return;
+        const types = this.type;
+        const meals = ['isBreakfast', 'isLunch', 'isDinner', 'isOther'];
+        const mealsObj = meals.reduce((obj, item) => {
+          obj[item] = types.includes(item) ? 1 : 2;
+          return obj;
+        }, {});
+        this.$api.dietFinishedDishInterface
+          .saveDietFinishedDish({
+            id: this.id,
+            method: this.method,
+            ingredientSaveRequests: this.tableData,
+            ...this.ruleForms,
+            ...mealsObj,
+          })
+          .then(() => {
+            this.$message.success('操作成功!');
+            this.$parent.search();
+            this.back();
+          });
+      });
+    },
     back() {
       this.$parent.viewIndex = 1;
     },

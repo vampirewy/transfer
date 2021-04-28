@@ -36,18 +36,6 @@
                     <el-option label="加餐" value="isOther"></el-option>
                   </el-select>
                 </div>
-                <div>
-                  <span class="label">菜品分类：</span>
-                  <el-select
-                    v-model="query.method"
-                    placeholder="选择"
-                    clearable
-                    style="width: 150px"
-                  >
-                    <el-option label="男" :value="1"></el-option>
-                    <el-option label="女" :value="0"></el-option>
-                  </el-select>
-                </div>
               </div>
               <div class="searchRight">
                 <div class="buttones">
@@ -69,26 +57,23 @@
         <div class="left">
           <el-tabs stretch type="border-card" value="1">
             <el-tab-pane label="成品菜菜单" name="1">
-              <el-collapse>
-                <el-collapse-item title="中国菜" name="1">
+              <el-collapse accordion @change="handleMenuChange">
+                <el-collapse-item
+                  v-for="(item, index) in menuList"
+                  :key="item.id"
+                  :title="item.name"
+                  :name="item.id + '-' + index"
+                >
                   <ul class="food-type-list">
-                    <li class="food-type-item is_active">心调养食谱</li>
-                    <li class="food-type-item">心调养食谱</li>
-                    <li class="food-type-item">心调养食谱</li>
-                  </ul>
-                </el-collapse-item>
-                <el-collapse-item title="中国菜" name="2">
-                  <ul class="food-type-list">
-                    <li class="food-type-item">心调养食谱</li>
-                    <li class="food-type-item">心调养食谱</li>
-                    <li class="food-type-item">心调养食谱</li>
-                  </ul>
-                </el-collapse-item>
-                <el-collapse-item title="中国菜" name="3">
-                  <ul class="food-type-list">
-                    <li class="food-type-item">心调养食谱</li>
-                    <li class="food-type-item">心调养食谱</li>
-                    <li class="food-type-item">心调养食谱</li>
+                    <li
+                      v-for="it in item.dietSortDtos"
+                      @click="selectMenu(item.id, it.id)"
+                      :key="it.id"
+                      :class="{ is_active: activeMenuId === item.id + it.id }"
+                      class="food-type-item"
+                    >
+                      {{ it.name }}
+                    </li>
                   </ul>
                 </el-collapse-item>
               </el-collapse>
@@ -97,7 +82,6 @@
         </div>
         <div class="right">
           <div class="divRightTitleDiv">
-            <!-- <div class="divRightTitle"><span>|</span>客户池</div> -->
             <div>
               <el-button
                 class="btn-new btnAdd"
@@ -139,7 +123,7 @@
                 <el-button
                   type="text"
                   size="small"
-                  v-if="getAccess('staff_list_edit')"
+                  @click="edit(scope.row.id)"
                   >编辑</el-button
                 >
                 <el-button
@@ -156,7 +140,7 @@
             layout="prev, pager, next, jumper, total, sizes"
             :total="total"
             :page-sizes="[15]"
-            :current-page="currentPage"
+            :current-page.sync="currentPage"
             :page-size="pageSize"
             @current-change="loadData"
           ></el-pagination>
@@ -164,7 +148,7 @@
       </div>
     </template>
     <template v-else>
-      <diet-dish-form></diet-dish-form>
+      <diet-dish-form :id="id"></diet-dish-form>
     </template>
   </div>
 </template>
@@ -178,33 +162,44 @@ export default {
   },
   data() {
     return {
+      id: '',
+      isShowDishSelect: false,
       viewIndex: 1,
       currentPage: 1,
       pageSize: 15,
       tableData: [],
       total: 0,
+      menuList: [],
+      activeMenuId: '',
       query: {
         name: '',
         meals: [],
-        method: '',
+        dietSortId: '',
       },
     };
   },
   created() {
     this.loadData();
+    this.loadCaiCategory(1);
   },
   methods: {
     add() {
+      this.id = '';
+      this.viewIndex = 2;
+    },
+    edit(id) {
+      this.id = id;
       this.viewIndex = 2;
     },
     deletes() {
       const ids = JSON.stringify(
-        this.$refs.dietFinishedDish.selection.map(item => (item.id)),
+        this.$refs.dietFinishedDish.selection.map(item => item.id),
       );
       this.$api.dietFinishedDishInterface
         .deleteDietFinishedDish(ids)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
+          this.$message.success('删除成功!');
+          this.loadData();
         });
     },
     search() {
@@ -220,20 +215,49 @@ export default {
       this.currentPage = 1;
       this.loadData();
     },
-    upMore() {},
+    selectMenu(id, id2) {
+      this.activeMenuId = id + id2;
+      this.currentPage = 1;
+      this.query.dietSortId = id2;
+      this.loadData();
+    },
+    handleMenuChange(e) {
+      const [id, index] = e.split('-');
+      this.loadCaiCategory(2, id, index);
+    },
+    loadCaiCategory(lv, parentId = 0, index) {
+      if (index && this.menuList[index].dietSortDtos.length > 0) return;
+      this.$api.dietFinishedDishInterface
+        .getCaiCategory({
+          lv,
+          parentId,
+        })
+        .then((res) => {
+          const { data } = res.data.data;
+          if (lv === 1) {
+            this.menuList = data.map((item) => {
+              item.dietSortDtos = [];
+              return item;
+            });
+          } else {
+            this.menuList[index].dietSortDtos = data;
+            console.log(this.menuList[index]);
+          }
+        });
+    },
     loadData() {
-      const { name, method, meals } = this.query;
+      const { name, dietSortId, meals } = this.query;
       const len = meals.length;
       const m = ['isBreakfast', 'isLunch', 'isDinner', 'isOther'];
       const mObj = m.reduce((obj, item) => {
-        if (len === 0) obj[item] = '1';
-        else obj[item] = meals.includes(item) ? '1' : '2';
+        if (len === 0) obj[item] = '';
+        else obj[item] = meals.includes(item) ? '1' : '';
         return obj;
       }, {});
       this.$api.dietFinishedDishInterface
         .getDietFinishedDishList({
           name,
-          method,
+          dietSortId,
           pageNo: this.currentPage,
           pageSize: this.pageSize,
           ...mObj,
@@ -262,12 +286,12 @@ export default {
 <style lang="scss" scoped>
 @import '../diet_programme/tabs_cus.scss';
 .el-tabs {
-    /deep/ .el-tabs__item {
-      &.is-active {
-        color: #333333 !important;
-        background-color: #DDE0E6 !important;
-      }
+  /deep/ .el-tabs__item {
+    &.is-active {
+      color: #333333 !important;
+      background-color: #dde0e6 !important;
     }
+  }
 }
 .search-title {
   height: 22px;
@@ -322,5 +346,13 @@ export default {
 }
 .el-pagination {
   margin-top: 20px;
+}
+.mask {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
 }
 </style>
