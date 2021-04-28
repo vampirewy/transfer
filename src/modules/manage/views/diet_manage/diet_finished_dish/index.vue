@@ -210,8 +210,9 @@ export default {
       this.query = {
         name: '',
         meals: [],
-        method: '',
+        dietSortId: '',
       };
+      this.activeMenuId = '';
       this.currentPage = 1;
       this.loadData();
     },
