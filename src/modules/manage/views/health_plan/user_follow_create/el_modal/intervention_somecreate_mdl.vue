@@ -2,7 +2,8 @@
   <div class="tableTopDoDiv"
        style="display: block;border-right: 1px dashed #DDE0E6;padding-right: 20px">
     <div class="divRightTitleDiv">
-      <div class="divRightTitle" style="margin-top: 15px;margin-bottom: 10px">选择模板</div>
+      <div class="divRightTitle" style="margin-top: 15px;margin-bottom: 10px">选择模板
+        <div class="titleBiao"></div></div>
     </div>
     <div class="bottom">
       <div class="action">
@@ -46,7 +47,8 @@
     </div>
     <div class="divRightTitleDiv">
       <div class="divRightTitle" style="margin-top: -10px">
-        已选客户（<span style="margin-right: 0">{{tableData.length}}人</span>）</div>
+        已选客户（<span style="margin-right: 0">{{tableData.length}}人</span>）
+        <div class="titleBiao"></div></div>
     </div>
     <div class="follow-plan">
       <el-table :data="tableData" style="width: 100%" align="center">
@@ -57,7 +59,7 @@
                 show-overflow-tooltip
         >
           <template slot-scope="scope">
-            <span>{{ scope.row.clientName | getResult }}</span>
+            <span>{{ scope.row.name | getResult }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="gender" label="性别" width="60px">
@@ -82,7 +84,7 @@
         </el-table-column>
         <el-table-column prop="noExecuteCount" label="计划剩余条数" width="120" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{ scope.row.noExecuteCount | getResult }}</span>
+            <span>{{ scope.row.unExecutePlanTotal | getResult }}</span>
           </template>
         </el-table-column>
       </el-table>

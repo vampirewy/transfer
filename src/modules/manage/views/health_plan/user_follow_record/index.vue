@@ -71,24 +71,24 @@
         <div>
           <span>依从度：</span>
           <el-select
-                  v-model="form.yicong"
+                  v-model="form.assortLevel"
                   placeholder="请选择"
                   style="width: 140px"
                   clearable
           >
-            <el-option :label="item.name" :value="item.paramValue" v-for="item in yicongList"
+            <el-option :label="item.name" :value="item.paramValue" v-for="item in assortLevelList"
                        :key="item.paramValue"></el-option>
           </el-select>
         </div>
         <div>
           <span>满意度：</span>
           <el-select
-                  v-model="form.manyi"
+                  v-model="form.pleasedLevel"
                   placeholder="请选择"
                   style="width: 140px"
                   clearable
           >
-            <el-option :label="item.name" :value="item.paramValue" v-for="item in manyiList"
+            <el-option :label="item.name" :value="item.paramValue" v-for="item in pleasedLevelList"
                        :key="item.paramValue"></el-option>
           </el-select>
         </div>
@@ -143,9 +143,9 @@
           <span>{{ scope.row.gridName | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="executePlanUserName" label="干预人" show-overflow-tooltip>
+            <el-table-column prop="executeUserName" label="干预人" show-overflow-tooltip>
               <template slot-scope="scope">
-                <span>{{ scope.row.executePlanUserName | getResult}}</span>
+                <span>{{ scope.row.executeUserName | getResult}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="executePlanWayName" label="随访形式" show-overflow-tooltip>
@@ -157,30 +157,20 @@
               <template slot-scope="scope">
           <span>{{ scope.row.executePlanTitle | getResult}}</span>
               </template>
-            </el-table-column>
-           <!-- <el-table-column prop="planUserName" label="随访结果" show-overflow-tooltip>
-              <template slot-scope="scope">
-          <span>{{ scope.row.executePlanContent | getResult}}</span>
-              </template>
-            </el-table-column>-->
+           </el-table-column>
             <el-table-column prop="executeTime" label="执行日期" width="100px" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>{{ scope.row.executeTime | getResultDate }}</span>
               </template>
             </el-table-column>
-            <!--<el-table-column prop="templateQuestionName" label="随访问卷" show-overflow-tooltip>
+            <el-table-column prop="assortLevelName" label="依从度" show-overflow-tooltip>
               <template slot-scope="scope">
-                <span>{{ scope.row.templateQuestionName | getResult}}</span>
-              </template>
-            </el-table-column>-->
-            <el-table-column prop="templateQuestionName" label="*依从度" show-overflow-tooltip>
-              <template slot-scope="scope">
-                <span>{{ scope.row.templateQuestionName | getResult}}</span>
+                <span>{{ scope.row.assortLevelName | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="templateQuestionName" label="*满意度" show-overflow-tooltip>
+            <el-table-column prop="pleasedLevelName" label="满意度" show-overflow-tooltip>
               <template slot-scope="scope">
-                <span>{{ scope.row.templateQuestionName | getResult}}</span>
+                <span>{{ scope.row.pleasedLevelName | getResult}}</span>
               </template>
             </el-table-column>
             <el-table-column label="操作" width="100">
@@ -237,8 +227,8 @@ export default {
         endTime: '',
         executeState: '1', // 状态
         gridId: '', // 客户类型
-        yicong: '',
-        manyi: '',
+        assortLevel: '',
+        pleasedLevel: '',
         genderList,
         executeStateList,
       },
@@ -246,8 +236,8 @@ export default {
       planuserModalVisible: false, // 干预人人列表弹窗
       gridList: [], // 人员类别下拉框
       planWayList: [], // 随访形式下拉框
-      yicongList: [],
-      manyiList: [],
+      assortLevelList: [], // 依从度
+      pleasedLevelList: [], // 满意度
       table: {
         list: [],
         totalCount: 0,
@@ -304,20 +294,22 @@ export default {
      */
     async getList() {
       const reqBody = {
-        planWay: this.form.planWay,
-        executeState: this.form.executeState,
+        /* executeState: this.form.executeState,
         workbenchSort: 'workbenchSort',
-        gender: this.form.gender,
         startTime: this.form.startTime,
-        endTime: this.form.endTime,
-        gridId: this.form.gridId,
-        executePlanUserId: this.form.planUserId,
+        endTime: this.form.endTime,*/
         keywords: this.form.keywords,
-        workUnitName: this.form.workUnitName,
+        gridId: this.form.gridId,
+        gender: this.form.gender,
+        executePlanWay: this.form.planWay,
+        pleasedLevel: this.form.pleasedLevel,
+        assortLevel: this.form.assortLevel,
+        /* executePlanUserId: this.form.planUserId,
+        workUnitName: this.form.workUnitName,*/
         pageNo: this.table.currentPage,
         pageSize: this.table.pageSize,
       };
-      const res = await this.$api.userFollowInterface.getIntervenePlanListPage(
+      const res = await this.$api.userFollowInterface.getInterveneRecordListPage(
         reqBody,
       );
       const { data } = res.data;
@@ -351,12 +343,12 @@ export default {
     async getSystemParamByYicong(code) {
       const res = await this.$api.userManagerInterface.getSystemParamByCode(code);
       const { data } = res.data;
-      this.yicongList = data;
+      this.assortLevelList = data;
     },
     async getSystemParamByCodeManyi(code) {
       const res = await this.$api.userManagerInterface.getSystemParamByCode(code);
       const { data } = res.data;
-      this.manyiList = data;
+      this.pleasedLevelList = data;
     },
     /**
      * 批量删除

@@ -3,7 +3,8 @@
     <el-row>
       <el-col :span="24" style="border-right: 1px dashed #DDE0E6;">
         <div class="divRightTitleDiv">
-          <div class="divRightTitle" style="margin-top: 5px">查看-随访计划信息</div>
+          <div class="divRightTitle" style="margin-top: 5px">查看-随访计划信息
+            <div class="titleBiao"></div></div>
         </div>
         <div class="ge">
           <el-form :inline="false" :model="formGet"
@@ -40,7 +41,8 @@
             </el-row>
           </el-form>
           <div class="divRightTitleDiv">
-            <div class="divRightTitle" style="margin-top: 5px">随访记录信息</div>
+            <div class="divRightTitle" style="margin-top: 5px">随访记录信息
+              <div class="titleBiao"></div></div>
           </div>
           <el-form :inline="false" :model="form"
                    label-width="85px"
@@ -78,7 +80,8 @@
             </el-row>
           </el-form>
           <div class="divRightTitleDiv" v-if="form.templateQuestionId">
-            <div class="divRightTitle" style="margin-top: 5px">随访问卷</div>
+            <div class="divRightTitle" style="margin-top: 5px">随访问卷
+              <div class="titleBiao"></div></div>
           </div>
          <!-- <el-form :inline="false" :model="form"
                    label-width="85px"

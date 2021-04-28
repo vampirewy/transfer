@@ -757,6 +757,7 @@ export default {
         });
         return;
       }
+      // this.multipleSelection[0].clientId = '1379239122384576513';
       this.$store.commit('intervention/SET_USERCHECK_LIST', this.multipleSelection);
       this.$store.dispatch('intervention/setTplList', []);
       this.$router.push({ // 1 单个

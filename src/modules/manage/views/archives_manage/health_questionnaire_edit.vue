@@ -28,7 +28,7 @@
     <div class="health_questionnaire_form" :class="{ 'isFixedForm': searchBarFixed === true }"
          :style="{'padding-top': contentPaddingTop + 'px'}">
       <div class="divRightTitleDiv">
-        <div class="divRightTitle">{{title}}问卷-基本信息</div>
+        <div class="divRightTitle">{{title}}问卷-基本信息<div class="titleBiao"></div></div>
       </div>
     <client-info :id="$route.params.id" :propsData="formData"
                  @change="data => formData.clientId = data"></client-info>
