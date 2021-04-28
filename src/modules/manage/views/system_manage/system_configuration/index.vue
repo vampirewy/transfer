@@ -21,7 +21,7 @@
             ? '基本设置'
             : Tabactive == '1'
             ? '评估设置'
-            : '报告配置'
+            : '个报配置'
         }}
       </div>
     </div>
@@ -113,6 +113,7 @@
               <el-input
                 type="textarea"
                 :rows="3"
+                v-model="text"
                 placeholder="请输入"
                 :maxlength="300"
                 show-word-limit
@@ -229,7 +230,7 @@
         @current-change="handleCurrentChange"
       ></el-pagination>
     </template>
-    <template v-if="viewIndex === 2">
+    <template v-if="Tabactive === 2">
       <staff-form
         :roleOptions="roleOptions"
         :detail="viewIndex === 4"
@@ -258,6 +259,7 @@ export default {
   },
   data() {
     return {
+      text: '',
       checkedCities: ['星期一', '星期二'],
       cities: cityOptions,
       tabbor: ['基本设置', '评估设置', '报告配置'],
