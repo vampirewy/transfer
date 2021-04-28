@@ -13,49 +13,49 @@
         <div class="container" :class="{'containerOtherCheckBox': $route.params.qusType !== 1}">
           <div>
             <el-row class="health_questionnaire_formQus">
-              <el-col :span="24" :id="'questionitem-' + item.id"
-                v-for="(item, index) in questionSubjectist" :key="item.id">
+              <el-col :span="24" :id="'questionitem-' + item.subjectId"
+                v-for="(item, index) in questionSubjectist" :key="item.subjectId">
                 <el-form-item
-                        :key="item.id"
+                        :key="item.subjectId"
                         :label="`${index + 1}. ${item.name} (单选)`"
                         v-if="item.subjectType === 1"
                 >
                   <el-radio-group
-                          v-if="answerMap[item.id]"
-                          v-model="answerMap[item.id][0].optionId"
+                          v-if="answerMap[item.subjectId]"
+                          v-model="answerMap[item.subjectId][0].optionId"
                           size="small"
                           @change="row => onAnswerChange(item, row)"
                           :disabled="item.disabled">
                     <el-radio-button
-                            v-for="val in item.questionSubjectOptionList"
-                            :label="val.id"
-                            :value="val.id"
-                            :key="val.id">
+                            v-for="val in item.optionDTOList"
+                            :label="val.optionId"
+                            :value="val.optionId"
+                            :key="val.optionId">
                       {{ val.name }}
                     </el-radio-button>
                   </el-radio-group>
                 </el-form-item>
-                <el-form-item :key="item.id"
+                <el-form-item :key="item.subjectId"
                               :label="`${index + 1}. ${item.name} (多选)`"
                               v-else-if="item.subjectType === 2">
-                  <el-checkbox-group v-model="answerMap[item.id]" size="small"
+                  <el-checkbox-group v-model="answerMap[item.subjectId]" size="small"
                                      @change="ev => onCheckboxChange(item, ev)">
                     <el-checkbox-button
-                            v-for="val in item.questionSubjectOptionList"
-                            :label="val.id"
-                            :key="val.id"
+                            v-for="val in item.optionDTOList"
+                            :label="val.optionId"
+                            :key="val.optionId"
                             :disabled="val.disabled">
                       {{ val.name }}
                     </el-checkbox-button>
                   </el-checkbox-group>
                 </el-form-item>
-                <el-form-item :key="item.id" class="questionTextarea"
+                <el-form-item :key="item.subjectId" class="questionTextarea"
                               :label="`${index + 1}. ${item.name} (填空)`"
                               v-else-if="item.subjectType === 3">
-                  <div v-for="val in item.questionSubjectOptionList" :key="val.id"
+                  <div v-for="val in item.optionDTOList" :key="val.optionId"
                        style="width: 100%;display: flex;margin-bottom: 20px;">
                     <span style="display: inline-block;width: 85px;">填写答案：</span>
-                    <el-input v-model.trim="answerMap[item.id][0].optionCode"
+                    <el-input v-model.trim="answerMap[item.subjectId][0].optionCode"
                               type="textarea"
                               :rows="5"
                               :maxlength="100"
@@ -160,21 +160,21 @@ export default {
       }
     },
     onCheckboxChange(row, checkedList = []) {
-      const optionList = row.questionSubjectOptionList;
+      const optionList = row.optionDTOList;
       const no = optionList.find(val => val.code === 'n');
       if (no) {
-        const item = checkedList.find(val => val === no.id);
+        const item = checkedList.find(val => val === no.optionId);
         if (item) {
           optionList
             .filter(val => val !== no)
             .forEach(val => this.$set(val, 'disabled', true));
-          this.answerMap[row.id] = [item];
+          this.answerMap[row.subjectId] = [item];
         } else {
           optionList.forEach(val => this.$set(val, 'disabled', false));
         }
       }
     },
-    onReasonChange(id) {
+    /* onReasonChange(id) {
       const row = this.answerOptionsList.find(val => val.id === id);
       const answerIndex = this.questions.findIndex(
         val => val.id === row.subjectId,
@@ -185,7 +185,7 @@ export default {
         subjectCode: row.subjectCode,
         subjectId: row.subjectId,
       });
-    },
+    },*/
     /* fetch(id, questionType) {
       this.$api.health.getDetail(id).then(({ data }) => {
         if (data.code === 200) {
@@ -227,7 +227,7 @@ export default {
       this.$set(this, 'answerMap', map);
       // this.setChooseNoSubject();
     },
-    setChooseNoSubject() {
+    /* setChooseNoSubject() {
       this.questions.forEach((val) => {
         val.questionSubjectDTOList.forEach((valOptions) => {
           if (this.chooseNoSubject.indexOf(valOptions.code) !== -1) { // 如果查到是之前push进选无的数组
@@ -236,23 +236,23 @@ export default {
             } if (valOptions.code === 'f01') {
               this.onAnswerChange(valOptions, '322');
             } else {
-              valOptions.questionSubjectOptionList
+              valOptions.optionDTOList
                 .filter(valItem => valItem.code !== 'n')
                 .forEach(valObj => this.$set(valObj, 'disabled', true));
             }
           } // 根据题目id找到题目再设disabled
         });
       });
-    },
+    },*/
     onTypeChange() {
       this.$set(this, 'answerOptionsList', []);
       if (this.questionSubjectist) {
         this.questionSubjectist.forEach((valOptions) => {
-          if (!this.answerMap[valOptions.id]) {
-            this.$set(this.answerMap, valOptions.id, []);
+          if (!this.answerMap[valOptions.subjectId]) {
+            this.$set(this.answerMap, valOptions.subjectId, []);
             if (valOptions.subjectType === 1) { // 1单选 2 多选 3 填空
               // 单选的话默认有一个选项
-              this.answerMap[valOptions.id].push({
+              this.answerMap[valOptions.subjectId].push({
                 optionId: '',
               });
             } else if (valOptions.subjectType === 3) { // 1单选 2 多选 3 填空
@@ -260,24 +260,24 @@ export default {
               /* this.answerMap[valOptions.id].push({
                 optionId: '',
               });*/
-              this.answerMap[valOptions.id].push({
+              this.answerMap[valOptions.subjectId].push({
                 optionCode: '',
                 subjectType: 3,
-                subjectId: valOptions.id,
+                subjectId: valOptions.subjectId,
               });
-              valOptions.questionSubjectOptionList.push({ code: '', id: '' });
+              valOptions.optionDTOList.push({ code: '', subjectId: '' });
             }
           }
           this.allQuestion.push(valOptions); // 所有题目push进一个数组，为了判断后面哪个没选过
-          valOptions.questionSubjectOptionList.forEach((item) => {
+          valOptions.optionDTOList.forEach((item) => {
             if (valOptions.subjectType === 3) {
-              this.answerOptionMap[valOptions.id] = item; // 填空没有答案id 输入题目id
+              this.answerOptionMap[valOptions.subjectId] = item; // 填空没有答案id 输入题目id
             } else {
-              this.answerOptionMap[item.id] = item; // 存入所有的答案选项，最后根据选项id取内容
+              this.answerOptionMap[item.optionId] = item; // 存入所有的答案选项，最后根据选项id取内容
             }
             // eslint-disable-next-line no-param-reassign
             item.subjectType = valOptions.subjectType;
-            item.subjectId = valOptions.id;
+            item.subjectId = valOptions.subjectId;
             item.subjectCode = valOptions.code;
           });
         });
@@ -308,7 +308,7 @@ export default {
             }
             this.formData.answerList.push({
               optionCode: row.code,
-              optionId: row.id || row.subjectId,
+              optionId: row.optionId || row.subjectId,
               subjectCode: row.subjectCode,
               subjectId: row.subjectId,
             });
@@ -324,12 +324,12 @@ export default {
       this.allQuestion.forEach((valQusOne) => {
         let same = false;
         this.formData.answerList.forEach((valAnswer) => {
-          if (valQusOne.id === valAnswer.subjectId) { // 如果有一样 就回答过了
+          if (valQusOne.subjectId === valAnswer.subjectId) { // 如果有一样 就回答过了
             same = true;
           }
         });
         if (same === false) { // 如果没有相同的则push
-          noAnswerList.push(valQusOne.id); // 把未完成的题目push进一个数组
+          noAnswerList.push(valQusOne.subjectId); // 把未完成的题目push进一个数组
         }
       });
       /* this.formData.answerList.forEach((valAnswer) => { // 选无

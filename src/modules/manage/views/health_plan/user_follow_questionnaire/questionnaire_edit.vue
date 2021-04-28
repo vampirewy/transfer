@@ -5,7 +5,7 @@
           <div class="divRightTitleDiv">
             <div class="divRightTitle">{{ routeType === 1 ? '新增-随访问卷' :
               routeType === 2 ? '编辑-随访问卷' :
-              routeType === 3 ? '查看-随访问卷' : '' }}</div>
+              routeType === 3 ? '查看-随访问卷' : '' }}<div class="titleBiao"></div></div>
           </div>
           <el-form
                   ref="form"
@@ -85,7 +85,8 @@
           </el-form>
           <div v-if="routeType !== 3">
             <div class="divRightTitleDiv">
-              <div class="divRightTitle" style="margin-top: 5px">添加问卷题目</div>
+              <div class="divRightTitle" style="margin-top: 5px">添加问卷题目
+                <div class="titleBiao"></div></div>
             </div>
             <div class="tool-button">
               <el-button
@@ -112,7 +113,7 @@
         <el-col :span="16" style="padding-left: 20px;">
           <div class="divRightTitleDiv">
             <div class="divRightTitle">{{ routeType !== 3 ? '已添加题目' :
-              routeType === 3 ? '题目' : '' }}</div>
+              routeType === 3 ? '题目' : '' }}<div class="titleBiao"></div></div>
           </div>
           <el-form
                   class="user-edit-form-questions"
