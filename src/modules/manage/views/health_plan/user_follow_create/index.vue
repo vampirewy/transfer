@@ -333,7 +333,7 @@
       >
         <template slot-scope="scope">
              <span class="clientName"
-                   @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
+                   @click="commonHref.toPersonalHealth(scope.row.id, $router)">
                {{ scope.row.name | getResult}}
              </span>
         </template>
@@ -701,10 +701,11 @@ export default {
           this.$refs.table.toggleRowExpansion(data);
         }
       });
+      console.log(row);
       if (this.expands.includes(row)) {
         this.$refs.table.toggleRowExpansion(row);
       } else {
-        this.expandData.clientId = row.clientId;
+        this.expandData.clientId = row.id;
         this.expandData.pageNo = 1;
         this.excuteType = type;
         this.getReoprtList(type).then(() => {
@@ -757,6 +758,10 @@ export default {
         });
         return;
       }
+      console.log(this.multipleSelection);
+      this.multipleSelection.forEach((val) => {
+        val.clientId = val.id;
+      });
       // this.multipleSelection[0].clientId = '1379239122384576513';
       this.$store.commit('intervention/SET_USERCHECK_LIST', this.multipleSelection);
       this.$store.dispatch('intervention/setTplList', []);
@@ -776,6 +781,9 @@ export default {
         });
         return;
       }
+      this.multipleSelectionAll.forEach((val) => {
+        val.clientId = val.id;
+      });
       this.$store.commit('intervention/SET_USERCHECK_LIST', this.multipleSelectionAll);
       this.$store.dispatch('intervention/setTplList', []);
       this.$router.push({ // 2 批量

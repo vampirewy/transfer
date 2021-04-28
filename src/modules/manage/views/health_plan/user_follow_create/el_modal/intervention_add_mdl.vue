@@ -208,7 +208,7 @@ export default {
           const { data } = res.data;
           console.log(data);
           this.form.templateQuestionId = data.templateQuestionId;
-          this.form.templateQuestionName = data.batchTemplateQuestionDTO.name;
+          this.form.templateQuestionName = data.templateQuestionName;
         }
       });
     },

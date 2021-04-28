@@ -311,7 +311,7 @@ export default {
         this.form.planContent = data.executePlanContent;
       }
       this.form.templateQuestionId = data.templateQuestionId;
-      this.form.templateQuestionName = data.batchTemplateQuestionDTO ? data.batchTemplateQuestionDTO.name : '';
+      this.form.templateQuestionName = data.templateQuestionName;
       this.form.batchNo = data.batchTemplateQuestionDTO ? data.batchTemplateQuestionDTO.batchNo : '';
       /* this.questionSubjectist = data.batchTemplateQuestionDTO ?
         data.batchTemplateQuestionDTO.questionSubjectist : [];*/
