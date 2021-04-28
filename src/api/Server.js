@@ -39,11 +39,10 @@ import doctormoney from './doctor_client_management/DoctorMoney';
 import ServiceManagerInterface from './service_manager/ServiceManagerInterface';
 import statics from './statistics/Statics';
 import serviceItemsInterface from './service_items_manage/ServiceItemsInterface';
-import dietManageInterface from './diet_manage/DietManageInterface';
+import dietProgrammeInterface from './diet_manage/DietProgrammeInterface';
 import dietFinishedDishInterface from './diet_manage/DietFinishedDishInterface';
 import dietRawMaterial from './diet_manage/DietRawMaterial';
-
-
+import dietMenuTemplateInterface from './diet_manage/DietMenuTemplateInterface';
 export default {
   loginInterface,
   systemManageInterface,
@@ -77,7 +76,8 @@ export default {
   ServiceManagerInterface,
   statics,
   serviceItemsInterface,
-  dietManageInterface,
+  dietProgrammeInterface,
   dietFinishedDishInterface,
   dietRawMaterial,
+  dietMenuTemplateInterface,
 };

@@ -28,8 +28,12 @@
                     clearable
                     style="width: 139px"
                   >
-                    <el-option label="男" :value="1"></el-option>
-                    <el-option label="女" :value="0"></el-option>
+                    <el-option
+                      v-for="item in cateData"
+                      :key="item.paramValue"
+                      :label="item.name"
+                      :value="item.paramValue"
+                    ></el-option>
                   </el-select>
                 </div>
               </div>
@@ -91,8 +95,10 @@
           <el-table-column prop="cho" label="碳水化合物 (g)"> </el-table-column>
           <el-table-column prop="id" label="操作" width="160px">
             <template slot-scope="scope">
-              <el-button type="text" size="small" @click="edit(scope.row.id)">编辑</el-button>
-              <el-button type="text" size="small" @click="look">查看</el-button>
+              <el-button type="text" size="small" @click="edit(scope.row.id)"
+                >编辑</el-button
+              >
+              <el-button type="text" size="small" @click="look(scope.row.id)">查看</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -101,7 +107,7 @@
           layout="prev, pager, next, jumper, total, sizes"
           :total="total"
           :page-sizes="[15]"
-          :current-page="currentPage"
+          :current-page.sync="currentPage"
           :page-size="pageSize"
           @current-change="loadData"
         ></el-pagination>
@@ -126,6 +132,7 @@ export default {
       currentPage: 1,
       pageSize: 15,
       tableData: [],
+      cateData: [],
       total: 0,
       roleOptions: '',
       role: '',
@@ -140,17 +147,20 @@ export default {
   },
   created() {
     this.loadData();
+    this.loadCateData();
   },
   methods: {
     add() {
       this.type = 'add';
       this.viewIndex = 2;
     },
-    look() {
+    look(id) {
+      this.id = id;
       this.type = 'edit';
       this.viewIndex = 2;
     },
     edit(id) {
+      this.type = 'add';
       this.id = id;
       this.viewIndex = 2;
     },
@@ -159,6 +169,7 @@ export default {
         this.$refs.dietRawMaterial.selection.map(item => item.id),
       );
       this.$api.dietRawMaterial.deleteDietIngredient(ids).then(() => {
+        this.$message.success('删除成功!');
         this.loadData();
       });
     },
@@ -173,6 +184,13 @@ export default {
       };
       this.currentPage = 1;
       this.loadData();
+    },
+    loadCateData() {
+      this.$api.dietRawMaterial
+        .getDietIngredientCategory('DP001')
+        .then((res) => {
+          this.cateData = res.data.data;
+        });
     },
     loadData() {
       this.$api.dietRawMaterial
