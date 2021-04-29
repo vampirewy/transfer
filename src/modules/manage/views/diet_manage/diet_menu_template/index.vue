@@ -11,7 +11,7 @@
             <div class="searchCondition">
               <div class="searchLeft">
                 <div class="searchInputFormItem">
-                  <el-input placeholder="名称" v-model="query"> </el-input>
+                  <el-input placeholder="名称" v-model="query.name"> </el-input>
                   <span class="searchBtnImgSpan" @click="search">
                     <img
                       class="searchBtnImg"
@@ -19,29 +19,27 @@
                     />
                   </span>
                 </div>
-                <div>
-                  <span class="label">模版周期：</span>
-                  <el-select
-                    v-model="status"
-                    placeholder="请选择"
-                    clearable
-                    style="width: 139px"
-                  >
-                    <el-option label="男" :value="1"></el-option>
-                    <el-option label="女" :value="0"></el-option>
-                  </el-select>
+                <div style="display: flex; align-items: center">
+                  <span class="label" style="width: 100px">模版周期：</span>
+                  <el-input clearable placeholder="请填写" v-model="query.day">
+                  </el-input>
                 </div>
-                <div>
+                <div style="position: relative">
                   <span class="label">模版分类：</span>
                   <el-select
-                    v-model="status"
                     placeholder="请选择"
+                    :value="menuTypeSelectName"
                     clearable
                     style="width: 139px"
                   >
-                    <el-option label="男" :value="1"></el-option>
-                    <el-option label="女" :value="0"></el-option>
                   </el-select>
+                  <div
+                    class="mask"
+                    @click="
+                      menuType = 1;
+                      isShowDietMenuTemplateType = true;
+                    "
+                  ></div>
                 </div>
               </div>
               <div class="searchRight">
@@ -75,6 +73,7 @@
               class="btn-new btnAdd"
               size="small"
               style="margin: 16px 0"
+              @click="deletes"
               ><img src="@/assets/images/common/delBtn.png" />删除</el-button
             >
             <el-button
@@ -88,27 +87,26 @@
             >
           </div>
         </div>
-        <el-table :data="tableData" align="center">
+        <el-table ref="dietMenuTemplate" :data="tableData" align="center">
           <el-table-column type="selection" width="55"> </el-table-column>
           <el-table-column
-            prop="realName"
+            prop="name"
             label="模版名称"
             show-overflow-tooltip
           ></el-table-column>
+          <el-table-column label="参考范围" show-overflow-tooltip>
+            <template slot-scope="scope">
+              {{ scope.row.minKcal }} ~ {{ scope.row.maxKcal }}
+            </template>
+          </el-table-column>
           <el-table-column
-            prop="mobileNo"
-            label="参考范围"
-            show-overflow-tooltip
-          ></el-table-column>
-          <el-table-column
-            prop="roleName"
+            prop="dietTemplateSortName"
             label="分类"
             show-overflow-tooltip
           ></el-table-column>
-          <el-table-column prop="activated" label="模版周期 (天)">
-          </el-table-column>
-          <el-table-column prop="activated" label="介绍"> </el-table-column>
-          <el-table-column prop="id" label="操作" width="160px">
+          <el-table-column prop="day" label="模版周期 (天)"> </el-table-column>
+          <el-table-column prop="intro" label="介绍"> </el-table-column>
+          <el-table-column label="操作" width="160px">
             <template slot-scope="scope">
               <el-button type="text" size="small">编辑</el-button>
               <el-button type="text" size="small" @click="config"
@@ -122,16 +120,18 @@
           layout="prev, pager, next, jumper, total, sizes"
           :total="total"
           :page-sizes="[15]"
-          :current-page="currentPage"
+          :current-page.sync="currentPage"
           :page-size="pageSize"
-          @current-change="handleCurrentChange"
+          @current-change="loadData"
         ></el-pagination>
       </div>
       <el-menu-template
+        ref="elMenuTemplate"
         :visible.sync="isShowDietMenuTemplate"
       ></el-menu-template>
       <el-menu-template-type
         :visible.sync="isShowDietMenuTemplateType"
+        @change="handleDietMenuTypeChange"
       ></el-menu-template-type>
     </template>
     <template v-else>
@@ -158,16 +158,21 @@ export default {
       isShowDietMenuTemplateType: false,
       currentPage: 1,
       pageSize: 15,
-      tableData: [{ realName: '苹果' }],
+      tableData: [],
+      cateData: [],
       total: 0,
-      roleOptions: '',
-      role: '',
-      status: '',
-      query: '',
+      menuTypeSelectName: '',
+      query: {
+        name: '',
+        day: '',
+        dietTemplateSortId: '',
+      },
     };
   },
+  created() {
+    this.loadData();
+  },
   methods: {
-    handleCurrentChange() {},
     add() {
       this.isShowDietMenuTemplate = true;
     },
@@ -177,9 +182,47 @@ export default {
     config() {
       this.viewIndex = 2;
     },
+    handleDietMenuTypeChange(e) {
+      if (this.menuType === 1) {
+        this.menuTypeSelectName = e[0];
+      } else {
+        this.$refs.elMenuTemplate.menuTypeSelectName = e[0];
+      }
+    },
+    deletes() {
+      const ids = JSON.stringify(
+        this.$refs.dietMenuTemplate.selection.map(item => item.id),
+      );
+      this.$api.dietMenuTemplateInterface
+        .deleteDietMenuTemplate(ids)
+        .then(() => {
+          this.$message.success('删除成功!');
+          this.loadData();
+        });
+    },
+    loadData() {
+      this.$api.dietMenuTemplateInterface
+        .getDietMenuTemplate({
+          pageNo: this.currentPage,
+          pageSize: this.pageSize,
+          ...this.query,
+        })
+        .then((res) => {
+          const { total, data } = res.data.data;
+          this.total = total;
+          this.tableData = data;
+        });
+    },
     look() {},
-    search() {},
-    reset() {},
+    search() {
+      this.currentPage = 1;
+      this.loadData();
+    },
+    reset() {
+      this.query = { name: '', query: '', dietTemplateSortId: '' };
+      this.currentPage = 1;
+      this.loadData();
+    },
     upMore() {},
   },
 };
@@ -234,5 +277,13 @@ export default {
 }
 .btnEdit {
   width: 110px;
+}
+.mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
 }
 </style>

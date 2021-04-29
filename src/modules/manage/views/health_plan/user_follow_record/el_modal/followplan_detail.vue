@@ -3,7 +3,8 @@
     <el-row>
       <el-col :span="24" style="border-right: 1px dashed #DDE0E6;">
         <div class="divRightTitleDiv">
-          <div class="divRightTitle" style="margin-top: 5px">查看-随访计划信息</div>
+          <div class="divRightTitle" style="margin-top: 5px">查看-随访计划信息
+            <div class="titleBiao"></div></div>
         </div>
         <div class="ge">
           <el-form :inline="false" :model="formGet"
@@ -40,7 +41,8 @@
             </el-row>
           </el-form>
           <div class="divRightTitleDiv">
-            <div class="divRightTitle" style="margin-top: 5px">随访记录信息</div>
+            <div class="divRightTitle" style="margin-top: 5px">随访记录信息
+              <div class="titleBiao"></div></div>
           </div>
           <el-form :inline="false" :model="form"
                    label-width="85px"
@@ -78,7 +80,8 @@
             </el-row>
           </el-form>
           <div class="divRightTitleDiv" v-if="form.templateQuestionId">
-            <div class="divRightTitle" style="margin-top: 5px">随访问卷</div>
+            <div class="divRightTitle" style="margin-top: 5px">随访问卷
+              <div class="titleBiao"></div></div>
           </div>
          <!-- <el-form :inline="false" :model="form"
                    label-width="85px"
@@ -117,11 +120,18 @@
         <!--<div class="divRightTitleDiv" style="margin-left: 20px">
           <div class="divRightTitle"  style="margin-top: 5px">填写健康问卷</div>
         </div>-->
-        <div v-show="form.templateQuestionId" style="margin-left: 20px">
+        <!--<div v-show="form.templateQuestionId" style="margin-left: 20px">
           <question-edit ref="questionEdit"
                          :propsType="questionType"
                          :propsQuestionSubjectist="questionSubjectist"
                          :propsQuestionAnswerList="questionAnswerList"></question-edit>
+        </div>-->
+        <div class="questionAnswer" v-for="(itemQus) in questionAnswerList"
+             :key="itemQus.subjectName">
+          <p class="answerText">{{itemQus.subjectName}}</p>
+          <p class="questionsText">
+            {{itemQus.optionsName}}
+          </p>
         </div>
         <!--<div class="noneText" v-show="!form.templateQuestionId">
           <div class="con">
@@ -222,11 +232,10 @@ export default {
         this.form.planContent = data.executePlanContent;
       }
       this.form.templateQuestionId = data.templateQuestionId;
-      this.form.templateQuestionName = data.batchTemplateQuestionDTO ? data.batchTemplateQuestionDTO.name : '';
+      this.form.templateQuestionName = data.templateQuestionName;
       this.form.batchNo = data.batchTemplateQuestionDTO ? data.batchTemplateQuestionDTO.batchNo : '';
-      this.questionSubjectist = data.batchTemplateQuestionDTO ?
-        data.batchTemplateQuestionDTO.questionSubjectist : [];
-      this.questionAnswerList = data.questionInfoAnswerList || [];
+      this.questionSubjectist = data.templateQuestionSubjectDtoList;
+      this.questionAnswerList = data.questionAnswerDTOList || [];
       if ((this.form.templateQuestionId && this.questionAnswerList.length === 0
         && this.questionType === 3) || !this.form.templateQuestionId) { // 问卷id存在但是答案为空 则是保存过的 不填题目
         this.form.checkInput = 0; // 没填写  ，或者题目id为null 则没有题目
@@ -279,6 +288,39 @@ export default {
       .el-form-item__content{
         line-height: 30px;
       }
+    }
+  }
+  .questionAnswer{
+    margin-left: 15px;
+    .answerText{
+      font-weight: bold;
+      font-size: 14px;
+      color: #333333;
+      margin-top: 18px;
+      margin-bottom: 16px;
+      position: relative;
+      margin-left: 15px;
+      &:before{
+        content: '';
+        width: 5px;
+        height: 5px;
+        border: 1px solid #B4BBC9;
+        border-radius: 50px;
+        position: absolute;
+        left: -15px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+    .questionsText{
+      padding: 0 0 0 10px;
+      margin: 0 0 30px 0;
+      font-size: 14px;
+      color: #333333;
+      height: 48px;
+      line-height: 48px;
+      background: #F6F8FC;
+      border-radius: 8px;
     }
   }
 .create-edit /deep/ {

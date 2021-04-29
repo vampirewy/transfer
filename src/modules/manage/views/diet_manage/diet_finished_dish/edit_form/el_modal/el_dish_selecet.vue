@@ -7,17 +7,22 @@
             <div>
               <span>菜品分类：</span>
               <el-select
-                v-model="status"
+                v-model="parentId"
                 placeholder="请选择"
                 clearable
                 style="width: 139px"
               >
-                <el-option label="男" :value="1"></el-option>
-                <el-option label="女" :value="0"></el-option>
+                <el-option
+                  v-for="item in cateData"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                ></el-option>
               </el-select>
             </div>
             <div class="searchInputFormItem">
-              <el-input placeholder="输入条件搜索" v-model="query"> </el-input>
+              <el-input placeholder="输入条件搜索" v-model="query.name">
+              </el-input>
               <span class="searchBtnImgSpan" @click="search">
                 <img
                   class="searchBtnImg"
@@ -37,27 +42,32 @@
         </div>
       </div>
     </div>
-    <el-table row-class-name="table-row" :data="tableData">
+    <el-table
+      ref="elDishSelectForm"
+      row-class-name="table-row"
+      :data="tableData"
+      row-key="id"
+    >
       <el-table-column type="selection" align="center" width="55">
       </el-table-column>
-      <el-table-column align="center" prop="title" label="菜品分类">
+      <el-table-column align="center" prop="parentName" label="菜品分类">
       </el-table-column>
-      <el-table-column align="center" prop="title2" label="名称">
+      <el-table-column align="center" prop="name" label="名称">
       </el-table-column>
     </el-table>
     <el-pagination
       background
       layout="prev, pager, next, jumper, total"
       :total="total"
-      :current-page="currentPage"
+      :current-page.sync="currentPage"
       :page-size="pageSize"
-      @current-change="handleCurrentChange"
+      @current-change="loadData(2)"
     ></el-pagination>
     <div class="form-buttons">
       <el-button size="small" class="cancelBtn" @click="actives = false">
         取消
       </el-button>
-      <el-button size="small" class="sureBtn" type="primary"
+      <el-button size="small" class="sureBtn" @click="submit" type="primary"
         >确定</el-button
       >
     </div>
@@ -71,18 +81,30 @@ export default {
       type: Boolean,
       default: false,
     },
+    value: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
   },
   data() {
     return {
-      tableData: [
-        { title: 345347357, title2: '谢小妞', title3: '29', title4: '女' },
-      ],
+      tableData: [],
+      cateData: [],
       currentPage: 1,
+      parentId: '',
       total: 0,
       pageSize: 15,
       status: '',
-      query: '',
+      query: {
+        name: '',
+      },
     };
+  },
+  created() {
+    this.loadData(1);
+    this.loadData(2);
   },
   computed: {
     actives: {
@@ -95,15 +117,60 @@ export default {
     },
   },
   methods: {
-    search() {},
-    reset() {},
-    handleCurrentChange() {},
+    setSelectItem() {
+      if (this.value.length > 0) {
+        this.tableData.forEach((row) => {
+          if (this.value.includes(row.id)) {
+            this.$nextTick(() => {
+              this.$refs.elDishSelectForm.toggleRowSelection(row, true);
+            });
+          }
+        });
+      }
+    },
+    loadData(lv) {
+      const query = {
+        ...this.query,
+        pageNo: this.currentPage,
+        pageSize: this.pageSize,
+        parentId: this.parentId,
+        lv,
+      };
+      this.$api.dietFinishedDishInterface.getCaiCategory(query).then((res) => {
+        const { data, total } = res.data.data;
+        if (lv === 2) {
+          this.total = total;
+          this.tableData = data;
+          this.setSelectItem();
+        } else {
+          this.cateData = data;
+        }
+      });
+    },
+    search() {
+      this.currentPage = 1;
+      this.loadData(2);
+    },
+    reset() {
+      this.query.name = '';
+      this.currentPage = 1;
+      this.loadData(2);
+    },
+    submit() {
+      const ids = this.$refs.elDishSelectForm.selection.map(item => item.id);
+      const names = this.$refs.elDishSelectForm.selection.map(
+        item => item.name,
+      );
+      this.$emit('change', ids, names);
+      this.actives = false;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .el-dish-select_content {
+  width: 620px;
   background-color: #ffffff;
   padding: 25px 19px;
   box-shadow: 0px 0px 30px 0px rgba(151, 166, 189, 0.3);

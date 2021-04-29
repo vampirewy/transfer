@@ -15,39 +15,51 @@
     >
       <el-form-item prop="names" label="原料名称：">
         <el-input
+          v-if="type !== 'edit'"
           style="width: 189px"
           v-model="ruleForm.names"
           placeholder="请输入"
         ></el-input>
+        <span v-else>{{ ruleForm.names }}</span>
       </el-form-item>
       <el-form-item style="position: relative" label="原料分类：">
         <el-select
-          placeholder="请选择 (可多选)"
+          v-if="type !== 'edit'"
+          placeholder="请选择"
           v-model="ruleForm.foodSort"
           clearable
           style="width: 189px"
         >
-          <el-option label="男" :value="1"></el-option>
-          <el-option label="女" :value="2"></el-option>
+          <el-option
+            v-for="item in cateData"
+            :key="item.paramValue"
+            :label="item.name"
+            :value="item.paramValue"
+          ></el-option>
         </el-select>
+        <span v-else>{{ foodSortName }}</span>
         <span class="tip">营养成分：以100g可食部计算</span>
       </el-form-item>
       <div>
         <el-form-item prop="otherName" label="别名：">
           <el-input
+            v-if="type !== 'edit'"
             style="width: 189px"
             v-model="ruleForm.otherName"
             placeholder="请输入"
           ></el-input>
+          <span v-else>{{ ruleForm.otherName }}</span>
         </el-form-item>
         <el-form-item label="备注：">
           <el-input
+            v-if="type !== 'edit'"
             style="width: 500px"
             v-model="ruleForm.remarks"
             type="textarea"
             :rows="4"
             placeholder="请输入"
           ></el-input>
+          <span v-else>{{ ruleForm.otherName }}</span>
         </el-form-item>
       </div>
       <div class="diet-form_center">
@@ -113,6 +125,7 @@ export default {
           { required: true, message: '请输入别名', trigger: 'change' },
         ],
       },
+      cateData: [],
       list: [
         { key: 'eatPercent', title: '可食部分', value: '' },
         { key: 'water', title: '水分', value: '' },
@@ -157,8 +170,23 @@ export default {
       this.ruleForm.id = this.id;
       this.loadData();
     }
+    this.loadCateData();
+  },
+  computed: {
+    foodSortName() {
+      if (this.cateData.length <= 0 || !this.ruleForm.foodSort) return '';
+      return this.cateData.find(item => item.paramValue === this.ruleForm.foodSort)
+        .name;
+    },
   },
   methods: {
+    loadCateData() {
+      this.$api.dietRawMaterial
+        .getDietIngredientCategory('DP001')
+        .then((res) => {
+          this.cateData = res.data.data;
+        });
+    },
     loadData() {
       this.$api.dietRawMaterial.getDietIngredientDetail(this.id).then((res) => {
         const {
@@ -168,6 +196,7 @@ export default {
           remarks,
           foodSort,
           ingredientId,
+          ...others
         } = res.data.data;
         this.ruleForm = {
           id,
@@ -177,6 +206,9 @@ export default {
           foodSort,
           ingredientId,
         };
+        this.list.forEach((item) => {
+          item.value = others[item.key];
+        });
       });
     },
     back() {

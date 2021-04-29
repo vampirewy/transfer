@@ -3,7 +3,8 @@
     <el-row>
       <el-col :span="12" style="border-right: 1px dashed #DDE0E6;">
         <div class="divRightTitleDiv">
-          <div class="divRightTitle" style="margin-top: 5px">执行-随访计划信息</div>
+          <div class="divRightTitle" style="margin-top: 5px">执行-随访计划信息
+            <div class="titleBiao"></div></div>
         </div>
         <div class="ge">
           <el-form :inline="false" :model="formGet"
@@ -40,7 +41,7 @@
             </el-row>
           </el-form>
           <div class="divRightTitleDiv">
-            <div class="divRightTitle" style="margin-top: 5px">执行-随访计划信息</div>
+            <div class="divRightTitle" style="margin-top: 5px">操作<div class="titleBiao"></div></div>
           </div>
           <el-form :inline="false" :model="form"
                    label-width="85px"
@@ -152,7 +153,8 @@
             </el-row>
           </el-form>
           <div class="divRightTitleDiv" v-if="form.templateQuestionId">
-            <div class="divRightTitle" style="margin-top: 5px">随访问卷</div>
+            <div class="divRightTitle" style="margin-top: 5px">随访问卷
+              <div class="titleBiao"></div></div>
           </div>
           <el-form :inline="false" :model="form"
                    label-width="85px"
@@ -189,7 +191,8 @@
       </el-col>
       <el-col :span="12">
         <div class="divRightTitleDiv" style="margin-left: 20px">
-          <div class="divRightTitle"  style="margin-top: 5px">填写健康问卷</div>
+          <div class="divRightTitle"  style="margin-top: 5px">填写健康问卷
+            <div class="titleBiao"></div></div>
         </div>
         <div v-show="form.templateQuestionId" style="margin-left: 20px">
           <question-edit ref="questionEdit"
@@ -298,8 +301,8 @@ export default {
         this.form.planDate = data.planDate ? data.planDate.split(' ')[0] : '';
         this.form.planWay = data.planWay;
         this.form.planTitle = data.planTitle;
-        this.form.planDoctor = 1; // this.$store.state.user.userId;
-        this.form.planDoctorName = 'csx'; // this.$store.state.user.userName;
+        this.form.planDoctor = data.currentOperateUserId; // this.$store.state.user.userId;
+        this.form.planDoctorName = data.currentOperateUserName; // this.$store.state.user.userName;
       } else if (this.questionType === 3) {
         this.form.planDate = data.executeTime ? data.executeTime.split(' ')[0] : '';
         this.form.planWayName = data.executePlanWayName;
@@ -308,10 +311,11 @@ export default {
         this.form.planContent = data.executePlanContent;
       }
       this.form.templateQuestionId = data.templateQuestionId;
-      this.form.templateQuestionName = data.batchTemplateQuestionDTO ? data.batchTemplateQuestionDTO.name : '';
+      this.form.templateQuestionName = data.templateQuestionName;
       this.form.batchNo = data.batchTemplateQuestionDTO ? data.batchTemplateQuestionDTO.batchNo : '';
-      this.questionSubjectist = data.batchTemplateQuestionDTO ?
-        data.batchTemplateQuestionDTO.questionSubjectist : [];
+      /* this.questionSubjectist = data.batchTemplateQuestionDTO ?
+        data.batchTemplateQuestionDTO.questionSubjectist : [];*/
+      this.questionSubjectist = data.templateQuestionSubjectDtoList;
       this.questionAnswerList = data.questionInfoAnswerList || [];
       if ((this.form.templateQuestionId && this.questionAnswerList.length === 0
         && this.questionType === 3) || !this.form.templateQuestionId) { // 问卷id存在但是答案为空 则是保存过的 不填题目

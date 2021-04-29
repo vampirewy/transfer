@@ -36,6 +36,7 @@
       ref="multipleTable"
       align="center"
       @row-click="handleRowClick"
+      class="openTable"
     >
       <el-table-column width="80">
         <template slot-scope="scope">
@@ -142,15 +143,12 @@ export default {
             pageSize: 5,
             search: this.params.keywords,
           }).then(({ data }) => {
-            if (data.code === 200) {
-              // console.log(data.data);
-              this.params.total = data.data.total;
-              this.tableData = data.data.data;
-              this.tableData.forEach((val) => {
-                this.$set(this.map, val.id, val);
-              });
-              console.log(this.map);
-            }
+            this.params.total = data.data.total;
+            this.tableData = data.data.data;
+            this.tableData.forEach((val) => {
+              this.$set(this.map, val.id, val);
+            });
+            console.log(this.map);
           });
       }
     },
@@ -216,11 +214,6 @@ export default {
         font-size: 18px;
         color: #fff;
       }
-    }
-  }
-  .el-table{
-    td{
-      padding: 11.5px 0;
     }
   }
   .el-table::before {

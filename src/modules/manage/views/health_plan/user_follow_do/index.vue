@@ -1,10 +1,12 @@
 <template>
-    <query-page @reset="onReset" @search="onSearch">
+  <div>
+    <!--<query-page @reset="onReset" @search="onSearch">
       <template v-slot:left>
         <search>
           <div class="searchInputFormItem">
             <el-input placeholder="姓名/手机号/企业单位" v-model="form.keywords">
-              <!-- <el-button slot="append" icon="el-icon-search" @click="onSearch"></el-button>-->
+              &lt;!&ndash; <el-button slot="append" icon="el-icon-search"
+              @click="onSearch"></el-button>&ndash;&gt;
             </el-input>
             <span class="searchBtnImgSpan" @click="onSearch">
             <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
@@ -16,7 +18,8 @@
             <el-option label="男" :value="1"></el-option>
             <el-option label="女" :value="2"></el-option>
           </el-select>
-          <!--<el-input placeholder="企业单位" v-model="form.workUnitName"></el-input>-->
+          &lt;!&ndash;<el-input placeholder="企业单位"
+          v-model="form.workUnitName"></el-input>&ndash;&gt;
           <el-select placeholder="人员类别" v-model="form.gridId" clearable>
             <el-option :label="item.gridName" :value="item.id" v-for="item in gridList"
                        :key="item.id"></el-option>
@@ -62,24 +65,211 @@
           </el-popover>
         </query-filter>
       </template>
-      <template v-slot:right>
+      <template v-slot:right>-->
+    <div class="divTop">
+      <div class="divTitle">
+        <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
+        待随访计划
+      </div>
+      <div class="searchCondition">
+        <div class="searchLeft">
+          <div class="searchInputFormItem">
+            <el-input placeholder="姓名/编号/单位" v-model="form.keywords">
+            </el-input>
+            <span class="searchBtnImgSpan" @click="onSearch">
+                  <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
+              </span>
+          </div>
+          <div>
+            <span>客户性别：</span>
+            <el-select
+                    v-model="form.gender"
+                    placeholder="请选择"
+                    style="width: 140px"
+                    clearable
+            >
+              <el-option label="男" value="1" key="1"></el-option>
+              <el-option label="女" value="2" key="2"></el-option>
+            </el-select>
+          </div>
+          <div>
+            <span>人员类别：</span>
+            <el-select
+                    v-model="form.gridId"
+                    placeholder="请选择"
+                    style="width: 140px"
+                    clearable
+            >
+              <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+                         :key="index"></el-option>
+            </el-select>
+          </div>
+          <div>
+            <span>随访方式：</span>
+            <el-select
+                    v-model="form.planWay"
+                    placeholder="请选择"
+                    style="width: 140px"
+                    clearable
+            >
+              <el-option :label="item.name" :value="item.id" v-for="item in planWayList"
+                         :key="item.id"></el-option>
+            </el-select>
+          </div>
+        </div>
+        <div class="searchRight">
+          <div class="buttones">
+            <div class="searchFor" @click="onSearch(1)">
+              <img src="@/assets/images/common/topsearchblue.png" alt="">
+            </div>
+            <div class="resetAll" @click="onReset">重置</div>
+            <div class="more" v-if="isTrue"  @click="upMore">
+              <span>></span>
+              展开更多</div>
+            <div class="more noMore" v-else @click="upMore">
+              <span>></span>收起筛选</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-if="!isTrue" class="searchCondition">
+      <div class="searchLeft" style="padding-left:5px;">
+        <div>
+          <span>随访医生：</span>
+          <el-popover
+                  ref="userPopover"
+                  placement="top-start"
+                  width="545"
+                  trigger="click"
+                  @show="planuserModalVisible = true"
+                  @hide="planuserModalVisible = false"
+          >
+            <manager-list v-if="planuserModalVisible"
+                          :selectedList="getPlanUserSelectedList()"
+                          @change="handlePlanuserSelectChange"
+                          @cancel="handlePlanuserClose"></manager-list>
+            <el-input class="select-user-trigger" slot="reference"
+                      style="width: 140px"
+                      :disabled="planUserName !== '' ? false : true"
+                      v-model="planUserName" placeholder="请输入">
+              <i :class="`el-icon-arrow-${planuserModalVisible ? 'up' : 'down'}`"
+                 slot="suffix"></i>
+            </el-input>
+          </el-popover>
+        </div>
+        <!--<div>
+          <span>&nbsp;&nbsp;&nbsp;&nbsp;创建人：</span>
+          <el-select
+                  v-model="form.planWay"
+                  placeholder="请选择"
+                  style="width: 140px"
+                  clearable
+          >
+            <el-option :label="item.name" :value="item.id" v-for="item in planWayList"
+                       :key="item.id"></el-option>
+          </el-select>
+        </div>-->
+        <div>
+          <span>创建人：</span>
+          <el-popover
+                  ref="createUserPopover"
+                  placement="top-start"
+                  width="590"
+                  trigger="click"
+                  @show="createUserModalVisible = true"
+                  @hide="handleCreateUserClose">
+            <user-open v-if="createUserModalVisible"
+                       :selectedList="form.createdByList"
+                      @change="handleCreateUserSelectChange"
+                      @cancel="handleCreateUserClose"></user-open>
+            <el-input class="select-user-trigger" slot="reference" style="width: 140px"
+                      :disabled="createUserName !== '' ? false : true"
+                      v-model="createUserName" placeholder="请选择">
+              <i :class="`el-icon-arrow-${createUserModalVisible ? 'up' : 'down'}`"
+                 slot="suffix"></i>
+            </el-input>
+          </el-popover>
+        </div>
+        <div>
+          <span>客户标签：</span>
+          <el-input placeholder="请输入" style="width: 140px" v-model="form.tag"></el-input>
+        </div>
+        <div>
+          <span>随访日期：</span>
+          <el-date-picker
+                  v-model="form.startPlanTime"
+                  type="date"
+                  value-format="yyyy-MM-dd"
+                  :max-date="form.endPlanTime"
+                  placeholder="开始时间"
+                  style="width: 120px"
+          >
+          </el-date-picker>
+          <span class="timing">-</span>
+          <el-date-picker
+                  v-model="form.endPlanTime"
+                  type="date"
+                  value-format="yyyy-MM-dd"
+                  :min-date="form.startPlanTime"
+                  placeholder="结束时间"
+                  style="width: 120px"
+          >
+          </el-date-picker>
+        </div>
+        <div>
+          <span>创建日期：</span>
+          <el-date-picker
+                  v-model="form.startCreatedTime"
+                  type="date"
+                  value-format="yyyy-MM-dd"
+                  :max-date="form.endCreatedTime"
+                  placeholder="开始时间"
+                  style="width: 120px"
+          >
+          </el-date-picker>
+          <span class="timing">-</span>
+          <el-date-picker
+                  v-model="form.endCreatedTime"
+                  type="date"
+                  value-format="yyyy-MM-dd"
+                  :min-date="form.startCreatedTime"
+                  placeholder="结束时间"
+                  style="width: 120px"
+          >
+          </el-date-picker>
+        </div>
+      </div>
+    </div>
+    <div class="topbottomborder"></div>
+    <div class="divRightTitleDiv">
+      <!-- <div class="divRightTitle"><span>|</span>客户池</div> -->
+      <div>
+        <el-button
+                class="btn-new btnDel"
+                size="small"
+                style="margin: 16px 0"
+                @click="handleSomeRemove"
+                v-if="getAccess('wait_visit_plan_batch_delete')"
+        ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
+      </div>
+    </div>
         <div class="user-follow">
-          <div class="tableTopDoDiv">
+          <!--<div class="tableTopDoDiv">
             <div class="divRightTitleDiv">
               <div class="divRightTitle"><span>|</span>待随访计划</div>
             </div>
             <div class="table-operate-buttons">
-              <!--<operate-button
+              &lt;!&ndash;<operate-button
                       type="edit"
                       @click="handleEditPlan"
-              ></operate-button>-->
+              ></operate-button>&ndash;&gt;
               <operate-button
                       type="delete"
                       @click="handleSomeRemove"
                       v-if="getAccess('wait_visit_plan_batch_delete')
               "></operate-button>
             </div>
-          </div>
+          </div>-->
           <el-table :data="table.list" style="width: 100%" align="center" ref="table"
                     @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="40"></el-table-column>
@@ -138,25 +328,18 @@
             {{ scope.row.mobile | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="planUserName" label="干预人" show-overflow-tooltip>
-              <template slot-scope="scope">
-          <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}">
-            {{ scope.row.planUserName | getResult}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column prop="planUserName" label="随访形式" show-overflow-tooltip>
-              <template slot-scope="scope">
-          <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}">
-            {{ scope.row.planWayName | getResult}}</span>
-              </template>
-            </el-table-column>
             <el-table-column prop="planUserName" label="随访标题" show-overflow-tooltip>
               <template slot-scope="scope">
           <span :class="{'redToday': scope.row.todayPlanDate === 1,
                           'overToday': scope.row.executeState === 3}">
             {{ scope.row.planTitle | getResult}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="planUserName" label="随访方式" show-overflow-tooltip>
+              <template slot-scope="scope">
+          <span :class="{'redToday': scope.row.todayPlanDate === 1,
+                          'overToday': scope.row.executeState === 3}">
+            {{ scope.row.planWayName | getResult}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="planUserName" label="随访内容" show-overflow-tooltip>
@@ -173,18 +356,25 @@
             {{ scope.row.templateQuestionName | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="executeTime" label="计划日期" width="120px" show-overflow-tooltip>
+            <el-table-column prop="planUserName" label="干预人" show-overflow-tooltip>
+              <template slot-scope="scope">
+          <span :class="{'redToday': scope.row.todayPlanDate === 1,
+                          'overToday': scope.row.executeState === 3}">
+            {{ scope.row.planUserName | getResult}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="executeTime" label="随访日期" width="120px" show-overflow-tooltip>
               <template slot-scope="scope">
           <span :class="{'redToday': scope.row.todayPlanDate === 1,
                           'overToday': scope.row.executeState === 3}"
           >{{ scope.row.planDate | getResultDate}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="executeTime" label="*创建人" show-overflow-tooltip>
+            <el-table-column prop="createdByName" label="创建人" show-overflow-tooltip>
               <template slot-scope="scope">
           <span :class="{'redToday': scope.row.todayPlanDate === 1,
                           'overToday': scope.row.executeState === 3}"
-          >{{ scope.row.planUserName | getResultDate}}</span>
+          >{{ scope.row.createdByName | getResult}}</span>
               </template>
             </el-table-column>
             <el-table-column label="操作" width="110">
@@ -220,8 +410,9 @@
           >
           </el-pagination>
         </div>
-      </template>
-    </query-page>
+      <!--</template>
+    </query-page>-->
+  </div>
 </template>
 
 <script>
@@ -230,9 +421,10 @@ import QueryPage from '~/src/components/query_page/index.vue';
 import Search from '~/src/components/query_page/search.vue';
 import QueryFilter from '~/src/components/query_page/query_filter.vue';
 import OperateButton from '~/src/components/query_page/operate_button.vue';
-import ManagerList from '@/components/user_health/manager_list.vue';
+import ManagerList from '@/components/date_select/doctor_open.vue';// '@/components/user_health/manager_list.vue';
 import deleteIcon from '~/src/assets/images/message-box-delete@2x.png';
 import InterventionAddMdl from '../user_follow_create/el_modal/intervention_add_mdl.vue';
+import userOpen from '~/src/components/date_select/user_open.vue';
 export default {
   name: 'user_follow_do',
   components: {
@@ -242,26 +434,37 @@ export default {
     OperateButton,
     ManagerList,
     InterventionAddMdl,
+    userOpen,
   },
   data() {
     return {
+      isTrue: true,
       form: {
         keywords: '', // 关键字
         gender: '', // 性别
         workUnitName: '', // 企业单位
         planUserId: '',
-        planUserName: '',
         planDate: '',
         planWay: '', // 随访方式
         startTime: '',
         endTime: '',
         executeState: '2', // 状态
         gridId: '', // 客户类型
+        tag: '',
+        startPlanTime: '',
+        endPlanTime: '',
+        startCreatedTime: '',
+        endCreatedTime: '',
+        planUserIdList: [],
+        createdByList: [],
         genderList,
         executeStateList,
       },
       selectPlanuser: [],
+      planUserName: '',
       planuserModalVisible: false, // 干预人人列表弹窗
+      createUserName: '',
+      createUserModalVisible: false, // 创建人弹窗
       gridList: [], // 人员类别下拉框
       planWayList: [], // 随访形式下拉框
       table: {
@@ -302,30 +505,83 @@ export default {
       this.getPlanWayList();
       this.getGridList(); // 获取人员列类别
     },
+    // 关闭创建人列表
+    handleCreateUserSelectChange(dataList) {
+      this.$refs.createUserPopover.doClose();
+      this.createUserModalVisible = false;
+      const list = [];
+      const listId = [];
+      dataList.forEach((value) => {
+        list.push(value.realName);
+        listId.push(value.id);
+      });
+      this.form.createdByList = listId;
+      this.createUserName = list.join(',');
+      /* if (this.selectAbnormal.length > 0) {
+        this.onAbnormalChange(this.selectAbnormal);
+        this.selectAbnormal = [];
+      } */
+    },
+    handleCreateUserClose() {
+      this.createUserModalVisible = false;
+      this.$refs.createUserPopover.doClose();
+    },
     // 关闭干预人列表
-    handlePlanuserClose(data) {
+    handlePlanuserSelectChange(dataList) {
+      this.$refs.userPopover.doClose();
+      this.planuserModalVisible = false;
+      const list = [];
+      const listId = [];
+      dataList.forEach((value) => {
+        list.push(value.realName);
+        listId.push(value.id);
+      });
+      console.log(dataList);
+      this.form.planUserIdList = listId;
+      this.planUserName = list.join(',');
+      /* if (this.selectAbnormal.length > 0) {
+        this.onAbnormalChange(this.selectAbnormal);
+        this.selectAbnormal = [];
+      } */
+    },
+    handlePlanuserClose() {
+      this.planuserModalVisible = false;
+      this.$refs.userPopover.doClose();
+    },
+    getPlanUserSelectedList() {
+      const selectedList = [];
+      this.form.planUserIdList.forEach((val) => {
+        selectedList.push({ id: val });
+      });
+      return selectedList;
+    },
+    // 关闭干预人列表
+    /* handlePlanuserClose(data) {
       this.$refs.userPopover.doClose();
       this.planuserModalVisible = false;
       this.form.planUserId = data.id;
       this.form.planUserName = data.realName;
-    },
+    },*/
     /**
      * 获取随访列表
      * @return {Promise<void>}
      */
     async getList() {
       const reqBody = {
-        planWay: this.form.planWay,
-        executeState: this.form.executeState,
-        overdueExecuteState: 3,
-        workbenchSort: 'workbenchSort',
-        gender: this.form.gender,
-        startTime: this.form.startTime,
-        endTime: this.form.endTime,
-        gridId: this.form.gridId,
-        planUserId: this.form.planUserId,
+        // executeState: this.form.executeState,
+        // overdueExecuteState: 3,
+        // workbenchSort: 'workbenchSort',
         keywords: this.form.keywords,
-        workUnitName: this.form.workUnitName,
+        gender: this.form.gender,
+        gridId: this.form.gridId,
+        planWay: this.form.planWay,
+        tag: this.form.tag,
+        startPlanTime: this.form.startPlanTime,
+        endPlanTime: this.form.endPlanTime,
+        startCreatedTime: this.form.startCreatedTime,
+        endCreatedTime: this.form.endCreatedTime,
+        planUserIdList: this.form.planUserIdList,
+        createdByList: this.form.createdByList,
         pageNo: this.table.currentPage,
         pageSize: this.table.pageSize,
       };
@@ -337,6 +593,9 @@ export default {
         this.table.list = data.data || [];
         this.table.totalCount = data.total;
       }
+    },
+    upMore() {
+      this.isTrue = !this.isTrue;
     },
     /**
      * 获取随访方式
@@ -364,7 +623,7 @@ export default {
          return { id, name };
        }); */
       // list.unshift({ name: '全部', value: '' });
-      this.gridList = data.list;
+      this.gridList = data.data;
     },
     /**
      * 新增随访
@@ -477,9 +736,9 @@ export default {
      * 重置
      */
     onReset() {
-      // Object.assign(this.$data, this.$options.data());
+      Object.assign(this.$data, this.$options.data());
       this.table.currentPage = 1;
-      this.form.keywords = '';
+      /* this.form.keywords = '';
       this.form.gender = '';
       this.form.workUnitName = '';
       this.form.gridId = '';
@@ -487,7 +746,7 @@ export default {
       this.form.endTime = '';
       this.form.planWay = '';
       this.form.planUserId = '';
-      this.form.planUserName = '';
+      this.form.planUserName = '';*/
       this.onLoad();
     },
     /**
@@ -534,6 +793,10 @@ export default {
 <style lang="scss" scoped>
   /deep/ .select-user-trigger {
     line-height: 37px;
+    input{
+      border: 1px solid #DDE0E6!important;
+      background-color: white!important;
+    }
     input, i {
       cursor: pointer;
     }
@@ -547,9 +810,8 @@ export default {
     }
   }
   /deep/ .el-input.is-disabled .el-input__inner{
-    background-color: white;
-    border-color: white;
     cursor: pointer;
+    background-color: white!important;
   }
   .user-follow {
     /*padding: 20px 32px 15px 32px;*/

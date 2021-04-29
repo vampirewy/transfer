@@ -338,6 +338,10 @@ a{
 .overToday{
   color: #E6B058;
 }
+.footer{
+  text-align: right;
+  margin-top: 20px;
+}
 .buttonsSelectOpen {
   text-align: right;
   margin-top: 20px;
@@ -563,7 +567,7 @@ color: #333333;
   width: 100%;
   }
 }
-
+}
 .tabBars{
   display: flex;
   align-items: flex-end;
@@ -723,5 +727,4 @@ color: #333333;
     margin-left: 5px;
     font-size: 12px;
   }
-}
 }

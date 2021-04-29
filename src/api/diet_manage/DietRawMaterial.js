@@ -14,5 +14,8 @@ class DietRawMaterial extends BaseModule {
   getDietIngredientDetail(id) {
     return this.get(`/ingredient/get_detail/${id}`);
   }
+  getDietIngredientCategory(id) {
+    return this.get(`/system_param_value/${id}`);
+  }
 }
 export default new DietRawMaterial();
