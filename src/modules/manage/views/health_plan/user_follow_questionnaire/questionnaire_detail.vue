@@ -3,7 +3,7 @@
       <el-row>
         <el-col :span="8">
           <div class="divRightTitleDiv">
-            <div class="divRightTitle">查看-随访问卷</div>
+            <div class="divRightTitle">查看-随访问卷<div class="titleBiao"></div></div>
           </div>
           <el-form
                   ref="form"
@@ -67,7 +67,7 @@
         </el-col>
         <el-col :span="16" style="padding-left: 20px;">
           <div class="divRightTitleDiv">
-            <div class="divRightTitle">题目</div>
+            <div class="divRightTitle">题目<div class="titleBiao"></div></div>
           </div>
           <el-form
                   class="user-edit-form-questions"

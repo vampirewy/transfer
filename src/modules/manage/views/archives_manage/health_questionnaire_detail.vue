@@ -15,7 +15,7 @@
           </div>
       </div>
         <div class="divRightTitleDiv" :style="{'padding-top': contentPaddingTop + 'px'}">
-          <div class="divRightTitle">查看-基本信息</div>
+          <div class="divRightTitle">查看-基本信息<div class="titleBiao"></div></div>
         </div>
         <div class="clientInfoDiv">
             <el-form ref="form" :model="formData" label-width="90px" label-suffix="：">

@@ -20,7 +20,7 @@
         <div class="tableTopDoDiv" style="display: block">
           <div class="divRightTitleDiv">
             <div class="divRightTitle" style="margin-top: 14px">
-              {{$route.params.type === '2' ? '批量创建' : '计划列表'}}</div>
+              {{$route.params.type === '2' ? '批量创建' : '计划列表'}}<div class="titleBiao"></div></div>
           </div>
           <div class="table-operate-buttons">
             <operate-button

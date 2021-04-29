@@ -30,22 +30,28 @@
                   <img src="@/assets/images/common/topsearchblue.png" alt="" />
                 </div>
                 <div class="resetAll" @click="reset">重置</div>
-                <el-button class="btnNew" type="primary">添加新类型</el-button>
+                <el-button class="btnNew" type="primary" @click="add"
+                  >添加新类型</el-button
+                >
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <el-table :data="tableData" align="center">
+    <el-table
+      @select="itemCheck"
+      ref="elMenuTemplateTypeForm"
+      :data="tableData"
+      align="center"
+    >
       <el-table-column type="selection" width="55"> </el-table-column>
-      <el-table-column prop="realName" label="模版名称" show-overflow-tooltip>
+      <el-table-column prop="name" label="模版名称" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span v-show="editIndex !== scope.$index">{{
-            scope.row.realName
-          }}</span>
+          <span v-show="editIndex !== scope.$index">{{ scope.row.name }}</span>
           <el-input
             v-show="editIndex === scope.$index"
+            v-model="scope.row.name"
             placeholder="请输入"
           ></el-input>
         </template>
@@ -60,12 +66,16 @@
               alt=""
             />
             <img
-              @click="editIndex = -1"
+              @click="handleEdit(scope.row)"
               v-show="editIndex === scope.$index"
               src="@/assets/images/diet/table_edit_success_icon.png"
               alt=""
             />
-            <img src="@/assets/images/diet/icon_del.png" alt="" />
+            <img
+              @click="deletes(scope.row.id, scope.$index)"
+              src="@/assets/images/diet/icon_del.png"
+              alt=""
+            />
           </div>
         </template>
       </el-table-column>
@@ -75,9 +85,9 @@
       layout="prev, pager, next, jumper, total, sizes"
       :total="total"
       :page-sizes="[15]"
-      :current-page="currentPage"
+      :current-page.sync="currentPage"
       :page-size="pageSize"
-      @current-change="handleCurrentChange"
+      @current-change="loadData"
     ></el-pagination>
     <div slot="footer" class="dialog-footer">
       <el-button size="small" @click="visibles = false" class="cancelBtn"
@@ -110,8 +120,11 @@ export default {
       total: 0,
       currentPage: 1,
       pageSize: 15,
-      tableData: [{ realName: '小麦' }],
+      tableData: [],
     };
+  },
+  created() {
+    this.loadData();
   },
   computed: {
     visibles: {
@@ -124,10 +137,64 @@ export default {
     },
   },
   methods: {
-    search() {},
-    reset() {},
-    handleCurrentChange() {},
-    submit() {},
+    loadData() {
+      this.$api.dietMenuTemplateInterface
+        .getDietMeneTemCate({
+          pageNo: this.currentPage,
+          pageSize: this.pageSize,
+          keywords: this.query,
+        })
+        .then((res) => {
+          const { data, total } = res.data.data;
+          this.tableData = data;
+          this.total = total;
+        });
+    },
+    handleEdit(item) {
+      this.$api.dietMenuTemplateInterface.saveDietMeneTemCate(item).then(() => {
+        this.$message.success('操作成功!');
+        this.loadData();
+        this.editIndex = -1;
+      });
+    },
+    itemCheck(selection, row) {
+      this.$refs.elMenuTemplateTypeForm.clearSelection();
+      if (selection.length === 0) {
+        return;
+      }
+      if (row) {
+        this.$refs.elMenuTemplateTypeForm.toggleRowSelection(row, true);
+      }
+    },
+    deletes(id, index) {
+      if (!id) return this.tableData.splice(index, 1);
+      this.$api.dietMenuTemplateInterface
+        .deleteDietMenuTemCate(`[${id}]`)
+        .then(() => {
+          this.$message.success('删除成功!');
+          this.loadData();
+        });
+    },
+    add() {
+      this.tableData.push({});
+      this.editIndex = this.tableData.length - 1;
+    },
+    search() {
+      this.currentPage = 1;
+      this.loadData();
+    },
+    reset() {
+      this.query = '';
+      this.currentPage = 1;
+      this.loadData();
+    },
+    submit() {
+      const ids = this.$refs.elMenuTemplateTypeForm.selection.map(
+        item => item.name,
+      );
+      this.$emit('change', ids);
+      this.visibles = false;
+    },
   },
 };
 </script>
@@ -160,6 +227,9 @@ export default {
     input {
       text-align: center;
     }
+  }
+  /deep/ th .el-checkbox__input{
+    visibility: hidden;
   }
 }
 .dialog-footer {

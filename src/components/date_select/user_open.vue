@@ -1,7 +1,7 @@
 <template>
   <div class="abnormal-popoper">
     <!--<div class="query searchInputFormItem">
-      <el-input v-model="params.keyword" placeholder="输入医生姓名搜索"></el-input>
+      <el-input v-model="params.keyword" placeholder="输入姓名搜索"></el-input>
       <span class="searchBtnImgSpan" @click="search(1)">
             <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
       </span>
@@ -10,7 +10,7 @@
       <div class="searchCondition">
         <div class="searchLeft">
           <div class="searchInputFormItem">
-            <el-input placeholder="输入医生姓名搜索" v-model="params.keyword">
+            <el-input placeholder="输入姓名搜索" v-model="params.keyword">
             </el-input>
             <span class="searchBtnImgSpan" @click="search(1)">
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
@@ -28,42 +28,36 @@
       </div>
     </div>
     <el-table
-      @selection-change="handleSelectionChange"
-      :data="tableData"
-      ref="table"
-      align="center"
+            @selection-change="handleSelectionChange"
+            :data="tableData"
+            ref="table"
+            align="center"
     >
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column label="姓名" prop="realName" min-width="90px" show-overflow-tooltip>
       </el-table-column>
       <el-table-column label="角色" prop="roleName" min-width="110px" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column label="简介" prop="introduction" show-overflow-tooltip>
-        <template slot-scope="scope">
-          <span v-if="scope.row.introduction">{{ scope.row.introduction }}</span>
-          <span v-if="!scope.row.introduction">-</span>
-        </template>
-      </el-table-column>
     </el-table>
     <el-pagination
-      background
-      layout="prev,pager,next,jumper,total"
-      :total="params.total"
-      :page-size="params.pageSize"
-      :current-page="params.pageNo"
-      @current-change="handleCurrentChange"
-      @size-change="handleSizeChange"
-      :pager-count="4"
+            background
+            layout="prev,pager,next,jumper,total"
+            :total="params.total"
+            :page-size="params.pageSize"
+            :current-page="params.pageNo"
+            @current-change="handleCurrentChange"
+            @size-change="handleSizeChange"
+            :pager-count="4"
     ></el-pagination>
-    <div class="footer">
+    <div class="footer" style="text-align: right;margin-top: 20px">
       <el-button class="cancelBtn" size="small" @click="cancel">取消</el-button>
-      <el-button type="primary" class="sureBtn" size="small" @click="submit">确定</el-button>
+      <el-button type="primary" size="small" class="sureBtn" @click="submit">确定</el-button>
     </div>
   </div>
 </template>
 <script>
 export default {
-  name: 'doctorOpen',
+  name: 'userOpen',
   props: {
     visible: Boolean,
     selectedList: {
@@ -87,7 +81,11 @@ export default {
     };
   },
   mounted() {
-    this.multipleSelectionAll = this.selectedList; // chexkbox回显
+    const selectedList = [];
+    this.selectedList.forEach((val) => {
+      selectedList.push({ id: val });
+    });
+    this.multipleSelectionAll = selectedList; // chexkbox回显
     this.fetch();
   },
   methods: {
@@ -110,8 +108,8 @@ export default {
     fetch() {
       // this.params.pageNo = this.params.pageNo;
       // this.params.pageSize = this.params.pageSize;
-      this.$api.userManagerInterface
-        .searchDoctor(Object.assign({}, this.params))
+      this.$api.systemManageInterface
+        .userList(Object.assign({}, this.params))
         .then(({ data }) => {
           // console.log(data.data);
           this.params.total = data.data.total;
@@ -131,7 +129,6 @@ export default {
       this.fetch();
     },
     reset() {
-      this.params.keyword = '';
       this.params.pageNo = 1;
       this.fetch();
     },
@@ -214,65 +211,65 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.abnormal-popoper {
-  /deep/ .el-input .el-input__inner{
-    font-size: 12px;
-  }
-  /deep/ .el-table .cell{
-    font-size: 12px;
-    color: #666666;
-  }
-  /deep/ .el-table td{
-    padding: 10px 0;
-  }
-  padding: 13px 18px 21px 18px;
-  /deep/ .el-table__header-wrapper th{
-    padding: 11px 0;
-    .cell{
-      font-size: 14px;
-      color: #333333;
+  .abnormal-popoper {
+    /deep/ .el-input .el-input__inner{
+      font-size: 12px;
     }
-  }
-  .query {
-    display: flex;
-    align-items: center;
-    height: 40px;
-    background: #F4F4F6;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    /deep/ .el-input {
-      flex: 1;
-      .el-input__inner {
-        background: transparent;
-        border: none;
+    /deep/ .el-table .cell{
+      font-size: 12px;
+      color: #666666;
+    }
+    /deep/ .el-table td{
+      padding: 10px 0;
+    }
+    padding: 13px 18px 21px 18px;
+    /deep/ .el-table__header-wrapper th{
+      padding: 11px 0;
+      .cell{
+        font-size: 14px;
+        color: #333333;
       }
     }
-    .search-button {
-      width: 36px;
-      height: 36px;
-      background: #4991FD;
-      border-radius: 5px;
+    .query {
       display: flex;
-      justify-content: center;
       align-items: center;
-      i {
-        font-size: 18px;
-        color: #fff;
+      height: 40px;
+      background: #F4F4F6;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      /deep/ .el-input {
+        flex: 1;
+        .el-input__inner {
+          background: transparent;
+          border: none;
+        }
+      }
+      .search-button {
+        width: 36px;
+        height: 36px;
+        background: #4991FD;
+        border-radius: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        i {
+          font-size: 18px;
+          color: #fff;
+        }
+      }
+    }
+    .el-table::before {
+      background: none;
+    }
+    .el-pagination {
+      margin-top: 20px;
+      text-align: right;
+      /deep/ .el-pagination__sizes {
+        margin-right: 0;
+      }
+      /deep/ .el-input__validateIcon {
+        display: none;
       }
     }
   }
-  .el-table::before {
-    background: none;
-  }
-  .el-pagination {
-    margin-top: 20px;
-    text-align: right;
-    /deep/ .el-pagination__sizes {
-      margin-right: 0;
-    }
-    /deep/ .el-input__validateIcon {
-      display: none;
-    }
-  }
-}
 </style>
