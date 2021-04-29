@@ -162,34 +162,6 @@
           <div class="othertest">
               <div @click="othertestAdd">添加</div>
           </div>
-          <!-- <el-form-item label="检查项目" prop="clientName" style="width:25%">
-            <el-popover
-              ref="userPopover"
-              placement="bottom-start"
-              width="650"
-              trigger="click"
-              @show="popoverStatus = true"
-              @hide="handlePopoperClose"
-            >
-              <select-user
-                v-if="popoverStatus"
-                @change="onSelectUser"
-              ></select-user>
-              <el-input
-                :class="`select-user-trigger ${id ? 'disabled' : ''}`"
-                slot="reference"
-                disabled
-                v-model="infoSource.clientName"
-                placeholder="请选择客户"
-                style="width: 232px;"
-              >
-                <i
-                  :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
-                  slot="suffix"
-                ></i>
-              </el-input>
-            </el-popover>
-          </el-form-item> -->
         </div>
      <el-table class="medicate-list mt20" :data="detectionInfos" align="center">
         <el-table-column label="检测项目" prop="name" show-overflow-tooltip>

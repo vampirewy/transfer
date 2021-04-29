@@ -33,7 +33,7 @@
       :sectionXList="xData">
     </line-chart>
     <div class="title">数据列表</div>
-    <el-table :data="table.list">
+    <el-table :data="table.list" class="openTable">
       <el-table-column
         v-for="(item, index) in table.columns"
         :key="index"

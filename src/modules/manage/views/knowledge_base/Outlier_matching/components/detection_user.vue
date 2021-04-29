@@ -1,10 +1,29 @@
 <template>
   <div class="medical-history-select-user">
-    <div class="query">
-      <el-input v-model="keyword" placeholder="输入条件搜索"></el-input>
+    <div class="query" style="background:#FFFFFF">
+      <!-- <el-input v-model="keyword" placeholder="输入条件搜索"></el-input>
       <el-button class="search-button" @click="search">
         <i class="el-icon-search"></i>
-      </el-button>
+      </el-button> -->
+      <div class="searchCondition">
+      <div class="searchLeft">
+        <div class="searchInputFormItem">
+          <el-input placeholder="名称/项目" v-model="formData.keyWord">
+          </el-input>
+          <span class="searchBtnImgSpan" @click="search(1)">
+                  <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
+              </span>
+        </div>
+      </div>
+      <div class="searchRight">
+        <div class="buttones" style="margin: 10px 10px 0 0;">
+          <div class="searchFor" @click="search(1)" style="margin: 10px 10px 0 0;">
+            <img src="@/assets/images/common/topsearchblue.png" alt="">
+          </div>
+          <div class="resetAll" @click="reset">重置</div>
+        </div>
+      </div>
+    </div>
     </div>
     <el-table :data="tableData" @row-click="rowClick" class="openTable">
       <!-- <el-table-column width="80">
@@ -51,6 +70,9 @@ export default {
   name: 'MedicalHistorySelectUser',
   data() {
     return {
+      formData: {
+        keyword: '',
+      },
       keyword: '',
       tableData: [],
       total: 0,
@@ -79,6 +101,9 @@ export default {
     search() {
       this.currentPage = 1;
       this.queryList();
+    },
+    reset() {
+
     },
     async queryList() {
       const res = await this.$api.healthMonitorInterface.healthDataItemGetAll({

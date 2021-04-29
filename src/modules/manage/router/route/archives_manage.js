@@ -224,9 +224,8 @@ export default [
         name: 'inspection_index',
         meta: {
           title: '单项检查',
-          access: 'Single_inspection',
-          hideInMenu: true,
-          hideInTag: true,
+          access: 'inspection_index',
+          keepAlive: true,
         },
         component: () =>
           import('../../views/archives_manage/single_inspection/inspection_index.vue'),
@@ -236,7 +235,7 @@ export default [
         name: 'inspection_index_add',
         meta: {
           title: '单项检查-新增',
-          access: 'Single_inspection',
+          access: 'inspection_index_add',
           hideInMenu: true,
           hideInTag: true,
         },
@@ -248,7 +247,7 @@ export default [
         name: 'bp_trend',
         meta: {
           title: '血压查看',
-          access: 'Single_inspection',
+          access: 'bp_trend',
           hideInMenu: true,
           hideInTag: true,
         },
