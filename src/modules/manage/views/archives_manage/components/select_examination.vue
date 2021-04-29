@@ -24,7 +24,7 @@
       </el-button>
     <div class="resetAll">重置</div>
     </div>
-    <el-table :data="tableData" @row-click="rowClick">
+    <el-table :data="tableData" @row-click="rowClick" class="openTable">
       <!-- <el-table-column width="80">
         <template slot-scope="scope">
           <el-radio v-model="selectRadio" :label="scope.row.id">&nbsp;</el-radio>

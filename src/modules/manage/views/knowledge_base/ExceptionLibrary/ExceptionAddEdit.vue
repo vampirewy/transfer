@@ -48,7 +48,7 @@
           </el-form-item>
         </el-col>
       </el-row> -->
-      <div class="main-info-title">新增短信</div>
+      <div class="main-info-title">新增异常库</div>
       <el-row>
         <!-- <el-col :span="6">
           <el-form-item label="就医编号" prop="hospital">
@@ -111,7 +111,12 @@
           </el-form-item>
         </el-col> -->
         <el-col :span="6">
-          <el-form-item label="短信类别" prop="result" >
+          <el-form-item label="异常名称" >
+            <el-input v-model="form.patientNo" placeholder="请输入" @input="replace"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="异常类型" >
             <el-select v-model="form.result" placeholder="请选择当前状态" width="150">
               <el-option
                 v-for="item in resultOptions"
@@ -123,7 +128,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="短信主题" prop="result">
+          <el-form-item label="性别限制" >
             <el-select v-model="form.result" placeholder="请选择当前状态">
               <el-option
                 v-for="item in resultOptions"
@@ -135,7 +140,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="适宜性别" prop="result">
+          <el-form-item label="ICD10：" >
             <el-select v-model="form.result" placeholder="请选择当前状态">
               <el-option
                 v-for="item in resultOptions"
@@ -147,7 +152,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="适宜人群" prop="result">
+          <el-form-item label="重要性" >
             <el-select v-model="form.result" placeholder="请选择当前状态">
               <el-option
                 v-for="item in resultOptions"
@@ -159,7 +164,31 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="适宜季节" prop="result">
+          <el-form-item label="紧急性">
+            <el-select v-model="form.result" placeholder="请选择当前状态">
+              <el-option
+                v-for="item in resultOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="推荐科室" >
+            <el-select v-model="form.result" placeholder="请选择当前状态">
+              <el-option
+                v-for="item in resultOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="推荐检查" >
             <el-select v-model="form.result" placeholder="请选择当前状态">
               <el-option
                 v-for="item in resultOptions"
@@ -181,7 +210,31 @@
           </el-form-item>
         </el-col> -->
         <el-col :span="24">
-          <el-form-item label="短信内容" prop="result">
+          <el-form-item label="解释" >
+            <el-input
+              type="textarea"
+              v-model="form.hpi"
+              :rows="5"
+              placeholder="请输入"
+              :maxlength="4000"
+              show-word-limit
+            ></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="原因">
+            <el-input
+              type="textarea"
+              v-model="form.hpi"
+              :rows="5"
+              placeholder="请输入"
+              :maxlength="4000"
+              show-word-limit
+            ></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="建议" >
             <el-input
               type="textarea"
               v-model="form.hpi"

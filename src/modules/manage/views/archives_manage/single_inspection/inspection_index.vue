@@ -324,7 +324,7 @@
               <el-table-column label="操作" prop="id" width="120" align="center">
                 <template slot-scope="scope">
                   <el-button type="text" size="small"
-                   @click="add(scope.row)"
+                   @click="adds(scope.row)"
                    v-if="getAccess('medical_history_edit')"
                    style="color:#3154AC">编辑</el-button>
                   <span style="color:#DDE0E6">|</span>
@@ -355,7 +355,11 @@
         </template>
       <!-- </query-page> -->
     </template>
-    <detail-dialog v-if="viewIndex === 4" :id="currentId" @close="viewIndex = 1"></detail-dialog>
+    <detail-dialog
+    v-if="viewIndex === 4"
+    :id="currentId"
+     @close="viewIndex = 1">
+     </detail-dialog>
   </div>
 </template>
 
@@ -543,7 +547,17 @@ export default {
       this.formData.pageSize = size;
       this.queryList();
     },
-    add(row) {
+    add() {
+      this.viewIndex = 2;
+      this.currentId = '';
+      this.$router.push({
+        path: '/inspection_index_add',
+        query: {
+          id: '',
+        },
+      });
+    },
+    adds(row) {
       this.viewIndex = 2;
       this.currentId = '';
       this.$router.push({

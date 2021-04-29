@@ -43,19 +43,19 @@
   <div class="divTop">
     <div class="divTitle">
       <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
-      短信模版
+      危险因素库
     </div>
     <div class="searchCondition">
       <div class="searchLeft">
         <div class="searchInputFormItem">
-          <el-input placeholder="内容" v-model="formData.keyWord">
+          <el-input placeholder="危险因素搜索" v-model="formData.keyWord">
           </el-input>
           <span class="searchBtnImgSpan" @click="search(1)">
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
               </span>
         </div>
         <div>
-          <span>适宜性别：</span>
+          <span>危险分类：</span>
           <el-select
                   v-model="formData.gender"
                   placeholder="请选择"
@@ -67,7 +67,7 @@
           </el-select>
         </div>
         <div>
-          <span>适宜类别：</span>
+          <span>题目类型：</span>
           <el-select
                   v-model="formData.clientGrid"
                   placeholder="请选择"
@@ -78,7 +78,7 @@
                        :key="index"></el-option>
           </el-select>
         </div>
-        <div>
+        <!-- <div>
           <span>适宜季节：</span>
           <el-select
                   v-model="formData.lifeStyleLv"
@@ -88,7 +88,7 @@
             <el-option :label="item.name" :value="item.paramValue"
                        v-for="(item, index) in lifeStyleList" :key="index"></el-option>
           </el-select>
-        </div>
+        </div> -->
       </div>
       <div class="searchRight">
         <div class="buttones">
@@ -105,7 +105,7 @@
       </div>
     </div>
   </div>
-    <div v-if="!isTrue" class="searchCondition" style="width:80%;">
+    <!-- <div v-if="!isTrue" class="searchCondition" style="width:80%;">
       <div class="searchLeft" style="padding-left:5px;">
         <div>
           <span>问卷来源：</span>
@@ -144,7 +144,7 @@
           </el-date-picker>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="topbottomborder"></div>
     <div class="divRightTitleDiv">
       <!-- <div class="divRightTitle"><span>|</span>客户池</div> -->
@@ -183,12 +183,12 @@
       <el-table style="width: 100%" :data="dataSource" align="center"
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="40"></el-table-column>
-        <el-table-column label="短信类别" prop="clientNo" show-overflow-tooltip>
+        <el-table-column label="危险因素" prop="clientNo" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.clientNo | getResult}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="短信主题" prop="clientName" show-overflow-tooltip>
+        <el-table-column label="题目类型" prop="clientName" show-overflow-tooltip>
           <template slot-scope="scope">
                 <span class="clientName"
                       @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
@@ -196,16 +196,16 @@
                 </span>
           </template>
         </el-table-column>
-        <el-table-column prop="gender" label="适宜性别" min-width="100px">
+        <el-table-column prop="gender" label="分类" min-width="80px">
           <template slot-scope="scope">
             <span>{{scope.row.gender | getResultGender}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="适宜人群" prop="age">
+        <!-- <el-table-column label="适宜人群" prop="age">
           <template slot-scope="scope">
             <span>{{ scope.row.age | getResult}}</span>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <!-- <el-table-column prop="clientGridName" label="人员类别" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.clientGridName | getResult}}</span>
@@ -216,12 +216,12 @@
             <span>{{ scope.row.lifeStyleLvName | getResult}}</span>
           </template>
         </el-table-column> -->
-        <el-table-column prop="workUnitName" label="适宜季节" show-overflow-tooltip>
+        <!-- <el-table-column prop="workUnitName" label="适宜季节" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.workUnitName | getResult}}</span>
           </template>
-        </el-table-column>
-        <el-table-column label="短信内容" prop="questionDate" min-width="120" show-overflow-tooltip>
+        </el-table-column> -->
+        <el-table-column label="建议" prop="questionDate" min-width="150" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.questionDate | getResultDate}}</span>
           </template>
@@ -243,7 +243,7 @@
               size="small"
               @click="
                 $router.push({
-                  name: 'knowledge_smsAdd',
+                  name: 'risk_factors_add',
                   params: {
                     type: 'edit',
                     qusType: scope.row.questionType,
@@ -253,12 +253,13 @@
               "
               v-if="getAccess('life_style_questionnaire_edit') && scope.row.questionType !== 4"
             >编辑</el-button>
+            <span style="color:#DDE0E6">|</span>
             <el-button
               type="text"
               size="small"
               @click="
                 $router.push({
-                  name: 'knowledge_smsLook',
+                  name: 'risk_factors_look',
                   params: {
                     qusType: scope.row.questionType,
                     id: scope.row.id,
@@ -409,7 +410,7 @@ export default {
      */
     handleAddCheck(val) {
       this.$router.push({
-        name: 'knowledge_smsAdd',
+        name: 'risk_factors_add',
         params: {
           type: 'edit',
           qusType: Number(val),

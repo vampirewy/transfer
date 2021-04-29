@@ -43,19 +43,19 @@
   <div class="divTop">
     <div class="divTitle">
       <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
-      短信模版
+      异常库
     </div>
     <div class="searchCondition">
       <div class="searchLeft">
         <div class="searchInputFormItem">
-          <el-input placeholder="内容" v-model="formData.keyWord">
+          <el-input placeholder="体检库/ICD10" v-model="formData.keyWord">
           </el-input>
           <span class="searchBtnImgSpan" @click="search(1)">
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
               </span>
         </div>
         <div>
-          <span>适宜性别：</span>
+          <span>异常类型：</span>
           <el-select
                   v-model="formData.gender"
                   placeholder="请选择"
@@ -67,7 +67,7 @@
           </el-select>
         </div>
         <div>
-          <span>适宜类别：</span>
+          <span>性别限制：</span>
           <el-select
                   v-model="formData.clientGrid"
                   placeholder="请选择"
@@ -79,7 +79,7 @@
           </el-select>
         </div>
         <div>
-          <span>适宜季节：</span>
+          <span>推荐检查：</span>
           <el-select
                   v-model="formData.lifeStyleLv"
                   placeholder="请选择"
@@ -96,11 +96,11 @@
             <img src="@/assets/images/common/topsearchblue.png" alt="">
           </div>
           <div class="resetAll" @click="reset">重置</div>
-          <!-- <div class="more" v-if="isTrue"  @click="upMore">
+          <div class="more" v-if="isTrue"  @click="upMore">
             <span>></span>
             展开更多</div>
           <div class="more noMore" v-else @click="upMore">
-            <span>></span>收起筛选</div> -->
+            <span>></span>收起筛选</div>
         </div>
       </div>
     </div>
@@ -108,7 +108,7 @@
     <div v-if="!isTrue" class="searchCondition" style="width:80%;">
       <div class="searchLeft" style="padding-left:5px;">
         <div>
-          <span>问卷来源：</span>
+          <span>紧急性：</span>
           <el-select
                   v-model="formData.source"
                   placeholder="请选择"
@@ -120,28 +120,16 @@
           </el-select>
         </div>
         <div>
-          <span>填写日期：</span>
-          <el-date-picker
-                  v-model="formData.startTime"
-                  type="date"
-                  value-format="yyyy-MM-dd"
-                  :max-date="formData.endTime"
-                  placeholder="选择开始日期"
+          <span>重要性：</span>
+          <el-select
+                  v-model="formData.source"
+                  placeholder="请选择"
                   style="width: 140px"
                   clearable
           >
-          </el-date-picker>
-          <span class="timing">-</span>
-          <el-date-picker
-                  v-model="formData.endTime"
-                  type="date"
-                  value-format="yyyy-MM-dd"
-                  :min-date="formData.startTime"
-                  placeholder="选择结束日期"
-                  style="width: 140px"
-                  clearable
-          >
-          </el-date-picker>
+            <el-option :label="item.name" :value="item.paramValue"
+                       v-for="(item, index) in questionFromList" :key="index"></el-option>
+          </el-select>
         </div>
       </div>
     </div>
@@ -183,12 +171,12 @@
       <el-table style="width: 100%" :data="dataSource" align="center"
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="40"></el-table-column>
-        <el-table-column label="短信类别" prop="clientNo" show-overflow-tooltip>
+        <el-table-column label="异常名称" prop="clientNo" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.clientNo | getResult}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="短信主题" prop="clientName" show-overflow-tooltip>
+        <el-table-column label="JCD10编码" prop="clientName" show-overflow-tooltip>
           <template slot-scope="scope">
                 <span class="clientName"
                       @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
@@ -196,49 +184,49 @@
                 </span>
           </template>
         </el-table-column>
-        <el-table-column prop="gender" label="适宜性别" min-width="100px">
+        <el-table-column prop="gender" label="其他名称" min-width="100px">
           <template slot-scope="scope">
             <span>{{scope.row.gender | getResultGender}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="适宜人群" prop="age">
+        <el-table-column label="类型" prop="age">
           <template slot-scope="scope">
             <span>{{ scope.row.age | getResult}}</span>
           </template>
         </el-table-column>
-        <!-- <el-table-column prop="clientGridName" label="人员类别" show-overflow-tooltip>
+        <el-table-column prop="clientGridName" label="性别" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.clientGridName | getResult}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="lifeStyleLvName" label="生活方式" show-overflow-tooltip>
+        <el-table-column prop="lifeStyleLvName" label="重要性" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.lifeStyleLvName | getResult}}</span>
           </template>
-        </el-table-column> -->
-        <el-table-column prop="workUnitName" label="适宜季节" show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column prop="workUnitName" label="紧急性" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.workUnitName | getResult}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="短信内容" prop="questionDate" min-width="120" show-overflow-tooltip>
+        <el-table-column label="推荐科室" prop="questionDate" min-width="100" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.questionDate | getResultDate}}</span>
           </template>
         </el-table-column>
-        <!-- <el-table-column label="问卷来源" prop="sourceName" show-overflow-tooltip>
+        <el-table-column label="推荐检查" prop="sourceName" show-overflow-tooltip>
           <template slot-scope="scope">
             {{ scope.row.sourceName | getResult}}
           </template>
         </el-table-column>
-        <el-table-column prop="gender" label="份数" width="60px">
+        <!-- <el-table-column prop="gender" label="份数" width="60px">
           <template slot-scope="scope">
             <span>{{scope.row.questionCount | getResult}}</span>
           </template>
         </el-table-column> -->
         <el-table-column label="操作" prop="index" width="120">
           <template slot-scope="scope">
-            <el-button
+            <!-- <el-button
               type="text"
               size="small"
               @click="
@@ -252,7 +240,7 @@
                 })
               "
               v-if="getAccess('life_style_questionnaire_edit') && scope.row.questionType !== 4"
-            >编辑</el-button>
+            >编辑</el-button> -->
             <el-button
               type="text"
               size="small"
@@ -409,7 +397,7 @@ export default {
      */
     handleAddCheck(val) {
       this.$router.push({
-        name: 'knowledge_smsAdd',
+        name: 'ExceptionAddEdit',
         params: {
           type: 'edit',
           qusType: Number(val),

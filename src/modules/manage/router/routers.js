@@ -27,6 +27,8 @@ import systemManage from './route/system_manage';
 import personalCenter from './route/personal_center';
 import errorRoute from './route/error';
 import dietManage from './route/diet_manage';
+import knowledgeBase from './route/knowledge_base';
+
 export default [
   ...loginRoute,
   ...homeRoute,
@@ -42,4 +44,5 @@ export default [
   ...personalCenter,
   ...errorRoute,
   ...dietManage,
+  ...knowledgeBase,
 ];

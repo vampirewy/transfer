@@ -432,8 +432,8 @@ export default {
           this.infoSource.drugsName = data.data.inspectionNo;
           this.infoSource.specification = data.data.inspectionOrg;
           this.infoSource.ingrenient = data.data.intro;
-          const json = {};
           for (let i = 0; i < data.data.inspectionRecordConfigDtos.length; i++) {
+            const json = {};
             json.sectionName = data.data.inspectionRecordConfigDtos[i].sectionItem;
             json.itemName = data.data.inspectionRecordConfigDtos[i].itemName;
             json.startDate = data.data.inspectionRecordConfigDtos[i].itemValue;
@@ -540,12 +540,12 @@ export default {
       if (!this.drugsList.length) {
         return this.$message.warning('请添加检查项目');
       }
-      const json = {};
       const arrars = [];
       for (let i = 0; i < this.drugsList.length; i++) {
+        const json = {};
         json.sectionItem = this.drugsList[i].sectionName;
         json.itemName = this.drugsList[i].itemName;
-        json.itemValue = this.drugsList[i].drugsList;
+        json.itemValue = this.drugsList[i].startDate;
         json.itemRef = this.drugsList[i].reference;
         json.unit = this.drugsList[i].unit;
         json.advice = this.drugsList[i].Suggestion;

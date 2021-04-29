@@ -111,7 +111,7 @@
           </el-form-item>
         </el-col> -->
         <el-col :span="6">
-          <el-form-item label="短信类别" prop="result" >
+          <el-form-item label="危险分类" prop="result" >
             <el-select v-model="form.result" placeholder="请选择当前状态" width="150">
               <el-option
                 v-for="item in resultOptions"
@@ -123,7 +123,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="短信主题" prop="result">
+          <el-form-item label="来源" prop="result">
             <el-select v-model="form.result" placeholder="请选择当前状态">
               <el-option
                 v-for="item in resultOptions"
@@ -135,7 +135,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="适宜性别" prop="result">
+          <el-form-item label="标题" prop="result">
             <el-select v-model="form.result" placeholder="请选择当前状态">
               <el-option
                 v-for="item in resultOptions"
@@ -147,7 +147,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="适宜人群" prop="result">
+          <el-form-item label="选项" prop="result">
             <el-select v-model="form.result" placeholder="请选择当前状态">
               <el-option
                 v-for="item in resultOptions"
@@ -158,7 +158,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
+        <!-- <el-col :span="6">
           <el-form-item label="适宜季节" prop="result">
             <el-select v-model="form.result" placeholder="请选择当前状态">
               <el-option
@@ -168,6 +168,16 @@
                 :value="item.value"
               ></el-option>
             </el-select>
+          </el-form-item>
+        </el-col> -->
+        <el-col :span="6">
+          <el-form-item label="危险因素" prop="doctorName">
+            <el-input v-model="form.doctorName" placeholder="请输入"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="排序编号" prop="doctorName">
+            <el-input v-model="form.doctorName" placeholder="请输入"></el-input>
           </el-form-item>
         </el-col>
         <!-- <el-col :span="6">
@@ -181,7 +191,7 @@
           </el-form-item>
         </el-col> -->
         <el-col :span="24">
-          <el-form-item label="短信内容" prop="result">
+          <el-form-item label="建议" prop="result">
             <el-input
               type="textarea"
               v-model="form.hpi"

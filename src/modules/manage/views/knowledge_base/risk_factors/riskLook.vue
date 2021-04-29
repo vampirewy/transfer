@@ -9,13 +9,13 @@
       <div><span>客户编号：</span><span>{{data.orgCode}}</span></div>
     </div> -->
     <div class="lines"></div>
-    <div class="titless">查看短信</div>
+    <div class="titless">查看危险因素</div>
     <!-- <div class="title">数据列表</div> -->
     <div class="lookPressure">
-      <div><span>就医编号：</span><span>{{data.orgCode}}</span></div>
-      <div><span>就医类型：</span><span>{{data.medicalType}}</span></div>
-      <div><span>医保卡号：</span><span>{{data.orgCode}}</span></div>
-      <div><span>就医机构：</span><span>{{data.orgCode}}</span></div>
+      <div><span>危险分类：</span><span>{{data.orgCode}}</span></div>
+      <div><span>来源：</span><span>{{data.medicalType}}</span></div>
+      <div><span>标题：</span><span>{{data.orgCode}}</span></div>
+      <div><span>选项：</span><span>{{data.orgCode}}</span></div>
     </div>
     <!-- <div class="lookPressure">
       <div><span>就医科室：</span><span>{{data.department}}</span></div>
@@ -24,13 +24,13 @@
       <div><span>出院时间：</span><span>{{data.outDate}}</span></div>
     </div> -->
     <div class="lookPressure">
-      <div><span>就医金额：</span><span>是否健康</span></div>
-      <!-- <div><span>当前状态：</span><span>{{data.result}}</span></div> -->
+      <div><span>危险因素：</span><span>是否健康</span></div>
+      <div><span>排序编号：</span><span>2</span></div>
       <div></div>
       <div></div>
     </div>
     <div class="lookPressure">
-      <div><span>现病史：</span><span>{{data.hpi}}</span></div>
+      <div><span>现病史：</span><span>适量减少肉类及肉制品摄入量</span></div>
     </div>
     <!-- <div class="lookPressure">
       <div><span>主诉：</span><span>{{data.complaint}}</span></div>
