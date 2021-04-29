@@ -268,7 +268,7 @@ export default {
   /deep/ .el-dialog__footer {
     padding-top: 30px;
     padding-right: 26px;
-    text-align: right;
+    text-align: center;
     button {
       width: 90px;
       border-radius: 20px;

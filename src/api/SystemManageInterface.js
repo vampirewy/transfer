@@ -53,6 +53,26 @@ class SystemManageInterface extends BaseModule {
   deleteRole(id) {
     return this.delete(`/role/${id}`);
   }
+  // 保存机构信息
+  saveOrganInfo(data) {
+    return this.post('/organ_info/save_organ_info', data);
+  }
+  // 获取评估设置模型列表
+  getListPage(data) {
+    return this.post('/model_assess/get_list_page', data);
+  }
+  // 获取评估设置模型详情
+  getListDetail(id) {
+    return this.get(`/model_assess/get_detail/${id}`);
+  }
+  // 保存评估模型信息
+  saveModel(data) {
+    return this.post('/model_assess/save_model_assess', data);
+  }
+  // 获取参数排序
+  getMainList(modelCode) {
+    return this.get(`/model_assess/get_main_item_list/${modelCode}`);
+  }
 }
 
 export default new SystemManageInterface();

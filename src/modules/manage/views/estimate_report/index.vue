@@ -18,7 +18,7 @@
     </comment>
     <examine
       v-else-if="view === 5"
-      :id="currentData.reportId"
+      :id="currentData"
       @close="handleClose"
     >
     </examine>
@@ -160,12 +160,11 @@
                     v-if="getAccess('customer_pool_distribute')"
             ><img src="@/assets/images/common/createReport.png" />生成报告</el-button>
           </div>
-          <el-button
+          <el-button v-if="Tabactive == 1 || Tabactive == 2"
             style="width:120px;margin: 16px 0;"
                     size="small"
                     @click="generateReport"
                     class="btn-new btnDel"
-                    v-if="getAccess('customer_pool_distribute')"
             ><img src="@/assets/images/common/createReport.png" />生成报告</el-button>
           <!-- <div v-if="Tabactive == 1 || Tabactive == 2">
             <el-button

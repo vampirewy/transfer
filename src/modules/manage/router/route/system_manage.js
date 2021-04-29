@@ -49,6 +49,16 @@ export default [
         },
         component: () => import('../../views/system_manage/system_configuration'),
       },
+      {
+        path: '/role_sort',
+        name: 'role_sort',
+        meta: {
+          title: '参数排序',
+          access: 'role_sort',
+          keepAlive: true,
+        },
+        component: () => import('../../views/system_manage/system_configuration/sort'),
+      },
     ],
   },
 ];

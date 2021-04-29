@@ -1,5 +1,7 @@
 <template>
   <div class="staff-page">
+    <explain v-if="viewIndex == 2" :id="currentData" @close="handleClose">
+    </explain>
     <div class="TabBars">
       <div>
         <span
@@ -28,30 +30,31 @@
     <!-- 基本设置 -->
     <template v-if="Tabactive === 0">
       <el-form
-        :class="{ 'staff-form inputCommon': true, 'staff-detail-form': detail }"
-        :model="staffForm"
-        ref="staffForm"
+        :model="form"
+        ref="Form"
         :rules="staffRules"
         label-width="90px"
         label-suffix="："
       >
         <el-row>
           <el-col :span="12">
-            <el-form-item label="机构名称">
-              <el-input
-                @input="handleMobileChange"
-                placeholder="请输入"
-              ></el-input>
+            <el-form-item label="机构名称" prop="name">
+              <el-input v-model="form.name" placeholder="请输入"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="机构地址">
-              <el-input type="text" placeholder="请输入"></el-input>
+              <el-input
+                type="text"
+                v-model="form.address"
+                placeholder="请输入"
+              ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="机构网址">
               <el-input
+                v-model="form.webstie"
                 @input="handleMobileChange"
                 placeholder="请输入"
               ></el-input>
@@ -59,36 +62,24 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="机构电话">
-              <el-input type="text" placeholder="请输入"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="公众号">
               <el-input
-                @input="handleMobileChange"
+                type="text"
+                v-model="form.telphone"
                 placeholder="请输入"
               ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="移动端">
-              <el-input type="text" placeholder="请输入"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="6">
             <el-form-item label="机构logo">
               <div class="form-item-upload">
-                <el-input placeholder="请上传机构logo"></el-input>
+                <el-input
+                  v-model="form.icon"
+                  placeholder="请上传机构logo"
+                ></el-input>
                 <upload
-                  :on-success="
-                    (res) => handleUploadSuccess(res, 'personalFrontImage')
-                  "
-                  :on-progress="
-                    () => handleUploadProgress('personalFrontImage')
-                  "
-                  :on-error="() => handleUploadError('personalFrontImage')"
+                  :on-success="(res) => handleUploadSuccess(res, 'icon')"
+                  :on-progress="() => handleUploadProgress('icon')"
+                  :on-error="() => handleUploadError('icon')"
                   :before-upload="beforeUpload"
                   :show-file-list="false"
                   :disabled="personalFrontImageLoading"
@@ -104,16 +95,14 @@
               </div>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="24">
-            <el-form-item
-              label="机构介绍"
-              prop="ingrenient"
-              style="width: 100%"
-            >
+            <el-form-item label="机构介绍" style="width: 100%">
               <el-input
                 type="textarea"
                 :rows="3"
-                v-model="text"
+                v-model="form.intro"
                 placeholder="请输入"
                 :maxlength="300"
                 show-word-limit
@@ -121,11 +110,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item
-              label="休息日"
-              prop="ingrenient"
-              style="width: 100%"
-            >
+            <el-form-item label="休息日" prop="ingrenient" style="width: 100%">
               <el-checkbox-group
                 v-model="checkedCities"
                 @change="handleCheckedCitiesChange"
@@ -139,74 +124,65 @@
         </el-row>
       </el-form>
       <div class="form-buttons">
-          <el-button
-            class="sureBtn"
-            type="primary"
-            @click="submit"
-            >保存</el-button
-          >
-        </div>
+        <el-button class="sureBtn" type="primary" @click="submitOrgan"
+          >保存</el-button
+        >
+      </div>
     </template>
+    <!-- 评估设置 -->
     <template v-if="Tabactive === 1">
       <el-table :data="tableData" align="center">
         <el-table-column
-          prop="realName"
+          prop="name"
           label="模型名称"
           show-overflow-tooltip
         ></el-table-column>
         <el-table-column
-          prop="mobileNo"
+          prop="name"
           label="评估疾病"
           show-overflow-tooltip
         ></el-table-column>
-        <el-table-column
-          prop="roleName"
-          label="性别"
-          show-overflow-tooltip
-        ></el-table-column>
-        <el-table-column
-          prop="activated"
-          label="年龄范围"
-          show-overflow-tooltip
-        >
+        <el-table-column prop="gender" label="性别" show-overflow-tooltip>
           <template slot-scope="scope">{{
-            scope.row.activated ? '激活' : '未激活'
+            scope.row.gender == 1 ? '男' : '女'
           }}</template>
         </el-table-column>
-        <el-table-column prop="state" label="介绍及说明" show-overflow-tooltip>
+        <el-table-column prop="minAge" label="年龄范围" show-overflow-tooltip>
+          <template slot-scope="scope"
+            >{{ scope.row.minAge }}~{{ scope.row.maxAge }}</template
+          >
+        </el-table-column>
+        <el-table-column
+          prop="intro"
+          style="width: 80px"
+          label="介绍及说明"
+          show-overflow-tooltip
+        >
           <template slot-scope="scope">
-          <span style="color:#3154AC;">{{
-            scope.row.state
-          }}</span>
+            <span
+              style="color: #3154ac; cursor: pointer"
+              @click="handleComment(scope.row)"
+              >编辑</span
+            >
           </template>
         </el-table-column>
         <el-table-column prop="state" label="平均风险" show-overflow-tooltip>
           <template slot-scope="scope">
-          <span style="color:#3154AC;">{{
-            scope.row.state
-          }}</span>
+            <el-button
+              type="text"
+              size="small"
+              @click="handleComment(scope.row)"
+              >设置</el-button
+            >
           </template>
         </el-table-column>
-        <el-table-column
-          prop="id"
-          label="操作"
-        >
+        <el-table-column prop="id" label="操作">
           <template slot-scope="scope">
-            <el-button
-              type="text"
-              size="small"
-              @click="detail(scope.row)"
+            <el-button type="text" size="small" @click="detail(scope.row)"
               >评估设置</el-button
             >
-            <el-button
-              type="text"
-              size="small"
-              >|</el-button
-            >
-            <el-button
-              type="text"
-              size="small"
-              @click="edit(scope.row)"
+            <el-button type="text" size="small">|</el-button>
+            <el-button type="text" size="small" @click="sort(scope.row)"
               >参数排序</el-button
             >
             <el-button
@@ -244,11 +220,20 @@
 
 <script>
 import StaffForm from './form.vue';
+import Explain from './explain.vue';
 import QueryFilter from '~/src/components/query_page/query_filter.vue';
 import Upload from '~/src/components/upload/index.vue';
 import OperateButton from '~/src/components/query_page/operate_button.vue';
 import deleteIcon from '~/src/assets/images/message-box-delete@2x.png';
-const cityOptions = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
+const cityOptions = [
+  '星期一',
+  '星期二',
+  '星期三',
+  '星期四',
+  '星期五',
+  '星期六',
+  '星期日',
+];
 export default {
   name: 'Staff',
   components: {
@@ -256,15 +241,16 @@ export default {
     QueryFilter,
     OperateButton,
     Upload,
+    Explain,
   },
   data() {
     return {
-      text: '',
-      checkedCities: ['星期一', '星期二'],
+      checkedCities: [],
       cities: cityOptions,
       tabbor: ['基本设置', '评估设置', '报告配置'],
       Tabactive: 0,
       viewIndex: 1,
+      currentData: {},
       status: '',
       role: '',
       query: '',
@@ -274,6 +260,19 @@ export default {
       pageSize: 15,
       currentId: '',
       roleOptions: [],
+      staffRules: {
+        name: [{ required: true, message: '机构名称不能为空' }],
+      },
+      form: {
+        name: '',
+        intro: '',
+        code: '',
+        address: '',
+        icon: '',
+        webstie: '',
+        telphone: '',
+        holiday: '',
+      },
     };
   },
   activated() {
@@ -283,11 +282,31 @@ export default {
     this.queryList();
   },
   methods: {
+    handleComment(data) {
+      this.viewIndex = 2;
+      this.currentData = data;
+      console.log(this.currentData);
+    },
+    handleClose() {
+      this.viewIndex = 1;
+      // this.queryPageList();
+    },
+    // 转化休息日
+    handleCheckedCitiesChange() {
+      this.form.holiday = this.checkedCities.toString();
+    },
     // 上传
     beforeUpload(file) {
-      const isPDF = file.type === 'application/pdf';
-      if (!isPDF) {
-        this.$message.warning('上传附件只能是 pdf 格式!');
+      const imgType = [
+        'image/gif',
+        'image/jpeg',
+        'image/jpg',
+        'image/png',
+        'image/svg',
+      ];
+      const isPDF = file.type;
+      if (imgType.indexOf(isPDF) === -1) {
+        this.$message.warning('上传附件只能是图片格式!');
         return false;
       }
       const sizeValid = file.size / 1024 / 1024 < 15; // 这里做文件大小限制
@@ -302,12 +321,13 @@ export default {
     },
     handleUploadSuccess(res, key) {
       this[`${key}Loading`] = false;
-      const { code, data, message } = res;
-      if (code === 200) {
-        this.formData[key] = data;
-        this.formData[`${key}Name`] = data.substring(data.lastIndexOf('/') + 1);
+      if (res.rc === 0) {
+        this.form[key] = res.data;
+        this.form[`${key}Name`] = res.data.substring(
+          res.data.lastIndexOf('/') + 1,
+        );
       } else {
-        this.$message.error(message || '网络异常！');
+        this.$message.error('网络异常！');
       }
     },
     handleUploadError(key) {
@@ -317,9 +337,26 @@ export default {
     handleUploadProgress(key) {
       this[`${key}Loading`] = true;
     },
-    // 你好
     TabbarBtn(index) {
       this.Tabactive = index;
+    },
+    // 机构保存
+    submitOrgan() {
+      this.$refs.Form.validate((valid) => {
+        if (valid) {
+          this.$api.systemManageInterface
+            .saveOrganInfo({
+              ...this.form,
+            })
+            .then((response) => {
+              if (response.data.rc === 0) {
+                this.$message.success('操作成功');
+              } else {
+                this.$message.error('网络异常！');
+              }
+            });
+        }
+      });
     },
     queryRoleList() {
       this.$api.systemManageInterface.roleList().then((res) => {
@@ -339,14 +376,12 @@ export default {
       this.queryList();
     },
     queryList() {
-      // 员工列表
+      // 评估模型列表
       this.$api.systemManageInterface
-        .userList({
+        .getListPage({
           pageNo: this.currentPage,
           pageSize: 15,
-          search: this.query,
-          roleId: this.role,
-          state: this.status,
+          keywords: '',
         })
         .then((res) => {
           const { data } = res;
@@ -369,6 +404,14 @@ export default {
       // 编辑页面
       this.viewIndex = 3;
       this.currentId = data.id;
+    },
+    sort(data) {
+      this.$router.push({
+        path: '/role_sort',
+        query: {
+          id: data.code,
+        },
+      });
     },
     changeState(data) {
       // 启用 / 禁用
@@ -410,7 +453,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.form-buttons{
+.form-buttons {
   text-align: center;
 }
 .divTop {
