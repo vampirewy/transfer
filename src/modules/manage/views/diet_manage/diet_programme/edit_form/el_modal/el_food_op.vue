@@ -10,45 +10,52 @@
   >
     <p class="item-title">已选择食物</p>
     <div class="selected-food">
-      <div class="selected-food-item" v-for="item in 10" :key="item">
-        菠萝鸡片
+      <div
+        class="selected-food-item"
+        v-for="item in seletedFoodsList"
+        :key="item.id"
+      >
+        {{ item.name || item.names }}
         <img src="@/assets/images/body/closeChooseTab.png" alt="" />
       </div>
     </div>
     <p class="item-title">食物列表</p>
     <div class="food-list">
       <div class="left">
-        <el-tabs stretch type="border-card" value="1">
+        <el-tabs stretch type="border-card" v-model="tabsActiceValue">
           <el-tab-pane label="成品菜" name="1">
-            <el-collapse>
-              <el-collapse-item title="中国菜" name="1">
+            <el-collapse accordion @change="changeCollapse">
+              <el-collapse-item
+                v-for="item in caiCateData"
+                :key="item.id"
+                :title="item.name"
+                :name="item.id"
+              >
                 <ul class="food-type-list">
-                  <li class="food-type-item is_active">心调养食谱</li>
-                  <li class="food-type-item">心调养食谱</li>
-                  <li class="food-type-item">心调养食谱</li>
-                </ul>
-              </el-collapse-item>
-              <el-collapse-item title="中国菜" name="2">
-                <ul class="food-type-list">
-                  <li class="food-type-item">心调养食谱</li>
-                  <li class="food-type-item">心调养食谱</li>
-                  <li class="food-type-item">心调养食谱</li>
-                </ul>
-              </el-collapse-item>
-              <el-collapse-item title="中国菜" name="3">
-                <ul class="food-type-list">
-                  <li class="food-type-item">心调养食谱</li>
-                  <li class="food-type-item">心调养食谱</li>
-                  <li class="food-type-item">心调养食谱</li>
+                  <li
+                    v-for="it in item.list"
+                    :key="it.id"
+                    class="food-type-item"
+                    :class="{ is_active: caiCateActiveId === it.id }"
+                    @click="selectCaiCate(it.id)"
+                  >
+                    {{ it.name }}
+                  </li>
                 </ul>
               </el-collapse-item>
             </el-collapse>
           </el-tab-pane>
           <el-tab-pane label="原料" name="2">
             <ul class="food-type-list">
-              <li class="food-type-item is_active">谷类及制品</li>
-              <li class="food-type-item">谷类及制品</li>
-              <li class="food-type-item">谷类及制品</li>
+              <li
+                v-for="item in rawCateData"
+                :key="item.paramValue"
+                @click="selectRawCate(item.paramValue)"
+                :class="{ is_active: rawCateActiveId === item.paramValue }"
+                class="food-type-item"
+              >
+                {{ item.name }}
+              </li>
             </ul>
           </el-tab-pane>
         </el-tabs>
@@ -59,9 +66,11 @@
             <div class="searchCondition">
               <div class="searchLeft">
                 <div class="searchInputFormItem">
-                  <el-input placeholder="请输入条件搜索"> </el-input>
+                  <el-input v-model="name" placeholder="请输入条件搜索">
+                  </el-input>
                   <span class="searchBtnImgSpan">
                     <img
+                      @click="search"
                       class="searchBtnImg"
                       src="@/assets/images/common/topsearch.png"
                     />
@@ -72,33 +81,77 @@
                 <div class="buttones">
                   <div class="searchFor">
                     <img
+                      @click="search"
                       src="@/assets/images/common/topsearchblue.png"
                       alt=""
                     />
                   </div>
-                  <div class="resetAll">重置</div>
+                  <div class="resetAll" @click="reset">重置</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <el-table row-class-name="table-row" :data="foodTableData">
-          <el-table-column type="selection" align="center" width="55">
-          </el-table-column>
-          <el-table-column align="center" prop="title" label="菜名">
-          </el-table-column>
-          <el-table-column align="center" prop="title2" label="餐次">
-          </el-table-column>
-        </el-table>
-        <el-pagination
-          background
-          layout="prev, pager, next, jumper, total, sizes"
-          :total="total"
-          :page-sizes="[15]"
-          :current-page="currentPage"
-          :page-size="pageSize"
-          @current-change="handleCurrentChange"
-        ></el-pagination>
+        <template v-if="tabsActiceValue === '1'">
+          <el-table
+            row-key="id"
+            @select="selectFood"
+            @select-all="selectFood"
+            row-class-name="table-row"
+            :data="caiTableData"
+          >
+            <el-table-column reserve-selection type="selection" align="center" width="55">
+            </el-table-column>
+            <el-table-column align="center" prop="name" label="菜名">
+            </el-table-column>
+            <el-table-column align="center" prop="mealTimes" label="餐次">
+            </el-table-column>
+          </el-table>
+          <el-pagination
+            background
+            layout="prev, pager, next, jumper, total, sizes"
+            :total="total"
+            :page-sizes="[15]"
+            :current-page.sync="currentPage"
+            :page-size="pageSize"
+            @current-change="loadCaiTableData"
+          ></el-pagination>
+        </template>
+        <template v-else>
+          <el-table
+            row-key="id"
+            @select="selectFood"
+            @select-all="selectFood"
+            row-class-name="table-row"
+            :data="rawTableData"
+          >
+            <el-table-column reserve-selection type="selection" align="center" width="55">
+            </el-table-column>
+            <el-table-column align="center" prop="names" label="菜名">
+            </el-table-column>
+            <el-table-column align="center" prop="otherName" label="餐次">
+            </el-table-column>
+            <el-table-column align="center" prop="kcal" label="能量">
+            </el-table-column>
+            <el-table-column align="center" prop="protein" label="蛋白质">
+            </el-table-column>
+            <el-table-column align="center" prop="protein" label="蛋白质">
+            </el-table-column>
+            <el-table-column align="center" prop="fat" label="脂肪">
+            </el-table-column>
+            <el-table-column align="center" prop="cho" label="碳水化合物">
+            </el-table-column>
+          </el-table>
+          <el-pagination
+            background
+            layout="prev, pager, next, jumper, total, sizes"
+            :total="total2"
+            :page-sizes="[15]"
+            :current-page.sync="currentPage2"
+            :page-size="pageSize"
+            @current-change="loadRawMaterialTableData"
+          ></el-pagination>
+        </template>
       </div>
     </div>
     <div slot="footer" class="dialog-footer">
@@ -127,10 +180,20 @@ export default {
   },
   data() {
     return {
+      tabsActiceValue: '1',
+      caiCateActiveId: '',
+      rawCateActiveId: '',
       currentPage: 1,
+      currentPage2: 1,
+      total2: 0,
       total: 0,
       pageSize: 15,
-      foodTableData: [{ title: '干烧冬笋', title2: '午餐、晚餐' }],
+      name: '',
+      seletedFoodsList: [],
+      caiCateData: [],
+      rawCateData: [],
+      rawTableData: [],
+      caiTableData: [],
     };
   },
   computed: {
@@ -143,18 +206,123 @@ export default {
       },
     },
   },
+  watch: {
+    tabsActiceValue(val) {
+      if (
+        val === '2' &&
+        this.rawCateData.length <= 0 &&
+        this.rawTableData.length <= 0
+      ) {
+        this.loadRawMaterialCateData();
+        this.loadRawMaterialTableData();
+      }
+    },
+  },
+  created() {
+    this.loadCaiCateData(1);
+    this.loadCaiTableData();
+  },
   methods: {
-    handleCurrentChange() {},
-    async submit() {
-      await this.$api.companyManageInterface.updateWorkUnit({
-        id: this.value.id,
-        workUnitName: this.value.workUnitName,
-        contact: this.value.contact,
-        mobile: this.value.mobile,
-        address: this.value.address,
-      });
-      this.$message.success('操作成功');
-      this.cancel();
+    selectFood(rows) {
+      this.seletedFoodsList.push(...rows);
+    },
+    selectCaiCate(id) {
+      this.caiCateActiveId = id;
+      this.loadCaiTableData();
+    },
+    selectRawCate(id) {
+      this.rawCateActiveId = id;
+      this.loadRawMaterialTableData();
+    },
+    changeCollapse(id) {
+      this.loadCaiCateData(2, id - 1, id);
+    },
+    loadCaiCateData(lv, index, parentId = 0) {
+      this.$api.dietFinishedDishInterface
+        .getCaiCategory({
+          lv,
+          parentId,
+        })
+        .then((res) => {
+          const { data } = res.data.data;
+          if (lv === 1) {
+            data.forEach((item) => {
+              item.list = [];
+            });
+            this.caiCateData = data;
+          } else {
+            this.caiCateData[index].list = data;
+          }
+        });
+    },
+    loadCaiTableData() {
+      this.$api.dietFinishedDishInterface
+        .getDietFinishedDishList({
+          pageNo: this.currentPage,
+          pageSize: this.pageSize,
+          dietSortId: this.caiCateActiveId,
+          name: this.name,
+        })
+        .then((res) => {
+          const { total, data } = res.data.data;
+          data.forEach((item) => {
+            item.mealTimes = [
+              item.isBreakfast - 2 && '早餐',
+              item.isLunch - 2 && '午餐',
+              item.isDinner - 2 && '晚餐',
+              item.isOther - 2 && '加餐',
+            ]
+              .filter(Boolean)
+              .join('、');
+          });
+          this.caiTableData = data;
+          this.total = total;
+        });
+    },
+    loadRawMaterialCateData() {
+      this.$api.dietRawMaterial
+        .getDietIngredientCategory('DP001')
+        .then((res) => {
+          this.rawCateData = res.data.data;
+        });
+    },
+    loadRawMaterialTableData() {
+      this.$api.dietRawMaterial
+        .getDietIngredientList({
+          pageNo: this.currentPage2,
+          pageSize: this.pageSize,
+          names: this.name,
+          foodSort: this.rawCateActiveId,
+        })
+        .then((res) => {
+          const { total, data } = res.data.data;
+          this.total2 = total;
+          this.rawTableData = data;
+        });
+    },
+    search() {
+      if (this.tabsActiceValue === '1') {
+        this.currentPage = 1;
+        this.loadCaiTableData();
+      } else {
+        this.currentPage2 = 1;
+        this.loadRawMaterialTableData();
+      }
+    },
+    reset() {
+      this.name = '';
+      if (this.tabsActiceValue === '1') {
+        this.currentPage = 1;
+        this.caiCateActiveId = '';
+        this.loadCaiTableData();
+      } else {
+        this.currentPage2 = 1;
+        this.loadRawMaterialTableData();
+      }
+    },
+    submit() {
+      this.$emit('change', this.seletedFoodsList);
+      this.visibles = false;
     },
   },
 };
@@ -215,7 +383,7 @@ export default {
     font-size: 12px;
     font-weight: 400;
     color: #333333;
-    margin:0 10px 10px 0;
+    margin: 0 10px 10px 0;
     box-sizing: border-box;
     img {
       width: 16px;

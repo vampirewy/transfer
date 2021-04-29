@@ -194,6 +194,7 @@ export default {
       );
       this.$emit('change', ids);
       this.visibles = false;
+      this.$refs.elMenuTemplateTypeForm.clearSelection();
     },
   },
 };

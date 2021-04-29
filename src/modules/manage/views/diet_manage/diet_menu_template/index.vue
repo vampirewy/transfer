@@ -108,8 +108,10 @@
           <el-table-column prop="intro" label="介绍"> </el-table-column>
           <el-table-column label="操作" width="160px">
             <template slot-scope="scope">
-              <el-button type="text" size="small">编辑</el-button>
-              <el-button type="text" size="small" @click="config"
+              <el-button type="text" @click="edit(scope.row.id)" size="small"
+                >编辑</el-button
+              >
+              <el-button type="text" size="small" @click="config(scope.row.id)"
                 >配置</el-button
               >
             </template>
@@ -126,6 +128,7 @@
         ></el-pagination>
       </div>
       <el-menu-template
+        :value="dietMenuTemDetail"
         ref="elMenuTemplate"
         :visible.sync="isShowDietMenuTemplate"
       ></el-menu-template>
@@ -135,7 +138,7 @@
       ></el-menu-template-type>
     </template>
     <template v-else>
-      <dist-menu-config-form></dist-menu-config-form>
+      <dist-menu-config-form :id="dietMenuConfigId"></dist-menu-config-form>
     </template>
   </div>
 </template>
@@ -153,7 +156,8 @@ export default {
   },
   data() {
     return {
-      viewIndex: 1,
+      viewIndex: 2,
+      dietMenuConfigId: '1385184210518355969',
       isShowDietMenuTemplate: false,
       isShowDietMenuTemplateType: false,
       currentPage: 1,
@@ -162,6 +166,7 @@ export default {
       cateData: [],
       total: 0,
       menuTypeSelectName: '',
+      dietMenuTemDetail: {},
       query: {
         name: '',
         day: '',
@@ -174,19 +179,30 @@ export default {
   },
   methods: {
     add() {
+      this.dietMenuTemDetail = { id: '' };
       this.isShowDietMenuTemplate = true;
+    },
+    edit(id) {
+      this.$api.dietMenuTemplateInterface
+        .getDietMenuTemplateDetail(id)
+        .then((res) => {
+          this.dietMenuTemDetail = res.data.data;
+          this.isShowDietMenuTemplate = true;
+        });
     },
     menuTemOp() {
       this.isShowDietMenuTemplateType = true;
     },
-    config() {
+    config(id) {
       this.viewIndex = 2;
+      this.dietMenuConfigId = id;
     },
     handleDietMenuTypeChange(e) {
       if (this.menuType === 1) {
         this.menuTypeSelectName = e[0];
       } else {
         this.$refs.elMenuTemplate.menuTypeSelectName = e[0];
+        this.$refs.elMenuTemplate.ruleForm.dietTemplateSortId = e[0];
       }
     },
     deletes() {

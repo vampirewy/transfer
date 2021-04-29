@@ -91,6 +91,7 @@ export default {
   data() {
     return {
       ruleForm: {
+        id: '',
         dietTemplateSortId: '',
         name: '',
         intro: '',
@@ -105,6 +106,24 @@ export default {
       },
       menuTypeSelectName: '',
     };
+  },
+  watch: {
+    value(val) {
+      if (val.id) {
+        this.ruleForm = val;
+        this.menuTypeSelectName = val.dietTemplateSortName;
+      } else {
+        this.ruleForm = {
+          id: '',
+          dietTemplateSortId: '',
+          name: '',
+          intro: '',
+          minKcal: '',
+          maxKcal: '',
+        };
+        this.menuTypeSelectName = '';
+      }
+    },
   },
   computed: {
     visibles: {
@@ -123,9 +142,11 @@ export default {
         .then(() => {
           this.$message.success('操作成功!');
           this.visibles = false;
+          this.$parent.loadData();
         });
     },
     selectType() {
+      this.$parent.menuType = 2;
       this.$parent.isShowDietMenuTemplateType = true;
     },
   },

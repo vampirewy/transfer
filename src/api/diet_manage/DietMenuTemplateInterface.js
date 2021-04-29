@@ -26,7 +26,7 @@ class DietMenuTemplateInterface extends BaseModule {
   deleteDietMenuTemCate(data) {
     return this.post('/diet_sort/deleted', data);
   }
-  getDietMenuTemConfig(data) {
+  saveDietMenuTemConfig(data) {
     return this.post('/diet_template/save_template_config', data);
   }
   getDietMenuTemConfigDetail(id) {
