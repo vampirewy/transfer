@@ -249,10 +249,6 @@ export default {
     }
   },
   methods: {
-    handleFoodSelect(e) {
-      // 选择食物回调
-      console.log(e);
-    },
     deleteDietTempPlateConfigDtos(index, inx, inxs) {
       this.editableTabs[index].mealTypeDtos[inx].dietTemplateConfigDtos.splice(
         inxs,
@@ -288,6 +284,17 @@ export default {
     foodAdd(index, inx) {
       this.selectDietMenuIndex = [index, inx];
       this.isShowFoodOp = true;
+    },
+    handleFoodSelect(e) {
+      // 选择食物回调
+      console.log(e);
+      e.forEach((item) => {
+        item.caiDto = item.caiIngredientDtos;
+      });
+      const [index, inx] = this.selectDietMenuIndex;
+      this.editableTabs[index].mealTypeDtos[inx].dietTemplateConfigDtos.push(
+        ...e,
+      );
     },
   },
 };
