@@ -157,7 +157,7 @@ export default {
   data() {
     return {
       viewIndex: 2,
-      dietMenuConfigId: '1385184210518355969',
+      dietMenuConfigId: '1388090523102408706',
       isShowDietMenuTemplate: false,
       isShowDietMenuTemplateType: false,
       currentPage: 1,
@@ -197,12 +197,13 @@ export default {
       this.viewIndex = 2;
       this.dietMenuConfigId = id;
     },
-    handleDietMenuTypeChange(e) {
+    handleDietMenuTypeChange(id = '', name = '') {
       if (this.menuType === 1) {
-        this.menuTypeSelectName = e[0];
+        this.menuTypeSelectName = name;
+        this.query.dietTemplateSortId = id;
       } else {
-        this.$refs.elMenuTemplate.menuTypeSelectName = e[0];
-        this.$refs.elMenuTemplate.ruleForm.dietTemplateSortId = e[0];
+        this.$refs.elMenuTemplate.menuTypeSelectName = name;
+        this.$refs.elMenuTemplate.ruleForm.dietTemplateSortId = id;
       }
     },
     deletes() {
@@ -229,7 +230,6 @@ export default {
           this.tableData = data;
         });
     },
-    look() {},
     search() {
       this.currentPage = 1;
       this.loadData();

@@ -73,6 +73,7 @@
                         <p class="food-title">
                           <img
                             class="food-circle"
+                            v-show="its.configType === 1"
                             :src="
                               isActive
                                 ? require('@/assets/images/diet/icon_line.png')
@@ -87,7 +88,15 @@
                             "
                             alt=""
                           />
-                          {{ its.caiId }}
+                          <img
+                            class="food-circle"
+                            v-show="its.configType === 2"
+                            :src="
+                              require('@/assets/images/diet/icon_circle.png')
+                            "
+                            alt=""
+                          />
+                          {{ its.name }}
                           <i
                             @click="isShowCooking = true"
                             class="el-icon-warning"
@@ -114,10 +123,16 @@
                             index.toString() + inx.toString() + inxs.toString(),
                         }"
                       >
-                        <div class="food-item foot-list_item">
-                          <p>{{ its.caiDto.name }}</p>
+                        <div
+                          v-for="(
+                            its2, inxs2
+                          ) in its.templateDietIngredientDtoList"
+                          :key="inxs2"
+                          class="food-item foot-list_item"
+                        >
+                          <p>{{ its2.name }}</p>
                           <div class="input-box">
-                            <el-input type="text" v-model="its.caiDto.name" />
+                            <el-input type="text" v-model="its2.weight" />
                             g
                           </div>
                         </div>
@@ -133,7 +148,7 @@
           <el-button size="small" class="cancelBtn" @click="back">
             返回
           </el-button>
-          <el-button size="small" class="sureBtn" type="primary"
+          <el-button size="small" class="sureBtn" type="primary" @click="submit"
             >保存</el-button
           >
         </div>
@@ -268,18 +283,21 @@ export default {
     back() {
       this.$parent.viewIndex = 1;
     },
-    removeTab(index) {
-      this.editableTabs.splice(index - 1, 1);
-      this.editableTabs.slice(index - 1).forEach((item) => {
-        let { name } = item;
-        name--;
-        item.title = `第${name}天`;
-        item.name = name.toString();
-      });
+    removeTab(day) {
+      const index = this.editableTabs.findIndex(item => item.day === day * 1);
+      this.editableTabs.splice(index, 1);
     },
     addTab() {
-      const len = this.editableTabs.length + 1;
-      this.editableTabs.push({ title: `第${len}天`, name: len.toString() });
+      const day = this.editableTabs.length + 1;
+      const meal = {
+        day,
+        mealTypeDtos: [
+          { mealType: 1, dietTemplateConfigDtos: [] },
+          { mealType: 2, dietTemplateConfigDtos: [] },
+          { mealType: 3, dietTemplateConfigDtos: [] },
+        ],
+      };
+      this.editableTabs.push(meal);
     },
     foodAdd(index, inx) {
       this.selectDietMenuIndex = [index, inx];
@@ -287,14 +305,65 @@ export default {
     },
     handleFoodSelect(e) {
       // 选择食物回调
-      console.log(e);
-      e.forEach((item) => {
-        item.caiDto = item.caiIngredientDtos;
+      e = e.map((item) => {
+        const obj = {};
+        if (item.name) {
+          obj.name = item.name;
+          obj.configType = 1;
+          obj.caiId = item.id;
+          obj.templateDietIngredientDtoList = item.caiIngredientDtos.map(
+            (it) => {
+              it.name = it.dietIngredientName;
+              return it;
+            },
+          );
+        } else {
+          obj.name = item.names;
+          obj.configType = 2;
+          obj.dietIngredientId = item.id;
+        }
+        obj.weight = 0;
+        return obj;
       });
       const [index, inx] = this.selectDietMenuIndex;
       this.editableTabs[index].mealTypeDtos[inx].dietTemplateConfigDtos.push(
         ...e,
       );
+    },
+    submit() {
+      const obj = [];
+      this.editableTabs.forEach((item) => {
+        item.mealTypeDtos.forEach((item2) => {
+          item2.dietTemplateConfigDtos.forEach((item3) => {
+            if (item3.templateDietIngredientDtoList) {
+              item3.templateDietIngredientDtoList.forEach((item4) => {
+                obj.push({
+                  dietTemplateId: this.id,
+                  configType: item3.configType,
+                  day: item.day,
+                  mealType: item2.mealType,
+                  dietIngredientId: item3.dietIngredientId,
+                  weight: item4.weight,
+                });
+              });
+            }
+            obj.push({
+              dietTemplateId: this.id,
+              configType: item3.configType,
+              day: item.day,
+              mealType: item2.mealType,
+              caiId: item3.caiId,
+              dietIngredientId: item3.dietIngredientId,
+              weight: item3.weight,
+            });
+          });
+        });
+      });
+      this.$api.dietMenuTemplateInterface
+        .saveDietMenuTemConfig(obj)
+        .then(() => {
+          this.$message.success('操作成功!');
+        });
     },
   },
 };
