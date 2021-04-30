@@ -53,7 +53,7 @@
         <div class="divTop">
           <div class="divTitle">
             <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
-            体检库</div>
+            干预模版</div>
 
           <div class="searchCondition">
           <div class="searchLeft">
@@ -64,8 +64,19 @@
                 <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
             </span>
           </div>
-          <!-- <div>
-            <span>客户性别：</span>
+          <div>
+            <span>是否启用：</span>
+           <el-select
+                  v-model="formData.gender"
+                  placeholder="请选择"
+                  style="width: 140px"
+          >
+            <el-option label="是" value="1" key="1"></el-option>
+            <el-option label="否" value="2" key="2"></el-option>
+          </el-select>
+          </div>
+          <div>
+            <span>适用性别：</span>
            <el-select
                   v-model="formData.gender"
                   placeholder="请选择"
@@ -74,7 +85,7 @@
             <el-option label="男" value="1" key="1"></el-option>
             <el-option label="女" value="2" key="2"></el-option>
           </el-select>
-          </div> -->
+          </div>
           <!-- <div>
             <span>人员类别：</span>
             <el-select
@@ -120,7 +131,7 @@
                     class="btn-new btnAdd"
                     size="small"
                     style="margin: 16px 0"
-                    @click="edits()"
+                    @click="InterventionAdd()"
             ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
             <el-button
                     size="small"
@@ -134,30 +145,34 @@
                     class="btn-new btnDel"
                     v-if="getAccess('customer_pool_distribute')"
             ><img src="@/assets/images/common/deliverBtn.png" />分配</el-button> -->
-            <el-button
+            <!-- <el-button
             style="width:120px;"
                     size="small"
                     class="btn-new btnDel"
                     v-if="getAccess('customer_pool_distribute')"
-            ><img src="@/assets/images/common/createReport.png" />生成报告</el-button>
+            ><img src="@/assets/images/common/createReport.png" />生成报告</el-button> -->
           </div>
         </div>
         <div>
           <el-table
-                  :data="table.list"
+                  :data="dataSource"
                   @selection-change="handleSelectionChange"
                   ref="multipleTable"
                   align="center"
                   show-overflow-tooltip
           >
             <el-table-column type="selection" min-width="40"></el-table-column>
-            <el-table-column label="体检库名称" prop="itemName" min-width="100" show-overflow-tooltip>
+            <el-table-column label="模版名称" prop="clientNo" min-width="80" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>
-                  {{ scope.row.itemName }}
+                  {{ scope.row.clientNo }}
                 </span>
               </template>
             </el-table-column>
+            <el-table-column label="适用性别" prop="createTime" min-width="80" show-overflow-tooltip />
+            <el-table-column label="条件" prop="createTime" min-width="80" show-overflow-tooltip />
+            <el-table-column label="组别" prop="createTime" min-width="80" show-overflow-tooltip />
+            <el-table-column label="级别" prop="createTime" min-width="80" show-overflow-tooltip />
             <el-table-column label="是否启用" min-width="150"  prop="state">
               <template slot-scope="scope">
                 <el-switch
@@ -170,18 +185,6 @@
                 </el-switch>
               </template>
             </el-table-column>
-            <el-table-column label="建档时间" prop="createTime" min-width="130" show-overflow-tooltip />
-            <el-table-column label="报告数" prop="doctorNames" min-width="130" show-overflow-tooltip>
-              <template slot-scope="scope">
-                <span>{{ scope.row.doctorNames || '0'}}</span>
-              </template>
-            </el-table-column>
-            <!-- <el-table-column label="附件" prop="annexTotal"  width="60" show-overflow-tooltip>
-              <template slot-scope="scope">
-                <span style="color:#36BF2F;">{{ scope.row.annexTotal || '0'}}</span>
-              </template>
-            </el-table-column> -->
-
             <!-- <el-table-column label="附件" prop="attachment">
               <template slot-scope="scope">
                 <div
@@ -203,19 +206,19 @@
                 <el-button
                         type="text"
                         size="small"
-                        @click="edits(scope.row.id)"
+                        @click="edits()"
                         v-if="getAccess('customer_pool_edit')"
-                >编辑</el-button>
-                <!-- <el-button type="text"
+                >计划</el-button>
+                <el-button type="text"
                         size="small"
                         style="color:#DDE0E6"
                         >|</el-button>
                 <el-button
                         type="text"
                         size="small"
-                        @click="claim(scope)"
-                >删除</el-button
-                > -->
+                        @click="editplan(scope)"
+                >编辑</el-button
+                >
                 <!-- <el-button
                         class="font-enable"
                         type="text"
@@ -296,7 +299,7 @@ export default {
       formData: {
         gridId: '',
         doctorId: '',
-        keywords: '', // 体检库
+        keywords: '',
         gender: '',
         genderType: '',
         startTime: '',
@@ -307,57 +310,23 @@ export default {
         pageSize: 15,
         type: 0,
       },
-      form: {
-        gender: '', // 性别
-        state: '', // 状态
-        isMain: '', // 重要指标
-        itemName: '', // 项目名称
-        organItemLibraryId: '', // 项目分类
-        // genderList: genderListByPhysicalProjectList,
-        // 状态数据
-        stateList: '',
-        isMainList: '',
-        libraryList: [],
-      },
-      table: {
-        list: [],
-        totalCount: 0, // 总条数
-        currentPage: 1, // 当前页
-        pageSize: 15, // 一页数量
-      },
       isCollapse: true,
       modalVisible: false,
       currentValue: {},
     };
   },
   methods: {
-    async getList() {
-      const reqBody = {
-        organItemLibraryId: this.form.organItemLibraryId,
-        gender: this.form.gender,
-        isMain: this.form.isMain,
-        state: this.form.state,
-        itemName: this.formData.keywords,
-        pageNo: this.table.currentPage,
-        pageSize: this.table.pageSize,
-      };
-      const res = await this.$api.physicalProjectListInterface.listPage(
-        reqBody,
-      );
-      const { data } = res.data;
-      if (data) {
-        this.table.list = data.data || [];
-        this.table.totalCount = data.total;
-      }
-    },
     // 展开更多
     upMore() {
       this.isTrue = !this.isTrue;
     },
-    // 编辑
-    edits(id) {
-      this.currentValue.type = id;
-      this.modalVisible = true;
+    // 新增
+    InterventionAdd() {
+      console.log('12312313');
+      this.$router.push({
+        name: 'InterventionAdd',
+      });
+      // this.modalVisible = true;
     },
     cancel() {
       this.modalVisible = false;
@@ -465,6 +434,11 @@ export default {
         type: 2, // 2-分配
       });
     },
+    editplan() {
+      this.$router.push({
+        name: 'InterventionEdit',
+      });
+    },
     claim({ row = {} }) {
       if (!row.id) {
         if (!this.chooseUserList.length) {
@@ -562,10 +536,9 @@ export default {
     },
   },
   mounted() {
-    this.getList();
-    // this.getUserList();
-    // this.getGridList(); // 获取人员列类别
-    // this.getDoctor(); // 获取医生列表
+    this.getUserList();
+    this.getGridList(); // 获取人员列类别
+    this.getDoctor(); // 获取医生列表
   },
 };
 </script>

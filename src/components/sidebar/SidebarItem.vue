@@ -77,7 +77,7 @@ export default {
         }
         return bool;
       });
-      console.log(showingChildren);
+      // console.log(showingChildren);
       // When there is only one child router, the child router is displayed by default
       if (showingChildren.length === 1) { // 子集就是一集
         return true;
@@ -112,12 +112,12 @@ export default {
         window.open(name.split('_')[1]);
         return;
       }
-      console.log(name);
-      console.log({
-        name,
-        params,
-        query,
-      });
+      // console.log(name);
+      // console.log({
+      //   name,
+      //   params,
+      //   query,
+      // });
       this.$router.push({
         name,
         params,

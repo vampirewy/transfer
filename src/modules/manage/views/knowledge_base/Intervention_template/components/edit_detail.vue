@@ -28,7 +28,7 @@
           style="width: 430px"
         ></el-input>
       </el-form-item> -->
-      <el-form-item label="体检库名称：">
+      <!-- <el-form-item label="体检库名称：">
         <el-input
           v-model="value.address"
           :disabled="value.type === 2"
@@ -36,9 +36,8 @@
           :maxlength="180"
           style="width: 410px"
         ></el-input>
-      </el-form-item>
+      </el-form-item> -->
       <div style="display: flex;">
-      <!-- <el-col :span="6"> -->
         <el-form-item label="性别限制：" >
           <el-select v-model="result" placeholder="请选择">
             <el-option
@@ -49,8 +48,6 @@
             ></el-option>
           </el-select>
         </el-form-item>
-      <!-- </el-col> -->
-      <!-- <el-col :span="6"> -->
         <el-form-item label="是否启用：" >
           <el-select v-model="results" placeholder="请选择">
             <el-option
@@ -61,8 +58,41 @@
             ></el-option>
           </el-select>
         </el-form-item>
-      <!-- </el-col> -->
       </div>
+      <div style="display: flex;">
+        <el-form-item label="干预形式：" >
+          <el-select v-model="result" placeholder="请选择">
+            <el-option
+              v-for="item in resultOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="主要内容：" >
+          <el-select v-model="results" placeholder="请选择">
+            <el-option
+              v-for="item in resultOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </div>
+      <el-col :span="24">
+          <el-form-item label="干预提示：" prop="result">
+            <el-input
+              type="textarea"
+              v-model="hpi"
+              :rows="5"
+              placeholder="请输入"
+              :maxlength="300"
+              show-word-limit
+            ></el-input>
+          </el-form-item>
+        </el-col>
       <!-- <el-form-item label="导入体检库：">
         <el-input
           v-model="value.contact"
@@ -81,7 +111,7 @@
         ></el-input>
       </el-form-item> -->
     </el-form>
-    <div slot="footer" class="dialog-footer">
+    <div slot="footer" class="dialog-footer" v-if="value.type === 1">
       <el-button size="small" @click="cancel" class="cancelBtn">取消</el-button>
       <el-button type="primary" size="small" @click="submit" class="sureBtn">确定</el-button>
     </div>
@@ -92,14 +122,14 @@ export default {
   name: 'edit_or_detail',
   props: {
     visible: Boolean,
-    value: Boolean,
+    value: Object,
   },
-  // props: ['id', 'editId'],
   data() {
     return {
       modalTitle: '编辑',
       result: '',
       results: '',
+      hpi: '',
       resultOptions: [
         { value: 1, label: '未指定' },
         { value: 2, label: '治疗中' },
@@ -109,9 +139,6 @@ export default {
         { value: 6, label: '其他' },
       ],
     };
-  },
-  mounted() {
-    console.log(this.value, '接收的数据');
   },
   methods: {
     cancel() {

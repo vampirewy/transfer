@@ -119,9 +119,58 @@ export default [
         name: 'Automatic_matching',
         meta: {
           title: '自从匹配',
-          keepAlive: true,
+          hideInMenu: true,
+          hideInBread: true,
         },
         component: () => import('../../views/knowledge_base/Outlier_matching/Automatic_matching.vue'),
+      },
+      {
+        path: '/matchingList',
+        name: 'matchingList',
+        meta: {
+          title: '指标匹配',
+          keepAlive: true,
+        },
+        component: () => import('../../views/knowledge_base/IndexMatching/matchingList.vue'),
+      },
+      {
+        path: '/MatchingAddEdit',
+        name: 'MatchingAddEdit',
+        meta: {
+          title: '新增指标匹配',
+          hideInMenu: true,
+          hideInBread: true,
+        },
+        component: () => import('../../views/knowledge_base/IndexMatching/MatchingAddEdit.vue'),
+      },
+      {
+        path: '/InterventionList',
+        name: 'InterventionList',
+        meta: {
+          title: '干预模版',
+          keepAlive: true,
+        },
+        component: () => import('../../views/knowledge_base/Intervention_template/InterventionList.vue'),
+      },
+      {
+        path: '/InterventionAdd',
+        name: 'InterventionAdd',
+        meta: {
+          title: '新增干预模版',
+          hideInMenu: true,
+          hideInBread: true,
+        },
+        component: () => import('../../views/knowledge_base/Intervention_template/InterventionAdd.vue'),
+      },
+      {
+        path: '/InterventionEdit',
+        name: 'InterventionEdit',
+        meta: {
+          title: '编辑计划',
+          hideInMenu: true,
+          hideInBread: true,
+        },
+        component: () => import('../../views/knowledge_base/Intervention_template/InterventionEdit.vue'),
       },
     ],
   },

@@ -293,7 +293,7 @@ export default {
     return {
       isTrue: true,
       currentValue: {},
-      modalVisible: true,
+      modalVisible: false,
       total: 0,
       dataSource: [],
       gridList: [],
@@ -401,7 +401,7 @@ export default {
      */
     handleAddCheck(val) {
       this.$router.push({
-        name: 'risk_factors_add',
+        name: 'Automatic_matching',
         params: {
           type: 'edit',
           qusType: Number(val),

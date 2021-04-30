@@ -41,9 +41,13 @@
     </template>-->
     <!--<template v-slot:right>-->
   <div class="divTop">
-    <div class="divTitle">
-      <!-- <span><img src="@/assets/images/common/titleLeft.png" alt=""></span> -->
+    <!-- <div class="divTitle">
+      <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
       自动匹配
+    </div> -->
+    <div class="form-title">
+        <div class="line"></div>
+        <h3 class="name">自动匹配</h3>
     </div>
     <div class="searchCondition">
       <div class="searchLeft">
@@ -564,6 +568,27 @@ export default {
     .el-dropdown-menu__item{
       padding: 0 40px;
 
+    }
+  }
+  .form-title {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-top: 20px;
+    .line {
+      width: 36px;
+      height: 4px;
+      background: #3154AC;
+      margin-right: 8px;
+      border-radius: 1px;
+      position: absolute;
+      margin-top: 12px;
+      opacity: 0.5;
+    }
+    .name {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333333;
     }
   }
    .handle-btn {

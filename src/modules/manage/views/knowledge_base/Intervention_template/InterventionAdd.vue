@@ -9,61 +9,23 @@
       label-suffix="："
     >
       <!-- <div class="basic-info-title">{{id ? '' : '新增'}}短信模版</div> -->
-      <!-- <el-row>
-        <el-col :span="6">
-          <el-form-item label="姓名" prop="clientInfoId">
-            <el-popover
-              ref="userPopover"
-              placement="bottom-start"
-              width="650"
-              trigger="click"
-              @show="popoverStatus = true"
-              @hide="popoverStatus = false">
-              <select-user v-if="popoverStatus"  @change="handleSelectUser"></select-user>
-              <el-input
-                class="select-user-trigger"
-                slot="reference"
-                disabled
-                v-model="currentUser.name"
-                placeholder="请选择客户">
-                <i :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`" slot="suffix"></i>
-              </el-input>
-            </el-popover>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="性别" prop="gender">
-            <el-radio v-model="currentUser.gender" :label="2" disabled>女</el-radio>
-            <el-radio v-model="currentUser.gender" :label="1" disabled>男</el-radio>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="年龄" prop="age">
-            <el-input v-model="currentUser.age" disabled></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="客户编号" prop="customerType">
-            <el-input v-model="currentUser.gridName" disabled></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row> -->
-      <!-- <div class="main-info-title">新增短信</div> -->
+      <!-- <div class="line"></div>
+      <div class="main-info-title">新增异常库</div> -->
       <div class="form-title">
         <div class="line"></div>
-        <h3 class="name">编辑计划</h3>
+        <h3 class="name">新增异常库</h3>
       </div>
       <el-row>
-        <!-- <el-col :span="6">
-          <el-form-item label="就医编号" prop="hospital">
-            <el-input v-model="form.hospital" placeholder="请输入"></el-input>
+        <el-col :span="6">
+          <el-form-item label="模版名称" >
+            <el-input v-model="form.patientNo" placeholder="请输入" @input="replace"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="就医类型" prop="medicalType">
-            <el-select v-model="form.medicalType" placeholder="请选择就医类型">
+          <el-form-item label="适用性别" >
+            <el-select v-model="form.result" placeholder="请选择当前状态">
               <el-option
-                v-for="item in typeOptions"
+                v-for="item in resultOptions"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -72,50 +34,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="医保卡号" prop="department">
-            <el-input v-model="form.department" placeholder="请输入"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="就医机构" prop="patientNo">
-            <el-input v-model="form.patientNo" placeholder="请输入" @input="replace"></el-input>
-          </el-form-item>
-        </el-col> -->
-        <!-- <el-col :span="6">
-          <el-form-item label="就医科室" prop="doctorName">
-            <el-input v-model="form.doctorName" placeholder="请输入"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="主管医生" prop="hpi">
-            <el-input v-model="form.hpi" placeholder="请输入" :maxlength="300"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="就医时间" prop="inDate">
-            <el-date-picker
-              v-model="form.inDate"
-              type="date"
-              placeholder="请选择就医时间"
-              value-format="yyyy-MM-dd"
-              :picker-options="options.inDate"
-              @change="handleStartDateChange"
-            ></el-date-picker>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="出院时间" prop="outDate">
-            <el-date-picker
-              v-model="form.outDate"
-              type="date"
-              placeholder="请选择出院时间"
-              value-format="yyyy-MM-dd"
-              :picker-options="options.outDate"
-            ></el-date-picker>
-          </el-form-item>
-        </el-col> -->
-        <el-col :span="6">
-          <el-form-item label="短信类别" prop="result" >
+          <el-form-item label="条件关系" >
             <el-select v-model="form.result" placeholder="请选择当前状态" width="150">
               <el-option
                 v-for="item in resultOptions"
@@ -127,76 +46,44 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="短信主题" prop="result">
-            <el-select v-model="form.result" placeholder="请选择当前状态">
-              <el-option
-                v-for="item in resultOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
+          <el-form-item label="组别" >
+            <el-input v-model="form.patientNo" placeholder="请输入" @input="replace"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="适宜性别" prop="result">
-            <el-select v-model="form.result" placeholder="请选择当前状态">
-              <el-option
-                v-for="item in resultOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
+          <el-form-item label="级别" >
+            <el-input v-model="form.patientNo" placeholder="请输入" @input="replace"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="适宜人群" prop="result">
-            <el-select v-model="form.result" placeholder="请选择当前状态">
-              <el-option
-                v-for="item in resultOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="适宜季节" prop="result">
-            <el-select v-model="form.result" placeholder="请选择当前状态">
-              <el-option
-                v-for="item in resultOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <!-- <el-col :span="6">
-          <el-form-item label="检查" prop="examination">
-            <el-input v-model="form.examination" placeholder="请输入" :maxlength="300"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="诊断" prop="diagnosis">
-            <el-input v-model="form.diagnosis" placeholder="请输入" :maxlength="300"></el-input>
-          </el-form-item>
-        </el-col> -->
-        <el-col :span="24">
-          <el-form-item label="短信内容" prop="result">
-            <el-input
-              type="textarea"
-              v-model="form.hpi"
-              :rows="5"
-              placeholder="请输入"
-              :maxlength="4000"
-              show-word-limit
-            ></el-input>
-          </el-form-item>
+          <div class="isEnabled">
+            <span>是否启用：</span>
+                <el-switch
+                  v-model="isstate"
+                  active-value="1"
+                  inactive-value="0"
+                  active-color="#13ce66"
+                  @change=changeStatus()
+                  >
+                </el-switch>
+          </div>
         </el-col>
       </el-row>
+      <div class="form-title">
+        <div class="line"></div>
+        <h3 class="name">详细内容</h3>
+      </div>
+      <div>
+        <div class="TabBars">
+          <div v-for="(item,index) in tabbor" :key="index">
+          <span :class="Tabactive === index?'TabBarsName':'TabBarsNames'" @click="TabbarBtn(index)">
+              {{item}}
+            </span>
+          </div>
+        </div>
+        <div class="interventionCon">
+        </div>
+      </div>
       <!-- <div class="form-buttons">
         <el-button plain @click="$emit('cancel')" size="small">取消</el-button>
         <el-button type="primary" @click="submit" size="small">保存</el-button>
@@ -236,6 +123,7 @@ export default {
   data() {
     return {
       popoverStatus: false,
+      isstate: true,
       form: {
         clientInfoId: '',
         hospital: '',
@@ -253,6 +141,9 @@ export default {
         therapy: '方案', // 方案
         orgCode: '',
       },
+      tabbor: ['小项', '人员类别', '异常', '组合异常', '疾病评估', '体质辨识'],
+      Tabactive: 0,
+      tabIndex: 0,
       options: {
         inDate: {
           disabledDate: (cur) => {
@@ -323,10 +214,16 @@ export default {
     }
   },
   methods: {
+    TabbarBtn(index) {
+      this.Tabactive = index;
+      // this.$emit('messageData', index, this.tabIndex);
+    },
     handleStartDateChange() {
       if (this.form.medicalType === 1 && this.form.inDate) {
         this.form.outDate = this.form.inDate;
       }
+    },
+    changeStatus() {
     },
     handleSelectUser(data) {
       this.$refs.userPopover.doClose();
@@ -404,6 +301,11 @@ export default {
         color: #333333;
       }
     }
+  .isEnabled{
+    font-size: 14px;
+    color: #666666;
+    margin: 10px 0 0 25px;
+  }
   .basic-info-title, .main-info-title {
     font-size: 18px;
     font-weight: 600;
@@ -505,5 +407,116 @@ export default {
       border: 1px solid #3154AC;
       text-align:center;
     }
+  }
+  .interventionCon{
+    height: 430px;
+    width: 100%;
+    border: solid 1px #DDE0E6;
+    border-radius: 0px 8px 8px 8px;
+    margin-bottom: 20px;
+    margin-top: -1px;
+  }
+    .TabBars{
+    display: flex;
+    margin-top: 20px;
+    // background: #F6F8FC;
+    width: 100%;
+    margin-left: 10px;
+    margin-left: 0px;
+    overflow: hidden;
+    padding-left: -5px;
+    border-left: solid 1px #EEF1F5;
+    border-top-left-radius: 11px;
+   .TabBarsNames{
+    cursor: pointer;
+    background: #EEF1F5;
+    border-color: transparent;
+    color: #666666;
+    position: relative;
+    margin-right: 30px;
+    // padding: 10px 14px 10px 16px;
+    font-size: 14px;
+    border-radius: 8px 5px 0 0;
+    display: block;
+    width: 100px;
+    height: 36px;
+    line-height: 36px;
+    text-align: center;
+    border-bottom: solid 1px #EEF1F5;
+  }
+  .TabBarsNames:after{
+    content: '';
+    display: block;
+    width: 25px;
+    height: 36px;
+    position: absolute;
+    -webkit-transform: skewX(23deg);
+    transform: skewX(23deg);
+    background: #EEF1F5;
+    border-top-right-radius: 8px;
+    top: 0px;
+    right: -13px;
+    border-bottom: solid 1px #EEF1F5;
+  }
+  .TabBarsNames:before {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 36px;
+    position: absolute;
+    -webkit-transform: skewX(165deg);
+    transform: skewX(163deg);
+    background: #EEF1F5;
+    border-top-left-radius: 8px;
+    top: 0px;
+    left: -4px;
+    border-bottom: solid 1px #EEF1F5;
+}
+  .TabBarsName{
+    cursor: pointer;
+    background: #ffffff;
+    border-color: transparent;
+    color: #333333;
+    font-weight: 500;
+    position: relative;
+    margin-right: 26px;
+    // padding: 10px 14px 10px 16px;
+    font-size: 14px;
+    border-radius: 8px 5px 0 0;
+    display: block;
+    width: 100px;
+    height: 36px;
+    line-height: 36px;
+    text-align: center;
+    border-top: solid 1px #DDE0E6;
+  }
+  .TabBarsName:after{
+    content: '';
+    display: block;
+    width: 25px;
+    height: 36px;
+    position: absolute;
+    -webkit-transform: skewX(23deg);
+    transform: skewX(23deg);
+    background: white;
+    border-top-right-radius: 8px;
+    top: 0px;
+    right: -10px;
+    border-right: solid 1px #DDE0E6;
+  }
+  .TabBarsName:before {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 36px;
+    position: absolute;
+    -webkit-transform: skewX(165deg);
+    transform: skewX(163deg);
+    background: white;
+    border-top-left-radius: 8px;
+    top: 0px;
+    left: -4px;
+    border-left: solid 1px #DDE0E6;
+  }
   }
 </style>

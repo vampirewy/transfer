@@ -43,50 +43,27 @@
   <div class="divTop">
     <div class="divTitle">
       <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
-      异常库
+      指标匹配
     </div>
     <div class="searchCondition">
       <div class="searchLeft">
         <div class="searchInputFormItem">
-          <el-input placeholder="体检库/ICD10" v-model="form.name">
+          <el-input placeholder="名称/项目" v-model="formData.keyWord">
           </el-input>
           <span class="searchBtnImgSpan" @click="search(1)">
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
               </span>
         </div>
         <div>
-          <span>异常类型：</span>
+          <span>显示列表：</span>
           <el-select
-                  v-model="formData.Types"
+                  v-model="formData.clientGrid"
                   placeholder="请选择"
                   style="width: 140px"
                   clearable
           >
-            <el-option :label="item.name" :value="item.paramValue"
-                       v-for="(item, index) in lifeStyleList" :key="index"></el-option>
-          </el-select>
-        </div>
-        <div>
-          <span>性别限制：</span>
-          <el-select
-                  v-model="formData.gender"
-                  placeholder="请选择"
-                  style="width: 140px"
-                  clearable
-          >
-            <el-option label="男" value="1" key="1"></el-option>
-            <el-option label="女" value="2" key="2"></el-option>
-          </el-select>
-        </div>
-        <div>
-          <span>推荐检查：</span>
-          <el-select
-                  v-model="formData.lifeStyleLv"
-                  placeholder="请选择"
-                  style="width: 140px"
-          >
-            <el-option :label="item.name" :value="item.paramValue"
-                       v-for="(item, index) in lifeStyleList" :key="index"></el-option>
+            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+                       :key="index"></el-option>
           </el-select>
         </div>
       </div>
@@ -96,19 +73,19 @@
             <img src="@/assets/images/common/topsearchblue.png" alt="">
           </div>
           <div class="resetAll" @click="reset">重置</div>
-          <div class="more" v-if="isTrue"  @click="upMore">
+          <!-- <div class="more" v-if="isTrue"  @click="upMore">
             <span>></span>
             展开更多</div>
           <div class="more noMore" v-else @click="upMore">
-            <span>></span>收起筛选</div>
+            <span>></span>收起筛选</div> -->
         </div>
       </div>
     </div>
   </div>
-    <div v-if="!isTrue" class="searchCondition" style="width:80%;">
+    <!-- <div v-if="!isTrue" class="searchCondition" style="width:80%;">
       <div class="searchLeft" style="padding-left:5px;">
         <div>
-          <span>紧急性：</span>
+          <span>问卷来源：</span>
           <el-select
                   v-model="formData.source"
                   placeholder="请选择"
@@ -120,36 +97,56 @@
           </el-select>
         </div>
         <div>
-          <span>重要性：</span>
-          <el-select
-                  v-model="formData.source"
-                  placeholder="请选择"
+          <span>填写日期：</span>
+          <el-date-picker
+                  v-model="formData.startTime"
+                  type="date"
+                  value-format="yyyy-MM-dd"
+                  :max-date="formData.endTime"
+                  placeholder="选择开始日期"
                   style="width: 140px"
                   clearable
           >
-            <el-option :label="item.name" :value="item.paramValue"
-                       v-for="(item, index) in questionFromList" :key="index"></el-option>
-          </el-select>
+          </el-date-picker>
+          <span class="timing">-</span>
+          <el-date-picker
+                  v-model="formData.endTime"
+                  type="date"
+                  value-format="yyyy-MM-dd"
+                  :min-date="formData.startTime"
+                  placeholder="选择结束日期"
+                  style="width: 140px"
+                  clearable
+          >
+          </el-date-picker>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="topbottomborder"></div>
     <div class="divRightTitleDiv">
       <!-- <div class="divRightTitle"><span>|</span>客户池</div> -->
       <div>
         <el-button
-                class="btn-new btnAdd"
-                size="small"
-                style="margin: 16px 0"
-                @click="handleAddCheck(1)"
-                v-if="getAccess('life_style_questionnaire_add')"
-        ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
-        <el-button
                 size="small"
                 class="btn-new btnDel"
-                @click="handleSomeRemove"
+                style="padding: 0 16px;"
+                @click="handleSomeAdd"
                 v-if="getAccess('life_style_questionnaire_deleted')"
+        ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
+        <el-button
+                class="btn-new btnAdd"
+                size="small"
+                style="margin: 16px 0;padding: 0 16px;"
+                @click="handleAddCheck(1)"
+                v-if="getAccess('life_style_questionnaire_add')"
         ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
+        <el-button
+                class="btn-new btnAdd"
+                size="small"
+                style="margin: 16px 0;float: right;padding: 0 16px;"
+                @click="handleAddCheck(1)"
+                v-if="getAccess('life_style_questionnaire_add')"
+        ><img src="@/assets/images/common/Sort.png" />默认排序</el-button>
       </div>
     </div>
       <div class="user-follow">
@@ -168,70 +165,67 @@
             </el-dropdown>
           </div>
         </div>-->
-      <el-table style="width: 100%" :data="table.list" align="center"
+      <el-table style="width: 100%" :data="dataSource" align="center"
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="40"></el-table-column>
-        <el-table-column label="异常名称" prop="abnormalName" show-overflow-tooltip>
+        <el-table-column label=" 待匹配异常" prop="clientNo" min-width="200" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{ scope.row.abnormalName | getResult}}</span>
+            <span>{{ scope.row.clientNo | getResult}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="JCD10编码" prop="abnormalCode" show-overflow-tooltip>
+        <!-- <el-table-column label=" 报告" prop="sourceName" min-width="150" show-overflow-tooltip>
           <template slot-scope="scope">
-                <span class="clientName"
-                      @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
-                  {{ scope.row.abnormalCode | getResult}}
-                </span>
+            <span>{{ scope.row.clientNo | getResult}}</span>
           </template>
-        </el-table-column>
-        <el-table-column prop="gender" label="其他名称" min-width="100px">
+        </el-table-column> -->
+        <!-- <el-table-column prop="gender" label="分类" min-width="80px">
           <template slot-scope="scope">
             <span>{{scope.row.gender | getResultGender}}</span>
           </template>
-        </el-table-column>
-        <el-table-column label="类型" prop="abnormalTypeName">
+        </el-table-column> -->
+        <!-- <el-table-column label="适宜人群" prop="age">
           <template slot-scope="scope">
-            <span>{{ scope.row.abnormalTypeName | getResult}}</span>
+            <span>{{ scope.row.age | getResult}}</span>
+          </template>
+        </el-table-column> -->
+        <!-- <el-table-column prop="clientGridName" label="人员类别" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{ scope.row.clientGridName | getResult}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="gender" label="性别" show-overflow-tooltip>
+        <el-table-column prop="lifeStyleLvName" label="生活方式" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{ scope.row.gender | getResult}}</span>
+            <span>{{ scope.row.lifeStyleLvName | getResult}}</span>
+          </template>
+        </el-table-column> -->
+        <!-- <el-table-column prop="workUnitName" label="适宜季节" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{ scope.row.workUnitName | getResult}}</span>
+          </template>
+        </el-table-column> -->
+        <el-table-column label="报告" prop="questionDate" min-width="150" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span  style="color:#36BF2F;">{{ scope.row.questionDate | getResultDate}}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="dangerLevelName" label="重要性" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{ scope.row.dangerLevelName | getResult}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="medicalLimitName" label="紧急性" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{ scope.row.medicalLimitName | getResult}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="推荐科室" prop="questionDate" min-width="100" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{ scope.row.questionDate | getResultDate}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="推荐检查" prop="sourceName" show-overflow-tooltip>
+        <!-- <el-table-column label="问卷来源" prop="sourceName" show-overflow-tooltip>
           <template slot-scope="scope">
             {{ scope.row.sourceName | getResult}}
           </template>
         </el-table-column>
-        <!-- <el-table-column prop="gender" label="份数" width="60px">
+        <el-table-column prop="gender" label="份数" width="60px">
           <template slot-scope="scope">
             <span>{{scope.row.questionCount | getResult}}</span>
           </template>
         </el-table-column> -->
-        <el-table-column label="操作" prop="index" width="120">
+        <el-table-column label="操作" prop="index" min-width="150">
           <template slot-scope="scope">
-            <!-- <el-button
+            <el-button
               type="text"
               size="small"
               @click="
                 $router.push({
-                  name: 'knowledge_smsAdd',
+                  name: 'risk_factors_add',
                   params: {
                     type: 'edit',
                     qusType: scope.row.questionType,
@@ -240,14 +234,15 @@
                 })
               "
               v-if="getAccess('life_style_questionnaire_edit') && scope.row.questionType !== 4"
-            >编辑</el-button> -->
+            >忽略</el-button>
+            <span style="color:#DDE0E6">|</span>
             <el-button
               type="text"
               size="small"
-              @click="exceptionBtn(scope.row)"
+              @click="edits()"
               v-if="getAccess('life_style_questionnaire_view')
               "
-            >查看</el-button>
+            >匹配</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -266,6 +261,11 @@
       </div>
     <!--</template>
   </query-page>-->
+    <edit-detail
+      :visible="modalVisible"
+      :value="currentValue"
+      @cancel="cancel"
+    ></edit-detail>
   </div>
 </template>
 
@@ -277,6 +277,7 @@ import OperateButton from '~/src/components/query_page/operate_button.vue';
 // import * as dayjs from 'dayjs';
 // import report from '../components/question_report.vue';
 import deleteIcon from '~/src/assets/images/message-box-delete@2x.png';
+import editDetail from './components/edit_detail.vue';
 
 export default {
   name: 'question',
@@ -286,17 +287,19 @@ export default {
     Search,
     QueryFilter,
     OperateButton,
+    editDetail,
   },
   data() {
     return {
       isTrue: true,
+      currentValue: {},
+      modalVisible: false,
       total: 0,
       dataSource: [],
       gridList: [],
-      lifeStyleList: [], // 异常类型
-      questionFromList: [], // 紧急类型
+      lifeStyleList: [], // 生活方式
+      questionFromList: [], // 问卷来源
       formData: {
-        Types: '',
         keyWord: '',
         gender: '',
         clientGrid: '',
@@ -311,18 +314,6 @@ export default {
       params: {
         pageNo: 1,
         pageSize: 15,
-      },
-      form: {
-        dangerLevel: '',
-        state: '',
-        name: '',
-        dangerLevelList: [],
-        stateList: '',
-        organTypeList: [],
-      },
-      table: {
-        list: [],
-        totalCount: 0,
       },
       options: {},
       types: [],
@@ -346,60 +337,35 @@ export default {
     };
   },
   activated() {
-    // this.getGridList();
-    // this.getQuestionFromList();
-    // this.getLifeStyleList();
-    // if (localStorage.getItem('homeSearchData')) {
-    //   const HomeSearchData = JSON.parse(localStorage.getItem('homeSearchData'));
-    //   this.formData.startTime = HomeSearchData.startDate;
-    //   this.formData.endTime = HomeSearchData.lastDate;
-    //   this.formData.searchRange = HomeSearchData.searchRange;
-    // }
+    this.getGridList();
+    this.getQuestionFromList();
+    this.getLifeStyleList();
+    if (localStorage.getItem('homeSearchData')) {
+      const HomeSearchData = JSON.parse(localStorage.getItem('homeSearchData'));
+      this.formData.startTime = HomeSearchData.startDate;
+      this.formData.endTime = HomeSearchData.lastDate;
+      this.formData.searchRange = HomeSearchData.searchRange;
+    }
   },
   destroyed() {
     // 清除时间 和 我的/平台
     localStorage.removeItem('homeSearchData');
   },
-  mounted() {
-    this.getList();
-    this.onLoad();
-  },
   methods: {
-    onLoad() {
-      this.getOrganTypeList();
-      this.getImportList();
-    },
-    exceptionBtn(scope) {
-      this.$router.push({
-        path: `/basic_data/unusual_list/detail/${scope.id}`,
-      });
-    },
-    async getList() {
-      const reqBody = {
-        name: this.form.name, // 异常名称
-        level: this.form.dangerLevel, // 重要性 ，传下拉列表接口的值，如1，2，3
-        state: this.form.state, // 状态，0不启用 1启用
-        type: this.form.abnormalType, // 异常类型，传下拉列表接口的值，如1，2，3
-        pageNo: this.table.currentPage,
-        pageSize: this.table.pageSize,
-      };
-      const res = await this.$api.unusualListInterface.listPage(reqBody);
+    async getGridList() {
+      const res = await this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
       const { data } = res.data;
-      if (data) {
-        this.table.list = data.data || [];
-        this.total = data.total;
-      }
+      this.gridList = data.data;
     },
-    async getOrganTypeList() {
-      const { data } = await this.$api.unusualListInterface.getOrganTypeList();
-      this.lifeStyleList = data.data;
-      this.$set(this.form, 'organTypeList', data.data);
+    async getQuestionFromList() {
+      const res = await this.$api.health.getQuestionFromList({ pageNo: 1, pageSize: 10000 });
+      const { data } = res.data;
+      this.questionFromList = data;
     },
-    async getImportList() {
-      const { data } = await this.$api.unusualListInterface.getImportList();
-      this.questionFromList = data.data;
-      this.$set(this.form, 'dangerLevelList', data.data);
-      // this.form.organTypeList
+    async getLifeStyleList() {
+      const res = await this.$api.health.getLifeStyleList({ pageNo: 1, pageSize: 10000 });
+      const { data } = res.data;
+      this.lifeStyleList = data;
     },
     handleSelectionChange(val) {
       // table组件选中事件,
@@ -421,13 +387,21 @@ export default {
       this.params.pageNo = current;
       this.fetch();
     },
+    // 匹配
+    edits() {
+      console.log('12312313');
+      this.modalVisible = true;
+    },
+    cancel() {
+      this.modalVisible = false;
+    },
     /**
      * 新增
      * @param val
      */
     handleAddCheck(val) {
       this.$router.push({
-        name: 'ExceptionAddEdit',
+        name: 'risk_factors_add',
         params: {
           type: 'edit',
           qusType: Number(val),
@@ -500,6 +474,16 @@ export default {
         },
       );
     },
+    handleSomeAdd() {
+      this.$router.push({
+        name: 'MatchingAddEdit',
+        params: {
+          type: 'Add',
+          qusType: '',
+          id: '',
+        },
+      });
+    },
     fetch() {
       if (this.formData.startTime) {
         this.formData.startTime = `${this.formData.startTime} 00:00:00`;
@@ -531,12 +515,12 @@ export default {
       this.isTrue = !this.isTrue;
     },
   },
-  // beforeRouteEnter(to, from, next) {
-  //   next((vm) => {
-  //     vm.getQuestionType();
-  //     vm.fetch();
-  //   });
-  // },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      // vm.getQuestionType();
+      vm.fetch();
+    });
+  },
 };
 </script>
 

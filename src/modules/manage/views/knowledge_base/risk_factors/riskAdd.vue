@@ -48,7 +48,11 @@
           </el-form-item>
         </el-col>
       </el-row> -->
-      <div class="main-info-title">新增短信</div>
+      <!-- <div class="main-info-title">新增短信</div> -->
+      <div class="form-title">
+        <div class="line"></div>
+        <h3 class="name">新增危险因素库</h3>
+      </div>
       <el-row>
         <!-- <el-col :span="6">
           <el-form-item label="就医编号" prop="hospital">
@@ -122,7 +126,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
+        <!-- <el-col :span="6">
           <el-form-item label="来源" prop="result">
             <el-select v-model="form.result" placeholder="请选择当前状态">
               <el-option
@@ -133,8 +137,8 @@
               ></el-option>
             </el-select>
           </el-form-item>
-        </el-col>
-        <el-col :span="6">
+        </el-col> -->
+        <!-- <el-col :span="6">
           <el-form-item label="标题" prop="result">
             <el-select v-model="form.result" placeholder="请选择当前状态">
               <el-option
@@ -145,8 +149,8 @@
               ></el-option>
             </el-select>
           </el-form-item>
-        </el-col>
-        <el-col :span="6">
+        </el-col> -->
+        <!-- <el-col :span="6">
           <el-form-item label="选项" prop="result">
             <el-select v-model="form.result" placeholder="请选择当前状态">
               <el-option
@@ -157,7 +161,7 @@
               ></el-option>
             </el-select>
           </el-form-item>
-        </el-col>
+        </el-col> -->
         <!-- <el-col :span="6">
           <el-form-item label="适宜季节" prop="result">
             <el-select v-model="form.result" placeholder="请选择当前状态">
@@ -389,6 +393,27 @@ export default {
 
 <style lang="scss" scoped>
 .medical-history-form {
+  .form-title {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-top: 20px;
+    .line {
+      width: 36px;
+      height: 4px;
+      background: #3154AC;
+      margin-right: 8px;
+      border-radius: 1px;
+      position: absolute;
+      margin-top: 12px;
+      opacity: 0.5;
+    }
+    .name {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333333;
+    }
+  }
   .basic-info-title, .main-info-title {
     font-size: 18px;
     font-weight: 600;

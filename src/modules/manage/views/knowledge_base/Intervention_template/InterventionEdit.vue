@@ -1,126 +1,53 @@
 <template>
   <div class="userManage">
-    <div>
-    <!-- <query-page @reset="reset" @search="search"> -->
-      <!-- <template slot="left">
-        <search>
-          <div class="searchInputFormItem">
-            <el-input placeholder="姓名/手机号/企业单位" v-model="formData.keywords">
-            </el-input>
-            <span class="searchBtnImgSpan" @click="search">
-                <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
-            </span>
-          </div>
-        </search>
-        <query-filter>
-          <el-select
-                  v-model="formData.gender"
-                  placeholder="请选择性别"
-                  style="width: 180px"
-          >
-            <el-option label="男" value="1" key="1"></el-option>
-            <el-option label="女" value="2" key="2"></el-option>
-          </el-select>
-          <el-select
-                  v-model="formData.gridId"
-                  placeholder="人员类别"
-                  style="width: 180px"
-          >
-            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
-                       :key="index"></el-option>
-          </el-select>
-          <div class="formSearchTitle setTimeText filter-item-title">建档时间</div>
-          <el-date-picker
-                  v-model="formData.startTime"
-                  type="date"
-                  :max-date="formData.endTime"
-                  placeholder="选择开始日期"
-                  style="width: 180px"
-          >
-          </el-date-picker>
-          <el-date-picker
-                  v-model="formData.endTime"
-                  type="date"
-                  :min-date="formData.startTime"
-                  placeholder="选择结束日期"
-                  style="width: 180px"
-          >
-          </el-date-picker>
-        </query-filter>
-      </template> -->
-      <!-- <template slot="right"> -->
-        </div>
-        <div class="divTop">
+        <!-- <div class="divTop">
           <div class="divTitle">
             <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
-            体检库</div>
-
-          <div class="searchCondition">
-          <div class="searchLeft">
-          <div class="searchInputFormItem">
-            <el-input placeholder="姓名/手机号/企业单位" v-model="formData.keywords">
-            </el-input>
-            <span class="searchBtnImgSpan" @click="search">
-                <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
-            </span>
-          </div>
-          <!-- <div>
-            <span>客户性别：</span>
-           <el-select
-                  v-model="formData.gender"
-                  placeholder="请选择"
-                  style="width: 140px"
-          >
-            <el-option label="男" value="1" key="1"></el-option>
-            <el-option label="女" value="2" key="2"></el-option>
-          </el-select>
-          </div> -->
-          <!-- <div>
-            <span>人员类别：</span>
-            <el-select
-                  v-model="formData.gridId"
-                  placeholder="请选择"
-                  style="width: 140px"
-          >
-            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
-                       :key="index"></el-option>
-          </el-select>
-          </div> -->
-            <!-- <div>
-            <span>管理医生：</span>
-            <el-select
-                  v-model="formData.doctorId"
-                  placeholder="请选择"
-                  style="width: 140px"
-          >
-            <el-option :label="item.realName" :value="item.id" v-for="(item, index) in doctorList"
-                       :key="index"></el-option>
-          </el-select>
-          </div> -->
-            </div>
-            <div class="searchRight">
-            <div class="buttones">
-            <div class="searchFor" @click="search">
-            <img src="@/assets/images/common/topsearchblue.png" alt="">
-          </div>
-          <div class="resetAll">重置</div>
-          <!-- <div class="more" v-if="isTrue"  @click="upMore">
-            <span>></span>
-            展开更多</div>
-          <div class="more noMore" v-else @click="upMore">
-            <span>></span>收起筛选</div> -->
-          </div>
-            </div>
-          </div>
+            编辑计划</div>
+        </div> -->
+        <div class="form-title">
+          <div class="line"></div>
+          <h3 class="name">编辑计划</h3>
         </div>
-        <div class="topbottomborder"></div>
+        <el-row>
+          <el-col :span="6">
+              <div class="isEnabled"><span>模版名称：</span>白内障</div>
+        </el-col>
+        <el-col :span="6">
+          <div class="isEnabled">
+            <span>是否启用：</span>
+                <el-switch
+                  v-model="isstate"
+                  active-value="1"
+                  inactive-value="0"
+                  active-color="#13ce66"
+                  @change=changeStatus()
+                  >
+                </el-switch>
+          </div>
+        </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <div class="isEnabled"><span>模版条件：</span>1231231312123131212</div>
+          </el-col>
+        </el-row>
+        <!-- <div class="divTop">
+          <div class="divTitle">
+            <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
+            计划列表</div>
+        </div> -->
+        <div class="form-title">
+          <div class="line"></div>
+          <h4 class="name">计划列表</h4>
+        </div>
         <div class="divRightTitleDiv">
           <div>
             <el-button
                     class="btn-new btnAdd"
                     size="small"
                     style="margin: 16px 0"
-                    @click="edits()"
+                    @click="InterventionAdd()"
             ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
             <el-button
                     size="small"
@@ -128,60 +55,27 @@
                     @click="handleSomeRemove"
                     v-if="getAccess('customer_pool_batch_delete')"
             ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
-            <!-- <el-button
-                    @click="assign({})"
-                    size="small"
-                    class="btn-new btnDel"
-                    v-if="getAccess('customer_pool_distribute')"
-            ><img src="@/assets/images/common/deliverBtn.png" />分配</el-button> -->
-            <el-button
-            style="width:120px;"
-                    size="small"
-                    class="btn-new btnDel"
-                    v-if="getAccess('customer_pool_distribute')"
-            ><img src="@/assets/images/common/createReport.png" />生成报告</el-button>
           </div>
         </div>
         <div>
           <el-table
-                  :data="table.list"
+                  :data="dataSource"
                   @selection-change="handleSelectionChange"
                   ref="multipleTable"
                   align="center"
                   show-overflow-tooltip
           >
             <el-table-column type="selection" min-width="40"></el-table-column>
-            <el-table-column label="体检库名称" prop="itemName" min-width="100" show-overflow-tooltip>
+            <el-table-column label="阶段" prop="clientNo" min-width="80" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>
-                  {{ scope.row.itemName }}
+                  {{ scope.row.clientNo }}
                 </span>
               </template>
             </el-table-column>
-            <el-table-column label="是否启用" min-width="150"  prop="state">
-              <template slot-scope="scope">
-                <el-switch
-                  v-model="scope.row.state "
-                  active-value="1"
-                  inactive-value="0"
-                  active-color="#13ce66"
-                  @change=changeStatus(scope,scope.row.state)
-                  >
-                </el-switch>
-              </template>
-            </el-table-column>
-            <el-table-column label="建档时间" prop="createTime" min-width="130" show-overflow-tooltip />
-            <el-table-column label="报告数" prop="doctorNames" min-width="130" show-overflow-tooltip>
-              <template slot-scope="scope">
-                <span>{{ scope.row.doctorNames || '0'}}</span>
-              </template>
-            </el-table-column>
-            <!-- <el-table-column label="附件" prop="annexTotal"  width="60" show-overflow-tooltip>
-              <template slot-scope="scope">
-                <span style="color:#36BF2F;">{{ scope.row.annexTotal || '0'}}</span>
-              </template>
-            </el-table-column> -->
-
+            <el-table-column label="干预形式" prop="createTime" min-width="80" show-overflow-tooltip />
+            <el-table-column label="主要内容" prop="createTime" min-width="80" show-overflow-tooltip />
+            <el-table-column label="干预提示" prop="createTime" min-width="80" show-overflow-tooltip />
             <!-- <el-table-column label="附件" prop="attachment">
               <template slot-scope="scope">
                 <div
@@ -203,10 +97,10 @@
                 <el-button
                         type="text"
                         size="small"
-                        @click="edits(scope.row.id)"
+                        @click="edits()"
                         v-if="getAccess('customer_pool_edit')"
                 >编辑</el-button>
-                <!-- <el-button type="text"
+                <el-button type="text"
                         size="small"
                         style="color:#DDE0E6"
                         >|</el-button>
@@ -214,8 +108,8 @@
                         type="text"
                         size="small"
                         @click="claim(scope)"
-                >删除</el-button
-                > -->
+                >查看</el-button
+                >
                 <!-- <el-button
                         class="font-enable"
                         type="text"
@@ -284,6 +178,7 @@ export default {
   },
   data() {
     return {
+      isstate: true,
       isTrue: true,
       value: true,
       total: 0,
@@ -296,7 +191,7 @@ export default {
       formData: {
         gridId: '',
         doctorId: '',
-        keywords: '', // 体检库
+        keywords: '',
         gender: '',
         genderType: '',
         startTime: '',
@@ -307,56 +202,22 @@ export default {
         pageSize: 15,
         type: 0,
       },
-      form: {
-        gender: '', // 性别
-        state: '', // 状态
-        isMain: '', // 重要指标
-        itemName: '', // 项目名称
-        organItemLibraryId: '', // 项目分类
-        // genderList: genderListByPhysicalProjectList,
-        // 状态数据
-        stateList: '',
-        isMainList: '',
-        libraryList: [],
-      },
-      table: {
-        list: [],
-        totalCount: 0, // 总条数
-        currentPage: 1, // 当前页
-        pageSize: 15, // 一页数量
-      },
       isCollapse: true,
       modalVisible: false,
       currentValue: {},
     };
   },
   methods: {
-    async getList() {
-      const reqBody = {
-        organItemLibraryId: this.form.organItemLibraryId,
-        gender: this.form.gender,
-        isMain: this.form.isMain,
-        state: this.form.state,
-        itemName: this.formData.keywords,
-        pageNo: this.table.currentPage,
-        pageSize: this.table.pageSize,
-      };
-      const res = await this.$api.physicalProjectListInterface.listPage(
-        reqBody,
-      );
-      const { data } = res.data;
-      if (data) {
-        this.table.list = data.data || [];
-        this.table.totalCount = data.total;
-      }
-    },
     // 展开更多
     upMore() {
       this.isTrue = !this.isTrue;
     },
-    // 编辑
-    edits(id) {
-      this.currentValue.type = id;
+    // 新增
+    InterventionAdd() {
+      // console.log('12312313');
+      // this.$router.push({
+      //   name: 'InterventionAdd',
+      // });
       this.modalVisible = true;
     },
     cancel() {
@@ -562,10 +423,9 @@ export default {
     },
   },
   mounted() {
-    this.getList();
-    // this.getUserList();
-    // this.getGridList(); // 获取人员列类别
-    // this.getDoctor(); // 获取医生列表
+    this.getUserList();
+    this.getGridList(); // 获取人员列类别
+    this.getDoctor(); // 获取医生列表
   },
 };
 </script>
@@ -581,6 +441,35 @@ export default {
   margin-left: 3px;
 }
 .userManage {
+   .form-title {
+      display: flex;
+      align-items: center;
+      position: relative;
+      margin-top: 20px;
+      .line {
+        width: 36px;
+        height: 4px;
+        background: #3154AC;
+        margin-right: 8px;
+        border-radius: 1px;
+        position: absolute;
+        margin-top: 12px;
+        opacity: 0.5;
+      }
+      .name {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333333;
+      }
+    }
+  .isEnabled{
+    font-size: 14px;
+    color: #666666;
+    margin: 10px 0 0 25px;
+  }
+  .divTitle{
+    margin-top: 20px;
+  }
   .attachment-btn {
     cursor: pointer;
     width: 24px;

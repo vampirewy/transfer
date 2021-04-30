@@ -162,6 +162,6 @@ export default {
     border-top-left-radius: 8px;
     top: 0px;
     left: -4px;
-}
+  }
   }
 </style>

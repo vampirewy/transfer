@@ -51,8 +51,8 @@
       <!-- <div class="main-info-title">新增异常库</div> -->
       <div class="form-title">
         <div class="line"></div>
-        <h3 class="name">新增异常库</h3>
-      </div>
+        <h3 class="name">自动匹配</h3>
+     </div>
       <el-row>
         <!-- <el-col :span="6">
           <el-form-item label="就医编号" prop="hospital">
@@ -116,61 +116,65 @@
         </el-col> -->
         <el-col :span="6">
           <el-form-item label="异常名称" >
-            <el-input v-model="form.clientInfoId" placeholder="请输入" @input="replace"></el-input>
+            <el-input v-model="form.patientNo" placeholder="请输入" @input="replace"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="异常类型" >
-            <el-select v-model="form.hospital" placeholder="请选择当前状态" width="150">
+            <el-select v-model="form.result" placeholder="请选择当前状态" width="150">
               <el-option
-                v-for="item in organTypeList"
-                :key="item.paramValue"
-                :label="item.name"
-                :value="item.paramValue"
+                v-for="item in resultOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
               ></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="性别限制" >
-            <el-select v-model="form.department" placeholder="请选择当前状态">
-              <el-option label="男" value="1" key="1"></el-option>
-              <el-option label="女" value="2" key="2"></el-option>
+            <el-select v-model="form.result" placeholder="请选择当前状态">
+              <el-option
+                v-for="item in resultOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="ICD10：" >
-            <el-select v-model="form.medicalType" placeholder="请选择当前状态">
+            <el-select v-model="form.result" placeholder="请选择当前状态">
               <el-option
                 v-for="item in resultOptions"
-                :key="item.paramValue"
-                :label="item.name"
-                :value="item.paramValue"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
               ></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="重要性" >
-            <el-select v-model="form.inDate" placeholder="请选择当前状态">
+            <el-select v-model="form.result" placeholder="请选择当前状态">
               <el-option
-                v-for="item in dangerLevelList"
-                :key="item.paramValue"
-                :label="item.name"
-                :value="item.paramValue"
+                v-for="item in resultOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
               ></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="紧急性">
-            <el-select v-model="form.outDate" placeholder="请选择当前状态">
+            <el-select v-model="form.result" placeholder="请选择当前状态">
               <el-option
-                v-for="item in medicalLimitList"
-                :key="item.paramValue"
-                :label="item.name"
-                :value="item.paramValue"
+                v-for="item in resultOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -179,7 +183,7 @@
           <el-form-item label="推荐科室" >
             <el-select v-model="form.result" placeholder="请选择当前状态">
               <el-option
-                v-for="item in doctorName"
+                v-for="item in resultOptions"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -213,7 +217,7 @@
           <el-form-item label="解释" >
             <el-input
               type="textarea"
-              v-model="form.interpret"
+              v-model="form.hpi"
               :rows="5"
               placeholder="请输入"
               :maxlength="4000"
@@ -225,7 +229,7 @@
           <el-form-item label="原因">
             <el-input
               type="textarea"
-              v-model="form.Reason"
+              v-model="form.hpi"
               :rows="5"
               placeholder="请输入"
               :maxlength="4000"
@@ -286,22 +290,22 @@ export default {
     return {
       popoverStatus: false,
       form: {
-        clientInfoId: '', // 异常名称
-        hospital: '', // 异常类型
-        department: '', // 性别限制
-        medicalType: '', // ICD10：
+        clientInfoId: '',
+        hospital: '',
+        department: '',
+        medicalType: '',
         patientNo: '',
-        inDate: '', // 重要性
-        outDate: '', // 紧急性
-        doctorName: '', // 推荐科室
-        result: '', // 推荐检查
-        interpret: '', // 解释
-        Reason: '', // 原因
-        Suggestion: '', // 建议
+        inDate: '',
+        outDate: '',
+        doctorName: '',
+        result: '',
+        complaint: '主诉', // 主诉
+        hpi: '现病史', // 现病史
+        examination: '检查', // 检查
+        diagnosis: '诊断', // 诊断
+        therapy: '方案', // 方案
+        orgCode: '',
       },
-      organTypeList: [],
-      dangerLevelList: [],
-      medicalLimitList: [],
       options: {
         inDate: {
           disabledDate: (cur) => {
@@ -356,64 +360,22 @@ export default {
     };
   },
   mounted() {
-    this.getDetail();
-    this.getOrganTypeList();
-    this.getImportList();
-    this.getQuickList();
-    // if (this.ids) {
-    //   this.$api.medicalHistoryInterface.medicalInfoDetail(this.ids).then((res) => {
-    //     const { data } = res;
-    //     console.log(data, '撒打算大的');
-    //     this.form = Object.assign(this.form, data.data || {});
-    //     this.currentUser = {
-    //       id: this.form.clientInfoId,
-    //       name: this.form.clientName,
-    //       age: this.form.age,
-    //       gender: this.form.gender,
-    //       gridName: this.form.clientGridName,
-    //     };
-    //   });
-    // }
+    if (this.ids) {
+      this.$api.medicalHistoryInterface.medicalInfoDetail(this.ids).then((res) => {
+        const { data } = res;
+        console.log(data, '撒打算大的');
+        this.form = Object.assign(this.form, data.data || {});
+        this.currentUser = {
+          id: this.form.clientInfoId,
+          name: this.form.clientName,
+          age: this.form.age,
+          gender: this.form.gender,
+          gridName: this.form.clientGridName,
+        };
+      });
+    }
   },
   methods: {
-    async getDetail() {
-      const reqBody = { id: 1 };
-      const res = await this.$api.unusualListInterface.getOrganAbnormal(
-        reqBody,
-      );
-      const { data } = res.data;
-      this.form.abnormalName = data.abnormalName;
-      this.form.gender = data.gender;
-      this.form.dangerLevel = data.dangerLevel;
-      this.form.medicalLimit = data.medicalLimit;
-      this.form.state = data.state;
-      this.form.medicalExplain = data.medicalExplain;
-      this.form.commonCause = data.commonCause;
-      this.form.advice = data.advice;
-      this.form.abnormalType = data.abnormalType;
-
-      this.form.abnormalAlias = data.abnormalAlias.map(it => ({ name: it }));
-    },
-
-    async getOrganTypeList() {
-      const { data } = await this.$api.unusualListInterface.getOrganTypeList();
-      this.$set(this.form, 'organTypeList', data.data);
-      this.organTypeList = data.data;
-      // this.form.organTypeList
-    },
-
-    async getImportList() {
-      const { data } = await this.$api.unusualListInterface.getImportList();
-      this.$set(this.form, 'dangerLevelList', data.data);
-      this.dangerLevelList = data.data;
-      // this.form.organTypeList
-    },
-    async getQuickList() {
-      const { data } = await this.$api.unusualListInterface.getQuickList();
-      this.$set(this.form, 'medicalLimitList', data.data);
-      this.medicalLimitList = data.data;
-      // this.form.organTypeList
-    },
     handleStartDateChange() {
       if (this.form.medicalType === 1 && this.form.inDate) {
         this.form.outDate = this.form.inDate;
@@ -474,7 +436,7 @@ export default {
 
 <style lang="scss" scoped>
 .medical-history-form {
-  .form-title {
+    .form-title {
     display: flex;
     align-items: center;
     position: relative;
