@@ -119,12 +119,13 @@ export default {
   methods: {
     setSelectItem() {
       if (this.value.length > 0) {
-        this.tableData.forEach((row) => {
-          if (this.value.includes(row.id)) {
-            this.$nextTick(() => {
+        this.$nextTick(() => {
+          this.tableData.forEach((row) => {
+            if (this.value.includes(row.id)) {
               this.$refs.elDishSelectForm.toggleRowSelection(row, true);
-            });
-          }
+            }
+          });
+          this.changeValue();
         });
       }
     },
@@ -156,12 +157,15 @@ export default {
       this.currentPage = 1;
       this.loadData(2);
     },
-    submit() {
+    changeValue() {
       const ids = this.$refs.elDishSelectForm.selection.map(item => item.id);
       const names = this.$refs.elDishSelectForm.selection.map(
         item => item.name,
       );
       this.$emit('change', ids, names);
+    },
+    submit() {
+      this.changeValue();
       this.actives = false;
     },
   },

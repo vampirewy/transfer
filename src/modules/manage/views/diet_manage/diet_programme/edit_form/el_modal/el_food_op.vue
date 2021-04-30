@@ -16,7 +16,11 @@
         :key="item.id"
       >
         {{ item.name || item.names }}
-        <img src="@/assets/images/body/closeChooseTab.png" alt="" />
+        <img
+          @click="deleteFood(index)"
+          src="@/assets/images/body/closeChooseTab.png"
+          alt=""
+        />
       </div>
     </div>
     <p class="item-title">食物列表</p>
@@ -100,7 +104,12 @@
             row-class-name="table-row"
             :data="caiTableData"
           >
-            <el-table-column reserve-selection type="selection" align="center" width="55">
+            <el-table-column
+              reserve-selection
+              type="selection"
+              align="center"
+              width="55"
+            >
             </el-table-column>
             <el-table-column align="center" prop="name" label="菜名">
             </el-table-column>
@@ -125,7 +134,12 @@
             row-class-name="table-row"
             :data="rawTableData"
           >
-            <el-table-column reserve-selection type="selection" align="center" width="55">
+            <el-table-column
+              reserve-selection
+              type="selection"
+              align="center"
+              width="55"
+            >
             </el-table-column>
             <el-table-column align="center" prop="names" label="菜名">
             </el-table-column>
@@ -189,11 +203,13 @@ export default {
       total: 0,
       pageSize: 15,
       name: '',
-      seletedFoodsList: [],
       caiCateData: [],
       rawCateData: [],
       rawTableData: [],
       caiTableData: [],
+      selectFoods: [],
+      selectRaws: [],
+      seletedFoodsList: [],
     };
   },
   computed: {
@@ -223,8 +239,11 @@ export default {
     this.loadCaiTableData();
   },
   methods: {
+    deleteFood(index) {
+      this.seletedFoodsList.splice(index, 1);
+    },
     selectFood(rows) {
-      this.seletedFoodsList.push(...rows);
+      this.seletedFoodsList = rows;
     },
     selectCaiCate(id) {
       this.caiCateActiveId = id;
