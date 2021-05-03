@@ -266,7 +266,6 @@ body .el-table th.gutter{
       border-radius: 4px;
     }
     &:disabled{
-      border: none !important;
       &::placeholder{
         color: #C8C8C8;
       }

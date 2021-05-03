@@ -2,6 +2,10 @@
   <div class="staff-page">
     <explain v-if="viewIndex == 2" :id="currentData" @close="handleClose">
     </explain>
+    <average v-if="viewIndex == 3" :id="currentData" @close="handleClose">
+    </average>
+    <setting v-if="viewIndex == 4" :id="currentData" @close="handleClose">
+    </setting>
     <div class="TabBars">
       <div>
         <span
@@ -171,7 +175,7 @@
             <el-button
               type="text"
               size="small"
-              @click="handleComment(scope.row)"
+              @click="handleAverage(scope.row)"
               >设置</el-button
             >
           </template>
@@ -221,10 +225,13 @@
 <script>
 import StaffForm from './form.vue';
 import Explain from './explain.vue';
+import Average from './average.vue';
+import Setting from './setting.vue';
 import QueryFilter from '~/src/components/query_page/query_filter.vue';
 import Upload from '~/src/components/upload/index.vue';
 import OperateButton from '~/src/components/query_page/operate_button.vue';
 import deleteIcon from '~/src/assets/images/message-box-delete@2x.png';
+
 const cityOptions = [
   '星期一',
   '星期二',
@@ -242,6 +249,8 @@ export default {
     OperateButton,
     Upload,
     Explain,
+    Average,
+    Setting,
   },
   data() {
     return {
@@ -285,7 +294,10 @@ export default {
     handleComment(data) {
       this.viewIndex = 2;
       this.currentData = data;
-      console.log(this.currentData);
+    },
+    handleAverage(data) {
+      this.viewIndex = 3;
+      this.currentData = data;
     },
     handleClose() {
       this.viewIndex = 1;

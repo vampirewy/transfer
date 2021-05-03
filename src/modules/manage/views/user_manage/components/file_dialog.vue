@@ -36,6 +36,7 @@
       </div>
       <el-form-item label="备注">
         <el-input
+          style="width:79%;"
           type="textarea"
           placeholded="请输入"
           v-model="formData.remark"
@@ -158,7 +159,7 @@ export default {
   }
   .el-upload__tip{
     color: #f94242;
-    margin-top: -5px;
+    margin-top: -15px;
     padding-left: 90px;
     margin-bottom: 5px;
   }
@@ -166,5 +167,6 @@ export default {
     background: #36BF2F;
     color: #fff;
     margin-left: 10px;
+    font-weight: 200;
   }
 </style>

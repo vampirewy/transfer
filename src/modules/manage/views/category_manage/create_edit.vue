@@ -19,23 +19,23 @@
 
       <div class="mt20">
         <div class="row">
-          <el-form-item label="类别名称：" style="width:25%" label-width="82px" prop="gridName">
+          <el-form-item label="类别名称：" style="width:23%" label-width="82px" prop="gridName">
             <span  v-if="routeType == 3">{{form.gridName}}</span>
             <el-input
             v-model="form.gridName"
             maxlength="30"
             v-if="routeType != 3"
-            style="width: 230px"
+            style="width: 200px"
             placeholder="请输入">
             </el-input>
           </el-form-item>
-          <el-form-item label="报告名称：" style="width:25%" label-width="82px" prop="reportName">
+          <el-form-item label="报告名称：" style="width:23%" label-width="82px" prop="reportName">
             <span  v-if="routeType == 3">{{form.reportName}}</span>
             <el-input
             v-model="form.reportName"
             maxlength="30"
             v-if="routeType != 3"
-            style="width: 230px"
+            style="width: 200px"
             placeholder="请输入">
             </el-input>
           </el-form-item>
@@ -43,7 +43,7 @@
             <span  v-if="routeType == 3">{{form.state == 0 ? '否':'是'}}</span>
             <el-select v-model="form.state"
             v-if="routeType != 3"
-            style="width: 230px"
+            style="width: 200px"
             placeholder="请选择是否启用">
               <el-option
                 v-for="it in isCompareList"
@@ -53,11 +53,11 @@
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="低危评估：" prop="dangerShow" label-width="83px" style="width:25%">
+          <el-form-item label="低危评估：" prop="dangerShow" label-width="83px" style="width:23%">
             <span  v-if="routeType == 3">{{form.state == 0 ? '不显示':'显示'}}</span>
             <el-select v-model="form.dangerShow"
             v-if="routeType != 3"
-            style="width: 230px"
+            style="width: 200px"
             placeholder="请选择低危评估">
               <el-option
                 v-for="it in isCompareLists"
@@ -78,7 +78,7 @@
               <span>{{item.name}}</span>
             </div>
             <el-checkbox
-                    style="width:25%;margin:20px 0 !important;"
+                    style="width:23%;margin:20px 0 !important;"
                     v-for="it in item.contentList"
                     :key="it.id"
                     v-model="it.checked"
@@ -90,8 +90,7 @@
         </div>
         <div class="handle-btn mt10 mb30">
           <el-button
-            class="canelBtn"
-            size="small"
+            class="cancelBtn"
             @click="cancel"
             >返回</el-button
           >
@@ -355,7 +354,6 @@ export default {
   }
   .el-input__inner,
   .el-textarea__inner {
-    background-color: #f4f4f6;
     border: 0;
     color: #333333;
   }
@@ -373,6 +371,7 @@ export default {
   .gridName-input {
     .el-input__inner {
       color: #333;
+      width: 80%;
     }
   }
   .form-inline {

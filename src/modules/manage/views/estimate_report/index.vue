@@ -650,6 +650,7 @@ export default {
     },
     TabbarBtn(index) {
       this.Tabactive = index;
+      this.$forceUpdate();
     },
     popoverStatusShow(row) {
       this.popoverStatus = true;

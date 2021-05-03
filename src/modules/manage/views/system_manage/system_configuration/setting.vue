@@ -2,7 +2,7 @@
   <el-dialog
     class="comment-dialog"
     :modal-append-to-body="false"
-    title="平均风险设置"
+    title="评估设置-肺癌患病风险评估"
     top="3vh"
     :visible="true"
     :before-close="() => $emit('close')"
@@ -151,7 +151,6 @@ export default {
       if (ismun) {
         this.$set(this.form[index], 'isshow', true);
       }
-      console.log(this.form, 147896548);
     },
     // 点击行保存
     ModifyListBtn(index) {

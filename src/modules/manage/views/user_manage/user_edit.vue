@@ -15,8 +15,9 @@
                   ref="form"
                   class="user-edit-form"
                   :model="formData"
-                  label-width="80px"
+                  label-width="90px"
                   :rules="rules"
+                  label-suffix="："
           >
             <el-row>
               <el-col :span="12">
@@ -182,15 +183,36 @@
                     <el-input
                             slot="reference"
                             class="select-user-trigger"
-                            disabled
                             v-model="formData.userRealName"
                             placeholder="请选择"
-                    >
-                      <i :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
-                         slot="suffix" ></i>
-                    </el-input>
+                    ></el-input>
+                    <el-select
+                          v-model="formData.marriage"
+                          placeholder="请选择"
+                          style="width: 100%;"
+                  >
+                    <el-option
+                               slot="reference"
+                               class="select-user-trigger"
+                               :value="formData.userRealName"
+                               ></el-option>
+                  </el-select>
+                      <!-- <i :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
+                         slot="suffix" ></i> -->
                   </el-popover>
                 </el-form-item>
+                <!-- <el-form-item label="管理医生">
+                  <el-select
+                          v-model="formData.workUnitDepartment"
+                          placeholder="请选择"
+                          style="width: 100%;"
+                  >
+                    <el-option :label="item.name"
+                               :value="item.paramValue"
+                               v-for="(item, index) in professionList"
+                               :key="index"></el-option>
+                  </el-select>
+                </el-form-item> -->
               </el-col>
               <el-col :span="24">
                 <el-form-item label="工作地址">
