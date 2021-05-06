@@ -1,7 +1,9 @@
 <template>
   <div class="report-edit">
     <el-form ref="form" :model="formData" label-width="90px" label-suffix="：" :rules="rules">
-      <div class="title">{{id ? '编辑' : '新增'}}体检信息-基本信息</div>
+      <div class="divRightTitleDiv" style="margin-top: -20px">
+        <div class="divRightTitle">{{id ? '编辑' : '新增'}}体检信息-基本信息<div class="titleBiao"></div></div>
+      </div>
       <el-row>
         <el-col :span="6">
           <el-form-item label="姓名" prop="clientId">
@@ -26,27 +28,25 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="性别" prop="gender" style="width:100%">
+          <el-form-item label="性别" prop="gender">
             <el-radio v-model="formData.gender" :label="1" disabled>男</el-radio>
             <el-radio v-model="formData.gender" :label="2" disabled>女</el-radio>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="年龄" prop="age" style="width:25%">
+          <el-form-item label="年龄" prop="age">
             <el-input
               v-model="formData.age"
               disabled
               class="age-input"
-              style="width: 200px;"
             ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="客户编号" prop="gridName" style="width:25%">
+          <el-form-item label="客户编号" prop="gridName">
             <el-input
               v-model="formData.cardNo"
               disabled
-              style="width: 200px;"
             ></el-input>
           </el-form-item>
         </el-col>

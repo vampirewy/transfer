@@ -285,7 +285,7 @@ export default {
       width: 50%;
       padding-left: 20px;
       font-size: 14px;
-      color: #666666;
+      color: #333333;
     }
   }
   .othertest{

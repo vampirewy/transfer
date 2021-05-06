@@ -8,8 +8,10 @@
                       @click="turnToPage(item.route)">
           <!--<item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
                 :title="onlyOneChild.meta.title" />-->
+          <!--<img v-if="!onlyOneChild.noShowingChildren || item.menuType ===1"
+               src="@/assets/images/body/sideBarImg.png"/>-->
           <img v-if="!onlyOneChild.noShowingChildren || item.menuType ===1"
-               src="@/assets/images/body/sideBarImg.png"/>
+               :src="upload_url + item.icon"/>
           <!--{{onlyOneChild.meta.title}}-->{{onlyOneChild.name}}
         </el-menu-item>
       <!--</app-link>-->
@@ -20,7 +22,8 @@
       <template slot="title">
         <!--<item v-if="item.meta" :icon="item.meta && item.meta.icon"
         :title="item.meta.title" />-->
-        <img src="@/assets/images/body/sideBarImg.png"/>
+        <!--<img src="@/assets/images/body/sideBarImg.png"/>-->
+        <img :src="upload_url + item.icon"/>
         <!--{{item.meta.title}}-->{{item.name}}
       </template>
       <sidebar-item
@@ -62,6 +65,7 @@ export default {
     // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237
     // TODO: refactor with render function
     this.onlyOneChild = null;
+    this.upload_url = process.env.api.upload_url;
     return {};
   },
   methods: {

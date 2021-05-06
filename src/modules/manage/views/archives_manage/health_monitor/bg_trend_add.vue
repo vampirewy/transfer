@@ -289,7 +289,7 @@ export default {
   .el-input__inner,
   .el-textarea__inner {
     // background-color: #f4f4f6;
-    border: 0;
+    /*border: 0;*/
   }
   .select-user-input {
     .el-input__inner {

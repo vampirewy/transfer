@@ -37,6 +37,9 @@ module.exports = {
             '/uploadFiles': {
                 target: 'http://182.61.43.226:9002',//'http://116.62.9.135:5124',
                 changeOrigin: true,
+                  pathRewrite: {
+                    "/uploadFiles": "/"
+                  }
             }
         },
         /**

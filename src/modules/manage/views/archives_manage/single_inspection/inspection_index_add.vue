@@ -10,14 +10,19 @@
         label-width="83px"
         class="form-inline"
     >
-      <div class="form-title">
+      <!--<div class="form-title">
         <div class="line"></div>
         <h3 v-if="id != ''" class="name">编辑-就医用户信息</h3>
         <h3 v-else class="name">新增单项检查</h3>
-      </div>
+      </div>-->
+        <div class="divRightTitleDiv" style="margin-top: -20px">
+            <div class="divRightTitle">{{id ? '编辑-就医用户信息' : '新增单项检查'}}
+                <div class="titleBiao"></div></div>
+        </div>
       <div class="medicate-record mt20">
-      <div class="row">
-          <el-form-item label="姓名" prop="clientName" style="width:25%">
+      <el-row>
+          <el-col :span="6">
+          <el-form-item label="姓名" prop="clientName">
             <el-popover
               ref="userPopover"
               placement="bottom-start"
@@ -36,7 +41,6 @@
                 disabled
                 v-model="infoSource.clientName"
                 placeholder="请选择客户"
-                style="width: 232px;"
               >
                 <i
                   :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
@@ -45,26 +49,31 @@
               </el-input>
             </el-popover>
           </el-form-item>
-          <el-form-item label="性别" prop="gender" style="width:20%">
+          </el-col>
+          <el-col :span="6">
+          <el-form-item label="性别" prop="gender">
             <el-radio v-model="infoSource.gender" :label="1" disabled>男</el-radio>
             <el-radio v-model="infoSource.gender" :label="2" disabled>女</el-radio>
           </el-form-item>
-              <el-form-item label="年龄" prop="age" style="width:25%">
+          </el-col>
+          <el-col :span="6">
+              <el-form-item label="年龄" prop="age">
             <el-input
               v-model="infoSource.age"
               disabled
               class="age-input"
-              style="width: 200px;"
             ></el-input>
           </el-form-item>
-          <el-form-item label="客户编号" prop="gridName" style="width:25%">
+          </el-col>
+          <el-col :span="6">
+          <el-form-item label="客户编号" prop="gridName">
             <el-input
               v-model="infoSource.gridName"
               disabled
-              style="width: 200px;"
             ></el-input>
           </el-form-item>
-      </div>
+          </el-col>
+      </el-row>
       </div>
 
       <!-- <div class="form-title">
@@ -73,24 +82,27 @@
       </div> -->
 
       <div class="medicate-info mt20" style="margin-top:0">
-        <div class="row">
-            <el-form-item label="检查编号" prop="drugsName" style="width:25%">
+        <el-row>
+            <el-col :span="6">
+            <el-form-item label="检查编号" prop="drugsName">
               <el-input
                 v-model="infoSource.drugsName"
                 placeholder="请输入"
                 :maxlength="100"
-                style="width: 200px"
               ></el-input>
             </el-form-item>
-            <el-form-item label="检查机构" prop="specification" style="width:25%">
+            </el-col>
+                <el-col :span="6">
+            <el-form-item label="检查机构" prop="specification">
               <el-input
                 v-model="infoSource.specification"
                 placeholder="请输入"
                 :maxlength="30"
-                style="width: 200px"
               ></el-input>
             </el-form-item>
-             <el-form-item label="检查时间" prop="endDate" style="width:25%">
+            </el-col>
+            <el-col :span="6">
+             <el-form-item label="检查时间" prop="endDate">
               <el-date-picker
                 class="end-date"
                 v-model="infoSource.endDate"
@@ -98,9 +110,10 @@
                 :min-date="infoSource.startDate"
                 value-format="yyyy-MM-dd"
                 placeholder="请选择"
-                style="width: 200px"
+                style="width: 100%"
               ></el-date-picker>
             </el-form-item>
+            </el-col>
             <!-- <el-form-item label="就医机构" prop="countDay" style="width:25%">
               <el-input
                 v-model="infoSource.countDay"
@@ -110,7 +123,7 @@
                 style="width: 200px"
               ></el-input>
             </el-form-item> -->
-        </div>
+        </el-row>
 
         <!-- <div class="row">
             <el-form-item label="就医科室" prop="dose" style="width:25%">
@@ -196,10 +209,14 @@
             </el-form-item>
         </div>
       </div>
-       <div class="form-title">
+       <!--<div class="form-title">
         <div class="line"></div>
         <h3 class="name">检查项目</h3>
-      </div>
+      </div>-->
+        <div class="divRightTitleDiv" style="margin-top: -20px">
+            <div class="divRightTitle">检查项目
+                <div class="titleBiao"></div></div>
+        </div>
         <div class="row">
             <div>
                 <span>体检库：</span>
@@ -216,7 +233,7 @@
                 ></el-option>
                 </el-select>
             </div>
-          <el-form-item label="检查项目" prop="clientName" style="width:25%">
+          <el-form-item label="检查项目" prop="clientName">
             <el-popover
               ref="userPopoverCheck"
               placement="bottom-start"
@@ -263,19 +280,19 @@
           prop="startDate"
         >
          <template slot-scope="scope">
-             <input class="Checkinput" type="text" v-model="scope.row.outcome">
+             <input class="Checkinput" type="text" placeholder="请输入" v-model="scope.row.outcome">
           </template>
         </el-table-column>
         <el-table-column label="正常参考" prop="refRange" >
           <template slot-scope="scope">
-             <input class="Checkinput" type="text" v-model="scope.row.reference">
+             <input class="Checkinput" type="text" placeholder="请输入" v-model="scope.row.reference">
           </template>
         </el-table-column>
         <el-table-column label="单位" prop="unit" show-overflow-tooltip>
         </el-table-column>
         <el-table-column label="建议" prop="dose" >
           <template slot-scope="scope">
-             <input class="Checkinput" type="text" v-model="scope.row.Suggestion">
+             <input class="Checkinput" type="text" placeholder="请输入" v-model="scope.row.Suggestion">
           </template>
         </el-table-column>
         <!-- <el-table-column label="每日次数" prop="countDay" show-overflow-tooltip>
@@ -599,7 +616,7 @@ export default {
   .el-input__inner,
   .el-textarea__inner {
     // background-color: #f4f4f6;
-    border: 0;
+    /*border: 0;*/
   }
   .select-user-input {
     .el-input__inner {
@@ -670,7 +687,7 @@ export default {
     height: 40px;
     background: #36BF2F;
     border-radius: 5px;
-    margin-left: 45px;
+    margin-left: 20px;
     text-align: center;
     line-height: 40px;
     color: #ffffff;
@@ -683,6 +700,9 @@ export default {
     border-radius: 5px;
     text-align: center;
     color: #333333;
+    &:focus-visible{
+        outline: none;
+    }
 }
 .icon-delete{
     width: 30px;

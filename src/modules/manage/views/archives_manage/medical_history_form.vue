@@ -8,7 +8,11 @@
       label-width="90px"
       label-suffix="："
     >
-      <div class="basic-info-title">{{id ? '' : '新增'}}就医用户信息</div>
+      <!--<div class="basic-info-title">{{id ? '' : '新增'}}就医用户信息</div>-->
+      <div class="divRightTitleDiv" style="margin-top: -20px">
+        <div class="divRightTitle">{{id ? '' : '新增'}}就医用户信息
+          <div class="titleBiao"></div></div>
+      </div>
       <el-row>
         <el-col :span="6">
           <el-form-item label="姓名" prop="clientInfoId">
@@ -48,7 +52,11 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <div class="main-info-title">就医信息</div>
+      <!--<div class="main-info-title">就医信息</div>-->
+      <div class="divRightTitleDiv" style="margin-top: -20px">
+        <div class="divRightTitle">就医信息
+          <div class="titleBiao"></div></div>
+      </div>
       <el-row>
         <el-col :span="6">
           <el-form-item label="就医编号" prop="hospital">
@@ -427,13 +435,13 @@ export default {
     }
     .el-input__inner {
       color: #333 !important;
-      background: #F4F4F6 !important;
+      /*background: #F4F4F6 !important;*/
     }
   }
   /deep/ input, /deep/ textarea {
-    border: none;
-    background: #F4F4F6;
-    border-radius: 5px;
+    /*border: none;*/
+    /*background: #F4F4F6;*/
+    /*border-radius: 5px;*/
   }
   /deep/ .el-radio.is-disabled {
     .el-radio__label {

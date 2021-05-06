@@ -1,24 +1,28 @@
 <template>
   <div class="health-monitor-trend">
-    <div class="lines"></div>
-    <div class="titless">查看-血压</div>
-    <div class="lookPressure">
-      <div><span>姓名：</span><span>{{queryInfo.clientName}}</span></div>
-      <div><span>性别：</span><span>{{queryInfo.gender}}</span></div>
-      <div><span>年龄：</span><span>{{queryInfo.age}}</span></div>
-      <div><span>客户编号：</span><span>{{queryInfo.clientNo}}</span></div>
+    <div class="divRightTitleDiv">
+      <div class="divRightTitle">查看-血压
+        <div class="titleBiao"></div></div>
     </div>
     <div class="lookPressure">
-      <div><span>收缩压：</span><span>{{queryInfo.sbp}}</span></div>
-      <div><span>舒张压：</span><span>{{queryInfo.dbp}}</span></div>
-      <div><span>脉搏：</span><span>{{queryInfo.hd}}</span></div>
+      <div><span class="lookPressureTitle">姓名：</span><span>{{queryInfo.clientName}}</span></div>
+      <div><span class="lookPressureTitle">性别：</span><span>{{queryInfo.gender}}</span></div>
+      <div><span class="lookPressureTitle">年龄：</span><span>{{queryInfo.age}}</span></div>
+      <div><span class="lookPressureTitle">客户编号：</span><span>{{queryInfo.clientNo}}</span></div>
+    </div>
+    <div class="lookPressure">
+      <div><span class="lookPressureTitle">收缩压：</span><span>{{queryInfo.sbp}}</span></div>
+      <div><span class="lookPressureTitle">舒张压：</span><span>{{queryInfo.dbp}}</span></div>
+      <div><span class="lookPressureTitle">脉搏：</span><span>{{queryInfo.hd}}</span></div>
       <div></div>
     </div>
     <div class="lookPressure">
-      <div><span>备注：</span><span>{{queryInfo.result}}</span></div>
+      <div><span class="lookPressureTitle">备注：</span><span>{{queryInfo.result}}</span></div>
     </div>
-    <div class="lines"></div>
-    <div class="titless">趋势</div>
+    <div class="divRightTitleDiv">
+      <div class="divRightTitle">趋势
+        <div class="titleBiao"></div></div>
+    </div>
     <div class="chart-legend">
       <span>收缩压</span>
       <span>舒张压</span>
@@ -198,7 +202,7 @@ export default {
     width: 25%;
     padding-left: 20px;
     font-size: 14px;
-    color: #666666;
+    color: #333333;
   }
 }
 </style>
