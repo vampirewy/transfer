@@ -15,10 +15,12 @@
     >
       <el-form-item prop="name" label="菜品名称：">
         <el-input
+          v-if="mode !== 'look'"
           style="width: 189px"
           v-model="ruleForms.name"
           placeholder="请输入"
         ></el-input>
+        <span v-else>{{ ruleForms.name }}</span>
       </el-form-item>
       <el-form-item
         prop="dietSortIds"
@@ -26,12 +28,14 @@
         label="菜品分类："
       >
         <el-select
+          v-if="mode !== 'look'"
           placeholder="请选择 (可多选)"
           :value="names"
           clearable
           style="width: 189px"
         >
         </el-select>
+        <span v-else>{{ names }}</span>
         <div class="mask" @click="isShowDishSelect = true"></div>
         <el-dish-select
           :active.sync="isShowDishSelect"
@@ -41,7 +45,11 @@
       </el-form-item>
       <div>
         <el-form-item label="餐次：">
-          <el-checkbox-group style="margin-left: 10px" v-model="type">
+          <el-checkbox-group
+            :disabled="mode === 'look'"
+            style="margin-left: 10px"
+            v-model="type"
+          >
             <el-checkbox label="isBreakfast">早餐</el-checkbox>
             <el-checkbox label="isLunch">午餐</el-checkbox>
             <el-checkbox label="isDinner">晚餐</el-checkbox>
@@ -66,7 +74,7 @@
         <div class="title">菜品原料</div>
       </div>
     </div>
-    <div class="divRightTitleDiv">
+    <div class="divRightTitleDiv" v-if="mode !== 'look'">
       <el-button
         class="btn-new btnAdd"
         size="small"
@@ -99,7 +107,7 @@
       </el-table-column>
       <el-table-column prop="id" align="center" label="操作" width="160px">
         <template slot-scope="scope">
-          <div class="btn-box">
+          <div class="btn-box" v-if="mode !== 'look'">
             <img
               v-show="scope.$index !== editIndex"
               @click="editIndex = scope.$index"
@@ -123,7 +131,7 @@
     </el-table>
     <div class="form-buttons">
       <el-button size="small" class="cancelBtn" @click="back"> 返回 </el-button>
-      <el-button size="small" class="sureBtn" @click="submit" type="primary"
+      <el-button size="small" v-if="mode !== 'look'" class="sureBtn" @click="submit" type="primary"
         >保存</el-button
       >
     </div>
@@ -140,6 +148,10 @@ export default {
   name: 'diet_dish_form',
   props: {
     id: {
+      type: String,
+      default: '',
+    },
+    mode: {
       type: String,
       default: '',
     },

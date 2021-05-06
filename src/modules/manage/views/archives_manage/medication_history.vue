@@ -171,7 +171,7 @@
           <div class="operates">
             <operate-button
               type="add"
-              @click="$router.push('medication_history_edit')"
+              @click="$router.push('medication_history_add')"
               v-if="getAccess('medication_history_add')"
             >
             </operate-button>

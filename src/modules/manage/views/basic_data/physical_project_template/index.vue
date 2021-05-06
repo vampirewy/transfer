@@ -1,6 +1,6 @@
 <template>
   <div class="physical-project-template">
-    <query-page @reset="onReset" @search="onSearch">
+    <!-- <query-page @reset="onReset" @search="onSearch">
       <template slot="left">
         <search>
 
@@ -10,22 +10,23 @@
                     placeholder="请输入模板名称"
                     style="width: 180px"
             >
-            <!--<el-button slot="append" icon="el-icon-search" @click="onSearch"></el-button>-->
+            <el-button slot="append" icon="el-icon-search" @click="onSearch"></el-button>
             </el-input>
             <span class="searchBtnImgSpan" @click="onSearch">
               <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
             </span>
         </div>
-          <!-- <el-input placeholder="请输入模板名称" v-model="form.keywords">
+          <el-input placeholder="请输入模板名称" v-model="form.keywords">
             <el-button
               slot="append"
               icon="el-icon-search"
               @click="onSearch"
             ></el-button>
-          </el-input> -->
+          </el-input>
         </search>
-      </template>
-      <template slot="right">
+      </template> -->
+      <!-- slot="right" -->
+      <template >
         <div class="divRightTitleDiv" style="margin-top: -8px;">
           <div class="divRightTitle"><span>|</span>体检项目模板</div>
           <div>
@@ -111,7 +112,7 @@
           </div>
         </div>
       </template>
-    </query-page>
+    <!-- </query-page> -->
   </div>
 </template>
 

@@ -26,7 +26,7 @@
           <div>
             <span>生成日期：</span>
             <el-date-picker
-            v-model="form.minReportDate"
+            v-model="form.startCreatedTime"
             type="date"
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
@@ -36,7 +36,7 @@
             </el-date-picker>
             <span class="timing">-</span>
           <el-date-picker
-            v-model="form.maxReportDate"
+            v-model="form.endCreatedTime"
             type="date"
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
@@ -66,7 +66,7 @@
            <div>
             <span>体检开始：</span>
             <el-date-picker
-            v-model="form.minReportDate"
+            v-model="form.startPEStartTime"
             type="date"
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
@@ -76,7 +76,7 @@
             </el-date-picker>
             <span class="timing">-</span>
           <el-date-picker
-            v-model="form.maxReportDate"
+            v-model="form.endPEStartTime"
             type="date"
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
@@ -88,7 +88,7 @@
           <div>
             <span>体检结束：</span>
             <el-date-picker
-            v-model="form.minReportDate"
+            v-model="form.startPEndTime"
             type="date"
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
@@ -98,7 +98,7 @@
             </el-date-picker>
             <span class="timing">-</span>
           <el-date-picker
-            v-model="form.maxReportDate"
+            v-model="form.endPEndTime"
             type="date"
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
@@ -159,9 +159,9 @@
                 </el-table>
               </el-table-column>
               <el-table-column type="selection" width="40"></el-table-column>
-              <el-table-column label="报告编号" prop="reportNo" width="90" show-overflow-tooltip>
+              <el-table-column label="报告编号" prop="no" width="90" show-overflow-tooltip>
               </el-table-column>
-              <el-table-column label="团队名称" prop="clientName" align="center" show-overflow-tooltip>
+              <el-table-column label="团队名称" prop="reportName" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
                   <span class="clientName"
                         @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
@@ -169,19 +169,19 @@
                   </span>
                 </template>
               </el-table-column>
-              <el-table-column label="参检团队" prop="genderTxt" show-overflow-tooltip>
+              <el-table-column label="参检团队" prop="inspectionTeam" show-overflow-tooltip>
               </el-table-column>
-              <el-table-column label="参检人数" prop="age" show-overflow-tooltip>
+              <el-table-column label="参检人数" prop="scope" show-overflow-tooltip>
               </el-table-column>
               <el-table-column
                 label="体检开始日期"
-                prop="gradeName"
+                prop="startDate"
                 min-width="80"
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
                 label="体检结束日期"
-                prop="workUnitName"
+                prop="endDate"
                 min-width="80"
                 show-overflow-tooltip>
               </el-table-column>
@@ -257,13 +257,12 @@ export default {
       popoverRow: {},
       form: {
         keywords: '',
-        reportNo: '',
-        workUnitName: '',
-        gridId: '',
-        minReportDate: null,
-        maxReportDate: null,
-        minAssessReportDate: null,
-        maxAssessReportDate: null,
+        startCreatedTime: null,
+        endCreatedTime: null,
+        startPEStartTime: null,
+        endPEStartTime: null,
+        startPEndTime: null,
+        endPEndTime: null,
       },
       table: {
         list: [],
@@ -402,7 +401,7 @@ export default {
       if (sendData.maxAssessReportDate) {
         sendData.maxAssessReportDate = `${sendData.maxAssessReportDate} 23:59:59`;
       }
-      await this.$api.accessReport.fetchUserList({
+      await this.$api.accessReport.groupReportList({
         ...sendData,
         pageNo: this.table.pageNo,
         pageSize: this.table.pageSize,

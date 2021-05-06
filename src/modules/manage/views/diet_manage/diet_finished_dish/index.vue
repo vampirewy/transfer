@@ -120,16 +120,10 @@
             <el-table-column prop="method" label="烹饪方法"> </el-table-column>
             <el-table-column prop="id" label="操作" width="160px">
               <template slot-scope="scope">
-                <el-button
-                  type="text"
-                  size="small"
-                  @click="edit(scope.row.id)"
+                <el-button type="text" size="small" @click="edit(scope.row.id)"
                   >编辑</el-button
                 >
-                <el-button
-                  type="text"
-                  size="small"
-                  v-if="getAccess('staff_list_view')"
+                <el-button type="text" size="small" @click="look(scope.row.id)"
                   >查看</el-button
                 >
               </template>
@@ -148,7 +142,7 @@
       </div>
     </template>
     <template v-else>
-      <diet-dish-form :id="id"></diet-dish-form>
+      <diet-dish-form :mode="mode" :id="id"></diet-dish-form>
     </template>
   </div>
 </template>
@@ -162,6 +156,7 @@ export default {
   },
   data() {
     return {
+      mode: '',
       id: '',
       isShowDishSelect: false,
       viewIndex: 1,
@@ -185,10 +180,17 @@ export default {
   methods: {
     add() {
       this.id = '';
+      this.mode = '';
       this.viewIndex = 2;
     },
     edit(id) {
       this.id = id;
+      this.mode = '';
+      this.viewIndex = 2;
+    },
+    look(id) {
+      this.id = id;
+      this.mode = 'look';
       this.viewIndex = 2;
     },
     deletes() {

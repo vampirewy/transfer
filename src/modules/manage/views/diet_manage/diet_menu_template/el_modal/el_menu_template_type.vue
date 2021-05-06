@@ -189,11 +189,11 @@ export default {
       this.loadData();
     },
     submit() {
-      const ids = this.$refs.elMenuTemplateTypeForm.selection.map(
-        item => item.name,
-      );
-      this.$emit('change', ids);
+      const [selection = {}] = this.$refs.elMenuTemplateTypeForm.selection;
+      const { name, id } = selection;
+      this.$emit('change', id, name);
       this.visibles = false;
+      this.$refs.elMenuTemplateTypeForm.clearSelection();
     },
   },
 };
@@ -228,7 +228,7 @@ export default {
       text-align: center;
     }
   }
-  /deep/ th .el-checkbox__input{
+  /deep/ th .el-checkbox__input {
     visibility: hidden;
   }
 }

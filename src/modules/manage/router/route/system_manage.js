@@ -49,6 +49,26 @@ export default [
         },
         component: () => import('../../views/system_manage/system_configuration'),
       },
+      {
+        path: '/role_sort',
+        name: 'role_sort',
+        meta: {
+          title: '参数排序',
+          access: 'role_sort',
+          keepAlive: true,
+        },
+        component: () => import('../../views/system_manage/system_configuration/sort'),
+      },
+      {
+        path: '/role_strack',
+        name: 'role_strack',
+        meta: {
+          title: '跟踪回访配置',
+          access: 'role_strack',
+          keepAlive: true,
+        },
+        component: () => import('../../views/system_manage/track'),
+      },
     ],
   },
 ];

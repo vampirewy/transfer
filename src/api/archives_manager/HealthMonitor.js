@@ -1,6 +1,14 @@
 import BaseModule from '../BaseModule';
 
 class HealthMonitorInterface extends BaseModule {
+  // 单项检查新增
+  saveInspectRecord(params) {
+    return this.post('/inspect/save_inspect_record', params);
+  }
+  // 获取单项检查详情
+  SinglegetDetail(id) {
+    return this.get(`/inspect/get_detail/${id}`);
+  }
   // 检测项目
   healthDataItemGetAll(params) {
     return this.post('/health_data_item/get_health_data_item_list_page', params);

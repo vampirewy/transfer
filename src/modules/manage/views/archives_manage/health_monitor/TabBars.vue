@@ -84,7 +84,7 @@ export default {
     border-color: transparent;
     color: #666666;
     position: relative;
-    margin-right: 20px;
+    margin-right: 30px;
     // padding: 10px 14px 10px 16px;
     font-size: 14px;
     border-radius: 8px 5px 0 0;
@@ -107,6 +107,19 @@ export default {
     top: 0px;
     right: -13px;
   }
+  .TabBarsNames:before {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 36px;
+    position: absolute;
+    -webkit-transform: skewX(165deg);
+    transform: skewX(163deg);
+    background: #EEF1F5;
+    border-top-left-radius: 8px;
+    top: 0px;
+    left: -4px;
+}
   .TabBarsName{
     cursor: pointer;
     background: #ffffff;
@@ -114,7 +127,7 @@ export default {
     color: #333333;
     font-weight: 500;
     position: relative;
-    margin-right: 20px;
+    margin-right: 30px;
     // padding: 10px 14px 10px 16px;
     font-size: 14px;
     border-radius: 8px 5px 0 0;
@@ -136,6 +149,19 @@ export default {
     border-top-right-radius: 8px;
     top: 0px;
     right: -13px;
+  }
+  .TabBarsName:before {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 36px;
+    position: absolute;
+    -webkit-transform: skewX(165deg);
+    transform: skewX(163deg);
+    background: white;
+    border-top-left-radius: 8px;
+    top: 0px;
+    left: -4px;
   }
   }
 </style>

@@ -1,5 +1,11 @@
 <template>
-  <el-dialog title="查看" class="dialog-detail" width="570px" :visible.sync="visible" @close="cancel">
+  <el-dialog
+  :modal-append-to-body="false"
+  title="查看"
+  class="dialog-detail"
+  width="570px"
+  :visible.sync="visible"
+  @close="cancel">
       <div class="form-title">
         <div class="point"></div>
         <h3 class="name">用药记录</h3>

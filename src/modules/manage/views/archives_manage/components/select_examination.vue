@@ -24,20 +24,17 @@
       </el-button>
     <div class="resetAll">重置</div>
     </div>
-    <el-table :data="tableData" @row-click="rowClick">
-      <el-table-column width="80">
+    <el-table :data="tableData" @row-click="rowClick" class="openTable">
+      <!-- <el-table-column width="80">
         <template slot-scope="scope">
           <el-radio v-model="selectRadio" :label="scope.row.id">&nbsp;</el-radio>
         </template>
-      </el-table-column>
-      <el-table-column prop="name" label="姓名"></el-table-column>
-      <el-table-column prop="age" label="年龄"></el-table-column>
-      <el-table-column prop="gender" label="性别">
-        <template slot-scope="scope">
-          <span v-if="scope.row.gender === 1">男</span>
-          <span v-if="scope.row.gender === 2">女</span>
-        </template>
-      </el-table-column>
+      </el-table-column> -->
+      <el-table-column type="selection" width="40" align="center"></el-table-column>
+      <el-table-column prop="sectionName" label="科室"></el-table-column>
+      <el-table-column prop="itemName" label="项目名称"></el-table-column>
+      <el-table-column prop="refRange" label="参考范围"></el-table-column>
+      <el-table-column prop="unit" label="单位"></el-table-column>
     </el-table>
     <el-pagination
       background

@@ -155,7 +155,8 @@ export default {
      * @return {Promise<void>}
      */
     async getDetail() {
-      const reqBody = { id: this.$route.params.id };
+      // const reqBody = { id: this.$route.params.id };
+      const reqBody = { id: 1 };
       const res = await this.$api.unusualListInterface.getOrganAbnormal(
         reqBody,
       );
@@ -178,7 +179,7 @@ export default {
      */
     goBack() {
       this.$router.push({
-        path: '/basic_data/unusual_list',
+        path: '/Exception',
       });
     },
   },

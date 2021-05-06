@@ -41,182 +41,98 @@
               v-model="editableTabsValue"
             >
               <el-tab-pane
-                :key="item.title"
-                v-for="item in editableTabs"
-                :label="item.title"
-                :name="item.name"
+                :key="item.day"
+                v-for="(item, index) in editableTabs"
+                :label="`第${item.day}天`"
+                :name="item.day.toString()"
               >
                 <el-collapse v-model="dietCollapseActiveNames">
-                  <el-collapse-item name="1">
+                  <el-collapse-item
+                    v-for="(it, inx) in item.mealTypeDtos"
+                    :key="it.mealType"
+                    :name="it.mealType"
+                  >
                     <template slot="title">
                       <div class="header">
-                        <span><i class="el-icon-arrow-down"></i>早餐</span>
-                        <i class="el-icon-plus" @click.stop="foodAdd"></i>
+                        <span
+                          ><i class="el-icon-arrow-down"></i
+                          >{{ mealTypeText[it.mealType - 1] }}</span
+                        >
+                        <i
+                          class="el-icon-plus"
+                          @click.stop="foodAdd(index, inx)"
+                        ></i>
                       </div>
                     </template>
-                    <div class="food-collapse" v-for="item in 2" :key="item">
+                    <div
+                      class="food-collapse"
+                      v-for="(its, inxs) in it.dietTemplateConfigDtos"
+                      :key="inxs"
+                    >
                       <div class="food-item">
                         <p class="food-title">
                           <img
                             class="food-circle"
+                            v-show="its.configType === 1"
                             :src="
                               isActive
                                 ? require('@/assets/images/diet/icon_line.png')
                                 : require('@/assets/images/diet/icon_add.png')
                             "
-                            @click="isActive = !isActive"
+                            @click="
+                              switchCaiDtoIndex(
+                                index.toString() +
+                                  inx.toString() +
+                                  inxs.toString(),
+                              )
+                            "
                             alt=""
                           />
-                          纯牛奶
+                          <img
+                            class="food-circle"
+                            v-show="its.configType === 2"
+                            :src="
+                              require('@/assets/images/diet/icon_circle.png')
+                            "
+                            alt=""
+                          />
+                          {{ its.name }}
                           <i
                             @click="isShowCooking = true"
                             class="el-icon-warning"
                           ></i>
                         </p>
                         <div class="input-box">
-                          <el-input type="text" value="123123" />
+                          <el-input type="text" v-model="its.weight" />
                           g
                         </div>
                         <img
                           class="food-del"
+                          @click="
+                            deleteDietTempPlateConfigDtos(index, inx, inxs)
+                          "
                           src="@/assets/images/diet/icon_del.png"
                           alt=""
                         />
                       </div>
-                      <div class="food-list" :class="{ is_active: isActive }">
-                        <div class="food-item foot-list_item">
-                          <p>甜酒酿</p>
+                      <div
+                        class="food-list"
+                        :class="{
+                          is_active:
+                            activeCaiDtoIndex ===
+                            index.toString() + inx.toString() + inxs.toString(),
+                        }"
+                      >
+                        <div
+                          v-for="(
+                            its2, inxs2
+                          ) in its.templateDietIngredientDtoList"
+                          :key="inxs2"
+                          class="food-item foot-list_item"
+                        >
+                          <p>{{ its2.name }}</p>
                           <div class="input-box">
-                            <el-input type="text" value="123123" />
-                            g
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </el-collapse-item>
-                  <el-collapse-item name="2">
-                    <template slot="title">
-                      <div class="header">
-                        <span><i class="el-icon-arrow-down"></i>午餐</span>
-                        <i class="el-icon-plus" @click.stop="foodAdd"></i>
-                      </div>
-                    </template>
-                    <div class="food-collapse" v-for="item in 2" :key="item">
-                      <div class="food-item">
-                        <p class="food-title">
-                          <img
-                            class="food-circle"
-                            :src="
-                              isActive
-                                ? require('@/assets/images/diet/icon_line.png')
-                                : require('@/assets/images/diet/icon_add.png')
-                            "
-                            @click="isActive = !isActive"
-                            alt=""
-                          />
-                          纯牛奶
-                        </p>
-                        <div class="input-box">
-                          <el-input type="text" value="123123" />
-                          g
-                        </div>
-                        <img
-                          class="food-del"
-                          src="@/assets/images/diet/icon_del.png"
-                          alt=""
-                        />
-                      </div>
-                      <div class="food-list" :class="{ is_active: isActive }">
-                        <div class="food-item foot-list_item">
-                          <p>甜酒酿</p>
-                          <div class="input-box">
-                            <el-input type="text" value="123123" />
-                            g
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </el-collapse-item>
-                  <el-collapse-item name="3">
-                    <template slot="title">
-                      <div class="header">
-                        <span><i class="el-icon-arrow-down"></i>晚餐</span>
-                        <i class="el-icon-plus" @click.stop="foodAdd"></i>
-                      </div>
-                    </template>
-                    <div class="food-collapse" v-for="item in 2" :key="item">
-                      <div class="food-item">
-                        <p class="food-title">
-                          <img
-                            class="food-circle"
-                            :src="
-                              isActive
-                                ? require('@/assets/images/diet/icon_line.png')
-                                : require('@/assets/images/diet/icon_add.png')
-                            "
-                            @click="isActive = !isActive"
-                            alt=""
-                          />
-                          纯牛奶
-                        </p>
-                        <div class="input-box">
-                          <el-input type="text" value="123123" />
-                          g
-                        </div>
-                        <img
-                          class="food-del"
-                          src="@/assets/images/diet/icon_del.png"
-                          alt=""
-                        />
-                      </div>
-                      <div class="food-list" :class="{ is_active: isActive }">
-                        <div class="food-item foot-list_item">
-                          <p>甜酒酿</p>
-                          <div class="input-box">
-                            <el-input type="text" value="123123" />
-                            g
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </el-collapse-item>
-                  <el-collapse-item name="4">
-                    <template slot="title">
-                      <div class="header">
-                        <span><i class="el-icon-arrow-down"></i>加餐</span>
-                        <i class="el-icon-plus" @click.stop="foodAdd"></i>
-                      </div>
-                    </template>
-                    <div class="food-collapse" v-for="item in 2" :key="item">
-                      <div class="food-item">
-                        <p class="food-title">
-                          <img
-                            class="food-circle"
-                            :src="
-                              isActive
-                                ? require('@/assets/images/diet/icon_line.png')
-                                : require('@/assets/images/diet/icon_add.png')
-                            "
-                            @click="isActive = !isActive"
-                            alt=""
-                          />
-                          纯牛奶
-                        </p>
-                        <div class="input-box">
-                          <el-input type="text" value="123123" />
-                          g
-                        </div>
-                        <img
-                          class="food-del"
-                          src="@/assets/images/diet/icon_del.png"
-                          alt=""
-                        />
-                      </div>
-                      <div class="food-list" :class="{ is_active: isActive }">
-                        <div class="food-item foot-list_item">
-                          <p>甜酒酿</p>
-                          <div class="input-box">
-                            <el-input type="text" value="123123" />
+                            <el-input type="text" v-model="its2.weight" />
                             g
                           </div>
                         </div>
@@ -232,7 +148,7 @@
           <el-button size="small" class="cancelBtn" @click="back">
             返回
           </el-button>
-          <el-button size="small" class="sureBtn" type="primary"
+          <el-button size="small" class="sureBtn" type="primary" @click="submit"
             >保存</el-button
           >
         </div>
@@ -289,7 +205,10 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-    <el-food-op :visible.sync="isShowFoodOp"></el-food-op>
+    <el-food-op
+      @change="handleFoodSelect"
+      :visible.sync="isShowFoodOp"
+    ></el-food-op>
     <el-cooking :visible.sync="isShowCooking"></el-cooking>
     <el-diet-pagoda :visible.sync="isShowDietPagoda"></el-diet-pagoda>
   </div>
@@ -313,6 +232,12 @@ export default {
     dietProteinroportionChart,
     dietDistributionChart,
   },
+  props: {
+    id: {
+      type: String,
+      default: '',
+    },
+  },
   data() {
     return {
       isShowDietPagoda: false,
@@ -326,35 +251,119 @@ export default {
       analysisData: [
         { title: '能量', title2: '2205.23 kcal', title3: '2203.23 kcal' },
       ],
+      mealTypeText: ['早餐', '午餐', '晚餐', '加餐'],
       dietCollapseActiveNames: '1',
-      editableTabsValue: '2',
-      editableTabs: [
-        { title: '第1天', name: '1' },
-        { title: '第2天', name: '2' },
-        { title: '第3天', name: '3' },
-        { title: '第4天', name: '4' },
-      ],
+      activeCaiDtoIndex: '',
+      editableTabsValue: '1',
+      editableTabs: [],
     };
   },
+  created() {
+    if (this.id) {
+      this.loadData();
+    }
+  },
   methods: {
+    deleteDietTempPlateConfigDtos(index, inx, inxs) {
+      this.editableTabs[index].mealTypeDtos[inx].dietTemplateConfigDtos.splice(
+        inxs,
+        1,
+      );
+    },
+    switchCaiDtoIndex(index) {
+      this.activeCaiDtoIndex = index === this.activeCaiDtoIndex ? '' : index;
+    },
+    loadData() {
+      this.$api.dietMenuTemplateInterface
+        .getDietMenuTemConfigDetail(this.id)
+        .then((res) => {
+          this.editableTabs = res.data.data;
+        });
+    },
     back() {
       this.$parent.viewIndex = 1;
     },
-    removeTab(index) {
-      this.editableTabs.splice(index - 1, 1);
-      this.editableTabs.slice(index - 1).forEach((item) => {
-        let { name } = item;
-        name--;
-        item.title = `第${name}天`;
-        item.name = name.toString();
-      });
+    removeTab(day) {
+      const index = this.editableTabs.findIndex(item => item.day === day * 1);
+      this.editableTabs.splice(index, 1);
     },
     addTab() {
-      const len = this.editableTabs.length + 1;
-      this.editableTabs.push({ title: `第${len}天`, name: len.toString() });
+      const day = this.editableTabs.length + 1;
+      const meal = {
+        day,
+        mealTypeDtos: [
+          { mealType: 1, dietTemplateConfigDtos: [] },
+          { mealType: 2, dietTemplateConfigDtos: [] },
+          { mealType: 3, dietTemplateConfigDtos: [] },
+        ],
+      };
+      this.editableTabs.push(meal);
     },
-    foodAdd() {
+    foodAdd(index, inx) {
+      this.selectDietMenuIndex = [index, inx];
       this.isShowFoodOp = true;
+    },
+    handleFoodSelect(e) {
+      // 选择食物回调
+      e = e.map((item) => {
+        const obj = {};
+        if (item.name) {
+          obj.name = item.name;
+          obj.configType = 1;
+          obj.caiId = item.id;
+          obj.templateDietIngredientDtoList = item.caiIngredientDtos.map(
+            (it) => {
+              it.name = it.dietIngredientName;
+              return it;
+            },
+          );
+        } else {
+          obj.name = item.names;
+          obj.configType = 2;
+          obj.dietIngredientId = item.id;
+        }
+        obj.weight = 0;
+        return obj;
+      });
+      const [index, inx] = this.selectDietMenuIndex;
+      this.editableTabs[index].mealTypeDtos[inx].dietTemplateConfigDtos.push(
+        ...e,
+      );
+    },
+    submit() {
+      const obj = [];
+      this.editableTabs.forEach((item) => {
+        item.mealTypeDtos.forEach((item2) => {
+          item2.dietTemplateConfigDtos.forEach((item3) => {
+            if (item3.templateDietIngredientDtoList) {
+              item3.templateDietIngredientDtoList.forEach((item4) => {
+                obj.push({
+                  dietTemplateId: this.id,
+                  configType: item3.configType,
+                  day: item.day,
+                  mealType: item2.mealType,
+                  dietIngredientId: item3.dietIngredientId,
+                  weight: item4.weight,
+                });
+              });
+            }
+            obj.push({
+              dietTemplateId: this.id,
+              configType: item3.configType,
+              day: item.day,
+              mealType: item2.mealType,
+              caiId: item3.caiId,
+              dietIngredientId: item3.dietIngredientId,
+              weight: item3.weight,
+            });
+          });
+        });
+      });
+      this.$api.dietMenuTemplateInterface
+        .saveDietMenuTemConfig(obj)
+        .then(() => {
+          this.$message.success('操作成功!');
+        });
     },
   },
 };

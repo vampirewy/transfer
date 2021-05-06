@@ -38,6 +38,7 @@
       >
         <el-tab-pane label="管理医生" name="first">
           <el-table
+                  class="openTable"
                   ref="doctorTable1"
                   :data="dataSource"
                   highlight-current-row
@@ -165,6 +166,7 @@
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="管理医生" name="first">
           <el-table
+                  class="openTable"
                   ref="doctorTable2"
                   :data="dataSource"
                   highlight-current-row

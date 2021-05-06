@@ -1,5 +1,6 @@
 <template>
   <el-dialog
+    :modal-append-to-body="false"
     title="查看"
     :visible="true"
     width="570px"
