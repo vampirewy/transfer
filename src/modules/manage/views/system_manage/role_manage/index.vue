@@ -226,6 +226,9 @@ export default {
   margin: 20px 0 0;
   text-align: right;
 }
+/deep/ .el-table .el-table__header-wrapper th{
+  padding: 13px 0!important;
+}
 .role-page {
   .query-container {
     margin-bottom: 40px;

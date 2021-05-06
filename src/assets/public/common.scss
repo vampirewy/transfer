@@ -435,7 +435,13 @@ a {
     }
   }
 }
-
+.labelTitle{
+  .el-form-item__label{
+    font-size: 14px;
+    color: #333333!important;
+    font-weight: bold;
+  }
+}
 /*tab*/
 .two-tab {
   margin-top: 20px;
@@ -539,6 +545,10 @@ a {
         div {
           .el-input__suffix {
             right: 0px;
+            border-left: 1px solid #DDE0E6;
+            border-radius: 0;
+            margin-top: 1px;
+            height: calc(100% - 2px);
           }
         }
       }
@@ -637,8 +647,8 @@ a {
 }
 
 .el-select .el-input .el-select__caret {
-  border-right: 1px solid #DDE0E6;
-  border-left: 1px solid #DDE0E6;
+  /*border-right: 1px solid #DDE0E6;
+  border-left: 1px solid #DDE0E6;*/
 }
 .el-card__body{
   padding-top: 0;
