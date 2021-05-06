@@ -62,6 +62,7 @@
                   :key="itemList.id"
                   :label="`${indexList + 1}. ${itemList.name} (单选)`"
                   v-if="itemList.subectType === 1"
+                  class="labelTitle"
                 >
                   <el-radio-group
                     v-if="answerMap[itemList.id]"
@@ -470,6 +471,13 @@ export default {
 </script>
 
 <style lang="scss">
+  .labelTitle{
+    /deep/ .el-form-item__label{
+      font-size: 16px;
+      color: #333333!important;
+      font-weight: bold;
+    }
+  }
   .health_questionnaire_edit{
     #intvTmpl_left{
       &.isFixed{
