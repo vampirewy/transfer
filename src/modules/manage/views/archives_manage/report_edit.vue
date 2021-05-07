@@ -1,7 +1,11 @@
 <template>
   <div class="report-edit">
     <el-form ref="form" :model="formData" label-width="90px" label-suffix="：" :rules="rules">
-      <div class="title">{{id ? '编辑' : '新增'}}体检信息-基本信息</div>
+      <!-- <div class="title">{{id ? '编辑' : '新增'}}体检信息-基本信息</div> -->
+      <div class="form-title">
+        <div class="line"></div>
+        <h3 class="name">{{id ? '编辑' : '新增'}}体检信息-基本信息</h3>
+     </div>
       <el-row>
         <el-col :span="6">
           <el-form-item label="姓名" prop="clientId">
@@ -250,6 +254,27 @@ export default {
 
 <style lang="scss" scoped>
 .report-edit {
+  .form-title {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-top: 20px;
+    .line {
+      width: 36px;
+      height: 4px;
+      background: #3154AC;
+      margin-right: 8px;
+      border-radius: 1px;
+      position: absolute;
+      margin-top: 12px;
+      opacity: 0.5;
+    }
+    .name {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333333;
+    }
+  }
   .title {
     font-size: 18px;
     font-weight: 600;

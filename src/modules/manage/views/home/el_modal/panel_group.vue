@@ -10,7 +10,7 @@
           <img class="card-panel-icon" :src="home1" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">客户总数</div>
+          <div class="card-panel-text">客户总数（人）</div>
           <div class="card-panel-number">
             {{ formData.clientInfoCount || 0 }}
           </div>
@@ -24,7 +24,7 @@
           <img class="card-panel-icon" :src="home2" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">体检总数</div>
+          <div class="card-panel-text">体检总数（人）</div>
           <div class="card-panel-number">
             {{ formData.reportInfoCount || 0 }}
           </div>
@@ -38,7 +38,7 @@
           <img class="card-panel-icon" :src="home3" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">问卷总数</div>
+          <div class="card-panel-text">问卷总数（人）</div>
           <div class="card-panel-number">
             {{ formData.questionInfoCount || 0 }}
           </div>
@@ -52,7 +52,7 @@
           <img class="card-panel-icon" :src="home4" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">评估报告总数</div>
+          <div class="card-panel-text">评估报告总数（人）</div>
           <div class="card-panel-number">
             {{ formData.assessReportCount || 0 }}
           </div>
@@ -106,7 +106,7 @@ export default {
 
 <style lang="scss" scoped>
 .panel-group {
-  background-color: white;
+  // background-color: white;
   // padding-top: 20px;
 
   .card-panel {
@@ -124,13 +124,13 @@ export default {
     align-items: center;
     border-radius: 15px;
     &:hover{
+      box-shadow: 0px 7px 18px 0px rgba(49, 84, 172, 0.35);
       transform: scale(1.1,1.1);
-      box-shadow: 0px 0px 47px 0px rgba(73, 145, 253, 0.4);
     }
     .card-panel-icon-wrapper {
-      width: 60px;
-      margin-left: 30px;
-      margin-right: 20px;
+      // width: 60px;
+      margin-left: 20px;
+      margin-right: 18px;
       transition: all 0.38s ease-out;
       border-radius: 6px;
     }
@@ -154,6 +154,7 @@ export default {
       line-height: 18px;
       color: #B4BBC9;
       font-size: 12px;
+      white-space: nowrap;
     }
     .cardDian{
       position: absolute;

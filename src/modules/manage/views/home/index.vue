@@ -7,7 +7,11 @@
     <el-row :gutter="40" style="margin-left: 0">
       <el-col :span="15" class="echartBody" style="width:96%;height:340px">
         <div class="rowTitleParent" style="padding-bottom: 5px">
-          <p class="rowTitle" style="margin-left: 0">近15天新增客户趋势（人）</p>
+          <!-- <p class="rowTitle" style="margin-left: 0">近15天新增客户趋势（人）</p> -->
+          <div class="divTitle">
+              <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
+            近15天新增客户趋势（人）
+          </div>
           <!-- <div class="rowTitleParentRight">
             <span style="background-color: #4991FD"></span>
             <label>随访计划</label>
@@ -106,14 +110,18 @@
     <!--</el-col>-->
     <!--</el-row>-->
   </div>
-  <div style="width:30%;margin-top:10px">
+  <div style="width:24%;margin-top:10px">
       <!-- <el-col :span="9"> -->
         <el-row>
           <el-col class="echartBody">
             <div class="rowTitleParent">
               <!-- <p class="rowTitle">{{listQuery.planType === '4' ? '随访计划' : '随访记录'}}
                 <span class="top5">TOP5</span></p> -->
-                <p class="rowTitle">随访计划</p>
+                <!-- <p class="rowTitle">客户类别分布</p> -->
+                <div class="divTitle">
+                  <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
+                客户类别分布（%）
+              </div>
               <!-- <el-radio-group
                       v-model="listQuery.planType"
                       @change="choosePlanType"
@@ -402,6 +410,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.divTitle{
+  margin: 26px 0 0 23px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333333;
+}
 .dashboard-editor-container {
   position: relative;
   // width: 70%;
@@ -533,13 +547,14 @@ export default {
 .TabBars{
   display: flex;
   margin-top: 30px;
+  margin-left: 10px;
   .TabBarsNames{
     cursor: pointer;
     background: #EEF1F5;
     border-color: transparent;
     color: #666666;
     position: relative;
-    margin-right: 20px;
+    margin-right: 30px;
     padding: 10px 14px 10px 16px;
     font-size: 14px;
     border-radius: 8px 5px 0 0;
@@ -557,6 +572,20 @@ export default {
     top: 0px;
     right: -13px;
   }
+  .TabBarsNames:before {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 39px;
+    position: absolute;
+    -webkit-transform: skewX(165deg);
+    transform: skewX(163deg);
+    background: #EEF1F5;
+    border-top-left-radius: 8px;
+    top: 0px;
+    left: -4px;
+    border-bottom: solid 1px #EEF1F5;
+  }
   .TabBarsName{
     cursor: pointer;
     background: #ffffff;
@@ -564,7 +593,7 @@ export default {
     color: #333333;
     font-weight: 500;
     position: relative;
-    margin-right: 20px;
+    margin-right: 30px;
     padding: 10px 14px 10px 16px;
     font-size: 14px;
     border-radius: 8px 5px 0 0;
@@ -584,7 +613,7 @@ export default {
   }
   .Tabunread{
     display: inline-block;
-    background: red;
+    background: #fa912b;
     padding: 3px;
     color: #ffffff;
     width: 12px;

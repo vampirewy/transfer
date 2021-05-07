@@ -48,7 +48,7 @@
     <div class="searchCondition">
       <div class="searchLeft">
         <div class="searchInputFormItem">
-          <el-input placeholder="名称/项目" v-model="formData.keyWord">
+          <el-input placeholder="名称/项目" v-model="form.itemName">
           </el-input>
           <span class="searchBtnImgSpan" @click="search(1)">
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
@@ -57,7 +57,7 @@
         <div>
           <span>显示列表：</span>
           <el-select
-                  v-model="formData.clientGrid"
+                  v-model="form.isAssess"
                   placeholder="请选择"
                   style="width: 140px"
                   clearable
@@ -168,9 +168,9 @@
       <el-table style="width: 100%" :data="dataSource" align="center"
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="40"></el-table-column>
-        <el-table-column label=" 待匹配异常" prop="clientNo" min-width="200" show-overflow-tooltip>
+        <el-table-column label=" 待匹配异常" prop="sectionName" min-width="200" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{ scope.row.clientNo | getResult}}</span>
+            <span>{{ scope.row.sectionName | getResult}}</span>
           </template>
         </el-table-column>
         <!-- <el-table-column label=" 报告" prop="sourceName" min-width="150" show-overflow-tooltip>
@@ -203,9 +203,9 @@
             <span>{{ scope.row.workUnitName | getResult}}</span>
           </template>
         </el-table-column> -->
-        <el-table-column label="报告" prop="questionDate" min-width="150" show-overflow-tooltip>
+        <el-table-column label="报告" prop="sectionName" min-width="150" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span  style="color:#36BF2F;">{{ scope.row.questionDate | getResultDate}}</span>
+            <span  style="color:#36BF2F;">{{ scope.row.sectionName | getResultDate}}</span>
           </template>
         </el-table-column>
         <!-- <el-table-column label="问卷来源" prop="sourceName" show-overflow-tooltip>
@@ -315,6 +315,15 @@ export default {
         pageNo: 1,
         pageSize: 15,
       },
+      form: {
+        itemName: '',
+        isAssess: '',
+        currentPage: '',
+      },
+      table: {
+        currentPage: 1,
+        pageSize: 15,
+      },
       options: {},
       types: [],
       multipleSelection: [], // 当前页选中的数据
@@ -337,21 +346,38 @@ export default {
     };
   },
   activated() {
-    this.getGridList();
-    this.getQuestionFromList();
-    this.getLifeStyleList();
-    if (localStorage.getItem('homeSearchData')) {
-      const HomeSearchData = JSON.parse(localStorage.getItem('homeSearchData'));
-      this.formData.startTime = HomeSearchData.startDate;
-      this.formData.endTime = HomeSearchData.lastDate;
-      this.formData.searchRange = HomeSearchData.searchRange;
-    }
+    this.getList();
+    // this.getGridList();
+    // this.getQuestionFromList();
+    // this.getLifeStyleList();
+    // if (localStorage.getItem('homeSearchData')) {
+    //   const HomeSearchData = JSON.parse(localStorage.getItem('homeSearchData'));
+    //   this.formData.startTime = HomeSearchData.startDate;
+    //   this.formData.endTime = HomeSearchData.lastDate;
+    //   this.formData.searchRange = HomeSearchData.searchRange;
+    // }
   },
   destroyed() {
     // 清除时间 和 我的/平台
     localStorage.removeItem('homeSearchData');
   },
   methods: {
+    async getList() {
+      const reqBody = {
+        itemName: this.form.itemName,
+        isAssess: this.form.isAssess,
+        pageNo: this.table.currentPage,
+        pageSize: this.table.pageSize,
+      };
+      const res = await this.$api.projectList.systemItemList(
+        reqBody,
+      );
+      const { data } = res.data;
+      if (data) {
+        this.dataSource = data.data || [];
+        this.table.totalCount = data.total;
+      }
+    },
     async getGridList() {
       const res = await this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
       const { data } = res.data;
@@ -515,12 +541,12 @@ export default {
       this.isTrue = !this.isTrue;
     },
   },
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      // vm.getQuestionType();
-      vm.fetch();
-    });
-  },
+  // beforeRouteEnter(to, from, next) {
+  //   next((vm) => {
+  //     vm.getQuestionType();
+  //     vm.fetch();
+  //   });
+  // },
 };
 </script>
 
