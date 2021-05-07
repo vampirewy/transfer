@@ -1,5 +1,6 @@
 <template>
-  <el-dialog title="新增附件" :visible.sync="visible" :modal-append-to-body="false" @close="cancel">
+  <el-dialog title="新增附件" :visible.sync="visible" width="610px"
+             :modal-append-to-body="false" @close="cancel">
     <el-form :model="formData" label-width="90px" ref="form" :rules="rules">
       <el-form-item label="附件上传：" prop="route">
         <el-input
@@ -15,13 +16,13 @@
           :on-exceed="handleLimit"
           :before-upload="beforeUpload"
         >
-          <el-button size="small" class="claickbutton" v-if="!formData.filePath">点击上传</el-button>
+          <el-button size="small" class="claickbutton" v-if="!formData.filePath">上传</el-button>
           <el-button size="small" class="claickbutton" v-else>重新上传</el-button>
         </upload>
       </el-form-item>
       <div class="el-upload__tip">支持格式：txt、docx、xlsx、jpg、png、jpeg、zip、rar、pdf</div>
       <div class="flex">
-        <el-form-item label="附件标题" prop="title">
+        <el-form-item label="附件标题：" prop="title">
         <el-input
                 style="width:100%;"
                 v-model="formData.title"
@@ -30,16 +31,17 @@
                 maxlength="30">
         </el-input>
       </el-form-item>
-      <el-form-item label="上传时间">
+      <el-form-item label="上传时间：">
         <el-input style="width:100%;" disabled="true" v-model="formData.uploadDate"></el-input>
       </el-form-item>
       </div>
-      <el-form-item label="备注">
+      <el-form-item label="备注：">
         <el-input
           type="textarea"
+          :rows="4"
           placeholded="请输入"
           v-model="formData.remark"
-          :maxlength="200"
+          :maxlength="300"
           show-word-limit>
         </el-input>
       </el-form-item>
@@ -146,6 +148,7 @@ export default {
   .dialog-footer {
     text-align: center;
     padding: 0 26px;
+    margin-top: -12px;
   }
   /deep/ .el-upload {
     text-align: left;
@@ -158,13 +161,15 @@ export default {
   }
   .el-upload__tip{
     color: #f94242;
-    margin-top: -5px;
+    margin-top: -15px;
     padding-left: 90px;
     margin-bottom: 5px;
   }
   .claickbutton{
+    width: 90px;
     background: #36BF2F;
     color: #fff;
     margin-left: 10px;
+    font-weight: 200;
   }
 </style>

@@ -73,6 +73,18 @@ class SystemManageInterface extends BaseModule {
   getMainList(modelCode) {
     return this.get(`/model_assess/get_main_item_list/${modelCode}`);
   }
+  // 获取平均风险排序
+  getAvgList(modelCode) {
+    return this.get(`/model_assess/get_avg_risk_list/${modelCode}`);
+  }
+  // 保存平均风险设置
+  saveAvg(data) {
+    return this.post('/model_assess/save_avg_risk', data);
+  }
+  // 保存排序
+  saveMainitem(data) {
+    return this.post('/model_assess/save_main_item', data);
+  }
 }
 
 export default new SystemManageInterface();

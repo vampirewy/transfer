@@ -33,6 +33,10 @@ class AccessReport extends BaseModule {
   generateReport(params) {
     return this.post('/assess_report/create_assess_info', params);
   }
+  // 团报告列表
+  groupReportList(params = {}) {
+    return this.post('/group_report/page_list', params);
+  }
 }
 
 export default new AccessReport();

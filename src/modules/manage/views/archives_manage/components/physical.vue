@@ -8,7 +8,6 @@
                 v-model="formData.reportNo"
                 placeholder="请输入"
                 :maxlength="100"
-                style="width: 200px"
               ></el-input>
             </el-form-item>
           <!-- <el-form-item label="录入模板">
@@ -31,7 +30,6 @@
                 v-model="formData.examinationOrgan"
                 placeholder="请输入"
                 :maxlength="30"
-                style="width: 200px"
               ></el-input>
             </el-form-item>
           <!-- <el-form-item label="体检库">
@@ -57,7 +55,7 @@
                 :min-date="formData.startDate"
                 value-format="yyyy-MM-dd"
                 placeholder="请选择"
-                style="width: 200px"
+                style="width: 100%"
               ></el-date-picker>
             </el-form-item>
           <!-- <el-form-item label="体检库" prop="libraryId">
@@ -72,24 +70,29 @@
           </el-form-item> -->
         </el-col>
         <el-col :span="6">
-          <div>
-            <span style="font-size:14px;margin-left: 25px;color:#666666">是否总检：</span>
+          <el-form-item label="是否总检" prop="endDate">
             <el-select
-              v-model="formData.reportState"
-              placeholder="请选择"
-              style="width: 140px"
+                    v-model="formData.reportState"
+                    placeholder="请选择"
+                    style="width: 100%"
             >
               <el-option
-                :label="item.gridName"
-                :value="item.id"
-                v-for="(item, index) in gridList"
-                :key="index"
+                      :label="item.gridName"
+                      :value="item.id"
+                      v-for="(item, index) in gridList"
+                      :key="index"
               ></el-option>
             </el-select>
-          </div>
+          </el-form-item>
         </el-col>
       </el-row>
-      <div class="title physical-examination-info">体检信息</div>
+      <div class="divRightTitleDiv">
+        <div class="divRightTitle" style="margin-top: 0">体检信息<div class="titleBiao"></div></div>
+      </div>
+      <div class="wltitle">
+        <div class="quan"></div>
+        <span>体检科室</span>
+      </div>
       <div class="add-department" @click="addDepartment">
         <i class="el-icon-circle-plus"></i>
         <span>点击新增体检科室</span>
@@ -213,14 +216,16 @@
           <el-input
             type="textarea"
             rows="4"
-            show-word-limit
             maxlength="2000"
             v-model="item.conclusion"
             placeholder="请输入科室小结"
           ></el-input>
         </div>
       </div>
-
+      <div class="wltitle">
+        <div class="quan"></div>
+        <span>异常信息</span>
+      </div>
       <div class="sub-title">
         <span>异常信息</span>
         <el-popover
@@ -272,18 +277,18 @@
         </div>
       </div>
       <div class="text-add-abnormal" v-else>点击右上角添加体检异常信息</div>
-
-      <div class="sub-title" style="background:#ffffff;color:#333333">
+      <div class="wltitle">
+        <div class="quan"></div>
         <span>总检建议</span>
       </div>
-      <div class="suggest-item">
+      <div class="suggest-item" style="margin-top: 0">
         <div class="label">综述</div>
         <el-input
           type="textarea"
           v-model="formData.summarize"
           :maxlength="4000"
-          show-word-limit
-          rows="5">
+          placeholder="请输入综述"
+          rows="4">
         </el-input>
       </div>
       <div class="suggest-item">
@@ -292,13 +297,13 @@
           type="textarea"
           v-model="formData.advice"
           :maxlength="4000"
-          show-word-limit
-          rows="5">
+          placeholder="请输入建议"
+          rows="4">
         </el-input>
       </div>
       <div class="buttons">
-        <el-button @click="$emit('close')">取消</el-button>
-        <el-button type="primary" @click="submit">保存</el-button>
+        <el-button class="cancelBtn" @click="$emit('close')">取消</el-button>
+        <el-button type="primary" class="sureBtn" @click="submit">保存</el-button>
       </div>
     </el-form>
   </div>
@@ -606,6 +611,13 @@ export default {
       margin: 10px 0 20px;
     }
   }
+  .wltitle{
+    height: 50px;
+    margin-top: -15px;
+    span{
+      font-size: 14px;
+    }
+  }
   .add-department {
     width: 340px;
     height: 80px;
@@ -668,10 +680,13 @@ export default {
       border-right: 1px solid #F4F4F6;
       /deep/ .el-table {
         .el-table__header-wrapper th {
-          background: rgba(73, 145, 253, 0.1);
+          padding: 13px 0;
         }
         &.el-table--enable-row-hover .el-table__body tr:hover > td {
           background: #fff;
+        }
+        .el-table__body td{
+          padding: 7px 0;
         }
       }
       .add-wrapper {
@@ -687,7 +702,7 @@ export default {
           display: flex;
           align-items: center;
           padding-left: 13px;
-          margin-right: 18px;
+          margin-right: 13px;
           .label {
             font-size: 14px;
             color: #666;
@@ -705,39 +720,49 @@ export default {
           }
         }
         .button-add-project {
-          width: 80px;
+          width: 70px;
           height: 40px;
-          background: #4991FD;
-          border-radius: 8px;
+          background: #36BF2F;
+          border-radius: 5px;
           color: #fff;
         }
       }
     }
     .bottom {
-      background: #F4F4F6;
+      background: #EEF1F5;
       border-radius: 5px;
-      padding: 10px 20px;
+      padding: 15px 20px 10px 20px;
       >div:first-child {
         font-size: 14px;
         font-weight: 400;
-        color: #4991FD;
+        color: #3154AC;
         line-height: 20px;
       }
       /deep/ textarea {
         padding-left: 0;
         padding-right: 0;
         background: none;
+        resize: none;
       }
     }
   }
   .suggest-item {
     margin-top: 20px;
     .label {
-      margin-bottom: 7px;
-      font-size: 16px;
-      font-weight: 600;
-      color: #333333;
+      font-size: 14px;
+      color: #3154AC;
       line-height: 22px;
+      background: #EEF1F5;
+      padding: 15px 0 0 20px;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+    }
+    /deep/ .el-textarea__inner{
+      background: #EEF1F5;
+      border-radius: 5px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      resize: none;
     }
   }
   .buttons {
@@ -766,12 +791,14 @@ export default {
   /deep/ .sub-title {
     height: 60px;
     background: #7CA7FF;
-    border-radius: 5px;
+    border-radius: 8px;
     display: flex;
     justify-content: space-between;
     color: #fff;
     padding: 0 10px 0 20px;
     align-items: center;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
     .button-add-abnormal {
       display: inline-block;
       width: 80px;
@@ -788,7 +815,9 @@ export default {
   /deep/ .abnormal-level {
     display: flex;
     justify-content: flex-end;
-    margin: 20px;
+    padding: 20px;
+    border-left: 1px solid #F4F4F6;
+    border-right: 1px solid #F4F4F6;
     span {
       font-size: 12px;
       font-weight: 400;
@@ -832,24 +861,28 @@ export default {
     font-weight: 400;
     color: #97A6BD;
     line-height: 20px;
-    padding: 67px 0;
+    padding: 35px 0 45px 0;
     text-align: center;
-    border-radius: 5px;
+    border-radius: 8px;
     border: 1px solid #F4F4F6;
     margin-bottom: 20px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top: none;
   }
   /deep/ .abnormal-list {
-    padding: 20px 20px 0 20px;
+    padding: 0 20px 0 20px;
     margin-bottom: 20px;
-    border-radius: 5px;
+    border-radius: 8px;
     border: 1px solid #F4F4F6;
     display: flex;
     flex-wrap: wrap;
+    border-top: none;
     .abnormal-item {
-      border-radius: 8px;
+      border-radius: 50px;
       display: flex;
       align-items: center;
-      padding: 14px 10px 14px 28px;
+      padding: 14px 15px 14px 18px;
       margin-right: 20px;
       margin-bottom: 20px;
       .abnormal-number {
@@ -869,42 +902,42 @@ export default {
         cursor: pointer;
       }
       &.level1 {
-        box-shadow: 0px 0px 15px 0px rgba(49, 197, 41, 0.2);
+       /* box-shadow: 0px 0px 15px 0px rgba(49, 197, 41, 0.2);*/
         border: 2px solid #31C529;
         .abnormal-number {
           color: #31C529;
         }
       }
       &.level2 {
-        box-shadow: 0px 0px 15px 0px rgba(73, 145, 253, 0.2);
+        /*box-shadow: 0px 0px 15px 0px rgba(73, 145, 253, 0.2);*/
         border: 2px solid #4991FD;
         .abnormal-number {
           color: #4991FD;
         }
       }
       &.level3 {
-        box-shadow: 0px 0px 15px 0px rgba(108, 108, 229, 0.2);
+        /*box-shadow: 0px 0px 15px 0px rgba(108, 108, 229, 0.2);*/
         border: 2px solid #6C6CE5;
         .abnormal-number {
           color: #6C6CE5;
         }
       }
       &.level4 {
-        box-shadow: 0px 0px 15px 0px rgba(230, 176, 88, 0.2);
+        /*box-shadow: 0px 0px 15px 0px rgba(230, 176, 88, 0.2);*/
         border: 2px solid #E6B058;
         .abnormal-number {
           color: #E6B058;
         }
       }
       &.level5 {
-        box-shadow: 0px 0px 15px 0px rgba(254, 43, 42, 0.2);
+        /*box-shadow: 0px 0px 15px 0px rgba(254, 43, 42, 0.2);*/
         border: 2px solid #FE2B2A;
         .abnormal-number {
           color: #FE2B2A;
         }
       }
       &.level0 {
-        box-shadow: 0px 0px 15px 0px rgba(254, 43, 42, 0.2);
+        /*box-shadow: 0px 0px 15px 0px rgba(254, 43, 42, 0.2);*/
         border: 2px solid #97A6BD;
       }
     }

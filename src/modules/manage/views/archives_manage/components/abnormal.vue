@@ -21,6 +21,7 @@
       </span>
     </div>
     <el-table
+            class="openTable"
       @selection-change="handleSelectionChange"
       :data="dataSource"
       ref="multipleTable"
@@ -41,8 +42,8 @@
       @size-change="handleSizeChange"
     ></el-pagination>
     <div class="buttons">
-      <el-button plain @click="cancel">取消</el-button>
-      <el-button type="primary" @click="submit">确定</el-button>
+      <el-button class="cancelBtn" @click="cancel">取消</el-button>
+      <el-button type="primary" class="sureBtn" @click="submit">确定</el-button>
     </div>
   </div>
 </template>
@@ -129,6 +130,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  /deep/ .el-table__header-wrapper th{
+    padding: 3px 0;
+  }
 .abnormal-popoper {
   padding: 13px 18px 21px 18px;
   .un-match {

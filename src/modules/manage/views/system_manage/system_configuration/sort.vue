@@ -24,11 +24,15 @@
         <el-table-column prop="id" label="操作">
           <template slot-scope="scope">
             <input type="text"
-            style="width:35%;border-radius:3px;border-width:1px;" v-model="scope.row.sortIndex" />
+            style="width:40%;border-radius:3px;border-width:1px;" v-model="scope.row.sortIndex" />
           </template>
         </el-table-column>
       </el-table>
     </div>
+    <div style="text-align: center;margin-top: 20px;">
+        <el-button class="cancelBtn" @click="$router.go(-1)">返回</el-button>
+        <el-button class="sureBtn" type="primary" @click="onSubmit">保存</el-button>
+      </div>
   </div>
 </template>
 
@@ -50,6 +54,18 @@ export default {
         .getMainList(this.$route.query.id)
         .then(({ data }) => {
           this.tableData = data.data;
+        });
+    },
+    onSubmit() {
+      this.$api.systemManageInterface
+        .saveMainitem(this.tableData)
+        .then(({ data }) => {
+          if (data.rc === 0) {
+            this.getMainList();
+            this.$message.success('操作成功');
+          } else {
+            this.$message.error('网络异常！');
+          }
         });
     },
   },

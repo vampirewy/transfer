@@ -53,7 +53,7 @@
           <div class="title articleTitle" :id="'questions-' + index"
                v-if="$route.params.qusType === 1">{{ item.name }}
           </div>
-            <el-row class="health_questionnaire_formQus">
+            <el-row class="health_questionnaire_formQus labelTitle">
               <el-col :span="$route.params.qusType !== 1 ? 24 :
               item.name === '既往情况' || item.name === '患病情况' ? 24 :
               item.name === '家族病史' ? 8 : 12" :id="'questionitem-' + itemList.code"
@@ -62,6 +62,7 @@
                   :key="itemList.id"
                   :label="`${indexList + 1}. ${itemList.name} (单选)`"
                   v-if="itemList.subectType === 1"
+
                 >
                   <el-radio-group
                     v-if="answerMap[itemList.id]"

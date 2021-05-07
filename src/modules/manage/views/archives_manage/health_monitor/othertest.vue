@@ -10,14 +10,19 @@
         label-width="83px"
         class="form-inline"
     >
-      <div class="form-title">
+      <!--<div class="form-title">
         <div class="line"></div>
         <h3 class="name">新增-其他检测</h3>
-      </div>
+      </div>-->
+        <div class="divRightTitleDiv">
+            <div class="divRightTitle">新增-其他检测
+                <div class="titleBiao"></div></div>
+        </div>
 
       <div class="medicate-record mt20">
-      <div class="row">
-          <el-form-item label="姓名" prop="clientName" style="width:25%">
+          <el-row>
+              <el-col :span="6">
+          <el-form-item label="姓名" prop="clientName">
             <el-popover
               ref="userPopover"
               placement="bottom-start"
@@ -36,7 +41,6 @@
                 disabled
                 v-model="infoSource.clientName"
                 placeholder="请选择客户"
-                style="width: 232px;"
               >
                 <i
                   :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
@@ -45,40 +49,46 @@
               </el-input>
             </el-popover>
           </el-form-item>
-          <el-form-item label="性别" prop="gender" style="width:20%">
+              </el-col>
+          <el-col :span="6">
+          <el-form-item label="性别" prop="gender">
             <el-radio v-model="infoSource.gender" :label="1" disabled>男</el-radio>
             <el-radio v-model="infoSource.gender" :label="2" disabled>女</el-radio>
           </el-form-item>
-              <el-form-item label="年龄" prop="age" style="width:25%">
+          </el-col>
+          <el-col :span="6">
+              <el-form-item label="年龄" prop="age">
             <el-input
               v-model="infoSource.age"
               disabled
               class="age-input"
-              style="width: 200px;"
             ></el-input>
           </el-form-item>
-          <el-form-item label="客户编号" prop="gridName" style="width:25%">
+          </el-col>
+          <el-col :span="6">
+          <el-form-item label="客户编号" prop="gridName">
             <el-input
               v-model="infoSource.gridName"
               disabled
-              style="width: 200px;"
             ></el-input>
           </el-form-item>
-      </div>
-      <div class="row" >
-        <el-form-item label="时间" prop="startDate" style="width:25%">
+          </el-col>
+          </el-row>
+          <el-row>
+          <el-col :span="6">
+        <el-form-item label="时间" prop="startDate">
         <el-date-picker
             class="start-date"
             v-model="infoSource.startDate"
             type="date"
             value-format="yyyy-MM-dd"
             placeholder="请选择时间"
-            style="width: 180px"
+            style="width: 100%"
         ></el-date-picker>
         </el-form-item>
-    </div>
+          </el-col>
+          </el-row>
       </div>
-
       <!-- <div class="form-title">
         <div class="line"></div>
         <h3 class="name">就医信息</h3>
@@ -127,10 +137,10 @@
             </el-form-item>
         </div>
       </div>
-       <div class="form-title">
-        <div class="line"></div>
-        <h3 class="name">检查项目</h3>
-      </div>
+        <div class="divRightTitleDiv" style="margin-top: -20px">
+            <div class="divRightTitle">检查项目
+                <div class="titleBiao"></div></div>
+        </div>
         <div class="row">
           <el-form-item label="检测项目" prop="clientName" style="width:40%;background:#ffffff">
             <el-popover
@@ -507,7 +517,7 @@ export default {
   .el-input__inner,
   .el-textarea__inner {
     // background-color: #f4f4f6;
-    border: 0;
+    /*border: 0;*/
   }
   .select-user-input {
     .el-input__inner {

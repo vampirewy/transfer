@@ -1,24 +1,28 @@
 <template>
   <div class="health-monitor-trend">
-    <div class="lines"></div>
-    <div class="titless">查看-血糖</div>
-    <div class="lookPressure">
-      <div><span>姓名：</span><span>{{queryInfo.clientName}}</span></div>
-      <div><span>性别：</span><span>{{queryInfo.gender}}</span></div>
-      <div><span>年龄：</span><span>{{queryInfo.age}}</span></div>
-      <div><span>客户编号：</span><span>{{queryInfo.clientNo}}</span></div>
+    <div class="divRightTitleDiv">
+      <div class="divRightTitle">查看-血糖
+        <div class="titleBiao"></div></div>
     </div>
     <div class="lookPressure">
-      <div><span>血糖类型：</span><span>{{queryInfo.sugarType}}</span></div>
-      <div><span>血糖值：</span><span>{{queryInfo.sugar}}</span></div>
+      <div><span class="lookPressureTitle">姓名：</span><span>{{queryInfo.clientName}}</span></div>
+      <div><span class="lookPressureTitle">性别：</span><span>{{queryInfo.gender}}</span></div>
+      <div><span class="lookPressureTitle">年龄：</span><span>{{queryInfo.age}}</span></div>
+      <div><span class="lookPressureTitle">客户编号：</span><span>{{queryInfo.clientNo}}</span></div>
+    </div>
+    <div class="lookPressure">
+      <div><span class="lookPressureTitle">血糖类型：</span><span>{{queryInfo.sugarType}}</span></div>
+      <div><span class="lookPressureTitle">血糖值：</span><span>{{queryInfo.sugar}}</span></div>
       <div></div>
       <div></div>
     </div>
     <div class="lookPressure">
-      <div><span>备注：</span><span>{{queryInfo.result}}</span></div>
+      <div><span class="lookPressureTitle">备注：</span><span>{{queryInfo.result}}</span></div>
     </div>
-    <div class="lines"></div>
-    <div class="titless">趋势</div>
+    <div class="divRightTitleDiv">
+      <div class="divRightTitle">趋势
+        <div class="titleBiao"></div></div>
+    </div>
     <div class="chart-legend">
       <span>空腹血糖</span>
       <span>餐后血糖</span>
@@ -165,7 +169,7 @@ export default {
     width: 25%;
     padding-left: 20px;
     font-size: 14px;
-    color: #666666;
+    color: #333333;
   }
 }
 .titless {

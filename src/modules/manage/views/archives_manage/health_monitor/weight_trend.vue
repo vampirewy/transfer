@@ -1,24 +1,28 @@
 <template>
   <div class="health-monitor-trend">
-    <div class="lines"></div>
-    <div class="titless">查看-体重</div>
-    <div class="lookPressure">
-      <div><span>姓名：</span><span>{{queryInfo.clientName}}</span></div>
-      <div><span>性别：</span><span>{{queryInfo.gender}}</span></div>
-      <div><span>年龄：</span><span>{{queryInfo.age}}</span></div>
-      <div><span>客户编号：</span><span>{{queryInfo.clientNo}}</span></div>
+    <div class="divRightTitleDiv">
+      <div class="divRightTitle">查看-体重
+        <div class="titleBiao"></div></div>
     </div>
     <div class="lookPressure">
-      <div><span>身高：</span><span>{{queryInfo.height}}</span></div>
-      <div><span>体重：</span><span>{{queryInfo.weight}}</span></div>
-      <div><span>腰围：</span><span>{{queryInfo.wc}}</span></div>
-      <div><span>体脂率：</span><span>{{queryInfo.bdPercent}}</span></div>
+      <div><span class="lookPressureTitle">姓名：</span><span>{{queryInfo.clientName}}</span></div>
+      <div><span class="lookPressureTitle">性别：</span><span>{{queryInfo.gender}}</span></div>
+      <div><span class="lookPressureTitle">年龄：</span><span>{{queryInfo.age}}</span></div>
+      <div><span class="lookPressureTitle">客户编号：</span><span>{{queryInfo.clientNo}}</span></div>
     </div>
     <div class="lookPressure">
-      <div><span>备注：</span><span>{{queryInfo.result}}</span></div>
+      <div><span class="lookPressureTitle">身高：</span><span>{{queryInfo.height}}</span></div>
+      <div><span class="lookPressureTitle">体重：</span><span>{{queryInfo.weight}}</span></div>
+      <div><span class="lookPressureTitle">腰围：</span><span>{{queryInfo.wc}}</span></div>
+      <div><span class="lookPressureTitle">体脂率：</span><span>{{queryInfo.bdPercent}}</span></div>
     </div>
-    <div class="lines"></div>
-    <div class="titless">体重-查看趋势</div>
+    <div class="lookPressure">
+      <div><span class="lookPressureTitle">备注：</span><span>{{queryInfo.result}}</span></div>
+    </div>
+    <div class="divRightTitleDiv">
+      <div class="divRightTitle">体重-查看趋势
+        <div class="titleBiao"></div></div>
+    </div>
     <div class="chart-legend">
       <span>体重</span>
     </div>
@@ -159,7 +163,7 @@ export default {
     width: 25%;
     padding-left: 20px;
     font-size: 14px;
-    color: #666666;
+    color: #333333;
   }
 }
 .titless {

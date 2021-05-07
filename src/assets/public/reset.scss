@@ -193,7 +193,7 @@ body .el-table th.gutter{
   border-radius: 5px;
   // border-color: #4991FD;
   padding: 0;
-  width: 360px;
+  width: 378px;
   .el-message-box__header {
     padding: 16px 19px;
     margin: 0;
@@ -214,7 +214,7 @@ body .el-table th.gutter{
     }
   }
   .el-message-box__btns {
-    padding: 10px 0 30px;
+    padding: 0 0 30px;
     text-align: center;
     background: #fff;
     button + button {
@@ -234,7 +234,7 @@ body .el-table th.gutter{
   .delete-text-content {
     display: flex;
     align-items: center;
-    padding-top: 27px;
+    /*padding-top: 27px;*/
     .delete-icon {
       width: 40px;
       height: 40px;
@@ -248,7 +248,7 @@ body .el-table th.gutter{
   padding: 10px 20px;
   color: #333333;
   &::placeholder{
-    color: #666666!important;
+    color: #999999!important;
   }
 }
 .el-input{
@@ -266,13 +266,12 @@ body .el-table th.gutter{
       border-radius: 4px;
     }
     &:disabled{
-      border: none !important;
       &::placeholder{
         color: #C8C8C8;
       }
     }
     &::placeholder{
-      color: #666666!important;
+      color: #999999!important;
     }
   }
   &.is-disabled .el-input__inner {
@@ -439,7 +438,7 @@ border: 1px solid #3154AC;
   /deep/ .el-textarea__inner{
     color: #333333 !important;
     &::placeholder{
-      color: #666666!important;
+      color: #999999!important;
     }
   }
   /deep/ .el-textarea.is-disabled .el-textarea__inner{
@@ -493,8 +492,11 @@ textarea:-ms-input-placeholder {
   text-align: right;
   padding: 0 5px;
   margin-right: -9px;
+  margin-top: 20px!important;
   .btn-prev{
     background-color: white!important;
+    border: 1px solid #EEF1F5;
+    border-radius: 3px!important;
     &:hover {
       color: #2F49D1;
       background: #EAECFA;
@@ -502,6 +504,13 @@ textarea:-ms-input-placeholder {
   }
   .btn-next{
     background-color: white!important;
+    border: 1px solid #EEF1F5;
+    border-radius: 3px!important;
+    .el-icon-arrow-right{
+      &:before{
+        content:'\e6e0';
+      }
+    }
     &:hover {
       color: #2F49D1;
       background: #EAECFA;
@@ -541,7 +550,6 @@ textarea:-ms-input-placeholder {
 .el-pagination .btn-prev {
   width: 32px;
   height: 32px;
-  color: #333333;
   border-radius: 5px;
   margin-right: 10px;
   padding-right: 6px;
@@ -616,6 +624,8 @@ textarea:-ms-input-placeholder {
     display: inline-block;
     right: 56px;
     color: white;
+    transform: rotateZ(270deg);
+    margin-top: -6px;
   }
   &.el-menu--collapse {
     .el-submenu__icon-arrow {

@@ -30,27 +30,25 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="性别" prop="gender" style="width:100%">
+          <el-form-item label="性别" prop="gender">
             <el-radio v-model="formData.gender" :label="1" disabled>男</el-radio>
             <el-radio v-model="formData.gender" :label="2" disabled>女</el-radio>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="年龄" prop="age" style="width:25%">
+          <el-form-item label="年龄" prop="age">
             <el-input
               v-model="formData.age"
               disabled
               class="age-input"
-              style="width: 200px;"
             ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="客户编号" prop="gridName" style="width:25%">
+          <el-form-item label="客户编号" prop="gridName">
             <el-input
               v-model="formData.cardNo"
               disabled
-              style="width: 200px;"
             ></el-input>
           </el-form-item>
         </el-col>

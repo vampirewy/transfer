@@ -3,7 +3,7 @@
     title="匹配项目"
     class="dialog-detail"
     :modal-append-to-body="false"
-    width="570px"
+    width="550px"
     :visible.sync="visible"
     @close="cancel"
   >
@@ -14,15 +14,18 @@
 
     <el-form
       :label-position="right"
-      label-width="100px"
+      label-width="90px"
       :model="value"
       class="form-content"
+      style="margin-top: -10px"
     >
     <div>
-      <div class="lookPressure">
-        <div><span>项目名称：</span><span>123123</span></div>
+      <!--<div class="lookPressure">-->
+        <el-form-item label="项目名称：" prop="clientName" style="background:#ffffff">
+          123123
+        </el-form-item>
         <!-- <div><span>科室名称：</span><span>123123</span></div> -->
-      </div>
+      <!--</div>-->
       <!-- <div><span></span><span style="color:#333333;font-size:16px">匹配</span></div> -->
       <div class="row" style="display: flex">
           <el-form-item label="检测项目：" prop="clientName" style="background:#ffffff">
@@ -44,7 +47,7 @@
                 disabled
                 v-model="detectioninfoSource.clientName"
                 placeholder="请选择(可多选)"
-                style="width:300px"
+                style="width:380px"
               >
                 <i
                   :class="`el-icon-caret-${detectionpopoverStatus ? 'top' : 'bottom'}`"
@@ -282,7 +285,7 @@ export default {
       width: 50%;
       padding-left: 20px;
       font-size: 14px;
-      color: #666666;
+      color: #333333;
     }
   }
   .othertest{

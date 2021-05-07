@@ -148,9 +148,12 @@ export default {
         ], */
         series: [],
       };
-      const colorLineList = ['#4991FD', '#31C529'];
+      /* const colorLineList = ['#4991FD', '#31C529'];
       // const colorList = ['#1450C9', '#F53625'];
-      const colorGradientList = ['#91c4ff', '#d7f4d6'];
+      const colorGradientList = ['#91c4ff', '#d7f4d6'];*/
+      const colorLineList = ['#3154ac4d', '#31C5294d'];
+      // const colorList = ['#1450C9', '#F53625'];
+      const colorGradientList = ['#3154ac4d', '#31C5294d'];
       this.sectionName.forEach((sectionNameValue, index) => {
         // if (this.sectionXList.length === 0) {
         //    this.chart.showLoading({
@@ -183,10 +186,10 @@ export default {
                 offset: 0,
                 color: colorGradientList[index], // 第一颜色
               },
-              {
+              /* {
                 offset: 1,
                 color: 'white', // 渐变颜色
-              },
+              },*/
             ]),
           },
           symbolSize: 1, // 设定实心点的大小
