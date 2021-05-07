@@ -18,40 +18,46 @@
       :model="value"
       class="form-content"
     >
-      <el-form-item label="企业名称：">
+      <el-form-item label="单位名称：">
         <el-input
+          v-if="value.type === 1"
           v-model="value.workUnitName"
-          :disabled="value.type === 2"
-          :placeholder="value.type === 1 ? '请输入' : ''"
+          placeholder="请输入"
           :maxlength="30"
           style="width: 430px"
         ></el-input>
+        <span v-if="value.type === 2">{{value.workUnitName}}</span>
       </el-form-item>
       <el-form-item label="联系地址：">
         <el-input
           v-model="value.address"
-          :disabled="value.type === 2"
-          :placeholder="value.type === 1 ? '请输入' : ''"
+          v-if="value.type === 1"
+          placeholder="请输入"
           :maxlength="200"
           style="width: 430px"
         ></el-input>
+        <span v-if="value.type === 2">{{value.address}}</span>
       </el-form-item>
       <el-form-item label="联系人：">
         <el-input
           v-model="value.contact"
-          :disabled="value.type === 2"
-          :placeholder="value.type === 1 ? '请输入' : ''"
+          v-if="value.type === 1"
+          placeholder="请输入"
           :maxlength="30"
           style="width: 166px"
         ></el-input>
+        <span v-if="value.type === 2"
+        style="min-width:166px;display:inline-block;">{{value.contact}}</span>
         <span class="tel">联系电话：</span>
         <el-input
           v-model="value.mobile"
           :format="/^(1\d{0,10}){0,1}$/"
-          :disabled="value.type === 2"
-          :placeholder="value.type === 1 ? '请输入' : ''"
+          v-if="value.type === 1"
+          placeholder="请输入"
           style="width: 166px"
         ></el-input>
+        <span v-if="value.type === 2"
+        >{{value.mobile}}</span>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer" v-if="value.type === 1">
@@ -114,7 +120,7 @@ export default {
   .form-content {
     margin-top: 20px;
     .el-input__inner {
-      background-color: #f4f4f6;
+      // background-color: #f4f4f6;
       border: 0;
     }
     .tel {

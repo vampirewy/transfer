@@ -50,10 +50,10 @@
             </div>
             <div class="searchRight">
             <div class="buttones">
-            <div class="searchFor" @click="onSearch">
+            <div class="searchFor searchmarTop" @click="onSearch">
             <img src="@/assets/images/common/topsearchblue.png" alt="">
           </div>
-          <div class="resetAll">重置</div>
+          <div class="resetAll searchmarTop">重置</div>
           </div>
             </div>
           </div>
