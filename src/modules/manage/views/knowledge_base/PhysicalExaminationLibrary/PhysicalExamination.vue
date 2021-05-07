@@ -393,15 +393,17 @@ export default {
         customClass: 'message-box-customize',
         showClose: true,
       }).then(() => {
-        const params = {
-          clientIdList: this.chooseUserList.map(user => user.id),
-        };
-        this.$api.userManagerInterface.deleteClientInfo(params).then(({ data }) => {
+        // const params = {
+        //   clientIdList: this.chooseUserList.map(user => user.id),
+        // };
+        const arrs = this.chooseUserList[0];
+        console.log(arrs, '删除数据');
+        this.$api.physicalProjectListInterface.deleteOrganItem(arrs.id).then(({ data }) => {
           if (data.code === 200) {
             this.$message.success('操作成功');
-            this.search();
+            // this.search();
             this.chooseUserList = [];
-            this.$refs.multipleTable.clearSelection();
+            // this.$refs.multipleTable.clearSelection();
           }
         });
       });

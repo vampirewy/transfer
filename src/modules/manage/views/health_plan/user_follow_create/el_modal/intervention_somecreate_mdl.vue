@@ -351,8 +351,13 @@ export default {
     .el-table{
       width: 99.99%!important;
     }
+    /deep/ .el-table__header-wrapper{
+      th{
+        padding: 15px 0;
+      }
+    }
     /deep/ td{
-      padding: 18.5px 0;
+      padding: 12.5px 0;
     }
     .red{
       color: red;

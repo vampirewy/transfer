@@ -10,14 +10,18 @@
         label-width="83px"
         class="form-inline"
     >
-      <div class="form-title">
+      <!--<div class="form-title">
         <div class="line"></div>
         <h3 class="name">新增-{{Name}}</h3>
-      </div>
-
+      </div>-->
+        <div class="divRightTitleDiv">
+            <div class="divRightTitle">新增-{{Name}}
+                <div class="titleBiao"></div></div>
+        </div>
       <div class="medicate-record mt20">
-      <div class="row">
-          <el-form-item label="姓名" prop="clientName" style="width:25%">
+      <el-row>
+          <el-col :span="6">
+          <el-form-item label="姓名" prop="clientName">
             <el-popover
               ref="userPopover"
               placement="bottom-start"
@@ -36,7 +40,6 @@
                 disabled
                 v-model="infoSource.clientName"
                 placeholder="请选择客户"
-                style="width: 232px;"
               >
                 <i
                   :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
@@ -45,26 +48,31 @@
               </el-input>
             </el-popover>
           </el-form-item>
-          <el-form-item label="性别" prop="gender" style="width:20%">
+          </el-col>
+          <el-col :span="6">
+          <el-form-item label="性别" prop="gender">
             <el-radio v-model="infoSource.gender" :label="1" disabled>男</el-radio>
             <el-radio v-model="infoSource.gender" :label="2" disabled>女</el-radio>
           </el-form-item>
-              <el-form-item label="年龄" prop="age" style="width:25%">
+          </el-col>
+          <el-col :span="6">
+              <el-form-item label="年龄" prop="age">
             <el-input
               v-model="infoSource.age"
               disabled
               class="age-input"
-              style="width: 200px;"
             ></el-input>
           </el-form-item>
-          <el-form-item label="客户编号" prop="gridName" style="width:25%">
+          </el-col>
+          <el-col :span="6">
+          <el-form-item label="客户编号" prop="gridName">
             <el-input
               v-model="infoSource.gridName"
               disabled
-              style="width: 200px;"
             ></el-input>
           </el-form-item>
-      </div>
+          </el-col>
+      </el-row>
       </div>
 
       <!-- <div class="form-title">
@@ -73,43 +81,48 @@
       </div> -->
 
       <div class="medicate-info mt20" style="margin-top:0">
-        <div class="row" v-if="id === 0">
-            <el-form-item label="收缩压" prop="drugsName" style="width:25%">
+        <el-row v-if="id === 0">
+            <el-col :span="6">
+            <el-form-item label="收缩压" prop="drugsName">
               <el-input
                 v-model="infoSource.SBP"
                 placeholder="请输入"
                 :maxlength="100"
-                style="width: 200px"
               ></el-input>
             </el-form-item>
-            <el-form-item label="舒张压" prop="specification" style="width:25%">
+            </el-col>
+            <el-col :span="6">
+            <el-form-item label="舒张压" prop="specification">
               <el-input
                 v-model="infoSource.DBP"
                 placeholder="请输入"
                 :maxlength="30"
-                style="width: 200px"
               ></el-input>
             </el-form-item>
-            <el-form-item label="脉搏" prop="specification" style="width:25%">
+            </el-col>
+            <el-col :span="6">
+            <el-form-item label="脉搏" prop="specification">
               <el-input
                 v-model="infoSource.pulse"
                 placeholder="请输入"
                 :maxlength="30"
-                style="width: 200px"
               ></el-input>
             </el-form-item>
-            <el-form-item label="时间" prop="startDate" style="width:25%">
+            </el-col>
+            <el-col :span="6">
+            <el-form-item label="时间" prop="startDate">
               <el-date-picker
                 class="start-date"
                 v-model="infoSource.startDate"
                 type="date"
                 value-format="yyyy-MM-dd"
                 placeholder="请选择时间"
-                style="width: 180px"
+                style="width: 100%"
               ></el-date-picker>
             </el-form-item>
-        </div>
-        <div class="row" v-if="id === 1">
+            </el-col>
+        </el-row>
+        <el-row v-if="id === 1">
             <!-- <el-form-item label="血糖类型" prop="drugsName" style="width:25%">
               <el-input
                 v-model="infoSource.bloodsugar"
@@ -118,6 +131,7 @@
                 style="width: 200px"
               ></el-input>
             </el-form-item> -->
+            <el-col :span="6">
             <el-form-item label="血糖类型" prop="medicalType">
                 <el-select v-model="infoSource.bloodsugar" placeholder="请选择血糖类型">
                 <el-option
@@ -128,120 +142,134 @@
                 ></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="血糖值" prop="drugsName" style="width:25%">
+            </el-col>
+            <el-col :span="6">
+            <el-form-item label="血糖值" prop="drugsName">
               <el-input
                 v-model="infoSource.bloodsugarvalue"
                 placeholder="请输入"
                 :maxlength="100"
-                style="width: 200px"
               ></el-input>
             </el-form-item>
-            <el-form-item label="时间" prop="startDate" style="width:25%">
+            </el-col>
+            <el-col :span="6">
+            <el-form-item label="时间" prop="startDate">
               <el-date-picker
                 class="start-date"
                 v-model="infoSource.startDate"
                 type="date"
                 value-format="yyyy-MM-dd"
                 placeholder="请选择时间"
-                style="width: 180px"
+                style="width: 100%"
               ></el-date-picker>
             </el-form-item>
-        </div>
+            </el-col>
+        </el-row>
         <div v-if="id === 2">
-            <div class="row" >
-                <el-form-item label="身高" prop="specification" style="width:23%">
+            <el-row>
+                <el-col :span="6">
+                <el-form-item label="身高" prop="specification">
                 <el-input
                     v-model="infoSource.Height"
                     placeholder="请输入"
                     :maxlength="30"
-                    style="width: 180px"
                 ></el-input>
                 </el-form-item>
-                <el-form-item label="体重" prop="drugsName" style="width:23%">
+                </el-col>
+                <el-col :span="6">
+                <el-form-item label="体重" prop="drugsName">
                 <el-input
                     v-model="infoSource.Weight"
                     placeholder="请输入"
                     :maxlength="100"
-                    style="width: 180px"
                 ></el-input>
                 </el-form-item>
-                <el-form-item label="腰围" prop="specification" style="width:23%">
+                </el-col>
+                <el-col :span="6">
+                <el-form-item label="腰围" prop="specification">
                 <el-input
                     v-model="infoSource.Waist"
                     placeholder="请输入"
                     :maxlength="30"
-                    style="width: 180px"
                 ></el-input>
                 </el-form-item>
-                <el-form-item label="体脂率" prop="specification" style="width:23%">
+                </el-col>
+                <el-col :span="6">
+                <el-form-item label="体脂率" prop="specification">
                 <el-input
                     v-model="infoSource.specification"
                     placeholder="请输入"
                     :maxlength="30"
-                    style="width: 180px"
                 ></el-input>
                 </el-form-item>
-            </div>
-            <div class="row" >
-                <el-form-item label="时间" prop="startDate" style="width:25%">
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="6">
+                <el-form-item label="时间" prop="startDate">
                 <el-date-picker
                     class="start-date"
                     v-model="infoSource.startDate"
                     type="date"
                     value-format="yyyy-MM-dd"
                     placeholder="请选择时间"
-                    style="width: 180px"
+                    style="width: 100%"
                 ></el-date-picker>
                 </el-form-item>
-            </div>
+                </el-col>
+            </el-row>
         </div>
         <div v-if="id === 3">
-            <div class="row">
-                <el-form-item label="运动时间" prop="specification" style="width:23%">
+                <el-row>
+                <el-col :span="6">
+                <el-form-item label="运动时间" prop="specification">
                 <el-input
                     v-model="infoSource.sportTime"
                     placeholder="请输入"
                     :maxlength="30"
-                    style="width: 180px"
                 ></el-input>
                 </el-form-item>
-                <el-form-item label="运动路程" prop="specification" style="width:23%">
+                </el-col>
+                    <el-col :span="6">
+                <el-form-item label="运动路程" prop="specification">
                 <el-input
                     v-model="infoSource.sportDistance"
                     placeholder="请输入"
                     :maxlength="30"
-                    style="width: 180px"
                 ></el-input>
                 </el-form-item>
-                <el-form-item label="运动步数" prop="specification" style="width:23%">
+                    </el-col>
+                <el-col :span="6">
+                <el-form-item label="运动步数" prop="specification">
                 <el-input
                     v-model="infoSource.steps"
                     placeholder="请输入"
                     :maxlength="30"
-                    style="width: 180px"
                 ></el-input>
                 </el-form-item>
-                <el-form-item label="运动消耗" prop="specification" style="width:23%">
+                </el-col>
+                <el-col :span="6">
+                <el-form-item label="运动消耗" prop="specification">
                 <el-input
                     v-model="infoSource.kcal"
                     placeholder="请输入"
                     :maxlength="30"
-                    style="width: 180px"
                 ></el-input>
                 </el-form-item>
-            </div>
-            <div class="row" >
-                <el-form-item label="时间" prop="startDate" style="width:25%">
+                </el-col>
+                </el-row>
+                <el-row>
+                <el-form-item label="时间" prop="startDate">
                 <el-date-picker
                     class="start-date"
                     v-model="infoSource.startDate"
                     type="date"
                     value-format="yyyy-MM-dd"
                     placeholder="请选择时间"
-                    style="width: 180px"
+                    style="width: 100%"
                 ></el-date-picker>
                 </el-form-item>
-            </div>
+                </el-row>
         </div>
         <div class="row">
             <el-form-item label="备注" prop="ingrenient" style="width:100%">
@@ -580,7 +608,7 @@ export default {
   .el-input__inner,
   .el-textarea__inner {
     // background-color: #f4f4f6;
-    border: 0;
+    /*border: 0;*/
   }
   .select-user-input {
     .el-input__inner {

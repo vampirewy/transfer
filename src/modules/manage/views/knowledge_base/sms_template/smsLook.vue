@@ -158,7 +158,7 @@ export default {
     width: 25%;
     padding-left: 20px;
     font-size: 14px;
-    color: #666666;
+    color: #333333;
   }
 }
 .titless {

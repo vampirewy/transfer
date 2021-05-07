@@ -464,6 +464,7 @@ export default {
       }
     }
     .health_questionnaire_form{
+      padding-top: 0;
       flex: 1;
       .footer {
         margin-top: 10px;

@@ -1,24 +1,29 @@
 <template>
   <div class="health-monitor-trend">
-    <div class="lines"></div>
-    <div class="titless">查看-运动</div>
-    <div class="lookPressure">
-      <div><span>姓名：</span><span>{{queryInfo.clientName}}</span></div>
-      <div><span>性别：</span><span>{{queryInfo.gender}}</span></div>
-      <div><span>年龄：</span><span>{{queryInfo.age}}</span></div>
-      <div><span>客户编号：</span><span>{{queryInfo.clientNo}}</span></div>
+    <div class="divRightTitleDiv">
+      <div class="divRightTitle">查看-运动
+        <div class="titleBiao"></div></div>
     </div>
     <div class="lookPressure">
-      <div><span>运动时间：</span><span>{{queryInfo.sportTime}}</span></div>
-      <div><span>运动路程：</span><span>{{queryInfo.steps}}</span></div>
-      <div><span>运动步数：</span><span>{{queryInfo.sportDistance}}</span></div>
-      <div><span>运动消耗：</span><span>{{queryInfo.kcal}}</span></div>
+      <div><span class="lookPressureTitle">姓名：</span><span>{{queryInfo.clientName}}</span></div>
+      <div><span class="lookPressureTitle">性别：</span><span>{{queryInfo.gender}}</span></div>
+      <div><span class="lookPressureTitle">年龄：</span><span>{{queryInfo.age}}</span></div>
+      <div><span class="lookPressureTitle">客户编号：</span><span>{{queryInfo.clientNo}}</span></div>
     </div>
     <div class="lookPressure">
-      <div><span>备注：</span><span>{{queryInfo.result}}</span></div>
+      <div><span class="lookPressureTitle">运动时间：</span><span>{{queryInfo.sportTime}}</span></div>
+      <div><span class="lookPressureTitle">运动路程：</span><span>{{queryInfo.steps}}</span></div>
+      <div><span class="lookPressureTitle">运动步数：</span>
+        <span>{{queryInfo.sportDistance}}</span></div>
+      <div><span class="lookPressureTitle">运动消耗：</span><span>{{queryInfo.kcal}}</span></div>
     </div>
-    <div class="lines"></div>
-    <div class="titless">运动-查看趋势</div>
+    <div class="lookPressure">
+      <div><span class="lookPressureTitle">备注：</span><span>{{queryInfo.result}}</span></div>
+    </div>
+    <div class="divRightTitleDiv">
+      <div class="divRightTitle">运动-查看趋势
+        <div class="titleBiao"></div></div>
+    </div>
     <div class="chart-legend">
       <span>步数</span>
     </div>
@@ -158,7 +163,7 @@ export default {
     width: 25%;
     padding-left: 20px;
     font-size: 14px;
-    color: #666666;
+    color: #333333;
   }
 }
 .titless {

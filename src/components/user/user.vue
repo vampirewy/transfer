@@ -158,6 +158,7 @@ export default {
         height: 30px;
         line-height: 30px;
       vertical-align: middle;
+        border-radius: 8px;
       img {
         width: 100%;
       }

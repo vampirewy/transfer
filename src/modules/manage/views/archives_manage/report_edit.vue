@@ -1,7 +1,11 @@
 <template>
   <div class="report-edit">
     <el-form ref="form" :model="formData" label-width="90px" label-suffix="：" :rules="rules">
-      <div class="title">{{id ? '编辑' : '新增'}}体检信息-基本信息</div>
+      <!-- <div class="title">{{id ? '编辑' : '新增'}}体检信息-基本信息</div> -->
+      <div class="form-title">
+        <div class="line"></div>
+        <h3 class="name">{{id ? '编辑' : '新增'}}体检信息-基本信息</h3>
+     </div>
       <el-row>
         <el-col :span="6">
           <el-form-item label="姓名" prop="clientId">
@@ -26,27 +30,25 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="性别" prop="gender" style="width:100%">
+          <el-form-item label="性别" prop="gender">
             <el-radio v-model="formData.gender" :label="1" disabled>男</el-radio>
             <el-radio v-model="formData.gender" :label="2" disabled>女</el-radio>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="年龄" prop="age" style="width:25%">
+          <el-form-item label="年龄" prop="age">
             <el-input
               v-model="formData.age"
               disabled
               class="age-input"
-              style="width: 200px;"
             ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="客户编号" prop="gridName" style="width:25%">
+          <el-form-item label="客户编号" prop="gridName">
             <el-input
               v-model="formData.cardNo"
               disabled
-              style="width: 200px;"
             ></el-input>
           </el-form-item>
         </el-col>
@@ -250,6 +252,27 @@ export default {
 
 <style lang="scss" scoped>
 .report-edit {
+  .form-title {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-top: 20px;
+    .line {
+      width: 36px;
+      height: 4px;
+      background: #3154AC;
+      margin-right: 8px;
+      border-radius: 1px;
+      position: absolute;
+      margin-top: 12px;
+      opacity: 0.5;
+    }
+    .name {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333333;
+    }
+  }
   .title {
     font-size: 18px;
     font-weight: 600;

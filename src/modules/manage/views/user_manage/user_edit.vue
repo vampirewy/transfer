@@ -1,6 +1,6 @@
 <template>
   <div class="user-edit">
-    <el-card>
+    <div>
       <el-row>
         <el-col :span="12">
           <div class="divRight">
@@ -278,14 +278,14 @@
               </el-select>
             </el-form-item>-->
             <el-form-item label="客户标签">
-              <el-row>
-                <el-col :span="20">
+              <el-row style="display: flex">
+                <el-col style="flex: 1;margin-right: 5px">
                   <el-input v-model="formData.tag" maxlength="10"></el-input>
                 </el-col>
-                <el-col :span="4">
+                <el-col style="width: 80px">
                   <el-button
                           class="addbutton"
-                          style="height: 40px;marginLeft: 5px;width:80px;"
+                          style="height: 40px;width:80px;font-size: 14px"
                           :disabled="!formData.tag"
                           @click="addNewTag"
                   >添加</el-button>
@@ -310,7 +310,6 @@
                       type="textarea"
                       placeholder="输入备注内容"
                       :maxlength="300"
-                      style="1px solid #DDE0E6 !important"
                       show-word-limit
                       v-model="formData.remark">
               </el-input>
@@ -383,7 +382,7 @@
               :current="currentRow"
               @cancel="fileDetailModalVisible = false"
       ></file-detail>
-    </el-card>
+    </div>
 
   </div>
 </template>
@@ -816,10 +815,10 @@ export default {
     .tags {
       margin-right: 10px;
     }
-    /deep/.el-card {
+    /deep/.div {
       border: 0;
     }
-    /deep/.el-card.is-always-shadow {
+    /deep/.div.is-always-shadow {
       box-shadow: none !important;
     }
     /deep/.el-form-item__label {
@@ -843,6 +842,7 @@ export default {
           font-size: 16px;
           color: #333333;
           font-weight: bold;
+          margin: 0 0 20px 0;
           span{
             color: #4991FD;
             font-size: 18px;
