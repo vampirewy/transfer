@@ -39,26 +39,28 @@
       </el-form-item>
       <div style="display: flex;">
       <!-- <el-col :span="6"> -->
-        <el-form-item label="性别限制：" >
-          <el-select v-model="result" placeholder="请选择">
+        <el-form-item label="导入体检库：" >
+          <el-select v-model="importLibraryId" placeholder="请选择">
             <el-option
               v-for="item in resultOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
             ></el-option>
           </el-select>
         </el-form-item>
       <!-- </el-col> -->
       <!-- <el-col :span="6"> -->
         <el-form-item label="是否启用：" >
-          <el-select v-model="results" placeholder="请选择">
-            <el-option
+          <el-select v-model="state" placeholder="请选择">
+            <!-- <el-option
               v-for="item in resultOptions"
               :key="item.value"
               :label="item.label"
               :value="item.value"
-            ></el-option>
+            ></el-option> -->
+            <el-option label="是" value="1" key="1"></el-option>
+            <el-option label="否" value="2" key="2"></el-option>
           </el-select>
         </el-form-item>
       <!-- </el-col> -->
@@ -93,6 +95,7 @@ export default {
   props: {
     visible: Boolean,
     value: Boolean,
+    libraryList: {},
   },
   // props: ['id', 'editId'],
   data() {
@@ -100,33 +103,40 @@ export default {
       modalTitle: '编辑',
       result: '',
       results: '',
+      state: '',
+      importLibraryId: '',
       resultOptions: [
-        { value: 1, label: '未指定' },
-        { value: 2, label: '治疗中' },
-        { value: 3, label: '转诊' },
-        { value: 4, label: '转为慢病' },
-        { value: 5, label: '痊愈' },
-        { value: 6, label: '其他' },
+        // { value: 1, label: '未指定' },
+        // { value: 2, label: '治疗中' },
+        // { value: 3, label: '转诊' },
+        // { value: 4, label: '转为慢病' },
+        // { value: 5, label: '痊愈' },
+        // { value: 6, label: '其他' },
       ],
     };
   },
   mounted() {
-    console.log(this.value, '接收的数据');
+    console.log(this.libraryList, '接收的数据');
+    this.getLibraryList();
   },
   methods: {
+    async getLibraryList() {
+      const res = await this.$api.physicalProjectListInterface.listOrganItemLibrary();
+      const { data } = res.data;
+      this.resultOptions = data;
+    },
     cancel() {
       this.$emit('cancel');
     },
     async submit() {
-      await this.$api.companyManageInterface.updateWorkUnit({
-        id: this.value.id,
-        workUnitName: this.value.workUnitName,
-        contact: this.value.contact,
-        mobile: this.value.mobile,
-        address: this.value.address,
+      await this.$api.physicalProjectListInterface.saveOrganItemLibrary({
+        name: this.value.address,
+        state: this.state,
+        importLibraryId: this.importLibraryId,
       });
       this.$message.success('操作成功');
       this.cancel();
+      this.$emit('cancel');
     },
   },
 };

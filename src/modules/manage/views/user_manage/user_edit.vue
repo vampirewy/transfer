@@ -26,9 +26,6 @@
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-<!--                <el-form-item label="年龄" prop="age">-->
-<!--                  <el-input v-model="formData.age"></el-input>-->
-<!--                </el-form-item>-->
                 <el-form-item label="出生日期" prop="birth">
                   <el-date-picker
                           v-model="formData.birth"
@@ -197,22 +194,8 @@
                                :value="formData.userRealName"
                                ></el-option>
                   </el-select>
-                      <!-- <i :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
-                         slot="suffix" ></i> -->
                   </el-popover>
                 </el-form-item>
-                <!-- <el-form-item label="管理医生">
-                  <el-select
-                          v-model="formData.workUnitDepartment"
-                          placeholder="请选择"
-                          style="width: 100%;"
-                  >
-                    <el-option :label="item.name"
-                               :value="item.paramValue"
-                               v-for="(item, index) in professionList"
-                               :key="index"></el-option>
-                  </el-select>
-                </el-form-item> -->
               </el-col>
               <el-col :span="24">
                 <el-form-item label="工作地址">
@@ -225,58 +208,6 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <!-- <el-row>
-              <el-col :span="24">
-                <el-form-item label="居住地址">
-                  <el-input v-model="formData.address" placeholder="请填写"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="24">
-                <el-form-item label="管理医生">
-                  <el-popover
-                          ref="popover1"
-                          placement="bottom"
-                          popper-class="user-edit-popper"
-                          width="650"
-                          trigger="click"
-                          @show="handlePopoperShow"
-                          @hide="handlePopoperClose">
-                    <doctor-select
-                            v-if="popoverStatus"
-                            mode="normal"
-                            :isRadio="false"
-                            :clientId="$route.params.userId"
-                            :selectedDoctor="formData.selectedDoctors"
-                            :selectedDoctorIds="selectedDoctorIds"
-                            @cancel="$refs.popover1.showPopper = false"
-                            @change="submitAssign"
-                    />
-                    <el-input
-                            slot="reference"
-                            class="select-user-trigger"
-                            disabled
-                            v-model="formData.userRealName"
-                            placeholder="请选择"
-                    >
-                      <i :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
-                         slot="suffix" ></i>
-                    </el-input>
-                  </el-popover>
-                </el-form-item>
-              </el-col>
-            </el-row> -->
-            <!-- <el-form-item label="用户类型">
-              <el-select v-model="formData.region" placeholder="请选择活动区域">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="所属企业">
-              <el-select v-model="formData.region" placeholder="请选择活动区域">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
-              </el-select>
-            </el-form-item>-->
             <el-form-item label="客户标签">
               <el-row style="display: flex">
                 <el-col style="flex: 1;margin-right: 5px">
@@ -636,9 +567,7 @@ export default {
       this.formData.tag = '';
     },
     close(index) {
-      // console.log(index);
       this.formData.tagList.splice(index, 1);
-      // console.log(object);
     },
     getAge(identityCard) {
       const len = (`${identityCard}`).length;

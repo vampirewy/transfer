@@ -523,19 +523,15 @@ a {
 
 .searchCondition {
   display: flex;
-
   .searchLeft {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-
     div {
       margin: 5px 5px 0 0;
-
       .timing {
         margin-right: 10px;
       }
-
       span {
         font-size: 14px;
         color: #333333;
@@ -567,7 +563,6 @@ a {
   .noMore {
     background: #7CA7FF;
     color: #fff !important;
-
     span {
       transform: rotate(-90deg);
       color: #fff !important;
@@ -586,11 +581,12 @@ a {
 
   .buttones {
     display: flex;
-
     div {
       margin: 15px 10px 0 0;
     }
-
+    .searchmarTop{
+      margin-top: 10px;
+    }
     .more {
       width: 110px;
       height: 40px;
@@ -609,10 +605,10 @@ a {
   }
 
   .searchInputFormItem {
-    width: 210px;
-
+    width: 220px;
+    margin-right: 10px !important;
     .el-input {
-      width: 85%;
+      width: 100%;
     }
   }
 
@@ -636,6 +632,9 @@ a {
     font-size: 14px;
     color: #333;
     font-weight: 400;
+  }
+  &:hover{
+      cursor: pointer;
   }
 }
 

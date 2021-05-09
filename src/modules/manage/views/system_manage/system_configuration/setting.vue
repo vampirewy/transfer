@@ -8,131 +8,296 @@
     :before-close="() => $emit('close')"
   >
     <div>
-      <el-table class="medicate-list mt20" :data="form" align="center">
-        <el-table-column label="年龄下限" prop="minAge" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <div>
-              <span>{{ scope.row.minAge }}</span>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="年龄上限" prop="maxAge" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <div>
-              <span>{{ scope.row.maxAge }}</span>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="男性风险"
-          prop="configRiskMan"
-          show-overflow-tooltip
-        >
-          <template slot-scope="scope">
-            <div v-if="scope.row.isshow">
-              <span>{{form.con}}</span>
+      <el-form
+        ref="form"
+        class="user-edit-form"
+        :model="formData"
+        label-width="100px"
+        label-suffix="："
+      >
+        <el-row>
+          <el-col :span="11">
+            <el-form-item label="适宜性别">
+              <el-select
+                v-model="formData.profession"
+                placeholder="请选择"
+                style="width: 100%"
+              >
+                <el-option
+                  :label="item.name"
+                  :value="item.id"
+                  v-for="(item, index) in denger"
+                  :key="index"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="问卷是否必填" prop="gender">
+              <el-radio-group v-model="formData.gender">
+                <el-radio :label="1" value="1">是</el-radio>
+                <el-radio :label="2" value="2">否</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="11" style="margin-right: 1px">
+            <el-form-item label="适宜年龄">
               <el-input
-                type="input"
-                :rows="5"
-                v-model="scope.row.configRiskMan"
-                placeholder="请输入"
-                :maxlength="150"
-                show-word-limit
-              ></el-input>
-            </div>
-            <div v-else>
-              <span>{{ scope.row.configRiskMan }}</span>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="女性风险"
-          prop="configRiskWoman"
-          show-overflow-tooltip
-        >
-          <template slot-scope="scope">
-            <div v-if="scope.row.isshow">
-              <el-input
-                type="input"
-                :rows="5"
-                v-model="scope.row.configRiskWoman"
-                placeholder="请输入"
-                :maxlength="150"
-                show-word-limit
-              ></el-input>
-            </div>
-            <div v-else>
-              <span>{{ scope.row.configRiskWoman }}</span>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" prop="index">
-          <template slot-scope="scope">
-            <el-button
-              type="text"
-              v-if="!scope.row.isshow"
-              @click="Addoperates(scope.$index)"
+                v-model="formData.name"
+                maxLength="30"
+                placeholder="输入最小年龄"
+              >
+              </el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="1" style="margin-right: 1px">
+            <div style="padding-top: 10px; text-align: center">一</div>
+          </el-col>
+          <el-col :span="10">
+            <el-input
+              v-model="formData.name"
+              maxLength="30"
+              placeholder="输入最大年龄"
             >
-              <img
-                class="icon-delete"
-                src="@/assets/images/service/compile.png"
-              />
-            </el-button>
-            <el-button
-              type="text"
-              v-if="scope.row.isshow"
-              @click="ModifyListBtn(scope.$index, scope.row.id)"
-            >
-              <img
-                class="icon-delete"
-                src="@/assets/images/service/allergic.png"
-              />
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+            </el-input>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="异常排除" prop="sportLibraryDTOList">
+              <div class="template-add-wrapper">
+                <el-popover
+                  ref="sportPopover"
+                  width="640"
+                  trigger="click"
+                  @show="popoverStatus = true"
+                  @hide="handlePopoverClose"
+                >
+                  <abnormal
+                    v-if="popoverStatus"
+                    @change="handleSportSelectChange"
+                    @cancel="handlePopoverClose"
+                  >
+                  </abnormal>
+                  <el-input
+                    class="select-template-trigger"
+                    slot="reference"
+                    v-model="templateStr"
+                    style="width:80%;"
+                    placeholder="请选择（可多选）"
+                  >
+                    <i
+                      class="el-select__caret el-input__icon "
+                      :class="
+                        popoverStatus
+                          ? 'el-icon-arrow-up'
+                          : 'el-icon-arrow-down'
+                      "
+                      slot="suffix"
+                    ></i>
+                  </el-input>
+                </el-popover>
+                <el-button @click="addSportTemplate" class="addbutton">添加</el-button>
+              </div>
+              <el-form-item>
+              <el-tag
+                      class="tags"
+                      closable
+                      v-for="(tag, index) in formData.tagList"
+                      :key="tag.name"
+                      @close="close(index)"
+              >{{ tag.name }}</el-tag>
+            </el-form-item>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="必查项目" prop="sportLibraryDTOList">
+              <div class="template-add-wrapper">
+                <el-popover
+                  ref="sportPopover"
+                  width="640"
+                  trigger="click"
+                  @show="popoverStatus = true"
+                  @hide="handlePopoverClose"
+                >
+                  <abnormal
+                    v-if="popoverStatus"
+                    @change="handleSportSelectChange"
+                    @cancel="handlePopoverClose"
+                  >
+                  </abnormal>
+                  <el-input
+                    class="select-template-trigger"
+                    slot="reference"
+                    v-model="templateStr"
+                    style="width:80%;"
+                    placeholder="请选择（可多选）"
+                  >
+                    <i
+                      class="el-select__caret el-input__icon "
+                      :class="
+                        popoverStatus
+                          ? 'el-icon-arrow-up'
+                          : 'el-icon-arrow-down'
+                      "
+                      slot="suffix"
+                    ></i>
+                  </el-input>
+                </el-popover>
+                <el-button @click="addSportTemplate" class="addbutton">添加</el-button>
+              </div>
+              <el-form-item>
+              <el-tag
+                      class="tags"
+                      closable
+                      v-for="(tag, index) in formData.tagList"
+                      :key="tag.name"
+                      @close="close(index)"
+              >{{ tag.name }}</el-tag>
+            </el-form-item>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="异常得分" prop="sportLibraryDTOList">
+              <div class="template-add-wrapper">
+                <el-popover
+                  ref="sportPopover"
+                  width="640"
+                  trigger="click"
+                  @show="popoverStatus = true"
+                  @hide="handlePopoverClose"
+                >
+                  <abnormal
+                    v-if="popoverStatus"
+                    @change="handleSportSelectChange"
+                    @cancel="handlePopoverClose"
+                  >
+                  </abnormal>
+                  <el-input
+                    class="select-template-trigger"
+                    slot="reference"
+                    v-model="templateStr"
+                    style="width:80%;"
+                    placeholder="请选择（可多选）"
+                  >
+                    <i
+                      class="el-select__caret el-input__icon "
+                      :class="
+                        popoverStatus
+                          ? 'el-icon-arrow-up'
+                          : 'el-icon-arrow-down'
+                      "
+                      slot="suffix"
+                    ></i>
+                  </el-input>
+                </el-popover>
+                <el-button @click="addSportTemplate" class="addbutton">添加</el-button>
+              </div>
+              <el-form-item>
+              <el-tag
+                      class="tags"
+                      closable
+                      v-for="(tag, index) in formData.tagList"
+                      :key="tag.name"
+                      @close="close(index)"
+              >{{ tag.name }}</el-tag>
+            </el-form-item>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
     </div>
     <span slot="footer" class="dialog-footer">
-      <el-button size="small" class="cancelBtn" @click="$emit('close')"
-        >还原初始值</el-button>
-      <el-button size="small" type="primary" @click="submit">保存</el-button>
+      <el-button size="small" class="cancelBtn" @click="$emit('close')"  style="width:90px;"
+        >取消</el-button
+      >
+      <el-button size="small" type="primary" @click="submit" style="width:90px;">保存</el-button>
     </span>
   </el-dialog>
 </template>
 
 <script>
-// import SportTemplate from './sport_template.vue';
+import abnormal from './abnormal.vue';
 export default {
   name: 'Comment',
   props: ['id'],
   components: {
-    // SportTemplate,
+    abnormal,
   },
   data() {
     return {
       activeIndex: '1',
-      form: {
-        id: '',
+      selectTemplate: [],
+      formData: {
+        birth: '', // 1992-01-04
+        gridId: '',
+        userRealName: '',
+        profession: '',
+        address: '',
+        tagList: [],
+        mobile: '',
         name: '',
-        intro: '',
-        tips: '',
-        modelExplain: '',
-        lowRiskPoint: '',
-        midRiskPoint: '',
-        highRiskPoint: '',
-        veryHighRiskPoint: '',
-        questioned: '',
+        age: '',
+        gender: '',
+        cardNo: '',
+        marriage: '',
+        ethnicGroup: '',
+        educationLevel: '',
+        remark: '',
+        tag: '',
+        workUnitName: '',
+        workUnitAddress: '',
+        userIdList: [],
+        workIdList: [],
+        selectedDoctors: [],
+        workUnitDepartment: '',
+        sportLibraryDTOList: [],
       },
+      denger: [
+        {
+          name: '男',
+          id: '1',
+        },
+        {
+          name: '女',
+          id: '2',
+        },
+      ],
       popoverStatus: false,
       newList: [],
     };
   },
   computed: {
+    templateStr() {
+      return this.selectTemplate.map(item => item.name).join(',');
+    },
   },
   mounted() {
     this.getCommentDetail();
   },
   methods: {
+    // 添加
+    addSportTemplate() {
+      if (this.selectTemplate && this.selectTemplate.length > 0) {
+        this.formData.tagList = this.selectTemplate;
+        this.selectTemplate = [];
+      }
+      console.log(this.formData.tagList, 123456);
+    },
+    // 删除
+    close(index) {
+      this.formData.tagList.splice(index, 1);
+    },
+    handlePopoverClose() {
+      this.popoverStatus = false;
+      this.$refs.sportPopover.doClose();
+    },
+    handleSportSelectChange(data) {
+      this.selectTemplate = data;
+      this.handlePopoverClose();
+    },
     getCommentDetail() {
       this.$api.systemManageInterface
         .getAvgList(this.id.id)
@@ -157,18 +322,14 @@ export default {
       this.$set(this.form[index], 'isshow', false);
     },
     submit() {
-      this.$api.systemManageInterface
-        .saveAvg(
-          this.form,
-        )
-        .then((response) => {
-          if (response.data.rc === 0) {
-            // this.$emit('close');
-            this.$message.success('操作成功');
-          } else {
-            this.$message.error('网络异常！');
-          }
-        });
+      this.$api.systemManageInterface.saveAvg(this.form).then((response) => {
+        if (response.data.rc === 0) {
+          // this.$emit('close');
+          this.$message.success('操作成功');
+        } else {
+          this.$message.error('网络异常！');
+        }
+      });
     },
   },
 };
@@ -263,7 +424,7 @@ export default {
   /deep/ .select-template-trigger input {
     cursor: pointer;
     color: #333 !important;
-    background: #f4f4f6 !important;
+    // background: #f4f4f6 !important;
   }
   .el-col {
     margin-right: 20px;
@@ -272,4 +433,10 @@ export default {
 .icon-delete {
   width: 30px;
 }
+.el-button{
+  padding: 12px 18px;
+}
+.tags {
+      margin-right: 10px;
+    }
 </style>

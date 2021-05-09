@@ -82,4 +82,6 @@
 .el-table .el-table__header-wrapper th .cell {
   font-weight: normal;
 }
-
+.el-table .el-table__header-wrapper th.is-leaf{
+  height: 48px;
+}

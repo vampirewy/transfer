@@ -57,7 +57,7 @@
         <div>
           <span>危险分类：</span>
           <el-select
-                  v-model="formData.gender"
+                  v-model="formData.riskType"
                   placeholder="请选择"
                   style="width: 140px"
                   clearable
@@ -183,22 +183,22 @@
       <el-table style="width: 100%" :data="dataSource" align="center"
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="40"></el-table-column>
-        <el-table-column label="危险因素" prop="clientNo" show-overflow-tooltip>
+        <el-table-column label="危险因素" prop="riskFactor" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{ scope.row.clientNo | getResult}}</span>
+            <span>{{ scope.row.riskFactor | getResult}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="题目类型" prop="clientName" show-overflow-tooltip>
+        <el-table-column label="题目类型" prop="riskType" show-overflow-tooltip>
           <template slot-scope="scope">
                 <span class="clientName"
                       @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
-                  {{ scope.row.clientName | getResult}}
+                  {{ scope.row.riskType | getResult}}
                 </span>
           </template>
         </el-table-column>
-        <el-table-column prop="gender" label="分类" min-width="80px">
+        <el-table-column prop="state" label="分类" min-width="80px">
           <template slot-scope="scope">
-            <span>{{scope.row.gender | getResultGender}}</span>
+            <span>{{scope.row.state | getResultGender}}</span>
           </template>
         </el-table-column>
         <!-- <el-table-column label="适宜人群" prop="age">
@@ -221,9 +221,9 @@
             <span>{{ scope.row.workUnitName | getResult}}</span>
           </template>
         </el-table-column> -->
-        <el-table-column label="建议" prop="questionDate" min-width="150" show-overflow-tooltip>
+        <el-table-column label="建议" prop="advice" min-width="150" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{ scope.row.questionDate | getResultDate}}</span>
+            <span>{{ scope.row.advice | getResultDate}}</span>
           </template>
         </el-table-column>
         <!-- <el-table-column label="问卷来源" prop="sourceName" show-overflow-tooltip>
@@ -245,8 +245,6 @@
                 $router.push({
                   name: 'risk_factors_add',
                   params: {
-                    type: 'edit',
-                    qusType: scope.row.questionType,
                     id: scope.row.id,
                   },
                 })
@@ -261,7 +259,6 @@
                 $router.push({
                   name: 'risk_factors_look',
                   params: {
-                    qusType: scope.row.questionType,
                     id: scope.row.id,
                   },
                 })
@@ -317,14 +314,11 @@ export default {
       lifeStyleList: [], // 生活方式
       questionFromList: [], // 问卷来源
       formData: {
-        keyWord: '',
-        gender: '',
-        clientGrid: '',
-        lifeStyleLv: '',
-        source: '',
-        startTime: undefined,
-        endTime: undefined,
-        questionType: 1,
+        keyWord: '', // 危险因素
+        riskType: '', // 危险分类
+        clientGrid: '', // 题目类型
+        pageNo: 1,
+        pageSize: 15,
       },
       visible: false,
       current: {},
@@ -354,15 +348,15 @@ export default {
     };
   },
   activated() {
-    this.getGridList();
-    this.getQuestionFromList();
-    this.getLifeStyleList();
-    if (localStorage.getItem('homeSearchData')) {
-      const HomeSearchData = JSON.parse(localStorage.getItem('homeSearchData'));
-      this.formData.startTime = HomeSearchData.startDate;
-      this.formData.endTime = HomeSearchData.lastDate;
-      this.formData.searchRange = HomeSearchData.searchRange;
-    }
+    // this.getGridList();
+    // this.getQuestionFromList();
+    // this.getLifeStyleList();
+    // if (localStorage.getItem('homeSearchData')) {
+    //   const HomeSearchData = JSON.parse(localStorage.getItem('homeSearchData'));
+    //   this.formData.startTime = HomeSearchData.startDate;
+    //   this.formData.endTime = HomeSearchData.lastDate;
+    //   this.formData.searchRange = HomeSearchData.searchRange;
+    // }
   },
   destroyed() {
     // 清除时间 和 我的/平台
@@ -475,7 +469,7 @@ export default {
             idsList.push(value.id);
           });
           const reqBody = idsList;
-          await this.$api.health.removeSome(
+          await this.$api.projectList.riskRemove(
             reqBody,
           );
           this.$message.success('操作成功');
@@ -483,19 +477,23 @@ export default {
         },
       );
     },
-    fetch() {
-      if (this.formData.startTime) {
-        this.formData.startTime = `${this.formData.startTime} 00:00:00`;
-      }
-      if (this.formData.endTime) {
-        this.formData.endTime = `${this.formData.endTime} 23:59:59`;
-      }
-      this.$api.health
-        .fetch(Object.assign(this.params, this.formData))
-        .then(({ data }) => {
-          this.total = data.data.total;
-          this.dataSource = data.data.data;
-        });
+    async fetch() {
+      const res = await this.$api.projectList.riskList(this.formData);
+      const { data } = res.data.data;
+      this.dataSource = data;
+      console.log(this.dataSource, '危险列表');
+      // if (this.formData.startTime) {
+      //   this.formData.startTime = `${this.formData.startTime} 00:00:00`;
+      // }
+      // if (this.formData.endTime) {
+      //   this.formData.endTime = `${this.formData.endTime} 23:59:59`;
+      // }
+      // this.$api.health
+      //   .fetch(Object.assign(this.params, this.formData))
+      //   .then(({ data }) => {
+      //     this.total = data.data.total;
+      //     this.dataSource = data.data.data;
+      //   });
     },
     getReport({ row }) {
       Object.assign(this.current, row);

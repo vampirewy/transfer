@@ -302,7 +302,7 @@ export default {
   /deep/ .select-template-trigger input {
     cursor: pointer;
     color: #333 !important;
-    background: #f4f4f6 !important;
+    // background: #f4f4f6 !important;
   }
   .el-col {
     margin-right: 20px;
@@ -363,7 +363,6 @@ export default {
       height: 0;
     }
     .TabBarsName {
-      border: 1px solid #dde0e6;
       cursor: pointer;
       background: #ffffff;
       border-color: transparent;

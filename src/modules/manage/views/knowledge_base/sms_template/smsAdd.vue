@@ -51,7 +51,7 @@
       <!-- <div class="main-info-title">新增短信</div> -->
       <div class="form-title">
         <div class="line"></div>
-        <h3 class="name">编辑计划</h3>
+        <h3 class="name">{{ids ? '编辑' : '新增'}}计划</h3>
       </div>
       <el-row>
         <!-- <el-col :span="6">
@@ -116,61 +116,54 @@
         </el-col> -->
         <el-col :span="6">
           <el-form-item label="短信类别" prop="result" >
-            <el-select v-model="form.result" placeholder="请选择当前状态" width="150">
+            <el-select v-model="form.smsTypeName" placeholder="请选择当前状态" width="150">
               <el-option
-                v-for="item in resultOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                v-for="item in smsTypes"
+                :key="item.parentId"
+                :label="item.name"
+                :value="item.parentId"
               ></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="短信主题" prop="result">
-            <el-select v-model="form.result" placeholder="请选择当前状态">
+            <el-select v-model="form.ThemeListName" placeholder="请选择当前状态">
               <el-option
-                v-for="item in resultOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                v-for="item in ThemeList"
+                :key="item.parentId"
+                :label="item.name"
+                :value="item.parentId"
               ></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="适宜性别" prop="result">
-            <el-select v-model="form.result" placeholder="请选择当前状态">
-              <el-option
-                v-for="item in resultOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
+            <el-select v-model="form.gender" placeholder="请选择当前状态">
+              <el-option label="男" value="1" key="1"></el-option>
+              <el-option label="女" value="2" key="2"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="适宜人群" prop="result">
-            <el-select v-model="form.result" placeholder="请选择当前状态">
-              <el-option
-                v-for="item in resultOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
+            <el-select v-model="form.Crowd" placeholder="请选择当前状态">
+              <el-option label="不限" value="0" key="0"></el-option>
+              <el-option label="成人" value="1" key="1"></el-option>
+              <el-option label="老人" value="2" key="2"></el-option>
+              <el-option label="少儿" value="3" key="3"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="适宜季节" prop="result">
-            <el-select v-model="form.result" placeholder="请选择当前状态">
-              <el-option
-                v-for="item in resultOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
+            <el-select v-model="form.Season" placeholder="请选择当前状态">
+              <el-option label="不限" value="0">不限</el-option>
+              <el-option label="春" value="1">春</el-option>
+              <el-option label="夏" value="2">夏</el-option>
+              <el-option label="秋" value="3">秋</el-option>
+              <el-option label="冬" value="4">冬</el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -188,7 +181,7 @@
           <el-form-item label="短信内容" prop="result">
             <el-input
               type="textarea"
-              v-model="form.hpi"
+              v-model="form.result"
               :rows="5"
               placeholder="请输入"
               :maxlength="4000"
@@ -236,22 +229,15 @@ export default {
   data() {
     return {
       popoverStatus: false,
+      ThemeList: [],
+      smsTypes: [],
       form: {
-        clientInfoId: '',
-        hospital: '',
-        department: '',
-        medicalType: '',
-        patientNo: '',
-        inDate: '',
-        outDate: '',
-        doctorName: '',
-        result: '',
-        complaint: '主诉', // 主诉
-        hpi: '现病史', // 现病史
-        examination: '检查', // 检查
-        diagnosis: '诊断', // 诊断
-        therapy: '方案', // 方案
-        orgCode: '',
+        smsTypeName: '', // 短信类别
+        ThemeListName: '', // 主题类别
+        gender: '', // 性别
+        Season: '', // 季节
+        Crowd: '', // 人群
+        result: '', // 短信内容
       },
       options: {
         inDate: {
@@ -303,26 +289,39 @@ export default {
         { value: 2, label: '住院' },
       ],
       currentUser: {},
-      ids: this.$route.query.id,
+      ids: this.$route.params.id,
     };
   },
   mounted() {
     if (this.ids) {
-      this.$api.medicalHistoryInterface.medicalInfoDetail(this.ids).then((res) => {
+      this.$api.projectList.smsListInfo(this.ids).then((res) => {
         const { data } = res;
-        console.log(data, '撒打算大的');
-        this.form = Object.assign(this.form, data.data || {});
-        this.currentUser = {
-          id: this.form.clientInfoId,
-          name: this.form.clientName,
-          age: this.form.age,
-          gender: this.form.gender,
-          gridName: this.form.clientGridName,
+        this.form = {
+          result: data.data.content,
+          gender: data.data.suitGender,
+          smsTypeName: data.data.categoryName,
+          ThemeListName: data.data.themName,
+          Crowd: data.data.suitCrowd,
+          Season: data.data.suitSeason,
         };
       });
     }
+    this.getGridList();
+    this.getGridType();
   },
   methods: {
+    async getGridList() {
+      const res = await this.$api.projectList.getSortlist({ lv: 2, parentId: 1 });
+      const { data } = res.data;
+      this.ThemeList = data;
+      console.log(this.ThemeList);
+    },
+    async getGridType() {
+      const res = await this.$api.projectList.getSortlist({ lv: 1, parentId: 0 });
+      const { data } = res.data;
+      this.smsTypes = data;
+      console.log(this.smsTypes);
+    },
     handleStartDateChange() {
       if (this.form.medicalType === 1 && this.form.inDate) {
         this.form.outDate = this.form.inDate;
@@ -344,31 +343,22 @@ export default {
       this.$refs.form.validate((valid) => {
         if (valid) {
           const params = {
-            clientInfoId: this.form.clientInfoId,
-            medicalType: this.form.medicalType,
-            hospital: this.form.hospital,
-            patientNo: this.form.patientNo,
-            inDate: this.form.inDate,
-            outDate: this.form.outDate,
-            doctorName: this.form.doctorName,
-            department: this.form.department,
-            result: this.form.result,
-            complaint: this.form.complaint,
-            examination: this.form.examination,
-            diagnosis: this.form.diagnosis,
-            therapy: this.form.therapy,
-            hpi: this.form.hpi,
-            orgCode: this.form.orgCode,
-            organId: this.form.organId,
+            content: this.form.result,
+            suitGender: this.form.gender,
+            categoryName: this.form.smsTypeName,
+            themName: this.form.ThemeListName,
+            suitCrowd: this.form.Crowd,
+            suitSeason: this.form.Season,
           };
-          if (this.id) {
-            params.id = this.id;
+          if (this.ids) {
+            params.id = this.ids;
           }
-          this.$api.medicalHistoryInterface.medicalInfo(params).then((res) => {
+          this.$api.projectList.saveMessageTemplate(params).then((res) => {
             const { data } = res;
             if (data.success) {
               this.$message.success('操作成功');
-              this.$emit('afterSubmit');
+              this.$router.go(-1);
+              // this.$emit('afterSubmit');
             }
           });
         }

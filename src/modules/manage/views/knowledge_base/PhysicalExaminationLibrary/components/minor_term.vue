@@ -1,46 +1,109 @@
 <template>
   <div class="userManage">
-     <div class="TabBars">
+     <!-- <div class="TabBars">
         <div v-for="(item,index) in tabbor" :key="index">
           <span :class="Tabactive === index?'TabBarsName':'TabBarsNames'" @click="TabbarBtn(index)">
             {{item}}
           </span>
         </div>
+      </div> -->
+    <div class="divTop" >
+      <div class="divTitle" style="margin-top:20px">
+        <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
+        异常库
       </div>
-    <div v-if="Tabactive == 0">
-      <div>
-        <minor-term></minor-term>
+      <div class="searchCondition">
+        <div class="searchLeft">
+          <div class="searchInputFormItem">
+            <el-input placeholder="项目/名称" v-model="form.itemName">
+            </el-input>
+            <span class="searchBtnImgSpan" @click="search(1)">
+                    <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
+                </span>
+          </div>
+          <div>
+            <span>项目库：</span>
+            <el-select
+                    v-model="form.examinationId"
+                    placeholder="请选择"
+                    style="width: 140px"
+                    clearable
+            >
+              <el-option
+              :label="item.name"
+              :value="item.id"
+              v-for="(item, index) in examination" :key="index"></el-option>
+            </el-select>
+          </div>
+          <div>
+            <span>科室名称：</span>
+            <el-select
+                    v-model="SectionListId"
+                    placeholder="请选择"
+                    style="width: 140px"
+                    clearable
+            >
+              <el-option
+              :label="item.sectionName"
+              :value="item.organItemLibraryId"
+              v-for="(item, index) in SectionList" :key="index"></el-option>
+            </el-select>
+          </div>
+          <div>
+            <span>重要指标：</span>
+            <el-select
+                    v-model="form.isMain"
+                    placeholder="请选择"
+                    style="width: 140px"
+            >
+              <el-option label="是" value="1" key="1"></el-option>
+              <el-option label="否" value="2" key="2"></el-option>
+            </el-select>
+          </div>
+        </div>
+        <div class="searchRight">
+          <div class="buttones">
+            <div class="searchFor" @click="search(1)">
+              <img src="@/assets/images/common/topsearchblue.png" alt="">
+            </div>
+            <div class="resetAll" @click="reset">重置</div>
+            <div class="more" v-if="isTrue"  @click="upMore">
+              <span>></span>
+              展开更多</div>
+            <div class="more noMore" v-else @click="upMore">
+              <span>></span>收起筛选</div>
+          </div>
+        </div>
       </div>
     </div>
-      <div v-else>
+    <div v-if="!isTrue" class="searchCondition" style="width:80%;">
+      <div class="searchLeft" style="padding-left:5px;">
         <div>
-          <physical-examination></physical-examination>
+          <span>适宜性别：</span>
+          <el-select
+                  v-model="form.gender"
+                  placeholder="请选择"
+                  style="width: 140px"
+                  clearable
+          >
+            <el-option label="男" value="1" key="1"></el-option>
+            <el-option label="女" value="2" key="2"></el-option>
+          </el-select>
         </div>
-        <!-- <div class="divTop">
-          <div class="divTitle" style="margin-top:20px">
-            <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
-            体检库</div>
-
-          <div class="searchCondition">
-          <div class="searchLeft">
-          <div class="searchInputFormItem">
-            <el-input placeholder="姓名/手机号/企业单位" v-model="formData.keywords">
-            </el-input>
-            <span class="searchBtnImgSpan" @click="search">
-                <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
-            </span>
-          </div>
-            </div>
-            <div class="searchRight">
-            <div class="buttones">
-            <div class="searchFor" @click="search">
-            <img src="@/assets/images/common/topsearchblue.png" alt="">
-          </div>
-          <div class="resetAll">重置</div>
-          </div>
-            </div>
-          </div>
+        <div>
+          <span>参与对比：</span>
+          <el-select
+                  v-model="formData.source"
+                  placeholder="请选择"
+                  style="width: 140px"
+                  clearable
+          >
+            <el-option :label="item.name" :value="item.paramValue"
+                       v-for="(item, index) in questionFromList" :key="index"></el-option>
+          </el-select>
         </div>
+      </div>
+    </div>
         <div class="topbottomborder"></div>
         <div class="divRightTitleDiv">
           <div>
@@ -48,7 +111,14 @@
                     class="btn-new btnAdd"
                     size="small"
                     style="margin: 16px 0"
-                    @click="edits()"
+                    @click="
+                      $router.push({
+                        name: 'minor_term_add',
+                        params: {
+                          id: '',
+                        },
+                      })
+                    "
             ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
             <el-button
                     size="small"
@@ -56,6 +126,12 @@
                     @click="handleSomeRemove"
                     v-if="getAccess('customer_pool_batch_delete')"
             ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
+            <!-- <el-button
+                    @click="assign({})"
+                    size="small"
+                    class="btn-new btnDel"
+                    v-if="getAccess('customer_pool_distribute')"
+            ><img src="@/assets/images/common/deliverBtn.png" />分配</el-button> -->
             <el-button
             style="width:120px;"
                     size="small"
@@ -73,29 +149,37 @@
                   show-overflow-tooltip
           >
             <el-table-column type="selection" min-width="40"></el-table-column>
-            <el-table-column label="体检库名称" prop="itemName" min-width="100" show-overflow-tooltip>
+            <el-table-column label="科室名称" prop="itemName" min-width="100" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>
                   {{ scope.row.itemName }}
                 </span>
               </template>
             </el-table-column>
-            <el-table-column label="是否启用" min-width="150"  prop="state">
+            <el-table-column label="小项名称" min-width="100"  prop="state">
               <template slot-scope="scope">
-                <el-switch
+                <span>
+                  {{ scope.row.state }}
+                </span>
+                <!-- <el-switch
                   v-model="scope.row.state "
                   active-value="1"
                   inactive-value="0"
                   active-color="#13ce66"
                   @change=changeStatus(scope,scope.row.state)
                   >
-                </el-switch>
+                </el-switch> -->
               </template>
             </el-table-column>
-            <el-table-column label="建档时间" prop="createTime" min-width="130" show-overflow-tooltip />
-            <el-table-column label="报告数" prop="doctorNames" min-width="130" show-overflow-tooltip>
+            <el-table-column label="性别" prop="gender" min-width="80" show-overflow-tooltip />
+            <el-table-column label="重要指标" prop="isMain" min-width="80" show-overflow-tooltip />
+            <el-table-column label="是否对比" prop="isCompareText"
+             min-width="80" show-overflow-tooltip />
+            <el-table-column label="范围或参考" prop="maxAge" min-width="100" show-overflow-tooltip />
+            <el-table-column label="单位" prop="unit" min-width="80" show-overflow-tooltip />
+            <el-table-column label="项目介绍" prop="refRange" min-width="100" show-overflow-tooltip>
               <template slot-scope="scope">
-                <span>{{ scope.row.doctorNames || '0'}}</span>
+                <span>{{ scope.row.refRange || '0'}}</span>
               </template>
             </el-table-column>
             <el-table-column label="操作" prop="index"  width="150">
@@ -103,7 +187,7 @@
                 <el-button
                         type="text"
                         size="small"
-                        @click="edits(scope.row.id)"
+                        @click="edits(scope.row)"
                         v-if="getAccess('customer_pool_edit')"
                 >编辑</el-button>
               </template>
@@ -121,13 +205,13 @@
             ></el-pagination>
           </div>
         </div>
+      <!-- </template> -->
     <edit-detail
       :visible="modalVisible"
       :value="currentValue"
       :libraryList="form.libraryList"
       @cancel="cancel"
-    ></edit-detail> -->
-    </div>
+    ></edit-detail>
   </div>
 </template>
 
@@ -138,10 +222,8 @@ import QueryPage from '~/src/components/query_page/index.vue';
 import Search from '~/src/components/query_page/search.vue';
 import QueryFilter from '~/src/components/query_page/query_filter.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
-import * as dayjs from 'dayjs';
-import editDetail from './components/edit_detail.vue';
-import minorTerm from './components/minor_term.vue';
-import physicalExamination from './components/physical_examination.vue';
+// import * as dayjs from 'dayjs';
+// import editDetail from 'edit_detail.vue';
 
 export default {
   name: 'index',
@@ -151,12 +233,13 @@ export default {
     Search,
     QueryPage,
     QueryFilter,
-    editDetail,
-    minorTerm,
-    physicalExamination,
+    // editDetail,
   },
   data() {
     return {
+      examination: [],
+      SectionList: '',
+      SectionListId: '',
       isTrue: true,
       value: true,
       total: 0,
@@ -181,6 +264,7 @@ export default {
         type: 0,
       },
       form: {
+        examinationId: '', // 项目库
         gender: '', // 性别
         state: '', // 状态
         isMain: '', // 重要指标
@@ -206,18 +290,33 @@ export default {
     };
   },
   methods: {
+    async getSectionList() {
+      const res = await this.$api.physicalProjectListInterface.getSectionList();
+      const { data } = res.data;
+      if (data) {
+        this.SectionList = data.data || [];
+      }
+    },
+    async queryList() {
+      const res = await this.$api.physicalProjectListInterface.listOrganItemLibrary();
+      console.log(res.data);
+      const { data } = res.data;
+      if (data) {
+        this.examination = data || [];
+      }
+    },
     TabbarBtn(index) {
       this.Tabactive = index;
     },
     async getList() {
       const reqBody = {
-        organItemLibraryId: this.form.organItemLibraryId,
+        organItemLibraryId: this.form.examinationId,
         gender: this.form.gender,
         isMain: this.form.isMain,
         state: this.form.state,
-        itemName: this.formData.keywords,
-        pageNo: this.table.currentPage,
-        pageSize: this.table.pageSize,
+        itemName: this.form.itemName,
+        pageno: this.table.currentPage,
+        pagesize: this.table.pageSize,
       };
       const res = await this.$api.physicalProjectListInterface.listPage(
         reqBody,
@@ -233,10 +332,15 @@ export default {
       this.isTrue = !this.isTrue;
     },
     // 编辑
-    edits(id) {
-      this.currentValue.type = id;
+    edits(row) {
+      // this.currentValue.type = id;
       this.modalVisible = true;
-      this.getLibraryList();
+      this.$router.push({
+        name: 'minor_term_add',
+        params: {
+          id: row.id,
+        },
+      });
     },
     async getLibraryList() {
       const res = await this.$api.physicalProjectListInterface.listOrganItemLibrary();
@@ -286,44 +390,52 @@ export default {
         // };
         const arrs = this.chooseUserList[0];
         console.log(arrs, '删除数据');
-        this.$api.physicalProjectListInterface.deleteOrganItem(arrs.id).then(({ data }) => {
-          if (data.code === 200) {
+        this.$api.physicalProjectListInterface.deleteOrganItem(arrs).then(({ data }) => {
+          if (data.success) {
             this.$message.success('操作成功');
-            // this.search();
             this.chooseUserList = [];
-            // this.$refs.multipleTable.clearSelection();
+            this.getList();
           }
         });
       });
     },
     reset() {
-      Object.assign(this.$data, this.$options.data());
-      this.getUserList();
-      this.getGridList(); // 获取人员列类别
+      this.form.examinationId = '';
+      this.form.gender = '';
+      this.form.isMain = '';
+      this.form.state = '';
+      this.form.itemName = '';
+      this.table.currentPage = 1;
+      // Object.assign(this.$data, this.$options.data());
+      // this.getUserList();
+      // this.getGridList(); // 获取人员列类别
+      this.getList();
     },
     onChangePage(current = 1) {
       this.params.pageNo = current;
-      this.getUserList();
+      // this.getUserList();
+      this.getList();
     },
     search() {
-      const hasOnlyStartTime = this.formData.startTime
-              && (!this.formData.startTime || !this.formData.endTime);
-      const hasOnlyEndTime = this.formData.endTime
-              && (!this.formData.startTime || !this.formData.endTime);
-      if (hasOnlyStartTime || hasOnlyEndTime) {
-        this.$message.error('查询必须包括开始时间和结束时间');
-        return;
-      }
-      if (this.formData.startTime > this.formData.endTime) {
-        this.$message.error('查询的开始时间不可大于结束时间');
-        return;
-      }
-      if (this.formData.startTime && this.formData.endTime) {
-        this.formData.startTime = dayjs(this.formData.startTime).format('YYYY-MM-DD');
-        this.formData.endTime = dayjs(this.formData.endTime).format('YYYY-MM-DD');
-      }
+      // const hasOnlyStartTime = this.formData.startTime
+      //         && (!this.formData.startTime || !this.formData.endTime);
+      // const hasOnlyEndTime = this.formData.endTime
+      //         && (!this.formData.startTime || !this.formData.endTime);
+      // if (hasOnlyStartTime || hasOnlyEndTime) {
+      //   this.$message.error('查询必须包括开始时间和结束时间');
+      //   return;
+      // }
+      // if (this.formData.startTime > this.formData.endTime) {
+      //   this.$message.error('查询的开始时间不可大于结束时间');
+      //   return;
+      // }
+      // if (this.formData.startTime && this.formData.endTime) {
+      //   this.formData.startTime = dayjs(this.formData.startTime).format('YYYY-MM-DD');
+      //   this.formData.endTime = dayjs(this.formData.endTime).format('YYYY-MM-DD');
+      // }
       this.params.pageNo = 1;
-      this.getUserList();
+      // this.getUserList();
+      this.getList();
     },
     handleSelectionChange(rows) {
       this.chooseUserList = rows;
@@ -454,6 +566,8 @@ export default {
   },
   mounted() {
     this.getList();
+    this.queryList();
+    this.getSectionList();
     // this.getUserList();
     // this.getGridList(); // 获取人员列类别
     // this.getDoctor(); // 获取医生列表

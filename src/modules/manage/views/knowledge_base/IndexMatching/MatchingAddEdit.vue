@@ -121,31 +121,27 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="异常类型" >
-            <el-select v-model="form.result" placeholder="请选择当前状态" width="150">
+            <el-select v-model="form.organTypeListId" placeholder="请选择" width="150">
               <el-option
-                v-for="item in resultOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                v-for="item in form.organTypeList"
+                :key="item.paramValue"
+                :label="item.name"
+                :value="item.paramValue"
               ></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="性别限制" >
-            <el-select v-model="form.result" placeholder="请选择当前状态">
-              <el-option
-                v-for="item in resultOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
+            <el-select v-model="form.result" placeholder="请选择">
+              <el-option label="男" value="1" key="1"></el-option>
+              <el-option label="女" value="2" key="2"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="ICD10：" >
-            <el-select v-model="form.result" placeholder="请选择当前状态">
+            <el-select v-model="form.result" placeholder="请选择">
               <el-option
                 v-for="item in resultOptions"
                 :key="item.value"
@@ -157,31 +153,31 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="重要性" >
-            <el-select v-model="form.result" placeholder="请选择当前状态">
+            <el-select v-model="form.dangerLevelListId" placeholder="请选择">
               <el-option
-                v-for="item in resultOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                v-for="item in form.dangerLevelList"
+                :key="item.paramValue"
+                :label="item.name"
+                :value="item.paramValue"
               ></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="紧急性">
-            <el-select v-model="form.result" placeholder="请选择当前状态">
+            <el-select v-model="form.medicalLimitListId" placeholder="请选择">
               <el-option
-                v-for="item in resultOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                v-for="item in form.medicalLimitList"
+                :key="item.paramValue"
+                :label="item.name"
+                :value="item.paramValue"
               ></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="推荐科室" >
-            <el-select v-model="form.result" placeholder="请选择当前状态">
+            <el-select v-model="form.result" placeholder="请选择">
               <el-option
                 v-for="item in resultOptions"
                 :key="item.value"
@@ -193,7 +189,7 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="推荐检查" >
-            <el-select v-model="form.result" placeholder="请选择当前状态">
+            <el-select v-model="form.result" placeholder="请选择">
               <el-option
                 v-for="item in resultOptions"
                 :key="item.value"
@@ -217,7 +213,7 @@
           <el-form-item label="解释" >
             <el-input
               type="textarea"
-              v-model="form.hpi"
+              v-model="form.interpret"
               :rows="5"
               placeholder="请输入"
               :maxlength="4000"
@@ -229,7 +225,7 @@
           <el-form-item label="原因">
             <el-input
               type="textarea"
-              v-model="form.hpi"
+              v-model="form.Reason"
               :rows="5"
               placeholder="请输入"
               :maxlength="4000"
@@ -305,6 +301,15 @@ export default {
         diagnosis: '诊断', // 诊断
         therapy: '方案', // 方案
         orgCode: '',
+        interpret: '', // 解释
+        Reason: '', // 原因
+        Suggestion: '', // 建议
+        organTypeList: [], // 异常类型
+        organTypeListId: '',
+        dangerLevelList: [], // 重要性
+        dangerLevelListId: '',
+        medicalLimitList: [], // 紧急性
+        medicalLimitListId: '',
       },
       options: {
         inDate: {
@@ -374,8 +379,27 @@ export default {
         };
       });
     }
+    this.getOrganTypeList();
+    this.getImportList();
+    this.getQuickList();
   },
   methods: {
+    // 异常类型下拉
+    async getOrganTypeList() {
+      const { data } = await this.$api.unusualListInterface.getOrganTypeList();
+      this.$set(this.form, 'organTypeList', data.data);
+      console.log(this.form.organTypeList);
+    },
+    async getImportList() {
+      const { data } = await this.$api.unusualListInterface.getImportList();
+      this.$set(this.form, 'dangerLevelList', data.data);
+      // this.form.organTypeList
+    },
+    async getQuickList() {
+      const { data } = await this.$api.unusualListInterface.getQuickList();
+      this.$set(this.form, 'medicalLimitList', data.data);
+      // this.form.organTypeList
+    },
     handleStartDateChange() {
       if (this.form.medicalType === 1 && this.form.inDate) {
         this.form.outDate = this.form.inDate;

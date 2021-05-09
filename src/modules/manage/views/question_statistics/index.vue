@@ -16,7 +16,7 @@
         <div class="divTop">
           <div class="divTitle">
             <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
-            问卷统计</div>
+            企业管理</div>
 
           <div class="searchCondition">
           <div class="searchLeft">

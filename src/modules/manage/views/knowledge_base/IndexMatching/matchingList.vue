@@ -43,12 +43,12 @@
   <div class="divTop">
     <div class="divTitle">
       <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
-      指标匹配
+      异常匹配
     </div>
     <div class="searchCondition">
       <div class="searchLeft">
         <div class="searchInputFormItem">
-          <el-input placeholder="名称/项目" v-model="formData.keyWord">
+          <el-input placeholder="名称/项目" v-model="form.itemName">
           </el-input>
           <span class="searchBtnImgSpan" @click="search(1)">
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
@@ -57,7 +57,7 @@
         <div>
           <span>显示列表：</span>
           <el-select
-                  v-model="formData.clientGrid"
+                  v-model="form.isAssess"
                   placeholder="请选择"
                   style="width: 140px"
                   clearable
@@ -165,47 +165,82 @@
             </el-dropdown>
           </div>
         </div>-->
-      <el-table style="width: 100%" :data="dataSource" align="center"
-                @selection-change="handleSelectionChange">
+      <el-table style="width: 100%" ref="table" :data="dataSource" align="center"
+                @selection-change="handleSelectionChange"
+                @expand-change="handleExpandChange">
+        <div class="boxs">
+          <el-table-column type="expand" width="1" class-name="hide-expand-column">
+          <el-table :data="expandData.list" class="expand-table" align="center">
+            <el-table-column
+              label="体检编号"
+              prop="planDate"
+              min-width="20%"
+              show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{ scope.row.planDate | getResultDate }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="姓名" prop="planWayName" min-width="15%" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{ scope.row.planWayName | getResult}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="性别" prop="planTitle" min-width="15%" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{ scope.row.planTitle | getResult}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="年龄"
+              prop="planContent"
+              min-width="10%"
+              show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{ scope.row.planContent | getResult}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="人员类别" prop="planTitle" min-width="25%" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{ scope.row.planTitle | getResult}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="体检日期" prop="planTitle" min-width="25%" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{ scope.row.planTitle | getResult}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="参检团队" prop="planTitle" min-width="25%" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{ scope.row.planTitle | getResult}}</span>
+              </template>
+            </el-table-column>
+          </el-table>
+          <div style="text-align: right">
+            <el-pagination
+                    style="padding-top: 15px;background-color: #f7f7fd"
+                    @current-change="handleExpandPageChange"
+                    background
+                    layout="prev,pager,next,jumper,total,sizes"
+                    :total="expandData.total"
+                    :page-size="expandData.pageSize"
+                    :current-page="expandData.pageNo"
+                    :hide-on-single-page="true"
+                    :pageSizes="[5]"
+            ></el-pagination>
+          </div>
+        </el-table-column>
+      </div>
         <el-table-column type="selection" width="40"></el-table-column>
-        <el-table-column label=" 待匹配异常" prop="clientNo" min-width="200" show-overflow-tooltip>
+        <el-table-column label=" 待匹配异常" prop="sectionName" min-width="200" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{ scope.row.clientNo | getResult}}</span>
+            <span>{{ scope.row.sectionName | getResult}}</span>
           </template>
         </el-table-column>
-        <!-- <el-table-column label=" 报告" prop="sourceName" min-width="150" show-overflow-tooltip>
+        <el-table-column label="报告" prop="itemName" min-width="150" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{ scope.row.clientNo | getResult}}</span>
-          </template>
-        </el-table-column> -->
-        <!-- <el-table-column prop="gender" label="分类" min-width="80px">
-          <template slot-scope="scope">
-            <span>{{scope.row.gender | getResultGender}}</span>
-          </template>
-        </el-table-column> -->
-        <!-- <el-table-column label="适宜人群" prop="age">
-          <template slot-scope="scope">
-            <span>{{ scope.row.age | getResult}}</span>
-          </template>
-        </el-table-column> -->
-        <!-- <el-table-column prop="clientGridName" label="人员类别" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{ scope.row.clientGridName | getResult}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="lifeStyleLvName" label="生活方式" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{ scope.row.lifeStyleLvName | getResult}}</span>
-          </template>
-        </el-table-column> -->
-        <!-- <el-table-column prop="workUnitName" label="适宜季节" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{ scope.row.workUnitName | getResult}}</span>
-          </template>
-        </el-table-column> -->
-        <el-table-column label="报告" prop="questionDate" min-width="150" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span  style="color:#36BF2F;">{{ scope.row.questionDate | getResultDate}}</span>
+            <el-button type="text"
+                     @click="expandsHandle(scope.row, 2)" style="color:#36BF2F;">
+            {{scope.row.itemName | getResultDate}}</el-button>
           </template>
         </el-table-column>
         <!-- <el-table-column label="问卷来源" prop="sourceName" show-overflow-tooltip>
@@ -315,6 +350,23 @@ export default {
         pageNo: 1,
         pageSize: 15,
       },
+      form: {
+        itemName: '',
+        isAssess: '',
+        currentPage: '',
+      },
+      expandData: {
+        clientId: '',
+        pageNo: 1,
+        pageSize: 5,
+        total: 0,
+        list: [],
+      },
+      expands: [],
+      table: {
+        currentPage: 1,
+        pageSize: 15,
+      },
       options: {},
       types: [],
       multipleSelection: [], // 当前页选中的数据
@@ -337,21 +389,38 @@ export default {
     };
   },
   activated() {
-    this.getGridList();
-    this.getQuestionFromList();
-    this.getLifeStyleList();
-    if (localStorage.getItem('homeSearchData')) {
-      const HomeSearchData = JSON.parse(localStorage.getItem('homeSearchData'));
-      this.formData.startTime = HomeSearchData.startDate;
-      this.formData.endTime = HomeSearchData.lastDate;
-      this.formData.searchRange = HomeSearchData.searchRange;
-    }
+    this.getList();
+    // this.getGridList();
+    // this.getQuestionFromList();
+    // this.getLifeStyleList();
+    // if (localStorage.getItem('homeSearchData')) {
+    //   const HomeSearchData = JSON.parse(localStorage.getItem('homeSearchData'));
+    //   this.formData.startTime = HomeSearchData.startDate;
+    //   this.formData.endTime = HomeSearchData.lastDate;
+    //   this.formData.searchRange = HomeSearchData.searchRange;
+    // }
   },
   destroyed() {
     // 清除时间 和 我的/平台
     localStorage.removeItem('homeSearchData');
   },
   methods: {
+    async getList() {
+      const reqBody = {
+        itemName: this.form.itemName,
+        isAssess: this.form.isAssess,
+        pageNo: this.table.currentPage,
+        pageSize: this.table.pageSize,
+      };
+      const res = await this.$api.physicalProjectListInterface.systemlistpage(
+        reqBody,
+      );
+      const { data } = res.data;
+      if (data) {
+        this.dataSource = data.data || [];
+        this.total = data.total;
+      }
+    },
     async getGridList() {
       const res = await this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
       const { data } = res.data;
@@ -371,6 +440,32 @@ export default {
       // table组件选中事件,
       this.multipleSelection = val;
     },
+    handleExpandChange(row, expandRows) {
+      this.expands = expandRows;
+      console.log(this.expands, '123123');
+    },
+    expandsHandle(row, type) {
+      // if (this.loading) {
+      //   return false;
+      // }
+      this.expands.forEach((data) => {
+        // 其他展开的行收起
+        if (data.id !== row.id) {
+          this.$refs.table.toggleRowExpansion(data);
+        }
+      });
+      console.log(row, type);
+      // if (this.expands.includes(row)) {
+      this.$refs.table.toggleRowExpansion(row);
+      // } else {
+      //   this.expandData.clientId = row.id;
+      //   this.expandData.pageNo = 1;
+      //   this.excuteType = type;
+      //   this.getReoprtList(type).then(() => {
+      //     this.$refs.table.toggleRowExpansion(row);
+      //   });
+      // }
+    },
     reset() {
       this.params.pageNo = 1;
       this.formData.keyWord = '';
@@ -384,8 +479,8 @@ export default {
       this.fetch();
     },
     search(current = 1) {
-      this.params.pageNo = current;
-      this.fetch();
+      this.table.currentPage = current;
+      this.getList();
     },
     // 匹配
     edits() {
@@ -515,12 +610,12 @@ export default {
       this.isTrue = !this.isTrue;
     },
   },
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      // vm.getQuestionType();
-      vm.fetch();
-    });
-  },
+  // beforeRouteEnter(to, from, next) {
+  //   next((vm) => {
+  //     vm.getQuestionType();
+  //     vm.fetch();
+  //   });
+  // },
 };
 </script>
 
@@ -529,6 +624,30 @@ export default {
     .el-dropdown-menu__item{
       padding: 0 40px;
 
+    }
+  }
+  /deep/ .el-table__expanded-cell{
+    border-radius: 8px;
+    border: 1px solid #DDE0E6;
+  }
+  // /deep/ .el-table .el-table__body td{
+  //   border-radius: 8px;
+  //   border: 1px solid #DDE0E6;
+  // }
+    /deep/ .el-table__expanded-cell {
+    padding: 20px;
+    .el-table .el-table__header-wrapper th {
+      background: #EEF1F5;
+      height: 48px;
+      .cell {
+        color: #333;
+      }
+    }
+    .el-table--enable-row-hover .el-table__body tr:hover > td {
+      background-color: #f7f7fd;
+    }
+    .el-table .el-table__body td {
+      background-color: #f7f7fd;
     }
   }
 </style>

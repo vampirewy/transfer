@@ -1,9 +1,22 @@
 <template>
   <div class="userManage">
+     <!-- <div class="TabBars">
+        <div v-for="(item,index) in tabbor" :key="index">
+          <span :class="Tabactive === index?'TabBarsName':'TabBarsNames'" @click="TabbarBtn(index)">
+            {{item}}
+          </span>
+        </div>
+      </div> -->
+    <!-- <div v-if="Tabactive == 0">
+      <div>
+        <minor-term></minor-term>
+      </div>
+    </div> -->
+      <!-- <div v-else> -->
         <div class="divTop">
-          <div class="divTitle">
+          <div class="divTitle" style="margin-top:20px">
             <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
-            我的客户</div>
+            体检库</div>
 
           <div class="searchCondition">
           <div class="searchLeft">
@@ -14,141 +27,15 @@
                 <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
             </span>
           </div>
-          <div>
-            <span>客户性别：</span>
-           <el-select
-                  v-model="formData.gender"
-                  placeholder="请选择"
-                  style="width: 140px"
-          >
-            <el-option label="男" value="1" key="1"></el-option>
-            <el-option label="女" value="2" key="2"></el-option>
-          </el-select>
-          </div>
-          <div>
-            <span>人员类别：</span>
-            <el-select
-                  v-model="formData.gridId"
-                  placeholder="请选择"
-                  style="width: 140px"
-          >
-            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
-                       :key="index"></el-option>
-          </el-select>
-          </div>
-            <div>
-            <span>管理医生：</span>
-            <el-select
-                  multiple
-                  placeholder="请选择"
-                  style="width: 140px"
-          >
-            <el-option :label="item.realName" :value="item.id" v-for="(item, index) in doctorList"
-                       :key="index"></el-option>
-          </el-select>
-          </div>
             </div>
             <div class="searchRight">
             <div class="buttones">
             <div class="searchFor" @click="search">
             <img src="@/assets/images/common/topsearchblue.png" alt="">
           </div>
-          <div class="resetAll" @click="reset">重置</div>
-          <div class="more" v-if="isTrue"  @click="upMore">
-            <span>></span>
-            展开更多</div>
-          <div class="more noMore" v-else @click="upMore">
-            <span>></span>收起筛选</div>
+          <div @click="resetAll" class="resetAll">重置</div>
           </div>
             </div>
-          </div>
-        </div>
-        <div v-if="!isTrue" class="searchCondition" style="width:80%;">
-          <div class="searchLeft" style="padding-left:5px;">
-          <div>
-            <span>体检报告：</span>
-            <el-select
-                  v-model="formData.hasReport"
-                  placeholder="请选择"
-                  style="width: 140px"
-          >
-            <el-option :label="item.name" :value="item.id" v-for="(item, index) in istrue"
-                       :key="index"></el-option>
-          </el-select>
-          </div>
-          <div>
-            <span>基础问卷：</span>
-            <el-select
-                  v-model="formData.hasLifeQuestion"
-                  placeholder="请选择"
-                  style="width: 140px"
-          >
-            <el-option :label="item.name" :value="item.id" v-for="(item, index) in istrue"
-                       :key="index"></el-option>
-          </el-select>
-          </div>
-          <div>
-            <span>个人报告：</span>
-            <el-select
-                  v-model="formData.hasAssessReport"
-                  placeholder="请选择"
-                  style="width: 140px"
-          >
-            <el-option :label="item.name" :value="item.id" v-for="(item, index) in istrue"
-                       :key="index"></el-option>
-          </el-select>
-          </div>
-          <div>
-            <span style="margin-left:28px;">附件：</span>
-            <el-select
-                  v-model="formData.hasAnnex"
-                  placeholder="请选择"
-                  style="width: 140px"
-          >
-            <el-option :label="item.name" :value="item.id" v-for="(item, index) in istrue"
-                       :key="index"></el-option>
-          </el-select>
-          </div>
-          <!-- <div>
-            <span>证件类型：</span>
-            <el-select
-                  v-model="formData.gridId"
-                  placeholder="请选择"
-                  style="width: 140px"
-          >
-            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
-                       :key="index"></el-option>
-          </el-select>
-          </div> -->
-          <div>
-            <span>证件号码：</span>
-            <el-input
-                  v-model="formData.cardNo"
-                  placeholder="请输入"
-                  style="width: 140px"
-          >
-            </el-input>
-          </div>
-           <div>
-            <span>建档日期：</span>
-            <el-date-picker
-                  v-model="formData.startTime"
-                  type="date"
-                  :max-date="formData.endTime"
-                  placeholder="选择开始日期"
-                  style="width: 140px"
-          >
-          </el-date-picker>
-          <span class="timing">-</span>
-          <el-date-picker
-                  v-model="formData.endTime"
-                  type="date"
-                  :min-date="formData.startTime"
-                  placeholder="选择结束日期"
-                  style="width: 140px"
-          >
-          </el-date-picker>
-          </div>
           </div>
         </div>
         <div class="topbottomborder"></div>
@@ -158,8 +45,7 @@
                     class="btn-new btnAdd"
                     size="small"
                     style="margin: 16px 0"
-                    @click="$router.push('user_edit')"
-                    v-if="getAccess('customer_pool_add')"
+                    @click="adds()"
             ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
             <el-button
                     size="small"
@@ -183,82 +69,21 @@
         </div>
         <div>
           <el-table
-                  :data="dataSource"
+                  :data="table.list"
                   @selection-change="handleSelectionChange"
                   ref="multipleTable"
                   align="center"
                   show-overflow-tooltip
           >
-            <el-table-column type="selection" width="40"></el-table-column>
-            <el-table-column label="客户编号" prop="clientNo" show-overflow-tooltip>
+            <el-table-column type="selection" min-width="40"></el-table-column>
+            <el-table-column label="体检库名称" prop="name" min-width="100" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>
-                  {{ scope.row.clientNo }}
-                </span>
-              </template>
-            </el-table-column>
-            <el-table-column label="姓名" prop="name" show-overflow-tooltip>
-              <template slot-scope="scope">
-                <span style="color:#3154AC;">
                   {{ scope.row.name }}
                 </span>
               </template>
             </el-table-column>
-            <el-table-column label="性别" prop="gender" width="60">
-              <template slot-scope="scope">
-                {{ scope.row.gender === 1 ? '男' :scope.row.gender === 1?'不限': '女' }}
-              </template>
-            </el-table-column>
-            <el-table-column label="年龄" prop="age" width="60"></el-table-column>
-            <el-table-column label="企业单位" prop="workUnitName" show-overflow-tooltip>
-              <template slot-scope="scope">
-                <span>{{ scope.row.workUnitName || '-'}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="人员类别" prop="gridName" show-overflow-tooltip>
-              <template slot-scope="scope">
-                <span>{{ scope.row.gridName || '-'}}</span>
-              </template>
-            </el-table-column>
-            <!-- <el-table-column label="是否认领" prop="state">
-              <template slot-scope="scope">
-                {{ scope.row.healthManageId === '1' ? '已认领' : '未认领' }}
-              </template>
-            </el-table-column> -->
-            <el-table-column label="体检报告" prop="reportTotal" width="80" show-overflow-tooltip>
-              <template slot-scope="scope">
-                <span style="color:#36BF2F;">{{ scope.row.reportTotal || '-'}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="基础问卷"
-            prop="lifeStyleQuestionTotal" width="80" show-overflow-tooltip>
-              <template slot-scope="scope">
-                <span style="color:#36BF2F;">{{ scope.row.lifeStyleQuestionTotal || '0'}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="个人报告" prop="assessReportTotal" width="80" show-overflow-tooltip>
-              <template slot-scope="scope">
-                <span style="color:#36BF2F;">{{ scope.row.assessReportTotal || '-'}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="管理医生" prop="doctorNames" show-overflow-tooltip>
-              <template slot-scope="scope">
-                <span>{{ scope.row.doctorNames || '0'}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="干预计划" prop="unExecutePlanTotal" width="80">
-              <template slot-scope="scope">
-                <span style="color:#36BF2F;">
-                  {{ scope.row.unExecutePlanTotal || '0'}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="建档时间" prop="createTime" show-overflow-tooltip />
-            <el-table-column label="附件" prop="annexTotal"  width="60" show-overflow-tooltip>
-              <template slot-scope="scope">
-                <span style="color:#36BF2F;">{{ scope.row.annexTotal || '0'}}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="是否启用" prop="state">
+            <el-table-column label="是否启用" min-width="150"  prop="state">
               <template slot-scope="scope">
                 <el-switch
                   v-model="scope.row.state "
@@ -270,35 +95,22 @@
                 </el-switch>
               </template>
             </el-table-column>
-            <!-- <el-table-column label="附件" prop="attachment">
+            <el-table-column label="建档时间"
+            prop="createdTime" min-width="130" show-overflow-tooltip />
+            <el-table-column label="报告数" prop="reportTotal" min-width="130" show-overflow-tooltip>
               <template slot-scope="scope">
-                <div
-                class="elbutton"
-                @click="
-                  $router.push({
-                    name: 'user_edit',
-                    params: {
-                      userId: scope.row.id,
-                    },
-                  })
-                ">
-                  查看
-                </div>
+                <span>{{ scope.row.reportTotal || '0'}}</span>
               </template>
-            </el-table-column> -->
-            <el-table-column label="操作" prop="index"  width="100">
+            </el-table-column>
+            <el-table-column label="操作" prop="index"  width="150">
               <template slot-scope="scope">
                 <el-button
                         type="text"
                         size="small"
-                        @click="
-                  $router.push(
-                     `/user_edit/${scope.row.id}`
-                  )
-                "
+                        @click="edits(scope.row.id)"
                         v-if="getAccess('customer_pool_edit')"
                 >编辑</el-button>
-                <el-button type="text"
+                <!-- <el-button type="text"
                         size="small"
                         style="color:#DDE0E6"
                         >|</el-button>
@@ -307,7 +119,7 @@
                         size="small"
                         @click="claim(scope)"
                 >删除</el-button
-                >
+                > -->
                 <!-- <el-button
                         class="font-enable"
                         type="text"
@@ -346,33 +158,35 @@
           </div>
         </div>
       <!-- </template> -->
-    <doctor-Select
-      :isRadio="false"
-      :visible="dialogTableVisible"
-      :clientId="clientId"
-      @cancel="dialogTableVisible = false"
-      @change="submitAssign"
-    ></doctor-Select>
+    <edit-detail
+      :visible="modalVisible"
+      :value="currentValue"
+      :libraryList="form.libraryList"
+      @cancel="cancel"
+    ></edit-detail>
+    <!-- </div> -->
   </div>
 </template>
 
 <script>
-import assignDialog from './components/assign_dialog.vue';
-import doctorSelect from '~/src/components/doctor_select/index.vue';
+// import assignDialog from './components/assign_dialog.vue';
+// import doctorSelect from '~/src/components/doctor_select/index.vue';
 import QueryPage from '~/src/components/query_page/index.vue';
 import Search from '~/src/components/query_page/search.vue';
 import QueryFilter from '~/src/components/query_page/query_filter.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
-import * as dayjs from 'dayjs';
+// import * as dayjs from 'dayjs';
+import editDetail from './edit_detail.vue';
 
 export default {
   name: 'index',
   components: {
-    'assign-dialog': assignDialog,
-    'doctor-Select': doctorSelect,
+    // 'assign-dialog': assignDialog,
+    // 'doctor-Select': doctorSelect,
     Search,
     QueryPage,
     QueryFilter,
+    editDetail,
   },
   data() {
     return {
@@ -386,45 +200,91 @@ export default {
       dialogTableVisible: false,
       clientId: '',
       formData: {
-        keywords: '',
         gridId: '',
+        doctorId: '',
+        keywords: '', // 体检库
         gender: '',
-        hasReport: '',
-        hasLifeQuestion: '',
-        hasAssessReport: '',
-        hasAnnex: '',
-        cardNo: '',
-        hasIntervenePlan: '',
-        startReportDate: '',
-        endReportDate: '',
-        startCollectionDate: '',
-        endCollectionDate: '',
-        tag: '',
+        genderType: '',
         startTime: '',
         endTime: '',
-        // doctorIdList: null,
       },
       params: {
         pageNo: 1,
         pageSize: 15,
+        type: 0,
+      },
+      form: {
+        gender: '', // 性别
+        state: '', // 状态
+        isMain: '', // 重要指标
+        itemName: '', // 项目名称
+        organItemLibraryId: '', // 项目分类
+        // genderList: genderListByPhysicalProjectList,
+        // 状态数据
+        stateList: '',
+        isMainList: '',
+        libraryList: [],
+      },
+      table: {
+        list: [],
+        totalCount: 0, // 总条数
+        currentPage: 1, // 当前页
+        pageSize: 15, // 一页数量
       },
       isCollapse: true,
-      istrue: [
-        {
-          name: '有',
-          id: '1',
-        },
-        {
-          name: '无',
-          id: '2',
-        },
-      ],
+      modalVisible: false,
+      currentValue: {},
+      tabbor: ['体检小项', '体检库'],
+      Tabactive: 0,
     };
   },
   methods: {
+    resetAll() {
+      this.formData.keywords = '';
+      this.getList();
+    },
+    TabbarBtn(index) {
+      this.Tabactive = index;
+    },
+    async getList() {
+      const reqBody = {
+        name: this.formData.keywords,
+        pageNo: this.table.currentPage,
+        pageSize: this.table.pageSize,
+      };
+      const res = await this.$api.physicalProjectListInterface.pageorganitemlibrary(
+        reqBody,
+      );
+      const { data } = res.data;
+      if (data) {
+        this.table.list = data.data || [];
+        this.total = data.total;
+      }
+    },
     // 展开更多
     upMore() {
       this.isTrue = !this.isTrue;
+    },
+    // 编辑
+    adds(id) {
+      this.currentValue.type = id;
+      this.modalVisible = true;
+      // this.getLibraryList();
+    },
+    edits(id) {
+      this.currentValue.type = id;
+      this.modalVisible = true;
+      // this.getLibraryList();
+    },
+    async getLibraryList() {
+      const res = await this.$api.physicalProjectListInterface.listOrganItemLibrary();
+      const { data } = res.data;
+      this.form.libraryList = data;
+      console.log(this.form.libraryList);
+    },
+    cancel() {
+      this.modalVisible = false;
+      this.getList();
     },
     // 获取人员列表
     async getGridList() {
@@ -457,22 +317,22 @@ export default {
         customClass: 'message-box-customize',
         showClose: true,
       }).then(() => {
-        const params = {
-          clientIdList: this.chooseUserList.map(user => user.id),
-        };
-        this.$api.userManagerInterface.deleteClientInfo(params).then(({ data }) => {
-          if (data.code === 200) {
+        // const params = {
+        //   clientIdList: this.chooseUserList.map(user => user.id),
+        // };
+        const arrs = this.chooseUserList[0];
+        console.log(arrs, '删除数据');
+        this.$api.physicalProjectListInterface.deleteOrganItemLibrary(arrs).then(({ data }) => {
+          if (data) {
             this.$message.success('操作成功');
-            this.search();
+            this.getList();
             this.chooseUserList = [];
-            this.$refs.multipleTable.clearSelection();
           }
         });
       });
     },
     reset() {
-      this.formData = [];
-      // Object.assign(this.$data, this.$options.data());
+      Object.assign(this.$data, this.$options.data());
       this.getUserList();
       this.getGridList(); // 获取人员列类别
     },
@@ -481,24 +341,24 @@ export default {
       this.getUserList();
     },
     search() {
-      const hasOnlyStartTime = this.formData.startTime
-              && (!this.formData.startTime || !this.formData.endTime);
-      const hasOnlyEndTime = this.formData.endTime
-              && (!this.formData.startTime || !this.formData.endTime);
-      if (hasOnlyStartTime || hasOnlyEndTime) {
-        this.$message.error('查询必须包括开始时间和结束时间');
-        return;
-      }
-      if (this.formData.startTime > this.formData.endTime) {
-        this.$message.error('查询的开始时间不可大于结束时间');
-        return;
-      }
-      if (this.formData.startTime && this.formData.endTime) {
-        this.formData.startTime = dayjs(this.formData.startTime).format('YYYY-MM-DD');
-        this.formData.endTime = dayjs(this.formData.endTime).format('YYYY-MM-DD');
-      }
-      this.params.pageNo = 1;
-      this.getUserList();
+      // const hasOnlyStartTime = this.formData.startTime
+      //         && (!this.formData.startTime || !this.formData.endTime);
+      // const hasOnlyEndTime = this.formData.endTime
+      //         && (!this.formData.startTime || !this.formData.endTime);
+      // if (hasOnlyStartTime || hasOnlyEndTime) {
+      //   this.$message.error('查询必须包括开始时间和结束时间');
+      //   return;
+      // }
+      // if (this.formData.startTime > this.formData.endTime) {
+      //   this.$message.error('查询的开始时间不可大于结束时间');
+      //   return;
+      // }
+      // if (this.formData.startTime && this.formData.endTime) {
+      //   this.formData.startTime = dayjs(this.formData.startTime).format('YYYY-MM-DD');
+      //   this.formData.endTime = dayjs(this.formData.endTime).format('YYYY-MM-DD');
+      // }
+      this.table.currentPage = 1;
+      this.getList();
     },
     handleSelectionChange(rows) {
       this.chooseUserList = rows;
@@ -581,15 +441,16 @@ export default {
 
     changeStatus({ row = {} }, status) {
       const setRow = row;
-      this.$api.userManagerInterface.editUserStatus({
-        id: setRow.id,
-        state: status,
-      }).then(({ data }) => {
-        if (data.code === 200) {
-          this.$message.success('操作成功');
-          setRow.state = status;
-        }
-      });
+      console.log(setRow, status, '12312313213');
+      // this.$api.userManagerInterface.editUserStatus({
+      //   id: setRow.id,
+      //   state: status,
+      // }).then(({ data }) => {
+      //   if (data.code === 200) {
+      //     this.$message.success('操作成功');
+      //     setRow.state = status;
+      //   }
+      // });
       // this.$confirm(
       // `<div class="delete-text-content"><img class="delete-icon"
       // src="${deleteIcon}"/><span>您确定要改变该病人状态吗？</span></div>`,
@@ -627,9 +488,10 @@ export default {
     },
   },
   mounted() {
-    this.getUserList();
-    this.getGridList(); // 获取人员列类别
-    this.getDoctor(); // 获取医生列表
+    this.getList();
+    // this.getUserList();
+    // this.getGridList(); // 获取人员列类别
+    // this.getDoctor(); // 获取医生列表
   },
 };
 </script>
@@ -726,6 +588,114 @@ export default {
       }
     }
   }
+}
+.TabBars{
+    display: flex;
+    margin-top: -20px;
+    margin-left: -23px;
+    height: 32px;
+    background: #F6F8FC;
+    width: 103.5%;
+    padding-top: 8px;
+  .TabBarsNames{
+    cursor: pointer;
+    background: #EEF1F5;
+    border-color: transparent;
+    color: #666666;
+    position: relative;
+    margin-right: 30px;
+    padding: 10px 14px 10px 16px;
+    font-size: 14px;
+    border-radius: 8px 5px 0 0;
+  }
+  .TabBarsNames:after{
+    content: '';
+    display: block;
+    width: 25px;
+    height: 40px;
+    position: absolute;
+    -webkit-transform: skewX(23deg);
+    transform: skewX(23deg);
+    background: #EEF1F5;
+    border-top-right-radius: 8px;
+    top: 0px;
+    right: -13px;
+  }
+  .TabBarsNames:before {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 39px;
+    position: absolute;
+    -webkit-transform: skewX(165deg);
+    transform: skewX(163deg);
+    background: #EEF1F5;
+    border-top-left-radius: 8px;
+    top: 0px;
+    left: -4px;
+    border-bottom: solid 1px #EEF1F5;
+  }
+  .TabBarsName{
+    cursor: pointer;
+    background: #ffffff;
+    border-color: transparent;
+    color: #333333;
+    font-weight: 500;
+    position: relative;
+    margin-right: 30px;
+    padding: 10px 14px 10px 16px;
+    font-size: 14px;
+    border-radius: 8px 5px 0 0;
+  }
+    .TabBarsName:before {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 39px;
+    position: absolute;
+    -webkit-transform: skewX(165deg);
+    transform: skewX(163deg);
+    background: white;
+    border-top-left-radius: 8px;
+    top: 0px;
+    left: -4px;
+    border-bottom: solid 1px white;
+  }
+  .TabBarsName:after{
+    content: '';
+    display: block;
+    width: 25px;
+    height: 40px;
+    position: absolute;
+    -webkit-transform: skewX(23deg);
+    transform: skewX(23deg);
+    background: white;
+    border-top-right-radius: 8px;
+    top: 0px;
+    right: -13px;
+  }
+  .Tabunread{
+    display: inline-block;
+    background: #fa912b;
+    padding: 3px;
+    color: #ffffff;
+    width: 12px;
+    height: 12px;
+    line-height: 12px;
+    text-align: center;
+    border-radius: 10px;
+    margin-left: 5px;
+    font-size: 12px;
+  }
+}
+.TabListcss{
+  height: 380px;
+  width: 97%;
+  background: #ffffff;
+  box-shadow: 0px 6px 24px 0px rgba(14, 37, 87, 0.06);
+  border-radius: 0px 0px 8px 8px;
+  padding: 20px;
+  margin-top: 10px;
 }
 
 </style>

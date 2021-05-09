@@ -51,7 +51,7 @@
       <!-- <div class="main-info-title">新增短信</div> -->
       <div class="form-title">
         <div class="line"></div>
-        <h3 class="name">新增危险因素库</h3>
+        <h3 class="name">{{ids ? '编辑' : '新增'}}危险因素库</h3>
       </div>
       <el-row>
         <!-- <el-col :span="6">
@@ -116,7 +116,7 @@
         </el-col> -->
         <el-col :span="6">
           <el-form-item label="危险分类" prop="result" >
-            <el-select v-model="form.result" placeholder="请选择当前状态" width="150">
+            <el-select v-model="form.riskType" placeholder="请选择当前状态" width="150">
               <el-option
                 v-for="item in resultOptions"
                 :key="item.value"
@@ -176,12 +176,12 @@
         </el-col> -->
         <el-col :span="6">
           <el-form-item label="危险因素" prop="doctorName">
-            <el-input v-model="form.doctorName" placeholder="请输入"></el-input>
+            <el-input v-model="form.riskFactor" placeholder="请输入"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="排序编号" prop="doctorName">
-            <el-input v-model="form.doctorName" placeholder="请输入"></el-input>
+            <el-input v-model="form.isSystem" placeholder="请输入"></el-input>
           </el-form-item>
         </el-col>
         <!-- <el-col :span="6">
@@ -198,7 +198,7 @@
           <el-form-item label="建议" prop="result">
             <el-input
               type="textarea"
-              v-model="form.hpi"
+              v-model="form.advice"
               :rows="5"
               placeholder="请输入"
               :maxlength="4000"
@@ -247,20 +247,10 @@ export default {
     return {
       popoverStatus: false,
       form: {
-        clientInfoId: '',
-        hospital: '',
-        department: '',
-        medicalType: '',
-        patientNo: '',
-        inDate: '',
-        outDate: '',
-        doctorName: '',
-        result: '',
-        complaint: '主诉', // 主诉
-        hpi: '现病史', // 现病史
-        examination: '检查', // 检查
-        diagnosis: '诊断', // 诊断
-        therapy: '方案', // 方案
+        riskFactor: '', // 危险因素
+        isSystem: '', // 排序编号
+        advice: '', // 建议
+        riskType: '',
         orgCode: '',
       },
       options: {
@@ -313,22 +303,22 @@ export default {
         { value: 2, label: '住院' },
       ],
       currentUser: {},
-      ids: this.$route.query.id,
+      ids: this.$route.params.id,
     };
   },
   mounted() {
     if (this.ids) {
-      this.$api.medicalHistoryInterface.medicalInfoDetail(this.ids).then((res) => {
+      this.$api.projectList.riskListInfo(this.ids).then((res) => {
         const { data } = res;
         console.log(data, '撒打算大的');
         this.form = Object.assign(this.form, data.data || {});
-        this.currentUser = {
-          id: this.form.clientInfoId,
-          name: this.form.clientName,
-          age: this.form.age,
-          gender: this.form.gender,
-          gridName: this.form.clientGridName,
-        };
+        // this.currentUser = {
+        //   id: this.form.clientInfoId,
+        //   name: this.form.clientName,
+        //   age: this.form.age,
+        //   gender: this.form.gender,
+        //   gridName: this.form.clientGridName,
+        // };
       });
     }
   },

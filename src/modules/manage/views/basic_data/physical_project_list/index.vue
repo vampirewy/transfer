@@ -182,7 +182,7 @@ export default {
       );
       const { data } = res.data;
       if (data) {
-        this.table.list = data.list || [];
+        this.table.list = data.data || [];
         this.table.totalCount = data.total;
       }
     },

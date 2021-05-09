@@ -218,7 +218,7 @@ export default {
   /deep/ .select-template-trigger input {
     cursor: pointer;
     color: #333 !important;
-    background: #F4F4F6 !important;
+    // background: #F4F4F6 !important;
   }
 }
 </style>

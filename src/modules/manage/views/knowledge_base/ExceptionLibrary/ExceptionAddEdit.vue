@@ -177,24 +177,24 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="推荐科室" >
-            <el-select v-model="form.result" placeholder="请选择当前状态">
+            <el-select v-model="doctorNameId" placeholder="请选择当前状态">
               <el-option
                 v-for="item in doctorName"
-                :key="item.value"
+                :key="item"
                 :label="item.label"
-                :value="item.value"
+                :value="item"
               ></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="推荐检查" >
-            <el-select v-model="form.result" placeholder="请选择当前状态">
+            <el-select v-model="RecommendInspectsId" placeholder="请选择当前状态">
               <el-option
-                v-for="item in resultOptions"
-                :key="item.value"
+                v-for="item in RecommendInspects"
+                :key="item"
                 :label="item.label"
-                :value="item.value"
+                :value="item"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -293,11 +293,14 @@ export default {
         patientNo: '',
         inDate: '', // 重要性
         outDate: '', // 紧急性
-        doctorName: '', // 推荐科室
+        doctorNameId: '', // 推荐科室
+        doctorName: [],
         result: '', // 推荐检查
         interpret: '', // 解释
         Reason: '', // 原因
         Suggestion: '', // 建议
+        RecommendInspects: [], // 推荐检查
+        RecommendInspectsId: '',
       },
       organTypeList: [],
       dangerLevelList: [],
@@ -360,6 +363,8 @@ export default {
     this.getOrganTypeList();
     this.getImportList();
     this.getQuickList();
+    this.listRecommendDepartment();
+    this.listRecommendInspect();
     // if (this.ids) {
     //   this.$api.medicalHistoryInterface.medicalInfoDetail(this.ids).then((res) => {
     //     const { data } = res;
@@ -394,7 +399,17 @@ export default {
 
       this.form.abnormalAlias = data.abnormalAlias.map(it => ({ name: it }));
     },
-
+    async listRecommendInspect() {
+      const { data } = await this.$api.unusualListInterface.RecommendInspect();
+      this.$set(this.form, 'RecommendInspects', data.data);
+      this.RecommendInspects = data.data;
+    },
+    async listRecommendDepartment() {
+      const { data } = await this.$api.unusualListInterface.RecommendDepartment();
+      this.$set(this.form, 'doctorName', data.data);
+      this.doctorName = data.data;
+      // this.form.organTypeList
+    },
     async getOrganTypeList() {
       const { data } = await this.$api.unusualListInterface.getOrganTypeList();
       this.$set(this.form, 'organTypeList', data.data);

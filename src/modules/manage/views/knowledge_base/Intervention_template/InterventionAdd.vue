@@ -82,6 +82,36 @@
           </div>
         </div>
         <div class="interventionCon">
+          <div v-if="Tabactive == 0">
+            <div>
+              <minor-term></minor-term>
+            </div>
+          </div>
+          <div v-if="Tabactive == 1">
+            <div>
+              <minor-term></minor-term>
+            </div>
+          </div>
+          <div v-if="Tabactive == 2">
+            <div>
+              <minor-term></minor-term>
+            </div>
+          </div>
+          <div v-if="Tabactive == 3">
+            <div>
+              <minor-term></minor-term>
+            </div>
+          </div>
+          <div v-if="Tabactive == 4">
+            <div>
+              <minor-term></minor-term>
+            </div>
+          </div>
+          <div v-if="Tabactive == 5">
+            <div>
+              <minor-term></minor-term>
+            </div>
+          </div>
         </div>
       </div>
       <!-- <div class="form-buttons">
@@ -103,11 +133,13 @@
 import * as dayjs from 'dayjs';
 const isSameOrAfter = require('dayjs/plugin/isSameOrAfter');
 dayjs.extend(isSameOrAfter);
+import minorTerm from './components/minorTerm.vue';
 
 export default {
   name: 'MedicalHistoryForm',
   components: {
     // SelectUser,
+    minorTerm,
   },
   props: {
     detail: {
@@ -415,6 +447,7 @@ export default {
     border-radius: 0px 8px 8px 8px;
     margin-bottom: 20px;
     margin-top: -1px;
+    overflow-y: scroll;
   }
     .TabBars{
     display: flex;
