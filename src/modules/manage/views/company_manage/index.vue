@@ -16,7 +16,7 @@
         <div class="divTop">
           <div class="divTitle">
             <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
-            企业管理</div>
+            问卷统计</div>
 
           <div class="searchCondition">
           <div class="searchLeft">
@@ -32,6 +32,7 @@
             <el-date-picker
                   v-model="form.startTime"
                   type="date"
+                  value-format="yyyy-MM-dd"
                   :max-date="form.endTime"
                   placeholder="选择开始日期"
                   style="width: 140px"
@@ -41,6 +42,7 @@
           <el-date-picker
                   v-model="form.endTime"
                   type="date"
+                  value-format="yyyy-MM-dd"
                   :min-date="form.startTime"
                   placeholder="选择结束日期"
                   style="width: 140px"
@@ -53,7 +55,7 @@
             <div class="searchFor searchmarTop" @click="onSearch">
             <img src="@/assets/images/common/topsearchblue.png" alt="">
           </div>
-          <div class="resetAll searchmarTop">重置</div>
+          <div class="resetAll searchmarTop" @click="onReset">重置</div>
           </div>
             </div>
           </div>
@@ -207,7 +209,8 @@ export default {
       this.queryList();
     },
     onReset() {
-      Object.assign(this.$data, this.$options.data());
+      this.form = [];
+      // Object.assign(this.$data, this.$options.data());
       this.table.currentPage = 1;
       this.queryList();
     },

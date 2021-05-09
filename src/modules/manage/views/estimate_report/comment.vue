@@ -45,7 +45,6 @@
                 <el-input
                   class="select-template-trigger"
                   slot="reference"
-                  disabled
                   v-model="templateStr"
                   placeholder="请选择">
                   <i :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`" slot="suffix"></i>
@@ -290,10 +289,10 @@ export default {
           }
     }
   }
-  /deep/ .select-template-trigger input {
+  /deep/  input {
     cursor: pointer;
     color: #333 !important;
-    background: #F4F4F6 !important;
+    // background: #F4F4F6 !important;
   }
 }
 </style>

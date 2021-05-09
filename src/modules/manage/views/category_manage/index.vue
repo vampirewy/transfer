@@ -45,7 +45,7 @@
             <div class="searchFor" @click="onSearch">
               <img src="@/assets/images/common/topsearchblue.png" alt="" />
             </div>
-            <div class="resetAll">重置</div>
+            <div class="resetAll" @click="onReset">重置</div>
           </div>
         </div>
       </div>
@@ -171,7 +171,6 @@ export default {
       boxshow: true,
       form: {
         keywords: '', // 关键字
-        name: '',
       },
       checkSelection: [],
       table: {
@@ -236,9 +235,10 @@ export default {
      * 重置
      */
     onReset() {
-      Object.assign(this.$data, this.$options.data());
-      this.table.currentPage = 1;
-      this.onLoad();
+      this.form = [];
+      // Object.assign(this.$data, this.$options.data());
+      // this.table.currentPage = 1;
+      // this.onLoad();
       this.getList();
     },
     /**

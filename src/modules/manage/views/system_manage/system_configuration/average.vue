@@ -264,7 +264,7 @@ export default {
   /deep/ .select-template-trigger input {
     cursor: pointer;
     color: #333 !important;
-    background: #f4f4f6 !important;
+    // background: #f4f4f6 !important;
   }
   .el-col {
     margin-right: 20px;

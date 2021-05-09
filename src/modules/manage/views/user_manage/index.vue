@@ -1,55 +1,5 @@
 <template>
   <div class="userManage">
-    <div>
-    <!-- <query-page @reset="reset" @search="search"> -->
-      <!-- <template slot="left">
-        <search>
-          <div class="searchInputFormItem">
-            <el-input placeholder="姓名/手机号/企业单位" v-model="formData.keywords">
-            </el-input>
-            <span class="searchBtnImgSpan" @click="search">
-                <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
-            </span>
-          </div>
-        </search>
-        <query-filter>
-          <el-select
-                  v-model="formData.gender"
-                  placeholder="请选择性别"
-                  style="width: 180px"
-          >
-            <el-option label="男" value="1" key="1"></el-option>
-            <el-option label="女" value="2" key="2"></el-option>
-          </el-select>
-          <el-select
-                  v-model="formData.gridId"
-                  placeholder="人员类别"
-                  style="width: 180px"
-          >
-            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
-                       :key="index"></el-option>
-          </el-select>
-          <div class="formSearchTitle setTimeText filter-item-title">建档时间</div>
-          <el-date-picker
-                  v-model="formData.startTime"
-                  type="date"
-                  :max-date="formData.endTime"
-                  placeholder="选择开始日期"
-                  style="width: 180px"
-          >
-          </el-date-picker>
-          <el-date-picker
-                  v-model="formData.endTime"
-                  type="date"
-                  :min-date="formData.startTime"
-                  placeholder="选择结束日期"
-                  style="width: 180px"
-          >
-          </el-date-picker>
-        </query-filter>
-      </template> -->
-      <!-- <template slot="right"> -->
-        </div>
         <div class="divTop">
           <div class="divTitle">
             <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
@@ -89,7 +39,7 @@
             <div>
             <span>管理医生：</span>
             <el-select
-                  v-model="formData.doctorId"
+                  multiple
                   placeholder="请选择"
                   style="width: 140px"
           >
@@ -103,7 +53,7 @@
             <div class="searchFor" @click="search">
             <img src="@/assets/images/common/topsearchblue.png" alt="">
           </div>
-          <div class="resetAll">重置</div>
+          <div class="resetAll" @click="reset">重置</div>
           <div class="more" v-if="isTrue"  @click="upMore">
             <span>></span>
             展开更多</div>
@@ -118,48 +68,48 @@
           <div>
             <span>体检报告：</span>
             <el-select
-                  v-model="formData.gridId"
+                  v-model="formData.hasReport"
                   placeholder="请选择"
                   style="width: 140px"
           >
-            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+            <el-option :label="item.name" :value="item.id" v-for="(item, index) in istrue"
                        :key="index"></el-option>
           </el-select>
           </div>
           <div>
             <span>基础问卷：</span>
             <el-select
-                  v-model="formData.gridId"
+                  v-model="formData.hasLifeQuestion"
                   placeholder="请选择"
                   style="width: 140px"
           >
-            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+            <el-option :label="item.name" :value="item.id" v-for="(item, index) in istrue"
                        :key="index"></el-option>
           </el-select>
           </div>
           <div>
             <span>个人报告：</span>
             <el-select
-                  v-model="formData.gridId"
+                  v-model="formData.hasAssessReport"
                   placeholder="请选择"
                   style="width: 140px"
           >
-            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+            <el-option :label="item.name" :value="item.id" v-for="(item, index) in istrue"
                        :key="index"></el-option>
           </el-select>
           </div>
           <div>
             <span style="margin-left:28px;">附件：</span>
             <el-select
-                  v-model="formData.gridId"
+                  v-model="formData.hasAnnex"
                   placeholder="请选择"
                   style="width: 140px"
           >
-            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+            <el-option :label="item.name" :value="item.id" v-for="(item, index) in istrue"
                        :key="index"></el-option>
           </el-select>
           </div>
-          <div>
+          <!-- <div>
             <span>证件类型：</span>
             <el-select
                   v-model="formData.gridId"
@@ -169,11 +119,11 @@
             <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
                        :key="index"></el-option>
           </el-select>
-          </div>
+          </div> -->
           <div>
-            <span>证件类型：</span>
+            <span>证件号码：</span>
             <el-input
-                  v-model="formData.gridId"
+                  v-model="formData.cardNo"
                   placeholder="请输入"
                   style="width: 140px"
           >
@@ -436,20 +386,39 @@ export default {
       dialogTableVisible: false,
       clientId: '',
       formData: {
-        gridId: '',
-        doctorId: '',
         keywords: '',
+        gridId: '',
         gender: '',
-        genderType: '',
+        hasReport: '',
+        hasLifeQuestion: '',
+        hasAssessReport: '',
+        hasAnnex: '',
+        cardNo: '',
+        hasIntervenePlan: '',
+        startReportDate: '',
+        endReportDate: '',
+        startCollectionDate: '',
+        endCollectionDate: '',
+        tag: '',
         startTime: '',
         endTime: '',
+        // doctorIdList: null,
       },
       params: {
         pageNo: 1,
         pageSize: 15,
-        type: 0,
       },
       isCollapse: true,
+      istrue: [
+        {
+          name: '有',
+          id: '1',
+        },
+        {
+          name: '无',
+          id: '2',
+        },
+      ],
     };
   },
   methods: {
@@ -502,7 +471,8 @@ export default {
       });
     },
     reset() {
-      Object.assign(this.$data, this.$options.data());
+      this.formData = [];
+      // Object.assign(this.$data, this.$options.data());
       this.getUserList();
       this.getGridList(); // 获取人员列类别
     },
