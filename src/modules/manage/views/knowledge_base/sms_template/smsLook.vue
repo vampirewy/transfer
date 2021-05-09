@@ -12,10 +12,10 @@
     <div class="titless">查看短信</div>
     <!-- <div class="title">数据列表</div> -->
     <div class="lookPressure">
-      <div><span>就医编号：</span><span>{{data.orgCode}}</span></div>
-      <div><span>就医类型：</span><span>{{data.medicalType}}</span></div>
-      <div><span>医保卡号：</span><span>{{data.orgCode}}</span></div>
-      <div><span>就医机构：</span><span>{{data.orgCode}}</span></div>
+      <div><span>就医编号：</span><span>{{data.categoryId}}</span></div>
+      <div><span>就医类型：</span><span>{{data.categoryName}}</span></div>
+      <div><span>医保卡号：</span><span>{{data.themId}}</span></div>
+      <div><span>就医机构：</span><span>{{data.categoryName}}</span></div>
     </div>
     <!-- <div class="lookPressure">
       <div><span>就医科室：</span><span>{{data.department}}</span></div>
@@ -24,13 +24,13 @@
       <div><span>出院时间：</span><span>{{data.outDate}}</span></div>
     </div> -->
     <div class="lookPressure">
-      <div><span>就医金额：</span><span>是否健康</span></div>
+      <div><span>就医金额：</span><span>{{data.suitSeason}}</span></div>
       <!-- <div><span>当前状态：</span><span>{{data.result}}</span></div> -->
       <div></div>
       <div></div>
     </div>
     <div class="lookPressure">
-      <div><span>现病史：</span><span>{{data.hpi}}</span></div>
+      <div><span>现病史：</span><span>{{data.themName}}</span></div>
     </div>
     <!-- <div class="lookPressure">
       <div><span>主诉：</span><span>{{data.complaint}}</span></div>
@@ -69,13 +69,13 @@ export default {
       xData: [],
       yData: [],
       data: {},
-      ids: this.$route.query.id,
+      ids: this.$route.params.id,
     };
   },
   mounted() {
     // this.queryChartData();
     // this.queryPageList();
-    this.$api.medicalHistoryInterface.medicalInfoDetail(this.ids).then((res) => {
+    this.$api.projectList.smsListInfo(this.ids).then((res) => {
       console.log('sdfsfsdf');
       const { data } = res;
       this.data = data.data || {};

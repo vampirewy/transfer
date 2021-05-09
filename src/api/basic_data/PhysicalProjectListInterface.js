@@ -9,14 +9,17 @@
 import BaseModule from '../BaseModule';
 
 class PhysicalProjectListInterface extends BaseModule {
-  // 体检库项目列表
+  // 体检库项目列表（小项）
   listPage(data = {}) {
     return this.post('/organ_item/list_page', data);
   }
-
+  // 体检库
+  pageorganitemlibrary(data = {}) {
+    return this.post('/organ_item_library/page_list', data);
+  }
   // 体检库项目详情
   getOrganItem(data = {}) {
-    return this.get(`/organ_item/${data.id}`);
+    return this.get(`/organ_item/${data}`);
   }
 
   // 体检库项目新增
@@ -64,6 +67,10 @@ class PhysicalProjectListInterface extends BaseModule {
       params: data,
     });
   }
+  // -------------------异常匹配-------------------------
+  // 列表
+  systemlistpage(data = {}) {
+    return this.post('/system_item/list_page', data);
+  }
 }
-
 export default new PhysicalProjectListInterface();

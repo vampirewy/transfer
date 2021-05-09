@@ -13,7 +13,14 @@ class UnusualListInterface extends BaseModule {
   listPage(data = {}) {
     return this.get('/organ_abnormal/list_page', { params: data });
   }
-
+  // 推荐科室下拉
+  RecommendDepartment() {
+    return this.get('/organ_abnormal/list_recommend_department');
+  }
+  // 推荐检查
+  RecommendInspect() {
+    return this.get('/organ_abnormal/list_recommend_inspect');
+  }
   // 修改异常
   updateOrganAbnormal(data = {}) {
     return this.put(`/organ_abnormal/update/${data.id}`, data);

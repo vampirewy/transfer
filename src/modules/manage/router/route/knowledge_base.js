@@ -106,6 +106,15 @@ export default [
         component: () => import('../../views/knowledge_base/PhysicalExaminationLibrary/PhysicalExamination.vue'),
       },
       {
+        path: '/minor_term_add',
+        name: 'minor_term_add',
+        meta: {
+          title: '体检库小项添加',
+          keepAlive: true,
+        },
+        component: () => import('../../views/knowledge_base/PhysicalExaminationLibrary/minor_term_add.vue'),
+      },
+      {
         path: '/OutlierList',
         name: 'OutlierList',
         meta: {

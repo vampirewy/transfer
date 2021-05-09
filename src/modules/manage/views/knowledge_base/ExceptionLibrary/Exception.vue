@@ -406,20 +406,17 @@ export default {
       this.multipleSelection = val;
     },
     reset() {
-      this.params.pageNo = 1;
-      this.formData.keyWord = '';
-      this.formData.gender = '';
-      this.formData.clientGrid = '';
-      this.formData.lifeStyleLv = '';
-      this.formData.source = '';
-      this.formData.startTime = undefined;
-      this.formData.endTime = undefined;
-      // this.getQuestionType();
-      this.fetch();
+      this.form.name = '';
+      this.form.dangerLevel = '';
+      this.form.state = '';
+      this.form.abnormalType = '';
+      this.table.currentPage = 1;
+      this.getList();
     },
     search(current = 1) {
       this.params.pageNo = current;
-      this.fetch();
+      // this.fetch();
+      this.getList();
     },
     /**
      * 新增
@@ -500,20 +497,20 @@ export default {
         },
       );
     },
-    fetch() {
-      if (this.formData.startTime) {
-        this.formData.startTime = `${this.formData.startTime} 00:00:00`;
-      }
-      if (this.formData.endTime) {
-        this.formData.endTime = `${this.formData.endTime} 23:59:59`;
-      }
-      this.$api.health
-        .fetch(Object.assign(this.params, this.formData))
-        .then(({ data }) => {
-          this.total = data.data.total;
-          this.dataSource = data.data.data;
-        });
-    },
+    // fetch() {
+    //   if (this.formData.startTime) {
+    //     this.formData.startTime = `${this.formData.startTime} 00:00:00`;
+    //   }
+    //   if (this.formData.endTime) {
+    //     this.formData.endTime = `${this.formData.endTime} 23:59:59`;
+    //   }
+    //   this.$api.health
+    //     .fetch(Object.assign(this.params, this.formData))
+    //     .then(({ data }) => {
+    //       this.total = data.data.total;
+    //       this.dataSource = data.data.data;
+    //     });
+    // },
     getReport({ row }) {
       Object.assign(this.current, row);
       this.visible = true;
