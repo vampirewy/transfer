@@ -456,8 +456,8 @@ export default {
       color: #666;
     }
     .el-input__inner {
-      color: #333 !important;
-      background: #F4F4F6 !important;
+      /*color: #333 !important;
+      background: #F4F4F6 !important;*/
     }
   }
   /deep/ input, /deep/ textarea {
