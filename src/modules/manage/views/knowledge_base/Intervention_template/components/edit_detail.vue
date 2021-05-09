@@ -40,22 +40,14 @@
       <div style="display: flex;">
         <el-form-item label="性别限制：" >
           <el-select v-model="result" placeholder="请选择">
-            <el-option
-              v-for="item in resultOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
+            <el-option label="男" value="1" key="1"></el-option>
+            <el-option label="女" value="2" key="2"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="是否启用：" >
           <el-select v-model="results" placeholder="请选择">
-            <el-option
-              v-for="item in resultOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
+            <el-option label="是" value="1" key="1"></el-option>
+            <el-option label="否" value="2" key="2"></el-option>
           </el-select>
         </el-form-item>
       </div>
@@ -111,7 +103,7 @@
         ></el-input>
       </el-form-item> -->
     </el-form>
-    <div slot="footer" class="dialog-footer" v-if="value.type === 1">
+    <div slot="footer" class="dialog-footer" >
       <el-button size="small" @click="cancel" class="cancelBtn">取消</el-button>
       <el-button type="primary" size="small" @click="submit" class="sureBtn">确定</el-button>
     </div>

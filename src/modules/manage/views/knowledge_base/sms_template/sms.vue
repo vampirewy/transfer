@@ -85,8 +85,11 @@
                   placeholder="请选择"
                   style="width: 140px"
           >
-            <el-option :label="item.name" :value="item.paramValue"
-                       v-for="(item, index) in lifeStyleList" :key="index"></el-option>
+            <el-option label="不限" value="0">不限</el-option>
+            <el-option label="春" value="1">春</el-option>
+            <el-option label="夏" value="2">夏</el-option>
+            <el-option label="秋" value="3">秋</el-option>
+            <el-option label="冬" value="4">冬</el-option>
           </el-select>
         </div>
       </div>
@@ -183,27 +186,27 @@
       <el-table style="width: 100%" :data="dataSource" align="center"
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="40"></el-table-column>
-        <el-table-column label="短信类别" prop="clientNo" show-overflow-tooltip>
+        <el-table-column label="短信类别" prop="themName" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{ scope.row.clientNo | getResult}}</span>
+            <span>{{ scope.row.themName | getResult}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="短信主题" prop="clientName" show-overflow-tooltip>
+        <el-table-column label="短信主题" prop="categoryName" show-overflow-tooltip>
           <template slot-scope="scope">
                 <span class="clientName"
                       @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
-                  {{ scope.row.clientName | getResult}}
+                  {{ scope.row.categoryName | getResult}}
                 </span>
           </template>
         </el-table-column>
-        <el-table-column prop="gender" label="适宜性别" min-width="100px">
+        <el-table-column prop="suitGender" label="适宜性别" min-width="100px">
           <template slot-scope="scope">
-            <span>{{scope.row.gender | getResultGender}}</span>
+            <span>{{scope.row.suitGender | getResultGender}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="适宜人群" prop="age">
+        <el-table-column label="适宜人群" prop="suitSeason">
           <template slot-scope="scope">
-            <span>{{ scope.row.age | getResult}}</span>
+            <span>{{ scope.row.suitSeason | getResult}}</span>
           </template>
         </el-table-column>
         <!-- <el-table-column prop="clientGridName" label="人员类别" show-overflow-tooltip>
@@ -216,14 +219,14 @@
             <span>{{ scope.row.lifeStyleLvName | getResult}}</span>
           </template>
         </el-table-column> -->
-        <el-table-column prop="workUnitName" label="适宜季节" show-overflow-tooltip>
+        <el-table-column prop="suitCrowd" label="适宜季节" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{ scope.row.workUnitName | getResult}}</span>
+            <span>{{ scope.row.suitCrowd | getResult}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="短信内容" prop="questionDate" min-width="120" show-overflow-tooltip>
+        <el-table-column label="短信内容" prop="content" min-width="120" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{ scope.row.questionDate | getResultDate}}</span>
+            <span>{{ scope.row.content | getResultDate}}</span>
           </template>
         </el-table-column>
         <!-- <el-table-column label="问卷来源" prop="sourceName" show-overflow-tooltip>
@@ -245,8 +248,6 @@
                 $router.push({
                   name: 'knowledge_smsAdd',
                   params: {
-                    type: 'edit',
-                    qusType: scope.row.questionType,
                     id: scope.row.id,
                   },
                 })
@@ -260,7 +261,6 @@
                 $router.push({
                   name: 'knowledge_smsLook',
                   params: {
-                    qusType: scope.row.questionType,
                     id: scope.row.id,
                   },
                 })
@@ -317,9 +317,9 @@ export default {
       questionFromList: [], // 问卷来源
       formData: {
         keyWord: '',
-        gender: '',
-        clientGrid: '',
-        lifeStyleLv: '',
+        gender: '', // 适宜性别
+        clientGrid: '', // 适宜类别
+        lifeStyleLv: '', // 适宜季节
         source: '',
         startTime: undefined,
         endTime: undefined,
@@ -353,35 +353,27 @@ export default {
     };
   },
   activated() {
-    this.getGridList();
-    this.getQuestionFromList();
-    this.getLifeStyleList();
-    if (localStorage.getItem('homeSearchData')) {
-      const HomeSearchData = JSON.parse(localStorage.getItem('homeSearchData'));
-      this.formData.startTime = HomeSearchData.startDate;
-      this.formData.endTime = HomeSearchData.lastDate;
-      this.formData.searchRange = HomeSearchData.searchRange;
-    }
+    // this.getGridList();
+    // this.getQuestionFromList();
+    // this.getLifeStyleList();
+    // if (localStorage.getItem('homeSearchData')) {
+    //   const HomeSearchData = JSON.parse(localStorage.getItem('homeSearchData'));
+    //   this.formData.startTime = HomeSearchData.startDate;
+    //   this.formData.endTime = HomeSearchData.lastDate;
+    //   this.formData.searchRange = HomeSearchData.searchRange;
+    // }
+    this.getList();
   },
   destroyed() {
     // 清除时间 和 我的/平台
     localStorage.removeItem('homeSearchData');
   },
   methods: {
-    async getGridList() {
-      const res = await this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
-      const { data } = res.data;
-      this.gridList = data.data;
-    },
-    async getQuestionFromList() {
-      const res = await this.$api.health.getQuestionFromList({ pageNo: 1, pageSize: 10000 });
-      const { data } = res.data;
-      this.questionFromList = data;
-    },
-    async getLifeStyleList() {
-      const res = await this.$api.health.getLifeStyleList({ pageNo: 1, pageSize: 10000 });
-      const { data } = res.data;
-      this.lifeStyleList = data;
+    async getList() {
+      const res = await this.$api.projectList.smsList(this.formData);
+      const { data } = res.data.data;
+      this.dataSource = data;
+      console.log(this.dataSource, '短信列表');
     },
     handleSelectionChange(val) {
       // table组件选中事件,
@@ -474,7 +466,8 @@ export default {
             idsList.push(value.id);
           });
           const reqBody = idsList;
-          await this.$api.health.removeSome(
+          console.log(reqBody, '删除数据');
+          await this.$api.projectList.removeSome(
             reqBody,
           );
           this.$message.success('操作成功');
@@ -482,20 +475,20 @@ export default {
         },
       );
     },
-    fetch() {
-      if (this.formData.startTime) {
-        this.formData.startTime = `${this.formData.startTime} 00:00:00`;
-      }
-      if (this.formData.endTime) {
-        this.formData.endTime = `${this.formData.endTime} 23:59:59`;
-      }
-      this.$api.health
-        .fetch(Object.assign(this.params, this.formData))
-        .then(({ data }) => {
-          this.total = data.data.total;
-          this.dataSource = data.data.data;
-        });
-    },
+    // fetch() {
+    //   if (this.formData.startTime) {
+    //     this.formData.startTime = `${this.formData.startTime} 00:00:00`;
+    //   }
+    //   if (this.formData.endTime) {
+    //     this.formData.endTime = `${this.formData.endTime} 23:59:59`;
+    //   }
+    //   this.$api.health
+    //     .fetch(Object.assign(this.params, this.formData))
+    //     .then(({ data }) => {
+    //       this.total = data.data.total;
+    //       this.dataSource = data.data.data;
+    //     });
+    // },
     getReport({ row }) {
       Object.assign(this.current, row);
       this.visible = true;

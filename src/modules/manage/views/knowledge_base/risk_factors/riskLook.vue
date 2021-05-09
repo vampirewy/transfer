@@ -12,10 +12,10 @@
     <div class="titless">查看危险因素</div>
     <!-- <div class="title">数据列表</div> -->
     <div class="lookPressure">
-      <div><span>危险分类：</span><span>{{data.orgCode}}</span></div>
-      <div><span>来源：</span><span>{{data.medicalType}}</span></div>
-      <div><span>标题：</span><span>{{data.orgCode}}</span></div>
-      <div><span>选项：</span><span>{{data.orgCode}}</span></div>
+      <div><span>危险分类：</span><span>{{data.riskType}}</span></div>
+      <div><span>来源：</span><span>{{data.riskFactor}}</span></div>
+      <div><span>标题：</span><span>{{data.riskTypeName}}</span></div>
+      <div><span>选项：</span><span>{{data.isSystem}}</span></div>
     </div>
     <!-- <div class="lookPressure">
       <div><span>就医科室：</span><span>{{data.department}}</span></div>
@@ -24,13 +24,13 @@
       <div><span>出院时间：</span><span>{{data.outDate}}</span></div>
     </div> -->
     <div class="lookPressure">
-      <div><span>危险因素：</span><span>是否健康</span></div>
-      <div><span>排序编号：</span><span>2</span></div>
+      <div><span>危险因素：</span><span>{{data.riskFactor}}</span></div>
+      <div><span>排序编号：</span><span>{{data.isSystem}}</span></div>
       <div></div>
       <div></div>
     </div>
     <div class="lookPressure">
-      <div><span>现病史：</span><span>适量减少肉类及肉制品摄入量</span></div>
+      <div><span>现病史：</span><span>{{data.advice}}</span></div>
     </div>
     <!-- <div class="lookPressure">
       <div><span>主诉：</span><span>{{data.complaint}}</span></div>
@@ -69,18 +69,18 @@ export default {
       xData: [],
       yData: [],
       data: {},
-      ids: this.$route.query.id,
+      ids: this.$route.params.id,
     };
   },
   mounted() {
-    // this.queryChartData();
-    // this.queryPageList();
-    this.$api.medicalHistoryInterface.medicalInfoDetail(this.ids).then((res) => {
-      console.log('sdfsfsdf');
-      const { data } = res;
-      this.data = data.data || {};
-      console.log(this.data, 'zzzzzzzzz');
-    });
+    if (this.ids) {
+      this.$api.projectList.riskListInfo(this.ids).then((res) => {
+        const { data } = res;
+        this.data = data.data;
+        console.log(this.data, '撒打算大的');
+        // this.form = Object.assign(this.form, data.data || {});
+      });
+    }
   },
   methods: {
     queryChartData() {
