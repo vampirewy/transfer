@@ -8,70 +8,51 @@
       label-width="90px"
       label-suffix="："
     >
-      <!-- <div class="basic-info-title">{{id ? '' : '新增'}}短信模版</div> -->
-      <!-- <div class="line"></div>
-      <div class="main-info-title">新增异常库</div> -->
-      <div class="form-title">
-        <div class="line"></div>
-        <h3 class="name">新增异常库</h3>
+      <div class="divRightTitleDiv">
+        <div class="divRightTitle" style="margin-top: 0">查看-跟踪记录
+          <div class="titleBiao"></div></div>
       </div>
       <el-row>
         <el-col :span="6">
-          <el-form-item label="模版名称" >
-            <el-input v-model="form.patientNo" placeholder="请输入" @input="replace"></el-input>
+          <el-form-item label="客户姓名：" >
+            <span>{{form.name | getResult}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="适用性别" >
-            <el-select v-model="form.result" placeholder="请选择当前状态">
-              <el-option
-                v-for="item in resultOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
+          <el-form-item label="性别" >
+            <span>{{form.gender | getResultGender}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="条件关系" >
-            <el-select v-model="form.result" placeholder="请选择当前状态" width="150">
-              <el-option
-                v-for="item in resultOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
+          <el-form-item label="体检编号：" >
+            <span>{{form.clientNo | getResult}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="组别" >
-            <el-input v-model="form.patientNo" placeholder="请输入" @input="replace"></el-input>
+          <el-form-item label="客户年龄：" >
+            <span>{{form.age | getResult}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="级别" >
-            <el-input v-model="form.patientNo" placeholder="请输入" @input="replace"></el-input>
+          <el-form-item label="手机号：" >
+            <span>{{form.mobile | getResult}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <div class="isEnabled">
-            <span>是否启用：</span>
-                <el-switch
-                  v-model="isstate"
-                  active-value="1"
-                  inactive-value="0"
-                  active-color="#13ce66"
-                  @change=changeStatus()
-                  >
-                </el-switch>
-          </div>
+          <el-form-item label="项目名称：" >
+            <span>{{form.projectName | getResult}}</span>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="项目结果：" >
+            <span :class="form.resultLevel === 1 ? 'warnRed' : 'warnYellow'">
+              {{form.result | getResult}}</span>
+          </el-form-item>
         </el-col>
       </el-row>
-      <div class="form-title">
-        <div class="line"></div>
-        <h3 class="name">详细内容</h3>
+      <div class="divRightTitleDiv">
+        <div class="divRightTitle" style="margin-top: 0">记录
+          <div class="titleBiao"></div></div>
       </div>
       <div>
         <div class="TabBars">
@@ -82,36 +63,28 @@
           </div>
         </div>
         <div class="interventionCon">
-          <div v-if="Tabactive == 0">
-            <div>
-              <minor-term></minor-term>
-            </div>
-          </div>
-          <div v-if="Tabactive == 1">
-            <div>
-              <minor-term></minor-term>
-            </div>
-          </div>
-          <div v-if="Tabactive == 2">
-            <div>
-              <minor-term></minor-term>
-            </div>
-          </div>
-          <div v-if="Tabactive == 3">
-            <div>
-              <minor-term></minor-term>
-            </div>
-          </div>
-          <div v-if="Tabactive == 4">
-            <div>
-              <minor-term></minor-term>
-            </div>
-          </div>
-          <div v-if="Tabactive == 5">
-            <div>
-              <minor-term></minor-term>
-            </div>
-          </div>
+          <el-row>
+            <el-col :span="6">
+              <el-form-item label="上报时间：" >
+                <span>2021-04-21 14:00</span>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="上报科室：" >
+                <span>内科</span>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="上报医生：" >
+                <span>陈良</span>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="上报备注：" >
+                <span>患者各项指标均已超出正常值，请注意观察，继续跟踪回访</span>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </div>
       </div>
       <!-- <div class="form-buttons">
@@ -121,8 +94,6 @@
        <div class="handle-btn mt30 mb30">
         <el-button class="reset-btn" size="small" @click="goBack"
           >返回</el-button>
-        <el-button class="add-btn" type="primary" size="small" @click="submit"
-          >保存</el-button>
       </div>
     </el-form>
   </div>
@@ -133,13 +104,11 @@
 import * as dayjs from 'dayjs';
 const isSameOrAfter = require('dayjs/plugin/isSameOrAfter');
 dayjs.extend(isSameOrAfter);
-import minorTerm from './components/minorTerm.vue';
 
 export default {
   name: 'MedicalHistoryForm',
   components: {
     // SelectUser,
-    minorTerm,
   },
   props: {
     detail: {
@@ -156,24 +125,23 @@ export default {
     return {
       popoverStatus: false,
       isstate: true,
-      form: {
-        clientInfoId: '',
-        hospital: '',
-        department: '',
-        medicalType: '',
-        patientNo: '',
-        inDate: '',
-        outDate: '',
-        doctorName: '',
-        result: '',
-        complaint: '主诉', // 主诉
-        hpi: '现病史', // 现病史
-        examination: '检查', // 检查
-        diagnosis: '诊断', // 诊断
-        therapy: '方案', // 方案
-        orgCode: '',
+      form: { id: '1',
+        clientNo: '2021015898745',
+        name: '吴白',
+        gender: 1,
+        mobile: '15899856354',
+        age: 30,
+        projectName: '肺部CT',
+        result: '疑似肺癌',
+        resultLevel: 1,
+        subjectName: '内科',
+        doctor: '陈良',
+        createdTime: '2021-04-27 14：00',
+        receiveName: '郑西',
+        receiveTime: '2021-04-29 19：20',
+        zongName: '否',
       },
-      tabbor: ['小项', '人员类别', '异常', '组合异常', '疾病评估', '体质辨识'],
+      tabbor: ['首次上报', '2021-04-21', '2021-04-15'],
       Tabactive: 0,
       tabIndex: 0,
       options: {
@@ -312,6 +280,9 @@ export default {
 
 <style lang="scss" scoped>
 .medical-history-form {
+  /deep/ .el-form-item{
+    margin-bottom: 10px;
+  }
     .form-title {
       display: flex;
       align-items: center;
@@ -441,24 +412,21 @@ export default {
     }
   }
   .interventionCon{
-    height: 430px;
+    min-height: 200px;
     width: 100%;
-    border: solid 1px #DDE0E6;
-    border-radius: 0px 8px 8px 8px;
+    border-top: solid 1px #DDE0E6;
     margin-bottom: 20px;
-    margin-top: -1px;
-    overflow-y: scroll;
+    padding-top: 25px;
   }
     .TabBars{
     display: flex;
     margin-top: 20px;
     // background: #F6F8FC;
     width: 100%;
-    margin-left: 10px;
     margin-left: 0px;
     overflow: hidden;
     padding-left: -5px;
-    border-left: solid 1px #EEF1F5;
+    border-left: solid 1px #DDE0E6;
     border-top-left-radius: 11px;
    .TabBarsNames{
     cursor: pointer;
@@ -480,7 +448,7 @@ export default {
   .TabBarsNames:after{
     content: '';
     display: block;
-    width: 25px;
+    width: 21px;
     height: 36px;
     position: absolute;
     -webkit-transform: skewX(23deg);
@@ -526,7 +494,7 @@ export default {
   .TabBarsName:after{
     content: '';
     display: block;
-    width: 25px;
+    width: 21px;
     height: 36px;
     position: absolute;
     -webkit-transform: skewX(23deg);
@@ -552,4 +520,16 @@ export default {
     border-left: solid 1px #DDE0E6;
   }
   }
+.warnRed{
+  border: 1px solid #F33D21;
+  border-radius: 50px;color: #F33D21;
+  font-size: 12px;
+  padding: 5px 12px;
+}
+.warnYellow{
+  border: 1px solid #FA912B;
+  border-radius: 50px;color: #FA912B;
+  font-size: 12px;
+  padding: 5px 12px;
+}
 </style>

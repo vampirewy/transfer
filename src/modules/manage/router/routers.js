@@ -29,7 +29,7 @@ import errorRoute from './route/error';
 import dietManage from './route/diet_manage';
 import knowledgeBase from './route/knowledge_base';
 import statistics from './route/statistics';
-
+import sunFollow from './route/sun_follow';
 export default [
   ...loginRoute,
   ...homeRoute,
@@ -47,4 +47,5 @@ export default [
   ...dietManage,
   ...knowledgeBase,
   ...statistics,
+  ...sunFollow,
 ];

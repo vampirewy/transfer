@@ -12,6 +12,7 @@ import userFollowDo from './user_follow_do';
 import interventionPlan from './intervention_plan';
 import userFollowRecord from './user_follow_record';
 import userFollowQuestionnaire from './user_follow_questionnaire';
+import sms from './sms';
 export default [
   {
     path: '/health_plan',
@@ -22,6 +23,6 @@ export default [
     },
     component: Main,
     children: [...interventionPlan, ...userFollowCreate, ...userFollowDo,
-      ...userFollowRecord, ...userFollowQuestionnaire],
+      ...userFollowRecord, ...userFollowQuestionnaire, ...sms],
   },
 ];
