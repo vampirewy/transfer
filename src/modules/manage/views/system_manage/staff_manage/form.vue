@@ -11,22 +11,29 @@
       <div class="title">{{detail ? '查看' : (id ? '编辑' : '新增')}}员工</div>
       <el-row>
         <el-col :span="6">
-          <el-form-item label="账号" prop="mobileNo">
-            <el-input
-              :disabled="detail"
-              v-model="staffForm.mobileNo"
-              @input="handleMobileChange"
-              :maxlength="11"
-              placeholder="请输入"></el-input>
+          <el-form-item label="用户角色" prop="roleId">
+            <el-select
+                    :disabled="detail"
+                    v-model="staffForm.roleId"
+                    placeholder="请选择"
+            >
+              <!--@change="roleChange"-->
+              <el-option
+                      v-for="item in newRoleOptions"
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id"
+              ></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="姓名" prop="realName">
+          <el-form-item label="用户姓名" prop="realName">
             <el-input
-              :disabled="detail"
-              type="text"
-              placeholder="请输入"
-              v-model="staffForm.realName"></el-input>
+                    :disabled="detail"
+                    type="text"
+                    placeholder="请输入"
+                    v-model="staffForm.realName"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -38,26 +45,50 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="角色" prop="roleId">
-            <el-select
-              :disabled="detail"
-              v-model="staffForm.roleId"
-              placeholder="请选择"
+          <el-form-item label="是否启用">
+            <el-switch
+                    v-model="staffForm.state"
+                    :active-value="1"
+                    :inactive-value="0"
+                    active-color="#13ce66"
             >
-              <!--@change="roleChange"-->
-              <el-option
-                v-for="item in newRoleOptions"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              ></el-option>
-            </el-select>
+            </el-switch>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="6">
-          <el-form-item label="数据范围" prop="dataRange">
+          <el-form-item label="登录名" prop="mobileNo">
+            <el-input
+                    :disabled="detail"
+                    v-model="staffForm.mobileNo"
+                    @input="handleMobileChange"
+                    :maxlength="11"
+                    placeholder="请输入"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6" v-if="!id">
+          <el-form-item label="登陆密码" prop="password">
+            <el-input
+                    :disabled="detail"
+                    type="text"
+                    placeholder="请输入"
+                    v-model="staffForm.password"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="手机号码" prop="contact">
+            <el-input
+                    :disabled="detail"
+                    type="text"
+                    placeholder="请输入"
+                    oninput="value = value.replace(/[^0-9]/g, '')"
+                    maxlength="11"
+                    v-model="staffForm.contact"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="管理范围" prop="dataRange">
             <el-select
               :disabled="detail"
               v-model="staffForm.dataRange"
@@ -120,7 +151,10 @@ export default {
         id: this.id,
         mobileNo: '',
         realName: '',
+        contact: '',
+        password: '',
         sex: '',
+        state: 1,
         roleId: '',
         dataRange: '',
         // menuIds: [],
@@ -130,6 +164,8 @@ export default {
         realName: [{ required: true, message: '姓名不能为空' }],
         sex: [{ required: true, message: '性别不能为空' }],
         roleId: [{ required: true, message: '角色不能为空' }],
+        password: [{ required: true, message: '登录不能为空' }],
+        contact: [{ required: true, message: '手机号码不能为空' }],
         dataRange: [{ required: true, message: '数据范围不能为空' }],
       },
       roleMenuIds: [],

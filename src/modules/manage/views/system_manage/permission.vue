@@ -182,7 +182,7 @@ export default {
         this.selectAll =
           checkedData.length > 0 &&
           Object.keys(nodes).length === checkedData.length;
-      });
+      }, 50);
     },
   },
 };

@@ -49,13 +49,25 @@
                   @click="add"
                   v-if="getAccess('role_list_add')"
           ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
+          <el-button
+                  class="btn-new btnDel"
+                  size="small"
+                  @click="handleSomeRemove"
+                  v-if="getAccess('role_list_delete')"
+          ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
         </div>
       </div>
-          <el-table :data="tableData" align="center">
+          <el-table :data="tableData" align="center" @selection-change="handleSelectionChange">
+            <el-table-column type="selection" width="40"></el-table-column>
             <el-table-column
               prop="name"
               label="角色名称"
               show-overflow-tooltip
+            ></el-table-column>
+            <el-table-column
+                    prop="memberNum"
+                    label="角色人数"
+                    show-overflow-tooltip
             ></el-table-column>
             <el-table-column
               prop="remark"
@@ -63,10 +75,20 @@
               show-overflow-tooltip
             ></el-table-column>
             <el-table-column
-              prop="memberNum"
-              label="成员数量"
-              show-overflow-tooltip
-            ></el-table-column>
+                    prop="state"
+                    label="是否启用"
+                    show-overflow-tooltip>
+              <template slot-scope="scope">
+                <el-switch
+                        v-model="scope.row.state "
+                        :active-value="1"
+                        :inactive-value="0"
+                        active-color="#13ce66"
+                        @change=changeStatus(scope.row)
+                >
+                </el-switch>
+              </template>
+            </el-table-column>
             <el-table-column
               prop="id"
               label="操作"
@@ -77,26 +99,26 @@
             >
               <template slot-scope="scope">
                 <el-button
+                        type="text"
+                        size="small"
+                        @click="edit(scope.row)"
+                        v-if="getAccess('role_list_edit')"
+                >编辑</el-button
+                >
+                <el-button
                   type="text"
                   size="small"
                   @click="detail(scope.row)"
                   v-if="getAccess('role_list_view')"
                   >查看</el-button
                 >
-                <el-button
-                  type="text"
-                  size="small"
-                  @click="edit(scope.row)"
-                  v-if="getAccess('role_list_edit')"
-                  >编辑</el-button
-                >
-                <el-button
+                <!--<el-button
                   type="text"
                   size="small"
                   @click="deleteRole(scope.row)"
                   v-if="getAccess('role_list_delete')"
                   >删除</el-button
-                >
+                >-->
               </template>
             </el-table-column>
           </el-table>
@@ -142,6 +164,7 @@ export default {
     return {
       viewIndex: 1, // 1:列表页，2:新增，3:编辑，4:详情
       name: '',
+      multipleSelection: [],
       tableData: [],
       total: 0,
       currentPage: 1,
@@ -153,6 +176,10 @@ export default {
     this.queryList();
   },
   methods: {
+    handleSelectionChange(val) {
+      // table组件选中事件,
+      this.multipleSelection = val;
+    },
     search() {
       this.currentPage = 1;
       this.queryList();
@@ -192,6 +219,52 @@ export default {
       this.viewIndex = 3;
       this.currentId = data.id;
     },
+    changeStatus(row) {
+      const setRow = row;
+      this.$api.systemManageInterface
+        .onoffRole({ id: setRow.id, state: setRow.state }).then(({ data }) => {
+          console.log(data);
+          if (data.rc === 0) {
+            this.$message.success('操作成功');
+          } else {
+            console.log(row.state);
+            row.state = row.state === 0 ? 1 : 0;
+            console.log(row.state);
+          }
+        });
+    },
+    /**
+     * 批量删除
+     */
+    handleSomeRemove() {
+      if (this.multipleSelection.length === 0) {
+        this.$message({
+          message: '请选择要删除的记录',
+          type: 'warning',
+        });
+        return;
+      }
+      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认删除！</span></div>`, '删除提示', {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        customClass: 'message-box-customize',
+        showClose: true,
+      }).then(
+        async () => {
+          const idsList = [];
+          this.multipleSelection.forEach((value) => {
+            idsList.push(value.id);
+          });
+          const reqBody = idsList;
+          await this.$api.systemManageInterface.deleteSomeRole(
+            reqBody,
+          );
+          this.$message.success('操作成功');
+          return this.queryList();
+        },
+      );
+    },
     deleteRole(data) {
       // 删除角色
       this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认删除?</span></div>`, '提示', {
@@ -225,9 +298,6 @@ export default {
 .el-pagination {
   margin: 20px 0 0;
   text-align: right;
-}
-/deep/ .el-table .el-table__header-wrapper th{
-  padding: 13px 0!important;
 }
 .role-page {
   .query-container {

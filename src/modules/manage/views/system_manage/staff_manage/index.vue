@@ -1,31 +1,6 @@
 <template>
   <div class="staff-page">
     <template v-if="viewIndex === 1">
-      <!--<query-page @reset="reset" @search="search">-->
-        <!--<template v-slot:left>
-          <search>
-            <div class="searchInputFormItem">
-              <el-input placeholder="输入手机号/姓名搜索" v-model="query"></el-input>
-              <span class="searchBtnImgSpan" @click="search">
-                <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
-              </span>
-            </div>
-          </search>
-          <query-filter>
-            <el-select v-model="status" placeholder="选择状态" clearable>
-              <el-option label="启用" :value="1"></el-option>
-              <el-option label="未启用" :value="0"></el-option>
-            </el-select>
-            <el-select v-model="role" placeholder="选择角色" clearable>
-              <el-option
-                v-for="item in roleOptions"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id">
-              </el-option>
-            </el-select>
-          </query-filter>
-        </template>-->
       <div class="divTop">
         <div class="divTitle">
           <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
@@ -40,13 +15,13 @@
                 <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
             </span>
             </div>
-            <div>
+            <!--<div>
               <span>是否启用：</span>
               <el-select v-model="status" placeholder="选择状态" clearable style="width: 150px">
                 <el-option label="启用" :value="1"></el-option>
                 <el-option label="未启用" :value="0"></el-option>
               </el-select>
-            </div>
+            </div>-->
             <div>
               <span>角色：</span>
               <el-select v-model="role" placeholder="选择角色" clearable style="width: 150px">
@@ -80,10 +55,22 @@
                   @click="add"
                   v-if="getAccess('staff_list_add')"
           ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
+          <el-button
+                  class="btn-new btnDel"
+                  size="small"
+                  @click="handleSomeRemove"
+          ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
+          <el-button
+                  class="btn-new btnDel"
+                  size="small"
+                  style="width: 110px"
+                  @click="resetPsd"
+          ><img src="@/assets/images/common/resetPsdBtn.png" />密码重置</el-button>
         </div>
       </div>
         <!--<template v-slot:right>-->
-          <el-table :data="tableData" align="center">
+          <el-table :data="tableData" align="center" @selection-change="handleSelectionChange">
+            <el-table-column type="selection" width="40"></el-table-column>
             <el-table-column
               prop="realName"
               label="姓名"
@@ -91,7 +78,7 @@
             ></el-table-column>
             <el-table-column
               prop="mobileNo"
-              label="手机号"
+              label="登录名"
               show-overflow-tooltip
             ></el-table-column>
             <el-table-column
@@ -100,19 +87,11 @@
               show-overflow-tooltip
             ></el-table-column>
             <el-table-column
-              prop="activated"
-              label="激活状态"
+              prop="dataRange"
+              label="管理范围"
               show-overflow-tooltip>
               <template slot-scope="scope">{{
-                scope.row.activated ? '激活' : '未激活'
-              }}</template>
-            </el-table-column>
-            <el-table-column
-              prop="state"
-              label="启用状态"
-              show-overflow-tooltip>
-              <template slot-scope="scope">{{
-                scope.row.state ? '启用' : '未启用'
+                scope.row.dataRange === 0 ? '全部' : '仅自己'
               }}</template>
             </el-table-column>
             <el-table-column
@@ -121,6 +100,21 @@
               width="200px"
               show-overflow-tooltip
             ></el-table-column>
+            <el-table-column
+                    prop="state"
+                    label="是否启用"
+                    show-overflow-tooltip>
+              <template slot-scope="scope">
+                <el-switch
+                        v-model="scope.row.state "
+                        :active-value="1"
+                        :inactive-value="0"
+                        active-color="#13ce66"
+                        @change=changeStatus(scope.row)
+                >
+                </el-switch>
+              </template>
+            </el-table-column>
             <el-table-column
               prop="id"
               label="操作"
@@ -144,14 +138,6 @@
                   v-if="getAccess('staff_list_edit')"
                   >编辑</el-button
                 >
-                <el-button
-                  type="text"
-                  size="small"
-                  @click="changeState(scope.row)"
-                  v-if="getAccess('staff_list_on_off')"
-                  :style="`color: ${scope.row.state ? '#FE2B2A' : '#31C529'}`"
-                  >{{ scope.row.state ? '禁用' : '启用' }}</el-button
-                >
               </template>
             </el-table-column>
           </el-table>
@@ -167,7 +153,16 @@
         <!--</template>
       </query-page>-->
     </template>
-    <template v-else-if="viewIndex !== 1">
+    <template v-else-if="viewIndex === 4">
+      <staff-detail
+              :roleOptions="roleOptions"
+              :detail="viewIndex === 4"
+              :id="currentId"
+              @cancel="viewIndex = 1"
+              @afterSubmit="handleAfterSubmit"
+      ></staff-detail>
+    </template>
+    <template v-else>
       <staff-form
         :roleOptions="roleOptions"
         :detail="viewIndex === 4"
@@ -181,20 +176,15 @@
 
 <script>
 import StaffForm from './form.vue';
-import QueryPage from '~/src/components/query_page/index.vue';
-import Search from '~/src/components/query_page/search.vue';
-import QueryFilter from '~/src/components/query_page/query_filter.vue';
-import OperateButton from '~/src/components/query_page/operate_button.vue';
+import StaffDetail from './detail.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
-
+import resetPsd from './reset_psd.vue';
 export default {
   name: 'Staff',
   components: {
     StaffForm,
-    QueryPage,
-    Search,
-    QueryFilter,
-    OperateButton,
+    StaffDetail,
+    resetPsd,
   },
   data() {
     return {
@@ -208,6 +198,7 @@ export default {
       pageSize: 15,
       currentId: '',
       roleOptions: [],
+      multipleSelection: [], // 当前页选中的数据
     };
   },
   activated() {
@@ -217,10 +208,16 @@ export default {
     this.queryList();
   },
   methods: {
+    handleSelectionChange(val) {
+      // table组件选中事件,
+      this.multipleSelection = val;
+    },
     queryRoleList() {
-      this.$api.systemManageInterface.roleList().then((res) => {
+      this.$api.systemManageInterface.rolePageList({ state: 1,
+        pageNo: 1,
+        pageSize: 999999 }).then((res) => {
         const { data } = res;
-        this.roleOptions = data.data || [];
+        this.roleOptions = data.data.data || [];
       });
     },
     search() {
@@ -266,23 +263,77 @@ export default {
       this.viewIndex = 3;
       this.currentId = data.id;
     },
-    changeState(data) {
-      // 启用 / 禁用
-      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>是否确认${data.state ? '禁用' : '启用'}?</span></div>`, '提示', {
+    /**
+     * 批量删除
+     */
+    handleSomeRemove() {
+      if (this.multipleSelection.length === 0) {
+        this.$message({
+          message: '请选择要删除的记录',
+          type: 'warning',
+        });
+        return;
+      }
+      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认删除！</span></div>`, '删除提示', {
         dangerouslyUseHTMLString: true,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         customClass: 'message-box-customize',
         showClose: true,
-      }).then(() => {
-        const state = data.state ? 0 : 1;
-        this.$api.systemManageInterface
-          .changeUserState(data.id, state)
-          .then(() => {
-            this.$message.success('操作成功');
-            this.queryList();
+      }).then(
+        async () => {
+          const idsList = [];
+          this.multipleSelection.forEach((value) => {
+            idsList.push(value.id);
           });
-      }).catch(() => {});
+          const reqBody = idsList;
+          await this.$api.systemManageInterface.deletedUser(
+            reqBody,
+          );
+          this.$message.success('操作成功');
+          return this.queryList();
+        },
+      );
+    },
+    /**
+     * 重置密码
+     */
+    resetPsd() {
+      if (this.multipleSelection.length === 0) {
+        this.$message({
+          message: '请选择要重置的用户',
+          type: 'warning',
+        });
+        return;
+      }
+      if (this.multipleSelection.length > 1) {
+        this.$message({
+          message: '请最多选择一条记录',
+          type: 'warning',
+        });
+        return;
+      }
+      const Row = { id: this.multipleSelection[0].id };
+      this.$jDynamic.show({
+        component: 'resetPsd',
+        data: {
+          modalTitle: '密码重置',
+          propsData: Row,
+          confirmfunc: async (value) => {
+            console.log(value);
+          },
+        },
+        render: h => h(resetPsd),
+      });
+    },
+    changeStatus(row) {
+      const setRow = row;
+      this.$api.systemManageInterface
+        .changeUserState(setRow.id, setRow.state).then(({ data }) => {
+          console.log(data);
+          this.$message.success('操作成功');
+          setRow.state = setRow.state;
+        });
     },
     handleCurrentChange(page) {
       this.currentPage = page;
@@ -301,9 +352,6 @@ export default {
 .el-pagination {
   margin: 20px 0 0;
   text-align: right;
-}
-/deep/ .el-table .el-table__header-wrapper th{
-  padding: 13px 0!important;
 }
 .staff-page {
   .query-container {
