@@ -279,7 +279,7 @@ import BptrendAdd from './bp_trend_add.vue';
 import BgtrendAdd from './bg_trend_add.vue';
 import OtherTest from './othertest.vue';
 import OthertestConfiguration from './othertestConfiguration.vue';
-import deleteIcon from '~/src/assets/images/message-box-delete@2x.png';
+import deleteIcon from '~/src/assets/images/deleteicon.png';
 import * as dayjs from 'dayjs';
 const isSameOrAfter = require('dayjs/plugin/isSameOrAfter');
 dayjs.extend(isSameOrAfter);

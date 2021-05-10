@@ -124,7 +124,7 @@ import {
   stateList,
   isMainList,
 } from '~/src/constant/base_data';
-import deleteIcon from '~/src/assets/images/message-box-delete@2x.png';
+import deleteIcon from '~/src/assets/images/deleteicon.png';
 
 export default {
   name: 'physical_project_list',

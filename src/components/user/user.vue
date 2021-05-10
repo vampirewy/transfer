@@ -1,6 +1,7 @@
 <template>
   <div class="user-avatar-dropdown">
-     <span class="avatarSpan" @click="handleClickAvatar">
+     <span class="avatarSpan">
+          <!--@click="handleClickAvatar"-->
         <el-avatar :src="doUserAvatar" size="medium" />
       </span>
       <el-dropdown @command="handleClick" v-if="showAdminButton">

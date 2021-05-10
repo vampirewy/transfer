@@ -884,8 +884,23 @@ a {
   .el-menu-item{
     &.is-active{
       &:before{
-        content: ''!important;
+        /*content: ''!important;*/
+        right: 0;
       }
+    }
+  }
+  .el-submenu{
+    &.is-active{
+        &:before{
+          width: 8px!important;
+          content: url("../../assets/images/body/chooseSidebarIcon.png")!important;
+          right: 0;
+          left: auto!important;
+          background-color: rgba(255,255,255,0)!important;
+          top: 16px;
+          position: absolute;
+          z-index: 1;
+        }
     }
   }
 }

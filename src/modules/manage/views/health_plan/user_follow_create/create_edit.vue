@@ -132,7 +132,7 @@ import InterventionTabMdl from './el_modal/intervention_tab_mdl.vue';
 import InterventionTabUserdetailMdl from './el_modal/intervention_tab_userdetail_mdl.vue';
 import InterventionAddMdl from './el_modal/intervention_add_mdl.vue';
 import InterventionSomecreateMdl from './el_modal/intervention_somecreate_mdl.vue';
-import deleteIcon from '~/src/assets/images/message-box-delete@2x.png';
+import deleteIcon from '~/src/assets/images/deleteicon.png';
 import InterventionDetail from './el_modal/intervention_detail.vue';
 
 export default {

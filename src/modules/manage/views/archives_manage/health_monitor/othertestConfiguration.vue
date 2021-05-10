@@ -201,7 +201,7 @@
 <script>
 import detail from '../components/detail.vue';
 import selectUser from '../components/select_user.vue';
-import deleteIcon from '~/src/assets/images/message-box-delete@2x.png';
+import deleteIcon from '~/src/assets/images/deleteicon.png';
 
 export default {
   name: 'medication_history_add',

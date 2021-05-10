@@ -164,7 +164,7 @@
 
 <script>
 import { genderList } from '~/src/constant/health_plan';
-import deleteIcon from '~/src/assets/images/message-box-delete@2x.png';
+import deleteIcon from '~/src/assets/images/deleteicon.png';
 
 export default {
   name: 'intervention_plan',
