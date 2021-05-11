@@ -35,8 +35,7 @@ export default [
         meta: {
           title: '团队报告',
           access: 'team_report',
-          hideInMenu: true,
-          hideInTag: true,
+          keepAlive: true,
         },
         component: () => import('../../views/team_report'),
       },
