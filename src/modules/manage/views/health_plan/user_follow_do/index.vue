@@ -422,7 +422,7 @@ import Search from '~/src/components/query_page/search.vue';
 import QueryFilter from '~/src/components/query_page/query_filter.vue';
 import OperateButton from '~/src/components/query_page/operate_button.vue';
 import ManagerList from '@/components/date_select/doctor_open.vue';// '@/components/user_health/manager_list.vue';
-import deleteIcon from '~/src/assets/images/message-box-delete@2x.png';
+import deleteIcon from '~/src/assets/images/deleteicon.png';
 import InterventionAddMdl from '../user_follow_create/el_modal/intervention_add_mdl.vue';
 import userOpen from '~/src/components/date_select/user_open.vue';
 export default {

@@ -230,7 +230,7 @@ import Setting from './setting.vue';
 import QueryFilter from '~/src/components/query_page/query_filter.vue';
 import Upload from '~/src/components/upload/index.vue';
 import OperateButton from '~/src/components/query_page/operate_button.vue';
-import deleteIcon from '~/src/assets/images/message-box-delete@2x.png';
+import deleteIcon from '~/src/assets/images/deleteicon.png';
 
 const cityOptions = [
   '星期一',

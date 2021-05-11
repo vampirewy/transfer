@@ -226,7 +226,7 @@ import doctorSelect from '@/components/doctor_select/index.vue';
 import QueryPage from '~/src/components/query_page/index.vue';
 import Search from '~/src/components/query_page/search.vue';
 import QueryFilter from '~/src/components/query_page/query_filter.vue';
-import deleteIcon from '~/src/assets/images/message-box-delete@2x.png';
+import deleteIcon from '~/src/assets/images/deleteicon.png';
 import * as dayjs from 'dayjs';
 
 export default {

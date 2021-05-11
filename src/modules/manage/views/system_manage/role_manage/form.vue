@@ -10,34 +10,49 @@
     >
       <div class="title">{{detail ? '查看' : (id ? '编辑' : '新增')}}角色</div>
       <el-row>
-        <el-col :span="12">
-          <el-form-item label="角色名称" prop="name">
-            <el-input
-              type="text"
-              :disabled="detail"
-              placeholder="请输入"
-              maxlength="30"
-              v-model="roleForm.name"></el-input>
+        <el-col :span="8">
+          <el-form-item label="角色名称" :prop="detail ? '' : 'name'">
+            <span v-if="detail">{{roleForm.name}}</span>
+            <el-input v-else
+                      type="text"
+                      placeholder="请输入"
+                      maxlength="30"
+                      v-model="roleForm.name"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="是否管理员" prop="adminFlag">
-            <el-radio-group :disabled="detail" v-model="roleForm.adminFlag">
+        <el-col :span="8">
+          <el-form-item label="是否管理员">
+            <span v-if="detail">{{roleForm.adminFlag | getResultState}}</span>
+            <el-radio-group v-else v-model="roleForm.adminFlag">
               <el-radio :label="1">是</el-radio>
               <el-radio :label="0">否</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
+        <el-col :span="6">
+          <el-form-item label="是否启用">
+            <span v-if="detail">{{roleForm.state | getResultState}}</span>
+            <el-switch
+                    v-else
+                    v-model="roleForm.state"
+                    :active-value="1"
+                    :inactive-value="0"
+                    active-color="#13ce66"
+            >
+            </el-switch>
+          </el-form-item>
+        </el-col>
       </el-row>
-      <el-form-item label="角色描述" prop="remark">
+      <el-form-item label="角色描述">
+        <span v-if="detail">{{roleForm.remark}}</span>
         <el-input
-          :disabled="detail"
-          type="textarea"
-          v-model="roleForm.remark"
-          :rows="4"
-          :placeholder="detail ? '' : '请输入'"
-          maxlength="300"
-          show-word-limit
+                v-else
+                type="textarea"
+                v-model="roleForm.remark"
+                :rows="4"
+                :placeholder="detail ? '' : '请输入'"
+                maxlength="300"
+                show-word-limit
         ></el-input>
       </el-form-item>
       <div class="title permission-title">权限管理</div>
@@ -87,6 +102,7 @@ export default {
         id: this.id,
         name: '',
         adminFlag: 1,
+        state: 1,
         remark: '',
         menuIds: [],
       },
@@ -120,13 +136,14 @@ export default {
     saveRole() {
       // 保存角色
       const fn = this.roleForm.id ? 'editRole' : 'addRole';
-      const { id, name, remark, adminFlag, menuIds } = this.roleForm;
+      const { id, name, remark, adminFlag, menuIds, state } = this.roleForm;
       this.$api.systemManageInterface[fn]({
         id,
         name,
         remark,
         adminFlag,
         menuIds,
+        state,
       }).then(() => {
         this.$message.success('操作成功');
         this.$emit('afterSubmit');

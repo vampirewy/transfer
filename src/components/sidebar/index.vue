@@ -55,6 +55,7 @@ export default {
           ReturnPath = path;
         }
       }
+      // 和子集的:index  对应到就选中了
       return ReturnPath;
     },
     showLogo() {

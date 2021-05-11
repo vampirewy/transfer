@@ -167,9 +167,9 @@ a {
       text-align: center;
       cursor: pointer;
 
-      &:hover {
+      /*&:hover {
         background: #24499D;
-      }
+      }*/
 
       .searchBtnImg {
         width: 16px;
@@ -202,9 +202,9 @@ a {
     text-align: center;
     cursor: pointer;
 
-    &:hover {
+    /*&:hover {
       background: #24499D;
-    }
+    }*/
 
     .searchBtnImg {
       width: 16px;
@@ -870,6 +870,39 @@ a {
 
 .el-dialog__title {
   font-weight: 600;
+}
+.el-menu--popup-right-start{
+  .el-menu-item{
+    &.is-active{
+      &:before{
+        content: ''!important;
+      }
+    }
+  }
+}
+.el-menu--collapse{
+  .el-menu-item{
+    &.is-active{
+      &:before{
+        /*content: ''!important;*/
+        right: 0;
+      }
+    }
+  }
+  .el-submenu{
+    &.is-active{
+        &:before{
+          width: 8px!important;
+          content: url("../../assets/images/body/chooseSidebarIcon.png")!important;
+          right: 0;
+          left: auto!important;
+          background-color: rgba(255,255,255,0)!important;
+          top: 16px;
+          position: absolute;
+          z-index: 1;
+        }
+    }
+  }
 }
 .lookPressure{
   .lookPressureTitle{
