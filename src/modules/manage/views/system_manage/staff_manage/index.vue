@@ -59,12 +59,14 @@
                   class="btn-new btnDel"
                   size="small"
                   @click="handleSomeRemove"
+                  v-if="getAccess('staff_list_del')"
           ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
           <el-button
                   class="btn-new btnDel"
                   size="small"
                   style="width: 110px"
                   @click="resetPsd"
+                  v-if="getAccess('staff_list_update_password')"
           ><img src="@/assets/images/common/resetPsdBtn.png" />密码重置</el-button>
         </div>
       </div>
@@ -119,8 +121,7 @@
               prop="id"
               label="操作"
               width="160px"
-              v-if="getAccess('staff_list_view') || getAccess('staff_list_edit') ||
-                  getAccess('staff_list_on_off')"
+              v-if="getAccess('staff_list_view') || getAccess('staff_list_edit')"
             >
               <template slot-scope="scope">
                 <el-button

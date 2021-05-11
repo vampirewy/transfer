@@ -17,31 +17,31 @@
           <el-row>
             <el-col :span="12">
             <el-form-item label="计费条数：">
-              {{form.gender}}
+              {{form.gender | getResult}}
             </el-form-item>
             </el-col>
             <el-col :span="12">
             <el-form-item label="手机号码：">
-              {{form.mobile}}
+              {{form.mobile | getResult}}
             </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               <el-form-item label="创建时间：">
-                {{form.gender}}
+                {{form.createdTime | getResult}}
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="创建人：">
-                {{form.gender}}
+                {{form.createdName | getResult}}
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="24">
               <el-form-item label="短信内容：" class="desc">
-                {{form.gender}}
+                {{form.content | getResult}}
               </el-form-item>
             </el-col>
           </el-row>

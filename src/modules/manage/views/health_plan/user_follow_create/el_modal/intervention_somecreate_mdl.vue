@@ -106,12 +106,15 @@ export default {
       tableData: [],
       form: {
         interventionTpl: [],
+        planDoctor: '',
+        planDoctorName: '',
       },
       total: 0,
       pageNo: 1,
     };
   },
   mounted() {
+    this.getUserInfo();
     this.getVuexUserList();// 获取干预模板名
   },
   methods: {
@@ -134,6 +137,12 @@ export default {
       this.openCheckVisible = false;
       this.$refs.abnormalPopover.doClose();
     },
+    async getUserInfo() {
+      const res = await this.$api.userManagerInterface.getUserInfo();
+      const { data } = res.data;
+      this.form.planDoctor = data.userId;
+      this.form.planDoctorName = data.realName;
+    },
     /**
      * 获取干预模板计划列表
      * @return {Promise<void>}
@@ -155,8 +164,8 @@ export default {
           it.hours || '00'
         }:${it.minute || '00'}:00`; */
         t.planTitle = t.title;
-        t.planDoctor = this.$store.state.user.userId;
-        t.planDoctorName = this.$store.state.user.userName;
+        t.planDoctor = this.form.planDoctor; // this.$store.state.user.userId;
+        t.planDoctorName = this.form.planDoctorName; // this.$store.state.user.userName;
         t.planTime = t.planDate;
         t.templateId = id; // 把所对应的父级模板绑定进去
       });

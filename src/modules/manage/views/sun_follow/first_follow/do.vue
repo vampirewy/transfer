@@ -12,10 +12,10 @@
               </div>
             </div>
             <div class="interventionCon">
-              <follow-record v-if="Tabactive === 0"></follow-record>
+              <!--<follow-record v-if="Tabactive === 0"></follow-record>
               <physical-info v-if="Tabactive === 1"></physical-info>
               <sun-record v-if="Tabactive === 2"></sun-record>
-              <medical-record v-if="Tabactive === 3"></medical-record>
+              <medical-record v-if="Tabactive === 3"></medical-record>-->
             </div>
           </div>
       </el-col>
@@ -242,7 +242,7 @@ export default {
         postSms: 1,
         smsDesc: '',
         afterDay: 10,
-        nextFollowTime: new Date(new Date().getTime() + (8.64e7 * 7)),
+        nextFollowTime: new Date(new Date().getTime() + (8.64e7 * 10)),
         followWay: '',
         followDesc: '',
       },

@@ -868,6 +868,7 @@ export default {
     }
     .el-input__suffix{
       width: 25px;
+      right: 5px;
     }
   }
   /deep/ .el-input.is-disabled .el-input__inner{

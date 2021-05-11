@@ -30,6 +30,7 @@ import dietManage from './route/diet_manage';
 import knowledgeBase from './route/knowledge_base';
 import statistics from './route/statistics';
 import sunFollow from './route/sun_follow';
+import inhospitalChange from './route/in_hospital_change';
 export default [
   ...loginRoute,
   ...homeRoute,
@@ -48,4 +49,5 @@ export default [
   ...knowledgeBase,
   ...statistics,
   ...sunFollow,
+  ...inhospitalChange,
 ];

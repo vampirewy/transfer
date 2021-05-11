@@ -195,8 +195,9 @@ export default {
           this.getDetailTogether();
         }
         if (this.addType === '2') {
-          this.form.planDoctor = this.$store.state.user.userId;
-          this.form.planDoctorName = this.$store.state.user.userName;
+          this.getUserInfo(); // 获取用户id和name，原本是存储，现在接口实时请求
+          // this.form.planDoctor = this.$store.state.user.userId;
+          // this.form.planDoctorName = this.$store.state.user.userName;
         }
         if (this.editType === 2) { // 待随访计划直接编辑，不让修改干预人;
           this.form.planDoctor = this.propsData.planUserId;
@@ -211,6 +212,12 @@ export default {
           this.form.templateQuestionName = data.templateQuestionName;
         }
       });
+    },
+    async getUserInfo() {
+      const res = await this.$api.userManagerInterface.getUserInfo();
+      const { data } = res.data;
+      this.form.planDoctor = data.userId;
+      this.form.planDoctorName = data.realName;
     },
     // 关闭弹窗选择列表 push数组
     handlePopoperClose(data) {

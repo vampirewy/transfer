@@ -9,17 +9,17 @@
 const build = {
     static_url: '/', // 静态资源路径
     common_url: '/api',
-    upload_url: '/uploadFiles/'
+    upload_url: 'http://182.61.43.226:9002/', //'/uploadFiles/'
 };
 const build_dev = {
     static_url: '/', // 静态资源路径
     common_url: '/api',
-    upload_url: '/uploadFiles/'
+    upload_url: 'http://182.61.43.226:9002/', //'/uploadFiles/'
 };
 const dev = {
     static_url: '/', // 静态资源路径
     common_url: '/api',
-    upload_url: '/uploadFiles/'
+    upload_url: 'http://182.61.43.226:9002/', //'/uploadFiles/'
 };
 
 module.exports = { build, build_dev, dev };

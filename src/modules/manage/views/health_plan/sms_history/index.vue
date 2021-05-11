@@ -63,20 +63,20 @@
         <div>
           <span>发送日期：</span>
           <el-date-picker
-                  v-model="form.startCreatedTime"
+                  v-model="form.minSendDate"
                   type="date"
                   value-format="yyyy-MM-dd"
-                  :max-date="form.endCreatedTime"
+                  :max-date="form.maxSendDate"
                   placeholder="开始时间"
                   style="width: 120px"
           >
           </el-date-picker>
           <span class="timing">-</span>
           <el-date-picker
-                  v-model="form.endCreatedTime"
+                  v-model="form.maxSendDate"
                   type="date"
                   value-format="yyyy-MM-dd"
-                  :min-date="form.startCreatedTime"
+                  :min-date="form.minSendDate"
                   placeholder="结束时间"
                   style="width: 120px"
           >
@@ -92,7 +92,6 @@
                 size="small"
                 style="margin: 16px 0"
                 @click="handleSomeRemove"
-                v-if="getAccess('wait_visit_plan_batch_delete')"
         ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
       </div>
     </div>
@@ -138,14 +137,14 @@
                 <span>{{ scope.row.gridName | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="workUnitName" label="短信内容">
+            <el-table-column prop="content" label="短信内容">
               <template slot-scope="scope">
-                <span>{{ scope.row.workUnitName | getResult}}</span>
+                <span>{{ scope.row.content | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="executeTime" label="发送日期" width="120px" show-overflow-tooltip>
+            <el-table-column prop="sendDate" label="发送日期" width="120px" show-overflow-tooltip>
               <template slot-scope="scope">
-          <span>{{ scope.row.planDate | getResultDate}}</span>
+          <span>{{ scope.row.sendDate | getResultDate}}</span>
               </template>
             </el-table-column>
             <el-table-column label="操作" width="100">
@@ -170,17 +169,10 @@
           >
           </el-pagination>
         </div>
-      <!--</template>
-    </query-page>-->
   </div>
 </template>
 
 <script>
-import { genderList, executeStateList } from '~/src/constant/health_plan';
-import QueryPage from '~/src/components/query_page/index.vue';
-import Search from '~/src/components/query_page/search.vue';
-import QueryFilter from '~/src/components/query_page/query_filter.vue';
-import OperateButton from '~/src/components/query_page/operate_button.vue';
 import ManagerList from '@/components/date_select/doctor_open.vue';// '@/components/user_health/manager_list.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
 import detail from './el_modal/detail.vue';
@@ -188,10 +180,6 @@ import userOpen from '~/src/components/date_select/user_open.vue';
 export default {
   name: 'sms_history',
   components: {
-    QueryPage,
-    Search,
-    QueryFilter,
-    OperateButton,
     ManagerList,
     detail,
     userOpen,
@@ -202,29 +190,11 @@ export default {
       form: {
         keywords: '', // 关键字
         gender: '', // 性别
-        workUnitName: '', // 企业单位
-        planUserId: '',
-        planDate: '',
-        planWay: '', // 随访方式
-        startTime: '',
-        endTime: '',
-        executeState: '2', // 状态
         gridId: '', // 客户类型
-        tag: '',
-        startPlanTime: '',
-        endPlanTime: '',
-        startCreatedTime: '',
-        endCreatedTime: '',
-        planUserIdList: [],
-        createdByList: [],
-        genderList,
-        executeStateList,
+        mobile: '',
+        minSendDate: '',
+        maxSendDate: '',
       },
-      selectPlanuser: [],
-      planUserName: '',
-      planuserModalVisible: false, // 干预人人列表弹窗
-      createUserName: '',
-      createUserModalVisible: false, // 创建人弹窗
       gridList: [], // 人员类别下拉框
       planWayList: [], // 随访形式下拉框
       table: {
@@ -234,22 +204,6 @@ export default {
         pageSize: 15,
       },
       multipleSelection: [], // 当前页选中的数据
-      pickerStartTime: {
-        disabledDate: (time) => {
-          if (this.form.endTime) {
-            const endTime = new Date(this.form.endTime);
-            return time.getTime() > new Date(endTime).getTime() - (3600 * 1000 * 23 * 1);
-          }
-        },
-      },
-      pickerEndTime: {
-        disabledDate: (time) => {
-          if (this.form.startTime) {
-            const startTime = new Date(this.form.startTime);
-            return time.getTime() < new Date(startTime).getTime() - (3600 * 1000 * 23 * 1);
-          }
-        },
-      },
     };
   },
   activated() {
@@ -265,87 +219,14 @@ export default {
       this.getPlanWayList();
       this.getGridList(); // 获取人员列类别
     },
-    // 关闭创建人列表
-    handleCreateUserSelectChange(dataList) {
-      this.$refs.createUserPopover.doClose();
-      this.createUserModalVisible = false;
-      const list = [];
-      const listId = [];
-      dataList.forEach((value) => {
-        list.push(value.realName);
-        listId.push(value.id);
-      });
-      this.form.createdByList = listId;
-      this.createUserName = list.join(',');
-      /* if (this.selectAbnormal.length > 0) {
-        this.onAbnormalChange(this.selectAbnormal);
-        this.selectAbnormal = [];
-      } */
-    },
-    handleCreateUserClose() {
-      this.createUserModalVisible = false;
-      this.$refs.createUserPopover.doClose();
-    },
-    // 关闭干预人列表
-    handlePlanuserSelectChange(dataList) {
-      this.$refs.userPopover.doClose();
-      this.planuserModalVisible = false;
-      const list = [];
-      const listId = [];
-      dataList.forEach((value) => {
-        list.push(value.realName);
-        listId.push(value.id);
-      });
-      console.log(dataList);
-      this.form.planUserIdList = listId;
-      this.planUserName = list.join(',');
-      /* if (this.selectAbnormal.length > 0) {
-        this.onAbnormalChange(this.selectAbnormal);
-        this.selectAbnormal = [];
-      } */
-    },
-    handlePlanuserClose() {
-      this.planuserModalVisible = false;
-      this.$refs.userPopover.doClose();
-    },
-    getPlanUserSelectedList() {
-      const selectedList = [];
-      this.form.planUserIdList.forEach((val) => {
-        selectedList.push({ id: val });
-      });
-      return selectedList;
-    },
-    // 关闭干预人列表
-    /* handlePlanuserClose(data) {
-      this.$refs.userPopover.doClose();
-      this.planuserModalVisible = false;
-      this.form.planUserId = data.id;
-      this.form.planUserName = data.realName;
-    },*/
     /**
      * 获取随访列表
      * @return {Promise<void>}
      */
     async getList() {
-      const reqBody = {
-        // executeState: this.form.executeState,
-        // overdueExecuteState: 3,
-        // workbenchSort: 'workbenchSort',
-        keywords: this.form.keywords,
-        gender: this.form.gender,
-        gridId: this.form.gridId,
-        planWay: this.form.planWay,
-        tag: this.form.tag,
-        startPlanTime: this.form.startPlanTime,
-        endPlanTime: this.form.endPlanTime,
-        startCreatedTime: this.form.startCreatedTime,
-        endCreatedTime: this.form.endCreatedTime,
-        planUserIdList: this.form.planUserIdList,
-        createdByList: this.form.createdByList,
-        pageNo: this.table.currentPage,
-        pageSize: this.table.pageSize,
-      };
-      const res = await this.$api.userFollowInterface.getIntervenePlanListPage(
+      const reqBody = Object.assign({ pageNo: this.table.currentPage,
+        pageSize: this.table.pageSize }, this.form);
+      const res = await this.$api.userManagerInterface.getMsgRecordList(
         reqBody,
       );
       const { data } = res.data;
@@ -378,11 +259,6 @@ export default {
     async getGridList() {
       const res = await this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
       const { data } = res.data;
-      /* const list = data.map((it) => {
-         const { id, name } = it;
-         return { id, name };
-       }); */
-      // list.unshift({ name: '全部', value: '' });
       this.gridList = data.data;
     },
     /**
@@ -426,7 +302,7 @@ export default {
             idsList.push(value.id);
           });
           const reqBody = idsList;
-          await this.$api.userFollowInterface.deleteSomeFollowplanDel(
+          await this.$api.userManagerInterface.deleteMsgRecord(
             reqBody,
           );
           this.$message.success('操作成功');
@@ -447,15 +323,6 @@ export default {
     onReset() {
       Object.assign(this.$data, this.$options.data());
       this.table.currentPage = 1;
-      /* this.form.keywords = '';
-      this.form.gender = '';
-      this.form.workUnitName = '';
-      this.form.gridId = '';
-      this.form.startTime = '';
-      this.form.endTime = '';
-      this.form.planWay = '';
-      this.form.planUserId = '';
-      this.form.planUserName = '';*/
       this.onLoad();
     },
     /**
@@ -472,42 +339,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  /deep/ .select-user-trigger {
-    line-height: 37px;
-    input{
-      border: 1px solid #DDE0E6!important;
-      background-color: white!important;
-    }
-    input, i {
-      cursor: pointer;
-    }
-    &.disabled {
-      input, i {
-        cursor: not-allowed;
-      }
-    }
-    .el-input__suffix{
-      width: 25px;
-    }
-  }
-  /deep/ .el-input.is-disabled .el-input__inner{
-    cursor: pointer;
-    background-color: white!important;
-  }
-  .user-follow {
-    .tool-button {
-      margin-bottom: 16px;
-    }
-    .search-btn {
-      float: right;
-      margin-right: 0;
-    }
-    /*.el-button + .el-button {
-      margin-left: 8px;
-    }*/
-    .el-pagination {
-      padding: 10px 0;
-      text-align: right;
-    }
-  }
+
 </style>

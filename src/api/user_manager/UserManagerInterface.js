@@ -8,7 +8,10 @@ class UserManagerInterface extends BaseModule {
   getDetail(userId) {
     return this.get(`/client_info/get_client_info_detail/${userId}`);
   }
-
+  // 获取当前登陆者信息
+  getUserInfo() {
+    return this.get('/user/info');
+  }
   getSystemParamByCode(code) {
     return this.get(`/system_param_value/${code}`);
   }
@@ -81,6 +84,18 @@ class UserManagerInterface extends BaseModule {
   //     params: data,
   //   });
   // }
+  // 短信平台 - 客户列表
+  getclientMsgList(params = {}) {
+    return this.post('/client_info/get_client_info_create_msg_list_page', params);
+  }
+  // 短信记录
+  getMsgRecordList(params = {}) {
+    return this.post('/message_record/page_list', params);
+  }
+  // 批量删除短信记录
+  deleteMsgRecord(params = {}) {
+    return this.post('/message_record/batch_delete', params);
+  }
 }
 
 export default new UserManagerInterface();
