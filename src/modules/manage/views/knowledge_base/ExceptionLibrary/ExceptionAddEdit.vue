@@ -116,7 +116,7 @@
         </el-col> -->
         <el-col :span="6">
           <el-form-item label="异常名称" >
-            <el-input v-model="form.clientInfoId" placeholder="请输入" @input="replace"></el-input>
+            <el-input v-model="form.clientInfoId" placeholder="请输入" ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -133,14 +133,17 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="性别限制" >
-            <el-select v-model="form.department" placeholder="请选择当前状态">
+            <el-select v-model="form.gender" placeholder="请选择当前状态">
               <el-option label="男" value="1" key="1"></el-option>
               <el-option label="女" value="2" key="2"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="ICD10：" >
+          <el-form-item label="ICD10" >
+            <el-input v-model="form.medicalType" placeholder="请输入"></el-input>
+          </el-form-item>
+          <!-- <el-form-item label="ICD10：" >
             <el-select v-model="form.medicalType" placeholder="请选择当前状态">
               <el-option
                 v-for="item in resultOptions"
@@ -149,7 +152,7 @@
                 :value="item.paramValue"
               ></el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
         </el-col>
         <el-col :span="6">
           <el-form-item label="重要性" >
@@ -177,6 +180,9 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="推荐科室" >
+            <el-input v-model="form.doctorNameId" placeholder="请输入" ></el-input>
+          </el-form-item>
+          <!-- <el-form-item label="推荐科室" >
             <el-select v-model="doctorNameId" placeholder="请选择当前状态">
               <el-option
                 v-for="item in doctorName"
@@ -185,10 +191,29 @@
                 :value="item"
               ></el-option>
             </el-select>
-          </el-form-item>
+            <el-select
+                v-model="value"
+                multiple
+                filterable
+                remote
+                reserve-keyword
+                placeholder="请输入关键词"
+                :remote-method="remoteMethod"
+                :loading="loading">
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+          </el-form-item> -->
         </el-col>
         <el-col :span="6">
           <el-form-item label="推荐检查" >
+            <el-input v-model="form.RecommendInspectsId" placeholder="请输入" ></el-input>
+          </el-form-item>
+          <!-- <el-form-item label="推荐检查" >
             <el-select v-model="RecommendInspectsId" placeholder="请选择当前状态">
               <el-option
                 v-for="item in RecommendInspects"
@@ -197,7 +222,7 @@
                 :value="item"
               ></el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
         </el-col>
         <!-- <el-col :span="6">
           <el-form-item label="检查" prop="examination">
@@ -237,7 +262,7 @@
           <el-form-item label="建议" >
             <el-input
               type="textarea"
-              v-model="form.hpi"
+              v-model="form.Suggestion"
               :rows="5"
               placeholder="请输入"
               :maxlength="4000"
@@ -288,7 +313,7 @@ export default {
       form: {
         clientInfoId: '', // 异常名称
         hospital: '', // 异常类型
-        department: '', // 性别限制
+        gender: '', // 性别限制
         medicalType: '', // ICD10：
         patientNo: '',
         inDate: '', // 重要性
@@ -305,7 +330,7 @@ export default {
       organTypeList: [],
       dangerLevelList: [],
       medicalLimitList: [],
-      options: {
+      optionss: {
         inDate: {
           disabledDate: (cur) => {
             // eslint-disable-next-line no-underscore-dangle
@@ -356,6 +381,11 @@ export default {
       ],
       currentUser: {},
       ids: this.$route.query.id,
+      options: [],
+      value: [],
+      list: [],
+      loading: false,
+      states: ['Alabama', 'Alaska'],
     };
   },
   mounted() {
@@ -398,6 +428,8 @@ export default {
       this.form.abnormalType = data.abnormalType;
 
       this.form.abnormalAlias = data.abnormalAlias.map(it => ({ name: it }));
+      this.list = this.states.map(item => ({ value: `value:${item}`, label: `label:${item}` }));
+      console.log(this.list, '123123');
     },
     async listRecommendInspect() {
       const { data } = await this.$api.unusualListInterface.RecommendInspect();
@@ -429,6 +461,19 @@ export default {
       this.medicalLimitList = data.data;
       // this.form.organTypeList
     },
+    remoteMethod(query) {
+      if (query !== '') {
+        this.loading = true;
+        setTimeout(() => {
+          this.loading = false;
+          this.options = this.list.filter(item =>
+            item.label.toLowerCase().indexOf(query.toLowerCase()) > -1,
+          );
+        }, 200);
+      } else {
+        this.options = [];
+      }
+    },
     handleStartDateChange() {
       if (this.form.medicalType === 1 && this.form.inDate) {
         this.form.outDate = this.form.inDate;
@@ -450,27 +495,23 @@ export default {
       this.$refs.form.validate((valid) => {
         if (valid) {
           const params = {
-            clientInfoId: this.form.clientInfoId,
-            medicalType: this.form.medicalType,
-            hospital: this.form.hospital,
-            patientNo: this.form.patientNo,
-            inDate: this.form.inDate,
-            outDate: this.form.outDate,
-            doctorName: this.form.doctorName,
-            department: this.form.department,
-            result: this.form.result,
-            complaint: this.form.complaint,
-            examination: this.form.examination,
-            diagnosis: this.form.diagnosis,
-            therapy: this.form.therapy,
-            hpi: this.form.hpi,
-            orgCode: this.form.orgCode,
-            organId: this.form.organId,
+            abnormalName: this.form.clientInfoId,
+            abnormalType: this.form.hospital,
+            gender: this.form.gender,
+            dangerLevel: this.form.inDate,
+            medicalLimit: this.form.outDate,
+            medicalExplain: this.form.interpret,
+            commonCause: this.form.Reason,
+            advice: this.form.Suggestion,
+            abnormalAlias: [this.form.clientInfoId],
+            recommendInspectName: this.form.RecommendInspectsId,
+            recommendDepartmentName: this.form.doctorNameId,
+            icdCode: this.form.medicalType,
           };
           if (this.id) {
             params.id = this.id;
           }
-          this.$api.medicalHistoryInterface.medicalInfo(params).then((res) => {
+          this.$api.unusualListInterface.saveOrganAbnormal(params).then((res) => {
             const { data } = res;
             if (data.success) {
               this.$message.success('操作成功');

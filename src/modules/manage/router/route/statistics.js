@@ -30,6 +30,16 @@ export default [
         component: () => import('../../views/question_statistics'),
       },
       {
+        path: '/stats_test',
+        name: 'stats_test',
+        meta: {
+          title: '体检基础统计',
+          access: 'stats_test',
+          keepAlive: true,
+        },
+        component: () => import('../../views/question_statistics/test'),
+      },
+      {
         path: '/work_statistics',
         name: 'work_statistics',
         meta: {

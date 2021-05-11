@@ -26,20 +26,27 @@
     </div>
     </div>
     <el-table :data="tableData" @row-click="rowClick" class="openTable">
-      <!-- <el-table-column width="80">
+      <el-table-column width="80">
         <template slot-scope="scope">
           <el-radio v-model="selectRadio" :label="scope.row.id">&nbsp;</el-radio>
         </template>
+      </el-table-column>
+      <!-- <el-table-column type="selection" width="40" align="center"></el-table-column> -->
+      <!-- <el-table-column label="" width="40">
+        <template scope="scope">
+           <el-radio
+           :label="scope.$index"
+           v-model="radio"  style="color: #fff;padding-left: 10px; margin-right: -25px;"></el-radio>
+        </template>
       </el-table-column> -->
-      <el-table-column type="selection" width="40" align="center"></el-table-column>
-      <el-table-column prop="name" label="姓名"></el-table-column>
-      <el-table-column prop="unit" label="单位"></el-table-column>
+      <el-table-column prop="abnormalName" label="异常名称"></el-table-column>
+      <!-- <el-table-column prop="unit" label="单位"></el-table-column>
       <el-table-column prop="intro" label="内容">
-        <!-- <template slot-scope="scope">
+        <template slot-scope="scope">
           <span v-if="scope.row.gender === 1">男</span>
           <span v-if="scope.row.gender === 2">女</span>
-        </template> -->
-      </el-table-column>
+        </template>
+      </el-table-column> -->
     </el-table>
     <el-pagination
       background
@@ -106,7 +113,7 @@ export default {
 
     },
     async queryList() {
-      const res = await this.$api.healthMonitorInterface.healthDataItemGetAll({
+      const res = await this.$api.unusualListInterface.listPage({
         projectName: this.keyword,
         pageNo: this.currentPage,
         pageSize: this.pageSize,

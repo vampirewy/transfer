@@ -21,14 +21,24 @@
     <div>
       <div><span></span><span style="color:#333333;font-size:16px">项目信息</span></div>
       <div class="lookPressure">
-        <div><span>项目名称：</span><span>123123</span></div>
-        <div><span>科室名称：</span><span>123123</span></div>
+        <div><span>项目名称：</span><span>{{expandData.itemName}}</span></div>
+        <div><span>科室名称：</span><span>{{expandData.sectionName}}</span></div>
       </div>
       <div class="lookPressure">
-        <div><span>适宜性别：</span><span>123123</span></div>
+        <div><span>适宜性别：</span><span>{{expandData.genderTxt}}</span></div>
         <div><span>正常参考：</span><span>123123</span></div>
       </div>
       <div><span></span><span style="color:#333333;font-size:16px">匹配</span></div>
+      <!-- <div class="row" style="display: flex">
+          <el-form-item label="项目匹配：" prop="hpi">
+              <el-input
+              v-model="detectioninfoSource.clientName"
+              placeholder="请输入" style="width:300px"></el-input>
+          </el-form-item>
+          <div class="othertest" >
+              <div @click="othertestAdd">添加</div>
+          </div>
+        </div> -->
       <div class="row" style="display: flex">
           <el-form-item label="检测项目：" prop="clientName" style="background:#ffffff">
             <el-popover
@@ -46,9 +56,8 @@
               <el-input
                 :class="`select-user-trigger ${id ? 'disabled' : ''}`"
                 slot="reference"
-                disabled
                 v-model="detectioninfoSource.clientName"
-                placeholder="请选择(可多选)"
+                placeholder="请选择"
                 style="width:300px"
               >
                 <i
@@ -62,17 +71,17 @@
               <div @click="othertestAdd">添加</div>
           </div>
         </div>
-        <el-table class="medicate-list mt20" :data="detectionInfos" align="center">
-        <el-table-column label="科室" prop="name" show-overflow-tooltip>
-        </el-table-column>
+        <el-table class="medicate-list mt20" :data="addProject" align="center">
+        <!-- <el-table-column label="科室" prop="name" show-overflow-tooltip>
+        </el-table-column> -->
         <el-table-column
           label="项目"
-          prop="consequences"
+          prop="name"
           show-overflow-tooltip
         >
-          <template slot-scope="scope">
+          <!-- <template slot-scope="scope">
               <input type="text" class="elinputs" v-model="scope.row.consequences" name="" id="">
-          </template>
+          </template> -->
         </el-table-column>
         <el-table-column label="操作" prop="index">
           <template slot-scope="scope">
@@ -171,7 +180,7 @@ export default {
   },
   props: {
     visible: Boolean,
-    value: Object,
+    value: String,
   },
   data() {
     return {
@@ -189,15 +198,37 @@ export default {
       ],
       detectioninfoSource: {
         Customer: '', // 客户id
-        clientName: '',
+        clientName: '', // 项目名称
         clientId: '', // 检测项目id
         age: '',
         gender: '',
         gridName: '',
       },
+      addProject: [],
+      expandData: {},
+      MatchingInfo: [],
     };
   },
+  mounted() {
+    this.getList();
+    // console.log(this.value, this.visible, '接收的数据');
+  },
   methods: {
+    async getList() {
+      this.$api.physicalProjectListInterface.Exceptionsystemitem(this.value).then((res) => {
+        this.expandData = res.data.data;
+        this.detectionInfos = res.data.nameList;
+      });
+    },
+    remove(index) {
+      this.$confirm('确定要删除该数据吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        this.addProject.splice(index, 1);
+      });
+    },
     detectionhandlePopoperClose() {
       this.detectionpopoverStatus = false;
     },
@@ -205,18 +236,23 @@ export default {
       this.$emit('cancel');
     },
     othertestAdd() {
-
+      const vm = this;
+      for (let i = 0; i < vm.MatchingInfo.length; i++) {
+        vm.addProject.push(vm.MatchingInfo[i]);
+      }
+      vm.MatchingInfo = [];
+      vm.detectioninfoSource.clientName = '';
     },
     // 选择检测项目
     detectiononSelectUser(data) {
       // data.clientId = this.infoSource.clientId;
       // data.ingrenient = this.infoSource.ingrenient;
       // data.consequences = '123132';
-      // this.detectionInfo.push(data);
-      console.log(data, '选择检测项目');
+      this.MatchingInfo.push(data);
+      console.log(this.MatchingInfo, '选择检测项目');
       this.$refs.userPopovers.doClose();
       this.detectionpopoverStatus = false;
-      // this.detectioninfoSource.clientName += data.name;
+      this.detectioninfoSource.clientName = data.name;
       // this.detectioninfoSource.clientId = data.id;
       // this.detectioninfoSource.age = data.age;
       // this.detectioninfoSource.gender = data.gender;
@@ -306,6 +342,9 @@ export default {
     line-height: 40px;
     color: #ffffff;
     margin-left: 20px;
+  }
+  .icon-delete{
+    width:30px;
   }
 }
 </style>

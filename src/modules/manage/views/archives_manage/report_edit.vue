@@ -256,7 +256,7 @@ export default {
     display: flex;
     align-items: center;
     position: relative;
-    margin-top: 20px;
+    margin-bottom: 20px;
     .line {
       width: 36px;
       height: 4px;
