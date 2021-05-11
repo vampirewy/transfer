@@ -118,7 +118,7 @@ export default [
         path: '/OutlierList',
         name: 'OutlierList',
         meta: {
-          title: '异常匹配',
+          title: '指标匹配',
           keepAlive: true,
         },
         component: () => import('../../views/knowledge_base/Outlier_matching/OutlierList.vue'),
@@ -137,7 +137,7 @@ export default [
         path: '/matchingList',
         name: 'matchingList',
         meta: {
-          title: '指标匹配',
+          title: '异常匹配',
           keepAlive: true,
         },
         component: () => import('../../views/knowledge_base/IndexMatching/matchingList.vue'),
@@ -146,7 +146,7 @@ export default [
         path: '/MatchingAddEdit',
         name: 'MatchingAddEdit',
         meta: {
-          title: '新增指标匹配',
+          title: '新增异常匹配',
           hideInMenu: true,
           hideInBread: true,
         },

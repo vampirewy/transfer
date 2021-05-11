@@ -48,7 +48,7 @@
     <div class="searchCondition">
       <div class="searchLeft">
         <div class="searchInputFormItem">
-          <el-input placeholder="名称/项目" v-model="formData.keyWord">
+          <el-input placeholder="名称/项目" v-model="formData.itemName">
           </el-input>
           <span class="searchBtnImgSpan" @click="search(1)">
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
@@ -57,7 +57,7 @@
         <div>
           <span>项目库：</span>
           <el-select
-                  v-model="formData.clientGrid"
+                  v-model="formData.isAssess"
                   placeholder="请选择"
                   style="width: 140px"
                   clearable
@@ -168,14 +168,14 @@
       <el-table style="width: 100%" :data="dataSource" align="center"
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="40"></el-table-column>
-        <el-table-column label=" 系统大项" prop="clientNo" min-width="200" show-overflow-tooltip>
+        <el-table-column label=" 系统大项" prop="itemName" min-width="200" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{ scope.row.clientNo | getResult}}</span>
+            <span>{{ scope.row.itemName | getResult}}</span>
           </template>
         </el-table-column>
-        <el-table-column label=" 系统小项" prop="sourceName" min-width="150" show-overflow-tooltip>
+        <el-table-column label=" 系统小项" prop="sectionName" min-width="150" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{ scope.row.clientNo | getResult}}</span>
+            <span>{{ scope.row.sectionName | getResult}}</span>
           </template>
         </el-table-column>
         <!-- <el-table-column prop="gender" label="分类" min-width="80px">
@@ -203,9 +203,9 @@
             <span>{{ scope.row.workUnitName | getResult}}</span>
           </template>
         </el-table-column> -->
-        <el-table-column label="匹配项目" prop="questionDate" min-width="150" show-overflow-tooltip>
+        <el-table-column label="匹配项目" prop="code" min-width="150" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{ scope.row.questionDate | getResultDate}}</span>
+            <span>{{ scope.row.code | getResultDate}}</span>
           </template>
         </el-table-column>
         <!-- <el-table-column label="问卷来源" prop="sourceName" show-overflow-tooltip>
@@ -239,7 +239,7 @@
             <el-button
               type="text"
               size="small"
-              @click="edits()"
+              @click="edits(scope.row.id)"
               v-if="getAccess('life_style_questionnaire_view')
               "
             >匹配</el-button>
@@ -262,6 +262,7 @@
     <!--</template>
   </query-page>-->
     <edit-detail
+      v-if="modalVisible"
       :visible="modalVisible"
       :value="currentValue"
       @cancel="cancel"
@@ -292,7 +293,7 @@ export default {
   data() {
     return {
       isTrue: true,
-      currentValue: {},
+      currentValue: '',
       modalVisible: false,
       total: 0,
       dataSource: [],
@@ -300,6 +301,7 @@ export default {
       lifeStyleList: [], // 生活方式
       questionFromList: [], // 问卷来源
       formData: {
+        isAssess: '',
         keyWord: '',
         gender: '',
         clientGrid: '',
@@ -337,36 +339,48 @@ export default {
     };
   },
   activated() {
-    this.getGridList();
-    this.getQuestionFromList();
-    this.getLifeStyleList();
-    if (localStorage.getItem('homeSearchData')) {
-      const HomeSearchData = JSON.parse(localStorage.getItem('homeSearchData'));
-      this.formData.startTime = HomeSearchData.startDate;
-      this.formData.endTime = HomeSearchData.lastDate;
-      this.formData.searchRange = HomeSearchData.searchRange;
-    }
+    this.getList();
+    // this.getGridList();
+    // this.getQuestionFromList();
+    // this.getLifeStyleList();
+    // if (localStorage.getItem('homeSearchData')) {
+    //   const HomeSearchData = JSON.parse(localStorage.getItem('homeSearchData'));
+    //   this.formData.startTime = HomeSearchData.startDate;
+    //   this.formData.endTime = HomeSearchData.lastDate;
+    //   this.formData.searchRange = HomeSearchData.searchRange;
+    // }
   },
   destroyed() {
     // 清除时间 和 我的/平台
     localStorage.removeItem('homeSearchData');
   },
   methods: {
-    async getGridList() {
-      const res = await this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
+    async getList() {
+      const reqBody = {
+        itemName: this.formData.itemName,
+        isAssess: this.formData.isAssess,
+        pageNo: this.params.pageNo,
+        pageSize: this.params.pageSize,
+      };
+      const res = await this.$api.physicalProjectListInterface.systemlistpage(
+        reqBody,
+      );
       const { data } = res.data;
-      this.gridList = data.data;
+      if (data) {
+        this.dataSource = data.data || [];
+        this.total = data.total;
+      }
     },
-    async getQuestionFromList() {
-      const res = await this.$api.health.getQuestionFromList({ pageNo: 1, pageSize: 10000 });
-      const { data } = res.data;
-      this.questionFromList = data;
-    },
-    async getLifeStyleList() {
-      const res = await this.$api.health.getLifeStyleList({ pageNo: 1, pageSize: 10000 });
-      const { data } = res.data;
-      this.lifeStyleList = data;
-    },
+    // async getQuestionFromList() {
+    //   const res = await this.$api.health.getQuestionFromList({ pageNo: 1, pageSize: 10000 });
+    //   const { data } = res.data;
+    //   this.questionFromList = data;
+    // },
+    // async getLifeStyleList() {
+    //   const res = await this.$api.health.getLifeStyleList({ pageNo: 1, pageSize: 10000 });
+    //   const { data } = res.data;
+    //   this.lifeStyleList = data;
+    // },
     handleSelectionChange(val) {
       // table组件选中事件,
       this.multipleSelection = val;
@@ -388,8 +402,8 @@ export default {
       this.fetch();
     },
     // 匹配
-    edits() {
-      console.log('12312313');
+    edits(id) {
+      this.currentValue = id;
       this.modalVisible = true;
     },
     cancel() {
@@ -474,20 +488,20 @@ export default {
         },
       );
     },
-    fetch() {
-      if (this.formData.startTime) {
-        this.formData.startTime = `${this.formData.startTime} 00:00:00`;
-      }
-      if (this.formData.endTime) {
-        this.formData.endTime = `${this.formData.endTime} 23:59:59`;
-      }
-      this.$api.health
-        .fetch(Object.assign(this.params, this.formData))
-        .then(({ data }) => {
-          this.total = data.data.total;
-          this.dataSource = data.data.data;
-        });
-    },
+    // fetch() {
+    //   if (this.formData.startTime) {
+    //     this.formData.startTime = `${this.formData.startTime} 00:00:00`;
+    //   }
+    //   if (this.formData.endTime) {
+    //     this.formData.endTime = `${this.formData.endTime} 23:59:59`;
+    //   }
+    //   this.$api.health
+    //     .fetch(Object.assign(this.params, this.formData))
+    //     .then(({ data }) => {
+    //       this.total = data.data.total;
+    //       this.dataSource = data.data.data;
+    //     });
+    // },
     getReport({ row }) {
       Object.assign(this.current, row);
       this.visible = true;
@@ -505,12 +519,12 @@ export default {
       this.isTrue = !this.isTrue;
     },
   },
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      // vm.getQuestionType();
-      vm.fetch();
-    });
-  },
+  // beforeRouteEnter(to, from, next) {
+  //   next((vm) => {
+  //     vm.getQuestionType();
+  //     vm.fetch();
+  //   });
+  // },
 };
 </script>
 

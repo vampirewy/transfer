@@ -22,7 +22,7 @@
     <div>
       <!--<div class="lookPressure">-->
         <el-form-item label="项目名称：" prop="clientName" style="background:#ffffff">
-          123123
+          {{name}}
         </el-form-item>
         <!-- <div><span>科室名称：</span><span>123123</span></div> -->
       <!--</div>-->
@@ -162,7 +162,8 @@ export default {
   },
   props: {
     visible: Boolean,
-    value: Object,
+    value: '',
+    name: '',
   },
   data() {
     return {
@@ -188,6 +189,9 @@ export default {
       },
     };
   },
+  mounted() {
+    // console.log(this.value, this.name, '接收的数据');
+  },
   methods: {
     detectionhandlePopoperClose() {
       this.detectionpopoverStatus = false;
@@ -204,23 +208,22 @@ export default {
       // data.ingrenient = this.infoSource.ingrenient;
       // data.consequences = '123132';
       // this.detectionInfo.push(data);
-      console.log(data, '选择检测项目');
+      // console.log(data, '选择检测项目');
       this.$refs.userPopovers.doClose();
       this.detectionpopoverStatus = false;
-      // this.detectioninfoSource.clientName += data.name;
-      // this.detectioninfoSource.clientId = data.id;
+      this.detectioninfoSource.clientName = data.abnormalName;
+      this.detectioninfoSource.clientId = data.id;
       // this.detectioninfoSource.age = data.age;
       // this.detectioninfoSource.gender = data.gender;
       // this.detectioninfoSource.gridName = data.gridName;
     },
     async submit() {
-      await this.$api.companyManageInterface.updateWorkUnit({
-        id: this.value.id,
-        workUnitName: this.value.workUnitName,
-        contact: this.value.contact,
-        mobile: this.value.mobile,
-        address: this.value.address,
+      const res = await this.$api.physicalProjectListInterface.Exceptionmatch({
+        reportAbnormalTempId: this.value,
+        organAbnormalId: this.detectioninfoSource.clientId,
       });
+      const { data } = res.data;
+      console.log(data);
       this.$message.success('操作成功');
       this.cancel();
     },

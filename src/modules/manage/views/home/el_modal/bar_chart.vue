@@ -121,7 +121,7 @@ export default {
               show: false,
               onZero: true,
               lineStyle: {
-                color: '#97A6BD', // y轴刻度字颜色
+                color: '#3154AC', // y轴刻度字颜色
                 // type: 'solid',
               },
             },

@@ -67,10 +67,23 @@ class PhysicalProjectListInterface extends BaseModule {
       params: data,
     });
   }
-  // -------------------异常匹配-------------------------
+  // -------------------指标匹配-------------------------
   // 列表
   systemlistpage(data = {}) {
     return this.post('/system_item/list_page', data);
+  }
+  // 详情
+  Exceptionsystemitem(data = {}) {
+    return this.get(`/system_item/${data}`);
+  }
+  // -------------------异常匹配-------------------------
+  // 列表
+  Exceptionlistpage(data = {}) {
+    return this.post('/report_abnormal_temp/page_list', data);
+  }
+  // 匹配提交
+  Exceptionmatch(data = {}) {
+    return this.post('/report_abnormal_temp/match', data);
   }
 }
 export default new PhysicalProjectListInterface();

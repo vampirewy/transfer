@@ -133,7 +133,7 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="性别限制" >
-            <el-select v-model="form.result" placeholder="请选择">
+            <el-select v-model="form.gender" placeholder="请选择">
               <el-option label="男" value="1" key="1"></el-option>
               <el-option label="女" value="2" key="2"></el-option>
             </el-select>
@@ -177,7 +177,7 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="推荐科室" >
-            <el-select v-model="form.result" placeholder="请选择">
+            <el-select v-model="form.Departments" placeholder="请选择">
               <el-option
                 v-for="item in resultOptions"
                 :key="item.value"
@@ -189,7 +189,7 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="推荐检查" >
-            <el-select v-model="form.result" placeholder="请选择">
+            <el-select v-model="form.Check" placeholder="请选择">
               <el-option
                 v-for="item in resultOptions"
                 :key="item.value"
@@ -237,7 +237,7 @@
           <el-form-item label="建议" >
             <el-input
               type="textarea"
-              v-model="form.hpi"
+              v-model="form.Suggestion"
               :rows="5"
               placeholder="请输入"
               :maxlength="4000"
@@ -286,30 +286,21 @@ export default {
     return {
       popoverStatus: false,
       form: {
-        clientInfoId: '',
-        hospital: '',
-        department: '',
-        medicalType: '',
-        patientNo: '',
-        inDate: '',
-        outDate: '',
+        patientNo: '', // 异常名称
+        gender: '', // 性别
+        Departments: '', // 推荐科室
+        Check: '', // 推荐检查
         doctorName: '',
         result: '',
-        complaint: '主诉', // 主诉
-        hpi: '现病史', // 现病史
-        examination: '检查', // 检查
-        diagnosis: '诊断', // 诊断
-        therapy: '方案', // 方案
-        orgCode: '',
         interpret: '', // 解释
         Reason: '', // 原因
         Suggestion: '', // 建议
         organTypeList: [], // 异常类型
-        organTypeListId: '',
+        organTypeListId: '', // 异常类型id
         dangerLevelList: [], // 重要性
-        dangerLevelListId: '',
+        dangerLevelListId: '', // 重要性Id
         medicalLimitList: [], // 紧急性
-        medicalLimitListId: '',
+        medicalLimitListId: '', // 紧急性id
       },
       options: {
         inDate: {
@@ -339,15 +330,15 @@ export default {
           },
         },
       },
-      rules: {
-        clientInfoId: [{ required: true, message: '客户不能为空' }],
-        medicalType: [{ required: true, message: '就医类型不能为空' }],
-        hospital: [{ required: true, message: '医疗机构不能为空' }],
-        inDate: [{ required: true, message: '就医时间不能为空' }],
-        result: [{ required: true, message: '当前状态不能为空' }],
-        hpi: [{ required: true, message: '现病史不能为空' }],
-        diagnosis: [{ required: true, message: '诊断不能为空' }],
-      },
+      // rules: {
+      //   clientInfoId: [{ required: true, message: '客户不能为空' }],
+      //   medicalType: [{ required: true, message: '就医类型不能为空' }],
+      //   hospital: [{ required: true, message: '医疗机构不能为空' }],
+      //   inDate: [{ required: true, message: '就医时间不能为空' }],
+      //   result: [{ required: true, message: '当前状态不能为空' }],
+      //   hpi: [{ required: true, message: '现病史不能为空' }],
+      //   diagnosis: [{ required: true, message: '诊断不能为空' }],
+      // },
       resultOptions: [
         { value: 1, label: '未指定' },
         { value: 2, label: '治疗中' },
@@ -390,11 +381,13 @@ export default {
       this.$set(this.form, 'organTypeList', data.data);
       console.log(this.form.organTypeList);
     },
+    // 重要性
     async getImportList() {
       const { data } = await this.$api.unusualListInterface.getImportList();
       this.$set(this.form, 'dangerLevelList', data.data);
       // this.form.organTypeList
     },
+    // 紧急性
     async getQuickList() {
       const { data } = await this.$api.unusualListInterface.getQuickList();
       this.$set(this.form, 'medicalLimitList', data.data);
@@ -432,11 +425,6 @@ export default {
             result: this.form.result,
             complaint: this.form.complaint,
             examination: this.form.examination,
-            diagnosis: this.form.diagnosis,
-            therapy: this.form.therapy,
-            hpi: this.form.hpi,
-            orgCode: this.form.orgCode,
-            organId: this.form.organId,
           };
           if (this.id) {
             params.id = this.id;
