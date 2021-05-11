@@ -6,7 +6,10 @@
         <div class="mainFixed">
           <div class="mainHeader">
             <Header class="header" ref="sideMenuHeader">
-              <img class="toggle" @click="toggleSidebar" src="@/assets/images/body/toggle.png"/>
+              <img class="toggle" @click="toggleSidebar" v-if="classObj.openSidebar"
+                   src="@/assets/images/body/toggle.png"/>
+              <img class="toggle" @click="toggleSidebar"  v-if="classObj.hideSidebar"
+                   src="@/assets/images/body/toggleClose.png"/>
               <span class="title" @click="$router.push('/home')">{{siteTitle}}</span>
               <span class="healthPageSide" v-show="personalHealthPage">个人管理中心</span>
               <side-menu v-show="!personalHealthPage"

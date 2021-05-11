@@ -173,45 +173,46 @@
           <el-table :data="expandData.list" class="expand-table" align="center">
             <el-table-column
               label="体检编号"
-              prop="planDate"
+              prop="clientId"
               min-width="20%"
               show-overflow-tooltip>
               <template slot-scope="scope">
-                <span>{{ scope.row.planDate | getResultDate }}</span>
+                <span>{{ scope.row.clientId | getResultDate }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="姓名" prop="planWayName" min-width="15%" show-overflow-tooltip>
+            <el-table-column label="姓名" prop="clientName" min-width="15%" show-overflow-tooltip>
               <template slot-scope="scope">
-                <span>{{ scope.row.planWayName | getResult}}</span>
+                <span>{{ scope.row.clientName | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column label="性别" prop="planTitle" min-width="15%" show-overflow-tooltip>
+            <el-table-column label="性别" prop="gender" min-width="15%" show-overflow-tooltip>
               <template slot-scope="scope">
-                <span>{{ scope.row.planTitle | getResult}}</span>
+                <span>{{ scope.row.gender | getResult}}</span>
               </template>
             </el-table-column>
             <el-table-column
               label="年龄"
-              prop="planContent"
+              prop="age"
               min-width="10%"
               show-overflow-tooltip>
               <template slot-scope="scope">
-                <span>{{ scope.row.planContent | getResult}}</span>
+                <span>{{ scope.row.age | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column label="人员类别" prop="planTitle" min-width="25%" show-overflow-tooltip>
+            <el-table-column label="人员类别"
+            prop="clientGridName" min-width="25%" show-overflow-tooltip>
               <template slot-scope="scope">
-                <span>{{ scope.row.planTitle | getResult}}</span>
+                <span>{{ scope.row.clientGridName | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column label="体检日期" prop="planTitle" min-width="25%" show-overflow-tooltip>
+            <el-table-column label="体检日期" prop="reportDate" min-width="25%" show-overflow-tooltip>
               <template slot-scope="scope">
-                <span>{{ scope.row.planTitle | getResult}}</span>
+                <span>{{ scope.row.reportDate | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column label="参检团队" prop="planTitle" min-width="25%" show-overflow-tooltip>
+            <el-table-column label="参检团队" prop="workUnitName" min-width="25%" show-overflow-tooltip>
               <template slot-scope="scope">
-                <span>{{ scope.row.planTitle | getResult}}</span>
+                <span>{{ scope.row.workUnitName | getResult}}</span>
               </template>
             </el-table-column>
           </el-table>
@@ -231,16 +232,16 @@
         </el-table-column>
       </div>
         <el-table-column type="selection" width="40"></el-table-column>
-        <el-table-column label=" 待匹配异常" prop="sectionName" min-width="200" show-overflow-tooltip>
+        <el-table-column label=" 待匹配异常" prop="abnormalName" min-width="200" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{ scope.row.sectionName | getResult}}</span>
+            <span>{{ scope.row.abnormalName | getResult}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="报告" prop="itemName" min-width="150" show-overflow-tooltip>
+        <el-table-column label="报告" prop="total" min-width="150" show-overflow-tooltip>
           <template slot-scope="scope">
             <el-button type="text"
                      @click="expandsHandle(scope.row, 2)" style="color:#36BF2F;">
-            {{scope.row.itemName | getResultDate}}</el-button>
+            {{scope.row.total | getResult}}</el-button>
           </template>
         </el-table-column>
         <!-- <el-table-column label="问卷来源" prop="sourceName" show-overflow-tooltip>
@@ -274,7 +275,7 @@
             <el-button
               type="text"
               size="small"
-              @click="edits()"
+              @click="edits(scope.row)"
               v-if="getAccess('life_style_questionnaire_view')
               "
             >匹配</el-button>
@@ -297,8 +298,10 @@
     <!--</template>
   </query-page>-->
     <edit-detail
+      v-if="modalVisible"
       :visible="modalVisible"
       :value="currentValue"
+      :name="names"
       @cancel="cancel"
     ></edit-detail>
   </div>
@@ -311,7 +314,7 @@ import QueryFilter from '~/src/components/query_page/query_filter.vue';
 import OperateButton from '~/src/components/query_page/operate_button.vue';
 // import * as dayjs from 'dayjs';
 // import report from '../components/question_report.vue';
-import deleteIcon from '~/src/assets/images/message-box-delete@2x.png';
+import deleteIcon from '~/src/assets/images/deleteicon.png';
 import editDetail from './components/edit_detail.vue';
 
 export default {
@@ -326,8 +329,9 @@ export default {
   },
   data() {
     return {
+      names: '',
       isTrue: true,
-      currentValue: {},
+      currentValue: '',
       modalVisible: false,
       total: 0,
       dataSource: [],
@@ -407,12 +411,12 @@ export default {
   methods: {
     async getList() {
       const reqBody = {
-        itemName: this.form.itemName,
+        keywords: this.form.itemName,
         isAssess: this.form.isAssess,
         pageNo: this.table.currentPage,
         pageSize: this.table.pageSize,
       };
-      const res = await this.$api.physicalProjectListInterface.systemlistpage(
+      const res = await this.$api.physicalProjectListInterface.Exceptionlistpage(
         reqBody,
       );
       const { data } = res.data;
@@ -442,7 +446,6 @@ export default {
     },
     handleExpandChange(row, expandRows) {
       this.expands = expandRows;
-      console.log(this.expands, '123123');
     },
     expandsHandle(row, type) {
       // if (this.loading) {
@@ -461,30 +464,38 @@ export default {
       //   this.expandData.clientId = row.id;
       //   this.expandData.pageNo = 1;
       //   this.excuteType = type;
-      //   this.getReoprtList(type).then(() => {
-      //     this.$refs.table.toggleRowExpansion(row);
-      //   });
+      this.getReoprtList(row).then(() => {
+        this.$refs.table.toggleRowExpansion(row);
+      });
       // }
     },
+    getReoprtList(row) {
+      return this.$api.reportInterface.fetchReportList({
+        pageNo: this.table.currentPage,
+        pageSize: this.table.pageSize,
+        reportAbnormalTempId: row.id,
+      }).then((res) => {
+        this.expandData.list = res.data.data.data;
+        this.dataSource = [...this.dataSource];
+        this.$forceUpdate();
+      });
+    },
     reset() {
-      this.params.pageNo = 1;
-      this.formData.keyWord = '';
-      this.formData.gender = '';
-      this.formData.clientGrid = '';
-      this.formData.lifeStyleLv = '';
-      this.formData.source = '';
-      this.formData.startTime = undefined;
-      this.formData.endTime = undefined;
+      this.form.itemName = '';
+      this.form.isAssess = '';
+      this.table.currentPage = 1;
       // this.getQuestionType();
-      this.fetch();
+      this.getList();
     },
     search(current = 1) {
       this.table.currentPage = current;
       this.getList();
     },
     // 匹配
-    edits() {
-      console.log('12312313');
+    edits(row) {
+      console.log(row, 'sdfsdfdfsdsd');
+      this.names = row.abnormalName;
+      this.currentValue = row.id;
       this.modalVisible = true;
     },
     cancel() {
@@ -571,7 +582,8 @@ export default {
     },
     handleSomeAdd() {
       this.$router.push({
-        name: 'MatchingAddEdit',
+        // name: 'MatchingAddEdit',
+        name: 'ExceptionAddEdit',
         params: {
           type: 'Add',
           qusType: '',

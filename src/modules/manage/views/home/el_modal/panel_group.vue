@@ -12,7 +12,7 @@
         <div class="card-panel-description">
           <div class="card-panel-text">客户总数（人）</div>
           <div class="card-panel-number">
-            {{ formData.clientInfoCount || 0 }}
+            {{ formData.clientInfoCount || 1820 }}
           </div>
         </div>
         <!-- <div class="cardDian"><p></p><p></p></div> -->
@@ -26,7 +26,7 @@
         <div class="card-panel-description">
           <div class="card-panel-text">体检总数（人）</div>
           <div class="card-panel-number">
-            {{ formData.reportInfoCount || 0 }}
+            {{ formData.reportInfoCount || 920 }}
           </div>
         </div>
         <!-- <div class="cardDian"><p></p><p></p></div> -->
@@ -40,7 +40,7 @@
         <div class="card-panel-description">
           <div class="card-panel-text">问卷总数（人）</div>
           <div class="card-panel-number">
-            {{ formData.questionInfoCount || 0 }}
+            {{ formData.questionInfoCount || 450 }}
           </div>
         </div>
         <!-- <div class="cardDian"><p></p><p></p></div> -->
@@ -54,7 +54,7 @@
         <div class="card-panel-description">
           <div class="card-panel-text">评估报告总数（人）</div>
           <div class="card-panel-number">
-            {{ formData.assessReportCount || 0 }}
+            {{ formData.assessReportCount || 560 }}
           </div>
         </div>
         <!-- <div class="cardDian"><p></p><p></p></div> -->
@@ -126,6 +126,10 @@ export default {
     &:hover{
       box-shadow: 0px 7px 18px 0px rgba(49, 84, 172, 0.35);
       transform: scale(1.1,1.1);
+      background: url(../../../../../assets/images/homeHover.png);
+      background-repeat: no-repeat;
+      background-position: right center;
+      // background-size: 25px;
     }
     .card-panel-icon-wrapper {
       // width: 60px;

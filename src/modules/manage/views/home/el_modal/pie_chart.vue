@@ -42,6 +42,7 @@ export default {
     this.$nextTick(() => {
       this.initChart();
     });
+    console.log(this.yList, '数据');
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -86,22 +87,45 @@ export default {
         series: [
           {
             name: '随访数量',
+            value: '随访数量',
             type: 'pie',
             // roseType: 'radius', //可以根据大小控制长短
-            radius: [55, 75], // 中间可设置空心
+            radius: [50, 75], // 中间可设置空心
             center: ['45%', '55%'],
             hoverAnimation: false,
-            /* label: {
-              formatter: '{d|{d}%}',
-              rich: {
-                d: { fontSize: 15 },
-              },
-            }, */
             label: {
               normal: {
+                show: true,
                 position: 'inner',
-                show: false,
+                textStyle: {
+                  fontWeight: 300,
+                  fontSize: 10,
+                },
+                formatter: '{d}%',
               },
+            },
+            // label: {
+            //   formatter: '{d|{d}%}',
+            //   rich: {
+            //     d: { fontSize: 10 },
+            //   },
+            // },
+            // label: {
+            //   normal: {
+            //   position: 'center',
+            //   show: false,
+            //   },
+            // },
+            emphasis: {
+              label: {
+                show: true,
+                fontSize: '16',
+                color: '#333333',
+                fontWeight: 'bold',
+              },
+            },
+            labelLine: {
+              show: false,
             },
             itemStyle: {
               // 通常情况下：
@@ -131,13 +155,13 @@ export default {
           },
         ],
       };
-      if (this.yList.length > 1) {
-        options.series[0].itemStyle.normal.borderWidth = 3;
-        options.series[0].itemStyle.normal.borderColor = '#fff';
-      } else {
-        options.series[0].itemStyle.normal.borderWidth = 0;
-        options.series[0].itemStyle.normal.borderColor = '#fff';
-      }
+      // if (this.yList.length > 1) {
+      //   options.series[0].itemStyle.normal.borderWidth = 3;
+      //   options.series[0].itemStyle.normal.borderColor = '#fff';
+      // } else {
+      //   options.series[0].itemStyle.normal.borderWidth = 0;
+      //   options.series[0].itemStyle.normal.borderColor = '#fff';
+      // }
       this.chart.setOption(options);
     },
   },

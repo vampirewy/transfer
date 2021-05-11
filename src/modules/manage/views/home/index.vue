@@ -1,11 +1,11 @@
 <template>
-<div>
+<div style="margin:-20px -15px;">
 <div style="display: flex;">
   <div class="dashboard-editor-container">
     <search-group @searchData="getSearchData" />
     <panel-group :formData="homeFindCountData" @toRouterPage="toRouterPage" />
     <el-row :gutter="40" style="margin-left: 0">
-      <el-col :span="15" class="echartBody" style="width:96%;height:340px">
+      <el-col :span="15" class="echartBody" style="width:96%;height:300px">
         <div class="rowTitleParent" style="padding-bottom: 5px">
           <!-- <p class="rowTitle" style="margin-left: 0">近15天新增客户趋势（人）</p> -->
           <div class="divTitle">
@@ -23,9 +23,10 @@
           <img src="@/assets/images/noDataLine.png"/>
           <span>暂无数据</span>
         </div>
-        <bar-chart-line :xList="intervenePlanName" :yList="intervenePlanYList" :height="'490px'"
+        <!-- <bar-chart-line
+        :xList="intervenePlanName" :yList="intervenePlanYList" :height="'300px'"
                    :colorListProp="['#4991FD', '#31C529']" key="1"
-                   v-else-if="intervenePlanXList.length === 1"/>
+                   v-else-if="intervenePlanXList.length === 1"/> -->
         <line-chart :chart-data="intervenePlanYList"
                     :sectionName="intervenePlanName"
                     :sectionXList="intervenePlanXList" v-else/>
@@ -118,7 +119,7 @@
               <!-- <p class="rowTitle">{{listQuery.planType === '4' ? '随访计划' : '随访记录'}}
                 <span class="top5">TOP5</span></p> -->
                 <!-- <p class="rowTitle">客户类别分布</p> -->
-                <div class="divTitle">
+                <div class="divTitle" style="margin-left:20px">
                   <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
                 客户类别分布（%）
               </div>
@@ -135,17 +136,17 @@
               <img src="@/assets/images/noDataLine.png" style="width: 200px;margin-top: 100px"/>
               <span>暂无数据</span>
             </div>
-            <div class="chart-wrapper" style="display: flex" v-else>
-              <div class="pieDiv" style="margin:0 3% 0 2%;overflow: hidden">
+            <div class="chart-wrapper" v-else>
+              <div class="pieDiv" style="margin:0 3% 0 5%;">
                 <pie-chart :xList="intervenePlanPieXList" :yList="intervenePlanPieYList" />
               </div>
-              <div class="pieDiv">
+              <div class="pieDiv" style="height:110px">
                 <div class="pieDivTips" v-for="(item, index) in dianPieList" :key="item.name">
                   <div class="pieDivTipsLeft">
                     <p class="dian" :style="{'background-color': dianColorList[index]}"></p>
                     <p class="dianSize">{{item.name}}</p>
                   </div>
-                  <p class="dianNum">{{item.value}}个</p>
+                  <p class="dianNum">{{item.value}}</p>
                 </div>
               </div>
             </div>
@@ -165,9 +166,10 @@
   <div class="TabListcss">
     <!-- <tab-list></tab-list> -->
       <el-table style="width: 100%;text-align: center" align="center"
+      class="openTable"
                :data="dataSource">
         <!-- <el-table-column type="selection" width="150"></el-table-column> -->
-        <el-table-column label="姓名" prop="clientName" max-width="200" show-overflow-tooltip>
+        <el-table-column label="姓名" prop="matchItemName" max-width="200" show-overflow-tooltip>
           <!-- <template slot-scope="scope">
                 <span class="clientName"
                       @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
@@ -175,7 +177,7 @@
                 </span>
           </template> -->
         </el-table-column>
-        <el-table-column label="客户编号" prop="clientNo" max-width="180" show-overflow-tooltip>
+        <el-table-column label="客户编号" prop="code" max-width="180" show-overflow-tooltip>
           <!-- <template slot-scope="scope">
             <span>{{ scope.row.clientNo | getResult}}</span>
           </template> -->
@@ -190,12 +192,12 @@
             <span>{{ scope.row.age | getResult}}</span>
           </template> -->
         </el-table-column>
-        <el-table-column label="任务名称" prop="createTime" max-width="180" show-overflow-tooltip>
+        <el-table-column label="任务名称" prop="itemName" max-width="180" show-overflow-tooltip>
           <!-- <template slot-scope="scope">
             <span>{{ scope.row.createTime | getResultDate}}</span>
           </template> -->
         </el-table-column>
-        <el-table-column label="任务提示" prop="index" max-width="200">
+        <el-table-column label="任务提示" prop="sectionName" max-width="200">
           <!-- <template slot-scope="scope">
             <span>{{ scope.row.createTime | getResultDate}}</span>
           </template> -->
@@ -232,7 +234,58 @@ export default {
 
   data() {
     return {
-      dataSource: [],
+      dataSource: [
+        {
+          sectionName: '生化检测',
+          itemName: '胰岛素释放试验',
+          code: 'F10070',
+          total: 0,
+          matchItemName: '小明',
+          id: '1',
+          gender: '男',
+          age: '18',
+        },
+        {
+          sectionName: '生化检测',
+          itemName: '胰岛素释放试验',
+          code: 'F10070',
+          total: 0,
+          matchItemName: '小明',
+          id: '1',
+          gender: '男',
+          age: '18',
+        },
+        {
+          sectionName: '生化检测',
+          itemName: '胰岛素释放试验',
+          code: 'F10070',
+          total: 0,
+          matchItemName: '小明',
+          id: '1',
+          gender: '男',
+          age: '18',
+        },
+        {
+          sectionName: '生化检测',
+          itemName: '胰岛素释放试验',
+          code: 'F10070',
+          total: 0,
+          matchItemName: '小明',
+          id: '1',
+          gender: '男',
+          age: '18',
+        },
+        {
+          sectionName: '生化检测',
+          itemName: '胰岛素释放试验',
+          code: 'F10070',
+          total: 0,
+          matchItemName: '小明',
+          id: '1',
+          gender: '男',
+          age: '18',
+        },
+      ],
       searchData: {},
       listQuery: {
         planType: '4',
@@ -240,15 +293,57 @@ export default {
       homeFindCountData: {},
       serviceOrderXList: [],
       serviceOrderYList: [],
-      intervenePlanPieXList: [],
-      intervenePlanPieYList: [],
+      intervenePlanPieXList: ['10', '20', '30', '10', '40'],
+      intervenePlanPieYList: [
+        {
+          value: 400,
+          name: ' 高级会员',
+        },
+        {
+          value: 548,
+          name: '体验客户',
+        },
+        {
+          value: 300,
+          name: 'VIP会员',
+        },
+        {
+          value: 100,
+          name: '普通会员',
+        },
+        {
+          value: 200,
+          name: '钻石会员',
+        },
+      ],
       clientTypeXList: [],
       clientTypeYList: [],
       clientTotal: 0,
-      intervenePlanYList: [],
-      intervenePlanName: ['随访计划', '随访记录'], // 随访任务折线图
-      intervenePlanXList: [],
-      dianPieList: [],
+      intervenePlanYList: [['20', '19', '16', '20', '23', '30', '28', '25', '20', '15', '23', '30', '35', '40', '20']],
+      intervenePlanName: ['客户趋势'], // 随访任务折线图
+      intervenePlanXList: ['04/07', '04/08', '04/09', '04/10', '04/11', '04/12', '04/13', '04/14', '04/15', '04/16', '04/17', '04/18', '04/19', '04/20', '04/21'],
+      dianPieList: [
+        {
+          namne: '高级会员',
+          value: '高级会员',
+        },
+        {
+          namne: '高级会员',
+          value: '体验客户',
+        },
+        {
+          namne: '高级会员',
+          value: 'VIP会员',
+        },
+        {
+          namne: '高级会员',
+          value: '普通会员',
+        },
+        {
+          namne: '高级会员',
+          value: '钻石会员',
+        },
+      ],
       dianColorList: ['#5B8FF9', '#5AD8A6', '#6C6CE5', '#F6BD16', '#E8684A', '#6DC8EC', '#31C529', '#54c9b6', '#F53626', '#f5c8be'],
       tabbor: ['当日任务', '阳性跟踪', '随访任务'],
       Tabactive: 0,
@@ -261,10 +356,10 @@ export default {
     },
     getSearchData(data) {
       this.searchData = data;
-      this.getHomeFindCount(data); // 查询五数据
-      this.getEchartIntervenePlan(data);// 随访任务折线图
-      this.getServiceOrderInfo(data); // 服务订单
-      this.getEchartIntervenePlanPie(data); // 随访任务饼图
+      // this.getHomeFindCount(data); // 查询五数据
+      // this.getEchartIntervenePlan(data);// 随访任务折线图
+      // this.getServiceOrderInfo(data); // 服务订单
+      // this.getEchartIntervenePlanPie(data); // 随访任务饼图
     },
     choosePlanType() { // 随访计划，随访记录切换
       const sendData = Object.assign(this.searchData, this.listQuery);
@@ -411,7 +506,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .divTitle{
-  margin: 26px 0 0 23px;
+  margin: 26px 0 0 0px;
   font-size: 16px;
   font-weight: 600;
   color: #333333;
@@ -475,7 +570,7 @@ export default {
     }
   }
   .echartBody{
-    height: 450px;
+    height: 410px;
     box-shadow: 0px 0px 50px 0px rgba(151, 166, 189, 0.2);
     border-radius: 15px;
     background-color: white;
@@ -504,7 +599,7 @@ export default {
     background: #fff;
     padding: 5px 20px 20px 20px;
     border-radius: 15px;
-    margin-top: 24px;
+    margin-top: 20px;
     /*margin-bottom: 32px;*/
     /*  p{
       font-size: 15px;
@@ -512,23 +607,28 @@ export default {
       border-bottom: 1px solid #EFEFEF;
     }*/
     .pieDiv{
-      width: 45%;
-      margin-left: 5%;
+      width: 90%;
+      margin-left: 20%;
       height: 170px;
       margin-top: 20px;
       overflow-y: auto;
+      overflow: hidden;
+      flex-wrap: wrap;
+      display: flex;
       .pieDivTips{
-        display: flex;
+        // display: flex;
         height: 24px;
         justify-content: space-between;
         align-items: center;
+        width: 36%;
         .pieDivTipsLeft{
-          display: flex;
+          // display: flex;
           align-items: center;
+          display: inline-block;
           .dian{
-            width: 9px;
-            height: 9px;
-            border-radius: 50px;
+            width: 12px;
+            height: 12px;
+            // border-radius: 50px;
             margin-right: 8px;
           }
           .dianSize{
@@ -539,6 +639,7 @@ export default {
         .dianNum{
           color: #333333;
           font-size: 12px;
+          display: inline-block;
         }
       }
     }
@@ -547,7 +648,7 @@ export default {
 .TabBars{
   display: flex;
   margin-top: 30px;
-  margin-left: 10px;
+  // margin-left: 10px;
   .TabBarsNames{
     cursor: pointer;
     background: #EEF1F5;
@@ -597,6 +698,20 @@ export default {
     padding: 10px 14px 10px 16px;
     font-size: 14px;
     border-radius: 8px 5px 0 0;
+  }
+  .TabBarsName:before {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 39px;
+    position: absolute;
+    -webkit-transform: skewX(165deg);
+    transform: skewX(163deg);
+    background: #ffffff;
+    border-top-left-radius: 8px;
+    top: 0px;
+    left: -4px;
+    border-bottom: solid 1px #ffffff;
   }
   .TabBarsName:after{
     content: '';

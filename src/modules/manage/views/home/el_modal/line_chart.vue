@@ -20,7 +20,7 @@ export default {
     },
     height: {
       type: String,
-      default: '490px',
+      default: '280px',
     },
     autoResize: {
       type: Boolean,
@@ -91,8 +91,8 @@ export default {
             show: false,
             onZero: true,
             lineStyle: {
-              color: '#97A6BD', // y轴刻度字颜色
-              // type: 'solid',
+              color: '#333333', // y轴刻度字颜色
+              type: 'solid',
             },
           },
         },
@@ -120,7 +120,7 @@ export default {
             show: false,
             onZero: true,
             lineStyle: {
-              color: '#97A6BD', // y轴刻度字颜色
+              color: '#333333', // y轴刻度字颜色
               type: 'solid',
             },
           },
@@ -140,17 +140,17 @@ export default {
         ], */
         series: [],
       };
-      const colorLineList = ['#4991FD', '#31C529'];
-      const colorGradientList = ['#91c4ff', '#d7f4d6'];
+      // const colorLineList = ['#4991FD', '#31C529'];
+      // const colorGradientList = ['#91c4ff', '#d7f4d6'];
       this.sectionName.forEach((sectionNameValue, index) => {
         this.chart.hideLoading();
         option.series.push({
           name: sectionNameValue,
           itemStyle: {
             normal: {
-              color: colorLineList[index], // hover的tip点的颜色
+              color: '#3154AC', // hover的tip点的颜色
               lineStyle: {
-                color: colorLineList[index], // 线段颜色
+                color: '#3154AC', // 线段颜色
                 width: 2, // 线段宽度
               },
             },
@@ -161,11 +161,11 @@ export default {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [ // 渐变由上至下
               {
                 offset: 0,
-                color: colorGradientList[index], // 第一颜色
+                color: '#3154AC90', // 第一颜色
               },
               {
                 offset: 1,
-                color: 'white', // 渐变颜色
+                color: '#3154AC90', // 渐变颜色
               },
             ]),
           },

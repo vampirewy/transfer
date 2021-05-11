@@ -133,7 +133,7 @@
 
 <script>
 import OperateButton from '~/src/components/query_page/operate_button.vue';
-import deleteIcon from '~/src/assets/images/message-box-delete@2x.png';
+import deleteIcon from '~/src/assets/images/deleteicon.png';
 import elPlanSettingMdl from './el_modal/el_plan_setting_mdl.vue';
 export default {
   name: 'create_edit',

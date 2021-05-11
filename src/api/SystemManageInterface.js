@@ -23,9 +23,19 @@ class SystemManageInterface extends BaseModule {
   changeUserState(id, state) {
     return this.put(`/user/on_off/${id}/${state}`);
   }
+  // 删除员工
+  deletedUser(data) {
+    return this.post('/user/deleted', data);
+  }
+  // 重置密码
+  updatePassword(data) {
+    return this.post('/user/update_password', data);
+  }
   // 角色列表
-  roleList() {
-    return this.get('/role/list');
+  roleList(data) {
+    return this.get('/role/list', {
+      params: data,
+    });
   }
   // 角色列表分页
   rolePageList(data) {
@@ -52,6 +62,14 @@ class SystemManageInterface extends BaseModule {
   // 角色删除
   deleteRole(id) {
     return this.delete(`/role/${id}`);
+  }
+  // 角色批量删除
+  deleteSomeRole(data) {
+    return this.post('/role/deleted', data);
+  }
+  // 角色启用/禁用
+  onoffRole(data) {
+    return this.post('/role/on_of', data);
   }
   // 保存机构信息
   saveOrganInfo(data) {
