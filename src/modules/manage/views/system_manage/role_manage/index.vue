@@ -172,8 +172,13 @@ export default {
       currentId: '',
     };
   },
-  activated() {
+  /* activated() {
     this.queryList();
+  },*/
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.queryList();
+    });
   },
   methods: {
     handleSelectionChange(val) {

@@ -146,8 +146,8 @@ export default {
             emphasis: {
               label: {
                 show: true,
-                fontSize: '16',
-                color: '#333333',
+                fontSize: '15',
+                // color: '#333333',
                 fontWeight: 'bold',
               },
             },

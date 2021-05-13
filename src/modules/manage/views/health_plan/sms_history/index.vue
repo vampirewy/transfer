@@ -206,8 +206,10 @@ export default {
       multipleSelection: [], // 当前页选中的数据
     };
   },
-  activated() {
-    this.onLoad();
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.onLoad();
+    });
   },
   /* computed: {
     keepAliveConf() {

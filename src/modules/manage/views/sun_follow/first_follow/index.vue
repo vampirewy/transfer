@@ -341,8 +341,10 @@ export default {
       idKey: 'clientId', // 标识列表数据中每一行的唯一键的名称(需要按自己的数据改一下)
     };
   },
-  activated() {
-    this.onLoad();
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.onLoad();
+    });
   },
   methods: {
     // 设置选中的方法

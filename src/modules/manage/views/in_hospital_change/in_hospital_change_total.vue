@@ -1,6 +1,5 @@
 <template>
-<div style="margin:-20px -15px -40px -15px;background-color: #F6F8FC;">
-  <div class="dashboard-editor-container">
+  <div class="dashboard-editor-container" style="background-color: #F6F8FC;padding: 20px">
     <search-group @searchData="getSearchData" />
     <panel-group :formData="homeFindCountData" @toRouterPage="toRouterPage" />
     <el-row :gutter="40" style="margin-left: 0;margin-bottom: 20px;width: 100%;">
@@ -29,7 +28,7 @@
           <el-radio-group
                   style="margin-top: 0;margin-right: 15px"
                   v-model="checkAfterForm.planType"
-                  @change="chooseRadio"
+                  @change="chooseSunRadio"
           >
             <el-radio-button label="1">本周</el-radio-button>
             <el-radio-button label="2">本月</el-radio-button>
@@ -106,7 +105,7 @@
       </el-col>
     </el-col>
   </el-row>
-    <el-row :gutter="40" style="margin-left: 0;margin-bottom: 20px;margin-right: 0">
+    <el-row :gutter="40" style="margin-left: 0;margin-right: 0">
       <el-col :span="16" class="echartBody" style="height: 470px">
         <subject></subject>
       </el-col>
@@ -156,7 +155,6 @@
     <!--</el-col>-->
     <!--</el-row>-->
   </div>
-</div>
 </template>
 
 <script>
@@ -270,6 +268,18 @@ export default {
         '#6DC8EC', '#31C529', '#54c9b6', '#F53626', '#f5c8be'],
     };
   },
+  mounted() { // 写两个因为缓存原因
+    document.querySelector('.main-content-con').style = 'top: 97px';
+    document.querySelector('.content-wrapper').style = 'height: calc(100%);margin: 0;padding: 0';
+  },
+  activated() {
+    document.querySelector('.main-content-con').style = 'top: 97px';
+    document.querySelector('.content-wrapper').style = 'height: calc(100%);margin: 0;padding: 0';
+  },
+  deactivated() { // 为了此页面有更好的展示效果，并保证其他页面样式不变
+    document.querySelector('.main-content-con').style = 'top: 116px';
+    document.querySelector('.content-wrapper').style = 'height: calc(100% - 80px);margin: 0 20px 20px 20px;padding: 20px';
+  },
   methods: {
     getSearchData(data) {
       this.searchData = data;
@@ -278,7 +288,7 @@ export default {
       // this.getServiceOrderInfo(data); // 服务订单
       // this.getEchartIntervenePlanPie(data); // 随访任务饼图
     },
-    checkRadio(val) {
+    chooseSunRadio(val) {
       console.log(val);
     },
     choosePlanType() { // 随访计划，随访记录切换
@@ -492,7 +502,7 @@ export default {
   }
   .echartBody{
     height: 410px;
-    box-shadow: 0px 0px 50px 0px rgba(151, 166, 189, 0.2);
+    box-shadow: 0px 6px 24px 0px rgba(14, 37, 87, 0.06);
     border-radius: 8px;
     background-color: white;
     /deep/ .el-radio-button__inner {

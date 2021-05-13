@@ -226,7 +226,7 @@ export default {
           {
             name: '已就诊',
             type: 'bar',
-            barWidth: 16,
+            barWidth: 14,
             itemStyle: {
               normal: {
                 barBorderRadius: [15, 15, 0, 0],
@@ -247,7 +247,7 @@ export default {
           {
             name: '未就诊',
             type: 'bar',
-            barWidth: 16,
+            barWidth: 14,
             itemStyle: {
               normal: {
                 barBorderRadius: [15, 15, 0, 0],
