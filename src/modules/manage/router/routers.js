@@ -2,6 +2,7 @@
  * @Author: csx
  * @Description 路由配置
  * meta: {
+ *     name: 页面名字  要与具体页面名字保持一致，为了关闭后清楚缓存
  *     title: {String|Number|Function} 显示在标签栏的文字
  *     hideInTag: (false) 设为true后此级路由将不会出现在标签栏中
  *     hideInMenu: (false) 设为true后在菜单栏不会显示该页面选项

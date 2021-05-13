@@ -181,7 +181,7 @@ import StaffDetail from './detail.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
 import resetPsd from './reset_psd.vue';
 export default {
-  name: 'Staff',
+  name: 'staff_list',
   components: {
     StaffForm,
     StaffDetail,

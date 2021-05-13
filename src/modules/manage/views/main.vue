@@ -55,10 +55,13 @@
               />
             </div>-->
             <Content class="content-wrapper">
-              <keep-alive>
+              <!--<keep-alive>
                 <router-view v-if="$route.meta.keepAlive"></router-view>
               </keep-alive>
-              <router-view v-if="!$route.meta.keepAlive"></router-view>
+              <router-view v-if="!$route.meta.keepAlive"></router-view>-->
+              <keep-alive :include="keepAliveList">
+                <router-view></router-view>
+              </keep-alive>
             </Content>
           </Layout>
         </Content>
@@ -101,6 +104,10 @@ export default {
       userName: state => state.user.userName,
       siteTitle: state => state.app.siteTitle,
       superAdmin: state => state.user.superAdmin,
+      keepAliveList() {
+        // 获取缓存的路由列表
+        return this.$store.state.app.keepAliveList.split(','); // 得缓存
+      },
     }),
     ...mapGetters({
       // menuList: 'app/menuList',
@@ -117,18 +124,22 @@ export default {
       menuList: [],
       contentMarginTop: 0,
       personalHealthPage: this.$route.meta.title === '个人管理中心', // 判断是否是个人健康管理页
+      routerNameMap: new Map(), // 得缓存
     };
   },
   watch: {
     $route(newRoute) {
       const { name, query, params, meta } = newRoute;
       this.personalHealthPageCheck(meta); // 判断是否是个人管理页
+      console.log(meta);
       this.addTag({
         route: { name, query, params, meta },
         type: 'push',
       });
       this.setTagNavList(getNewTagList(this.tagNavList, newRoute));
       this.$refs.sideMenu.updateOpenName(newRoute.name);
+      console.log(this.tagNavList);
+      this.dehuancun();
     },
   },
   mounted() {
@@ -152,6 +163,7 @@ export default {
           name: 'home',
         });
       }
+      this.dehuancun();
       this.setContentMarginTop();
     }, 100);
     window.onresize = () => { // 60 120  180  240 头部导航栏固定高度
@@ -165,6 +177,14 @@ export default {
       addTag: 'app/ADD_TAG',
       closeTag: 'app/CLOSE_TAG',
     }),
+    dehuancun() { // 判断缓存
+      const routerComponentNameList = []; // 得缓存
+      this.tagNavList.forEach((val) => {
+        routerComponentNameList.push(val.name);
+      });
+      console.log(routerComponentNameList);
+      this.$store.commit('app/setKeepAliveLists', routerComponentNameList.join());
+    },
     personalHealthPageCheck(meta) {
       if (meta.title === '个人管理中心') {
         this.personalHealthPage = true;
@@ -229,6 +249,7 @@ export default {
         }
       }
       this.setTagNavList(res);
+      this.dehuancun();
     },
     handleClick(item) {
       this.turnToPage(item);
