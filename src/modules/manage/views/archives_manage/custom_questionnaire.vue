@@ -320,7 +320,7 @@ import deleteIcon from '~/src/assets/images/deleteicon.png';
 import VisitedQuestionaireOpen from '@/components/date_select/visited_questionaire_open.vue';
 
 export default {
-  name: 'question',
+  name: 'custom_questionnaire',
   components: {
     report,
     QueryPage,

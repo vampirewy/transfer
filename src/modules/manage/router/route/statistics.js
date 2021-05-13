@@ -40,6 +40,16 @@ export default [
         component: () => import('../../views/question_statistics/test'),
       },
       {
+        path: '/in_hospital_change_total',
+        name: 'in_hospital_change_total',
+        meta: {
+          title: '院内转诊统计',
+          access: 'in_hospital_change_total',
+          keepAlive: true,
+        },
+        component: () => import('../../views/in_hospital_change/in_hospital_change_total'),
+      },
+      {
         path: '/work_statistics',
         name: 'work_statistics',
         meta: {

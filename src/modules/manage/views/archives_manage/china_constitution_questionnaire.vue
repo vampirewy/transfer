@@ -292,7 +292,7 @@ import report from './components/question_report.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
 
 export default {
-  name: 'question',
+  name: 'china_constitution_questionnaire',
   components: {
     report,
     QueryPage,

@@ -257,7 +257,7 @@ import OperateButton from '~/src/components/query_page/operate_button.vue';
 import ManagerList from '@/components/user_health/manager_list.vue';
 
 export default {
-  name: 'user_follow_create',
+  name: 'follow_record',
   components: {
     QueryPage,
     Search,

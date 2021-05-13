@@ -415,7 +415,7 @@ import abnormal from './el_modal/abnormal.vue';
 import ManagerList from '@/components/user_health/manager_list.vue';
 
 export default {
-  name: 'user_follow_create',
+  name: 'create_plan',
   components: {
     QueryPage,
     Search,

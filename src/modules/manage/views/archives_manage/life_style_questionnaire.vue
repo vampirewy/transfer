@@ -299,7 +299,7 @@ import report from './components/question_report.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
 
 export default {
-  name: 'question',
+  name: 'life_style_questionnaire',
   components: {
     report,
     QueryPage,
