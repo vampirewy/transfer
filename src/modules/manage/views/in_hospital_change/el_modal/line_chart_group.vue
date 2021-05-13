@@ -113,7 +113,8 @@ export default {
           axisPointer: {
             // type: 'cross',
             lineStyle: {
-              color: '#cccccc',
+              color: '#33333385',
+              type: 'dashed',
             },
           },
           padding: [5, 10],

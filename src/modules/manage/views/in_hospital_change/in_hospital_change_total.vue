@@ -1,10 +1,10 @@
 <template>
-<div style="margin:-20px -15px;background-color: #F6F8FC;">
+<div style="margin:-20px -15px -40px -15px;background-color: #F6F8FC;">
   <div class="dashboard-editor-container">
     <search-group @searchData="getSearchData" />
     <panel-group :formData="homeFindCountData" @toRouterPage="toRouterPage" />
-    <el-row :gutter="40" style="margin-left: 0;margin-bottom: 20px">
-      <el-col :span="15" class="echartBody" style="width:96%;height:380px">
+    <el-row :gutter="40" style="margin-left: 0;margin-bottom: 20px;width: 100%;">
+      <el-col :span="24" class="echartBody" style="height:380px">
 
             <div class="divTop">
               <div class="divTitle" style="margin-top: 15px">
@@ -61,11 +61,11 @@
                     :sectionXList="intervenePlanXList" v-else/>
       </el-col>
     </el-row>
-     <el-row :gutter="40" style="margin-left: 0;margin-bottom: 20px">
-      <el-col :span="18" class="echartBody" style="height: 470px">
+     <el-row :gutter="40" style="margin-left: 0;margin-bottom: 20px;margin-right: 0">
+      <el-col :span="16" class="echartBody" style="height: 470px">
         <sun></sun>
       </el-col>
-    <el-col :span="6">
+    <el-col :span="8" style="padding-right: 0">
       <el-col class="echartBody" style="height: 470px">
         <div class="rowTitleParent">
           <div class="divTitle" style="margin-left:15px;margin-top: -5px">
@@ -75,11 +75,12 @@
         </div>
         <div style="text-align: center;margin-top: 10px">
           <el-radio-group
-                  v-model="listQuery.planType"
+                  v-model="checkAfterPercent.planType"
                   @change="choosePlanType"
           >
-            <el-radio-button label="4">科室</el-radio-button>
-            <el-radio-button label="5">阳性</el-radio-button>
+            <el-radio-button label="1">总体</el-radio-button>
+            <el-radio-button label="2">红色预警</el-radio-button>
+            <el-radio-button label="3">橙色预警</el-radio-button>
           </el-radio-group>
         </div>
         <div class="noDataLine" v-if="intervenePlanPieXList.length === 0" style="height: 215px">
@@ -87,11 +88,12 @@
           <span>暂无数据</span>
         </div>
         <div class="chart-wrapper" v-else>
-          <div class="pieDiv" style="margin:0 5% 0 5%;">
-            <pie-chart :xList="intervenePlanPieXList" :yList="intervenePlanPieYList" />
+          <div class="pieDiv" style="margin:0 5% 10px 5%;">
+            <funnel-chart :xList="intervenePlanPieXList" :yList="intervenePlanPieYList" />
           </div>
-          <div class="pieDiv" style="height:80px">
-            <div class="pieDivTips" v-for="(item, index) in dianPieList" :key="item.name">
+          <div class="pieDiv" style="height:80px;margin-top: 40px">
+            <div class="pieDivTips"
+                 v-for="(item, index) in dianPieCheckAfterPercentList" :key="item.name">
               <div class="pieDivTipsLeft">
                 <p class="dian" :style="{'background-color': dianColorList[index]}"></p>
                 <p class="dianSize">{{item.name}}</p>
@@ -103,11 +105,11 @@
       </el-col>
     </el-col>
   </el-row>
-    <el-row :gutter="40" style="margin-left: 0;margin-bottom: 20px">
-      <el-col :span="18" class="echartBody" style="height: 470px">
+    <el-row :gutter="40" style="margin-left: 0;margin-bottom: 20px;margin-right: 0">
+      <el-col :span="16" class="echartBody" style="height: 470px">
         <subject></subject>
       </el-col>
-    <el-col :span="6">
+    <el-col :span="8" style="padding-right: 0">
       <el-col class="echartBody" style="height: 470px">
         <div class="rowTitleParent">
           <div class="divTitle" style="margin-left:15px;margin-top: -5px">
@@ -163,6 +165,7 @@ import PieChartKong from './el_modal/pie_chart_kong.vue';
 import BarChart from './el_modal/bar_chart.vue';
 import LineChart from './el_modal/line_chart.vue';
 import LinePieChart from './el_modal/line_pie_chart.vue';
+import FunnelChart from './el_modal/funnel_chart.vue';
 // import TabList from './el_modal/tab-list.vue';
 const BarChartLine = () => import('./el_modal/bar_chart.vue'); // 为了解决eslint报错，和组件相互干扰的问题
 import Subject from './el_modal/subject.vue';
@@ -178,6 +181,7 @@ export default {
     BarChartLine, // 折线图的柱形显示
     LineChart,
     LinePieChart,
+    FunnelChart, // 漏斗图 检后转化率
     // TabList,
     Sun, // 阳性就诊排名
     Subject, // 就诊科室排名
@@ -194,31 +198,33 @@ export default {
         startTime: '',
         endTime: '',
       },
+      checkAfterPercent: {
+        planType: '2',
+      },
       homeFindCountData: {},
       serviceOrderXList: [],
       serviceOrderYList: [],
+      dianPieCheckAfterPercentList: [
+        { namne: '阳性上报',
+          value: '阳性上报',
+        },
+        { namne: '首次跟踪',
+          value: '首次跟踪',
+        },
+        { namne: '预约挂号',
+          value: '预约挂号',
+        },
+        { namne: '完成就诊',
+          value: '完成就诊',
+        },
+      ],
       intervenePlanPieXList: ['10', '20', '30', '10', '40'],
       intervenePlanPieYList: [
-        {
-          value: 700,
-          name: ' 外科',
-        },
-        {
-          value: 248,
-          name: '急诊科',
-        },
-        {
-          value: 200,
-          name: '肿瘤科',
-        },
-        {
-          value: 400,
-          name: '消化内科',
-        },
-        {
-          value: 200,
-          name: '中医内科',
-        },
+        { value: 700, name: ' 外科' },
+        { value: 248, name: '急诊科' },
+        { value: 200, name: '肿瘤科' },
+        { value: 400, name: '消化内科' },
+        { value: 200, name: '中医内科' },
       ],
       clientTypeXList: [],
       clientTypeYList: [],
@@ -250,15 +256,9 @@ export default {
       ],
       dianColorList: ['#3154AC', '#806CE5', '#333333', '#FA912B', '#36BF2F',
         '#6DC8EC', '#31C529', '#54c9b6', '#F53626', '#f5c8be'],
-      tabbor: ['当日任务', '阳性跟踪', '随访任务'],
-      Tabactive: 0,
     };
   },
   methods: {
-    TabbarBtn(index) {
-      this.Tabactive = index;
-      // console.log(index);
-    },
     getSearchData(data) {
       this.searchData = data;
       // this.getHomeFindCount(data); // 查询五数据
@@ -484,7 +484,8 @@ export default {
     border-radius: 8px;
     background-color: white;
     /deep/ .el-radio-button__inner {
-      padding: 12.2px 25px;
+      padding: 12.2px 11px;
+      min-width: 80px;
     }
     /deep/ .el-radio-button__inner{
       border: 1px solid #E5E7EF;
@@ -541,7 +542,7 @@ export default {
             width: 12px;
             height: 12px;
             // border-radius: 50px;
-            margin-right: 8px;
+            margin-right: 6px;
           }
           .dianSize{
             color: #97A6BD;

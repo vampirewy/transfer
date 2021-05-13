@@ -2,7 +2,7 @@
   <el-row
     :gutter="20"
     class="panel-group"
-    style="margin: 10px 0 20px 0;display: flex;width: 99%;"
+    style="margin: 10px 0 20px 0;display: flex;width: 100%;"
   >
     <el-col class="card-panel-col" style="padding-left: 0">
       <div class="card-panel" @click="toRouterPage(1)">
@@ -70,7 +70,7 @@
         </div>
       </div>
     </el-col>
-    <el-col class="card-panel-col">
+    <el-col class="card-panel-col" style="padding-right: 0">
       <div class="card-panel" @click="toRouterPage(4)">
         <div class="card-panel-top">
           <div class="card-panel-description">
