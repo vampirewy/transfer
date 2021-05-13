@@ -83,19 +83,20 @@
             <el-radio-button label="3">橙色预警</el-radio-button>
           </el-radio-group>
         </div>
-        <div class="noDataLine" v-if="intervenePlanPieXList.length === 0" style="height: 215px">
+        <div class="noDataLine" v-if="checkAfterPercentYList.length === 0" style="height: 215px">
           <img src="@/assets/images/noDataLine.png" style="width: 200px;margin-top: 100px"/>
           <span>暂无数据</span>
         </div>
         <div class="chart-wrapper" v-else>
           <div class="pieDiv" style="margin:0 5% 10px 5%;">
-            <funnel-chart :xList="intervenePlanPieXList" :yList="intervenePlanPieYList" />
+            <funnel-chart :xList="checkAfterPercentXList" :yList="checkAfterPercentYList" />
           </div>
           <div class="pieDiv" style="height:80px;margin-top: 40px">
             <div class="pieDivTips"
                  v-for="(item, index) in dianPieCheckAfterPercentList" :key="item.name">
               <div class="pieDivTipsLeft">
-                <p class="dian" :style="{'background-color': dianColorList[index]}"></p>
+                <p class="dian"
+                   :style="{'background-color': dianCheckAfterPercentColorList[index]}"></p>
                 <p class="dianSize">{{item.name}}</p>
               </div>
               <p class="dianNum">{{item.value}}</p>
@@ -132,7 +133,8 @@
         </div>
         <div class="chart-wrapper" v-else>
           <div class="pieDiv" style="margin:18px 5% 0 5%;">
-            <pie-chart :xList="intervenePlanPieXList" :yList="intervenePlanPieYList" />
+            <pie-chart :xList="intervenePlanPieXList"
+                       :yList="intervenePlanPieYList" :centerText="checkAfterFeeTotal"/>
           </div>
           <div class="pieDiv" style="height:80px">
             <div class="pieDivTips" v-for="(item, index) in dianPieList" :key="item.name">
@@ -218,6 +220,15 @@ export default {
           value: '完成就诊',
         },
       ],
+      checkAfterPercentXList: ['检后就医转化率分析'],
+      checkAfterPercentYList: [
+        { value: 80, name: '阳性上报' },
+        { value: 60, name: '首次跟踪' },
+        { value: 40, name: '完成就诊' },
+        { value: 20, name: '预约挂号' },
+      ],
+      dianCheckAfterPercentColorList: ['#FA912B', '#806CE5', '#36BF2F', '#24499D', '#36BF2F',
+        '#6DC8EC', '#31C529', '#54c9b6', '#F53626', '#f5c8be'],
       intervenePlanPieXList: ['10', '20', '30', '10', '40'],
       intervenePlanPieYList: [
         { value: 700, name: ' 外科' },
@@ -226,6 +237,7 @@ export default {
         { value: 400, name: '消化内科' },
         { value: 200, name: '中医内科' },
       ],
+      checkAfterFeeTotal: '74652.0',
       clientTypeXList: [],
       clientTypeYList: [],
       clientTotal: 0,
@@ -270,8 +282,8 @@ export default {
       console.log(val);
     },
     choosePlanType() { // 随访计划，随访记录切换
-      const sendData = Object.assign(this.searchData, this.listQuery);
-      this.getEchartIntervenePlanPie(sendData);
+      // const sendData = Object.assign(this.searchData, this.listQuery);
+      // this.getEchartIntervenePlanPie(sendData);
     },
     toRouterPage(type) { // 点击客户总数 跳转我的客户
       localStorage.setItem('homeSearchData', JSON.stringify({

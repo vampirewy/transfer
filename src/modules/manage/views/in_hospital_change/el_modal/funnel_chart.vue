@@ -79,9 +79,9 @@ export default {
           trigger: 'item',
           formatter: '{b} : {c}%',
         },
-        legend: {
+        /* legend: {
           data: ['展现', '点击', '访问', '咨询', '订单'],
-        },
+        },*/
         series: [
           {
             name: '', // 检后就医转化率分析
@@ -101,6 +101,8 @@ export default {
             label: {
               show: true,
               position: 'inside',
+              formatter: '{c}%',
+              color: '#fff',
             },
             labelLine: {
               length: 10,
@@ -112,18 +114,35 @@ export default {
             itemStyle: {
               borderColor: '#fff',
               borderWidth: 0,
+              // 通常情况下：
+              normal: {
+                // 每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组中的颜色
+                /* color(params) {
+                  const colorList = [
+                    '#FA912B', '#806CE5', '#24499D', '#36BF2F',
+                    '#6DC8EC', '#31C529', '#54c9b6', '#F53626', '#f5c8be',
+                  ];
+                  return colorList[params.dataIndex];
+                },*/
+                /* color: new echarts.graphic.LinearGradient(1, 1, 0, 1, [
+                  {
+                    offset: 0,
+                    color: '#FA912B',
+                  },
+                  {
+                    offset: 1,
+                    color: '#EAAF75',
+                  },
+                ]),*/
+                // color: '#a453f7',  //设置所有柱状图颜色
+              },
             },
             emphasis: {
               label: {
                 fontSize: 20,
               },
             },
-            data: [
-              { value: 60, name: '60%' },
-              { value: 40, name: '40%' },
-              { value: 20, name: '20%' },
-              { value: 80, name: '80%' },
-            ],
+            data: this.yList,
           },
         ],
       };
@@ -134,6 +153,41 @@ export default {
       //   options.series[0].itemStyle.normal.borderWidth = 0;
       //   options.series[0].itemStyle.normal.borderColor = '#fff';
       // }
+      /* this.yList.forEach((val) => {
+
+      });*/
+      option.series[0].itemStyle.normal = {
+        /* color: new echarts.graphic.LinearGradient(1, 1, 0, 1, [
+          {
+            offset: 0,
+            color: '#FA912B',
+          },
+          {
+            offset: 1,
+            color: '#EAAF75',
+          },
+        ]),*/
+        color(params) {
+          /* const colorList = [
+            '#FA912B', '#806CE5', '#24499D', '#36BF2F',
+            '#6DC8EC', '#31C529', '#54c9b6', '#F53626', '#f5c8be',
+          ];*/
+          const colorList = [new echarts.graphic.LinearGradient(1, 1, 0, 1, [
+            { offset: 0, color: '#FA912B' },
+            { offset: 1, color: '#EAAF75' },
+          ]), new echarts.graphic.LinearGradient(1, 1, 0, 1, [
+            { offset: 0, color: '#806CE5' },
+            { offset: 1, color: '#6C6CE5' },
+          ]), new echarts.graphic.LinearGradient(0, 0, 1, 1, [
+            { offset: 0, color: '#5393D5' },
+            { offset: 1, color: '#3154AC' },
+          ]), new echarts.graphic.LinearGradient(1, 1, 0, 1, [
+            { offset: 0, color: '#36BF2F' },
+            { offset: 1, color: '#22AE60' },
+          ])];
+          return colorList[params.dataIndex];
+        },
+      };
       this.chart.setOption(option);
     },
   },
