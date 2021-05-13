@@ -244,13 +244,13 @@
         </el-table-column> -->
         <el-table-column label="操作" prop="index">
           <template slot-scope="scope">
-            <el-button type="text">
+            <!-- <el-button type="text">
               <img
                 class="icon-delete"
                 src="@/assets/images/service/compile.png"
                 @click="operates(scope.$index, scope.row.id)"
               />
-            </el-button>
+            </el-button> -->
             <!-- <el-button type="text">
               <img
                 class="icon-delete"
@@ -363,7 +363,8 @@ export default {
         for (let i = 0; i < this.detectionInfo.length; i++) {
           this.detectionInfos.push(this.detectionInfo[i]);
         }
-        console.log(this.detectionInfos, 'dfafdsfsdfds12312');
+        this.detectioninfoSource.clientName = '';
+        // console.log(this.detectionInfos, 'dfafdsfsdfds12312');
         this.detectionInfo = [];
       } else {
         return this.$message.warning('请先选择客户');
@@ -393,18 +394,26 @@ export default {
     },
     // 选择检测项目
     detectiononSelectUser(data) {
-      data.clientId = this.infoSource.clientId;
-      data.ingrenient = this.infoSource.ingrenient;
-      data.consequences = '123132';
-      this.detectionInfo.push(data);
       console.log(data, '选择检测项目');
-      this.$refs.userPopovers.doClose();
-      this.detectionpopoverStatus = false;
-      this.detectioninfoSource.clientName += data.name;
-      this.detectioninfoSource.clientId = data.id;
-      this.detectioninfoSource.age = data.age;
-      this.detectioninfoSource.gender = data.gender;
-      this.detectioninfoSource.gridName = data.gridName;
+      if (data) {
+        // data.clientId = this.infoSource.clientId;
+        // data.ingrenient = this.infoSource.ingrenient;
+        // data.consequences = '123132';
+        data.forEach((val) => {
+          this.detectioninfoSource.clientName += `${val.intro}、`;
+          this.detectionInfo.push(val);
+        });
+        // this.detectionInfo.push(data);
+        this.$refs.userPopovers.doClose();
+        this.detectionpopoverStatus = false;
+        // this.detectioninfoSource.clientName += data.name;
+        // this.detectioninfoSource.clientId = data.id;
+        // this.detectioninfoSource.age = data.age;
+        // this.detectioninfoSource.gender = data.gender;
+        // this.detectioninfoSource.gridName = data.gridName;
+      } else {
+        this.$refs.userPopovers.doClose();
+      }
     },
     addRecord() {
       this.$refs.form.validate((valid) => {
@@ -464,10 +473,10 @@ export default {
       if (!this.detectioninfoSource.clientId === '') {
         return this.$message.warning('请添加检测项目');
       }
-      const json = {};
       const arrars = [];
       for (let i = 0; i < this.detectionInfos.length; i++) {
-        json.clientId = this.detectionInfos[i].clientId;
+        const json = {};
+        json.clientId = this.infoSource.clientId;
         json.result = this.detectionInfos[i].consequences;
         json.healthDataItemId = this.detectionInfos[i].id;
         json.detectDate = this.infoSource.startDate + this.infoSource.startDates;

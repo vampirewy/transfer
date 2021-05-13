@@ -124,7 +124,7 @@
       </div>
     </template>
     <div class="buttons">
-      <el-button @click="$emit('close')">返回</el-button>
+      <el-button @click="back('close')">返回</el-button>
     </div>
   </div>
 </template>
@@ -133,7 +133,7 @@
 import { MAX_PAGESIZE } from '~/src/libs/util/index';
 export default {
   name: 'report_detail',
-  props: ['id'],
+  // props: ['id'],
   data() {
     return {
       formData: {
@@ -150,6 +150,7 @@ export default {
         4: 'IV',
         5: 'V',
       },
+      id: this.$route.query.id || '',
     };
   },
   mounted() {
@@ -194,6 +195,9 @@ export default {
           }
         });
       });
+    },
+    back() {
+      this.$router.go(-1);
     },
   },
 };

@@ -10,7 +10,7 @@
     <div class="divTop" >
       <div class="divTitle" style="margin-top:20px">
         <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
-        异常库
+        体检小项
       </div>
       <div class="searchCondition">
         <div class="searchLeft">
@@ -98,8 +98,8 @@
                   style="width: 140px"
                   clearable
           >
-            <el-option :label="item.name" :value="item.paramValue"
-                       v-for="(item, index) in questionFromList" :key="index"></el-option>
+            <el-option label="是" value="1" key="1"></el-option>
+            <el-option label="否" value="2" key="2"></el-option>
           </el-select>
         </div>
       </div>
@@ -171,15 +171,19 @@
                 </el-switch> -->
               </template>
             </el-table-column>
-            <el-table-column label="性别" prop="gender" min-width="80" show-overflow-tooltip />
-            <el-table-column label="重要指标" prop="isMain" min-width="80" show-overflow-tooltip />
+            <el-table-column label="性别" prop="gender" min-width="80" show-overflow-tooltip>
+              <template slot-scope="scope">
+                {{ scope.row.gender === 1 ? '男' :scope.row.gender === 1?'不限': '女' }}
+              </template>
+            </el-table-column>
+            <el-table-column label="重要指标" prop="isMainText" min-width="80" show-overflow-tooltip />
             <el-table-column label="是否对比" prop="isCompareText"
              min-width="80" show-overflow-tooltip />
             <el-table-column label="范围或参考" prop="maxAge" min-width="100" show-overflow-tooltip />
             <el-table-column label="单位" prop="unit" min-width="80" show-overflow-tooltip />
-            <el-table-column label="项目介绍" prop="refRange" min-width="100" show-overflow-tooltip>
+            <el-table-column label="项目介绍" prop="intro" min-width="100" show-overflow-tooltip>
               <template slot-scope="scope">
-                <span>{{ scope.row.refRange || '0'}}</span>
+                <span>{{ scope.row.intro || '0'}}</span>
               </template>
             </el-table-column>
             <el-table-column label="操作" prop="index"  width="150">
@@ -289,20 +293,33 @@ export default {
       Tabactive: 0,
     };
   },
+  mounted() {
+    this.getList();
+    this.queryList();
+    // this.getUserList();
+    // this.getGridList(); // 获取人员列类别
+    // this.getDoctor(); // 获取医生列表
+  },
   methods: {
-    async getSectionList() {
-      const res = await this.$api.physicalProjectListInterface.getSectionList();
-      const { data } = res.data;
-      if (data) {
-        this.SectionList = data.data || [];
-      }
-    },
     async queryList() {
       const res = await this.$api.physicalProjectListInterface.listOrganItemLibrary();
       console.log(res.data);
       const { data } = res.data;
       if (data) {
         this.examination = data || [];
+        this.form.examinationId = data[0].id;
+        this.getSectionList();
+      }
+    },
+    async getSectionList() {
+      const res = await this.$api.physicalProjectListInterface.getSectionList({
+        pageNo: 1,
+        pageSize: 100,
+        organItemLibraryId: this.form.examinationId,
+      });
+      const { data } = res.data;
+      if (data) {
+        this.SectionList = data.data || [];
       }
     },
     TabbarBtn(index) {
@@ -563,14 +580,6 @@ export default {
           }
         });
     },
-  },
-  mounted() {
-    this.getList();
-    this.queryList();
-    this.getSectionList();
-    // this.getUserList();
-    // this.getGridList(); // 获取人员列类别
-    // this.getDoctor(); // 获取医生列表
   },
 };
 </script>

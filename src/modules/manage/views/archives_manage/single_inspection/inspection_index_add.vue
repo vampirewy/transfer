@@ -16,7 +16,7 @@
         <h3 v-else class="name">新增单项检查</h3>
       </div>-->
         <div class="divRightTitleDiv" style="margin-top: -20px">
-            <div class="divRightTitle">{{id ? '编辑-就医用户信息' : '新增单项检查'}}
+            <div class="divRightTitle">{{id ? '编辑就医用户信息' : '新增单项检查'}}
                 <div class="titleBiao"></div></div>
         </div>
       <div class="medicate-record mt20">
@@ -197,7 +197,7 @@
          </div> -->
 
         <div class="row">
-            <el-form-item label="检查描述" prop="ingrenient" style="width:100%">
+            <el-form-item label="检查描述" style="width:100%">
               <el-input
                 type="textarea"
                 :rows="5"
@@ -219,7 +219,8 @@
         </div>
         <div class="row">
             <div>
-                <span>体检库：</span>
+                <!-- <span>体检库：</span> -->
+            <el-form-item label="体检库" prop="gridId">
                 <el-select
                 v-model="formData.gridId"
                 placeholder="请选择"
@@ -232,6 +233,7 @@
                     :key="index"
                 ></el-option>
                 </el-select>
+            </el-form-item>
             </div>
           <el-form-item label="检查项目" prop="clientName">
             <el-popover
@@ -245,7 +247,7 @@
               <select-examination
                 v-if="popoverStatusCheck"
                 @change="onSelectUserCheck"
-                :examination="formData.gridId"
+                :examination="infoSource.gridId"
               ></select-examination>
               <el-input
                 :class="`select-user-trigger ${id ? 'disabled' : ''}`"
@@ -320,12 +322,12 @@
         </el-table-column> -->
         <el-table-column label="操作" prop="index">
           <template slot-scope="scope">
-              <el-button type="text" @click="Addoperates(scope.$index, scope.row.id)">
+              <!-- <el-button type="text" @click="Addoperates(scope.$index, scope.row.id)">
               <img
                 class="icon-delete"
                 src="@/assets/images/service/compile.png"
               />
-            </el-button>
+            </el-button> -->
             <el-button type="text" @click="deleteField(scope.$index, scope.row.id)">
               <img
                 class="icon-delete"
@@ -394,16 +396,18 @@ export default {
         gridName: '',
         clientNameCheck: '', // 检查项目
         startDates: ' 00:00:00',
+        gridId: '',
       },
       drugsList: [],
       resultList: [],
       gridList: [],
       rules: {
         clientName: [{ required: true, message: '客户不能为空' }],
-        drugsName: [{ required: true, message: '药品名称不能为空' }],
+        drugsName: [{ required: true, message: '检查编号不能为空' }],
+        specification: [{ required: true, message: '检查机构不能为空' }],
         startDate: [{ required: true, message: '开始时间不能为空' }],
-        endDate: [{ required: true, message: '结束时间不能为空' }],
-        result: [{ required: true, message: '当前状态不能为空' }],
+        endDate: [{ required: true, message: '检查时间不能为空' }],
+        gridId: [{ required: true, message: '体检库不能为空' }],
       },
       formData: {
         pageNo: 1,
@@ -415,7 +419,7 @@ export default {
   mounted() {
     console.log(this.id);
     window.vm = this;
-    this.getResultList();
+    // this.getResultList();
     this.queryList();
     if (this.id) {
       this.saveInspectRecord(this.id);
@@ -440,6 +444,9 @@ export default {
         this.gridList = data || [];
       }
     },
+    deleteField(index) {
+      this.drugsList.splice(index, 1);
+    },
     saveInspectRecord(id) {
       this.$api.healthMonitorInterface.SinglegetDetail(id).then(({ data }) => {
         if (data.success) {
@@ -459,8 +466,8 @@ export default {
             json.dose = data.data.inspectionRecordConfigDtos[i].advice;
             this.drugsList.push(json);
           }
-          console.log(this.drugsList, 'sdfsfsfsdfsdf');
-          this.$message.success('操作成功');
+          // console.log(this.drugsList, 'sdfsfsfsdfsdf');
+          // this.$message.success('操作成功');
         }
       });
     },
@@ -469,6 +476,10 @@ export default {
         for (let i = 0; i < this.StatusCheck.length; i++) {
           this.drugsList.push(this.StatusCheck[i]);
         }
+        this.StatusCheck = [];
+        this.infoSource.clientNameCheck = '';
+      } else {
+        this.$message.warning('请选择检查项目');
       }
     },
     handlePopoperClose() {
@@ -487,18 +498,25 @@ export default {
       this.infoSource.gridName = data.gridName;
     },
     onSelectUserCheck(data) {
-      data.outcome = '';
-      data.reference = '';
-      data.Suggestion = '';
       console.log(data, '接收的数据12323');
-      this.$refs.userPopoverCheck.doClose();
-      this.popoverStatusCheck = false;
-      this.StatusCheck.push(data);
-    //   this.infoSource.clientName = data.name;
-    //   this.infoSource.clientId = data.id;
-    //   this.infoSource.age = data.age;
-    //   this.infoSource.gender = data.gender;
-    //   this.infoSource.gridName = data.gridName;
+      if (data) {
+        // data.outcome = '';
+        // data.reference = '';
+        // data.Suggestion = '';
+        // this.popoverStatusCheck = false;
+        data.forEach((val) => {
+          this.infoSource.clientNameCheck += `${val.itemName}、`;
+          this.StatusCheck.push(val);
+        });
+        this.$refs.userPopoverCheck.doClose();
+      //   this.infoSource.clientName = data.name;
+      //   this.infoSource.clientId = data.id;
+      //   this.infoSource.age = data.age;
+      //   this.infoSource.gender = data.gender;
+      //   this.infoSource.gridName = data.gridName;
+      } else {
+        this.$refs.userPopoverCheck.doClose();
+      }
     },
     addRecord() {
       this.$refs.form.validate((valid) => {
@@ -554,9 +572,9 @@ export default {
         return this.$message.warning('请选择客户');
       }
 
-      if (!this.drugsList.length) {
-        return this.$message.warning('请添加检查项目');
-      }
+      // if (!this.drugsList.length) {
+      //   return this.$message.warning('请添加检查项目');
+      // }
       const arrars = [];
       for (let i = 0; i < this.drugsList.length; i++) {
         const json = {};
@@ -579,6 +597,7 @@ export default {
       }).then(({ data }) => {
         if (data.success) {
           this.$message.success('操作成功');
+          this.$router.go(-1);
         }
       });
     //   this.$api.medication.add(reqBody).then(({ data }) => {
@@ -649,13 +668,6 @@ export default {
   .handle-btn {
     text-align: center;
     .reset-btn {
-      // -webkit-border-radius: 8px;
-      // -moz-border-radius: 8px;
-      // border-radius: 8px;
-      // background: #97a6bd;
-      // color: #ffffff;
-      // font-weight: 400;
-      // padding: 12px 26px;
       width: 90px;
       height: 40px;
       background: rgba(49, 84, 172, 0.1);
@@ -665,10 +677,6 @@ export default {
       color: #3154AC;
     }
     .add-btn {
-      // -webkit-border-radius: 8px;
-      // -moz-border-radius: 8px;
-      // border-radius: 8px;
-      // padding: 12px 25px;
       width: 90px;
       height: 40px;
       background: rgba(49, 84, 172, 0.1);

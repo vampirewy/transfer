@@ -12,7 +12,7 @@ import iconDelete from '~/src/assets/images/common/delBtn.png';
 import iconAccurate from '~/src/assets/images/accurate@2x.png'; // 精准
 import iconTogether from '~/src/assets/images/together.png'; // 合并
 import iconGenerateReport from '~/src/assets/images/generateReport@2x.png'; // 合并
-import iconEditGray from '~/src/assets/images/editGray.png'; // 导入
+import iconEditGray from '~/src/assets/images/common/export.png'; // 导入
 export default {
   name: 'OperateButton',
   props: {
@@ -31,7 +31,7 @@ export default {
         someAdd: { label: '批量创建', icon: iconAdd },
         together: { label: '合并计划', icon: iconTogether },
         generateReport: { label: '生成报告', icon: iconGenerateReport },
-        editGray: { label: '导入', icon: iconEditGray },
+        editGray: { label: '导出', icon: iconEditGray },
       },
     };
   },

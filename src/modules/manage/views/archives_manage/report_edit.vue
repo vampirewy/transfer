@@ -201,6 +201,7 @@ export default {
               this.$api.reportInterface,
             );
           }
+          console.log(formData, '接收数据');
           request(formData).then(({ data }) => {
             if (data) {
               this.$message.success('操作成功');
@@ -224,6 +225,7 @@ export default {
       this.$api.reportInterface.getReportDetail(id).then(({ data }) => {
         if (data.success) {
           this.formData = data.data;
+          this.formData.cardNo = data.data.clientId;
           if (!this.formData.sectionConclusionList) {
             this.$set(this.formData, 'sectionConclusionList', []);
           }

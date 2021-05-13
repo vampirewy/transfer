@@ -3,7 +3,7 @@
     <el-form :model="formData" label-width="90px" label-suffix="：" ref="form" :rules="rules">
       <el-row>
         <el-col :span="6">
-           <el-form-item label="检查编号" prop="drugsName">
+           <el-form-item label="检查编号" prop="reportNo">
               <el-input
                 v-model="formData.reportNo"
                 placeholder="请输入"
@@ -25,7 +25,7 @@
           </el-form-item> -->
         </el-col>
            <el-col :span="6">
-            <el-form-item label="检查机构" prop="specification">
+            <el-form-item label="检查机构" >
               <el-input
                 v-model="formData.examinationOrgan"
                 placeholder="请输入"
@@ -47,7 +47,7 @@
           </el-form-item> -->
         </el-col>
         <el-col :span="6">
-           <el-form-item label="体检时间" prop="endDate">
+           <el-form-item label="体检日期" prop="reportDate">
               <el-date-picker
                 class="end-date"
                 v-model="formData.reportDate"
@@ -70,18 +70,15 @@
           </el-form-item> -->
         </el-col>
         <el-col :span="6">
-          <el-form-item label="是否总检" prop="endDate">
+          <el-form-item label="是否总检" prop="reportState">
             <el-select
                     v-model="formData.reportState"
                     placeholder="请选择"
                     style="width: 100%"
             >
-              <el-option
-                      :label="item.gridName"
-                      :value="item.id"
-                      v-for="(item, index) in gridList"
-                      :key="index"
-              ></el-option>
+            <el-option label="未知" value="0" key="0"></el-option>
+            <el-option label="已总检" value="1" key="1"></el-option>
+            <el-option label="未总检" value="2" key="2"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -302,7 +299,7 @@
         </el-input>
       </div>
       <div class="buttons">
-        <el-button class="cancelBtn" @click="$emit('close')">取消</el-button>
+        <el-button class="cancelBtn" @click="black('close')">取消</el-button>
         <el-button type="primary" class="sureBtn" @click="submit">保存</el-button>
       </div>
     </el-form>
@@ -335,9 +332,10 @@ export default {
         advice: '',
         physicalExamination: '',
         gridId: '',
-        specification: '', // 检查机构
-        drugsName: '', // 检查编号
-        endDate: '', // 体检时间
+        examinationOrgan: '', // 检查机构
+        reportNo: '', // 检查编号
+        reportDate: '', // 体检时间
+        reportState: '', // 是否总检
       },
       abnormalModalVisible: false,
       abnormalLevelMap: {
@@ -348,11 +346,17 @@ export default {
         5: 'V',
       },
       rules: {
-        // libraryId: [
-        //   { required: true, message: '请选择体检库', trigger: 'change' },
-        // ],
+        reportNo: [
+          { required: true, message: '请输入检查编号', trigger: 'blur' },
+        ],
         physicalExamination: [
-          { required: true, message: '请选择体检库', trigger: 'change' },
+          { required: true, message: '请输入检查机构', trigger: 'blur' },
+        ],
+        reportDate: [
+          { required: true, message: '请选择体检日期', trigger: 'blur' },
+        ],
+        reportState: [
+          { required: true, message: '请选择是否总检', trigger: 'blur' },
         ],
       },
     };
@@ -578,6 +582,9 @@ export default {
         });
       }
       this.$set(this.formData, 'sectionConclusionList', sections);
+    },
+    black() {
+      this.$router.go(-1);
     },
   },
 };

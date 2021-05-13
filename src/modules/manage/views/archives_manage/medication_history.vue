@@ -91,9 +91,9 @@
                   </el-select>
                 </div>
                 <div>
-                <span>结束日期：</span>
+                <span>开始日期：</span>
                 <el-date-picker
-                  v-model="form.startTime"
+                  v-model="form.startStartInputTime"
                   type="date"
                   :max-date="form.endTime"
                   placeholder="选择开始日期"
@@ -102,7 +102,7 @@
                 </el-date-picker>
                 <span class="timing">-</span>
                 <el-date-picker
-                  v-model="form.endTime"
+                  v-model="form.endStartInputTime"
                   type="date"
                   :min-date="form.startTime"
                   placeholder="选择结束日期"
@@ -116,7 +116,7 @@
                   <div class="searchFor" @click="search">
                     <img src="@/assets/images/common/topsearchblue.png" alt="" />
                   </div>
-                  <div class="resetAll">重置</div>
+                  <div class="resetAll" @click="reset">重置</div>
                   <div class="more" v-if="isTrue" @click="upMore">
                     <span>></span>
                     展开更多
@@ -131,13 +131,13 @@
           <div v-if="!isTrue" class="searchCondition" style="width: 100%">
             <div class="searchLeft" style="padding-left: 5px">
                <div>
-                  <span>是否总检：</span>
+                  <span>人员类别：</span>
                   <el-select
-                    v-model="form.drugsName"
+                    v-model="form.clientGrid"
                     placeholder="请选择"
                     style="width: 140px"
                   >
-                    <el-option
+                   <el-option
                       :label="item.gridName"
                       :value="item.id"
                       v-for="(item, index) in gridList"
@@ -148,7 +148,7 @@
               <div>
                 <span>结束日期：</span>
                 <el-date-picker
-                  v-model="form.startTime"
+                  v-model="form.endInputStartTime"
                   type="date"
                   :max-date="form.endTime"
                   placeholder="选择开始日期"
@@ -157,7 +157,7 @@
                 </el-date-picker>
                 <span class="timing">-</span>
                 <el-date-picker
-                  v-model="form.endTime"
+                  v-model="form.endInputEndTime"
                   type="date"
                   :min-date="form.startTime"
                   placeholder="选择结束日期"
@@ -191,9 +191,9 @@
             align="center"
           >
             <el-table-column type="selection"> </el-table-column>
-            <el-table-column label="客户编号" prop="clientGridName" show-overflow-tooltip>
+            <el-table-column label="客户编号" prop="clientNo" show-overflow-tooltip>
               <template slot-scope="scope">
-                <span>{{ scope.row.clientGridName | getResult }}</span>
+                <span>{{ scope.row.clientNo | getResult }}</span>
               </template>
             </el-table-column>
             <el-table-column label="姓名" prop="clientName" show-overflow-tooltip>
@@ -216,11 +216,11 @@
             </el-table-column>
             <el-table-column
               label="人员类别"
-              prop="workUnitName"
+              prop="clientGridName"
               show-overflow-tooltip
             >
               <template slot-scope="scope">
-                <span>{{ scope.row.workUnitName | getResult }}</span>
+                <span>{{ scope.row.clientGridName | getResult }}</span>
               </template>
             </el-table-column>
             <el-table-column label="药品名称" prop="drugName" show-overflow-tooltip>
@@ -228,13 +228,13 @@
                 <span>{{ scope.row.drugName | getResult }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="针对问题" prop="clientGridName" show-overflow-tooltip>
+            <el-table-column label="针对问题" prop="mainIndication" show-overflow-tooltip>
               <template slot-scope="scope">
-                <span>{{ scope.row.clientGridName | getResult }}</span>
+                <span>{{ scope.row.mainIndication | getResult }}</span>
               </template>
             </el-table-column>
             <el-table-column
-              label="用药时间"
+              label="就医时间"
               prop="startDate"
               show-overflow-tooltip
             >
@@ -242,14 +242,14 @@
                 <span>{{ scope.row.startDate | getResult }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="用药时间" prop="endDate" show-overflow-tooltip>
+            <el-table-column label="出院时间" prop="endDate" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>{{ scope.row.endDate | getResult }}</span>
               </template>
             </el-table-column>
-             <el-table-column label="用药记录" prop="clientGridName" show-overflow-tooltip>
+             <el-table-column label="用药记录" prop="pharmacyCount" show-overflow-tooltip>
               <template slot-scope="scope">
-                <span>{{ scope.row.clientGridName | getResult }}</span>
+                <span>{{ scope.row.pharmacyCount | getResult }}</span>
               </template>
             </el-table-column>
             <el-table-column label="操作" prop="index" width="150px">
@@ -263,7 +263,9 @@
                   v-if="getAccess('medication_history_edit')"
                   >编辑
                 </el-button>
-                <el-button type="text" size="small" @click="handleDetailRow(scope.row)"
+                <el-button type="text" size="small"
+                 @click="handleDetailRow(scope.row)"
+                 v-if="getAccess('medication_history_view')"
                   >查看</el-button
                 >
                 <!-- <el-button
@@ -307,7 +309,7 @@ import QueryFilter from '~/src/components/query_page/query_filter.vue';
 import OperateButton from '~/src/components/query_page/operate_button.vue';
 import detail from './components/detail.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
-import { MAX_PAGESIZE } from '~/src/libs/util/index';
+// import { MAX_PAGESIZE } from '~/src/libs/util/index';
 
 export default {
   name: 'medication_history',
@@ -320,14 +322,15 @@ export default {
   },
   data() {
     return {
-      isTrue: false,
+      isTrue: true,
       form: {
-        keyWord: '',
-        gender: '',
+        keyWord: '', // 输入框内容
+        gender: '', // 客户性别
         clientGrid: '', // 人员类别
-        drugsName: '', // 药品名称
-        startTime: '', // 开始时间
-        endTime: '', // 结束时间
+        startStartInputTime: '', // 开始时间
+        endStartInputTime: '', // 开始时间结束时间
+        endInputStartTime: '', // 结束时间
+        endInputEndTime: '', // 结束时间结束时间
       },
       genderList: [
         {
@@ -339,7 +342,7 @@ export default {
           value: 2,
         },
       ],
-      clientGridList: [],
+      gridList: [], // 人员类别
       table: {
         list: [],
         totalCount: 0,
@@ -357,8 +360,8 @@ export default {
       detailModalVisible: false,
     };
   },
-  mounted() {
-    this.getGridList();
+  activated() {
+    this.getGridLists();
     this.queryList();
   },
   methods: {
@@ -367,15 +370,26 @@ export default {
       this.$forceUpdate();
     },
     search() {
-
+      this.table.currentPage = 1;
+      this.queryList();
     },
-    async getGridList() {
-      const res = await this.$api.medicalHistoryInterface.clientTypeList({
-        pageNo: 1,
-        pageSize: MAX_PAGESIZE,
-      });
+    reset() {
+      this.form.keyWord = '';
+      this.form.gender = '';
+      this.form.clientGrid = '';
+      this.form.startStartInputTime = '';
+      this.form.endStartInputTime = '';
+      this.form.endInputStartTime = '';
+      this.form.endInputEndTime = '';
+      this.table.currentPage = 1;
+      this.queryList();
+    },
+    // 获取人员列表
+    async getGridLists() {
+      const res = await
+      this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
       const { data } = res.data;
-      this.clientGridList = data.list;
+      this.gridList = data.data;
     },
     onSearch() {
       this.table.currentPage = 1;
@@ -402,6 +416,13 @@ export default {
           }
         });
       });
+    },
+    // 获取人员列表
+    async getGridList() {
+      const res = await
+      this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
+      const { data } = res.data;
+      this.gridList = data.data;
     },
     async queryList() {
       const res = await this.$api.medication.fetch({

@@ -87,15 +87,15 @@
                 <div>
                   <span>人员类别：</span>
                   <el-select
-                    v-model="formData.gridId"
+                    v-model="formData.clientGrid"
                     placeholder="请选择"
                     style="width: 140px"
                   >
-                    <el-option
-                      :label="item.gridName"
-                      :value="item.id"
-                      v-for="(item, index) in gridList"
-                      :key="index"
+                   <el-option
+                    :label="item.gridName"
+                    :value="item.id"
+                    v-for="(item, index) in gridList"
+                    :key="index"
                     ></el-option>
                   </el-select>
                 </div>
@@ -103,6 +103,7 @@
                 <span>体检日期：</span>
                 <el-date-picker
                   v-model="formData.startTime"
+                  value-format="yyyy-MM-dd hh:mm:ss"
                   type="date"
                   :max-date="formData.endTime"
                   placeholder="选择开始日期"
@@ -112,6 +113,7 @@
                 <span class="timing">-</span>
                 <el-date-picker
                   v-model="formData.endTime"
+                  value-format="yyyy-MM-dd hh:mm:ss"
                   type="date"
                   :min-date="formData.startTime"
                   placeholder="选择结束日期"
@@ -125,7 +127,7 @@
                   <div class="searchFor" @click="search">
                     <img src="@/assets/images/common/topsearchblue.png" alt="" />
                   </div>
-                  <div class="resetAll">重置</div>
+                  <div class="resetAll" @click="resetAll">重置</div>
                   <!-- <div class="more" v-if="isTrue" @click="upMore">
                     <span>></span>
                     展开更多
@@ -201,12 +203,12 @@
               <operate-button
                 type="add"
                 @click="add"
-                v-if="getAccess('medical_history_add')">
+                v-if="getAccess('inspection_index_add')">
               </operate-button>
               <operate-button
                 type="delete"
                 @click="handleDelete"
-                v-if="getAccess('medical_history_batch_delete')">
+                v-if="getAccess('inspection_index_deleted')">
               </operate-button>
             </div>
           </div>
@@ -258,15 +260,15 @@
               <el-table-column type="selection" align="center"></el-table-column>
               <el-table-column
                 label="客户编号"
-                prop="inspectionNo"
+                prop="clientNo"
                 align="center"
                 show-overflow-tooltip>
-                <template slot-scope="scope">
+                <!-- <template slot-scope="scope">
                 <span class="clientName"
                       @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
                   {{ scope.row.clientName || '-'}}
                 </span>
-                </template>
+                </template> -->
               </el-table-column>
               <el-table-column
                 label="姓名"
@@ -281,14 +283,14 @@
               </el-table-column>
                 <el-table-column
                 label="年龄"
-                align="age"
-                prop="hospital"
+                align="center"
+                prop="age"
                 show-overflow-tooltip>
               </el-table-column>
                <el-table-column
                 label="检查单号"
                 align="center"
-                prop="clientId"
+                prop="inspectionNo"
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
@@ -306,15 +308,15 @@
               <el-table-column
                 label="检查项目"
                 align="center"
-                prop="workUnitName"
+                prop="itemNames"
                 show-overflow-tooltip>
               </el-table-column>
-              <el-table-column
+              <!-- <el-table-column
                 label="项目库"
                 align="center"
                 prop="diagnosis"
                 show-overflow-tooltip>
-              </el-table-column>
+              </el-table-column> -->
               <el-table-column
                 label="次数"
                 align="center"
@@ -325,7 +327,7 @@
                 <template slot-scope="scope">
                   <el-button type="text" size="small"
                    @click="adds(scope.row)"
-                   v-if="getAccess('medical_history_edit')"
+                   v-if="getAccess('inspection_index_edit')"
                    style="color:#3154AC">编辑</el-button>
                   <span style="color:#DDE0E6">|</span>
                   <el-button
@@ -374,7 +376,7 @@ import deleteIcon from '~/src/assets/images/deleteicon.png';
 import { MAX_PAGESIZE } from '~/src/libs/util/index';
 
 export default {
-  name: 'index',
+  name: 'inspection_index',
   components: {
     MedicalHistoryForm,
     DetailDialog,
@@ -388,10 +390,13 @@ export default {
       isTrue: false,
       total: 0,
       tableData: [],
+      gridList: [],
       formData: {
         keywords: '',
         startTime: '',
         endTime: '',
+        clientGrid: '',
+        gender: '',
         pageNo: 1,
         pageSize: 15,
       },
@@ -421,27 +426,28 @@ export default {
         list: [],
       },
       loading: false,
-      pickerStartTime: {
-        disabledDate: (time) => {
-          if (this.formData.endTime) {
-            const endTime = new Date(this.formData.endTime);
-            return time.getTime() > new Date(endTime).getTime() - (3600 * 1000 * 23 * 1);
-          }
-        },
-      },
-      pickerEndTime: {
-        disabledDate: (time) => {
-          if (this.formData.startTime) {
-            const startTime = new Date(this.formData.startTime);
-            return time.getTime() < new Date(startTime).getTime() - (3600 * 1000 * 23 * 1);
-          }
-        },
-      },
+      // pickerStartTime: {
+      //   disabledDate: (time) => {
+      //     if (this.formData.endTime) {
+      //       const endTime = new Date(this.formData.endTime);
+      //       return time.getTime() > new Date(endTime).getTime() - (3600 * 1000 * 23 * 1);
+      //     }
+      //   },
+      // },
+      // pickerEndTime: {
+      //   disabledDate: (time) => {
+      //     if (this.formData.startTime) {
+      //       const startTime = new Date(this.formData.startTime);
+      //       return time.getTime() < new Date(startTime).getTime() - (3600 * 1000 * 23 * 1);
+      //     }
+      //   },
+      // },
     };
   },
-  mounted() {
+  activated() {
     this.getClientTypeList();
     this.queryList();
+    this.getGridList();
   },
   methods: {
     upMore() {
@@ -503,10 +509,18 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
+    // 获取人员列表
+    async getGridList() {
+      const res = await
+      this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
+      const { data } = res.data;
+      this.gridList = data.data;
+    },
     queryList() {
-      if (!this.checkRangeDate()) {
-        return false;
-      }
+      // if (!this.checkRangeDate()) {
+      //   return false;
+      // }
+      console.log({ ...this.formData }, '123123');
       this.$api.medicalHistoryInterface
         .singleinspectionPageList({ ...this.formData })
         .then((res) => {
@@ -515,6 +529,11 @@ export default {
             const result = data.data || {};
             this.tableData = result.data || [];
             this.total = result.total || 0;
+            // for (let i = 0; i > result.data.length; i++) {
+            //   for (let j = 0; j > result.data[i].inspectionRecordConfigDtos.length; j++) {
+            //     console.log(result.data[i].inspectionRecordConfigDtos[j].itemName + ',');
+            //   }
+            // }
           }
         });
     },
@@ -530,10 +549,20 @@ export default {
       this.queryList();
     },
     search() {
-      if (!this.checkRangeDate()) {
-        return false;
-      }
+      // if (!this.checkRangeDate()) {
+      //   return false;
+      // }
       this.formData.pageNo = 1;
+      this.queryList();
+    },
+    resetAll() {
+      this.formData.keywords = '';
+      this.formData.startTime = '';
+      this.formData.endTime = '';
+      this.formData.clientGrid = '';
+      this.formData.gender = '';
+      this.formData.pageNo = 1;
+      this.formData.pageSize = 15;
       this.queryList();
     },
     handleEnter() {
@@ -568,8 +597,14 @@ export default {
       });
     },
     detail(data) {
-      this.viewIndex = 4;
+      // this.viewIndex = 4;
       this.currentId = data.id;
+      this.$router.push({
+        path: '/inspection_index_info',
+        query: {
+          id: data.id,
+        },
+      });
     },
     handleEdit() {
       if (this.multipleSelection.length === 0) {

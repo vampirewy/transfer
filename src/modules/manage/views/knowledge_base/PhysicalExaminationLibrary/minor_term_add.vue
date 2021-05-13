@@ -14,7 +14,7 @@
       </div>
       <el-row>
         <el-col :span="6">
-          <el-form-item label="项目库" prop="result" >
+          <el-form-item label="项目库" prop="gridListId" >
             <el-select v-model="gridListId" placeholder="请选择" width="150">
               <el-option
                 v-for="item in gridList"
@@ -26,7 +26,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="项目科室" prop="result">
+          <el-form-item label="项目科室" prop="SectionListId">
             <el-select v-model="SectionListId" placeholder="请选择">
               <el-option
                 v-for="item in SectionList"
@@ -39,13 +39,13 @@
         </el-col>
         <el-col :span="6">
           <!-- <el-form-item label="标题" prop="result"> -->
-            <el-form-item label="小项名称" prop="doctorName">
+            <el-form-item label="小项名称" prop="MinorItemsName">
               <el-input v-model="form.MinorItemsName" placeholder="请输入"></el-input>
             </el-form-item>
           <!-- </el-form-item> -->
         </el-col>
         <el-col :span="6">
-          <el-form-item label="适宜性别" prop="result">
+          <el-form-item label="适宜性别" >
             <el-select v-model="form.Gender" placeholder="请选择">
               <el-option label="男" value="1" key="1"></el-option>
               <el-option label="女" value="2" key="2"></el-option>
@@ -53,7 +53,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="9">
-          <el-form-item label="年龄范围" prop="doctorName">
+          <el-form-item label="年龄范围">
             <div style="display: flex;">
             <el-input v-model="form.minAge" placeholder="请输入"></el-input>
             <span style="margin:0 10px 0 10px;color:#333333">—</span>
@@ -62,7 +62,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="9">
-          <el-form-item label="正常范围" prop="doctorName">
+          <el-form-item label="正常范围" >
             <div style="display: flex;">
             <el-input v-model="form.minnormal" placeholder="请输入"></el-input>
             <span style="margin:0 10px 0 10px;color:#333333">—</span>
@@ -71,12 +71,12 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="小项单位" prop="examination">
+          <el-form-item label="小项单位">
             <el-input v-model="form.Units" placeholder="请输入" :maxlength="300"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="正常参考" prop="examination">
+          <el-form-item label="正常参考" >
             <el-input v-model="form.Reference" placeholder="请输入" :maxlength="300"></el-input>
           </el-form-item>
         </el-col>
@@ -98,7 +98,7 @@
           </el-form-item>
         </el-col> -->
         <el-col :span="24">
-          <el-form-item label="小项介绍" prop="result">
+          <el-form-item label="小项介绍" >
             <el-input
               type="textarea"
               v-model="form.Introduction"
@@ -200,9 +200,9 @@ export default {
         },
       },
       rules: {
-        clientInfoId: [{ required: true, message: '客户不能为空' }],
-        medicalType: [{ required: true, message: '就医类型不能为空' }],
-        hospital: [{ required: true, message: '医疗机构不能为空' }],
+        gridListId: [{ required: true, message: '项目库不能为空' }],
+        SectionListId: [{ required: true, message: '科室不能为空' }],
+        MinorItemsName: [{ required: true, message: '小项名称不能为空' }],
         inDate: [{ required: true, message: '就医时间不能为空' }],
         result: [{ required: true, message: '当前状态不能为空' }],
         hpi: [{ required: true, message: '现病史不能为空' }],
@@ -246,7 +246,6 @@ export default {
       });
     }
     this.queryList();
-    this.getSectionList();
   },
   methods: {
     async queryList() {
@@ -255,10 +254,16 @@ export default {
       const { data } = res.data;
       if (data) {
         this.gridList = data || [];
+        this.gridListId = data[0].id;
+        this.getSectionList();
       }
     },
     async getSectionList() {
-      const res = await this.$api.physicalProjectListInterface.getSectionList();
+      const res = await this.$api.physicalProjectListInterface.getSectionList({
+        pageNo: 1,
+        pageSize: 100,
+        organItemLibraryId: this.gridListId,
+      });
       const { data } = res.data;
       if (data) {
         this.SectionList = data.data || [];

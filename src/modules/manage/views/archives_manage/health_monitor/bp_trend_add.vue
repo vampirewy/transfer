@@ -83,30 +83,39 @@
       <div class="medicate-info mt20" style="margin-top:0">
         <el-row v-if="id === 0">
             <el-col :span="6">
-            <el-form-item label="收缩压" prop="drugsName">
+            <el-form-item label="收缩压" prop="SBP">
               <el-input
                 v-model="infoSource.SBP"
+                type='number'
                 placeholder="请输入"
                 :maxlength="100"
+                style="width: 130px"
               ></el-input>
+              <span style="color:333333;font-size:14px">mmHg</span>
             </el-form-item>
             </el-col>
             <el-col :span="6">
-            <el-form-item label="舒张压" prop="specification">
+            <el-form-item label="舒张压" prop="DBP">
               <el-input
                 v-model="infoSource.DBP"
+                type='number'
                 placeholder="请输入"
                 :maxlength="30"
+                style="width: 130px"
               ></el-input>
+              <span style="color:333333;font-size:14px">mmHg</span>
             </el-form-item>
             </el-col>
             <el-col :span="6">
-            <el-form-item label="脉搏" prop="specification">
+            <el-form-item label="脉搏" >
               <el-input
                 v-model="infoSource.pulse"
+                type='number'
                 placeholder="请输入"
                 :maxlength="30"
+                style="width: 130px"
               ></el-input>
+              <span style="color:333333;font-size:14px">次/分钟</span>
             </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -132,7 +141,7 @@
               ></el-input>
             </el-form-item> -->
             <el-col :span="6">
-            <el-form-item label="血糖类型" prop="medicalType">
+            <el-form-item label="血糖类型" prop="bloodsugar">
                 <el-select v-model="infoSource.bloodsugar" placeholder="请选择血糖类型">
                 <el-option
                     v-for="item in typeOptions"
@@ -146,10 +155,13 @@
             <el-col :span="6">
             <el-form-item label="血糖值" prop="drugsName">
               <el-input
+                type='number'
                 v-model="infoSource.bloodsugarvalue"
                 placeholder="请输入"
                 :maxlength="100"
+                style="width: 130px"
               ></el-input>
+              <span style="color:333333;font-size:14px">mmol/L</span>
             </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -168,39 +180,51 @@
         <div v-if="id === 2">
             <el-row>
                 <el-col :span="6">
-                <el-form-item label="身高" prop="specification">
+                <el-form-item label="身高">
                 <el-input
+                    type='number'
                     v-model="infoSource.Height"
                     placeholder="请输入"
                     :maxlength="30"
+                    style="width: 130px"
                 ></el-input>
+                <span style="color:333333;font-size:14px">cm</span>
                 </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                <el-form-item label="体重" prop="drugsName">
+                <el-form-item label="体重" prop="Weight">
                 <el-input
+                    type='number'
                     v-model="infoSource.Weight"
                     placeholder="请输入"
                     :maxlength="100"
+                    style="width: 130px"
                 ></el-input>
+                <span style="color:333333;font-size:14px">kg</span>
                 </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                <el-form-item label="腰围" prop="specification">
+                <el-form-item label="腰围" prop="Waist">
                 <el-input
+                    type='number'
                     v-model="infoSource.Waist"
                     placeholder="请输入"
                     :maxlength="30"
+                    style="width: 130px"
                 ></el-input>
+                <span style="color:333333;font-size:14px">cm</span>
                 </el-form-item>
                 </el-col>
                 <el-col :span="6">
                 <el-form-item label="体脂率" prop="specification">
                 <el-input
+                    type='number'
                     v-model="infoSource.specification"
                     placeholder="请输入"
                     :maxlength="30"
+                    style="width: 130px"
                 ></el-input>
+                <span style="color:333333;font-size:14px">%</span>
                 </el-form-item>
                 </el-col>
             </el-row>
@@ -222,39 +246,50 @@
         <div v-if="id === 3">
                 <el-row>
                 <el-col :span="6">
-                <el-form-item label="运动时间" prop="specification">
+                <el-form-item label="运动时间" >
                 <el-input
+                    type='number'
                     v-model="infoSource.sportTime"
                     placeholder="请输入"
                     :maxlength="30"
+                    style="width:130px"
                 ></el-input>
+                <span style="color:333333;font-size:14px">min</span>
                 </el-form-item>
                 </el-col>
                     <el-col :span="6">
-                <el-form-item label="运动路程" prop="specification">
+                <el-form-item label="运动路程" >
                 <el-input
+                    type='number'
                     v-model="infoSource.sportDistance"
                     placeholder="请输入"
                     :maxlength="30"
+                    style="width:130px"
                 ></el-input>
+                <span style="color:333333;font-size:14px">公里</span>
                 </el-form-item>
                     </el-col>
                 <el-col :span="6">
-                <el-form-item label="运动步数" prop="specification">
+                <el-form-item label="运动步数" >
                 <el-input
+                    type='number'
                     v-model="infoSource.steps"
                     placeholder="请输入"
                     :maxlength="30"
+                    style="width:130px"
                 ></el-input>
+                <span style="color:333333;font-size:14px">步</span>
                 </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                <el-form-item label="运动消耗" prop="specification">
+                <el-form-item label="运动消耗" >
                 <el-input
                     v-model="infoSource.kcal"
                     placeholder="请输入"
                     :maxlength="30"
+                    style="width:130px"
                 ></el-input>
+                <span style="color:333333;font-size:14px">Kcai</span>
                 </el-form-item>
                 </el-col>
                 </el-row>
@@ -351,6 +386,12 @@ export default {
         startDate: [{ required: true, message: '开始时间不能为空' }],
         endDate: [{ required: true, message: '结束时间不能为空' }],
         result: [{ required: true, message: '当前状态不能为空' }],
+        SBP: [{ required: true, message: '收缩压不能为空' }],
+        DBP: [{ required: true, message: '舒张压不能为空' }],
+        bloodsugar: [{ required: true, message: '血糖类型不能为空', trigger: 'blur' }],
+        Weight: [{ required: true, message: '体重不能为空' }],
+        Waist: [{ required: true, message: '腰围不能为空' }],
+        specification: [{ required: true, message: '体脂率不能为空' }],
       },
       formData: {
         pageNo: 1,
@@ -398,6 +439,7 @@ export default {
         this.infoSource.gender = data.data.gender;
         this.infoSource.age = data.data.age;
         this.infoSource.clientId = data.data.clientId;
+        this.infoSource.gridName = data.data.clientId;
         this.infoSource.SBP = data.data.sbp;
         this.infoSource.DBP = data.data.dbp;
         this.infoSource.pulse = data.data.hd;
@@ -411,6 +453,7 @@ export default {
         this.infoSource.gender = data.data.gender;
         this.infoSource.age = data.data.age;
         this.infoSource.clientId = data.data.clientId;
+        this.infoSource.gridName = data.data.clientId;
         this.infoSource.bloodsugarvalue = data.data.sugar;
         this.infoSource.startDate = data.data.testDate;
         this.infoSource.conclusion = data.data.result;
@@ -422,6 +465,7 @@ export default {
         this.infoSource.gender = data.data.gender;
         this.infoSource.age = data.data.age;
         this.infoSource.clientId = data.data.clientId;
+        this.infoSource.gridName = data.data.clientId;
         this.infoSource.Height = data.data.height;
         this.infoSource.Weight = data.data.weight;
         this.infoSource.Waist = data.data.wc;
@@ -436,6 +480,7 @@ export default {
         this.infoSource.gender = data.data.gender;
         this.infoSource.age = data.data.age;
         this.infoSource.clientId = data.data.clientId;
+        this.infoSource.gridName = data.data.clientId;
         this.infoSource.sportTime = data.data.sportTime;
         this.infoSource.sportDistance = data.data.sportDistance;
         this.infoSource.steps = data.data.steps;
@@ -584,6 +629,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/deep/ input::-webkit-outer-spin-button,
+/deep/ input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+}
+/deep/ input[type='number'] {
+  -moz-appearance: textfield !important;
+}
 .medication-history-add /deep/ {
   .row {
     display: flex;

@@ -151,9 +151,9 @@ export default {
       /* const colorLineList = ['#4991FD', '#31C529'];
       // const colorList = ['#1450C9', '#F53625'];
       const colorGradientList = ['#91c4ff', '#d7f4d6'];*/
-      const colorLineList = ['#3154ac4d', '#31C5294d'];
+      const colorLineList = ['#3154AC', '#31C5294d'];
       // const colorList = ['#1450C9', '#F53625'];
-      const colorGradientList = ['#3154ac4d', '#31C5294d'];
+      const colorGradientList = ['#3154AC90', '#31C5294d'];
       this.sectionName.forEach((sectionNameValue, index) => {
         // if (this.sectionXList.length === 0) {
         //    this.chart.showLoading({
@@ -184,7 +184,12 @@ export default {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [ // 渐变由上至下
               {
                 offset: 0,
+                // color: '#3154AC90',
                 color: colorGradientList[index], // 第一颜色
+              },
+              {
+                offset: 1,
+                color: '#3154AC90', // 渐变颜色
               },
               /* {
                 offset: 1,

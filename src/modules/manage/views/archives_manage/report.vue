@@ -85,7 +85,7 @@
                 <div>
                   <span>人员类别：</span>
                   <el-select
-                    v-model="formData.gridId"
+                    v-model="formData.clientGrid"
                     placeholder="请选择"
                     style="width: 140px"
                   >
@@ -104,12 +104,9 @@
                     placeholder="请选择"
                     style="width: 140px"
                   >
-                    <el-option
-                      :label="item.gridName"
-                      :value="item.id"
-                      v-for="(item, index) in gridList"
-                      :key="index"
-                    ></el-option>
+                  <el-option label="未知" value="0" key="0"></el-option>
+                  <el-option label="已总检" value="1" key="1"></el-option>
+                  <el-option label="未总检" value="2" key="2"></el-option>
                   </el-select>
                 </div>
               </div>
@@ -118,7 +115,7 @@
                   <div class="searchFor" @click="search">
                     <img src="@/assets/images/common/topsearchblue.png" alt="" />
                   </div>
-                  <div class="resetAll">重置</div>
+                  <div class="resetAll" @click="reset">重置</div>
                   <div class="more" v-if="isTrue" @click="upMore">
                     <span>></span>
                     展开更多
@@ -135,7 +132,7 @@
               <div>
                 <span>体检日期：</span>
                 <el-date-picker
-                  v-model="formData.physicalstartTime"
+                  v-model="formData.minReportDate"
                   type="date"
                   :max-date="formData.pickerStartTime"
                   placeholder="选择开始日期"
@@ -144,7 +141,7 @@
                 </el-date-picker>
                 <span class="timing">-</span>
                 <el-date-picker
-                  v-model="formData.physicalendTime"
+                  v-model="formData.maxReportDate"
                   type="date"
                   :min-date="formData.pickerEndTime"
                   placeholder="选择结束日期"
@@ -155,7 +152,7 @@
               <div>
                 <span>采集日期：</span>
                 <el-date-picker
-                  v-model="formData.gatherstartTime"
+                  v-model="formData.minCreateDate"
                   type="date"
                   :max-date="formData.pickerStartTime"
                   placeholder="选择开始日期"
@@ -164,7 +161,7 @@
                 </el-date-picker>
                 <span class="timing">-</span>
                 <el-date-picker
-                  v-model="formData.gatherendTime"
+                  v-model="formData.maxCreateDate"
                   type="date"
                   :min-date="formData.pickerEndTime"
                   placeholder="选择结束日期"
@@ -246,7 +243,7 @@
               <el-table-column type="selection" width="40" align="center"></el-table-column>
               <el-table-column
                 label="体检编号"
-                prop="age"
+                prop="reportNo"
                 align="center"
                 show-overflow-tooltip></el-table-column>
               <el-table-column
@@ -276,7 +273,7 @@
                 show-overflow-tooltip></el-table-column>
               <el-table-column
                 label="人员类别"
-                prop="workUnitName"
+                prop="clientGridName"
                 align="center"
                 show-overflow-tooltip></el-table-column>
               <el-table-column
@@ -288,29 +285,29 @@
               </el-table-column>
                <el-table-column
                 label="总检日期"
-                prop="reportDate"
+                prop="zjDate"
                 min-width="100"
                 show-overflow-tooltip
                 align="center">
               </el-table-column>
                  <el-table-column
                 label="总检"
-                prop="reportNo"
+                prop="clientName"
                 align="center"
                 show-overflow-tooltip></el-table-column>
               <el-table-column
                 label="采集日期"
-                prop="followReportItemTotal"
+                prop="createTime"
                 align="center"
                 show-overflow-tooltip></el-table-column>
               <el-table-column
                 label="体检次数"
-                prop="reportAbnormalTotal"
+                prop="reportCount"
                 align="center"
                 show-overflow-tooltip></el-table-column>
               <el-table-column
                 label="企业单位"
-                prop="reportCount"
+                prop="workUnitName"
                 align="center"
                 min-width="100"
                 show-overflow-tooltip></el-table-column>
@@ -367,8 +364,7 @@ import ReportEdit from './report_edit.vue';
 import ReportDetail from './report_detail.vue';
 
 export default {
-  isTrue: true,
-  name: 'index',
+  name: 'physical_examination_report',
   components: {
     QueryPage,
     Search,
@@ -379,25 +375,25 @@ export default {
   },
   data() {
     return {
+      isTrue: true,
       view: 1, // 1:列表，2:新增、编辑，3:详情
       currentId: '',
       total: 0,
       dataSource: [],
+      gridList: [], // 人员类别
       formData: {
         keywords: '', // 搜索客户姓名/企业名称/体检医院
         gender: '', // 性别0-男1-女
-        // gridId: '',
-        // TotalTest: '',
-        // gridName: '',
-        // physicalstartTime: '',
-        // physicalendTime: '',
-        // gatherstartTime: '',
-        // gatherendTime: '',
         minReportDate: null, // 体检日期搜索 最小体检日期搜索
         maxReportDate: null, // 体检日期搜索 最大体检日期搜索
-        workUnitName: '', // 所属企业名字
-        reportNo: '', // 体检编号
-        clientId: '', // 客户id
+        // workUnitName: '', // 所属企业名字
+        // reportNo: '', // 体检编号
+        // clientId: '', // 客户id
+        reportState: '', // 总检状态 0.未知 1.已总检 2.未总检
+        clientGrid: '', // 客户类型
+        minCreateDate: null, // 搜索条件采集时间最小时间
+        maxCreateDate: null, // 搜索条件采集时间最大时间
+        // reportAbnormalTempId: '', // 临时异常id搜索
       },
       params: {
         pageNo: 1, // 页码
@@ -414,30 +410,30 @@ export default {
         list: [],
       },
       loading: false,
-      pickerStartTime: {
-        disabledDate: (time) => {
-          if (this.formData.maxReportDate) {
-            const endTime = new Date(this.formData.maxReportDate);
-            return time.getTime() > new Date(endTime).getTime() - (3600 * 1000 * 23 * 1);
-          }
-        },
-      },
-      pickerEndTime: {
-        disabledDate: (time) => {
-          if (this.formData.minReportDate) {
-            const startTime = new Date(this.formData.minReportDate);
-            return time.getTime() < new Date(startTime).getTime() - (3600 * 1000 * 23 * 1);
-          }
-        },
-      },
+      // pickerStartTime: {
+      //   disabledDate: (time) => {
+      //     if (this.formData.maxReportDate) {
+      //       const endTime = new Date(this.formData.maxReportDate);
+      //       return time.getTime() > new Date(endTime).getTime() - (3600 * 1000 * 23 * 1);
+      //     }
+      //   },
+      // },
+      // pickerEndTime: {
+      //   disabledDate: (time) => {
+      //     if (this.formData.minReportDate) {
+      //       const startTime = new Date(this.formData.minReportDate);
+      //       return time.getTime() < new Date(startTime).getTime() - (3600 * 1000 * 23 * 1);
+      //     }
+      //   },
+      // },
     };
   },
-  mounted() {
+  activated() {
     if (localStorage.getItem('homeSearchData')) {
-      const HomeSearchData = JSON.parse(localStorage.getItem('homeSearchData'));
-      this.formData.minReportDate = HomeSearchData.startDate;
-      this.formData.maxReportDate = HomeSearchData.lastDate;
-      this.formData.searchRange = HomeSearchData.searchRange;
+      // const HomeSearchData = JSON.parse(localStorage.getItem('homeSearchData'));
+      // this.formData.minReportDate = HomeSearchData.startDate;
+      // this.formData.maxReportDate = HomeSearchData.lastDate;
+      // this.formData.searchRange = HomeSearchData.searchRange;
     }
   },
   destroyed() {
@@ -466,6 +462,13 @@ export default {
     handleDetail(id) {
       this.view = 3;
       this.currentId = id;
+      this.currentId = id;
+      this.$router.push({
+        path: '/report_detail',
+        query: {
+          id: this.currentId,
+        },
+      });
     },
     handleAdd() {
       this.view = 2;
@@ -528,17 +531,19 @@ export default {
     reset() {
       this.formData.keywords = '';
       this.formData.gender = '';
-      this.formData.workUnitName = '';
-      this.formData.reportNo = '';
-      this.formData.minReportDate = undefined;
-      this.formData.maxReportDate = undefined;
+      this.formData.clientGrid = '';
+      this.formData.reportState = '';
+      this.formData.minReportDate = null;
+      this.formData.maxReportDate = null;
+      this.formData.minCreateDate = null;
+      this.formData.maxCreateDate = null;
       this.search();
     },
-    search(current = 1) {
-      if (!this.checkRangeDate()) {
-        return false;
-      }
-      this.params.pageNo = current;
+    search() {
+      // if (!this.checkRangeDate()) {
+      //   return false;
+      // }
+      this.params.pageNo = 1;
       this.fetch();
     },
     handleDelete() { // 批量删除
@@ -566,17 +571,24 @@ export default {
         });
       }).catch(() => {});
     },
+    // 获取人员列表
+    async getGridList() {
+      const res = await
+      this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
+      const { data } = res.data;
+      this.gridList = data.data;
+    },
     fetch() {
-      if (!this.checkRangeDate()) {
-        return false;
-      }
+      // if (!this.checkRangeDate()) {
+      //   return false;
+      // }
       const sendData = Object.assign({}, this.formData);
-      if (sendData.minReportDate) {
-        sendData.minReportDate = `${sendData.minReportDate} 00:00:00`;
-      }
-      if (sendData.maxReportDate) {
-        sendData.maxReportDate = `${sendData.maxReportDate} 23:59:59`;
-      }
+      // if (sendData.minReportDate) {
+      //   sendData.minReportDate = `${sendData.minReportDate} 00:00:00`;
+      // }
+      // if (sendData.maxReportDate) {
+      //   sendData.maxReportDate = `${sendData.maxReportDate} 23:59:59`;
+      // }
       this.$api.reportInterface
         .fetchReportList(Object.assign(this.params, sendData))
         .then(({ data }) => {
@@ -585,6 +597,7 @@ export default {
             this.dataSource = data.data.data;
           }
         });
+      this.getGridList();
     },
     checkRangeDate() {
       if (this.formData.minReportDate && this.formData.maxReportDate
