@@ -25,7 +25,7 @@
                 style="width: 200px"
               ></el-input>
             </el-form-item>
-            <el-form-item label="计量单位" prop="specification" style="width:25%">
+            <el-form-item label="姓名" prop="specification" style="width:25%">
               <el-input
                 v-model="infoSource.specification"
                 placeholder="请输入"
@@ -33,21 +33,14 @@
                 style="width: 200px"
               ></el-input>
             </el-form-item>
-            <el-table-column label="是否启用" prop="state" style="width:25%">
-                <!-- <el-switch
-                  v-model="isstat"
-                  active-value="1"
-                  inactive-value="2"
-                  active-color="#13ce66"
-                  >
-                </el-switch> -->
-                <div style="margin:5px 0 0 20px">
+            <el-form-item label="是否启用" prop="isstate" style="width:25%">
+                <!-- <div style="margin:5px 0 0 20px"> -->
                     <el-switch
                     v-model="isstate"
                     active-color="#13ce66">
                     </el-switch>
-                </div>
-            </el-table-column>
+                <!-- </div> -->
+            </el-form-item>
         </div>
       </div>
       <div class="medicate-info mt20" style="margin-top:0">
@@ -236,8 +229,8 @@ export default {
       drugsList: [],
       resultList: [],
       rules: {
-        clientName: [{ required: true, message: '客户不能为空' }],
-        drugsName: [{ required: true, message: '药品名称不能为空' }],
+        specification: [{ required: true, message: '姓名不能为空' }],
+        isstate: [{ required: true, message: '请选择是否启用' }],
         startDate: [{ required: true, message: '开始时间不能为空' }],
         endDate: [{ required: true, message: '结束时间不能为空' }],
         result: [{ required: true, message: '当前状态不能为空' }],
@@ -489,6 +482,7 @@ export default {
       display: flex;
       align-items: center;
       position: relative;
+      margin-top: 20px;
       .line {
         width: 36px;
         height: 4px;

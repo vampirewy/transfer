@@ -18,8 +18,14 @@
       <div><span class="lookPressureTitle">运动消耗：</span><span>{{queryInfo.kcal}}</span></div>
     </div>
     <div class="lookPressure">
-      <div><span class="lookPressureTitle">备注：</span><span>{{queryInfo.result}}</span></div>
+      <div style="width:100%;display: flex;">
+        <span class="lookPressureTitle" style="width:50px;white-space: nowrap;">备注：</span>
+        <span>{{queryInfo.result}}</span>
+      </div>
     </div>
+    <!-- <div class="lookPressure">
+      <div><span class="lookPressureTitle">备注：</span><span>{{queryInfo.result}}</span></div>
+    </div> -->
     <div class="divRightTitleDiv">
       <div class="divRightTitle">运动-查看趋势
         <div class="titleBiao"></div></div>

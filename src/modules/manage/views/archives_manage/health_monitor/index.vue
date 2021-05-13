@@ -110,18 +110,29 @@
           <operate-button
             type="add"
             @click="add"
-            v-if="getAccess('medical_history_add')">
+            >
           </operate-button>
           <operate-button
             type="delete"
             @click="handleDelete"
-            v-if="getAccess('medical_history_batch_delete')">
+            >
           </operate-button>
-          <operate-button
-            type="editGray"
-            @click="editGray"
-            v-if="getAccess('medical_history_batch_delete')">
-          </operate-button>
+          <span v-if="tabIndex === 'other'" style="margin-left: 10px;">
+            <el-button
+                size="small"
+                class="btn-new btnDel"
+                @click="editGray"
+            ><img style="margin-left:10px"
+            src="@/assets/images/common/getReportBtn.png" />
+            <span style="margin-right:15px">项目配置</span>
+            </el-button>
+          </span>
+          <span v-else>
+            <operate-button
+              type="editGray"
+              >
+            </operate-button>
+          </span>
         </div>
         <el-table
           :data="table.list"

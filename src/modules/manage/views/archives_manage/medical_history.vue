@@ -27,7 +27,7 @@
                 <div>
                   <span>客户性别：</span>
                   <el-select
-                    v-model="formData.clientGrid"
+                    v-model="formData.gender"
                     placeholder="请选择"
                     style="width: 140px"
                   >
@@ -38,7 +38,7 @@
                 <div>
                   <span>人员类别：</span>
                   <el-select
-                    v-model="formData.Category"
+                    v-model="formData.clientGrid"
                     placeholder="请选择"
                     style="width: 140px"
                   >
@@ -51,18 +51,15 @@
                   </el-select>
                 </div>
                 <div>
-                  <span>是否总检：</span>
+                  <span>就医类型：</span>
                   <el-select
-                    v-model="formData.isTotalTest"
+                    v-model="formData.medicalType"
                     placeholder="请选择"
                     style="width: 140px"
                   >
-                    <el-option
-                      :label="item.gridName"
-                      :value="item.id"
-                      v-for="(item, index) in gridList"
-                      :key="index"
-                    ></el-option>
+                  <el-option label="未知" value="0" key="0"></el-option>
+                  <el-option label="已总检" value="1" key="1"></el-option>
+                  <el-option label="未总检" value="2" key="2"></el-option>
                   </el-select>
                 </div>
               </div>
@@ -86,9 +83,9 @@
            <div v-if="!isTrue" class="searchCondition" style="width: 100%">
             <div class="searchLeft" style="padding-left: 5px">
               <div>
-                <span>体检日期：</span>
+                <span>就医日期：</span>
                 <el-date-picker
-                  v-model="formData.physicalstartTime"
+                  v-model="formData.inDateStartTime"
                   type="date"
                   :max-date="formData.endTime"
                   placeholder="选择开始日期"
@@ -97,7 +94,7 @@
                 </el-date-picker>
                 <span class="timing">-</span>
                 <el-date-picker
-                  v-model="formData.physicalendTime"
+                  v-model="formData.inDateEndTime"
                   type="date"
                   :min-date="formData.startTime"
                   placeholder="选择结束日期"
@@ -106,9 +103,9 @@
                 </el-date-picker>
               </div>
               <div>
-                <span>采集日期：</span>
+                <span>出院日期：</span>
                 <el-date-picker
-                  v-model="formData.gatherstartTime"
+                  v-model="formData.outDateStartTime"
                   type="date"
                   :max-date="formData.endTime"
                   placeholder="选择开始日期"
@@ -117,7 +114,7 @@
                 </el-date-picker>
                 <span class="timing">-</span>
                 <el-date-picker
-                  v-model="formData.gatherendTime"
+                  v-model="formData.outDateEndTime"
                   type="date"
                   :min-date="formData.startTime"
                   placeholder="选择结束日期"
@@ -128,16 +125,16 @@
               <div>
                   <span>当前状态：</span>
                   <el-select
-                    v-model="formData.CurrentStatus"
+                    v-model="formData.result"
                     placeholder="请选择"
                     style="width: 140px"
                   >
                     <el-option
-                      :label="item.gridName"
-                      :value="item.id"
-                      v-for="(item, index) in gridList"
-                      :key="index"
-                    ></el-option>
+                    v-for="item in resultOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
                   </el-select>
                 </div>
             </div>
@@ -207,14 +204,9 @@
                 prop="clientNo"
                 align="center"
                 show-overflow-tooltip>
-                <!-- <template slot-scope="scope">
-                <span class="clientName"
-                      @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
-                  {{ scope.row.clientName || '-'}}
-                </span>
-                </template> -->
               </el-table-column>
-              <el-table-column label="性名" prop="clientName" align="center"></el-table-column>
+              <el-table-column label="性名" prop="clientName" align="center"
+              show-overflow-tooltip></el-table-column>
               <el-table-column label="性别" prop="gender" align="center">
                 <template slot-scope="scope">
                   {{scope.row.gender === 1 ? '男' : (scope.row.gender === 2 ? '女' : '')}}
@@ -259,7 +251,7 @@
             <el-table-column
                 label="出院日期"
                 align="center"
-                prop="inDate"
+                prop="outDate"
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
@@ -323,7 +315,7 @@ import deleteIcon from '~/src/assets/images/deleteicon.png';
 import { MAX_PAGESIZE } from '~/src/libs/util/index';
 
 export default {
-  name: 'index',
+  name: 'medical_history',
   components: {
     MedicalHistoryForm,
     DetailDialog,
@@ -334,23 +326,20 @@ export default {
   },
   data() {
     return {
-      isTrue: false,
+      isTrue: true,
       total: 0,
       tableData: [],
+      gridList: [], // 人员类别
       formData: {
         keyWord: '', // 姓名
-        Category: '', // 人员类别
-        clientGrid: '', // 性别
-        isTotalTest: '', // 是否总检
-        physicalstartTime: '', // 体检日期开始
-        physicalendTime: '', // 体检日期结束
-        gatherstartTime: '', // 采集日期开始
-        gatherendTime: '', // 采集日期结束
-        CurrentStatus: '', // 当前状态
-        department: '',
-        hospital: '',
-        startTime: '',
-        endTime: '',
+        clientGrid: '', // 人员类别
+        gender: '', // 性别
+        medicalType: '', // 就医类型
+        inDateStartTime: '', // 就医日期开始
+        inDateEndTime: '', // 就医日期结束
+        outDateStartTime: '', // 出院日期开始
+        outDateEndTime: '', // 出院日期结束
+        result: '', // 当前状态
         pageNo: 1,
         pageSize: 15,
       },
@@ -396,11 +385,20 @@ export default {
           }
         },
       },
+      resultOptions: [
+        { value: 1, label: '未指定' },
+        { value: 2, label: '治疗中' },
+        { value: 3, label: '转诊' },
+        { value: 4, label: '转为慢病' },
+        { value: 5, label: '痊愈' },
+        { value: 6, label: '其他' },
+      ],
     };
   },
-  mounted() {
+  activated() {
     this.getClientTypeList();
     this.queryList();
+    this.getGridList();
   },
   methods: {
     upMore() {
@@ -474,27 +472,26 @@ export default {
           const result = res.data || {};
           this.tableData = result.data.data || [];
           this.total = result.total || 0;
-          console.log(this.tableData, 'list');
           // }
         });
     },
+    // 获取人员列表
+    async getGridList() {
+      const res = await
+      this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
+      const { data } = res.data;
+      this.gridList = data.data;
+    },
     reset() {
-      // this.formData.keyWord = ''; // 姓名
-      // this.formData.Category = ''; // 人员类别
-      // this.formData.clientGrid = ''; // 性别
-      // this.formData.isTotalTest = ''; // 是否总检
-      // this.formData.physicalstartTime = ''; // 体检日期开始
-      // this.formData.physicalendTime = ''; // 体检日期结束
-      // this.formData.gatherstartTime = ''; // 采集日期开始
-      // this.formData.gatherendTime = ''; // 采集日期结束
-      // this.formData.CurrentStatus = ''; // 当前状态
       this.formData.keyWord = '';
-      this.formData.workUnitName = '';
+      this.formData.gender = '';
       this.formData.clientGrid = '';
-      this.formData.department = '';
-      this.formData.hospital = '';
-      this.formData.startTime = '';
-      this.formData.endTime = '';
+      this.formData.medicalType = '';
+      this.formData.inDateStartTime = '';
+      this.formData.inDateEndTime = '';
+      this.formData.outDateStartTime = '';
+      this.formData.outDateEndTime = '';
+      this.formData.result = '';
       this.formData.pageNo = 1;
       this.queryList();
     },
@@ -520,9 +517,6 @@ export default {
       // this.$router.push('/medication_history_add');
       this.$router.push({
         path: '/medical_history_form',
-        query: {
-          id: '',
-        },
       });
       // this.$router.push({
       //   path: `/medication_history_add${row.id}`,
@@ -585,7 +579,7 @@ export default {
         }
         p.then((res) => {
           const { data } = res;
-          if (data.code === 200) {
+          if (data.success) {
             this.$message.success('操作成功');
             this.queryList();
           }

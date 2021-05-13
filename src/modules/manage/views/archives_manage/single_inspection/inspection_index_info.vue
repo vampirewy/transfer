@@ -1,67 +1,54 @@
 <template>
   <div class="health-monitor-trend">
     <div class="lines"></div>
-    <div class="titless">查看-就医用户信息</div>
+    <div class="titless">查看就医用户信息</div>
     <div class="lookPressure">
       <div><span>姓名：</span><span>{{data.clientName}}</span></div>
       <div><span>性别：</span><span>{{data.gender}}</span></div>
       <div><span>年龄：</span><span>{{data.age}}</span></div>
-      <div><span>客户编号：</span><span>{{data.clientGrid}}</span></div>
+      <div><span>客户编号：</span><span>{{data.clientId}}</span></div>
     </div>
-    <div class="lines"></div>
-    <div class="titless">就医信息</div>
+    <!-- <div class="lines"></div>
+    <div class="titless">就医信息</div> -->
     <!-- <div class="title">数据列表</div> -->
     <div class="lookPressure">
-      <div><span>就医编号：</span><span>{{data.orgCode}}</span></div>
-      <div><span>就医类型：</span><span>{{data.medicalType}}</span></div>
-      <div><span>医保卡号：</span><span>{{data.patientNo}}</span></div>
-      <div><span>就医机构：</span><span>{{data.hospital}}</span></div>
+      <div><span>检查编号：</span><span>{{data.inspectionNo}}</span></div>
+      <div><span>检查机构：</span><span>{{data.inspectionOrg}}</span></div>
+      <div><span>检查时间：</span><span>{{data.inspectionDate}}</span></div>
     </div>
-    <div class="lookPressure">
-      <div><span>就医科室：</span><span>{{data.department}}</span></div>
-      <div><span>主管医生：</span><span>{{data.doctorName}}</span></div>
-      <div><span>就医时间：</span><span>{{data.inDate}}</span></div>
-      <div><span>出院时间：</span><span>{{data.outDate}}</span></div>
-    </div>
-    <div class="lookPressure">
-      <div><span>就医金额：</span><span>是否健康</span></div>
-      <div><span>当前状态：</span><span>{{data.result}}</span></div>
-      <div></div>
-      <div></div>
-    </div>
-    <div class="lookPressure">
+     <div class="lookPressure">
       <div style="width:100%;display: flex;">
-        <span style="white-space: nowrap;">现病史：</span>
-        <span>{{data.hpi}}</span>
+        <span class="lookPressureTitle" style="width:80px;white-space: nowrap;">检查描述：</span>
+        <span>{{data.intro}}</span>
       </div>
     </div>
-    <div class="lookPressure">
-      <div style="width:100%;display: flex;">
-        <span style="white-space: nowrap;">主诉：</span>
-        <span>{{data.complaint}}</span>
-      </div>
-    </div>
-    <div class="lookPressure">
-      <div style="width:100%;display: flex;">
-        <span style="white-space: nowrap;">检查：</span>
-        <span>{{data.examination}}</span>
-      </div>
-    </div>
-    <div class="lookPressure">
-      <div style="width:100%;display: flex;">
-        <span style="white-space: nowrap;">诊断：</span>
-        <span>{{data.diagnosis}}</span>
-      </div>
-    </div>
-    <div class="lookPressure">
-      <div style="width:100%;display: flex;">
-        <span style="white-space: nowrap;">方案：</span>
-        <span>{{data.therapy}}</span>
-      </div>
-    </div>
+    <div class="lines"></div>
+    <div class="titless">检查项目</div>
+     <el-table class="medicate-list mt20 openTable"
+     :data="data.inspectionRecordConfigDtos"
+     align="center">
+        <el-table-column label="科室" prop="sectionItem" show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column
+          label="项目"
+          prop="itemName"
+          show-overflow-tooltip
+        >
+        </el-table-column>
+        <el-table-column
+          label="结果"
+          prop="startDate"
+        >
+        </el-table-column>
+        <el-table-column label="正常参考" prop="itemRef" >
+        </el-table-column>
+        <el-table-column label="单位" prop="unit" show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column label="建议" prop="advice" >
+        </el-table-column>
+      </el-table>
     <div class="buttons">
         <div class="buttonsemit" @click="blacks('close')">返回</div>
-      <!-- <el-button plain size="small" @click="$emit('close')">返回</el-button> -->
     </div>
   </div>
 </template>
@@ -90,11 +77,15 @@ export default {
   mounted() {
     // this.queryChartData();
     // this.queryPageList();
-    this.$api.medicalHistoryInterface.medicalInfoDetail(this.ids).then((res) => {
-      console.log('sdfsfsdf');
+    // this.$api.medicalHistoryInterface.medicalInfoDetail(this.ids).then((res) => {
+    //   console.log('sdfsfsdf');
+    //   const { data } = res;
+    //   this.data = data.data || {};
+    //   console.log(this.data, 'zzzzzzzzz');
+    // });
+    this.$api.healthMonitorInterface.SinglegetDetail(this.ids).then((res) => {
       const { data } = res;
       this.data = data.data || {};
-      console.log(this.data, 'zzzzzzzzz');
     });
   },
   methods: {
@@ -148,6 +139,7 @@ export default {
 <style lang="scss" scoped>
 .buttons{
     text-align: center;
+    margin-top: 30px;
     width: 100%;
     .buttonsemit{
         width: 90px;
