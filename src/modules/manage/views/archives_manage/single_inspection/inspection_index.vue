@@ -444,10 +444,12 @@ export default {
       // },
     };
   },
-  activated() {
-    this.getClientTypeList();
-    this.queryList();
-    this.getGridList();
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.getClientTypeList();
+      vm.queryList();
+      vm.getGridList();
+    });
   },
   methods: {
     upMore() {

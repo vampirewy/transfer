@@ -144,7 +144,7 @@ import minorTerm from './components/minor_term.vue';
 import physicalExamination from './components/physical_examination.vue';
 
 export default {
-  name: 'index',
+  name: 'PhysicalExamination',
   components: {
     // 'assign-dialog': assignDialog,
     // 'doctor-Select': doctorSelect,

@@ -361,7 +361,7 @@ export default {
       },
     };
   },
-  mounted() {
+  /* mounted() {
     // this.getGridList();
     // this.getQuestionFromList();
     // this.getLifeStyleList();
@@ -372,6 +372,11 @@ export default {
     //   this.formData.searchRange = HomeSearchData.searchRange;
     // }
     this.getList();
+  },*/
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.getList();
+    });
   },
   destroyed() {
     // 清除时间 和 我的/平台

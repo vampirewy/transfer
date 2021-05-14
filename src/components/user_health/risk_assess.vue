@@ -3,34 +3,37 @@
     <div class="risk-assess">
       <div class="assessTitle">很高风险</div>
       <div class="assessContent">
-        <p class="assessContentOne level1" v-for="item in assessListData.assess5" :key="item">
+        <!-- <p class="assessContentOne level1" v-for="item in assessListData.assess5" :key="item">
           {{item}}
+        </p> -->
+        <p class="assessContentOne level1" v-for="item in 1" :key="item">
+             高血压
         </p>
       </div>
     </div>
     <div class="risk-assess">
       <div class="assessTitle">高风险</div>
       <div class="assessContent">
-        <p class="assessContentOne level2" v-for="item in assessListData.assess4" :key="item">
-          {{item}}
+        <p class="assessContentOne level2" v-for="item in 3" :key="item">
+          高血压
         </p>
       </div>
     </div>
     <div class="risk-assess">
       <div class="assessTitle">中度风险</div>
       <div class="assessContent">
-        <p class="assessContentOne level3" v-for="item in assessListData.assess3"
+        <p class="assessContentOne level3" v-for="item in 4"
            :key="item">
-          {{item}}
+          高血压
         </p>
       </div>
     </div>
     <div class="risk-assess">
       <div class="assessTitle">低风险</div>
       <div class="assessContent">
-        <p class="assessContentOne level4"  v-for="(item, index) in assessListData.assess2"
+        <p class="assessContentOne level4"  v-for="(item, index) in 2"
            :key="index">
-          {{item}}1
+          高血压
         </p>
       </div>
     </div>
@@ -81,11 +84,13 @@ export default {
         width: 22px;
         padding: 0 10px 0 18px;
         height: 100%;
-        background-color: #F4F4F6;
+        background-color: #DDE0E6;
         font-size: 14px;
         color: #333333;
         word-wrap: break-word;
         letter-spacing: 10px;
+        font-weight: 600;
+        border-radius: 10px 0 0 10px;
       }
       .assessContent{
         background-color: white;

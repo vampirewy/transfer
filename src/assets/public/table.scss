@@ -55,21 +55,22 @@
     padding: 0 !important;
     .expand-table {
       .el-table__header-wrapper th {
-        background: rgba(108, 108, 229, 0.6);
-        padding: 9px 0;
+        background: #EEF1F5;
+        padding: 13px 0;
         .cell {
-          color: #fff;
-          font-size: 14px;
+          color: #333;
         }
       }
       td {
         padding: 4px 0;
       }
       .el-table__body td {
-        background-color: #f7f7fd;
+        background-color: white;
+        padding: 7px 0!important;
       }
       tr:hover > td {
-        background-color: #E8E8FA !important;
+        background-color: #f7f7fd;
+        // background-color: #E8E8FA !important;
       }
     }
   }

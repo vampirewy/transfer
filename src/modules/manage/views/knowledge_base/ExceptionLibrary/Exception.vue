@@ -283,7 +283,7 @@ import OperateButton from '~/src/components/query_page/operate_button.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
 
 export default {
-  name: 'question',
+  name: 'Exception',
   components: {
     // report,
     QueryPage,
@@ -358,9 +358,11 @@ export default {
     // 清除时间 和 我的/平台
     localStorage.removeItem('homeSearchData');
   },
-  mounted() {
-    this.getList();
-    this.onLoad();
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.getList();
+      vm.onLoad();
+    });
   },
   methods: {
     onLoad() {
