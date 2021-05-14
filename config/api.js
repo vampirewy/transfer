@@ -13,8 +13,8 @@ const build = {
 };
 const build_dev = {
     static_url: '/', // 静态资源路径
-    common_url: '/api',
-    upload_url: 'http://182.61.43.226:9002/', //'/uploadFiles/'
+    common_url: 'http://health.pre.touchealth.com/api', // /api
+    upload_url: 'http://health.pre.touchealth.com/', //'/uploadFiles/'
 };
 const dev = {
     static_url: '/', // 静态资源路径

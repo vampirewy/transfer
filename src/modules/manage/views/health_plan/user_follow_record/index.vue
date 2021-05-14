@@ -263,8 +263,10 @@ export default {
       },
     };
   },
-  activated() {
-    this.onLoad();
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.onLoad();
+    });
   },
   methods: {
     handleSelectionChange(val) {

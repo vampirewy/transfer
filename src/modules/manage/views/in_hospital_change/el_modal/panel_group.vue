@@ -2,7 +2,7 @@
   <el-row
     :gutter="20"
     class="panel-group"
-    style="margin: 10px 0 20px 0;display: flex;width: 99%;"
+    style="margin: 0 0 20px 0;display: flex;width: 100%;"
   >
     <el-col class="card-panel-col" style="padding-left: 0">
       <div class="card-panel" @click="toRouterPage(1)">
@@ -70,7 +70,7 @@
         </div>
       </div>
     </el-col>
-    <el-col class="card-panel-col">
+    <el-col class="card-panel-col" style="padding-right: 0">
       <div class="card-panel" @click="toRouterPage(4)">
         <div class="card-panel-top">
           <div class="card-panel-description">
@@ -153,15 +153,15 @@ export default {
     overflow: hidden;
     color: #666;
     background: #fff;
-    box-shadow: 0px 0px 50px 0px rgba(151, 166, 189, 0.2);
-    border-color: rgba(0, 0, 0, 0.05);
+    box-shadow: 0px 4px 24px 0px rgba(36, 73, 157, 0.06);
+    // border-color: rgba(0, 0, 0, 0.05);
     text-align: center;
     /*align-items: center;*/
-    border-radius: 15px;
+    border-radius: 12px;
     padding: 20px 0 0 0;
     &:hover{
       // box-shadow: 0px 7px 18px 0px rgba(49, 84, 172, 0.35);
-      // transform: scale(1.1,1.1);
+      transform: scale(1.1,1.1);
      /* background: url(../../../../../assets/images/homeHover.png);
       background-repeat: no-repeat;
       background-position: right center;*/

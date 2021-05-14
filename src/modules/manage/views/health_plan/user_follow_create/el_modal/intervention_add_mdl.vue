@@ -128,7 +128,7 @@
         </el-form>
       </div>
     </div>
-    <div slot="footer" class="dialog-footer">
+    <div class="dialog-footer" style="text-align: center;margin-top: 10px">
       <el-button size="small" class="cancelBtn" @click="cancel">取消</el-button>
       <el-button size="small" class="sureBtn" type="primary" @click="save">确定</el-button>
     </div>

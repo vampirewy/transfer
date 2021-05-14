@@ -305,9 +305,15 @@ export default {
         });
     },
   },
-  activated() {
+  /* activated() {
     this.getSystemParamByCode('ZY007');
     this.getTemplateQuestionList();
+  },*/
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.getSystemParamByCode('ZY007');
+      vm.getTemplateQuestionList();
+    });
   },
 };
 </script>

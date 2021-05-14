@@ -32,6 +32,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    centerText: {
+      type: String,
+      default: '0.00',
+    },
   },
   data() {
     return {
@@ -84,6 +88,28 @@ export default {
           bottom: '15',
           data: this.xList,
         },*/
+        graphic: {
+          type: 'text',
+          left: 'center',
+          top: '41%',
+          style: {
+            text: this.centerText, // 圈中的文字值
+            textAlign: 'center',
+            fill: '#333333',
+            fontSize: 20,
+            fontWeight: 600,
+          },
+        },
+        title: {
+          text: '总费用',
+          left: 'center',
+          top: '53%',
+          textStyle: {
+            color: '#999999',
+            fontSize: 14,
+            align: 'center',
+          },
+        },
         series: [
           {
             name: '随访数量',
@@ -120,8 +146,8 @@ export default {
             emphasis: {
               label: {
                 show: true,
-                fontSize: '16',
-                color: '#333333',
+                fontSize: '15',
+                // color: '#333333',
                 fontWeight: 'bold',
               },
             },

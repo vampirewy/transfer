@@ -13,7 +13,6 @@
                 class="btn-new btnAdd"
                 size="small"
                 style="margin: 16px 0 10px 0"
-                @click="add"
         ><img src="@/assets/images/common/export.png" />导出</el-button>
         <el-button
                 class="btn-new btnAdd"

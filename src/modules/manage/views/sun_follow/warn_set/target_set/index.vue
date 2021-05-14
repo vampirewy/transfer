@@ -167,11 +167,13 @@ export default {
       roleOptions: [],
     };
   },
-  activated() {
-    // 查询条件： 角色
-    this.queryRoleList();
-    // 员工列表
-    this.queryList();
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      // 查询条件： 角色
+      vm.queryRoleList();
+      // 员工列表
+      vm.queryList();
+    });
   },
   methods: {
     queryRoleList() {
