@@ -1,38 +1,60 @@
 <template>
   <div class="app-wrapper" :class="classObj">
-    <Sidebar class="sidebar-container" :menu-list="menuList"></Sidebar>
-    <Layout class="main">
+    <Sidebar
+      class="sidebar-container"
+      :menu-list="menuList"
+      v-show="!personalHealthPage"
+    ></Sidebar>
+    <Layout class="main" v-show="!personalHealthPage">
       <Layout>
         <div class="mainFixed">
           <div class="mainHeader">
-            <Header class="header" ref="sideMenuHeader">
-              <img class="toggle" @click="toggleSidebar" v-if="classObj.openSidebar"
-                   src="@/assets/images/body/toggle.png"/>
-              <img class="toggle" @click="toggleSidebar"  v-if="classObj.hideSidebar"
-                   src="@/assets/images/body/toggleClose.png"/>
-              <span class="title" @click="$router.push('/home')">{{siteTitle}}</span>
-              <span class="healthPageSide" v-show="personalHealthPage">个人管理中心</span>
-              <side-menu v-show="!personalHealthPage"
-                         ref="sideMenu"
-                         :active-name="$route.name"
-                         :menu-list="menuList"
-                         @on-select="turnToPage"
-              > <!--style="height: 63px;overflow-y: auto"-->
+            <Header
+              class="header"
+              ref="sideMenuHeader"
+              v-show="!personalHealthPage"
+            >
+              <img
+                class="toggle"
+                @click="toggleSidebar"
+                v-if="classObj.openSidebar"
+                src="@/assets/images/body/toggle.png"
+              />
+              <img
+                class="toggle"
+                @click="toggleSidebar"
+                v-if="classObj.hideSidebar"
+                src="@/assets/images/body/toggleClose.png"
+              />
+              <span class="title" @click="$router.push('/home')">{{
+                siteTitle
+              }}</span>
+              <span class="healthPageSide" v-show="personalHealthPage"
+                >个人管理中心</span
+              >
+              <side-menu
+                v-show="!personalHealthPage"
+                ref="sideMenu"
+                :active-name="$route.name"
+                :menu-list="menuList"
+                @on-select="turnToPage"
+              >
+                <!--style="height: 63px;overflow-y: auto"-->
               </side-menu>
               <!--<header-bar :siteTitle="siteTitle">-->
               <user
-                      :user-avatar="userAvatar"
-                      :user-name="userName"
-                      :super-admin="superAdmin"
+                :user-avatar="userAvatar"
+                :user-name="userName"
+                :super-admin="superAdmin"
               />
               <!--</header-bar>-->
             </Header>
             <div class="tag-nav-wrapper" v-show="!personalHealthPage">
               <tags-nav
-                      :value="$route"
-                      @input="handleClick"
-                      :list="tagNavList"
-                      @on-close="handleCloseTag"
+                :value="$route"
+                @input="handleClick"
+                :list="tagNavList"
+                @on-close="handleCloseTag"
               />
             </div>
           </div>
@@ -44,7 +66,10 @@
           @on-select="turnToPage"
         > 132 192  252
         </side-menu>-->
-        <Content class="main-content-con" :style="{'margin-top': contentMarginTop + 'px'}">
+        <Content
+          class="main-content-con"
+          :style="{ 'margin-top': contentMarginTop + 'px' }"
+        >
           <Layout class="main-layout-con">
             <!--<div class="tag-nav-wrapper">
               <tags-nav
@@ -64,6 +89,42 @@
         </Content>
       </Layout>
     </Layout>
+    <div  v-if="personalHealthPage">
+      <div class="personal-top">
+        <div class="header-left">
+          <span>健康管理系统</span>
+          <span class="headertop">· 个人管理中心</span>
+        </div>
+         <user
+                :user-avatar="userAvatar"
+                :user-name="userName"
+                :super-admin="superAdmin"
+              />
+      </div>
+      <Content
+        class="main-content-con"
+        :style="{ 'margin-top': -65 + 'px' }"
+      >
+      <div>
+        <Layout class="main-layout-con">
+          <!--<div class="tag-nav-wrapper">
+              <tags-nav
+                :value="$route"
+                @input="handleClick"
+                :list="tagNavList"
+                @on-close="handleCloseTag"
+              />
+            </div>-->
+          <Content class="content-wrapper">
+            <keep-alive>
+              <router-view v-if="$route.meta.keepAlive"></router-view>
+            </keep-alive>
+            <router-view v-if="!$route.meta.keepAlive"></router-view>
+          </Content>
+        </Layout>
+      </div>
+      </Content>
+    </div>
   </div>
 </template>
 
@@ -154,7 +215,8 @@ export default {
       }
       this.setContentMarginTop();
     }, 100);
-    window.onresize = () => { // 60 120  180  240 头部导航栏固定高度
+    window.onresize = () => {
+      // 60 120  180  240 头部导航栏固定高度
       this.setContentMarginTop();
     };
   },
@@ -172,7 +234,8 @@ export default {
         this.personalHealthPage = false;
       }
     },
-    async getCheckMenuList() { // 获取当前登录人权限
+    async getCheckMenuList() {
+      // 获取当前登录人权限
       const res = await this.$api.loginInterface.getCheckedMenu({});
       const { data } = res.data;
       console.log(data);
@@ -238,58 +301,58 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .app-wrapper {
+.app-wrapper {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  .main {
+    min-height: 100%;
+    transition: margin-left 0.28s;
+    margin-left: 210px;
     position: relative;
-    height: 100%;
-    width: 100%;
-    .main {
-      min-height: 100%;
-      transition: margin-left .28s;
-      margin-left: 210px;
-      position: relative;
-      background-color: #F6F8FC;
-      overflow: hidden;
-      border-radius: 24px 0px 0px 24px;
-      z-index: 1002;
-    }
+    background-color: #f6f8fc;
+    overflow: hidden;
+    border-radius: 24px 0px 0px 24px;
+    z-index: 1002;
+  }
 
-    .sidebar-container {
-      transition: width 0.28s;
-      width: 232px !important;
-      background-color: #3154AC;
-      height: 100%;
-      position: fixed;
-      font-size: 0px;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      z-index: 1001;
-      overflow: hidden;
-      overflow-y: auto;
-      &::-webkit-scrollbar{
-        width: 0!important;
-      }
+  .sidebar-container {
+    transition: width 0.28s;
+    width: 232px !important;
+    background-color: #3154ac;
+    height: 100%;
+    position: fixed;
+    font-size: 0px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1001;
+    overflow: hidden;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      width: 0 !important;
     }
   }
-  .hideSidebar {
-    .sidebar-container {
-      width: 64px !important;
-    }
-    .main {
-      margin-left: 64px;
-    }
+}
+.hideSidebar {
+  .sidebar-container {
+    width: 64px !important;
   }
+  .main {
+    margin-left: 64px;
+  }
+}
 .main /deep/ {
   height: 100%;
-  .mainFixed{
+  .mainFixed {
     position: absolute;
     top: 0;
     /*min-width: 1400px;*/
-    width:100%;
+    width: 100%;
     // height: 136px;
-    z-index: 9
+    z-index: 9;
   }
-  .mainHeader{
+  .mainHeader {
     background: white;
     .header {
       height: 56px;
@@ -297,12 +360,12 @@ export default {
       // background: #fff;
       padding: 0 0 0 10px;
       display: flex;
-      .toggle{
+      .toggle {
         width: 56px;
         height: 56px;
         cursor: pointer;
       }
-      .title{
+      .title {
         font-size: 14px;
         display: inline-block;
         width: 120px;
@@ -312,7 +375,7 @@ export default {
         cursor: pointer;
         color: black;
       }
-      .healthPageSide{
+      .healthPageSide {
         flex: 1;
         font-size: 14px;
         display: inline-block;
@@ -327,7 +390,7 @@ export default {
     }
     .tag-nav-wrapper {
       height: 40px;
-      border-top: 1px solid #F6F6F9;
+      border-top: 1px solid #f6f6f9;
       background-color: white;
       /*position: fixed;
       top: 60px;*/
@@ -338,10 +401,10 @@ export default {
     height: calc(100vh - 97px);
     overflow: hidden;
     position: absolute;
-    top: 116px;
+    top: 125px;
     .main-layout-con {
       height: 100%;
-    /*  .tag-nav-wrapper {
+      /*  .tag-nav-wrapper {
         padding: 0;
         height: 36px;
       }*/
@@ -356,4 +419,33 @@ export default {
     }
   }
 }
+/deep/ .personal-top{
+  width: 100%;
+  height: 90px;
+  display: flex;
+  justify-content: space-between;
+  // align-items: center;
+  background: linear-gradient(135deg, #24499D 0%, #3154AC 100%);
+  .header-left{
+    margin-top: 14px;
+    margin-left: 30px;
+    span{
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .headertop{
+      font-weight: 400;
+      margin-left: 28px;
+    }
+  }
+  .user-avatar-dropdown{
+    .quitSpan{
+      color: #fff !important;
+    }
+  }
+}
+// /deep/ .health_questionnaire_edit{
+//     background: #F6F8FC !important;
+//   }
 </style>

@@ -165,7 +165,7 @@
 <script>
 import deleteIcon from '~/src/assets/images/deleteicon.png';
 export default {
-  name: 'intervention_plan',
+  name: 'type_manage',
   data() {
     return {
       boxshow: true,

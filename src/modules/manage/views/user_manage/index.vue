@@ -366,7 +366,7 @@ import deleteIcon from '~/src/assets/images/deleteicon.png';
 import * as dayjs from 'dayjs';
 
 export default {
-  name: 'index',
+  name: 'customer_pool',
   components: {
     'assign-dialog': assignDialog,
     'doctor-Select': doctorSelect,
@@ -626,7 +626,7 @@ export default {
         });
     },
   },
-  mounted() {
+  activated() {
     this.getUserList();
     this.getGridList(); // 获取人员列类别
     this.getDoctor(); // 获取医生列表

@@ -4,6 +4,7 @@
     <el-form :model="formData" label-width="90px" ref="form" :rules="rules">
       <el-form-item label="附件上传：" prop="route">
         <el-input
+                readonly
                 v-model="formData.route"
                 placeholded="大小不超过15MB"
                 autocomplete="off">
@@ -79,6 +80,7 @@ export default {
         title: [{ required: true, message: '请输入附件标题' }],
         route: [{ required: true, message: '请上传附件' }],
       },
+      readonly: true,
     };
   },
   methods: {

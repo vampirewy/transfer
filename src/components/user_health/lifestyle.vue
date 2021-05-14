@@ -3,19 +3,19 @@
     <div class="life-style">
       <p class="nameP">
         <img src="@/assets/images/healthPlan/lifestyle1.png"/>饮食：
-        <span>{{formNew.questionLifestyle1.paramValue || '-'}}</span>
+        <span>{{formNew.questionLifestyle1.paramValue || '您的膳食结构基本合理'}}</span>
       </p>
       <p class="nameP"><img src="@/assets/images/healthPlan/lifestyle2.png"/>吸烟：
-        <span>{{formNew.questionLifestyle2.paramValue || '-'}}</span>
+        <span>{{formNew.questionLifestyle2.paramValue || '暂无数据'}}</span>
       </p>
       <p class="nameP"><img src="@/assets/images/healthPlan/lifestyle3.png"/>饮酒：
-        <span>{{formNew.questionLifestyle3.paramValue || '-'}}</span>
+        <span style="color:#F33D21;">{{formNew.questionLifestyle3.paramValue || '您会酗酒'}}</span>
       </p>
       <p class="nameP"><img src="@/assets/images/healthPlan/lifestyle4.png"/>精神：
-        <span>{{formNew.questionLifestyle4.paramValue || '-'}}</span>
+        <span style="color:#F33D21;">{{formNew.questionLifestyle4.paramValue || '您的精神压力有点大'}}</span>
       </p>
       <p class="nameP"><img src="@/assets/images/healthPlan/lifestyle5.png"/>睡眠：
-        <span>{{formNew.questionLifestyle5.paramValue || '-'}}</span>
+        <span>{{formNew.questionLifestyle5.paramValue || '您的睡眠状况一般'}}</span>
       </p>
     </div>
   </div>

@@ -200,7 +200,7 @@ export default {
       modalVisible: false,
     };
   },
-  mounted() {
+  activated() {
     this.queryList();
   },
   methods: {

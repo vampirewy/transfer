@@ -1,12 +1,20 @@
 <template>
   <div>
-  <client-info v-if="showTopLeft"></client-info>
+  <!-- <client-info v-if="showTopLeft"></client-info> -->
   <div class="health_questionnaire_edit">
     <div class="intvTmpl_left" id="intvTmpl_left"
          :class="{ 'isFixed': searchBarFixed === true }"
          v-if="showTopLeft"
-         style="max-height: 30000px;height: auto;margin-right: 30px">
-      <div class="intvTmpl_left_title">个人管理中心</div>
+         style="max-height: 30000px;height: auto;">
+         <div class="headimage">
+           <div class="userimg">
+             <img src="@/assets/images/common/user.png" alt="">
+             <div class="userImg"><img src="@/assets/images/common/usernews.png" alt=""></div>
+           </div>
+           <div class="username">轻那个风</div>
+           <div class="usertype">高级会员</div>
+         </div>
+      <!-- <div class="intvTmpl_left_title">个人管理中心</div> -->
       <ul class="intv_menulist">
         <li :class="{'active':active === index}" @click="clickMenu(index, '#questions-' + index)"
             v-for="(item, index) in templateList" :key="index">
@@ -106,7 +114,7 @@ export default {
       showTopLeft: true,
       clientId: this.$route.params.id,
       templateList: [
-        { name: '个人健康画像', active: 0 },
+        { name: '健康问题', active: 0 },
         { name: '危险因素', active: 1 },
         { name: '健康风险评估', active: 2 },
         { name: '随访方案及计划', active: 3 },
@@ -241,5 +249,50 @@ export default {
         font-size: 14px;
       }
     }
+  }
+  .headimage{
+    .userimg{
+      position: relative;
+      width: 80px;
+      height: 80px;
+      margin: auto;
+      margin-top: 40px;
+      img{
+        width: 100%;
+      }
+      .userImg{
+        width: 30px;
+        height: 30px;
+        position: absolute;
+        border-radius: 50%;
+        right: 0;
+        bottom: 0;
+        img{
+          width: 100%;
+        }
+      }
+    }
+    .username{
+        text-align: center;
+        font-weight: 600;
+        color: #333333;
+        font-size: 18px;
+        line-height: 25px;
+        margin-top: 10px;
+      }
+      .usertype{
+        width: 70px;
+        height: 24px;
+        background: rgba(49, 84, 172, 0.1);
+        border-radius: 12px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: auto;
+        color: #24499D;
+        font-size: 12px;
+        line-height: 25px;
+        margin-top: 6px;
+      }
   }
 </style>

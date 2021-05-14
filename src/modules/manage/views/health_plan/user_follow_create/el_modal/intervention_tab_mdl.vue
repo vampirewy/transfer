@@ -261,7 +261,7 @@ export default {
   .intervention_tab_div{
     display: flex;
     .intvTmpl_left{
-      min-width: 150px;
+      min-width: 216px;
       max-height: calc(100vh - 235px);
       min-height: calc(100vh - 235px);
   }

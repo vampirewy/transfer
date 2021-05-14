@@ -236,7 +236,7 @@ import QuestionsOpen from '~/src/components/date_select/questions_open.vue';
 import { MAX_PAGESIZE } from '~/src/libs/util/index';
 
 export default {
-  name: 'EstimateReport',
+  name: 'team_report',
   components: {
     QueryPage,
     Search,

@@ -1,25 +1,32 @@
 <template>
   <div class="follow-plan">
     <el-table :data="tableData" style="width: 100%" align="center">
-      <el-table-column prop="clientName" label="指标名称" show-overflow-tooltip>
+      <el-table-column prop="clientName" label="随访日期" show-overflow-tooltip>
         <!-- <template slot-scope="scope">
           <span>{{ scope.row.itemName | getResult}}</span>
         </template> -->
       </el-table-column>
-      <el-table-column prop="gridName" label="结果" show-overflow-tooltip>
+      <el-table-column prop="gridName" label="随访形式" show-overflow-tooltip>
         <!-- <template slot-scope="scope">
           <span>{{ scope.row.itemValue | getResult}}</span>
         </template> -->
       </el-table-column>
-      <el-table-column prop="executePlanWayName" label="参考范围" show-overflow-tooltip>
+      <el-table-column prop="executePlanWayName" label="随访标题" show-overflow-tooltip>
         <!-- <template slot-scope="scope">
           <span>{{ scope.row.refRange | getResult }}</span>
         </template> -->
       </el-table-column>
-      <el-table-column prop="executeTime" label="单位" show-overflow-tooltip>
+      <el-table-column prop="executeTime" label="随访结果" show-overflow-tooltip>
         <!-- <template slot-scope="scope">
           <span>{{ scope.row.itemUnit | getResult }}</span>
         </template> -->
+      </el-table-column>
+      <el-table-column prop="executePlanWayName" label="操作" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <el-button type="text"
+                        size="small"
+                        >查看</el-button>
+        </template>
       </el-table-column>
     </el-table>
     <el-pagination
@@ -40,34 +47,34 @@ export default {
     return {
       tableData: [
         {
-          clientName: '空腹血糖',
-          gridName: '4.12',
-          executeTime: 'mmol/L',
-          executePlanWayName: '3.6~5.8',
+          clientName: '2020-10-01',
+          gridName: '我是名称',
+          executeTime: '我是标题',
+          executePlanWayName: '我是提',
         },
         {
-          clientName: '空腹血糖',
-          gridName: '4.12',
-          executeTime: 'mmol/L',
-          executePlanWayName: '3.6~5.8',
+          clientName: '2020-10-01',
+          gridName: '我是名称',
+          executeTime: '我是标题',
+          executePlanWayName: '我是提示啊我是提示',
         },
         {
-          clientName: '空腹血糖',
-          gridName: '4.12',
-          executeTime: 'mmol/L',
-          executePlanWayName: '3.6~5.8',
+          clientName: '2020-10-01',
+          gridName: '我是名称',
+          executeTime: '我是标题',
+          executePlanWayName: '我是提示啊我是提示',
         },
         {
-          clientName: '空腹血糖',
-          gridName: '4.12',
-          executeTime: 'mmol/L',
-          executePlanWayName: '3.6~5.8',
+          clientName: '2020-10-01',
+          gridName: '我是名称',
+          executeTime: '我是标题',
+          executePlanWayName: '我是提示啊我是提示',
         },
         {
-          clientName: '空腹血糖',
-          gridName: '4.12',
-          executeTime: 'mmol/L',
-          executePlanWayName: '3.6~5.8',
+          clientName: '2020-10-01',
+          gridName: '我是名称',
+          executeTime: '我是标题',
+          executePlanWayName: '我是提示啊我是提示',
         },
       ],
       currentPage: 1,
