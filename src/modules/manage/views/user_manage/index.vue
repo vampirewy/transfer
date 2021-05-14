@@ -199,7 +199,9 @@
             </el-table-column>
             <el-table-column label="姓名" prop="name" show-overflow-tooltip>
               <template slot-scope="scope">
-                <span style="color:#3154AC;">
+                <span class="clientName"
+                @click="commonHref.toPersonalHealth(scope.row.id, $router)"
+                >
                   {{ scope.row.name }}
                 </span>
               </template>

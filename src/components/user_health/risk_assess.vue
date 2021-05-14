@@ -90,6 +90,7 @@ export default {
         word-wrap: break-word;
         letter-spacing: 10px;
         font-weight: 600;
+        border-radius: 10px 0 0 10px;
       }
       .assessContent{
         background-color: white;

@@ -607,4 +607,7 @@ export default {
     }
   }
 }
+.searchCondition .buttones div{
+  margin: 10px 10px 0 0;
+}
 </style>

@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       title: 'Vue Element Admin',
-      logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png',
+      logo: 'http://health.pre.touchealth.com/logo.png',
     };
   },
 };
@@ -55,8 +55,8 @@ export default {
     width: 100%;
 
     & .sidebar-logo {
-      width: 32px;
-      height: 32px;
+      width: 180px;
+      // height: 32px;
       vertical-align: middle;
     }
 
