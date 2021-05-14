@@ -144,6 +144,7 @@ import SideMenu from '~/src/components/side_menu/side_menu.vue';
 import { getNewTagList, routeEqual, localSave } from '~/src/libs/util';
 import routers from '../router/routers';
 import ResizeMixin from '../../../libs/util/ResizeHandler';
+import sunWarnOpen from './sun_follow/sun_warn_open/detail.vue'; // 阳性预警值弹窗
 export default {
   name: 'main',
   components: {
@@ -155,6 +156,7 @@ export default {
     TagsNav,
     Content,
     SideMenu,
+    sunWarnOpen,
   },
   mixins: [ResizeMixin],
   computed: {
@@ -231,6 +233,7 @@ export default {
       // 60 120  180  240 头部导航栏固定高度
       this.setContentMarginTop();
     };
+    // this.handleSunView(); // 阳性预警值弹窗
   },
   methods: {
     ...mapMutations({
@@ -316,6 +319,32 @@ export default {
     },
     handleClick(item) {
       this.turnToPage(item);
+    },
+    /**
+     * 阳性 - · 危急值提醒 ·
+     */
+    handleSunView() {
+      const Row = {
+        name: '甑生病',
+        mobile: '13888888888',
+        sex: 1,
+        age: 36,
+        subject: '内科',
+        doctor: '陈良',
+        desc: '请尽快处理',
+        warnName: ['肺部CT：疑似肺癌', '胃部CT：疑似胃炎'],
+      };
+      this.$jDynamic.show({
+        component: 'sunWarnOpen',
+        data: {
+          modalTitle: '· 危急值提醒 ·',
+          propsData: Row,
+          confirmfunc: async (value) => {
+            console.log(value);
+          },
+        },
+        render: h => h(sunWarnOpen),
+      });
     },
   },
 };
