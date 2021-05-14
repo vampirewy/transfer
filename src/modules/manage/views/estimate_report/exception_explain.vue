@@ -1,6 +1,9 @@
 <template>
   <div class="exception-explain">
-    <div class="title">异常解读</div>
+    <div class="divRightTitleDiv">
+      <div class="divRightTitle" style="margin-top: 0">异常解读
+        <div class="titleBiao"></div></div>
+    </div>
     <div
       v-for="(exception, index) in exceptions"
       :key="index"
@@ -51,7 +54,7 @@
       </div>
     </div>
     <div class="page-button">
-      <el-button plain size="small" @click="$emit('close')">返回</el-button>
+      <el-button class="cancelBtn" size="small" @click="$emit('close')">返回</el-button>
     </div>
   </div>
 </template>
@@ -112,7 +115,7 @@ export default {
     margin-bottom: 10px;
     .exception-header {
       padding: 19px;
-      background: #F4F4F6;
+      background: #F6F8FC;
       border-radius: 5px;
       font-size: 16px;
       font-weight: 600;
@@ -159,9 +162,9 @@ export default {
     }
   }
   .detail {
-    background: #F4F4F6;
+    background: #F6F8FC;
     border-radius: 5px;
-    border: 1px solid #F4F4F6;
+    border: 1px solid #F6F8FC;
     padding: 20px;
     .detail-button {
       text-align: right;

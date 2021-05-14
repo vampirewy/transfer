@@ -116,8 +116,8 @@
       </el-tabs>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button size="small" plain @click="$emit('close')">取消</el-button>
-      <el-button size="small" type="primary" @click="submit">确定</el-button>
+      <el-button size="small" class="cancelBtn" @click="$emit('close')">取消</el-button>
+      <el-button size="small" class="sureBtn" type="primary" @click="submit">确定</el-button>
     </span>
   </el-dialog>
 </template>
@@ -249,12 +249,6 @@ export default {
       }
     }
   }
-  /deep/ textarea {
-    background: #F4F4F6;
-    border-radius: 5px;
-    border: none;
-    resize: none;
-  }
   /deep/ .el-input__count {
     background: #F4F4F6;
   }
@@ -268,14 +262,14 @@ export default {
     padding-top: 30px;
     padding-right: 26px;
     text-align: center;
-    button {
+    /* button {
       width: 90px;
       border-radius: 20px;
       border: none;
     }
     button + button {
       margin-left: 20px;
-    }
+    }*/
     .is-plain {
       width: 90px;
           height: 40px;

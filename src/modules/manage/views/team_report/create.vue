@@ -1,11 +1,10 @@
 <template>
   <div class="user-edit">
-    <el-card>
       <el-row>
         <el-col :span="24">
           <div class="divRight">
             <div class="divRightTitleDiv">
-              <div class="divRightTitle">
+              <div class="divRightTitle" style="margin: 0">
                 生成
                 <div class="titleBiao"></div>
               </div>
@@ -19,25 +18,23 @@
             :rules="rules"
           >
             <el-row>
-              <el-col :span="7">
+              <el-col :span="6">
                 <el-form-item label="报告编号：" prop="name">
                   <el-input
                     v-model="formData.name"
-                    style="width: 180px"
                     maxLength="30"
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="7">
+              <el-col :span="6">
                 <el-form-item label="报告编号：" prop="name">
                   <el-input
                     v-model="formData.name"
-                    style="width: 180px"
                     maxLength="30"
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
+              <el-col :span="12">
                 <el-form-item label="体检日期：" prop="name">
                   <el-date-picker
                     v-model="formData.startTime"
@@ -81,8 +78,9 @@
               </div>
               <el-col :span="24" v-if="formData.worker == 1">
                 <el-form-item label="参检团队">
-                  <div class="template-add-wrapper">
+                  <div class="template-add-wrapper" style="display: flex">
                     <el-popover
+                            style="display: block;width: 100%;"
                       ref="sportPopover"
                       placement="bottom-end"
                       width="650"
@@ -97,22 +95,17 @@
                       >
                       </sport-template>
                       <el-input
-                        style="width: 90%"
-                        class="select-template-trigger"
+                        class="select-user-trigger"
                         slot="reference"
                         disabled
                         v-model="templateStr"
                         placeholder="请选择"
                       >
-                        <i
-                          :class="`el-icon-caret-${
-                            popoverStatus ? 'top' : 'bottom'
-                          }`"
-                          slot="suffix"
-                        ></i>
+                        <i :class="`el-icon-arrow-${popoverStatus ? 'up' : 'down'}`"
+                           slot="suffix"></i>
                       </el-input>
                     </el-popover>
-                    <el-button class="sureBtn" @click="addSportTemplate">添加</el-button>
+                    <el-button class="addLv" @click="addSportTemplate">添加</el-button>
                   </div>
                 </el-form-item>
                 <el-table :data="form.sportLibraryDTOList" class="sport-table">
@@ -452,7 +445,6 @@
               :current="currentRow"
               @cancel="fileDetailModalVisible = false"
       ></file-detail> -->
-    </el-card>
   </div>
 </template>
 <script>
@@ -870,6 +862,17 @@ export default {
   .select-user-trigger {
     cursor: pointer;
   }
+  .addLv{
+    width: 80px;
+    height: 40px;
+    font-size: 14px;
+    background: #36BF2F;
+    border-radius: 5px;
+    text-align: center;
+    color: #ffffff;
+    margin-left: 10px;
+    border: none;
+  }
   .tags {
     margin-right: 10px;
   }
@@ -882,14 +885,29 @@ export default {
   /deep/.el-form-item__label {
     padding-right: 8px !important;
   }
-  /deep/.el-input__inner,
-  /deep/.el-textarea__inner {
-    background-color: #f4f4f6;
+  /deep/ .select-user-trigger {
+    .el-input__suffix{
+      right: 15px;
+    }
+    input{
+      border: 1px solid #DDE0E6!important;
+    }
+    input, i {
+      background-color: white!important;
+      cursor: pointer;
+      color: #333333;
+      &::placeholder{
+        color: #999999!important;
+      }
+    }
+    &.disabled {
+      input, i {
+        cursor: not-allowed;
+      }
+    }
   }
   .user-edit-form {
-    margin-top: 10px;
-    padding-right: 20px;
-    border-right: 1px solid #f4f4f6;
+    margin-top: 20px;
   }
   .divRight {
     flex: 1;
