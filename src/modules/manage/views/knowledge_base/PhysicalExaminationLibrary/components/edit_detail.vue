@@ -143,6 +143,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/deep/  .form-content .el-input__inner{
+  background: #ffffff !important;
+}
 .dialog-detail /deep/ {
   .form-title {
     display: flex;

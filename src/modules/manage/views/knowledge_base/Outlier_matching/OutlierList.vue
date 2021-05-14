@@ -128,13 +128,13 @@
     <div class="divRightTitleDiv">
       <!-- <div class="divRightTitle"><span>|</span>客户池</div> -->
       <div>
-        <el-button
+        <!-- <el-button
                 size="small"
                 class="btn-new btnDel"
                 style="padding: 0 16px;margin:20px 0 20px 0"
                 @click="handleSomeRemove"
                 v-if="getAccess('life_style_questionnaire_deleted')"
-        ><img src="@/assets/images/common/delBtn.png" />撤销</el-button>
+        ><img src="@/assets/images/common/delBtn.png" />撤销</el-button> -->
         <!-- <el-button
                 class="btn-new btnAdd"
                 size="small"
@@ -222,7 +222,7 @@
         </el-table-column> -->
         <el-table-column label="操作" prop="index" min-width="150">
           <template slot-scope="scope">
-            <el-button
+            <!-- <el-button
               type="text"
               size="small"
               @click="
@@ -236,8 +236,8 @@
                 })
               "
               v-if="getAccess('life_style_questionnaire_edit') && scope.row.questionType !== 4"
-            >撤销</el-button>
-            <span style="color:#DDE0E6">|</span>
+            >撤销</el-button> -->
+            <!-- <span style="color:#DDE0E6">|</span> -->
             <el-button
               type="text"
               size="small"
@@ -548,6 +548,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/deep/ .el-input.is-disabled .el-input__inner{
+  background: #ffffff !important;
+}
  .qusDrop {
     .el-dropdown-menu__item{
       padding: 0 40px;

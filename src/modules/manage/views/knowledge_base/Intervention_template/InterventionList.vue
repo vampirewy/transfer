@@ -169,10 +169,14 @@
                 </span>
               </template>
             </el-table-column>
-            <el-table-column label="适用性别" prop="gender" min-width="80" show-overflow-tooltip />
+            <el-table-column label="适用性别" prop="gender" min-width="80" show-overflow-tooltip >
+              <template slot-scope="scope">
+                {{scope.row.gender === 1 ? '男' : (scope.row.gender === 2 ? '女' : '')}}
+              </template>
+            </el-table-column>
             <el-table-column label="条件" prop="qualification" min-width="80" show-overflow-tooltip />
-            <el-table-column label="组别" prop="orgCode" min-width="80" show-overflow-tooltip />
-            <el-table-column label="级别" prop="checked" min-width="80" show-overflow-tooltip />
+            <!-- <el-table-column label="组别" prop="orgCode" min-width="80" show-overflow-tooltip />
+            <el-table-column label="级别" prop="checked" min-width="80" show-overflow-tooltip /> -->
             <el-table-column label="是否启用" min-width="150"  prop="state">
               <template slot-scope="scope">
                 <el-switch
@@ -216,7 +220,7 @@
                 <el-button
                         type="text"
                         size="small"
-                        @click="editplan(scope)"
+                        @click="editplan(scope.row)"
                 >编辑</el-button
                 >
                 <!-- <el-button
@@ -452,9 +456,12 @@ export default {
         type: 2, // 2-分配
       });
     },
-    editplan() {
+    editplan(row) {
       this.$router.push({
         name: 'InterventionEdit',
+        params: {
+          id: row.id,
+        },
       });
     },
     claim({ row = {} }) {

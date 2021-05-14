@@ -114,7 +114,7 @@
 }
 .el-dialog{
   padding: 0 0 24px 0!important;/*24px 26px*/
-  border-radius: 20px!important;
+  border-radius: 8px!important;
 }
 .el-dialog__body{
   // border-radius: 20px 20px 0 0;
@@ -276,7 +276,7 @@ body .el-table th.gutter{
   }
   &.is-disabled .el-input__inner {
     color: #B4BBC9;
-    background-color: #EEF1F5 !important;
+    // background-color: #EEF1F5 !important;
   }
 }
 .is-error{

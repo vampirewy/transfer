@@ -106,6 +106,15 @@ export default [
         component: () => import('../../views/knowledge_base/PhysicalExaminationLibrary/PhysicalExamination.vue'),
       },
       {
+        path: '/physical_sort',
+        name: 'physical_sort',
+        meta: {
+          title: '排序',
+          keepAlive: true,
+        },
+        component: () => import('../../views/knowledge_base/PhysicalExaminationLibrary/components/physical_sort.vue'),
+      },
+      {
         path: '/minor_term_add',
         name: 'minor_term_add',
         meta: {

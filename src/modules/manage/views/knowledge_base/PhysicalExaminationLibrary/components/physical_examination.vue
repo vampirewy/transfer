@@ -59,12 +59,13 @@
                     class="btn-new btnDel"
                     v-if="getAccess('customer_pool_distribute')"
             ><img src="@/assets/images/common/deliverBtn.png" />分配</el-button> -->
-            <el-button
+            <!-- <el-button
             style="width:120px;"
                     size="small"
                     class="btn-new btnDel"
+                    @click="Sort"
                     v-if="getAccess('customer_pool_distribute')"
-            ><img src="@/assets/images/common/createReport.png" />生成报告</el-button>
+            ><img src="@/assets/images/common/createReport.png" />排序</el-button> -->
           </div>
         </div>
         <div>
@@ -260,6 +261,14 @@ export default {
         this.table.list = data.data || [];
         this.total = data.total;
       }
+    },
+    Sort() {
+      this.$router.push({
+        name: 'physical_sort',
+        params: {
+          type: 'edit',
+        },
+      });
     },
     // 展开更多
     upMore() {
@@ -497,6 +506,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .font-enable {
   color: #31c529;
 }

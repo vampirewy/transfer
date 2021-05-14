@@ -13,7 +13,7 @@
                 <div class="searchInputFormItem">
                   <el-input placeholder="姓名/编号/单位" v-model="query">
                   </el-input>
-                  <span class="searchBtnImgSpan" @click="search">
+                  <span class="searchBtnImgSpan" @click="search" style="right:-3px">
                     <img
                       class="searchBtnImg"
                       src="@/assets/images/common/topsearch.png"
@@ -84,7 +84,7 @@
                     v-model="status"
                     placeholder="选择"
                     clearable
-                    style="width: 146px; margin-right: 15px"
+                    style="width: 154px; margin-right: 15px"
                   >
                     <el-option label="男" :value="1"></el-option>
                     <el-option label="女" :value="0"></el-option>

@@ -13,7 +13,7 @@
       <div class="main-info-title">新增异常库</div> -->
       <div class="form-title">
         <div class="line"></div>
-        <h3 class="name">新增异常库</h3>
+        <h3 class="name">新增-干预模版</h3>
       </div>
       <el-row>
         <el-col :span="6">
@@ -311,12 +311,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/deep/ .el-form-item__label{
+  margin-top: 10px;
+}
 .medical-history-form {
     .form-title {
       display: flex;
       align-items: center;
       position: relative;
       margin-top: 20px;
+      margin-bottom: 20px;
       .line {
         width: 36px;
         height: 4px;

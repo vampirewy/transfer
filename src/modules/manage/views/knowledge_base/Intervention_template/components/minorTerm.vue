@@ -56,7 +56,7 @@
                 </el-input>
               </el-popover>
             </el-form-item>
-            <div class="othertest">
+            <div class="othertest" style="margin-top:15px">
                 <div @click="othertestAdd">添加</div>
             </div>
           </div>
@@ -100,23 +100,26 @@
             </el-table-column> -->
             <el-table-column label="操作" prop="index"  width="150">
               <template slot-scope="scope">
-                <el-button
-                        type="text"
-                        size="small"
-                        @click="edits()"
-                        v-if="getAccess('customer_pool_edit')"
-                >计划</el-button>
-                <el-button type="text"
-                        size="small"
-                        style="color:#DDE0E6"
-                        >|</el-button>
-                <el-button
-                        type="text"
-                        size="small"
-                        @click="editplan(scope)"
-                >编辑</el-button
-                >
-              </template>
+<el-button type="text" @click="Addoperates(scope.$index, scope.row.id)">
+              <img
+                class="icon-delete"
+                src="@/assets/images/service/compile.png"
+              />
+            </el-button>
+<!-- <el-button type="text" v-if="scope.row.isshow"
+ @click="ModifyListBtn(scope.$index, scope.row.id)">
+              <img
+                class="icon-delete"
+                src="@/assets/images/service/allergic.png"
+              />
+            </el-button> -->
+            <el-button type="text" @click="deleteField(scope.$index, scope.row.id)">
+              <img
+                class="icon-delete"
+                src="@/assets/images/service/deletes.png"
+              />
+            </el-button>
+          </template>
             </el-table-column>
           </el-table>
           <div style="text-align: right">
@@ -541,5 +544,7 @@ export default {
     }
   }
 }
-
+.icon-delete{
+    width: 30px;
+}
 </style>

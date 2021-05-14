@@ -4,21 +4,21 @@
       <div class="divTitle">
         <div class="searchCondition">
           <div class="searchLeft">
-            <div>
+            <div >
               <span>膳食模版</span>
               <el-select
                 v-model="status"
                 placeholder="选择"
                 clearable
-                style="width: 139px"
+                style="width: 110px"
               >
                 <el-option label="男" :value="1"></el-option>
                 <el-option label="女" :value="0"></el-option>
               </el-select>
             </div>
-            <div class="searchInputFormItem">
+            <div class="searchInputFormItem" style="width:100px">
               <el-input placeholder="输入条件搜索" v-model="query"> </el-input>
-              <span class="searchBtnImgSpan" @click="search">
+              <span class="searchBtnImgSpan" @click="search" style="right:-3px">
                 <img
                   class="searchBtnImg"
                   src="@/assets/images/common/topsearch.png"

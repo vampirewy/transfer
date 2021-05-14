@@ -83,14 +83,14 @@
             <p class="desc">膳食平衡宝塔</p>
           </div>
         </div>
-        <div class="diet-type-item">
+        <div class="diet-type-item" @click="isShowDietPagodaGuide = true">
           <img src="@/assets/images/diet/diet_image2.png" alt="膳食指南" />
           <div>
             <p class="title">中国居民</p>
             <p class="desc">膳食指南</p>
           </div>
         </div>
-        <div class="diet-type-item">
+        <div class="diet-type-item" @click="isShowDietPagodaExchange = true">
           <img src="@/assets/images/diet/diet_image3.png" alt="食物交换份" />
           <div>
             <p class="title">常见</p>
@@ -453,6 +453,9 @@
     <el-diet-rule :visible.sync="isShowDietRule"></el-diet-rule>
     <el-cooking :visible.sync="isShowCooking"></el-cooking>
     <el-diet-pagoda :visible.sync="isShowDietPagoda"></el-diet-pagoda>
+    <el-diet-pagoda-guide :visible.sync="isShowDietPagodaGuide"></el-diet-pagoda-guide>
+    <el-diet-pagoda-exchange :visible.sync="isShowDietPagodaExchange"></el-diet-pagoda-exchange>
+
   </div>
 </template>
 
@@ -467,6 +470,8 @@ import elFoodOp from './el_modal/el_food_op.vue'; // 食物操作
 import elDietRule from './el_modal/el_diet_rule.vue'; // 食谱原则
 import elCooking from './el_modal/el_cooking.vue'; // 食谱烹饪方式
 import elDietPagoda from './el_modal/el_diet_pagoda.vue'; // 膳食宝塔
+import elDietPagodaGuide from './el_modal/el_diet_pagoda_guide.vue'; // 膳食宝塔
+import elDietPagodaExchange from './el_modal/el_diet_pagoda_exchange.vue'; // 膳食宝塔
 
 export default {
   name: 'diet_form',
@@ -481,10 +486,14 @@ export default {
     dietProportionChart,
     dietProteinroportionChart,
     dietDistributionChart,
+    elDietPagodaGuide,
+    elDietPagodaExchange,
   },
   data() {
     return {
       isShowDietPagoda: false,
+      isShowDietPagodaGuide: false,
+      isShowDietPagodaExchange: false,
       isShowCooking: false,
       isShowDietRule: false,
       isShowFoodOp: false,

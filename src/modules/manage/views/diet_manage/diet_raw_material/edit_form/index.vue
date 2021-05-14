@@ -22,44 +22,44 @@
         ></el-input>
         <span v-else>{{ ruleForm.names }}</span>
       </el-form-item>
-      <el-form-item style="position: relative" label="原料分类：">
-        <el-select
+      <el-form-item prop="otherName" label="别名：">
+        <el-input
           v-if="type !== 'edit'"
-          placeholder="请选择"
-          v-model="ruleForm.foodSort"
-          clearable
           style="width: 189px"
-        >
-          <el-option
-            v-for="item in cateData"
-            :key="item.paramValue"
-            :label="item.name"
-            :value="item.paramValue"
-          ></el-option>
-        </el-select>
-        <span v-else>{{ foodSortName }}</span>
-        <span class="tip">营养成分：以100g可食部计算</span>
+          v-model="ruleForm.otherName"
+          placeholder="请输入"
+        ></el-input>
+        <span v-else>{{ ruleForm.otherName }}</span>
       </el-form-item>
       <div>
-        <el-form-item prop="otherName" label="别名：">
-          <el-input
-            v-if="type !== 'edit'"
-            style="width: 189px"
-            v-model="ruleForm.otherName"
-            placeholder="请输入"
-          ></el-input>
-          <span v-else>{{ ruleForm.otherName }}</span>
-        </el-form-item>
         <el-form-item label="备注：">
           <el-input
             v-if="type !== 'edit'"
-            style="width: 500px"
+            style="width: 200px"
             v-model="ruleForm.remarks"
             type="textarea"
             :rows="4"
             placeholder="请输入"
           ></el-input>
           <span v-else>{{ ruleForm.otherName }}</span>
+        </el-form-item>
+        <el-form-item style="position: relative" label="原料分类：">
+          <el-select
+            v-if="type !== 'edit'"
+            placeholder="请选择"
+            v-model="ruleForm.foodSort"
+            clearable
+            style="width: 189px"
+          >
+            <el-option
+              v-for="item in cateData"
+              :key="item.paramValue"
+              :label="item.name"
+              :value="item.paramValue"
+            ></el-option>
+          </el-select>
+          <span v-else>{{ foodSortName }}</span>
+          <span class="tip">营养成分：以100g可食部计算</span>
         </el-form-item>
       </div>
       <div class="diet-form_center">

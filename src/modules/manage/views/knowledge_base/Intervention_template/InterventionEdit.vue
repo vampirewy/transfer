@@ -205,7 +205,14 @@ export default {
       isCollapse: true,
       modalVisible: false,
       currentValue: {},
+      ids: this.$route.params.id,
     };
+  },
+  mounted() {
+    // console.log(this.ids, 'asdasdasd');
+    this.getUserList();
+    this.getGridList(); // 获取人员列类别
+    this.getDoctor(); // 获取医生列表
   },
   methods: {
     // 展开更多
@@ -421,11 +428,6 @@ export default {
           }
         });
     },
-  },
-  mounted() {
-    this.getUserList();
-    this.getGridList(); // 获取人员列类别
-    this.getDoctor(); // 获取医生列表
   },
 };
 </script>

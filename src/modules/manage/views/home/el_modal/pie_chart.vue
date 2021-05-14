@@ -133,11 +133,11 @@ export default {
                 // 每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组中的颜色
                 color(params) {
                   const colorList = [
-                    '#5B8FF9',
-                    '#5AD8A6',
-                    '#6C6CE5',
-                    '#F6BD16',
-                    '#E8684A',
+                    '#333333',
+                    '#806CE5',
+                    '#3154AC',
+                    '#36BF2F',
+                    '#FA912B',
                     '#6DC8EC',
                     '#31C529',
                     '#54c9b6',
