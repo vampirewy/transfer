@@ -283,7 +283,7 @@ import deleteIcon from '~/src/assets/images/deleteicon.png';
 import editDetail from './components/edit_detail.vue';
 
 export default {
-  name: 'question',
+  name: 'OutlierList',
   components: {
     // report,
     QueryPage,
@@ -342,7 +342,7 @@ export default {
       },
     };
   },
-  mounted() {
+  /* mounted() {
     this.getList();
     this.queryList();
     // this.getGridList();
@@ -354,6 +354,12 @@ export default {
     //   this.formData.endTime = HomeSearchData.lastDate;
     //   this.formData.searchRange = HomeSearchData.searchRange;
     // }
+  },*/
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.getList();
+      vm.queryList();
+    });
   },
   destroyed() {
     // 清除时间 和 我的/平台

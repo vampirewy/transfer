@@ -360,9 +360,11 @@ export default {
       detailModalVisible: false,
     };
   },
-  activated() {
-    this.getGridLists();
-    this.queryList();
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.getGridLists();
+      vm.queryList();
+    });
   },
   methods: {
     upMore() {

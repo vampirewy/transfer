@@ -389,7 +389,7 @@ const COLUMNS = {
 };
 
 export default {
-  name: 'HealthMonitor',
+  name: 'health_monitor',
   components: {
     TabBars,
     QueryPage,
@@ -475,12 +475,14 @@ export default {
       },
     };
   },
-  mounted() {
-    if (localStorage.getItem('healthMonitorActive')) {
-      this.tabIndex = localStorage.getItem('healthMonitorActive');
-      localStorage.removeItem('healthMonitorActive');
-    }
-    this.queryPageList();
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      if (localStorage.getItem('healthMonitorActive')) {
+        vm.tabIndex = localStorage.getItem('healthMonitorActive');
+        localStorage.removeItem('healthMonitorActive');
+      }
+      vm.queryPageList();
+    });
   },
   methods: {
     TabbarBtn(index, type) {

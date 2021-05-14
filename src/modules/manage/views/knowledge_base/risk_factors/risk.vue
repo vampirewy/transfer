@@ -297,7 +297,7 @@ import OperateButton from '~/src/components/query_page/operate_button.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
 
 export default {
-  name: 'question',
+  name: 'risk_factors_index',
   components: {
     // report,
     QueryPage,

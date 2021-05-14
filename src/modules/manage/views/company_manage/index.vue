@@ -200,9 +200,14 @@ export default {
       modalVisible: false,
     };
   },
-  mounted() {
-    this.queryList();
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.queryList();
+    });
   },
+  /* mounted() {
+    this.queryList();
+  },*/
   methods: {
     onSearch() {
       this.table.currentPage = 1;
