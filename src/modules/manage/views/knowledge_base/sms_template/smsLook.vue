@@ -12,10 +12,18 @@
     <div class="titless">查看短信</div>
     <!-- <div class="title">数据列表</div> -->
     <div class="lookPressure">
-      <div><span>就医编号：</span><span>{{data.categoryId}}</span></div>
-      <div><span>就医类型：</span><span>{{data.categoryName}}</span></div>
-      <div><span>医保卡号：</span><span>{{data.themId}}</span></div>
-      <div><span>就医机构：</span><span>{{data.categoryName}}</span></div>
+      <div><span>短信类别：</span><span>{{data.categoryId}}</span></div>
+      <div><span>短信主题：</span><span>{{data.categoryName}}</span></div>
+      <div><span>适宜性别：</span>
+      <span v-if="data.suitGender === 1">男</span>
+      <span v-if="data.suitGender === 2">女</span>
+      </div>
+      <div><span>适宜人群：</span>
+      <span v-if="data.suitSeason === 0">不限</span>
+      <span v-if="data.suitSeason === 1">成人</span>
+      <span v-if="data.suitSeason === 2">老人</span>
+      <span v-if="data.suitSeason === 3">少儿</span>
+      </div>
     </div>
     <!-- <div class="lookPressure">
       <div><span>就医科室：</span><span>{{data.department}}</span></div>
@@ -24,14 +32,26 @@
       <div><span>出院时间：</span><span>{{data.outDate}}</span></div>
     </div> -->
     <div class="lookPressure">
-      <div><span>就医金额：</span><span>{{data.suitSeason}}</span></div>
+      <div><span>适宜季节：</span>
+      <span v-if="data.suitCrowd === 0">不限</span>
+      <span v-if="data.suitCrowd === 1">春</span>
+      <span v-if="data.suitCrowd === 2">夏</span>
+      <span v-if="data.suitCrowd === 3">秋</span>
+      <span v-if="data.suitCrowd === 4">冬</span>
+      </div>
       <!-- <div><span>当前状态：</span><span>{{data.result}}</span></div> -->
       <div></div>
       <div></div>
     </div>
-    <div class="lookPressure">
-      <div><span>现病史：</span><span>{{data.themName}}</span></div>
+     <div class="lookPressure">
+      <div style="width:100%;display: flex;">
+        <span class="lookPressureTitle" style="width:80px;white-space: nowrap;">短信内容：</span>
+        <span>{{data.content}}</span>
+      </div>
     </div>
+    <!-- <div class="lookPressure">
+      <div><span>短信内容：</span><span>{{data.themName}}</span></div>
+    </div> -->
     <!-- <div class="lookPressure">
       <div><span>主诉：</span><span>{{data.complaint}}</span></div>
     </div>

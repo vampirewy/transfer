@@ -154,12 +154,12 @@
                     <el-form-item label="编码：" label-width="55px">
                       <el-input v-model="itemOne.code" :maxlength="6"
                                 onkeyup="value = value.replace(/[\u4e00-\u9fa5]/ig,'')"
-                                placeholder="请输入"></el-input>
+                                placeholder="输入"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="4">
                     <el-form-item label="分数：" label-width="55px">
-                      <el-input v-model="itemOne.score" placeholder="请输入"></el-input>
+                      <el-input v-model="itemOne.score" placeholder="输入"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="5" v-if="routeType !== 3" style="width: 170px">

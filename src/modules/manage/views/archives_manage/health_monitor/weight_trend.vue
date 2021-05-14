@@ -17,8 +17,14 @@
       <div><span class="lookPressureTitle">体脂率：</span><span>{{queryInfo.bdPercent}}</span></div>
     </div>
     <div class="lookPressure">
-      <div><span class="lookPressureTitle">备注：</span><span>{{queryInfo.result}}</span></div>
+      <div style="width:100%;display: flex;">
+        <span class="lookPressureTitle" style="width:50px;white-space: nowrap;">备注：</span>
+        <span>{{queryInfo.result}}</span>
+      </div>
     </div>
+    <!-- <div class="lookPressure">
+      <div><span class="lookPressureTitle">备注：</span><span>{{queryInfo.result}}</span></div>
+    </div> -->
     <div class="divRightTitleDiv">
       <div class="divRightTitle">体重-查看趋势
         <div class="titleBiao"></div></div>

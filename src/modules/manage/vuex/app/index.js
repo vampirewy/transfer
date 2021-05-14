@@ -38,6 +38,7 @@ const initState = {
   sidebar: {
     opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
   },
+  keepAliveList: '', // 保存缓存的列表得缓存
 };
 
 const gettersToProps = {
@@ -125,6 +126,9 @@ const mutations = {
     Object.keys(payload).forEach((key) => {
       state[key] = payload[key];
     });
+  },
+  setKeepAliveLists(state, arrListString) { // 得缓存
+    state.keepAliveList = arrListString;
   },
 };
 

@@ -196,7 +196,7 @@ export default [
           import('../../views/archives_manage/medication_history_edit.vue'),
       },
       {
-        path: '/report_detail/:id',
+        path: '/report_detail',
         name: 'report_detail',
         meta: {
           title: '体检报告详情',
@@ -241,6 +241,18 @@ export default [
         },
         component: () =>
           import('../../views/archives_manage/single_inspection/inspection_index_add.vue'),
+      },
+      {
+        path: '/inspection_index_info',
+        name: 'inspection_index_info',
+        meta: {
+          title: '单项检查-查看',
+          access: 'inspection_index_info',
+          hideInMenu: true,
+          hideInTag: true,
+        },
+        component: () =>
+          import('../../views/archives_manage/single_inspection/inspection_index_info.vue'),
       },
       {
         path: '/bp_trend',

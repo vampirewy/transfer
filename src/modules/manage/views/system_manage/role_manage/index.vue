@@ -153,7 +153,7 @@ import OperateButton from '~/src/components/query_page/operate_button.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
 
 export default {
-  name: 'Role',
+  name: 'role_list',
   components: {
     RoleForm,
     QueryPage,
@@ -172,8 +172,13 @@ export default {
       currentId: '',
     };
   },
-  activated() {
+  /* activated() {
     this.queryList();
+  },*/
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.queryList();
+    });
   },
   methods: {
     handleSelectionChange(val) {

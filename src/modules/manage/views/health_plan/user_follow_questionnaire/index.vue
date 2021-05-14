@@ -191,7 +191,7 @@ import QueryFilter from '~/src/components/query_page/query_filter.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
 
 export default {
-  name: 'index',
+  name: 'visited_questionaire',
   components: {
     Search,
     QueryPage,
@@ -305,9 +305,15 @@ export default {
         });
     },
   },
-  activated() {
+  /* activated() {
     this.getSystemParamByCode('ZY007');
     this.getTemplateQuestionList();
+  },*/
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.getSystemParamByCode('ZY007');
+      vm.getTemplateQuestionList();
+    });
   },
 };
 </script>

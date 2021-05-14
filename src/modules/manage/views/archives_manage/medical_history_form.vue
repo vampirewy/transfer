@@ -59,8 +59,8 @@
       </div>
       <el-row>
         <el-col :span="6">
-          <el-form-item label="就医编号" prop="hospital">
-            <el-input v-model="form.hospital" placeholder="请输入"></el-input>
+          <el-form-item label="就医编号" prop="MedicalNumber">
+            <el-input v-model="form.MedicalNumber" placeholder="请输入"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -76,27 +76,27 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="医保卡号" prop="department">
+          <el-form-item label="医保卡号">
+            <el-input v-model="form.patientNo" placeholder="请输入"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="就医机构" prop="hospital">
+            <el-input v-model="form.hospital" placeholder="请输入" ></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="就医科室" prop="department">
             <el-input v-model="form.department" placeholder="请输入"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="就医机构" prop="patientNo">
-            <el-input v-model="form.patientNo" placeholder="请输入" @input="replace"></el-input>
+          <el-form-item label="主管医生" >
+            <el-input v-model="form.doctorName" placeholder="请输入" :maxlength="300"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="就医科室" prop="doctorName">
-            <el-input v-model="form.doctorName" placeholder="请输入"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="主管医生" prop="hpi">
-            <el-input v-model="form.hpi" placeholder="请输入" :maxlength="300"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="就医时间" prop="inDate">
+          <el-form-item label="就医时间" >
             <el-date-picker
               v-model="form.inDate"
               type="date"
@@ -108,7 +108,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="出院时间" prop="outDate">
+          <el-form-item label="出院时间" >
             <el-date-picker
               v-model="form.outDate"
               type="date"
@@ -119,8 +119,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="就医金额" prop="complaint">
-            <el-input v-model="form.complaint" placeholder="请输入" :maxlength="300"></el-input>
+          <el-form-item label="就医金额" prop="amountofmoney">
+            <el-input v-model="form.amountofmoney" placeholder="请输入" :maxlength="300"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -135,18 +135,8 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <!-- <el-col :span="6">
-          <el-form-item label="检查" prop="examination">
-            <el-input v-model="form.examination" placeholder="请输入" :maxlength="300"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="诊断" prop="diagnosis">
-            <el-input v-model="form.diagnosis" placeholder="请输入" :maxlength="300"></el-input>
-          </el-form-item>
-        </el-col> -->
         <el-col :span="24">
-          <el-form-item label="现病史" prop="therapy">
+          <el-form-item label="现病史" prop="hpi">
             <el-input
               type="textarea"
               v-model="form.hpi"
@@ -158,7 +148,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="主诉" prop="therapy">
+          <el-form-item label="主诉" prop="complaint">
             <el-input
               type="textarea"
               v-model="form.complaint"
@@ -182,7 +172,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="诊断" prop="therapy">
+          <el-form-item label="诊断" prop="diagnosis">
             <el-input
               type="textarea"
               v-model="form.diagnosis"
@@ -246,21 +236,24 @@ export default {
     return {
       popoverStatus: false,
       form: {
-        clientInfoId: '',
-        hospital: '',
-        department: '',
-        medicalType: '',
-        patientNo: '',
-        inDate: '',
-        outDate: '',
-        doctorName: '',
-        result: '',
-        complaint: '主诉', // 主诉
-        hpi: '现病史', // 现病史
-        examination: '检查', // 检查
-        diagnosis: '诊断', // 诊断
-        therapy: '方案', // 方案
-        orgCode: '',
+        MedicalNumber: '', // 就医编号
+        amountofmoney: '', // 金额
+        clientInfoId: '', // 客户ID
+        hospital: '', // 医院（医疗机构）
+        department: '', // 科室
+        patientNo: '', // 医疗卡号
+        medicalType: '', // 就医类型
+        inDate: '', // 入院时间
+        outDate: '', // 出院时间
+        doctorName: '', // 医生名称
+        result: '', // 当前状态
+        complaint: '', // 主诉
+        hpi: '', // 现病史
+        examination: '', // 检查
+        diagnosis: '', // 诊断
+        therapy: '', // 方案
+        orgCode: '', // 组织code
+        organId: '', // 组织id
       },
       options: {
         inDate: {
@@ -291,13 +284,14 @@ export default {
         },
       },
       rules: {
-        clientInfoId: [{ required: true, message: '客户不能为空' }],
         medicalType: [{ required: true, message: '就医类型不能为空' }],
-        hospital: [{ required: true, message: '医疗机构不能为空' }],
-        inDate: [{ required: true, message: '就医时间不能为空' }],
-        result: [{ required: true, message: '当前状态不能为空' }],
+        department: [{ required: true, message: '就医科室不能为空' }],
+        hospital: [{ required: true, message: '就机构室不能为空' }],
         hpi: [{ required: true, message: '现病史不能为空' }],
+        complaint: [{ required: true, message: '主诉不能为空' }],
         diagnosis: [{ required: true, message: '诊断不能为空' }],
+        amountofmoney: [{ required: true, message: '金额不能为空' }],
+        MedicalNumber: [{ required: true, message: '就医编号不能为空' }],
       },
       resultOptions: [
         { value: 1, label: '未指定' },
@@ -326,7 +320,7 @@ export default {
           name: this.form.clientName,
           age: this.form.age,
           gender: this.form.gender,
-          gridName: this.form.clientGridName,
+          gridName: this.form.clientGrid,
         };
       });
     }
@@ -338,6 +332,7 @@ export default {
       }
     },
     handleSelectUser(data) {
+      console.log(data, '客户选择');
       this.$refs.userPopover.doClose();
       this.popoverStatus = false;
       this.currentUser = data;
@@ -351,33 +346,36 @@ export default {
     },
     submit() {
       this.$refs.form.validate((valid) => {
+        console.log(valid, 'qqqqqqq');
         if (valid) {
           const params = {
+            annexList: [],
             clientInfoId: this.form.clientInfoId,
-            medicalType: this.form.medicalType,
+            complaint: this.form.complaint,
+            department: this.form.department,
+            diagnosis: this.form.diagnosis,
+            doctorName: this.form.doctorName,
+            examination: this.form.examination,
             hospital: this.form.hospital,
             patientNo: this.form.patientNo,
             inDate: this.form.inDate,
-            outDate: this.form.outDate,
-            doctorName: this.form.doctorName,
-            department: this.form.department,
-            result: this.form.result,
-            complaint: this.form.complaint,
-            examination: this.form.examination,
-            diagnosis: this.form.diagnosis,
-            therapy: this.form.therapy,
-            hpi: this.form.hpi,
+            medicalType: this.form.medicalType,
             orgCode: this.form.orgCode,
             organId: this.form.organId,
+            outDate: this.form.outDate,
+            result: this.form.result,
+            therapy: this.form.therapy,
+            hpi: this.form.hpi,
           };
-          if (this.id) {
-            params.id = this.id;
+          if (this.ids) {
+            params.id = this.ids;
           }
           this.$api.medicalHistoryInterface.medicalInfo(params).then((res) => {
             const { data } = res;
             if (data.success) {
               this.$message.success('操作成功');
               this.$emit('afterSubmit');
+              this.$router.go(-1);
             }
           });
         }

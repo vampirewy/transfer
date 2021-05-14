@@ -1,7 +1,7 @@
 <template>
   <div class="medical-history-select-user">
     <div class="query">
-      <div>
+      <!-- <div>
         <span>项目分类：</span>
         <el-select
         v-model="formData.gridId"
@@ -15,16 +15,19 @@
             :key="index"
         ></el-option>
         </el-select>
-    </div>
+    </div> -->
     <div style="width:250px;margin-left:20px">
       <el-input v-model="keyword" placeholder="输入条件搜索"></el-input>
     </div>
       <el-button class="search-button" @click="search">
         <i class="el-icon-search"></i>
       </el-button>
-    <div class="resetAll">重置</div>
+    <div class="resetAll" @click="resetAll">重置</div>
     </div>
-    <el-table :data="tableData" @row-click="rowClick" class="openTable">
+     <!-- @row-click="rowClick" -->
+    <el-table :data="tableData"
+     class="openTable"
+     @selection-change="handleSelectionChange">
       <!-- <el-table-column width="80">
         <template slot-scope="scope">
           <el-radio v-model="selectRadio" :label="scope.row.id">&nbsp;</el-radio>
@@ -47,6 +50,14 @@
       @current-change="handleCurrentChange"
       @size-change="handleSizeChange"
     ></el-pagination>
+    <div class="handle-btn mt30 mb30">
+      <el-button class="reset-btn" size="small" @click="goBack"
+        >返回</el-button
+      >
+      <el-button class="add-btn" type="primary" size="small" @click="submit"
+        >保存</el-button
+      >
+    </div>
   </div>
 </template>
 
@@ -66,6 +77,7 @@ export default {
       formData: {
         gridId: '',
       },
+      multipleSelection: [],
     };
   },
   mounted() {
@@ -73,6 +85,16 @@ export default {
     console.log(this.examination, '接收的数据');
   },
   methods: {
+    submit() {
+      // console.log(this.multipleSelection, '多选');
+      this.$emit('change', this.multipleSelection);
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+    goBack() {
+      this.$emit('change');
+    },
     rowClick(scope) {
       this.selectRadio = scope.id;
       this.$emit('change', scope);
@@ -89,7 +111,13 @@ export default {
     search() {
       this.currentPage = 1;
       this.queryList();
-      this.getOrganType();
+      // this.getOrganType();
+    },
+    resetAll() {
+      this.currentPage = 1;
+      this.keyword = '';
+      this.formData.gridId = '';
+      this.queryList();
     },
     async queryList() {
     //  this.$api.reportInterface.getOrganList(Object.assign(this.formData))
@@ -98,11 +126,11 @@ export default {
         // keywords: this.keyword,
         pageno: this.currentPage,
         pagesize: this.pageSize,
-        itemName: '',
+        itemName: this.keyword,
         gender: '',
         isMain: '',
         state: '',
-        organItemLibraryId: '1',
+        organItemLibraryId: this.examination,
       });
       const { data } = res.data;
       if (data) {
@@ -120,6 +148,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .handle-btn {
+    text-align: center;
+    margin-top: 20px;
+    .reset-btn {
+      width: 90px;
+      height: 40px;
+      background: rgba(49, 84, 172, 0.1);
+      border-radius: 20px;
+      border: 1px solid #3154AC;
+      text-align:center;
+      color: #3154AC;
+    }
+    .add-btn {
+      width: 90px;
+      height: 40px;
+      background: rgba(49, 84, 172, 0.1);
+      border-radius: 20px;
+      background: #3154AC;
+      border: 1px solid #3154AC;
+      text-align:center;
+    }
+  }
 .medical-history-select-user {
   padding: 13px 18px 21px 18px;
   .query {

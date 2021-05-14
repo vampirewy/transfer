@@ -9,9 +9,11 @@
       :disabled="true"
     >
       <div class="divRight">
-        <div class="divRightTitleDiv">
+        <div class="lines"></div>
+        <div class="titless">编辑用药记录</div>
+        <!-- <div class="divRightTitleDiv">
           <div class="divRightTitle"><span>|</span>查看-异常库</div>
-        </div>
+        </div> -->
       </div>
       <el-row>
         <el-col :span="6">
@@ -84,9 +86,13 @@
         </el-input>
       </el-form-item>
     </el-form>
-    <div class="footer">
+    <!-- <div class="footer">
       <el-button class="reset-btn" size="small" @click="goBack">返回</el-button>
-    </div>
+    </div> -->
+    <div style="text-align: center;margin-top: 20px;">
+        <el-button class="cancelBtn" @click="$router.go(-1)">返回</el-button>
+        <!-- <el-button class="sureBtn" type="primary" @click="onSubmit">保存</el-button> -->
+      </div>
   </div>
 </template>
 
@@ -122,6 +128,7 @@ export default {
         abnormalTypeName: '',
       },
       table: [],
+      id: this.$route.params.id,
     };
   },
   mounted() {
@@ -155,8 +162,8 @@ export default {
      * @return {Promise<void>}
      */
     async getDetail() {
-      // const reqBody = { id: this.$route.params.id };
-      const reqBody = { id: 1 };
+      const reqBody = { id: this.$route.params.id };
+      // const reqBody = { id: '1392061524995657730' };
       const res = await this.$api.unusualListInterface.getOrganAbnormal(
         reqBody,
       );
@@ -271,23 +278,43 @@ export default {
   }
 
   .divRight {
-    flex: 1;
-    margin-bottom: 20px;
-    .divRightTitleDiv {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      .divRightTitle {
-        font-size: 18px;
-        color: #333333;
-        font-weight: bold;
-        span {
-          color: #4991fd;
-          font-size: 18px;
-          margin-right: 9px;
-        }
+    position: relative;
+    .titless {
+      position: relative;
+      padding-left: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #333333;
+      line-height: 25px;
+      margin-bottom: 20px;
       }
+    .lines {
+      width: 36px;
+      height: 4px;
+      background: #3154AC;
+      margin-left: 10px;
+      border-radius: 1px;
+      position: absolute;
+      margin-top: 17px;
+      opacity: 0.5;
     }
+    // flex: 1;
+    // margin-bottom: 20px;
+    // .divRightTitleDiv {
+    //   display: flex;
+    //   align-items: baseline;
+    //   justify-content: space-between;
+    //   .divRightTitle {
+    //     font-size: 18px;
+    //     color: #333333;
+    //     font-weight: bold;
+    //     span {
+    //       color: #4991fd;
+    //       font-size: 18px;
+    //       margin-right: 9px;
+    //     }
+    //   }
+    // }
   }
 }
 </style>

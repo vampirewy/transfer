@@ -257,7 +257,7 @@ import OperateButton from '~/src/components/query_page/operate_button.vue';
 import ManagerList from '@/components/user_health/manager_list.vue';
 
 export default {
-  name: 'user_follow_create',
+  name: 'follow_record',
   components: {
     QueryPage,
     Search,
@@ -336,8 +336,10 @@ export default {
       idKey: 'clientId', // 标识列表数据中每一行的唯一键的名称(需要按自己的数据改一下)
     };
   },
-  activated() {
-    this.onLoad();
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.onLoad();
+    });
   },
   methods: {
     // 设置选中的方法

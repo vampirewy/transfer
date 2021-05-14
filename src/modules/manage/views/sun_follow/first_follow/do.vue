@@ -12,10 +12,10 @@
               </div>
             </div>
             <div class="interventionCon">
-              <!--<follow-record v-if="Tabactive === 0"></follow-record>
+              <follow-record v-if="Tabactive === 0"></follow-record>
               <physical-info v-if="Tabactive === 1"></physical-info>
               <sun-record v-if="Tabactive === 2"></sun-record>
-              <medical-record v-if="Tabactive === 3"></medical-record>-->
+              <medical-record v-if="Tabactive === 3"></medical-record>
             </div>
           </div>
       </el-col>

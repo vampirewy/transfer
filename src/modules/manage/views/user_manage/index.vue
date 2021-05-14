@@ -626,10 +626,12 @@ export default {
         });
     },
   },
-  activated() {
-    this.getUserList();
-    this.getGridList(); // 获取人员列类别
-    this.getDoctor(); // 获取医生列表
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.getUserList();
+      vm.getGridList();
+      vm.getDoctor();
+    });
   },
 };
 </script>

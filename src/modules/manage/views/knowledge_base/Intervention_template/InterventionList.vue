@@ -276,7 +276,7 @@ import * as dayjs from 'dayjs';
 import editDetail from './components/edit_detail.vue';
 
 export default {
-  name: 'index',
+  name: 'InterventionList',
   components: {
     // 'assign-dialog': assignDialog,
     // 'doctor-Select': doctorSelect,
@@ -312,11 +312,16 @@ export default {
       currentValue: {},
     };
   },
-  mounted() {
+  /* mounted() {
     this.fetch();
     // this.getUserList();
     // this.getGridList(); // 获取人员列类别
     // this.getDoctor(); // 获取医生列表
+  },*/
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.fetch();
+    });
   },
   methods: {
     fetch() {

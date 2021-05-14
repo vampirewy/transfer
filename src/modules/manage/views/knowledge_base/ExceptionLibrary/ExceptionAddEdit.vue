@@ -516,6 +516,7 @@ export default {
             if (data.success) {
               this.$message.success('操作成功');
               this.$emit('afterSubmit');
+              this.$router.go(-1);
             }
           });
         }
@@ -535,6 +536,7 @@ export default {
     align-items: center;
     position: relative;
     margin-top: 20px;
+    margin-bottom: 20px;
     .line {
       width: 36px;
       height: 4px;

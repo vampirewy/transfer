@@ -698,6 +698,7 @@ export default {
     padding: 10px 14px 10px 16px;
     font-size: 14px;
     border-radius: 8px 5px 0 0;
+    box-shadow: 0px 6px 24px 0px rgba(14, 37, 87, 0.06);
   }
   .TabBarsName:before {
     content: '';
@@ -742,7 +743,7 @@ export default {
 }
 .TabListcss{
   height: 380px;
-  width: 97%;
+  width: 95%;
   background: #ffffff;
   box-shadow: 0px 6px 24px 0px rgba(14, 37, 87, 0.06);
   border-radius: 0px 0px 8px 8px;

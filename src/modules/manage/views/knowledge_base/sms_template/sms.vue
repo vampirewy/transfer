@@ -57,7 +57,7 @@
         <div>
           <span>适宜性别：</span>
           <el-select
-                  v-model="formData.gender"
+                  v-model="formData.suitGender"
                   placeholder="请选择"
                   style="width: 140px"
                   clearable
@@ -67,21 +67,23 @@
           </el-select>
         </div>
         <div>
-          <span>适宜类别：</span>
+          <span>适宜人群：</span>
           <el-select
-                  v-model="formData.clientGrid"
+                  v-model="formData.suitCrowd"
                   placeholder="请选择"
                   style="width: 140px"
                   clearable
           >
-            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
-                       :key="index"></el-option>
+              <el-option label="不限" value="0" key="0"></el-option>
+              <el-option label="成人" value="1" key="1"></el-option>
+              <el-option label="老人" value="2" key="2"></el-option>
+              <el-option label="少儿" value="3" key="3"></el-option>
           </el-select>
         </div>
         <div>
           <span>适宜季节：</span>
           <el-select
-                  v-model="formData.lifeStyleLv"
+                  v-model="formData.suitSeason"
                   placeholder="请选择"
                   style="width: 140px"
           >
@@ -95,7 +97,7 @@
       </div>
       <div class="searchRight">
         <div class="buttones">
-          <div class="searchFor" @click="search(1)">
+          <div class="searchFor" @click="searchs(1)">
             <img src="@/assets/images/common/topsearchblue.png" alt="">
           </div>
           <div class="resetAll" @click="reset">重置</div>
@@ -157,13 +159,13 @@
                 size="small"
                 style="margin: 16px 0"
                 @click="handleAddCheck(1)"
-                v-if="getAccess('life_style_questionnaire_add')"
+                v-if="getAccess('knowledge_sms_add')"
         ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
         <el-button
                 size="small"
                 class="btn-new btnDel"
                 @click="handleSomeRemove"
-                v-if="getAccess('life_style_questionnaire_deleted')"
+                v-if="getAccess('knowledge_sms_del')"
         ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
       </div>
     </div>
@@ -206,8 +208,14 @@
         </el-table-column>
         <el-table-column label="适宜人群" prop="suitSeason">
           <template slot-scope="scope">
-            <span>{{ scope.row.suitSeason | getResult}}</span>
+            <span v-if="scope.row.suitSeason === 0">不限</span>
+            <span v-if="scope.row.suitSeason === 1">成人</span>
+            <span v-if="scope.row.suitSeason === 2">老人</span>
+            <span v-if="scope.row.suitSeason === 3">少儿</span>
           </template>
+           <!-- <template slot-scope="scope">
+            {{scope.row.gender === 1 ? '男' : (scope.row.gender === 2 ? '女' : '')}}
+          </template> -->
         </el-table-column>
         <!-- <el-table-column prop="clientGridName" label="人员类别" show-overflow-tooltip>
           <template slot-scope="scope">
@@ -221,7 +229,11 @@
         </el-table-column> -->
         <el-table-column prop="suitCrowd" label="适宜季节" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{ scope.row.suitCrowd | getResult}}</span>
+            <span v-if="scope.row.suitSeason === 0">不限</span>
+            <span v-if="scope.row.suitSeason === 1">春</span>
+            <span v-if="scope.row.suitSeason === 2">夏</span>
+            <span v-if="scope.row.suitSeason === 3">秋</span>
+            <span v-if="scope.row.suitSeason === 4">冬</span>
           </template>
         </el-table-column>
         <el-table-column label="短信内容" prop="content" min-width="120" show-overflow-tooltip>
@@ -252,7 +264,7 @@
                   },
                 })
               "
-              v-if="getAccess('life_style_questionnaire_edit') && scope.row.questionType !== 4"
+              v-if="getAccess('knowledge_sms_edit') && scope.row.questionType !== 4"
             >编辑</el-button>
             <el-button
               type="text"
@@ -299,7 +311,7 @@ import OperateButton from '~/src/components/query_page/operate_button.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
 
 export default {
-  name: 'question',
+  name: 'knowledge_sms',
   components: {
     // report,
     QueryPage,
@@ -317,9 +329,9 @@ export default {
       questionFromList: [], // 问卷来源
       formData: {
         keyWord: '',
-        gender: '', // 适宜性别
-        clientGrid: '', // 适宜类别
-        lifeStyleLv: '', // 适宜季节
+        suitGender: '', // 适宜性别
+        suitCrowd: '', // 适宜类别
+        suitSeason: '', // 适宜季节
         source: '',
         startTime: undefined,
         endTime: undefined,
@@ -352,7 +364,7 @@ export default {
       },
     };
   },
-  activated() {
+  /* mounted() {
     // this.getGridList();
     // this.getQuestionFromList();
     // this.getLifeStyleList();
@@ -363,6 +375,11 @@ export default {
     //   this.formData.searchRange = HomeSearchData.searchRange;
     // }
     this.getList();
+  },*/
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.getList();
+    });
   },
   destroyed() {
     // 清除时间 和 我的/平台
@@ -371,8 +388,9 @@ export default {
   methods: {
     async getList() {
       const res = await this.$api.projectList.smsList(this.formData);
-      const { data } = res.data.data;
-      this.dataSource = data;
+      const { data } = res.data;
+      this.dataSource = data.data;
+      this.total = data.total;
       console.log(this.dataSource, '短信列表');
     },
     handleSelectionChange(val) {
@@ -382,18 +400,22 @@ export default {
     reset() {
       this.params.pageNo = 1;
       this.formData.keyWord = '';
-      this.formData.gender = '';
-      this.formData.clientGrid = '';
-      this.formData.lifeStyleLv = '';
+      this.formData.suitGender = '';
+      this.formData.suitCrowd = '';
+      this.formData.suitSeason = '';
       this.formData.source = '';
       this.formData.startTime = undefined;
       this.formData.endTime = undefined;
       // this.getQuestionType();
-      this.fetch();
+      this.getList();
     },
     search(current = 1) {
       this.params.pageNo = current;
-      this.fetch();
+      this.getList();
+    },
+    searchs() {
+      this.params.pageNo = 1;
+      this.getList();
     },
     /**
      * 新增
@@ -471,7 +493,7 @@ export default {
             reqBody,
           );
           this.$message.success('操作成功');
-          return this.fetch();
+          return this.getList();
         },
       );
     },
@@ -506,12 +528,12 @@ export default {
       this.isTrue = !this.isTrue;
     },
   },
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      // vm.getQuestionType();
-      vm.fetch();
-    });
-  },
+  // beforeRouteEnter(to, from, next) {
+  //   next((vm) => {
+  //     // vm.getQuestionType();
+  //     vm.fetch();
+  //   });
+  // },
 };
 </script>
 

@@ -230,7 +230,7 @@ import manabnor from './components/manabnor.vue';
 import wonmenabnormal from './components/wonmenabnormal.vue';
 import lBMI from './components/BMI.vue';
 export default {
-  name: 'company_manage',
+  name: 'stats_test',
   components: {
     QueryPage,
     Search,
@@ -272,8 +272,13 @@ export default {
       tabcheckidx: 0,
     };
   },
-  mounted() {
+  /* mounted() {
     this.queryList();
+  },*/
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.queryList();
+    });
   },
   methods: {
     TabbarBtn(index) {

@@ -426,7 +426,7 @@ import deleteIcon from '~/src/assets/images/deleteicon.png';
 import InterventionAddMdl from '../user_follow_create/el_modal/intervention_add_mdl.vue';
 import userOpen from '~/src/components/date_select/user_open.vue';
 export default {
-  name: 'user_follow_do',
+  name: 'wait_visit_plan',
   components: {
     QueryPage,
     Search,
@@ -492,8 +492,10 @@ export default {
       },
     };
   },
-  activated() {
-    this.onLoad();
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.onLoad();
+    });
   },
   methods: {
     handleSelectionChange(val) {

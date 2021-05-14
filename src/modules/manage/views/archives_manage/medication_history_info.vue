@@ -3,10 +3,10 @@
     <div class="lines"></div>
     <div class="titless">查看-就医用户信息</div>
     <div class="lookPressure">
-      <div><span>姓名：</span><span>{{data.doctorName}}</span></div>
+      <div><span>姓名：</span><span>{{data.clientName}}</span></div>
       <div><span>性别：</span><span>{{data.gender}}</span></div>
       <div><span>年龄：</span><span>{{data.age}}</span></div>
-      <div><span>客户编号：</span><span>{{data.orgCode}}</span></div>
+      <div><span>客户编号：</span><span>{{data.clientGrid}}</span></div>
     </div>
     <div class="lines"></div>
     <div class="titless">就医信息</div>
@@ -14,8 +14,8 @@
     <div class="lookPressure">
       <div><span>就医编号：</span><span>{{data.orgCode}}</span></div>
       <div><span>就医类型：</span><span>{{data.medicalType}}</span></div>
-      <div><span>医保卡号：</span><span>{{data.orgCode}}</span></div>
-      <div><span>就医机构：</span><span>{{data.orgCode}}</span></div>
+      <div><span>医保卡号：</span><span>{{data.patientNo}}</span></div>
+      <div><span>就医机构：</span><span>{{data.hospital}}</span></div>
     </div>
     <div class="lookPressure">
       <div><span>就医科室：</span><span>{{data.department}}</span></div>
@@ -30,19 +30,34 @@
       <div></div>
     </div>
     <div class="lookPressure">
-      <div><span>现病史：</span><span>{{data.hpi}}</span></div>
+      <div style="width:100%;display: flex;">
+        <span style="white-space: nowrap;">现病史：</span>
+        <span>{{data.hpi}}</span>
+      </div>
     </div>
     <div class="lookPressure">
-      <div><span>主诉：</span><span>{{data.complaint}}</span></div>
+      <div style="width:100%;display: flex;">
+        <span style="white-space: nowrap;">主诉：</span>
+        <span>{{data.complaint}}</span>
+      </div>
     </div>
     <div class="lookPressure">
-      <div><span>检查：</span><span>{{data.examination}}</span></div>
+      <div style="width:100%;display: flex;">
+        <span style="white-space: nowrap;">检查：</span>
+        <span>{{data.examination}}</span>
+      </div>
     </div>
     <div class="lookPressure">
-      <div><span>诊断：</span><span>{{data.diagnosis}}</span></div>
+      <div style="width:100%;display: flex;">
+        <span style="white-space: nowrap;">诊断：</span>
+        <span>{{data.diagnosis}}</span>
+      </div>
     </div>
     <div class="lookPressure">
-      <div><span>方案：</span><span>{{data.therapy}}</span></div>
+      <div style="width:100%;display: flex;">
+        <span style="white-space: nowrap;">方案：</span>
+        <span>{{data.therapy}}</span>
+      </div>
     </div>
     <div class="buttons">
         <div class="buttonsemit" @click="blacks('close')">返回</div>

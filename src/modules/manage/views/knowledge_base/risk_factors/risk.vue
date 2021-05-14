@@ -297,7 +297,7 @@ import OperateButton from '~/src/components/query_page/operate_button.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
 
 export default {
-  name: 'question',
+  name: 'risk_factors_index',
   components: {
     // report,
     QueryPage,
@@ -315,8 +315,8 @@ export default {
       questionFromList: [], // 问卷来源
       formData: {
         keyWord: '', // 危险因素
-        riskType: '', // 危险分类
-        clientGrid: '', // 题目类型
+        // riskType: '', // 危险分类
+        // clientGrid: '', // 题目类型
         pageNo: 1,
         pageSize: 15,
       },
@@ -481,7 +481,7 @@ export default {
       const res = await this.$api.projectList.riskList(this.formData);
       const { data } = res.data.data;
       this.dataSource = data;
-      console.log(this.dataSource, '危险列表');
+      // console.log(this.dataSource, '危险列表');
       // if (this.formData.startTime) {
       //   this.formData.startTime = `${this.formData.startTime} 00:00:00`;
       // }

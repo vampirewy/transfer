@@ -318,7 +318,7 @@ export default {
       },
     };
   },
-  mounted() {
+  /* mounted() {
     if (localStorage.getItem('homeSearchData')) {
       const HomeSearchData = JSON.parse(localStorage.getItem('homeSearchData'));
       this.form.minAssessReportDate = HomeSearchData.startDate;
@@ -327,6 +327,18 @@ export default {
     }
     this.getClientTypeList();
     this.queryPageList();
+  },*/
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      if (localStorage.getItem('homeSearchData')) {
+        const HomeSearchData = JSON.parse(localStorage.getItem('homeSearchData'));
+        vm.form.minAssessReportDate = HomeSearchData.startDate;
+        vm.form.maxAssessReportDate = HomeSearchData.lastDate;
+        vm.form.searchRange = HomeSearchData.searchRange;
+      }
+      vm.getClientTypeList();
+      vm.queryPageList();
+    });
   },
   destroyed() {
     // 清除时间 和 我的/平台

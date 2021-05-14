@@ -108,7 +108,8 @@ export default {
     };
   },
   mounted() {
-    this.$api.medicalHistoryInterface.medicalInfoDetail(this.id).then((res) => {
+    console.log(this.id, '弹窗');
+    this.$api.healthMonitorInterface.SinglegetDetail(this.id).then((res) => {
       const { data } = res;
       this.data = data.data || {};
     });

@@ -119,9 +119,9 @@
             <el-select v-model="form.smsTypeName" placeholder="请选择当前状态" width="150">
               <el-option
                 v-for="item in smsTypes"
-                :key="item.parentId"
+                :key="item.id"
                 :label="item.name"
-                :value="item.parentId"
+                :value="item.id"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -131,9 +131,9 @@
             <el-select v-model="form.ThemeListName" placeholder="请选择当前状态">
               <el-option
                 v-for="item in ThemeList"
-                :key="item.parentId"
+                :key="item.id"
                 :label="item.name"
-                :value="item.parentId"
+                :value="item.id"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -320,7 +320,7 @@ export default {
       const res = await this.$api.projectList.getSortlist({ lv: 1, parentId: 0 });
       const { data } = res.data;
       this.smsTypes = data;
-      console.log(this.smsTypes);
+      // console.log(this.smsTypes);
     },
     handleStartDateChange() {
       if (this.form.medicalType === 1 && this.form.inDate) {

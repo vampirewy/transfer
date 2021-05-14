@@ -10,8 +10,10 @@
       class="form-inline"
     >
       <div class="form-title">
-        <div class="line"></div>
-        <h3 class="name">编辑用药记录</h3>
+        <!-- <div class="line"></div>
+        <h3 class="name">编辑用药记录</h3> -->
+        <div class="lines"></div>
+        <div class="titless">编辑用药记录</div>
       </div>
 
       <div class="medicate-info mt20">
@@ -22,7 +24,7 @@
                 v-model="dataSource.drugsName"
                 placeholder="请输入"
                 :maxlength="100"
-                style="width: 230px"
+                style="width: 200px"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -32,7 +34,7 @@
                 v-model="dataSource.mainIndication"
                 placeholder="请输入"
                 :maxlength="30"
-                style="width: 230px"
+                style="width: 200px"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -42,7 +44,7 @@
                 v-model="dataSource.specification"
                 placeholder="请输入"
                 :maxlength="30"
-                style="width: 230px"
+                style="width: 200px"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -53,7 +55,7 @@
                 placeholder="请输入"
                 :maxlength="30"
                 number
-                style="width: 230px"
+                style="width: 200px"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -69,7 +71,7 @@
                 :max-date="dataSource.endDate"
                 value-format="yyyy-MM-dd"
                 placeholder="请选择开始用药时间"
-                style="width: 230px"
+                style="width: 200px"
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -82,7 +84,7 @@
                 :min-date="dataSource.startDate"
                 value-format="yyyy-MM-dd"
                 placeholder="请选择结束用药时间"
-                style="width: 230px"
+                style="width: 200px"
               ></el-date-picker>
             </el-form-item>
           </el-col>
@@ -92,23 +94,23 @@
                 v-model="dataSource.doseOne"
                 placeholder="请输入"
                 :maxlength="30"
-                style="width: 230px"
+                style="width: 200px"
               ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="当前状态" prop="result">
               <el-select
-                style="width: 230px"
+                style="width: 205px"
                 placeholder="请选择当前状态"
                 v-model="dataSource.result"
               >
                 <el-option
-                  v-for="item in resultList"
-                  :key="item.paramValue"
-                  :label="item.name"
-                  :value="item.paramValue">
-                </el-option>
+                    v-for="item in resultOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                ></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -143,13 +145,16 @@
             </el-form-item>
           </el-col>
         </el-row>
-
-        <div class="handle-btn mt10 mb30">
+         <div style="text-align: center;margin-top: 20px;">
+        <el-button class="cancelBtn" @click="$router.go(-1)">返回</el-button>
+        <el-button class="sureBtn" type="primary" @click="submit">保存</el-button>
+      </div>
+        <!-- <div class="handle-btn mt10 mb30">
           <el-button class="reset-btn" size="small" @click="goBack">返回</el-button>
           <el-button class="add-btn" type="primary" size="small" @click="submit"
             >保存</el-button
           >
-        </div>
+        </div> -->
       </div>
     </el-form>
   </div>
@@ -180,10 +185,18 @@ export default {
         result: [{ required: true, message: '当前状态不能为空' }],
       },
       resultList: [],
+      resultOptions: [
+        { value: 1, label: '未指定' },
+        { value: 2, label: '治疗中' },
+        { value: 3, label: '转诊' },
+        { value: 4, label: '转为慢病' },
+        { value: 5, label: '痊愈' },
+        { value: 6, label: '其他' },
+      ],
     };
   },
   mounted() {
-    this.getResultList();
+    // this.getResultList();
   },
   methods: {
     async getResultList() {
@@ -252,6 +265,26 @@ export default {
   }
   .form-inline {
     .form-title {
+      position: relative;
+      .titless {
+      position: relative;
+      padding-left: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #333333;
+      line-height: 25px;
+      margin-bottom: 20px;
+      }
+    .lines {
+      width: 36px;
+      height: 4px;
+      background: #3154AC;
+      margin-left: 10px;
+      border-radius: 1px;
+      position: absolute;
+      margin-top: -5px;
+      opacity: 0.5;
+    }
       display: flex;
       align-items: center;
       .line {
@@ -272,13 +305,14 @@ export default {
     .handle-btn {
       text-align: center;
       .reset-btn {
-        -webkit-border-radius: 8px;
-        -moz-border-radius: 8px;
-        border-radius: 8px;
-        background: #97a6bd;
-        color: #ffffff;
+        color: #3154AC;
         font-weight: 400;
         padding: 12px 26px;
+        width: 90px;
+        height: 40px;
+        background: rgba(49, 84, 172, 0.1);
+        border-radius: 50px;
+        border: 1px solid #3154AC;
       }
       .add-btn {
         -webkit-border-radius: 8px;

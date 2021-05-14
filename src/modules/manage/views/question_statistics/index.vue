@@ -254,7 +254,7 @@ import spirit from './components/spirit.vue';// 精神压力
 import physique from './components/physique.vue';// 中医体质辨识
 import psychology from './components/psychology.vue';// 心理测评分析
 export default {
-  name: 'company_manage',
+  name: 'stats_index',
   components: {
     QueryPage,
     Search,
@@ -302,8 +302,10 @@ export default {
       tabcheckidx: 0,
     };
   },
-  mounted() {
-    this.queryList();
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.queryList();
+    });
   },
   methods: {
     TabbarBtn(index) {

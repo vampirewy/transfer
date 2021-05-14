@@ -6,7 +6,10 @@
         <i class="el-icon-search"></i>
       </el-button>
     </div>
-    <el-table :data="tableData" @row-click="rowClick" class="openTable">
+    <!-- @row-click="rowClick" -->
+    <el-table :data="tableData"
+    class="openTable"
+    @selection-change="handleSelectionChange">
       <!-- <el-table-column width="80">
         <template slot-scope="scope">
           <el-radio v-model="selectRadio" :label="scope.row.id">&nbsp;</el-radio>
@@ -57,15 +60,22 @@ export default {
       currentPage: 1,
       pageSize: 5,
       selectRadio: '',
+      multipleSelection: [],
     };
   },
   mounted() {
     this.queryList();
   },
   methods: {
-    rowClick(scope) {
-      this.selectRadio = scope.id;
-      this.$emit('change', scope);
+    goBack() {
+      this.$emit('change');
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+    submit() {
+      // this.selectRadio = scope.id;
+      this.$emit('change', this.multipleSelection);
     },
     handleCurrentChange(page) {
       this.currentPage = page;

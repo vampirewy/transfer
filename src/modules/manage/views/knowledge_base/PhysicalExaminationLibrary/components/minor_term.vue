@@ -10,7 +10,7 @@
     <div class="divTop" >
       <div class="divTitle" style="margin-top:20px">
         <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
-        异常库
+        体检小项
       </div>
       <div class="searchCondition">
         <div class="searchLeft">
@@ -98,8 +98,8 @@
                   style="width: 140px"
                   clearable
           >
-            <el-option :label="item.name" :value="item.paramValue"
-                       v-for="(item, index) in questionFromList" :key="index"></el-option>
+            <el-option label="是" value="1" key="1"></el-option>
+            <el-option label="否" value="2" key="2"></el-option>
           </el-select>
         </div>
       </div>
@@ -111,6 +111,7 @@
                     class="btn-new btnAdd"
                     size="small"
                     style="margin: 16px 0"
+                    v-if="getAccess('physical_project_list_add')"
                     @click="
                       $router.push({
                         name: 'minor_term_add',
@@ -124,7 +125,7 @@
                     size="small"
                     class="btn-new btnDel"
                     @click="handleSomeRemove"
-                    v-if="getAccess('customer_pool_batch_delete')"
+                    v-if="getAccess('physical_project_list_batch_delete')"
             ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
             <!-- <el-button
                     @click="assign({})"
@@ -171,15 +172,19 @@
                 </el-switch> -->
               </template>
             </el-table-column>
-            <el-table-column label="性别" prop="gender" min-width="80" show-overflow-tooltip />
-            <el-table-column label="重要指标" prop="isMain" min-width="80" show-overflow-tooltip />
+            <el-table-column label="性别" prop="gender" min-width="80" show-overflow-tooltip>
+              <template slot-scope="scope">
+                {{ scope.row.gender === 1 ? '男' :scope.row.gender === 1?'不限': '女' }}
+              </template>
+            </el-table-column>
+            <el-table-column label="重要指标" prop="isMainText" min-width="80" show-overflow-tooltip />
             <el-table-column label="是否对比" prop="isCompareText"
              min-width="80" show-overflow-tooltip />
             <el-table-column label="范围或参考" prop="maxAge" min-width="100" show-overflow-tooltip />
             <el-table-column label="单位" prop="unit" min-width="80" show-overflow-tooltip />
-            <el-table-column label="项目介绍" prop="refRange" min-width="100" show-overflow-tooltip>
+            <el-table-column label="项目介绍" prop="intro" min-width="100" show-overflow-tooltip>
               <template slot-scope="scope">
-                <span>{{ scope.row.refRange || '0'}}</span>
+                <span>{{ scope.row.intro || '0'}}</span>
               </template>
             </el-table-column>
             <el-table-column label="操作" prop="index"  width="150">
@@ -188,7 +193,7 @@
                         type="text"
                         size="small"
                         @click="edits(scope.row)"
-                        v-if="getAccess('customer_pool_edit')"
+                        v-if="getAccess('physical_project_list_edit')"
                 >编辑</el-button>
               </template>
             </el-table-column>
@@ -197,7 +202,9 @@
             <el-pagination
                     style="margin-top: 15px"
                     @current-change="onChangePage"
+                    @size-change="handleSizeChange"
                     background
+                    :current-page="table.pageNo"
                     layout="prev, pager, next, jumper, total, sizes"
                     :total="total"
                     :pageSizes="[15]"
@@ -279,7 +286,7 @@ export default {
       table: {
         list: [],
         totalCount: 0, // 总条数
-        currentPage: 1, // 当前页
+        pageNo: 1, // 当前页
         pageSize: 15, // 一页数量
       },
       isCollapse: true,
@@ -289,24 +296,47 @@ export default {
       Tabactive: 0,
     };
   },
+  /* mounted() {
+    this.getList();
+    this.queryList();
+    // this.getUserList();
+    // this.getGridList(); // 获取人员列类别
+    // this.getDoctor(); // 获取医生列表
+  },*/
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.getList();
+      vm.queryList();
+    });
+  },
   methods: {
-    async getSectionList() {
-      const res = await this.$api.physicalProjectListInterface.getSectionList();
-      const { data } = res.data;
-      if (data) {
-        this.SectionList = data.data || [];
-      }
-    },
     async queryList() {
       const res = await this.$api.physicalProjectListInterface.listOrganItemLibrary();
       console.log(res.data);
       const { data } = res.data;
       if (data) {
         this.examination = data || [];
+        this.form.examinationId = data[0].id;
+        this.getSectionList();
+      }
+    },
+    async getSectionList() {
+      const res = await this.$api.physicalProjectListInterface.getSectionList({
+        pageNo: 1,
+        pageSize: 100,
+        organItemLibraryId: this.form.examinationId,
+      });
+      const { data } = res.data;
+      if (data) {
+        this.SectionList = data.data || [];
       }
     },
     TabbarBtn(index) {
       this.Tabactive = index;
+    },
+    handleSizeChange(size) {
+      this.table.pageSize = size;
+      this.getList();
     },
     async getList() {
       const reqBody = {
@@ -315,8 +345,8 @@ export default {
         isMain: this.form.isMain,
         state: this.form.state,
         itemName: this.form.itemName,
-        pageno: this.table.currentPage,
-        pagesize: this.table.pageSize,
+        pageNo: this.table.pageNo,
+        pageSize: this.table.pageSize,
       };
       const res = await this.$api.physicalProjectListInterface.listPage(
         reqBody,
@@ -405,14 +435,18 @@ export default {
       this.form.isMain = '';
       this.form.state = '';
       this.form.itemName = '';
-      this.table.currentPage = 1;
+      this.table.pageNo = 1;
       // Object.assign(this.$data, this.$options.data());
       // this.getUserList();
       // this.getGridList(); // 获取人员列类别
       this.getList();
     },
+    handleCurrentChange(page) {
+      this.table.pageNo = page;
+      this.getList();
+    },
     onChangePage(current = 1) {
-      this.params.pageNo = current;
+      this.table.pageNo = current;
       // this.getUserList();
       this.getList();
     },
@@ -433,7 +467,7 @@ export default {
       //   this.formData.startTime = dayjs(this.formData.startTime).format('YYYY-MM-DD');
       //   this.formData.endTime = dayjs(this.formData.endTime).format('YYYY-MM-DD');
       // }
-      this.params.pageNo = 1;
+      this.table.pageNo = 1;
       // this.getUserList();
       this.getList();
     },
@@ -563,14 +597,6 @@ export default {
           }
         });
     },
-  },
-  mounted() {
-    this.getList();
-    this.queryList();
-    this.getSectionList();
-    // this.getUserList();
-    // this.getGridList(); // 获取人员列类别
-    // this.getDoctor(); // 获取医生列表
   },
 };
 </script>

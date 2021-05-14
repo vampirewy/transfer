@@ -51,23 +51,22 @@
           </el-form-item>
           </el-col>
           <el-col :span="6">
+          <el-form-item label="年龄" prop="age">
+            <el-input
+              v-model="infoSource.age"
+              disabled
+              class="age-input"
+            ></el-input>
+          </el-form-item>
+          </el-col>
+          <el-col :span="6">
           <el-form-item label="性别" prop="gender">
             <el-radio v-model="infoSource.gender" :label="1" disabled>男</el-radio>
             <el-radio v-model="infoSource.gender" :label="2" disabled>女</el-radio>
           </el-form-item>
           </el-col>
           <el-col :span="6">
-              <el-form-item label="年龄" prop="age">
-            <el-input
-              v-model="infoSource.age"
-              disabled
-              class="age-input"
-
-            ></el-input>
-          </el-form-item>
-          </el-col>
-          <el-col :span="6">
-          <el-form-item label="人员类别" prop="gridName">
+          <el-form-item label="客户类别" prop="gridName">
             <el-input
               v-model="infoSource.gridName"
               disabled
@@ -89,7 +88,7 @@
       <div class="medicate-info mt20">
        <el-row>
        <el-col :span="6">
-            <el-form-item label="就医编号" prop="drugsName">
+            <el-form-item label="药品名称" prop="drugsName">
               <el-input
                 v-model="infoSource.drugsName"
                 placeholder="请输入"
@@ -99,19 +98,13 @@
             </el-form-item>
             </el-col>
             <el-col :span="6">
-            <el-form-item label="就医类型" prop="result">
-              <el-select
-                style="width: 100%"
-                placeholder="请选择"
-                v-model="infoSource.result"
-              >
-                <el-option
-                  v-for="item in resultList"
-                  :key="item.paramValue"
-                  :label="item.name"
-                  :value="item.paramValue">
-                </el-option>
-              </el-select>
+            <el-form-item label="针对问题" prop="mainIndication" style="width:25%">
+              <el-input
+                v-model="infoSource.mainIndication"
+                placeholder="请输入"
+                :maxlength="30"
+                style="width: 200px"
+              ></el-input>
             </el-form-item>
             </el-col>
             <!-- <el-form-item label="针对问题" prop="mainIndication" style="width:25%">
@@ -123,7 +116,7 @@
               ></el-input>
             </el-form-item> -->
             <el-col :span="6">
-            <el-form-item label="医保卡号" prop="specification">
+            <el-form-item label="规格" prop="specification">
               <el-input
                 v-model="infoSource.specification"
                 placeholder="请输入"
@@ -133,7 +126,7 @@
             </el-form-item>
             </el-col>
             <el-col :span="6">
-            <el-form-item label="就医机构" prop="countDay">
+            <el-form-item label="每日次数" prop="countDay">
               <el-input
                 v-model="infoSource.countDay"
                 placeholder="请输入"
@@ -146,34 +139,8 @@
            </el-row>
 
         <el-row>
-        <el-col :span="6">
-            <el-form-item label="就医科室" prop="dose" >
-              <el-input
-                v-model="infoSource.dose"
-                placeholder="请输入"
-                :maxlength="30"
-
-              ></el-input>
-            </el-form-item>
-            </el-col>
             <el-col :span="6">
-            <el-form-item label="主管医生" prop="result">
-              <el-select
-                style="width: 100%"
-                placeholder="请选择"
-                v-model="infoSource.result"
-              >
-                <el-option
-                  v-for="item in resultList"
-                  :key="item.paramValue"
-                  :label="item.name"
-                  :value="item.paramValue">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="就医时间" prop="startDate">
+              <el-form-item label="开始时间" prop="startDate">
               <el-date-picker
                 class="start-date"
                 v-model="infoSource.startDate"
@@ -186,7 +153,7 @@
             </el-form-item>
             </el-col>
             <el-col :span="6">
-            <el-form-item label="出院时间" prop="endDate">
+            <el-form-item label="结束时间" prop="endDate">
               <el-date-picker
                 class="end-date"
                 v-model="infoSource.endDate"
@@ -198,10 +165,8 @@
               ></el-date-picker>
             </el-form-item>
             </el-col>
-        </el-row>
-         <el-row>
-         <el-col :span="6">
-            <el-form-item label="就医金额" prop="dose">
+            <el-col :span="6">
+            <el-form-item label="每次计量" prop="dose" >
               <el-input
                 v-model="infoSource.dose"
                 placeholder="请输入"
@@ -218,18 +183,17 @@
                 v-model="infoSource.result"
               >
                 <el-option
-                  v-for="item in resultList"
-                  :key="item.paramValue"
-                  :label="item.name"
-                  :value="item.paramValue">
+                  v-for="item in resultOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
             </el-col>
-         </el-row>
-
+        </el-row>
         <div class="row">
-            <el-form-item label="现病史" prop="ingrenient" style="width:100%">
+            <el-form-item label="主要成分" prop="ingrenient" style="width:100%">
               <el-input
                 type="textarea"
                 :rows="5"
@@ -242,7 +206,7 @@
         </div>
 
         <div class="row">
-            <el-form-item label="主诉" prop="resoures" style="width:100%">
+            <el-form-item label="用药情况" prop="resoures" style="width:100%">
               <el-input
                 type="textarea"
                 :rows="5"
@@ -253,43 +217,7 @@
               ></el-input>
             </el-form-item>
         </div>
-        <div class="row">
-            <el-form-item label="检查" prop="resoures" style="width:100%">
-              <el-input
-                type="textarea"
-                :rows="5"
-                v-model="infoSource.resoures"
-                placeholder="请输入"
-                :maxlength="300"
-                show-word-limit
-              ></el-input>
-            </el-form-item>
-        </div>
-        <div class="row">
-            <el-form-item label="诊断" prop="resoures" style="width:100%">
-              <el-input
-                type="textarea"
-                :rows="5"
-                v-model="infoSource.resoures"
-                placeholder="请输入"
-                :maxlength="300"
-                show-word-limit
-              ></el-input>
-            </el-form-item>
-        </div>
-        <div class="row">
-            <el-form-item label="方案" prop="resoures" style="width:100%">
-              <el-input
-                type="textarea"
-                :rows="5"
-                v-model="infoSource.resoures"
-                placeholder="请输入"
-                :maxlength="300"
-                show-word-limit
-              ></el-input>
-            </el-form-item>
-        </div>
-        <!-- <div class="handle-btn mt10 mb30">
+        <div class="handle-btn mt10 mb30">
           <el-button class="reset-btn" size="small" @click="clear"
             >清空</el-button
           >
@@ -300,15 +228,15 @@
             @click="addRecord"
             >添加</el-button
           >
-        </div> -->
+        </div>
       </div>
 
-      <!-- <div class="form-title">
+      <div class="form-title">
         <div class="line"></div>
         <h3 class="name">已添加药品</h3>
-      </div> -->
+      </div>
 
-      <!-- <el-table class="medicate-list mt20" :data="drugsList" align="center">
+      <el-table class="medicate-list mt20" :data="drugsList" align="center">
         <el-table-column label="药品名称" prop="drugsName" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.drugsName | getResult }}</span>
@@ -332,7 +260,7 @@
             <span>{{ scope.row.startDate | getResult }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="结束时间" prop="endDate" show-overflow-tooltip>
+        <el-table-column label="结束时间" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.endDate | getResult }}</span>
           </template>
@@ -370,12 +298,21 @@
             <span>{{ scope.row.resoures | getResult }}</span>
           </template>
         </el-table-column>
+        <el-table-column
+          label="药品信息"
+          prop="resoures"
+          show-overflow-tooltip
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.resoures | getResult }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" prop="index">
           <template slot-scope="scope">
             <el-button type="text" @click="remove(scope)">删除</el-button>
           </template>
         </el-table-column>
-      </el-table> -->
+      </el-table>
 
       <div class="handle-btn mt30 mb30">
         <el-button class="reset-btn" size="small" @click="goBack"
@@ -428,11 +365,20 @@ export default {
         result: [{ required: true, message: '当前状态不能为空' }],
       },
       id: '',
+      resultOptions: [
+        { value: 1, label: '未指定' },
+        { value: 2, label: '治疗中' },
+        { value: 3, label: '转诊' },
+        { value: 4, label: '转为慢病' },
+        { value: 5, label: '痊愈' },
+        { value: 6, label: '其他' },
+      ],
     };
   },
   mounted() {
     window.vm = this;
-    this.getResultList();
+    // this.getResultList();
+    // console.log(this.id);
   },
   methods: {
 
@@ -516,7 +462,8 @@ export default {
       }
 
       this.$api.medication.add(reqBody).then(({ data }) => {
-        if (data.code === 200) {
+        if (data.success) {
+          this.$message.success('操作成功');
           this.$router.go(-1);
         }
       });

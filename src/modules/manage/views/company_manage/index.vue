@@ -200,8 +200,10 @@ export default {
       modalVisible: false,
     };
   },
-  activated() {
-    this.queryList();
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.queryList();
+    });
   },
   methods: {
     onSearch() {

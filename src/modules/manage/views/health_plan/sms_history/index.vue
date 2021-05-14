@@ -178,7 +178,7 @@ import deleteIcon from '~/src/assets/images/deleteicon.png';
 import detail from './el_modal/detail.vue';
 import userOpen from '~/src/components/date_select/user_open.vue';
 export default {
-  name: 'sms_history',
+  name: 'smsHistory',
   components: {
     ManagerList,
     detail,
@@ -206,9 +206,27 @@ export default {
       multipleSelection: [], // 当前页选中的数据
     };
   },
-  activated() {
-    this.onLoad();
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.onLoad();
+    });
   },
+  /* computed: {
+    keepAliveConf() {
+      return this.$store.state.app.keepAliveList;
+    },
+  },
+  watch: {
+    keepAliveConf(e) {
+      // 监听缓存列表的变化，如果缓存列表中没有当前的路由或组件则在缓存中销毁该实例
+      const name = this.$options.name;
+      console.log(name);
+      console.log(e);
+      if (!e.split(',').includes(name)) {
+        this.$destroy();
+      }
+    },
+  },*/
   methods: {
     handleSelectionChange(val) {
       // table组件选中事件,

@@ -181,7 +181,7 @@ import StaffDetail from './detail.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
 import resetPsd from './reset_psd.vue';
 export default {
-  name: 'Staff',
+  name: 'staff_list',
   components: {
     StaffForm,
     StaffDetail,
@@ -202,11 +202,19 @@ export default {
       multipleSelection: [], // 当前页选中的数据
     };
   },
-  activated() {
+  /* activated() {
     // 查询条件： 角色
     this.queryRoleList();
     // 员工列表
     this.queryList();
+  },*/
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      // 查询条件： 角色
+      vm.queryRoleList();
+      // 员工列表
+      vm.queryList();
+    });
   },
   methods: {
     handleSelectionChange(val) {

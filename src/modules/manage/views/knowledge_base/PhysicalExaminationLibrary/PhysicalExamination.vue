@@ -144,7 +144,7 @@ import minorTerm from './components/minor_term.vue';
 import physicalExamination from './components/physical_examination.vue';
 
 export default {
-  name: 'index',
+  name: 'PhysicalExamination',
   components: {
     // 'assign-dialog': assignDialog,
     // 'doctor-Select': doctorSelect,
@@ -453,7 +453,7 @@ export default {
     },
   },
   mounted() {
-    this.getList();
+    // this.getList();
     // this.getUserList();
     // this.getGridList(); // 获取人员列类别
     // this.getDoctor(); // 获取医生列表

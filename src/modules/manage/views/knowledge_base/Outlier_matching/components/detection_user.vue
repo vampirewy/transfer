@@ -25,21 +25,24 @@
       </div>
     </div>
     </div>
-    <el-table :data="tableData" @row-click="rowClick" class="openTable">
+    <!-- @row-click="rowClick"  -->
+    <el-table :data="tableData"
+    class="openTable"
+    @selection-change="handleSelectionChange">
       <!-- <el-table-column width="80">
         <template slot-scope="scope">
           <el-radio v-model="selectRadio" :label="scope.row.id">&nbsp;</el-radio>
         </template>
       </el-table-column> -->
       <el-table-column type="selection" width="40" align="center"></el-table-column>
-      <el-table-column prop="name" label="姓名"></el-table-column>
-      <el-table-column prop="unit" label="单位"></el-table-column>
-      <el-table-column prop="intro" label="内容">
+      <el-table-column prop="sectionName" label="科室"></el-table-column>
+      <el-table-column prop="itemName" label="项目"></el-table-column>
+      <!-- <el-table-column prop="intro" label="内容"> -->
         <!-- <template slot-scope="scope">
           <span v-if="scope.row.gender === 1">男</span>
           <span v-if="scope.row.gender === 2">女</span>
         </template> -->
-      </el-table-column>
+      <!-- </el-table-column> -->
     </el-table>
     <el-pagination
       background
@@ -79,15 +82,23 @@ export default {
       currentPage: 1,
       pageSize: 5,
       selectRadio: '',
+      multipleSelection: [],
     };
   },
   mounted() {
     this.queryList();
   },
   methods: {
-    rowClick(scope) {
-      this.selectRadio = scope.id;
-      this.$emit('change', scope);
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+    goBack() {
+      this.$emit('change');
+    },
+    submit() {
+      // this.selectRadio = scope.id;
+      // this.$emit('change', scope);
+      this.$emit('change', this.multipleSelection);
     },
     handleCurrentChange(page) {
       this.currentPage = page;
@@ -106,19 +117,34 @@ export default {
 
     },
     async queryList() {
-      const res = await this.$api.healthMonitorInterface.healthDataItemGetAll({
-        projectName: this.keyword,
-        pageNo: this.currentPage,
-        pageSize: this.pageSize,
-      });
-      console.log(res.data);
+      const reqBody = {
+        itemName: this.formData.keyword,
+        pageno: this.currentPage,
+        pagesize: this.pageSize,
+      };
+      const res = await this.$api.physicalProjectListInterface.listPage(
+        reqBody,
+      );
       const { data } = res.data;
       if (data) {
         this.tableData = data.data || [];
-        console.log(this.tableData);
         this.total = data.total;
       }
     },
+    // async queryList() {
+    //   const res = await this.$api.healthMonitorInterface.healthDataItemGetAll({
+    //     projectName: this.keyword,
+    //     pageNo: this.currentPage,
+    //     pageSize: this.pageSize,
+    //   });
+    //   console.log(res.data);
+    //   const { data } = res.data;
+    //   if (data) {
+    //     this.tableData = data.data || [];
+    //     console.log(this.tableData);
+    //     this.total = data.total;
+    //   }
+    // },
   },
 };
 </script>

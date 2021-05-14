@@ -415,7 +415,7 @@ import abnormal from './el_modal/abnormal.vue';
 import ManagerList from '@/components/user_health/manager_list.vue';
 
 export default {
-  name: 'user_follow_create',
+  name: 'create_plan',
   components: {
     QueryPage,
     Search,
@@ -493,8 +493,13 @@ export default {
       idKey: 'clientId', // 标识列表数据中每一行的唯一键的名称(需要按自己的数据改一下)
     };
   },
-  activated() {
+  /* activated() {
     this.onLoad();
+  },*/
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.onLoad();
+    });
   },
   methods: {
     // 设置选中的方法
@@ -888,17 +893,12 @@ export default {
   }
   /deep/ .el-table__expanded-cell {
     padding: 0;
-    .el-table .el-table__header-wrapper th {
-      background: rgba(108, 108, 229, 0.6);
-      .cell {
-        color: #fff;
-      }
-    }
     .el-table--enable-row-hover .el-table__body tr:hover > td {
-      background-color: #f7f7fd;
+      // background-color: #f7f7fd;
     }
     .el-table .el-table__body td {
-      background-color: #f7f7fd;
+      // background-color: #f7f7fd;
+      padding: 11.5px 0;
     }
   }
   /*padding: 20px 32px 15px 32px;*/

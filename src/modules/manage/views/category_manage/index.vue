@@ -188,8 +188,10 @@ export default {
       }
     },
   },
-  mounted() {
-    this.onLoad();
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.onLoad();
+    });
   },
   methods: {
     togglebox() {

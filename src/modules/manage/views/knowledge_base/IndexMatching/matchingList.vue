@@ -318,7 +318,7 @@ import deleteIcon from '~/src/assets/images/deleteicon.png';
 import editDetail from './components/edit_detail.vue';
 
 export default {
-  name: 'question',
+  name: 'matchingList',
   components: {
     // report,
     QueryPage,
@@ -392,7 +392,7 @@ export default {
       },
     };
   },
-  activated() {
+  /* mounted() {
     this.getList();
     // this.getGridList();
     // this.getQuestionFromList();
@@ -403,6 +403,11 @@ export default {
     //   this.formData.endTime = HomeSearchData.lastDate;
     //   this.formData.searchRange = HomeSearchData.searchRange;
     // }
+  },*/
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.getList();
+    });
   },
   destroyed() {
     // 清除时间 和 我的/平台
@@ -412,7 +417,7 @@ export default {
     async getList() {
       const reqBody = {
         keywords: this.form.itemName,
-        isAssess: this.form.isAssess,
+        // isAssess: this.form.isAssess,
         pageNo: this.table.currentPage,
         pageSize: this.table.pageSize,
       };

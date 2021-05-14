@@ -14,7 +14,7 @@ import BgtrendAdd from './bg_trend_add.vue';
 import TargetSet from './target_set/index.vue';
 import KeywordSet from './keyword_set/index.vue';
 export default {
-  name: 'HealthMonitor',
+  name: 'warn_set',
   components: {
     TabBars,
     SportTrend,

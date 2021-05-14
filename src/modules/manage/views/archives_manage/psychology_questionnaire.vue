@@ -295,7 +295,7 @@ import report from './components/question_report.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
 
 export default {
-  name: 'question',
+  name: 'psychology_questionnaire',
   components: {
     report,
     QueryPage,
