@@ -353,8 +353,9 @@
                     </el-option>
                   </el-select>
                 </template> -->
-                <template slot-scope="scope" v-if="scope.row.lifeQuestionDate">
+                <template slot-scope="scope">
                   <el-popover
+                          v-if="scope.row.lifeQuestionDate"
                           :ref="`popover-${scope.row.reportId}`"
                           placement="bottom-start"
                           width="570"
@@ -377,6 +378,7 @@
                          slot="suffix"></i>
                     </el-input>
                   </el-popover>
+                  <span v-else>无</span>
                 </template>
               </el-table-column>
               <el-table-column label="异常" width="60" show-overflow-tooltip>
@@ -851,6 +853,23 @@ export default {
 /deep/ .el-table__expand-icon > .el-icon{
   margin: 0;
 }
+/*/deep/ .el-table__expanded-cell {
+  padding: 0;
+  .el-table .el-table__header-wrapper th {
+    background: #EEF1F5;
+    padding: 13px 0;
+    .cell {
+      color: #333;
+    }
+  }
+  .el-table--enable-row-hover .el-table__body tr:hover > td {
+    background-color: #f7f7fd;
+  }
+  .el-table .el-table__body td {
+    background-color: white;
+    padding: 3px 0!important;
+  }
+}*/
 .divTop{
   padding-top: 30px;
 }
@@ -864,6 +883,7 @@ export default {
   top: 18px;
   margin-top: -20px;
   z-index: 1;
+  margin-left: -20px;
   div {
     .TabBarsNames {
       cursor: pointer;
@@ -871,14 +891,13 @@ export default {
       border-color: transparent;
       color: #666666;
       position: relative;
-      margin-right: 20px;
       padding: 14px 16px;
       font-size: 14px;
       border-radius: 8px 8px 0 0;
-      margin: 0 20px;
+      margin: 0 26px 0 20px;
     }
     .fristName:nth-child(1) {
-      border-radius: 0px 5px 0 0;
+      border-radius: 8px 5px 0 0;
       margin-left: 0;
     }
     .TabBarsNames:after {
@@ -918,7 +937,7 @@ export default {
       color: #333333;
       font-weight: 600;
       position: relative;
-      margin: 0 20px;
+      margin: 0 26px 0 20px;
       padding: 14px 16px;
       font-size: 14px;
       border-radius: 8px 8px 0 0;
@@ -967,8 +986,8 @@ export default {
   /deep/ .select-user-trigger {
     display: flex;
     .el-input__suffix{
-      right: 15px;
-      top: 6px;
+      right: 10px;
+      top: 4px;
     }
     input, i {
       cursor: pointer;
@@ -980,6 +999,8 @@ export default {
     }
     input{
       border: 1px solid #97A6BD!important;
+      color: #333333;
+      height: 32px;
     }
   }
   /deep/ .comment-img, /deep/ .exception-explain-img {
