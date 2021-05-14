@@ -184,34 +184,34 @@
           :value="currentValue"
           @cancel="cancel"
         ></blood>
-        <drink
+        <bloodfat
           v-if="Tabactive === 2"
           :data="tabcheckidx"
           :visible="modalVisible"
           :value="currentValue"
           @cancel="cancel"
-        ></drink>
-        <food
+        ></bloodfat>
+        <abnormal
           v-if="Tabactive === 3"
           :data="tabcheckidx"
           :visible="modalVisible"
           :value="currentValue"
           @cancel="cancel"
-        ></food>
-        <sport
+        ></abnormal>
+        <manabnor
           v-if="Tabactive === 4"
           :data="tabcheckidx"
           :visible="modalVisible"
           :value="currentValue"
           @cancel="cancel"
-        ></sport>
-        <sleep
+        ></manabnor>
+        <wonmenabnormal
           v-if="Tabactive === 5"
           :data="tabcheckidx"
           :visible="modalVisible"
           :value="currentValue"
           @cancel="cancel"
-        ></sleep>
+        ></wonmenabnormal>
         </div>
       </div>
     </div>
@@ -224,10 +224,10 @@ import Search from '~/src/components/query_page/search.vue';
 import QueryFilter from '~/src/components/query_page/query_filter.vue';
 import OperateButton from '~/src/components/query_page/operate_button.vue';
 import blood from './components/blood.vue';
-import drink from './components/drink.vue';
-import food from './components/food.vue';
-import sport from './components/sport.vue';
-import sleep from './components/sleep.vue';
+import bloodfat from './components/bloodfat.vue';
+import abnormal from './components/abnormal.vue';
+import manabnor from './components/manabnor.vue';
+import wonmenabnormal from './components/wonmenabnormal.vue';
 import lBMI from './components/BMI.vue';
 export default {
   name: 'stats_test',
@@ -236,12 +236,12 @@ export default {
     Search,
     QueryFilter,
     OperateButton,
-    blood,
-    drink,
-    food,
-    sport,
-    sleep,
     lBMI,
+    blood,
+    bloodfat,
+    abnormal,
+    manabnor,
+    wonmenabnormal,
   },
   data() {
     return {

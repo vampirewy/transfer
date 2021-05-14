@@ -633,11 +633,6 @@ export default {
       vm.getDoctor();
     });
   },
-  /* mounted() {
-    this.getUserList();
-    this.getGridList(); // 获取人员列类别
-    this.getDoctor(); // 获取医生列表
-  },*/
 };
 </script>
 

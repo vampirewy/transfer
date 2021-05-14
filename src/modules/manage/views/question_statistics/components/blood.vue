@@ -74,7 +74,7 @@ export default {
             name: '男性',
             type: 'bar',
             data: [120, 100, 440, 320],
-            barWidth: 25, // 柱图宽度
+            barWidth: 16, // 柱图宽度
             itemStyle: {
               normal: {
                 // 柱形图圆角，初始化效果
@@ -105,7 +105,7 @@ export default {
             name: '女性',
             type: 'bar',
             data: [200, 120, 240, 330],
-            barWidth: 25, // 柱图宽度
+            barWidth: 16, // 柱图宽度
             itemStyle: {
               normal: {
                 // 柱形图圆角，初始化效果

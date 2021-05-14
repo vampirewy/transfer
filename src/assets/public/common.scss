@@ -280,13 +280,12 @@ a {
 
 // 点 title
 .formSearchTitle {
-  font-size: 18px;
+  font-size: 16px;
   color: #333333;
   display: flex;
   align-items: center;
   font-weight: bold;
-  margin: 20px 0 15px 0;
-
+  height: 60px;
   &.setTimeText {
     font-size: 14px;
     font-weight: 400;
@@ -305,10 +304,10 @@ a {
   .dianLv {
     width: 5px;
     height: 5px;
-    background: #31C529;
     border-radius: 50%;
     display: inline-block;
-    margin-right: 5px;
+    border: 1px solid #B4BBC9;
+    margin: 0px 8px 0px 0;
   }
 }
 
@@ -336,16 +335,16 @@ a {
 
 // 侧边选择栏
 .intvTmpl_left {
-  width: 150px;
+  width: 216px;
   max-height: 685px;
   overflow-y: auto;
   overflow-x: hidden;
-  border-radius: 8px;
+  // border-radius: 8px;
   text-align: center;
-  margin-right: 20px;
+  // margin-right: 20px;
   min-height: 600px;
-  border: 1px solid #E5E7EF;
-  border-top: none;
+  background: #fff;
+  border-radius: 20px 0 0 0;
 
   .intvTmpl_left_title {
     position: absolute;
@@ -359,7 +358,7 @@ a {
   }
 
   .intv_menulist {
-    width: 150px;
+    width: 216px;
     margin-top: 48px;
 
     li {
@@ -372,16 +371,26 @@ a {
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
-      text-align: left;
-
+      text-align: center;
+      position: relative;
+      border-bottom: 1px solid #EEF1F5;
       &.active {
-        background: #3154AC;
-        color: white;
+        background: rgba(36, 73, 157, 0.1);
+        color: #24499D;
+        &::before{
+          width: 8px !important;
+          content: url(../images/common/menuleft.png) !important;
+          right: 0px;
+          left: auto !important;
+          background-color: rgba(255, 255, 255, 0) !important;
+          top: 14%;
+          position: absolute;
+        }
       }
 
       &:hover {
-        color: white;
-        background: #3154AC;
+        color: #24499D;
+        background: rgba(36, 73, 157, 0.1);
       }
     }
   }

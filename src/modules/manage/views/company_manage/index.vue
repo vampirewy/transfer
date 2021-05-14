@@ -205,9 +205,6 @@ export default {
       vm.queryList();
     });
   },
-  /* mounted() {
-    this.queryList();
-  },*/
   methods: {
     onSearch() {
       this.table.currentPage = 1;
