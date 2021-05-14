@@ -171,7 +171,7 @@
             </el-table-column>
             <el-table-column label="适用性别" prop="gender" min-width="80" show-overflow-tooltip >
               <template slot-scope="scope">
-                {{scope.row.gender === 1 ? '男' : (scope.row.gender === 2 ? '女' : '')}}
+                {{scope.row.gender === 0 ? '男' : (scope.row.gender === 1 ? '女' : '')}}
               </template>
             </el-table-column>
             <el-table-column label="条件" prop="qualification" min-width="80" show-overflow-tooltip />
