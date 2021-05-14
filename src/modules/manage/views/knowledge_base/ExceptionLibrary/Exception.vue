@@ -57,7 +57,7 @@
         <div>
           <span>异常类型：</span>
           <el-select
-                  v-model="formData.Types"
+                  v-model="form.abnormalType"
                   placeholder="请选择"
                   style="width: 140px"
                   clearable
@@ -67,15 +67,15 @@
           </el-select>
         </div>
         <div>
-          <span>性别限制：</span>
+          <span>是否启用：</span>
           <el-select
-                  v-model="formData.gender"
+                  v-model="form.gender"
                   placeholder="请选择"
                   style="width: 140px"
                   clearable
           >
-            <el-option label="男" value="1" key="1"></el-option>
-            <el-option label="女" value="2" key="2"></el-option>
+            <el-option label="是" value="1" key="1"></el-option>
+            <el-option label="否" value="0" key="0"></el-option>
           </el-select>
         </div>
         <div>
@@ -110,19 +110,23 @@
         <div>
           <span>紧急性：</span>
           <el-select
-                  v-model="formData.source"
+                  v-model="formData.medicalLimitListId"
                   placeholder="请选择"
                   style="width: 140px"
                   clearable
           >
-            <el-option :label="item.name" :value="item.paramValue"
-                       v-for="(item, index) in questionFromList" :key="index"></el-option>
+            <el-option
+              v-for="item in medicalLimitList"
+              :key="item.paramValue"
+              :label="item.name"
+              :value="item.paramValue"
+            ></el-option>
           </el-select>
         </div>
         <div>
           <span>重要性：</span>
           <el-select
-                  v-model="formData.source"
+                  v-model="form.source"
                   placeholder="请选择"
                   style="width: 140px"
                   clearable
@@ -196,7 +200,7 @@
         </el-table-column>
         <el-table-column prop="gender" label="性别" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{ scope.row.gender | getResult}}</span>
+            {{ scope.row.gender === 1 ? '男' :scope.row.gender === 1?'不限': '女' }}
           </template>
         </el-table-column>
         <el-table-column prop="dangerLevelName" label="重要性" show-overflow-tooltip>
@@ -295,6 +299,8 @@ export default {
       gridList: [],
       lifeStyleList: [], // 异常类型
       questionFromList: [], // 紧急类型
+      medicalLimitList: [],
+      medicalLimitListId: '', // 紧急性
       formData: {
         Types: '',
         keyWord: '',
@@ -319,6 +325,9 @@ export default {
         dangerLevelList: [],
         stateList: '',
         organTypeList: [],
+        abnormalType: '',
+        gender: '',
+        source: '',
       },
       table: {
         list: [],
@@ -345,17 +354,6 @@ export default {
       },
     };
   },
-  activated() {
-    // this.getGridList();
-    // this.getQuestionFromList();
-    // this.getLifeStyleList();
-    // if (localStorage.getItem('homeSearchData')) {
-    //   const HomeSearchData = JSON.parse(localStorage.getItem('homeSearchData'));
-    //   this.formData.startTime = HomeSearchData.startDate;
-    //   this.formData.endTime = HomeSearchData.lastDate;
-    //   this.formData.searchRange = HomeSearchData.searchRange;
-    // }
-  },
   destroyed() {
     // 清除时间 和 我的/平台
     localStorage.removeItem('homeSearchData');
@@ -368,20 +366,27 @@ export default {
     onLoad() {
       this.getOrganTypeList();
       this.getImportList();
+      this.getQuickList();
     },
     exceptionBtn(scope) {
       this.$router.push({
         path: `/basic_data/unusual_list/detail/${scope.id}`,
       });
     },
+    async getQuickList() {
+      const { data } = await this.$api.unusualListInterface.getQuickList();
+      this.$set(this.form, 'medicalLimitList', data.data);
+      this.medicalLimitList = data.data;
+      // this.form.organTypeList
+    },
     async getList() {
       const reqBody = {
         name: this.form.name, // 异常名称
-        level: this.form.dangerLevel, // 重要性 ，传下拉列表接口的值，如1，2，3
-        state: this.form.state, // 状态，0不启用 1启用
+        level: this.form.source, // 重要性 ，传下拉列表接口的值，如1，2，3
+        state: this.form.gender, // 状态，0不启用 1启用
         type: this.form.abnormalType, // 异常类型，传下拉列表接口的值，如1，2，3
-        pageNo: this.table.currentPage,
-        pageSize: this.table.pageSize,
+        pageNo: this.params.pageNo,
+        pageSize: this.params.pageSize,
       };
       const res = await this.$api.unusualListInterface.listPage(reqBody);
       const { data } = res.data;
@@ -407,8 +412,8 @@ export default {
     },
     reset() {
       this.form.name = '';
-      this.form.dangerLevel = '';
-      this.form.state = '';
+      this.form.source = '';
+      this.form.gender = '';
       this.form.abnormalType = '';
       this.table.currentPage = 1;
       this.getList();

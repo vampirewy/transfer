@@ -50,10 +50,23 @@
         <h3 class="name">自动匹配</h3>
     </div>
     <div class="searchCondition">
-      <div class="searchLeft">
-        <div>
-          1321
-          <el-col :span="6">
+          <div style="margin-left: 80%;">
+          <span>项目库：</span>
+          <el-select
+                  v-model="formData.isAssess"
+                  placeholder="请选择"
+                  style="width: 140px"
+                  clearable
+          >
+            <el-option
+                  v-for="item in resultOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+            ></el-option>
+          </el-select>
+        </div>
+          <!-- <el-col :span="6">
             <el-form-item label="适宜季节" >
               <el-select v-model="formresult" placeholder="请选择当前状态">
                 <el-option
@@ -64,8 +77,7 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-          </el-col>
-        </div>
+          </el-col> -->
         <!-- <div class="searchInputFormItem">
           <el-input placeholder="名称/项目" v-model="formData.keyWord">
           </el-input>
@@ -108,7 +120,6 @@
                        v-for="(item, index) in lifeStyleList" :key="index"></el-option>
           </el-select>
         </div> -->
-      </div>
       <!-- <div class="searchRight">
         <div class="buttones">
           <div class="searchFor" @click="search(1)">
@@ -211,12 +222,17 @@
       <el-table style="width: 100%" :data="dataSource" align="center"
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="40"></el-table-column>
-        <el-table-column label=" 系统大项" prop="clientNo" min-width="200" show-overflow-tooltip>
+        <el-table-column label="机构科室" prop="clientNo" min-width="200" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.clientNo | getResult}}</span>
           </template>
         </el-table-column>
-        <el-table-column label=" 系统小项" prop="sourceName" min-width="150" show-overflow-tooltip>
+        <el-table-column label="机构项目" prop="sourceName" min-width="150" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{ scope.row.clientNo | getResult}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="系统科室" prop="sourceName" min-width="150" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.clientNo | getResult}}</span>
           </template>
@@ -246,7 +262,7 @@
             <span>{{ scope.row.workUnitName | getResult}}</span>
           </template>
         </el-table-column> -->
-        <el-table-column label="匹配项目" prop="questionDate" min-width="150" show-overflow-tooltip>
+        <el-table-column label="系统项目" prop="questionDate" min-width="150" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.questionDate | getResultDate}}</span>
           </template>
@@ -261,7 +277,7 @@
             <span>{{scope.row.questionCount | getResult}}</span>
           </template>
         </el-table-column> -->
-        <el-table-column label="操作" prop="index" min-width="150">
+        <!-- <el-table-column label="操作" prop="index" min-width="150">
           <template slot-scope="scope">
             <el-button
               type="text"
@@ -295,7 +311,7 @@
               "
             >匹配</el-button>
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
       <div style="text-align: right">
         <el-pagination
@@ -460,6 +476,9 @@ export default {
     /**
      * 勾选编辑
      */
+    goBack() {
+      this.$router.go(-1);
+    },
     handleEditCheck() {
       if (this.multipleSelection.length !== 1) {
         this.$message({

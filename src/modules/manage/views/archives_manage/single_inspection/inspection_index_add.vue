@@ -290,7 +290,10 @@
              <input class="Checkinput" type="text" placeholder="请输入" v-model="scope.row.reference">
           </template>
         </el-table-column>
-        <el-table-column label="单位" prop="unit" show-overflow-tooltip>
+        <el-table-column label="单位" prop="unit">
+          <template slot-scope="scope">
+             <input class="Checkinput" type="text" placeholder="请输入" v-model="scope.row.unit">
+          </template>
         </el-table-column>
         <el-table-column label="建议" prop="dose" >
           <template slot-scope="scope">
@@ -580,7 +583,7 @@ export default {
         const json = {};
         json.sectionItem = this.drugsList[i].sectionName;
         json.itemName = this.drugsList[i].itemName;
-        json.itemValue = this.drugsList[i].startDate;
+        json.itemValue = this.drugsList[i].outcome;
         json.itemRef = this.drugsList[i].reference;
         json.unit = this.drugsList[i].unit;
         json.advice = this.drugsList[i].Suggestion;

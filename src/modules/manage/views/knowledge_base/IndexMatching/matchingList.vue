@@ -392,7 +392,7 @@ export default {
       },
     };
   },
-  activated() {
+  mounted() {
     this.getList();
     // this.getGridList();
     // this.getQuestionFromList();
@@ -412,7 +412,7 @@ export default {
     async getList() {
       const reqBody = {
         keywords: this.form.itemName,
-        isAssess: this.form.isAssess,
+        // isAssess: this.form.isAssess,
         pageNo: this.table.currentPage,
         pageSize: this.table.pageSize,
       };

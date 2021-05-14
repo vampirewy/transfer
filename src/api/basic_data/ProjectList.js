@@ -54,6 +54,10 @@ class ProjectList extends BaseModule {
   riskRemove(data) {
     return this.post('/system_risk/deleted', data);
   }
+  // 危险因素保存
+  savesystemrisk(data) {
+    return this.post('/system_risk/save_system_risk', data);
+  }
 }
 
 export default new ProjectList();

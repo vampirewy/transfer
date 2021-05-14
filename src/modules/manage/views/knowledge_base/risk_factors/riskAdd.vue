@@ -115,7 +115,7 @@
           </el-form-item>
         </el-col> -->
         <el-col :span="6">
-          <el-form-item label="危险分类" prop="result" >
+          <el-form-item label="危险分类" prop="riskType" >
             <el-select v-model="form.riskType" placeholder="请选择当前状态" width="150">
               <el-option
                 v-for="item in resultOptions"
@@ -195,7 +195,7 @@
           </el-form-item>
         </el-col> -->
         <el-col :span="24">
-          <el-form-item label="建议" prop="result">
+          <el-form-item label="建议" prop="advice">
             <el-input
               type="textarea"
               v-model="form.advice"
@@ -288,7 +288,8 @@ export default {
         inDate: [{ required: true, message: '就医时间不能为空' }],
         result: [{ required: true, message: '当前状态不能为空' }],
         hpi: [{ required: true, message: '现病史不能为空' }],
-        diagnosis: [{ required: true, message: '诊断不能为空' }],
+        advice: [{ required: true, message: '建议不能为空' }],
+        riskType: [{ required: true, message: '危险分类不能为空' }],
       },
       resultOptions: [
         { value: 1, label: '未指定' },
@@ -310,7 +311,7 @@ export default {
     if (this.ids) {
       this.$api.projectList.riskListInfo(this.ids).then((res) => {
         const { data } = res;
-        console.log(data, '撒打算大的');
+        // console.log(data, '撒打算大的');
         this.form = Object.assign(this.form, data.data || {});
         // this.currentUser = {
         //   id: this.form.clientInfoId,
@@ -344,30 +345,20 @@ export default {
       this.$refs.form.validate((valid) => {
         if (valid) {
           const params = {
-            clientInfoId: this.form.clientInfoId,
-            medicalType: this.form.medicalType,
-            hospital: this.form.hospital,
-            patientNo: this.form.patientNo,
-            inDate: this.form.inDate,
-            outDate: this.form.outDate,
-            doctorName: this.form.doctorName,
-            department: this.form.department,
-            result: this.form.result,
-            complaint: this.form.complaint,
-            examination: this.form.examination,
-            diagnosis: this.form.diagnosis,
-            therapy: this.form.therapy,
-            hpi: this.form.hpi,
-            orgCode: this.form.orgCode,
-            organId: this.form.organId,
+            riskFactor: this.form.riskFactor,
+            riskType: this.form.riskType,
+            isSystem: this.form.isSystem,
+            advice: this.form.advice,
+            state: 1,
           };
-          if (this.id) {
-            params.id = this.id;
+          if (this.ids) {
+            params.id = this.ids;
           }
-          this.$api.medicalHistoryInterface.medicalInfo(params).then((res) => {
+          this.$api.projectList.savesystemrisk(params).then((res) => {
             const { data } = res;
             if (data.success) {
               this.$message.success('操作成功');
+              this.$router.go(-1);
               this.$emit('afterSubmit');
             }
           });
@@ -388,6 +379,7 @@ export default {
     align-items: center;
     position: relative;
     margin-top: 20px;
+    margin-bottom: 20px;
     .line {
       width: 36px;
       height: 4px;

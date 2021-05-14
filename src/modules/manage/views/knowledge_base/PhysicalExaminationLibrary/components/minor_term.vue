@@ -111,6 +111,7 @@
                     class="btn-new btnAdd"
                     size="small"
                     style="margin: 16px 0"
+                    v-if="getAccess('physical_project_list_add')"
                     @click="
                       $router.push({
                         name: 'minor_term_add',
@@ -124,7 +125,7 @@
                     size="small"
                     class="btn-new btnDel"
                     @click="handleSomeRemove"
-                    v-if="getAccess('customer_pool_batch_delete')"
+                    v-if="getAccess('physical_project_list_batch_delete')"
             ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
             <!-- <el-button
                     @click="assign({})"
@@ -192,7 +193,7 @@
                         type="text"
                         size="small"
                         @click="edits(scope.row)"
-                        v-if="getAccess('customer_pool_edit')"
+                        v-if="getAccess('physical_project_list_edit')"
                 >编辑</el-button>
               </template>
             </el-table-column>
@@ -201,7 +202,9 @@
             <el-pagination
                     style="margin-top: 15px"
                     @current-change="onChangePage"
+                    @size-change="handleSizeChange"
                     background
+                    :current-page="table.pageNo"
                     layout="prev, pager, next, jumper, total, sizes"
                     :total="total"
                     :pageSizes="[15]"
@@ -283,7 +286,7 @@ export default {
       table: {
         list: [],
         totalCount: 0, // 总条数
-        currentPage: 1, // 当前页
+        pageNo: 1, // 当前页
         pageSize: 15, // 一页数量
       },
       isCollapse: true,
@@ -325,6 +328,10 @@ export default {
     TabbarBtn(index) {
       this.Tabactive = index;
     },
+    handleSizeChange(size) {
+      this.table.pageSize = size;
+      this.getList();
+    },
     async getList() {
       const reqBody = {
         organItemLibraryId: this.form.examinationId,
@@ -332,8 +339,8 @@ export default {
         isMain: this.form.isMain,
         state: this.form.state,
         itemName: this.form.itemName,
-        pageno: this.table.currentPage,
-        pagesize: this.table.pageSize,
+        pageNo: this.table.pageNo,
+        pageSize: this.table.pageSize,
       };
       const res = await this.$api.physicalProjectListInterface.listPage(
         reqBody,
@@ -422,14 +429,18 @@ export default {
       this.form.isMain = '';
       this.form.state = '';
       this.form.itemName = '';
-      this.table.currentPage = 1;
+      this.table.pageNo = 1;
       // Object.assign(this.$data, this.$options.data());
       // this.getUserList();
       // this.getGridList(); // 获取人员列类别
       this.getList();
     },
+    handleCurrentChange(page) {
+      this.table.pageNo = page;
+      this.getList();
+    },
     onChangePage(current = 1) {
-      this.params.pageNo = current;
+      this.table.pageNo = current;
       // this.getUserList();
       this.getList();
     },
@@ -450,7 +461,7 @@ export default {
       //   this.formData.startTime = dayjs(this.formData.startTime).format('YYYY-MM-DD');
       //   this.formData.endTime = dayjs(this.formData.endTime).format('YYYY-MM-DD');
       // }
-      this.params.pageNo = 1;
+      this.table.pageNo = 1;
       // this.getUserList();
       this.getList();
     },

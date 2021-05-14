@@ -37,7 +37,7 @@
         </el-table-column>
         <el-table-column
           label="结果"
-          prop="startDate"
+          prop="itemValue"
         >
         </el-table-column>
         <el-table-column label="正常参考" prop="itemRef" >

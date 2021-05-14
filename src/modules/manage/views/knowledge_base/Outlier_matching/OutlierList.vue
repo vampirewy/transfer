@@ -46,11 +46,11 @@
       指标匹配
     </div>
     <div class="searchCondition">
-      <div class="searchLeft">
+      <div class="searchLeft" style="display: flex">
         <div class="searchInputFormItem">
           <el-input placeholder="名称/项目" v-model="formData.itemName">
           </el-input>
-          <span class="searchBtnImgSpan" @click="search(1)">
+          <span class="searchBtnImgSpan">
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
               </span>
         </div>
@@ -62,8 +62,10 @@
                   style="width: 140px"
                   clearable
           >
-            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
-                       :key="index"></el-option>
+            <el-option
+              :label="item.name"
+              :value="item.id"
+              v-for="(item, index) in examination" :key="index"></el-option>
           </el-select>
         </div>
       </div>
@@ -129,11 +131,11 @@
         <el-button
                 size="small"
                 class="btn-new btnDel"
-                style="padding: 0 16px;"
+                style="padding: 0 16px;margin:20px 0 20px 0"
                 @click="handleSomeRemove"
                 v-if="getAccess('life_style_questionnaire_deleted')"
         ><img src="@/assets/images/common/delBtn.png" />撤销</el-button>
-        <el-button
+        <!-- <el-button
                 class="btn-new btnAdd"
                 size="small"
                 style="margin: 16px 0;padding: 0 16px;"
@@ -146,7 +148,7 @@
                 style="margin: 16px 0;float: right;padding: 0 16px;"
                 @click="handleAddCheck(1)"
                 v-if="getAccess('life_style_questionnaire_add')"
-        ><img src="@/assets/images/common/getReportBtn.png" />自动匹配</el-button>
+        ><img src="@/assets/images/common/getReportBtn.png" />全部项目</el-button> -->
       </div>
     </div>
       <div class="user-follow">
@@ -249,7 +251,7 @@
       <div style="text-align: right">
         <el-pagination
           style="margin-top: 15px"
-          @current-change="search"
+          @current-change="searchs"
           background
           layout="prev, pager, next, jumper, total, sizes"
           :total="total"
@@ -300,7 +302,9 @@ export default {
       gridList: [],
       lifeStyleList: [], // 生活方式
       questionFromList: [], // 问卷来源
+      examination: '', // 项目库
       formData: {
+        itemName: '',
         isAssess: '',
         keyWord: '',
         gender: '',
@@ -338,8 +342,9 @@ export default {
       },
     };
   },
-  activated() {
+  mounted() {
     this.getList();
+    this.queryList();
     // this.getGridList();
     // this.getQuestionFromList();
     // this.getLifeStyleList();
@@ -355,6 +360,16 @@ export default {
     localStorage.removeItem('homeSearchData');
   },
   methods: {
+    async queryList() {
+      const res = await this.$api.physicalProjectListInterface.listOrganItemLibrary();
+      console.log(res.data);
+      const { data } = res.data;
+      if (data) {
+        this.examination = data || [];
+        this.form.examinationId = data[0].id;
+        this.getSectionList();
+      }
+    },
     async getList() {
       const reqBody = {
         itemName: this.formData.itemName,
@@ -395,11 +410,15 @@ export default {
       this.formData.startTime = undefined;
       this.formData.endTime = undefined;
       // this.getQuestionType();
-      this.fetch();
+      this.getList();
     },
-    search(current = 1) {
+    search() {
+      this.params.pageNo = 1;
+      this.getList();
+    },
+    searchs(current = 1) {
       this.params.pageNo = current;
-      this.fetch();
+      this.getList();
     },
     // 匹配
     edits(id) {
@@ -451,7 +470,7 @@ export default {
         this.$api.health.remove(row.id).then(({ data }) => {
           if (data.code === 200) {
             this.$message.success('操作成功');
-            this.fetch();
+            this.getList();
           }
         });
       });
@@ -484,7 +503,7 @@ export default {
             reqBody,
           );
           this.$message.success('操作成功');
-          return this.fetch();
+          return this.getList();
         },
       );
     },

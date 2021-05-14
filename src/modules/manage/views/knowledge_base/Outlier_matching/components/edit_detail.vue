@@ -76,7 +76,7 @@
         </el-table-column> -->
         <el-table-column
           label="项目"
-          prop="name"
+          prop="itemName"
           show-overflow-tooltip
         >
           <!-- <template slot-scope="scope">
@@ -211,7 +211,7 @@ export default {
   },
   mounted() {
     this.getList();
-    // console.log(this.value, this.visible, '接收的数据');
+    // console.log(this.value, '接收的数据');
   },
   methods: {
     async getList() {
@@ -245,29 +245,45 @@ export default {
     },
     // 选择检测项目
     detectiononSelectUser(data) {
-      // data.clientId = this.infoSource.clientId;
-      // data.ingrenient = this.infoSource.ingrenient;
-      // data.consequences = '123132';
-      this.MatchingInfo.push(data);
-      console.log(this.MatchingInfo, '选择检测项目');
-      this.$refs.userPopovers.doClose();
-      this.detectionpopoverStatus = false;
-      this.detectioninfoSource.clientName = data.name;
-      // this.detectioninfoSource.clientId = data.id;
-      // this.detectioninfoSource.age = data.age;
-      // this.detectioninfoSource.gender = data.gender;
-      // this.detectioninfoSource.gridName = data.gridName;
+      console.log(data, '选择检测项目');
+      if (data) {
+        // data.clientId = this.infoSource.clientId;
+        // data.ingrenient = this.infoSource.ingrenient;
+        // data.consequences = '123132';
+        data.forEach((val) => {
+          this.detectioninfoSource.clientName += `${val.itemName}、`;
+          this.MatchingInfo.push(val);
+        });
+        // this.MatchingInfo.push(data);
+        this.$refs.userPopovers.doClose();
+        this.detectionpopoverStatus = false;
+        // this.detectioninfoSource.clientName = data.name;
+        // this.detectioninfoSource.clientId = data.id;
+        // this.detectioninfoSource.age = data.age;
+        // this.detectioninfoSource.gender = data.gender;
+        // this.detectioninfoSource.gridName = data.gridName;
+      } else {
+        this.$refs.userPopovers.doClose();
+      }
     },
     async submit() {
-      await this.$api.companyManageInterface.updateWorkUnit({
-        id: this.value.id,
-        workUnitName: this.value.workUnitName,
-        contact: this.value.contact,
-        mobile: this.value.mobile,
-        address: this.value.address,
+      const arr = [];
+      this.addProject.forEach((val) => {
+        arr.push(val.itemName);
       });
+      const reqBody = { id: this.value, nameList: arr };
+      await this.$api.projectList.systemIteMatch(reqBody);
       this.$message.success('操作成功');
-      this.cancel();
+      // this.cancel('refreash');
+      // await this.$api.companyManageInterface.updateWorkUnit({
+      //   id: this.value.id,
+      //   workUnitName: this.value.workUnitName,
+      //   contact: this.value.contact,
+      //   mobile: this.value.mobile,
+      //   address: this.value.address,
+      // });
+      // this.$message.success('操作成功');
+      // this.cancel();
     },
   },
 };
