@@ -161,11 +161,11 @@
               <el-table-column type="selection" width="40"></el-table-column>
               <el-table-column label="报告编号" prop="no" width="90" show-overflow-tooltip>
               </el-table-column>
-              <el-table-column label="团队名称" prop="reportName" align="center" show-overflow-tooltip>
+              <el-table-column label="团队名称" prop="teamName" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
                   <span class="clientName"
                         @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
-                    {{ scope.row.clientName || '-'}}
+                    {{ scope.row.teamName || '-'}}
                   </span>
                 </template>
               </el-table-column>
@@ -194,7 +194,7 @@
                     src="../../../../assets/images/comment.png"/>
                 </template>
               </el-table-column>
-              <el-table-column label="生成日期" prop="reportDate" min-width="90" show-overflow-tooltip>
+              <el-table-column label="生成日期" prop="createdTime" min-width="90" show-overflow-tooltip>
               </el-table-column>
               <el-table-column label="操作" align="center" width="60">
                 <template slot-scope="scope">
@@ -366,7 +366,7 @@ export default {
     },
     // 查看pdf
     openPdf(data) {
-      window.open(data.assessReportName);
+      window.open(data.reportFile);
     },
     handleMatch(data) {
       this.view = 4;

@@ -9,7 +9,9 @@
 const build = {
     static_url: '/', // 静态资源路径
     common_url: '/api',
-    upload_url: 'http://182.61.43.226:9002/', //'/uploadFiles/'
+    // upload_url: 'http://182.61.43.226:9002/', //'/uploadFiles/'
+    upload_url: 'http://health.pre.touchealth.com/api/',
+
 };
 const build_dev = {
     static_url: '/', // 静态资源路径
@@ -19,7 +21,8 @@ const build_dev = {
 const dev = {
     static_url: '/', // 静态资源路径
     common_url: '/api',
-    upload_url: 'http://182.61.43.226:9002/', //'/uploadFiles/'
+    // upload_url: 'http://182.61.43.226:9002/',
+    upload_url: 'http://health.pre.touchealth.com/api/', //'/uploadFiles/'
 };
 
 module.exports = { build, build_dev, dev };
