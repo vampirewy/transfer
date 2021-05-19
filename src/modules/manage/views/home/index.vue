@@ -138,14 +138,16 @@
             </div>
             <div class="chart-wrapper" v-else>
               <div class="pieDiv" style="margin:0 3% 0 5%;">
-                <pie-chart :xList="intervenePlanPieXList" :yList="intervenePlanPieYList" />
+                <pie-chart :xList="intervenePlanPieXList"
+                :yList="intervenePlanPieYList"
+                :centerText="checkAfterFeeTotal"/>
               </div>
-              <div style="position: relative;">
+              <!-- <div style="position: relative;">
                 <div class="totals">
                   <div class="num">1280</div>
                   <div class="name">客户总数</div>
                 </div>
-              </div>
+              </div> -->
               <div class="pieDiv" style="height:110px">
                 <div class="pieDivTips" v-for="(item, index) in dianPieList" :key="item.name">
                   <div class="pieDivTipsLeft">
@@ -302,6 +304,7 @@ export default {
       serviceOrderXList: [],
       serviceOrderYList: [],
       intervenePlanPieXList: ['10', '20', '30', '10', '40'],
+      checkAfterFeeTotal: '1280',
       intervenePlanPieYList: [
         {
           value: 400,

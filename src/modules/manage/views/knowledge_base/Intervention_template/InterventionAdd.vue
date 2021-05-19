@@ -13,7 +13,8 @@
       <div class="main-info-title">新增异常库</div> -->
       <div class="form-title">
         <div class="line"></div>
-        <h3 class="name">新增-干预模版</h3>
+        <h3 class="name" v-if="ids === ''">新增-干预模版</h3>
+        <h3 class="name" v-else>编辑-干预模版</h3>
       </div>
       <el-row>
         <el-col :span="6">
@@ -24,12 +25,14 @@
         <el-col :span="6">
           <el-form-item label="适用性别" >
             <el-select v-model="form.result" placeholder="请选择当前状态">
-              <el-option
+              <el-option label="男" value="1" key="1"></el-option>
+              <el-option label="女" value="2" key="2"></el-option>
+              <!-- <el-option
                 v-for="item in resultOptions"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
-              ></el-option>
+              ></el-option> -->
             </el-select>
           </el-form-item>
         </el-col>
@@ -82,36 +85,41 @@
           </div>
         </div>
         <div class="interventionCon">
-          <div v-if="Tabactive == 0">
+          <div>
+            <div>
+              <minor-term :indexs="Tabactive"
+              @change="TabReceiver"
+              :TabTitle="TabTitle"
+              :key="timer"
+              :InterventionList="Intervention"
+              ></minor-term>
+            </div>
+          </div>
+          <!-- <div v-if="Tabactive === 1">
+            <div>
+              <minor-term :indexs="Tabactive" :TabTitle="TabTitle"></minor-term>
+            </div>
+          </div>
+          <div v-if="Tabactive === 2">
             <div>
               <minor-term></minor-term>
             </div>
           </div>
-          <div v-if="Tabactive == 1">
+          <div v-if="Tabactive === 3">
             <div>
               <minor-term></minor-term>
             </div>
           </div>
-          <div v-if="Tabactive == 2">
+          <div v-if="Tabactive === 4">
             <div>
               <minor-term></minor-term>
             </div>
           </div>
-          <div v-if="Tabactive == 3">
+          <div v-if="Tabactive === 5">
             <div>
               <minor-term></minor-term>
             </div>
-          </div>
-          <div v-if="Tabactive == 4">
-            <div>
-              <minor-term></minor-term>
-            </div>
-          </div>
-          <div v-if="Tabactive == 5">
-            <div>
-              <minor-term></minor-term>
-            </div>
-          </div>
+          </div> -->
         </div>
       </div>
       <!-- <div class="form-buttons">
@@ -173,9 +181,19 @@ export default {
         therapy: '方案', // 方案
         orgCode: '',
       },
+      timer: '',
       tabbor: ['小项', '人员类别', '异常', '组合异常', '疾病评估', '体质辨识'],
+      tabborName: ['Minterm', 'Category', 'Exception', 'Composition', 'Disease', 'Constitution'],
+      TabTitle: 'Minterm',
       Tabactive: 0,
       tabIndex: 0,
+      Minterm: [], // 小项数据
+      Category: [], // 人员类别
+      Exception: [], // 异常
+      Composition: [], // 组合异常
+      Disease: [], // 疾病评估
+      Constitution: [], // 体质辨识
+      Intervention: [], // 传过去的数据
       options: {
         inDate: {
           disabledDate: (cur) => {
@@ -226,14 +244,15 @@ export default {
         { value: 2, label: '住院' },
       ],
       currentUser: {},
-      ids: this.$route.query.id,
+      ids: this.$route.params.id,
     };
   },
   mounted() {
+    // console.log(this.ids, '编辑');
     if (this.ids) {
       this.$api.medicalHistoryInterface.medicalInfoDetail(this.ids).then((res) => {
         const { data } = res;
-        console.log(data, '撒打算大的');
+        // console.log(data, '撒打算大的');
         this.form = Object.assign(this.form, data.data || {});
         this.currentUser = {
           id: this.form.clientInfoId,
@@ -246,8 +265,51 @@ export default {
     }
   },
   methods: {
+    // 接收的数据
+    TabReceiver(data, TabTitle) {
+      if (TabTitle === 'Minterm') {
+        this.Minterm = data;
+      }
+      if (TabTitle === 'Category') {
+        this.Category = data;
+      }
+      if (TabTitle === 'Exception') {
+        this.Exception = data;
+      }
+      if (TabTitle === 'Composition') {
+        this.Composition = data;
+      }
+      if (TabTitle === 'Disease') {
+        this.Disease = data;
+      }
+      if (TabTitle === 'Constitution') {
+        this.Constitution = data;
+      }
+    },
     TabbarBtn(index) {
       this.Tabactive = index;
+      this.TabTitle = this.tabborName[index];
+      this.timer = new Date().getTime();
+      this.Intervention = [];
+      if (this.TabTitle === 'Minterm') {
+        this.Intervention = this.Minterm;
+      }
+      if (this.TabTitle === 'Category') {
+        this.Intervention = this.Category;
+      }
+      if (this.TabTitle === 'Exception') {
+        this.Intervention = this.Exception;
+      }
+      if (this.TabTitle === 'Composition') {
+        this.Intervention = this.Composition;
+      }
+      if (this.TabTitle === 'Disease') {
+        this.Intervention = this.Disease;
+      }
+      if (this.TabTitle === 'Constitution') {
+        this.Intervention = this.Constitution;
+      }
+      // console.log(this.TabTitle);
       // this.$emit('messageData', index, this.tabIndex);
     },
     handleStartDateChange() {
@@ -270,38 +332,44 @@ export default {
       this.form.patientNo = str;
     },
     submit() {
-      this.$refs.form.validate((valid) => {
-        if (valid) {
-          const params = {
-            clientInfoId: this.form.clientInfoId,
-            medicalType: this.form.medicalType,
-            hospital: this.form.hospital,
-            patientNo: this.form.patientNo,
-            inDate: this.form.inDate,
-            outDate: this.form.outDate,
-            doctorName: this.form.doctorName,
-            department: this.form.department,
-            result: this.form.result,
-            complaint: this.form.complaint,
-            examination: this.form.examination,
-            diagnosis: this.form.diagnosis,
-            therapy: this.form.therapy,
-            hpi: this.form.hpi,
-            orgCode: this.form.orgCode,
-            organId: this.form.organId,
-          };
-          if (this.id) {
-            params.id = this.id;
-          }
-          this.$api.medicalHistoryInterface.medicalInfo(params).then((res) => {
-            const { data } = res;
-            if (data.success) {
-              this.$message.success('操作成功');
-              this.$emit('afterSubmit');
-            }
-          });
-        }
-      });
+      console.log(this.Minterm, '小项数据');
+      console.log(this.Category, '人员类别');
+      console.log(this.Exception, '异常');
+      console.log(this.Composition, '组合异常');
+      console.log(this.Disease, '疾病评估');
+      console.log(this.Constitution, '体质辨识');
+    //   this.$refs.form.validate((valid) => {
+    //     if (valid) {
+    //       const params = {
+    //         clientInfoId: this.form.clientInfoId,
+    //         medicalType: this.form.medicalType,
+    //         hospital: this.form.hospital,
+    //         patientNo: this.form.patientNo,
+    //         inDate: this.form.inDate,
+    //         outDate: this.form.outDate,
+    //         doctorName: this.form.doctorName,
+    //         department: this.form.department,
+    //         result: this.form.result,
+    //         complaint: this.form.complaint,
+    //         examination: this.form.examination,
+    //         diagnosis: this.form.diagnosis,
+    //         therapy: this.form.therapy,
+    //         hpi: this.form.hpi,
+    //         orgCode: this.form.orgCode,
+    //         organId: this.form.organId,
+    //       };
+    //       if (this.id) {
+    //         params.id = this.id;
+    //       }
+    //       this.$api.medicalHistoryInterface.medicalInfo(params).then((res) => {
+    //         const { data } = res;
+    //         if (data.success) {
+    //           this.$message.success('操作成功');
+    //           this.$emit('afterSubmit');
+    //         }
+    //       });
+    //     }
+    //   });
     },
     goBack() {
       this.$router.go(-1);
@@ -311,7 +379,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/deep/ .el-form-item__label{
+/deep/ .row .el-form-item__label{
   margin-top: 10px;
 }
 .medical-history-form {

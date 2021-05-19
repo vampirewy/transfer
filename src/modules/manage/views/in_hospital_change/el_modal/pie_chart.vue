@@ -118,7 +118,7 @@ export default {
             // roseType: 'radius', //可以根据大小控制长短
             radius: [63, 88], // 中间可设置空心
             center: ['50%', '50%'],
-            hoverAnimation: true,
+            hoverAnimation: false, // hover是否变大
             label: {
               normal: {
                 show: true,
@@ -126,7 +126,7 @@ export default {
                 textStyle: {
                   fontWeight: 300,
                   fontSize: 11,
-                  // color: 'white',
+                  color: 'white',
                 },
                 formatter: '{d}%',
               },
@@ -147,7 +147,7 @@ export default {
               label: {
                 show: true,
                 fontSize: '15',
-                // color: '#333333',
+                color: '#fff',
                 fontWeight: 'bold',
               },
             },

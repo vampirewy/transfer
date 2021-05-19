@@ -210,7 +210,7 @@
                 <el-button
                         type="text"
                         size="small"
-                        @click="edits()"
+                        @click="editplan(scope.row)"
                         v-if="getAccess('customer_pool_edit')"
                 >计划</el-button>
                 <el-button type="text"
@@ -220,7 +220,7 @@
                 <el-button
                         type="text"
                         size="small"
-                        @click="editplan(scope.row)"
+                        @click="edits(scope.row)"
                 >编辑</el-button
                 >
                 <!-- <el-button
@@ -344,11 +344,18 @@ export default {
     },
     // 新增
     InterventionAdd() {
-      console.log('12312313');
       this.$router.push({
         name: 'InterventionAdd',
       });
-      // this.modalVisible = true;
+    },
+    // 编辑
+    edits(row) {
+      this.$router.push({
+        name: 'InterventionAdd',
+        params: {
+          id: row.id,
+        },
+      });
     },
     cancel() {
       this.modalVisible = false;

@@ -296,19 +296,19 @@ export default {
       Tabactive: 0,
     };
   },
-  /* mounted() {
+  mounted() {
     this.getList();
     this.queryList();
     // this.getUserList();
     // this.getGridList(); // 获取人员列类别
     // this.getDoctor(); // 获取医生列表
-  },*/
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      vm.getList();
-      vm.queryList();
-    });
   },
+  // beforeRouteEnter(to, from, next) {
+  //   next((vm) => {
+  //     vm.getList();
+  //     vm.queryList();
+  //   });
+  // },
   methods: {
     async queryList() {
       const res = await this.$api.physicalProjectListInterface.listOrganItemLibrary();

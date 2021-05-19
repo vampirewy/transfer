@@ -1,11 +1,11 @@
 <template>
   <el-dialog
-    :title="value.type === 1 ? '编辑' : '编辑体检库'"
+    title="查看体检库"
     class="dialog-detail"
     :modal-append-to-body="false"
     width="570px"
     :visible.sync="visible"
-    @close="cancel"
+    @close="cancels"
   >
     <!-- <div class="form-title">
       <div class="point"></div>
@@ -40,13 +40,13 @@
       </el-form-item> -->
       <div style="display: flex;">
         <el-form-item label="性别限制：" >
-          <el-select v-model="gender" placeholder="请选择">
+          <el-select v-model="gender" disabled placeholder="请选择">
             <el-option label="男" value="1" key="1"></el-option>
             <el-option label="女" value="2" key="2"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="是否启用：" >
-          <el-select v-model="Status" placeholder="请选择">
+          <el-select v-model="Status" disabled placeholder="请选择">
             <el-option label="是" value="1" key="1"></el-option>
             <el-option label="否" value="2" key="2"></el-option>
           </el-select>
@@ -54,7 +54,7 @@
       </div>
       <div style="display: flex;">
         <el-form-item label="干预形式：" >
-          <el-select style="width:160px" v-model="interfereform" placeholder="请选择">
+          <el-select style="width:160px" v-model="interfereform" disabled placeholder="请选择">
             <el-option
               v-for="item in form.planWayList"
               :key="item.id"
@@ -65,7 +65,7 @@
         </el-form-item>
         <el-col :span="6">
           <el-form-item label="主要内容：" >
-            <el-input v-model="results" style="width:160px" placeholder="请输入" ></el-input>
+            <el-input v-model="results" style="width:160px" disabled placeholder="请输入" ></el-input>
           </el-form-item>
         </el-col>
         <!-- <el-form-item label="主要内容：" >
@@ -87,6 +87,7 @@
               type="textarea"
               v-model="Prompt"
               :rows="5"
+              disabled
               placeholder="请输入"
               :maxlength="300"
               show-word-limit
@@ -113,7 +114,7 @@
     </el-form>
     <div slot="footer" class="dialog-footer" >
       <el-button size="small" @click="cancel" class="cancelBtn">取消</el-button>
-      <el-button type="primary" size="small" @click="submit" class="sureBtn">确定</el-button>
+      <!-- <el-button type="primary" size="small" @click="submit" class="sureBtn">确定</el-button> -->
     </div>
   </el-dialog>
 </template>
@@ -122,9 +123,7 @@ export default {
   name: 'edit_or_detail',
   props: {
     visible: Boolean,
-    value: Object,
     id: String,
-    interveneTemplateId: String,
   },
   data() {
     return {
@@ -132,7 +131,7 @@ export default {
       gender: '', // 性别
       Status: '', // 状态
       interfereform: '', // 干预形式
-      results: '',
+      results: '', // 内容
       Prompt: '', // 提示
       // resultOptions: [
       //   { value: 1, label: '未指定' },
@@ -148,32 +147,24 @@ export default {
     };
   },
   mounted() {
-    console.log(this.value, this.id, this.interveneTemplateId, '接收的数据');
-    this.getPlanWayList();
+    console.log(this.id, '接收的数据');
+    this.getDetail();
   },
   methods: {
-    async getPlanWayList() {
-      const res = await this.$api.userFollowInterface.getIntervenePlanWayList();
+    async getDetail() {
+      const reqBody = { id: this.id };
+      const res = await this.$api.interventionTemplateInterface.getInterveneTemplatePlanById(
+        reqBody,
+      );
       const { data } = res.data;
-      const list = data.map((it) => {
-        const { id, name } = it;
-        return { id, name };
-      });
-      this.form.planWayList = list;
+      this.Prompt = data.title;
+      this.results = data.planContent;
+      this.interfereform = data.planWay;
     },
     cancel() {
-      this.$emit('cancel');
+      this.$emit('cancels');
     },
     async submit() {
-      // await this.$api.companyManageInterface.updateWorkUnit({
-      //   id: this.value.id,
-      //   workUnitName: this.value.workUnitName,
-      //   contact: this.value.contact,
-      //   mobile: this.value.mobile,
-      //   address: this.value.address,
-      // });
-      // this.$message.success('操作成功');
-      // this.cancel();
       this.$refs.form.validate(async (valid) => {
         if (valid) {
           const obj = {
