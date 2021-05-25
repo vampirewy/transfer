@@ -338,7 +338,7 @@ export default {
     },
     // 选择检测项目
     detectiononSelectUser(data, NameType) {
-      console.log(data, NameType, '123123选择检测项目');
+      // console.log(data, NameType, '123123选择检测项目');
       if (data) {
         data.forEach((val) => {
           if (NameType === 'Minterm') {

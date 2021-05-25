@@ -112,14 +112,7 @@
                     size="small"
                     style="margin: 16px 0"
                     v-if="getAccess('physical_project_list_add')"
-                    @click="
-                      $router.push({
-                        name: 'minor_term_add',
-                        params: {
-                          id: '',
-                        },
-                      })
-                    "
+                    @click="handleAdd()"
             ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
             <el-button
                     size="small"
@@ -310,6 +303,15 @@ export default {
   //   });
   // },
   methods: {
+    handleAdd() {
+      this.$emit('cancels');
+      // this.$router.push({
+      //   name: 'minor_term_add',
+      //   params: {
+      //     id: '',
+      //   },
+      // });
+    },
     async queryList() {
       const res = await this.$api.physicalProjectListInterface.listOrganItemLibrary();
       console.log(res.data);
@@ -365,12 +367,13 @@ export default {
     edits(row) {
       // this.currentValue.type = id;
       this.modalVisible = true;
-      this.$router.push({
-        name: 'minor_term_add',
-        params: {
-          id: row.id,
-        },
-      });
+      this.$emit('cancels', row.id);
+      // this.$router.push({
+      //   name: 'minor_term_add',
+      //   params: {
+      //     id: row.id,
+      //   },
+      // });
     },
     async getLibraryList() {
       const res = await this.$api.physicalProjectListInterface.listOrganItemLibrary();
