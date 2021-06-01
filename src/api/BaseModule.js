@@ -42,7 +42,8 @@ class BaseModule {
             // CapsuleUI.Message.warning(response.data.message);
           }
           CapsuleUI.Message.warning(response.data.msg);
-          return response;
+          // return response;
+          return Promise.reject(response);
         }
         return response;
       },

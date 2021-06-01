@@ -26,10 +26,6 @@ export default {
       type: Boolean,
       default: true,
     },
-    chartData: {
-      type: Array,
-      default: () => [],
-    },
     sectionName: { // 部门
       type: Array,
       default: () => [],
@@ -38,11 +34,22 @@ export default {
       type: Array,
       default: () => [],
     },
+    chartData1: {
+      type: Array,
+      default: () => [],
+    },
+    chartData2: {
+      type: Array,
+      default: () => [],
+    },
+    chartData3: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
       chart: null,
-      monthList: ['1月', '2月', '3月', '4月', '5月', '6月'],
     };
   },
   watch: {
@@ -110,7 +117,7 @@ export default {
         xAxis: [
           {
             // type: 'category',
-            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+            data: this.sectionXList,
             axisPointer: {
               type: 'shadow',
             },
@@ -242,7 +249,7 @@ export default {
                 ]),
               },
             },
-            data: [17.0, 9.9, 17.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 26.5, 33.3],
+            data: this.chartData1,
           },
           {
             name: '未就诊',
@@ -263,7 +270,7 @@ export default {
                 ]),
               },
             },
-            data: [12.6, 3.9, 19.0, 26.4, 28.7, 70.7, 175.6, 192.2, 48.7, 18.8, 16.0, 22.3],
+            data: this.chartData2,
           },
           {
             name: '平均温度',
@@ -282,7 +289,7 @@ export default {
                 },
               },
             },
-            data: [20.6, 12.2, 13.3, 14.5, 16.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2],
+            data: this.chartData3,
           },
         ],
       };

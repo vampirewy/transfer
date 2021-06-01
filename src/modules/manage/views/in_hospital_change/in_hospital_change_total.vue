@@ -8,7 +8,7 @@
             <div class="divTop">
               <div class="divTitle" style="margin-top: 15px">
                 <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
-                阳性就诊TOP排名
+                检后就诊趋势
               </div>
             </div>
             <div class="divRightTitleDiv">
@@ -55,7 +55,9 @@
         :xList="intervenePlanName" :yList="intervenePlanYList" :height="'300px'"
                    :colorListProp="['#4991FD', '#31C529']" key="1"
                    v-else-if="intervenePlanXList.length === 1"/> -->
-        <line-pie-chart :chart-data="intervenePlanYList"
+        <line-pie-chart :chart-data1="intervenePlanYList1"
+                        :chart-data2="intervenePlanYList2"
+                        :chart-data3="intervenePlanYList3"
                     :sectionName="intervenePlanName"
                     :sectionXList="intervenePlanXList" v-else/>
       </el-col>
@@ -92,13 +94,12 @@
           </div>
           <div class="pieDiv" style="height:80px;margin-top: 40px">
             <div class="pieDivTips"
-                 v-for="(item, index) in dianPieCheckAfterPercentList" :key="item.name">
+                 v-for="(item, index) in dianPieCheckAfterPercentList" :key="item">
               <div class="pieDivTipsLeft">
                 <p class="dian"
                    :style="{'background-color': dianCheckAfterPercentColorList[index]}"></p>
-                <p class="dianSize">{{item.name}}</p>
               </div>
-              <p class="dianNum">{{item.value}}</p>
+              <p class="dianNum">{{item}}</p>
             </div>
           </div>
         </div>
@@ -126,22 +127,21 @@
             <el-radio-button label="5">阳性</el-radio-button>
           </el-radio-group>
         </div>
-        <div class="noDataLine" v-if="intervenePlanPieXList.length === 0" style="height: 215px">
+        <div class="noDataLine" v-if="checkAfterFeePieYList.length === 0" style="height: 215px">
           <img src="@/assets/images/noDataLine.png" style="width: 200px;margin-top: 100px"/>
           <span>暂无数据</span>
         </div>
         <div class="chart-wrapper" v-else>
           <div class="pieDiv" style="margin:18px 5% 0 5%;">
-            <pie-chart :xList="intervenePlanPieXList"
-                       :yList="intervenePlanPieYList" :centerText="checkAfterFeeTotal"/>
+            <pie-chart :xList="checkAfterFeePieXList"
+                       :yList="checkAfterFeePieYList" :centerText="checkAfterFeeTotal"/>
           </div>
           <div class="pieDiv" style="height:80px">
-            <div class="pieDivTips" v-for="(item, index) in dianPieList" :key="item.name">
+            <div class="pieDivTips" v-for="(item, index) in dianPieList" :key="item">
               <div class="pieDivTipsLeft">
-                <p class="dian" :style="{'background-color': dianColorList[index]}"></p>
-                <p class="dianSize">{{item.name}}</p>
+                <p class="dian" :style="{'background-color': dianPieColorList[index]}"></p>
               </div>
-              <p class="dianNum">{{item.value}}</p>
+              <p class="dianNum">{{item}}</p>
             </div>
           </div>
         </div>
@@ -190,81 +190,36 @@ export default {
   data() {
     return {
       searchData: {},
-      listQuery: {
-        planType: '4',
-      },
-      checkAfterForm: {
+      checkAfterForm: { // 检后就诊趋势 查询
         planType: '2',
         startTime: '',
         endTime: '',
       },
-      checkAfterPercent: {
+      checkAfterPercent: { // 检后就医转化率 查询
         planType: '2',
       },
+      listQuery: { // 检后就医费用 查询
+        planType: '4',
+      },
       homeFindCountData: {},
-      serviceOrderXList: [],
-      serviceOrderYList: [],
-      dianPieCheckAfterPercentList: [
-        { namne: '阳性上报',
-          value: '阳性上报',
-        },
-        { namne: '首次跟踪',
-          value: '首次跟踪',
-        },
-        { namne: '预约挂号',
-          value: '预约挂号',
-        },
-        { namne: '完成就诊',
-          value: '完成就诊',
-        },
-      ],
+      // 检后就诊趋势折线图
+      intervenePlanYList1: [], // 已就诊
+      intervenePlanYList2: [], // 未就诊
+      intervenePlanYList3: [], // 就诊费用
+      intervenePlanName: ['检后就诊趋势'],
+      intervenePlanXList: [],
+      // 检后就医转化率分析漏斗图
+      dianPieCheckAfterPercentList: [],
       checkAfterPercentXList: ['检后就医转化率分析'],
-      checkAfterPercentYList: [
-        { value: 80, name: '阳性上报' },
-        { value: 60, name: '首次跟踪' },
-        { value: 40, name: '完成就诊' },
-        { value: 20, name: '预约挂号' },
-      ],
+      checkAfterPercentYList: [],
       dianCheckAfterPercentColorList: ['#FA912B', '#806CE5', '#36BF2F', '#24499D', '#36BF2F',
         '#6DC8EC', '#31C529', '#54c9b6', '#F53626', '#f5c8be'],
-      intervenePlanPieXList: ['10', '20', '30', '10', '40'],
-      intervenePlanPieYList: [
-        { value: 700, name: ' 外科' },
-        { value: 248, name: '急诊科' },
-        { value: 200, name: '肿瘤科' },
-        { value: 400, name: '消化内科' },
-        { value: 200, name: '中医内科' },
-      ],
-      checkAfterFeeTotal: '74652.0',
-      clientTypeXList: [],
-      clientTypeYList: [],
-      clientTotal: 0,
-      intervenePlanYList: [['20', '19', '16', '20', '23', '30', '28', '25', '20', '15', '23', '30', '35', '40', '20']],
-      intervenePlanName: ['客户趋势'], // 随访任务折线图
-      intervenePlanXList: ['04/07', '04/08', '04/09', '04/10', '04/11', '04/12', '04/13', '04/14', '04/15', '04/16', '04/17', '04/18', '04/19', '04/20', '04/21'],
-      dianPieList: [
-        {
-          namne: '外科',
-          value: '外科',
-        },
-        {
-          namne: '急诊科',
-          value: '急诊科',
-        },
-        {
-          namne: '肿瘤科',
-          value: '肿瘤科',
-        },
-        {
-          namne: '消化内科',
-          value: '消化内科',
-        },
-        {
-          namne: '中医内科',
-          value: '中医内科',
-        },
-      ],
-      dianColorList: ['#3154AC', '#806CE5', '#333333', '#FA912B', '#36BF2F',
+      // 检后就医费用饼图
+      checkAfterFeePieXList: [],
+      checkAfterFeePieYList: [],
+      checkAfterFeeTotal: '', // 总费用
+      dianPieList: [],
+      dianPieColorList: ['#3154AC', '#806CE5', '#333333', '#FA912B', '#36BF2F',
         '#6DC8EC', '#31C529', '#54c9b6', '#F53626', '#f5c8be'],
     };
   },
@@ -280,20 +235,25 @@ export default {
     document.querySelector('.main-content-con').style = 'top: 116px';
     document.querySelector('.content-wrapper').style = 'height: calc(100% - 80px);margin: 0 20px 20px 20px;padding: 20px';
   },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.getEchartIntervenePlan();// 检后就诊趋势
+      vm.getCheckAfterPercent(); // 检后就医转化率
+      vm.getCheckAfterFee(); // 检后就医费用
+    });
+  },
   methods: {
     getSearchData(data) {
       this.searchData = data;
       // this.getHomeFindCount(data); // 查询五数据
-      // this.getEchartIntervenePlan(data);// 随访任务折线图
-      // this.getServiceOrderInfo(data); // 服务订单
-      // this.getEchartIntervenePlanPie(data); // 随访任务饼图
+      // this.getEchartcheckAfterFeePie(data); // 随访任务饼图
     },
     chooseSunRadio(val) {
       console.log(val);
     },
     choosePlanType() { // 随访计划，随访记录切换
       // const sendData = Object.assign(this.searchData, this.listQuery);
-      // this.getEchartIntervenePlanPie(sendData);
+      // this.getEchartcheckAfterFeePie(sendData);
     },
     toRouterPage(type) { // 点击客户总数 跳转我的客户
       localStorage.setItem('homeSearchData', JSON.stringify({
@@ -319,13 +279,15 @@ export default {
         this.homeFindCountData = res.data.data;
       });
     },
-    // 随访任务 折线图
-    getEchartIntervenePlan(sendData) {
-      const sendDataGet = Object.assign({}, sendData);
+    // 检后就诊趋势 折线图
+    getEchartIntervenePlan() {
+      const sendDataGet = Object.assign({}, this.checkAfterForm);
       sendDataGet.planType = 4;
       this.intervenePlanXList = [];
-      this.intervenePlanYList = [];
-      this.$api.personal.echartIntervenePlan(sendDataGet).then((res) => {
+      this.intervenePlanYList1 = [];
+      this.intervenePlanYList2 = [];
+      this.intervenePlanYList3 = [];
+      /* this.$api.personal.echartIntervenePlan(sendDataGet).then((res) => {
         const lineIntervenePlanListMap = res.data.data.lineIntervenePlanListMap;
         const xListInit = [];
         const yListInit = [];
@@ -343,14 +305,22 @@ export default {
           this.intervenePlanXList = [];
           this.intervenePlanYList = [];
         }
-        this.getEchartIntervenePlanAll(sendData);
-      });
+      });*/
+      this.intervenePlanXList = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+      this.intervenePlanYList1 =
+        [17.0, 9.9, 17.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 26.5, 33.3];
+      this.intervenePlanYList2 =
+        [12.6, 3.9, 19.0, 26.4, 28.7, 70.7, 175.6, 192.2, 48.7, 18.8, 16.0, 22.3];
+      this.intervenePlanYList3 =
+        [20.6, 12.2, 13.3, 14.5, 16.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 16.2];
     },
-    // 随访任务 折线图全部任务
-    getEchartIntervenePlanAll(sendData) {
-      const sendDataGetAll = Object.assign({}, sendData);
-      sendDataGetAll.planType = 5;
-      this.$api.personal.echartIntervenePlan(sendDataGetAll).then((res) => {
+    // 检后就诊转化率 漏斗图
+    getCheckAfterPercent() {
+      const sendDataGet = Object.assign({}, this.checkAfterPercent);
+      sendDataGet.planType = 4;
+      this.dianPieCheckAfterPercentList = [];
+      this.checkAfterPercentYList = [];
+      /* this.$api.personal.echartIntervenePlan(sendDataGet).then((res) => {
         const lineIntervenePlanListMap = res.data.data.lineIntervenePlanListMap;
         const xListInit = [];
         const yListInit = [];
@@ -363,50 +333,27 @@ export default {
             yListInit.push(lineIntervenePlanListMap[key]);
           });
           this.intervenePlanXList = xListInit;
-          if (this.intervenePlanXList.length === 1) {
-            this.intervenePlanYList.push(yListInit);
-            this.intervenePlanYList = [Number(this.intervenePlanYList[0][0]),
-              Number(this.intervenePlanYList[1][0])];
-          } else {
-            this.intervenePlanYList.push(yListInit);
-          }
+          this.intervenePlanYList.push(yListInit);
         } else {
           this.intervenePlanXList = [];
           this.intervenePlanYList = [];
         }
-      });
-    },
-    // 服务订单  先写死 二期需求
-    getServiceOrderInfo(sendData) {
-      // this.serviceOrderXList = ['心里咨询', '报告解读', '私人医生', '其他'];
-      // this.serviceOrderYList = [79, 42, 100, 130];
-      const sendDataGet = Object.assign({}, sendData);
-      this.serviceOrderXList = [];
-      this.serviceOrderYList = [];
-      this.$api.personal.echartServiceOrder(sendDataGet).then((res) => {
-        const ServiceOrderListMap = res.data.data.serviceOrderListMap;
-        const xListInit = [];
-        const yListInit = [];
-        if (
-          ServiceOrderListMap != null &&
-          JSON.stringify(ServiceOrderListMap) !== '{}'
-        ) {
-          Object.keys(ServiceOrderListMap).forEach((key) => {
-            xListInit.push(key);
-            yListInit.push(Number(ServiceOrderListMap[key]));
-          });
-          this.serviceOrderXList = xListInit;
-          this.serviceOrderYList = yListInit;
-        } else {
-          this.serviceOrderXList = [];
-          this.serviceOrderYList = [];
-        }
-      });
+      });*/
+      this.dianPieCheckAfterPercentList = ['阳性上报', '首次跟踪', '预约挂号', '完成就诊'];
+      this.checkAfterPercentYList = [
+        { value: 80, name: '阳性上报' },
+        { value: 60, name: '首次跟踪' },
+        { value: 40, name: '完成就诊' },
+        { value: 20, name: '预约挂号' },
+      ];
     },
     // 随访任务饼图
-    getEchartIntervenePlanPie(sendData) {
-      const sendDataGet = Object.assign(sendData, this.listQuery);
-      this.$api.personal.echartIntervenePlanPie(sendDataGet).then((res) => {
+    getCheckAfterFee() {
+      const sendDataGet = Object.assign({}, this.listQuery);
+      sendDataGet.planType = 4;
+      this.dianPieList = [];
+      this.checkAfterFeePieYList = [];
+      /* this.$api.personal.echartcheckAfterFeePie(sendDataGet).then((res) => {
         const intervenePlanListMap = res.data.data.intervenePlanListMap;
         const xListInit = [];
         const yListInit = [];
@@ -420,15 +367,24 @@ export default {
             yListInit.push({ name: key, value: intervenePlanListMap[key] });
             dianObjList.push({ name: key, value: intervenePlanListMap[key] });
           });
-          this.intervenePlanPieXList = xListInit;
-          this.intervenePlanPieYList = yListInit;
+          this.checkAfterFeePieXList = xListInit;
+          this.checkAfterFeePieYList = yListInit;
           this.dianPieList = dianObjList;
         } else {
-          this.intervenePlanPieXList = [];
-          this.intervenePlanPieYList = [];
+          this.checkAfterFeePieXList = [];
+          this.checkAfterFeePieYList = [];
           this.dianPieList = [];
         }
-      });
+      });*/
+      this.dianPieList = ['外科', '急诊科', '肿瘤科', '消化内科', '中医内科'];
+      this.checkAfterFeePieYList = [
+        { value: 700, name: ' 外科' },
+        { value: 248, name: '急诊科' },
+        { value: 200, name: '肿瘤科' },
+        { value: 400, name: '消化内科' },
+        { value: 200, name: '中医内科' },
+      ];
+      this.checkAfterFeeTotal = '74652.0';
     },
 
   },

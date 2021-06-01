@@ -53,3 +53,13 @@ export const getResultMain = (val) => { // 1是 0否 重要指标
   }
   return val;
 };
+export const getResultReportState = (val) => { // 0否 1是 是否总检
+  if (val === null) {
+    return '-';
+  } else if (val === 2) {
+    return '否';
+  } else if (val === 1) {
+    return '是';
+  }
+  return val;
+};

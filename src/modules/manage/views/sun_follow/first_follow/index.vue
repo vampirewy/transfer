@@ -41,13 +41,13 @@
         <div>
           <span>是否总检：</span>
           <el-select
-                  v-model="form.zongCheck"
+                  v-model="form.reportState"
                   placeholder="请选择"
                   style="width: 140px"
                   clearable
           >
-            <el-option label="是" :value="0"></el-option>
-            <el-option label="否" :value="1"></el-option>
+            <el-option label="是" :value="1"></el-option>
+            <el-option label="否" :value="2"></el-option>
           </el-select>
         </div>
       </div>
@@ -71,19 +71,19 @@
       <div>
         <span>上报来源：</span>
         <el-select
-                v-model="form.gridId"
+                v-model="form.source"
                 placeholder="请选择"
                 style="width: 140px"
                 clearable
         >
-          <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+          <el-option :label="item.name" :value="item.value" v-for="(item, index) in sourceList"
                      :key="index"></el-option>
         </el-select>
       </div>
       <div>
         <span>手机号码：</span>
         <el-input
-                v-model="form.mobile"
+                v-model="form.phoneNo"
                 placeholder="请输入"
                 style="width: 140px">
         </el-input>
@@ -125,10 +125,11 @@
         <el-button
                 class="btn-new btnAdd"
                 size="small"
+                @click="exportList"
         ><img src="@/assets/images/common/export.png" />导出</el-button>
         </div>
-        <el-radio-group v-model="warnType">
-          <el-radio :label="0">全部</el-radio>
+        <el-radio-group v-model="form.reportLv" @change="onSearch">
+          <el-radio :label="''">全部</el-radio>
           <el-radio :label="1">红色预警</el-radio>
           <el-radio :label="2">橙色预警</el-radio>
         </el-radio-group>
@@ -156,7 +157,6 @@
               @selection-change="handleSelectionChange"
               :row-key="getRowKeys"
               @expand-change="handleExpandChange">
-      <el-table-column type="selection" width="40"></el-table-column>
       <el-table-column prop="clientNo" label="客户编号" min-width="100px" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{scope.row.clientNo | getResult}}</span>
@@ -170,7 +170,7 @@
         <template slot-scope="scope">
              <span class="clientName"
                    @click="commonHref.toPersonalHealth(scope.row.id, $router)">
-               {{ scope.row.name | getResult}}
+               {{ scope.row.clientName | getResult}}
              </span>
         </template>
       </el-table-column>
@@ -184,46 +184,46 @@
           <span>{{ scope.row.age | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="projectName" label="项目名称" width="60px">
+      <el-table-column prop="itemName" label="项目名称" width="60px">
         <template slot-scope="scope">
-          <span>{{ scope.row.projectName | getResult }}</span>
+          <span>{{ scope.row.itemName | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="结果" prop="result" min-width="100px">
+      <el-table-column label="结果" prop="itemValue" min-width="100px">
         <template slot-scope="scope">
-              <span :class="scope.row.resultLevel === 1 ? 'warnRed' : 'warnYellow'">
-                {{ scope.row.result | getResult }}
+              <span :class="scope.row.reportLv === 1 ? 'warnRed' : 'warnYellow'">
+                {{ scope.row.itemValue | getResult }}
               </span>
         </template>
       </el-table-column>
-      <el-table-column label="上报科室" prop="subjectName" show-overflow-tooltip>
+      <el-table-column label="上报科室" prop="reportDepartment" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.subjectName | getResult}}</span>
+          <span>{{ scope.row.reportDepartment | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="上报医生" prop="doctor" show-overflow-tooltip>
+      <el-table-column label="上报医生" prop="reportUserName" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.doctor | getResult}}</span>
+          <span>{{ scope.row.reportUserName | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="上报时间" prop="createdTime" min-width="90px" show-overflow-tooltip>
+      <el-table-column label="上报时间" prop="reportDate" min-width="90px" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.createdTime | getResult}}</span>
+          <span>{{ scope.row.reportDate | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="receiveName" label="接收人" show-overflow-tooltip>
+      <el-table-column prop="recieveUserName" label="接收人" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.receiveName | getResult}}</span>
+          <span>{{ scope.row.recieveUserName | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="receiveTime" label="接收时间" show-overflow-tooltip>
+      <el-table-column prop="recieveDate" label="接收时间" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.receiveTime | getResult}}</span>
+          <span>{{ scope.row.recieveDate | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="zongName" label="是否总检" show-overflow-tooltip>
+      <el-table-column prop="reportState" label="是否总检" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.zongName | getResult}}</span>
+          <span>{{ scope.row.reportState | getResultReportState}}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="80">
@@ -254,7 +254,6 @@
 </template>
 
 <script>
-import { genderList, executeStateList } from '~/src/constant/health_plan';
 import QueryPage from '~/src/components/query_page/index.vue';
 import Search from '~/src/components/query_page/search.vue';
 import QueryFilter from '~/src/components/query_page/query_filter.vue';
@@ -272,37 +271,25 @@ export default {
   },
   data() {
     return {
+      upload_url: process.env.api.upload_url,
       isTrue: true,
-      warnType: 0,
       form: {
         keywords: '', // 关键字
         gender: '', // 性别
         gridId: '', // 人员类别
-        zongCheck: '',
-        hasIntervenePlan: '', // 剩余计划
-        hasReport: '', // 体检报告
-        tag: '', // 客户标签
-        startReportDate: '', // 体检日期
-        endReportDate: '', // 体检日期
-        startCollectionDate: '', // 采集日期
-        endCollectionDate: '', // 采集日期
-        workUnitName: '', // 企业单位
-        planUserId: '',
-        planUserName: '',
-        planWay: '', // 随访方式
-        executeState: '', // 状态
-        selectTime: [], // 选择时间
-        planWayList: [],
-        genderList,
-        executeStateList,
+        reportState: '', // 是否总检
+        source: '',
+        phoneNo: '',
         startTime: '',
         endTime: '',
+        reportLv: '',
       },
       abnormalModalVisible: false, // 异常列表弹窗
       selectPlanuser: [],
       planuserModalVisible: false, // 干预人人列表弹窗
       selectAbnormal: [],
       gridList: [], // 人员类别下拉框
+      sourceList: [{ value: 1, name: '采集系统' }, { value: 2, name: '手动上报' }, { value: 3, name: '后台预警' }], // 上报来源下拉框
       expands: [],
       getRowKeys: row => row.id,
       expandData: {
@@ -455,92 +442,11 @@ export default {
       this.isTrue = !this.isTrue;
     },
     /**
-     * 获取随访列表
+     * 获取列表
      * @return {Promise<void>}
      */
     async getList() {
-      /* console.log(this.form);
-      if (this.form.startTime) {
-        this.form.startTime = `${this.form.startTime.split(' ')[0]} 00:00:00`;
-      }
-      if (this.form.endTime) {
-        this.form.endTime = `${this.form.endTime.split(' ')[0]} 23:59:59`;
-      }
-      if (this.form.startReportDate) {
-        this.form.startReportDate = `${this.form.startReportDate.split(' ')[0]} 00:00:00`;
-      }
-      if (this.form.endReportDate) {
-        this.form.endReportDate = `${this.form.endReportDate.split(' ')[0]} 23:59:59`;
-      }
-      if (this.form.startCollectionDate) {
-        this.form.startCollectionDate = `${this.form.startCollectionDate.split(' ')[0]} 00:00:00`;
-      }
-      if (this.form.endCollectionDate) {
-        this.form.endCollectionDate = `${this.form.endCollectionDate.split(' ')[0]} 23:59:59`;
-      }
-      const reqBody = {
-        planWay: this.form.planWay,
-        executeState: this.form.executeState,
-        gender: this.form.gender,
-        gridId: this.form.gridId,
-        planUserId: this.form.planUserId,
-        reportAbnormalCodes: this.form.abnormalId,
-        hasIntervenePlan: this.form.hasIntervenePlan,
-        hasReport: this.form.hasReport,
-        /!* tag: this.form.tag,*!/
-        startReportDate: this.form.startReportDate,
-        endReportDate: this.form.endReportDate,
-        startCollectionDate: this.form.startCollectionDate,
-        endCollectionDate: this.form.endCollectionDate,
-        workUnitName: this.form.workUnitName,
-        startTime: this.form.startTime,
-        endTime: this.form.endTime,
-        keywords: this.form.keywords,
-        pageNo: this.table.pageNo,
-        pageSize: this.table.pageSize,
-      };
-      const res = await this.$api.userFollowInterface.getIntervenePlanPageList(
-        reqBody,
-      );*/
-      const res = {
-        data: {
-          data: {
-            data: [
-              { id: '1',
-                clientNo: '2021015898745',
-                name: '吴白',
-                gender: 1,
-                age: 30,
-                projectName: '肺部CT',
-                result: '疑似肺癌',
-                resultLevel: 1,
-                subjectName: '内科',
-                doctor: '陈良',
-                createdTime: '2021-04-27 14：00',
-                receiveName: '郑西',
-                receiveTime: '2021-04-29 19：20',
-                zongName: '否',
-              },
-              { id: '2',
-                clientNo: '20210213987451',
-                name: '王新一',
-                gender: 1,
-                age: 20,
-                projectName: '胃部CT',
-                result: '疑似胃癌',
-                resultLevel: 2,
-                subjectName: '内科',
-                doctor: '陈良',
-                createdTime: '2021-04-27 18：00',
-                receiveName: '郑西',
-                receiveTime: '2021-04-28 16：20',
-                zongName: '是',
-              },
-            ],
-            total: 2,
-          },
-        },
-      };
+      const res = await this.$api.sunFollow.getPositiveFirstListPage(this.form);
       const { data } = res.data;
       console.log(data);
       if (data) {
@@ -550,6 +456,15 @@ export default {
           this.setSelectRow();
         }, 100);
       }
+    },
+    /**
+     * 导出列表
+     * @return {Promise<void>}
+     */
+    async exportList() {
+      const res = await this.$api.sunFollow.exportPositiveFirst(this.form);
+      const { data } = res.data;
+      window.open(this.upload_url + data);
     },
     /**
      * 获取随访方式
@@ -691,7 +606,7 @@ export default {
     },
     handleView(row) {
       this.$router.push({
-        path: `/first_follow_do/${row.id}`,
+        path: `/first_follow_do/${row.clientId}/1`,
       });
     },
     // 获取下拉计划 / 记录数据
