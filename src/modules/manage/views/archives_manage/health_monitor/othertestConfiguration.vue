@@ -115,8 +115,8 @@
             <div v-if="scope.row.isshow">
                 <el-switch
                 v-model="ModifyList.state"
-                active-value="1"
-                inactive-value="2"
+                :active-value="1"
+                :inactive-value="2"
                 active-color="#13ce66">
                 </el-switch>
             </div>

@@ -171,7 +171,7 @@
             </el-table-column>
             <el-table-column label="适用性别" prop="gender" min-width="80" show-overflow-tooltip >
               <template slot-scope="scope">
-                {{scope.row.gender === 1 ? '男' : (scope.row.gender === 2 ? '女' : '')}}
+                {{scope.row.gender === 0 ? '男' : (scope.row.gender === 1 ? '女' : '')}}
               </template>
             </el-table-column>
             <el-table-column label="条件" prop="qualification" min-width="80" show-overflow-tooltip />
@@ -181,8 +181,8 @@
               <template slot-scope="scope">
                 <el-switch
                   v-model="scope.row.state "
-                  active-value="1"
-                  inactive-value="0"
+                  :active-value="1"
+                  :inactive-value="0"
                   active-color="#13ce66"
                   @change=changeStatus(scope,scope.row.state)
                   >
@@ -210,7 +210,7 @@
                 <el-button
                         type="text"
                         size="small"
-                        @click="edits()"
+                        @click="editplan(scope.row)"
                         v-if="getAccess('customer_pool_edit')"
                 >计划</el-button>
                 <el-button type="text"
@@ -220,7 +220,7 @@
                 <el-button
                         type="text"
                         size="small"
-                        @click="editplan(scope.row)"
+                        @click="edits(scope.row)"
                 >编辑</el-button
                 >
                 <!-- <el-button
@@ -344,11 +344,18 @@ export default {
     },
     // 新增
     InterventionAdd() {
-      console.log('12312313');
       this.$router.push({
         name: 'InterventionAdd',
       });
-      // this.modalVisible = true;
+    },
+    // 编辑
+    edits(row) {
+      this.$router.push({
+        name: 'InterventionAdd',
+        params: {
+          id: row.id,
+        },
+      });
     },
     cancel() {
       this.modalVisible = false;

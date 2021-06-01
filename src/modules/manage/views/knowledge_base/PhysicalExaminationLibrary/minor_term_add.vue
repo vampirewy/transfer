@@ -10,7 +10,7 @@
     >
       <div class="form-title">
         <div class="line"></div>
-        <h3 class="name">{{ids ? '编辑' : '新增'}}小项</h3>
+        <h3 class="name">{{id ? '编辑' : '新增'}}小项</h3>
       </div>
       <el-row>
         <el-col :span="6">
@@ -136,15 +136,16 @@ export default {
     // SelectUser,
   },
   props: {
-    detail: {
-      type: Boolean,
-      default: false,
-    },
-    id: {
-      type: [String, Number],
-      required: false,
-      default: '',
-    },
+    // detail: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+    // id: {
+    //   type: [String, Number],
+    //   required: false,
+    //   default: '',
+    // },
+    id: '',
   },
   data() {
     return {
@@ -221,15 +222,13 @@ export default {
         { value: 2, label: '住院' },
       ],
       currentUser: {},
-      ids: this.$route.params.id,
+      // ids: this.$route.params.id,
     };
   },
   mounted() {
-    console.log(this.ids, 'qweqweq');
-    if (this.ids) {
-      this.$api.physicalProjectListInterface.getOrganItem(this.ids).then((res) => {
+    if (this.id) {
+      this.$api.physicalProjectListInterface.getOrganItem(this.id).then((res) => {
         const { data } = res;
-        console.log(data, '撒打算大的');
         this.form = {
           checked1: data.data.isMain, // 默认重要指标
           checked2: data.data.displayPosition, // 参与报告对比
@@ -301,19 +300,20 @@ export default {
         intro: this.form.Introduction,
         unit: this.form.Units,
       };
-      if (this.ids) {
-        params.id = this.ids;
+      if (this.id) {
+        params.id = this.id;
       }
       this.$api.physicalProjectListInterface.saveOrganItem(params).then((res) => {
         const { data } = res;
         if (data.success) {
           this.$message.success('操作成功');
-          this.$emit('afterSubmit');
+          this.$emit('cancels');
         }
       });
     },
     goBack() {
-      this.$router.go(-1);
+      // this.$router.go(-1);
+      this.$emit('cancels');
     },
   },
 };

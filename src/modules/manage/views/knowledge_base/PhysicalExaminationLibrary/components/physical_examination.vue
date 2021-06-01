@@ -88,8 +88,8 @@
               <template slot-scope="scope">
                 <el-switch
                   v-model="scope.row.state "
-                  active-value="1"
-                  inactive-value="0"
+                  :active-value="1"
+                  :inactive-value="0"
                   active-color="#13ce66"
                   @change=changeStatus(scope,scope.row.state)
                   >
@@ -108,7 +108,7 @@
                 <el-button
                         type="text"
                         size="small"
-                        @click="edits(scope.row.id)"
+                        @click="edits(scope.row)"
                         v-if="getAccess('customer_pool_edit')"
                 >编辑</el-button>
                 <!-- <el-button type="text"
@@ -160,6 +160,7 @@
         </div>
       <!-- </template> -->
     <edit-detail
+      v-if="modalVisible"
       :visible="modalVisible"
       :value="currentValue"
       :libraryList="form.libraryList"
@@ -276,12 +277,16 @@ export default {
     },
     // 编辑
     adds(id) {
-      this.currentValue.type = id;
+      this.currentValue = [];
+      this.currentValue.id = id;
       this.modalVisible = true;
       // this.getLibraryList();
     },
-    edits(id) {
-      this.currentValue.type = id;
+    edits(row) {
+      console.log(row);
+      this.currentValue = row;
+      // this.currentValue.name = row.name;
+      // this.currentValue.state = row.state;
       this.modalVisible = true;
       // this.getLibraryList();
     },

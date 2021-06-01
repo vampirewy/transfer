@@ -8,8 +8,11 @@
         </div>
       </div>
     <div v-if="Tabactive == 0">
-      <div>
-        <minor-term></minor-term>
+      <div v-if="isadd">
+        <minor-term @cancels="SelectUser"></minor-term>
+      </div>
+      <div v-else>
+        <minor-term-add :id="mintermAdd" @cancels="SelectUsers"></minor-term-add>
       </div>
     </div>
       <div v-else>
@@ -137,11 +140,12 @@
 import QueryPage from '~/src/components/query_page/index.vue';
 import Search from '~/src/components/query_page/search.vue';
 import QueryFilter from '~/src/components/query_page/query_filter.vue';
-import deleteIcon from '~/src/assets/images/deleteicon.png';
-import * as dayjs from 'dayjs';
+// import deleteIcon from '~/src/assets/images/deleteicon.png';
+// import * as dayjs from 'dayjs';
 import editDetail from './components/edit_detail.vue';
 import minorTerm from './components/minor_term.vue';
 import physicalExamination from './components/physical_examination.vue';
+import minorTermAdd from './minor_term_add.vue';
 
 export default {
   name: 'PhysicalExamination',
@@ -154,11 +158,13 @@ export default {
     editDetail,
     minorTerm,
     physicalExamination,
+    minorTermAdd,
   },
   data() {
     return {
       isTrue: true,
       value: true,
+      isadd: true,
       total: 0,
       gridList: [],
       doctorList: [],
@@ -203,206 +209,219 @@ export default {
       currentValue: {},
       tabbor: ['体检小项', '体检库'],
       Tabactive: 0,
+      mintermAdd: '',
     };
+  },
+  mounted() {
+    this.isadd = true;
+    this.Tabactive = 0;
   },
   methods: {
     TabbarBtn(index) {
+      this.isadd = true;
       this.Tabactive = index;
     },
-    async getList() {
-      const reqBody = {
-        organItemLibraryId: this.form.organItemLibraryId,
-        gender: this.form.gender,
-        isMain: this.form.isMain,
-        state: this.form.state,
-        itemName: this.formData.keywords,
-        pageNo: this.table.currentPage,
-        pageSize: this.table.pageSize,
-      };
-      const res = await this.$api.physicalProjectListInterface.listPage(
-        reqBody,
-      );
-      const { data } = res.data;
-      if (data) {
-        this.table.list = data.data || [];
-        this.total = data.total;
-      }
+    SelectUser(data) {
+      // console.log('1213212313');
+      this.mintermAdd = data;
+      this.isadd = false;
     },
+    SelectUsers() {
+      this.isadd = true;
+    },
+    // async getList() {
+    //   const reqBody = {
+    //     organItemLibraryId: this.form.organItemLibraryId,
+    //     gender: this.form.gender,
+    //     isMain: this.form.isMain,
+    //     state: this.form.state,
+    //     itemName: this.formData.keywords,
+    //     pageNo: this.table.currentPage,
+    //     pageSize: this.table.pageSize,
+    //   };
+    //   const res = await this.$api.physicalProjectListInterface.listPage(
+    //     reqBody,
+    //   );
+    //   const { data } = res.data;
+    //   if (data) {
+    //     this.table.list = data.data || [];
+    //     this.total = data.total;
+    //   }
+    // },
     // 展开更多
-    upMore() {
-      this.isTrue = !this.isTrue;
-    },
+    // upMore() {
+    //   this.isTrue = !this.isTrue;
+    // },
     // 编辑
-    edits(id) {
-      this.currentValue.type = id;
-      this.modalVisible = true;
-      this.getLibraryList();
-    },
-    async getLibraryList() {
-      const res = await this.$api.physicalProjectListInterface.listOrganItemLibrary();
-      const { data } = res.data;
-      this.form.libraryList = data;
-      // if (this.form.libraryList && this.form.libraryList.length) {
-      //   this.form.organItemLibraryId = data[0].id;
-      // }
-      console.log(this.form.libraryList);
-    },
-    cancel() {
-      this.modalVisible = false;
-    },
+    // edits(id) {
+    //   this.currentValue.type = id;
+    //   this.modalVisible = true;
+    //   this.getLibraryList();
+    // },
+    // async getLibraryList() {
+    //   const res = await this.$api.physicalProjectListInterface.listOrganItemLibrary();
+    //   const { data } = res.data;
+    //   this.form.libraryList = data;
+    //   // if (this.form.libraryList && this.form.libraryList.length) {
+    //   //   this.form.organItemLibraryId = data[0].id;
+    //   // }
+    //   console.log(this.form.libraryList);
+    // },
+    // cancel() {
+    //   this.modalVisible = false;
+    // },
     // 获取人员列表
-    async getGridList() {
-      const res = await
-      this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
-      const { data } = res.data;
-      this.gridList = data.data;
-    },
-    // 获取医生列表
-    async getDoctor() {
-      const res = await
-      this.$api.doctorInterface.getDoctorList({ pageNo: 1, pageSize: 10000 });
-      const { data } = res.data;
-      this.doctorList = data.data;
-    },
-    handleEditCheck() {},
+    // async getGridList() {
+    //   const res = await
+    //   this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
+    //   const { data } = res.data;
+    //   this.gridList = data.data;
+    // },
+    // // 获取医生列表
+    // async getDoctor() {
+    //   const res = await
+    //   this.$api.doctorInterface.getDoctorList({ pageNo: 1, pageSize: 10000 });
+    //   const { data } = res.data;
+    //   this.doctorList = data.data;
+    // },
+    // handleEditCheck() {},
     // 批量删除
-    handleSomeRemove() {
-      if (!this.chooseUserList.length) {
-        this.$message.error('请选择需要删除客户');
-        return;
-      }
-      const deleteDom = `<div class="delete-text-content">
-        <img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认删除！</span></div>
-        `;
-      this.$confirm(deleteDom, '删除提示', {
-        dangerouslyUseHTMLString: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        customClass: 'message-box-customize',
-        showClose: true,
-      }).then(() => {
-        // const params = {
-        //   clientIdList: this.chooseUserList.map(user => user.id),
-        // };
-        const arrs = this.chooseUserList[0];
-        console.log(arrs, '删除数据');
-        this.$api.physicalProjectListInterface.deleteOrganItem(arrs.id).then(({ data }) => {
-          if (data.code === 200) {
-            this.$message.success('操作成功');
-            // this.search();
-            this.chooseUserList = [];
-            // this.$refs.multipleTable.clearSelection();
-          }
-        });
-      });
-    },
-    reset() {
-      Object.assign(this.$data, this.$options.data());
-      this.getUserList();
-      this.getGridList(); // 获取人员列类别
-    },
-    onChangePage(current = 1) {
-      this.params.pageNo = current;
-      this.getUserList();
-    },
-    search() {
-      const hasOnlyStartTime = this.formData.startTime
-              && (!this.formData.startTime || !this.formData.endTime);
-      const hasOnlyEndTime = this.formData.endTime
-              && (!this.formData.startTime || !this.formData.endTime);
-      if (hasOnlyStartTime || hasOnlyEndTime) {
-        this.$message.error('查询必须包括开始时间和结束时间');
-        return;
-      }
-      if (this.formData.startTime > this.formData.endTime) {
-        this.$message.error('查询的开始时间不可大于结束时间');
-        return;
-      }
-      if (this.formData.startTime && this.formData.endTime) {
-        this.formData.startTime = dayjs(this.formData.startTime).format('YYYY-MM-DD');
-        this.formData.endTime = dayjs(this.formData.endTime).format('YYYY-MM-DD');
-      }
-      this.params.pageNo = 1;
-      this.getUserList();
-    },
-    handleSelectionChange(rows) {
-      this.chooseUserList = rows;
-    },
-    assign({ row = {} }) {
-      if (row.id) {
-        this.chooseUserList = [row];
-      }
-      if (this.chooseUserList.length) {
-        this.clientId = this.chooseUserList[0].id;
-        this.dialogTableVisible = true;
-      } else {
-        this.$message.warning('请选择客户');
-      }
-    },
-    submitAssign(userList) {
-      if (!userList.length) {
-        this.$message.warning('请选择医生');
-        return;
-      }
-      this.dialogTableVisible = false;
-      const userIdList = userList.filter(t => t.selectType === 1).map(t => t.id);
-      const workIdList = userList.filter(t => t.selectType === 2).map(t => t.id);
+    // handleSomeRemove() {
+    //   if (!this.chooseUserList.length) {
+    //     this.$message.error('请选择需要删除客户');
+    //     return;
+    //   }
+    //   const deleteDom = `<div class="delete-text-content">
+    //     <img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认删除！</span></div>
+    //     `;
+    //   this.$confirm(deleteDom, '删除提示', {
+    //     dangerouslyUseHTMLString: true,
+    //     confirmButtonText: '确定',
+    //     cancelButtonText: '取消',
+    //     customClass: 'message-box-customize',
+    //     showClose: true,
+    //   }).then(() => {
+    //     // const params = {
+    //     //   clientIdList: this.chooseUserList.map(user => user.id),
+    //     // };
+    //     const arrs = this.chooseUserList[0];
+    //     console.log(arrs, '删除数据');
+    //     this.$api.physicalProjectListInterface.deleteOrganItem(arrs.id).then(({ data }) => {
+    //       if (data.code === 200) {
+    //         this.$message.success('操作成功');
+    //         // this.search();
+    //         this.chooseUserList = [];
+    //         // this.$refs.multipleTable.clearSelection();
+    //       }
+    //     });
+    //   });
+    // },
+    // reset() {
+    //   Object.assign(this.$data, this.$options.data());
+    //   this.getUserList();
+    //   this.getGridList(); // 获取人员列类别
+    // },
+    // onChangePage(current = 1) {
+    //   this.params.pageNo = current;
+    //   this.getUserList();
+    // },
+    // search() {
+    //   const hasOnlyStartTime = this.formData.startTime
+    //           && (!this.formData.startTime || !this.formData.endTime);
+    //   const hasOnlyEndTime = this.formData.endTime
+    //           && (!this.formData.startTime || !this.formData.endTime);
+    //   if (hasOnlyStartTime || hasOnlyEndTime) {
+    //     this.$message.error('查询必须包括开始时间和结束时间');
+    //     return;
+    //   }
+    //   if (this.formData.startTime > this.formData.endTime) {
+    //     this.$message.error('查询的开始时间不可大于结束时间');
+    //     return;
+    //   }
+    //   if (this.formData.startTime && this.formData.endTime) {
+    //     this.formData.startTime = dayjs(this.formData.startTime).format('YYYY-MM-DD');
+    //     this.formData.endTime = dayjs(this.formData.endTime).format('YYYY-MM-DD');
+    //   }
+    //   this.params.pageNo = 1;
+    //   this.getUserList();
+    // },
+    // handleSelectionChange(rows) {
+    //   this.chooseUserList = rows;
+    // },
+    // assign({ row = {} }) {
+    //   if (row.id) {
+    //     this.chooseUserList = [row];
+    //   }
+    //   if (this.chooseUserList.length) {
+    //     this.clientId = this.chooseUserList[0].id;
+    //     this.dialogTableVisible = true;
+    //   } else {
+    //     this.$message.warning('请选择客户');
+    //   }
+    // },
+    // submitAssign(userList) {
+    //   if (!userList.length) {
+    //     this.$message.warning('请选择医生');
+    //     return;
+    //   }
+    //   this.dialogTableVisible = false;
+    //   const userIdList = userList.filter(t => t.selectType === 1).map(t => t.id);
+    //   const workIdList = userList.filter(t => t.selectType === 2).map(t => t.id);
 
-      this.submit({
-        clientIdList: this.chooseUserList.map(val => val.id),
-        userIdList,
-        workIdList,
-        type: 2, // 2-分配
-      });
-    },
-    claim({ row = {} }) {
-      if (!row.id) {
-        if (!this.chooseUserList.length) {
-          this.$message.warning('请选择客户');
-          return;
-        }
-      } else {
-        this.chooseUserList = [row];
-      }
-      this.$confirm(
-        `<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>您确定要删除该病人吗？</span></div>`,
-        '提示',
-        {
-          dangerouslyUseHTMLString: true,
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          customClass: 'message-box-customize',
-          showClose: true,
-        },
-      ).then(() => {
-        const params = {
-          clientIdList: this.chooseUserList.map(user => user.id),
-        };
-        this.$api.userManagerInterface.deleteClientInfo(params).then(({ data }) => {
-          if (data.code === 200) {
-            this.$message.success('操作成功');
-            this.getUserList();
-            this.chooseUserList = [];
-            this.$refs.multipleTable.clearSelection();
-          }
-        });
-        // this.submit({
-        //   clientIdList: this.chooseUserList.map(val => val.id),
-        //   userIdList: [this.$store.state.user.userId],
-        //   type: 1,
-        // });
-      });
-    },
-    submit(params) {
-      this.$api.userManagerInterface.claim(params).then(({ data }) => {
-        if (data.code === 200) {
-          this.$message.success('操作成功');
-          this.search();
-          this.chooseUserList = [];
-          this.$refs.multipleTable.clearSelection();
-        }
-      });
-    },
+    //   this.submit({
+    //     clientIdList: this.chooseUserList.map(val => val.id),
+    //     userIdList,
+    //     workIdList,
+    //     type: 2, // 2-分配
+    //   });
+    // },
+    // claim({ row = {} }) {
+    //   if (!row.id) {
+    //     if (!this.chooseUserList.length) {
+    //       this.$message.warning('请选择客户');
+    //       return;
+    //     }
+    //   } else {
+    //     this.chooseUserList = [row];
+    //   }
+    //   this.$confirm(
+    //     '提示',
+    //     {
+    //       dangerouslyUseHTMLString: true,
+    //       confirmButtonText: '确定',
+    //       cancelButtonText: '取消',
+    //       customClass: 'message-box-customize',
+    //       showClose: true,
+    //     },
+    //   ).then(() => {
+    //     const params = {
+    //       clientIdList: this.chooseUserList.map(user => user.id),
+    //     };
+    //     this.$api.userManagerInterface.deleteClientInfo(params).then(({ data }) => {
+    //       if (data.code === 200) {
+    //         this.$message.success('操作成功');
+    //         this.getUserList();
+    //         this.chooseUserList = [];
+    //         this.$refs.multipleTable.clearSelection();
+    //       }
+    //     });
+    //     // this.submit({
+    //     //   clientIdList: this.chooseUserList.map(val => val.id),
+    //     //   userIdList: [this.$store.state.user.userId],
+    //     //   type: 1,
+    //     // });
+    //   });
+    // },
+    // submit(params) {
+    //   this.$api.userManagerInterface.claim(params).then(({ data }) => {
+    //     if (data.code === 200) {
+    //       this.$message.success('操作成功');
+    //       this.search();
+    //       this.chooseUserList = [];
+    //       this.$refs.multipleTable.clearSelection();
+    //     }
+    //   });
+    // },
 
     changeStatus({ row = {} }, status) {
       const setRow = row;
@@ -441,22 +460,16 @@ export default {
       //     });
       // });
     },
-    getUserList() {
-      this.$api.userManagerInterface
-        .fetchUserList(Object.assign(this.params, this.formData))
-        .then(({ data }) => {
-          if (data.success) {
-            this.total = data.data.total;
-            this.dataSource = data.data.data;
-          }
-        });
-    },
-  },
-  mounted() {
-    // this.getList();
-    // this.getUserList();
-    // this.getGridList(); // 获取人员列类别
-    // this.getDoctor(); // 获取医生列表
+    // getUserList() {
+    //   this.$api.userManagerInterface
+    //     .fetchUserList(Object.assign(this.params, this.formData))
+    //     .then(({ data }) => {
+    //       if (data.success) {
+    //         this.total = data.data.total;
+    //         this.dataSource = data.data.data;
+    //       }
+    //     });
+    // },
   },
 };
 </script>
