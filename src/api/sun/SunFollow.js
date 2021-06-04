@@ -33,6 +33,10 @@ class SunFollow extends BaseModule {
   updateReportLv(data = {}) {
     return this.post('/positive_tracking/update_report_lv', data);
   }
+  // 首次跟踪列表 - 客户既往史和家族疾病史
+  getClientFamilyDisease(data = {}) {
+    return this.get(`/client_info/get_client_past_his_and_family_disease/${data.clientId}`);
+  }
   // 首次跟踪列表 - 客户体检信息比较
   getClientReportCompareList(data = {}) {
     return this.post('/positive_tracking/get_client_report_compare_list', data);

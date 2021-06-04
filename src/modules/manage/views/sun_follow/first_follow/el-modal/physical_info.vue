@@ -5,20 +5,17 @@
         <div class="titleBiao"></div></div>
     </div>
     <div class="medical_his">
-      <p>高血压</p>
-      <p>糖尿病</p>
+      <p v-for="(item, index) in pastHistory" :key="index">{{item}}</p>
     </div>
     <div class="divRightTitleDiv">
-      <div class="divRightTitle">家族史
+      <div class="divRightTitle" style="margin-top: 5px">家族史
         <div class="titleBiao"></div></div>
     </div>
     <div class="medical_his">
-      <p>高血压</p>
-      <p>糖尿病</p>
-      <p>脂肪肝</p>
+      <p v-for="(item, index) in familyDisease" :key="index">{{item}}</p>
     </div>
     <div class="divRightTitleDiv">
-      <div class="divRightTitle">体检报告
+      <div class="divRightTitle" style="margin-top: 5px">体检报告
         <div class="titleBiao"></div></div>
     </div>
   <div class="user-follow">
@@ -118,7 +115,8 @@ export default {
       reportTimeList: [],
       abnormalModalVisible: false, // 异常列表弹窗
       selectAbnormal: [],
-      gridList: [], // 人员类别下拉框
+      pastHistory: [], // 既往史
+      familyDisease: [], // 既往史
       loading: false,
       table: {
         list: [],
@@ -146,7 +144,7 @@ export default {
     },
     onLoad() {
       this.getReportList();
-      this.getGridList(); // 获取人员列类别
+      this.getFamilyHistory(); // 获取家族史既往史
     },
     // 关闭异常列表
     handleAbnormalSelectChange(dataList) {
@@ -197,10 +195,12 @@ export default {
     * 获取人员类别
     * @return {Promise<void>}
     */
-    async getGridList() {
-      const res = await this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
+    async getFamilyHistory() {
+      const res = await this.$api.sunFollow.getClientFamilyDisease({
+        clientId: this.$route.params.clientId });
       const { data } = res.data;
-      this.gridList = data.data;
+      this.pastHistory = data.pastHistory;
+      this.familyDisease = data.familyDisease;
     },
     /**
      * 搜索
@@ -244,6 +244,7 @@ export default {
       background: #EEF1F5;
       border-radius: 50px;
       margin-right: 15px;
+      margin-bottom: 15px;
     }
   }
 .user-follow {

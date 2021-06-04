@@ -13,7 +13,7 @@ const build = {
 };
 const build_dev = {
     static_url: '/', // 静态资源路径
-    common_url: 'http://health.pre.touchealth.com/api', // /api
+    common_url: 'http://health.pre.touchealth.com/api', // /apil
     upload_url: 'http://health.pre.touchealth.com/', //'/uploadFiles/'
 };
 const dev = {
