@@ -9,17 +9,17 @@
 const build = {
     static_url: '/', // 静态资源路径
     common_url: '/api',
-    upload_url: 'http://182.61.43.226:9002/', //'/uploadFiles/'
+    upload_url: 'http://health.pre.touchealth.com/', //'/uploadFiles/'
 };
 const build_dev = {
     static_url: '/', // 静态资源路径
-    common_url: 'http://health.pre.touchealth.com/api', // /api
+    common_url: 'http://health.pre.touchealth.com/api', // /apil
     upload_url: 'http://health.pre.touchealth.com/', //'/uploadFiles/'
 };
 const dev = {
     static_url: '/', // 静态资源路径
     common_url: '/api',
-    upload_url: 'http://182.61.43.226:9002/', //'/uploadFiles/'
+    upload_url: 'http://health.pre.touchealth.com/', //'/uploadFiles/'
 };
 
 module.exports = { build, build_dev, dev };

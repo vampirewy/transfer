@@ -29,20 +29,20 @@
         <div>
           <span>上报时间：</span>
           <el-date-picker
-                  v-model="form.startTime"
+                  v-model="form.startReportDate"
                   type="date"
                   value-format="yyyy-MM-dd"
-                  :max-date="form.endTime"
+                  :max-date="form.endReportDate"
                   placeholder="开始时间"
                   style="width: 120px"
           >
           </el-date-picker>
           <span class="timing">-</span>
           <el-date-picker
-                  v-model="form.endTime"
+                  v-model="form.endReportDate"
                   type="date"
                   value-format="yyyy-MM-dd"
-                  :min-date="form.startTime"
+                  :min-date="form.startReportDate"
                   placeholder="结束时间"
                   style="width: 120px"
           >
@@ -81,20 +81,20 @@
       <div>
         <span>跟踪时间：</span>
         <el-date-picker
-                v-model="form.startReportDate"
+                v-model="form.startTrackingDate"
                 type="date"
                 value-format="yyyy-MM-dd"
-                :max-date="form.endReportDate"
+                :max-date="form.endTrackingDate"
                 placeholder="开始时间"
                 style="width: 120px"
         >
         </el-date-picker>
         <span class="timing">-</span>
         <el-date-picker
-                v-model="form.endReportDate"
+                v-model="form.endTrackingDate"
                 type="date"
                 value-format="yyyy-MM-dd"
-                :min-date="form.startReportDate"
+                :min-date="form.startTrackingDate"
                 placeholder="结束时间"
                 style="width: 120px"
         >
@@ -106,8 +106,8 @@
     <div class="divRightTitleDiv">
       <!-- <div class="divRightTitle"><span>|</span>客户池</div> -->
       <div style="text-align: right;margin: 16px 0">
-        <el-radio-group v-model="warnType">
-          <el-radio :label="0">全部</el-radio>
+        <el-radio-group v-model="form.reportLv" @change="onSearch">
+          <el-radio :label="''">全部</el-radio>
           <el-radio :label="1">红色预警</el-radio>
           <el-radio :label="2">橙色预警</el-radio>
         </el-radio-group>
@@ -138,58 +138,60 @@
               @expand-change="handleExpandChange">
       <el-table-column type="expand" width="1" class-name="hide-expand-column">
         <el-table :data="expandData.list" class="expand-table" align="center">
-          <el-table-column label="项目名称" prop="name" min-width="100px" show-overflow-tooltip>
+          <el-table-column label="项目名称" prop="itemName" min-width="90px" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{ scope.row.name | getResult}}</span>
+              <span>{{ scope.row.itemName | getResult}}</span>
             </template>
           </el-table-column>
           <el-table-column
             label="结果"
             prop="result"
-            min-width="100px">
+            min-width="80px">
             <template slot-scope="scope">
-              <span class="warnRed">
-                {{ scope.row.result | getResult }}
+              <span :class="scope.row.reportLv === 1 ? 'warnRed' : 'warnYellow'">
+                {{ scope.row.itemValue | getResult }}
               </span>
             </template>
           </el-table-column>
-          <el-table-column label="上报科室" prop="subjectName" show-overflow-tooltip>
+          <el-table-column label="上报科室" prop="reportDepartment" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{ scope.row.subjectName | getResult}}</span>
+              <span>{{ scope.row.reportDepartment | getResult}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="上报医生" prop="doctor" show-overflow-tooltip>
+          <el-table-column label="上报医生" prop="reportUserName" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{ scope.row.doctor | getResult}}</span>
+              <span>{{ scope.row.reportUserName | getResult}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="上报时间" prop="createdTime" min-width="90px" show-overflow-tooltip>
+          <el-table-column label="上报时间" prop="reportDate" min-width="90px" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{ scope.row.createdTime | getResult}}</span>
+              <span>{{ scope.row.reportDate | getResult}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="最新跟踪" prop="createdNewTime"
+          <el-table-column label="最新跟踪" prop="nearestTrackingDate"
                            min-width="90px" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{ scope.row.createdNewTime | getResult}}</span>
+              <span>{{ scope.row.nearestTrackingDate | getResult}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="下次跟踪" prop="nextFollowTime"
+          <el-table-column label="下次跟踪" prop="nextTrackingDate"
                            min-width="90px" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{ scope.row.nextFollowTime | getResult}}</span>
+              <span>{{ scope.row.nextTrackingDate | getResult}}</span>
             </template>
           </el-table-column>
           <el-table-column
             label="操作"
             prop="planContent"
-            min-width="100">
+            min-width="80">
             <template slot-scope="scope">
-              <el-button v-if="excuteType === 2"
+              <el-button v-if="excuteType === 1"
+                      @click="handleTask(scope.row)"
                       type="text"
                       size="small"
               >跟踪</el-button>
               <el-button v-else
+                      @click="handleView(scope.row)"
                       type="text"
                       size="small"
               >查看</el-button>
@@ -225,7 +227,7 @@
         <template slot-scope="scope">
              <span class="clientName"
                    @click="commonHref.toPersonalHealth(scope.row.id, $router)">
-               {{ scope.row.name | getResult}}
+               {{ scope.row.clientName | getResult}}
              </span>
         </template>
       </el-table-column>
@@ -239,38 +241,38 @@
           <span>{{ scope.row.age | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="unExecutePlanTotal" label="待跟踪项目" show-overflow-tooltip>
+      <el-table-column prop="isTrackingNum" label="待跟踪项目" show-overflow-tooltip>
         <template slot-scope="scope">
           <el-button type="text"
-                     @click="expandsHandle(scope.row, 2)" style="color: #F33D21;font-size: 14px">
-            {{scope.row.unExecutePlanTotal | getResult}}</el-button>
+                     @click="expandsHandle(scope.row, 1)" style="color: #F33D21;font-size: 14px">
+            {{scope.row.isTrackingNum | getResult}}</el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="createdTime" label="最早上报" show-overflow-tooltip>
+      <el-table-column prop="earliestReportDate" label="最早上报" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.createdTime | getResult}}</span>
+          <span>{{ scope.row.earliestReportDate | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="createdNewTime" label="最新上报" show-overflow-tooltip>
+      <el-table-column prop="nearestReportDate" label="最新上报" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.createdNewTime | getResult}}</span>
+          <span>{{ scope.row.nearestReportDate | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="createdFollowTime" label="最近跟踪" show-overflow-tooltip>
+      <el-table-column prop="nearestTrackingDate" label="最近跟踪" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.createdFollowTime | getResult}}</span>
+          <span>{{ scope.row.nearestTrackingDate | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="nextFollowTime" label="下次跟踪" show-overflow-tooltip>
+      <el-table-column prop="nextTrackingDate" label="下次跟踪" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.nextFollowTime | getResult}}</span>
+          <span>{{ scope.row.nextTrackingDate | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="executePlanTotal" label="跟踪记录" show-overflow-tooltip>
+      <el-table-column prop="trackingRecordNum" label="跟踪记录" show-overflow-tooltip>
         <template slot-scope="scope">
           <el-button type="text"
-                     @click="expandsHandle(scope.row, 1)" style="color: #36BF2F;font-size: 14px">
-            {{scope.row.executePlanTotal | getResult}}</el-button>
+                     @click="expandsHandle(scope.row, 2)" style="color: #36BF2F;font-size: 14px">
+            {{scope.row.trackingRecordNum | getResult}}</el-button>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="80">
@@ -278,7 +280,7 @@
           <el-button
                   type="text"
                   size="small"
-                  @click="handleView(scope.row)"
+                  @click="handleTask(scope.row)"
           >跟踪</el-button>
         </template>
       </el-table-column>
@@ -301,48 +303,20 @@
 </template>
 
 <script>
-import { genderList, executeStateList } from '~/src/constant/health_plan';
-import QueryPage from '~/src/components/query_page/index.vue';
-import Search from '~/src/components/query_page/search.vue';
-import QueryFilter from '~/src/components/query_page/query_filter.vue';
-import OperateButton from '~/src/components/query_page/operate_button.vue';
-import ManagerList from '@/components/user_health/manager_list.vue';
-
 export default {
   name: 'follow_task',
-  components: {
-    QueryPage,
-    Search,
-    QueryFilter,
-    OperateButton,
-    ManagerList,
-  },
   data() {
     return {
       isTrue: true,
-      warnType: 0,
       form: {
         keywords: '', // 关键字
         gender: '', // 性别
+        startReportDate: '',
+        endReportDate: '',
         gridId: '', // 人员类别
-        hasIntervenePlan: '', // 剩余计划
-        hasReport: '', // 体检报告
-        tag: '', // 客户标签
-        startReportDate: '', // 体检日期
-        endReportDate: '', // 体检日期
-        startCollectionDate: '', // 采集日期
-        endCollectionDate: '', // 采集日期
-        workUnitName: '', // 企业单位
-        planUserId: '',
-        planUserName: '',
-        planWay: '', // 随访方式
-        executeState: '', // 状态
-        selectTime: [], // 选择时间
-        planWayList: [],
-        genderList,
-        executeStateList,
-        startTime: '',
-        endTime: '',
+        startTrackingDate: '',
+        endTrackingDate: '',
+        reportLv: '',
       },
       abnormalModalVisible: false, // 异常列表弹窗
       selectPlanuser: [],
@@ -350,7 +324,7 @@ export default {
       selectAbnormal: [],
       gridList: [], // 人员类别下拉框
       expands: [],
-      getRowKeys: row => row.id,
+      getRowKeys: row => row.clientId,
       expandData: {
         clientId: '',
         pageNo: 1,
@@ -382,9 +356,7 @@ export default {
         pageNo: 1,
         pageSize: 1,
       },
-      multipleSelectionAll: [], // 所有选中的数据包含跨页数据
       multipleSelection: [], // 当前页选中的数据
-      idKey: 'clientId', // 标识列表数据中每一行的唯一键的名称(需要按自己的数据改一下)
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -394,79 +366,12 @@ export default {
   },
   methods: {
     // 设置选中的方法
-    setSelectRow() {
-      if (!this.multipleSelectionAll || this.multipleSelectionAll.length <= 0) {
-        return;
-      }
-      // 标识当前行的唯一键的名称
-      const idKey = this.idKey;
-      const selectAllIds = [];
-      this.multipleSelectionAll.forEach((row) => {
-        selectAllIds.push(row[idKey]);
-      });
-      this.$refs.table.clearSelection();
-      for (let i = 0; i < this.table.list.length; i++) {
-        if (selectAllIds.indexOf(this.table.list[i][idKey]) >= 0) {
-          // 设置选中，记住table组件需要使用ref="table"
-          this.$refs.table.toggleRowSelection(this.table.list[i], true);
-        }
-      }
-    },
-    // 记忆选择核心方法
-    changePageCoreRecordData() {
-      // 标识当前行的唯一键的名称
-      const idKey = this.idKey;
-      const that = this;
-      // 如果总记忆中还没有选择的数据，那么就直接取当前页选中的数据，不需要后面一系列计算
-      if (this.multipleSelectionAll.length <= 0) {
-        this.multipleSelectionAll = this.multipleSelection;
-        return;
-      }
-      // 总选择里面的key集合
-      const selectAllIds = [];
-      this.multipleSelectionAll.forEach((row) => {
-        selectAllIds.push(row[idKey]);
-      });
-      const selectIds = [];
-      // 获取当前页选中的id
-      this.multipleSelection.forEach((row) => {
-        selectIds.push(row[idKey]);
-        // 如果总选择里面不包含当前页选中的数据，那么就加入到总选择集合里
-        if (selectAllIds.indexOf(row[idKey]) < 0) {
-          that.multipleSelectionAll.push(row);
-        }
-      });
-      const noSelectIds = [];
-      // 得到当前页没有选中的id
-      this.table.list.forEach((row) => {
-        if (selectIds.indexOf(row[idKey]) < 0) {
-          noSelectIds.push(row[idKey]);
-        }
-      });
-      noSelectIds.forEach((id) => {
-        if (selectAllIds.indexOf(id) >= 0) {
-          for (let i = 0; i < that.multipleSelectionAll.length; i++) {
-            if (that.multipleSelectionAll[i][idKey] === id) {
-              // 如果总选择中有未被选中的，那么就删除这条
-              that.multipleSelectionAll.splice(i, 1);
-              break;
-            }
-          }
-        }
-      });
-    },
-    // 得到选中的所有数据
-    getAllSelectionData() {
-      // 再执行一次记忆勾选数据匹配，目的是为了在当前页操作勾选后直接获取选中数据
-      this.changePageCoreRecordData();
-    },
     handleSelectionChange(val) {
       // table组件选中事件,
       this.multipleSelection = val;
     },
     onLoad() {
       this.getList();
-      this.getPlanWayList();
       this.getGridList(); // 获取人员列类别
     },
     // 关闭异常列表
@@ -501,109 +406,17 @@ export default {
       this.isTrue = !this.isTrue;
     },
     /**
-     * 获取随访列表
+     * 获取列表
      * @return {Promise<void>}
      */
     async getList() {
-      /* console.log(this.form);
-      if (this.form.startTime) {
-        this.form.startTime = `${this.form.startTime.split(' ')[0]} 00:00:00`;
-      }
-      if (this.form.endTime) {
-        this.form.endTime = `${this.form.endTime.split(' ')[0]} 23:59:59`;
-      }
-      if (this.form.startReportDate) {
-        this.form.startReportDate = `${this.form.startReportDate.split(' ')[0]} 00:00:00`;
-      }
-      if (this.form.endReportDate) {
-        this.form.endReportDate = `${this.form.endReportDate.split(' ')[0]} 23:59:59`;
-      }
-      if (this.form.startCollectionDate) {
-        this.form.startCollectionDate = `${this.form.startCollectionDate.split(' ')[0]} 00:00:00`;
-      }
-      if (this.form.endCollectionDate) {
-        this.form.endCollectionDate = `${this.form.endCollectionDate.split(' ')[0]} 23:59:59`;
-      }
-      const reqBody = {
-        planWay: this.form.planWay,
-        executeState: this.form.executeState,
-        gender: this.form.gender,
-        gridId: this.form.gridId,
-        planUserId: this.form.planUserId,
-        reportAbnormalCodes: this.form.abnormalId,
-        hasIntervenePlan: this.form.hasIntervenePlan,
-        hasReport: this.form.hasReport,
-        /!* tag: this.form.tag,*!/
-        startReportDate: this.form.startReportDate,
-        endReportDate: this.form.endReportDate,
-        startCollectionDate: this.form.startCollectionDate,
-        endCollectionDate: this.form.endCollectionDate,
-        workUnitName: this.form.workUnitName,
-        startTime: this.form.startTime,
-        endTime: this.form.endTime,
-        keywords: this.form.keywords,
-        pageNo: this.table.pageNo,
-        pageSize: this.table.pageSize,
-      };
-      const res = await this.$api.userFollowInterface.getIntervenePlanPageList(
-        reqBody,
-      );*/
-      const res = {
-        data: {
-          data: {
-            data: [
-              { id: '1',
-                clientNo: '2021015898745',
-                name: '吴白',
-                gender: 1,
-                age: 30,
-                unExecutePlanTotal: 2,
-                createdTime: '2021-04-27 14：00',
-                createdNewTime: '2021-04-29 19：20',
-                createdFollowTime: '2021-05-06 15：10',
-                nextFollowTime: '2021-05-07',
-                executePlanTotal: 1,
-              },
-              { id: '2',
-                clientNo: '20210213987451',
-                name: '王新一',
-                gender: 1,
-                age: 20,
-                unExecutePlanTotal: 2,
-                createdTime: '2021-04-29 14：00',
-                createdNewTime: '2021-04-29 19：20',
-                createdFollowTime: '2021-05-05 12：13',
-                nextFollowTime: '2021-05-06',
-                executePlanTotal: 1,
-              },
-            ],
-            total: 2,
-          },
-        },
-      };
+      const res = await this.$api.sunFollow.getPositiveTaskdListPage(this.form);
       const { data } = res.data;
       console.log(data);
       if (data) {
         this.table.list = data.data || [];
         this.table.totalCount = data.total;
-        setTimeout(() => {
-          this.setSelectRow();
-        }, 100);
       }
-    },
-    /**
-     * 获取随访方式
-     * @return {Promise<void>}
-     */
-    async getPlanWayList() {
-      const res = await this.$api.userFollowInterface.getIntervenePlanWayList();
-      const { data } = res.data;
-      const list = data.map((it) => {
-        const { id, name } = it;
-        return { id, name };
-      });
-      list.unshift({ name: '全部', value: '' });
-      this.form.planWayList = list;
     },
     /**
      * 获取人员类别
@@ -627,7 +440,7 @@ export default {
       }
       this.expands.forEach((data) => {
         // 其他展开的行收起
-        if (data.id !== row.id) {
+        if (data.clientId !== row.clientId) {
           this.$refs.table.toggleRowExpansion(data);
         }
       });
@@ -635,19 +448,15 @@ export default {
       if (this.expands.includes(row)) {
         this.$refs.table.toggleRowExpansion(row);
       } else {
-        this.expandData.clientId = row.id;
+        this.expandData.clientId = row.clientId;
         this.expandData.pageNo = 1;
         this.excuteType = type;
-        /* this.getReoprtList(type).then(() => {
+        this.getReoprtList(type).then(() => {
           this.$refs.table.toggleRowExpansion(row);
-        });*/
-        this.getReoprtList(type);
-        setTimeout(() => {
-          this.$refs.table.toggleRowExpansion(row);
-        }, 200);
+        });
       }
     },
-    getReoprtList(type) {
+    /* getReoprtList(type) {
       this.expandData.list = [];
       this.loading = true;
       let Type = '';
@@ -689,24 +498,29 @@ export default {
       // 展开的table的渲染更新依赖外层table数据，如果外层数据没变，展开的内容不会更新渲染，所以这里更新一下dataSource
       this.table.list = [...this.table.list];
       this.$forceUpdate();
-    },
-    /* getReoprtList(type) { 真实接口
+    },*/
+    getReoprtList(type) { // 真实接口
       this.expandData.list = [];
       this.loading = true;
       let Type = '';
+      let fn = '';
       if (type) { Type = type; } else { Type = this.excuteType; }
-      return this.$api.interventionPlanInterface.getInterveneList({
+      if (Type === 1) {
+        fn = 'getWaitingTrackingItemList';
+      } else if (Type === 2) {
+        fn = 'getRecordTrackingItemList';
+      }
+      return this.$api.sunFollow[fn]({
         pageNo: this.expandData.pageNo,
         pageSize: this.expandData.pageSize,
-        clientId: 1382540131324256257, // this.expandData.clientId,
-        executeState: Type,
+        clientId: this.expandData.clientId,
       }).then(({ data }) => {
         console.log(data);
-        if (Type === 2) {
+        /* if (Type === 2) {
           this.expandData.list = data.data.data;
         } else if (Type === 1) {
           this.expandData.list = [];
-          data.data.data.forEach((value) => {
+          data.data.forEach((value) => {
             const Value = value;
             Value.planDate = Value.executeTime;
             Value.planWayName = Value.executePlanWayName;
@@ -714,7 +528,8 @@ export default {
             Value.planContent = Value.executePlanContent;
             this.expandData.list.push(Value);
           });
-        }
+        }*/
+        this.expandData.list = data.data.data;
         this.expandData.total = data.data.total;
         this.loading = false;
         // 展开的table的渲染更新依赖外层table数据，如果外层数据没变，展开的内容不会更新渲染，所以这里更新一下dataSource
@@ -723,49 +538,19 @@ export default {
       }).catch(() => {
         this.loading = false;
       });
-    },*/
-    // 获取下拉计划 / 记录数据
-    /**
-     * 新增
-     */
-    handleCreate() {
-      if (this.multipleSelection.length !== 1) {
-        this.$message({
-          message: '请选择一条记录创建',
-          type: 'warning',
-        });
-        return;
-      }
-      console.log(this.multipleSelection);
-      this.multipleSelection.forEach((val) => {
-        val.clientId = val.id;
-      });
-      // this.multipleSelection[0].clientId = '1379239122384576513';
-      this.$store.commit('intervention/SET_USERCHECK_LIST', this.multipleSelection);
-      this.$store.dispatch('intervention/setTplList', []);
-      this.$router.push({ // 1 单个
-        path: '/health_plan/user_follow_create/create/1',
+    },
+    // 跟踪
+    handleTask(row) {
+      this.$router.push({
+        path: `/first_follow_do/${row.clientId}/2`,
       });
     },
-    /**
-     * 批量新增
-     */
-    handleCreateTogether() {
-      this.getAllSelectionData(); // 获取全部勾选的数据
-      if (this.multipleSelectionAll.length < 2) {
-        this.$message({
-          message: '请选择至少两条记录进行创建',
-          type: 'warning',
-        });
-        return;
-      }
-      this.multipleSelectionAll.forEach((val) => {
-        val.clientId = val.id;
-      });
-      this.$store.commit('intervention/SET_USERCHECK_LIST', this.multipleSelectionAll);
-      this.$store.dispatch('intervention/setTplList', []);
-      this.$router.push({ // 2 批量
-        path: '/health_plan/user_follow_create/createBatch/2',
+    // 查看
+    handleView(row) {
+      localStorage.setItem('positiveTrackingDetail', JSON.stringify({
+        itemName: row.itemName, itemValue: row.itemValue, reportLv: row.reportLv }));
+      this.$router.push({
+        path: `/follow_record_detail/${row.clientId}/${row.id}`,
       });
     },
     /**
@@ -817,7 +602,6 @@ export default {
      */
     handleChange(target) {
       // 改变页的时候调用一次，改变每页显示条数的时候也要调用一次
-      this.changePageCoreRecordData();
       this.table.pageNo = target;
       this.getList();
     },
@@ -899,6 +683,12 @@ export default {
   .warnRed{
     border: 1px solid #F33D21;
     border-radius: 50px;color: #F33D21;
+    font-size: 12px;
+    padding: 2px 9px;
+  }
+  .warnYellow{
+    border: 1px solid #FA912B;
+    border-radius: 50px;color: #FA912B;
     font-size: 12px;
     padding: 2px 9px;
   }

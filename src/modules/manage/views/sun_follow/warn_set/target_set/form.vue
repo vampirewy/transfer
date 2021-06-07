@@ -14,23 +14,23 @@
       </div>
       <el-row>
         <el-col :span="6">
-          <el-form-item label="模板名称" prop="realName">
+          <el-form-item label="模板名称" prop="name">
             <el-input
               :disabled="detail"
               type="text"
               placeholder="请输入"
-              v-model="staffForm.realName"></el-input>
+              v-model="staffForm.name"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="预警分类" prop="dataRange">
+          <el-form-item label="预警分类" prop="trackingLv">
             <el-select
                     :disabled="detail"
-                    v-model="staffForm.dataRange"
+                    v-model="staffForm.trackingLv"
                     placeholder="请选择"
             >
-              <el-option label="红色预警" :value="0"></el-option>
-              <el-option label="橙色预警" :value="1"></el-option>
+              <el-option label="红色预警" :value="1"></el-option>
+              <el-option label="橙色预警" :value="2"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -38,7 +38,7 @@
           <el-form-item label="适用性别" class="form-item-sex">
               <el-select
                       :disabled="detail"
-                      v-model="staffForm.sex"
+                      v-model="staffForm.gender"
                       placeholder="请选择"
               >
               <el-option label="不限" :value="0">不限</el-option>
@@ -56,14 +56,14 @@
                     type="text"
                     style="width: 140px"
                     placeholder="请输入"
-                    v-model="staffForm.startAge"></el-input>
+                    v-model="staffForm.minAge"></el-input>
             -
             <el-input
                     :disabled="detail"
                     style="width: 140px"
                     type="text"
                     placeholder="请输入"
-                    v-model="staffForm.endAge"></el-input>
+                    v-model="staffForm.maxAge"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -72,37 +72,7 @@
           <div class="titleBiao"></div></div>
       </div>
       <el-row style="display: flex">
-        <el-col :span="5">
-          <el-form-item label="条件关系：">
-            <el-select
-                    v-model="formData.gridId"
-                    placeholder="请选择"
-            >
-              <el-option
-                      v-for="(item, index) in gridList"
-                      :label="item.name"
-                      :value="item.id"
-                      :key="index"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="5">
-        <el-form-item label="体检库：">
-          <el-select
-                  v-model="formData.gridId"
-                  placeholder="请选择"
-          >
-            <el-option
-                    v-for="(item, index) in gridList"
-                    :label="item.name"
-                    :value="item.id"
-                    :key="index"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        </el-col>
-        <el-col :span="14">
+        <el-col :span="6">
         <el-form-item label="检查项目" prop="clientName">
           <el-popover
                   ref="userPopover"
@@ -124,125 +94,75 @@
           </el-popover>
         </el-form-item>
         </el-col>
-        <div class="inspectionAdd">
-          <div @click="inspectionAdd()">添加</div>
-        </div>
+        <el-col :span="6">
+          <el-form-item label="科室名称" prop="sectionName">
+            <el-input
+                    :disabled="detail"
+                    type="text"
+                    placeholder="请输入"
+                    v-model="staffForm.sectionName"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="小项名称" prop="itemName">
+            <el-input
+                    :disabled="detail"
+                    type="text"
+                    placeholder="请输入"
+                    v-model="staffForm.itemName"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="小项条件" prop="itemCondition">
+            <el-select
+                    v-model="staffForm.itemCondition"
+                    placeholder="请选择"
+                    @change="changeItemCondition"
+            >
+              <el-option
+                      v-for="(item, index) in relationOptions"
+                      :label="item.name"
+                      :value="item.value"
+                      :key="index"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
       </el-row>
-      <div class="adddepart">
-        <el-table
-                :data="detailDatalist"
-                ref="multipleTable"
-                tooltip-effect="dark"
-                class="openTable"
-                stripe
-                style="width: 100%"
-        >
-          <el-table-column prop="name" label="科室名称">
-            <template slot-scope="scope">
-              <div>{{ scope.row.name }}</div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="contactName" label="小项名称">
-            <template slot-scope="scope">
-              <div>{{ scope.row.contactName }}</div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="contactCondition" label="小项条件">
-            <template slot-scope="scope">
-              <div v-if="scope.row.isActive == 1">
-                {{ scope.row.contactCondition }}
-              </div>
-              <el-select v-model="scope.row.contactCondition" placeholder="请选择"
-                         style="width: 100px" v-else>
-                <el-option v-for="item in relationOptions" :key="item.value" :label="item.name"
-                           :value="item.value">
-                </el-option>
-              </el-select>
-            </template>
-          </el-table-column>
-          <el-table-column prop="contactVal" label="条件的值">
-            <template slot-scope="scope">
-              <div v-if="scope.row.isActive == 1">
-                {{ scope.row.contactVal }}
-              </div>
-              <el-input
-                      class="addinput"
-                      v-else
-                      v-model="scope.row.contactVal"
-                      maxlength="30"
-                      placeholder="请输入"
-              >
-              </el-input>
-            </template>
-          </el-table-column>
-          <el-table-column prop="contactLowVal" label="低值">
-            <template slot-scope="scope">
-              <div v-if="scope.row.isActive == 1">
-                {{ scope.row.contactLowVal }}
-              </div>
-              <el-input
-                      class="addinput"
-                      v-else
-                      v-model="scope.row.contactLowVal"
-                      maxlength="30"
-                      placeholder="请输入"
-              >
-              </el-input>
-            </template>
-          </el-table-column>
-          <el-table-column prop="contactHighVal" label="高值">
-            <template slot-scope="scope">
-              <div v-if="scope.row.isActive == 1">
-                {{ scope.row.contactHighVal }}
-              </div>
-              <el-input
-                      class="addinput"
-                      v-else
-                      v-model="scope.row.contactHighVal"
-                      maxlength="30"
-                      placeholder="请输入"
-              >
-              </el-input>
-            </template>
-          </el-table-column>
-          <el-table-column
-                  prop="number"
-                  label="操作"
-                  min-width="90"
-                  align="center"
-          >
-            <template slot-scope="scope">
-              <el-button type="text" size="small">
-                <img
-                        v-if="scope.row.isActive == 1"
-                        @click="btnlooker(scope.$index, scope.row)"
-                        style="width: 30px; height: 30px"
-                        src="@/assets/images/service/compile.png"
-                        alt=""
-                />
-                <img
-                        v-else
-                        @click="baocun(scope.$index, scope.row)"
-                        style="width: 30px; height: 30px"
-                        src="@/assets/images/service/allergic.png"
-                        alt=""
-                />
-              </el-button>
-              <el-button
-                      type="text"
-                      size="small"
-                      @click="removekeys(scope.$index, scope.row)"
-              >
-                <img
-                        style="width: 30px; height: 30px"
-                        src="@/assets/images/service/deletes.png"
-                        alt=""
-                />
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
+      <el-row>
+        <el-col :span="6">
+          <el-form-item label="条件的值" :prop="staffForm.itemCondition !== 6 ? 'itemValue' : ''"
+                        ref="itemValue">
+            <el-input
+                    :disabled="staffForm.itemCondition === 6"
+                    type="text"
+                    :placeholder="staffForm.itemCondition !== 6 ? '请输入' : ''"
+                    v-model="staffForm.itemValue"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="低值" :prop="staffForm.itemCondition === 6
+          || staffForm.itemCondition === '' ? 'minItemValue' : ''" ref="minItemValue">
+            <el-input
+                    :disabled="staffForm.itemCondition !== 6 && staffForm.itemCondition !== ''"
+                    type="text"
+                    :placeholder="staffForm.itemCondition === 6
+                    || staffForm.itemCondition === '' ? '请输入' : ''"
+                    v-model="staffForm.minItemValue"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="高值" :prop="staffForm.itemCondition === 6
+          || staffForm.itemCondition === '' ? 'maxItemValue' : ''" ref="maxItemValue">
+            <el-input
+                    :disabled="staffForm.itemCondition !== 6 && staffForm.itemCondition !== ''"
+                    type="text"
+                    :placeholder="staffForm.itemCondition === 6
+                    || staffForm.itemCondition === '' ? '请输入' : ''"
+                    v-model="staffForm.maxItemValue"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
       <div class="form-buttons">
         <el-button size="small" class="cancelBtn" @click="$emit('cancel')">{{
           detail ? '返回' : '取消'
@@ -279,156 +199,89 @@ export default {
   },
   data() {
     return {
-      gridList: [],
-      formData: {
-        gridId: '',
-      },
-      selectPlanuser: [],
       planUserName: '',
       planuserModalVisible: false, // 干预人人列表弹窗
-      detailDatalist: [],
-      relationOptions: [{ value: 0, name: '<' }, { value: 1, name: '≤' }, { value: 2, name: '>' },
-        { value: 3, name: '≥' }, { value: 4, name: '区间' }],
+      relationOptions: [{ value: 1, name: '>' }, { value: 2, name: '=' }, { value: 3, name: '<' },
+        { value: 4, name: '≥' }, { value: 5, name: '≤' }, { value: 6, name: '区间' }],
       staffForm: {
         id: this.id,
-        mobileNo: '',
-        realName: '',
-        sex: '',
+        templateType: 1,
+        name: '',
         roleId: '',
-        dataRange: '',
-        // menuIds: [],
+        trackingLv: '',
+        gender: '',
+        minAge: '',
+        maxAge: '',
+        sectionName: '',
+        itemName: '',
+        itemCondition: '',
+        itemValue: '',
+        minItemValue: '',
+        maxItemValue: '',
       },
       staffRules: {
-        realName: [{ required: true, message: '模板名称不能为空' }],
-        dataRange: [{ required: true, message: '请选择预警分类' }],
+        name: [{ required: true, message: '请输入模板名称' }],
+        trackingLv: [{ required: true, message: '请选择预警分类' }],
+        sectionName: [{ required: true, message: '请输入科室名称' }],
+        itemName: [{ required: true, message: '请输入小项名称' }],
+        itemCondition: [{ required: true, message: '请选择小项条件' }],
+        itemValue: [{ required: true, message: '请输入条件的值' }],
+        minItemValue: [{ required: true, message: '请输入低值' }],
+        maxItemValue: [{ required: true, message: '请输入高值' }],
       },
-      roleMenuIds: [],
-      roleMenuIdsMap: {},
-      newRoleOptions: [...this.roleOptions],
     };
   },
   mounted() {
-    this.queryList();
-    /* if (this.id) {
-      // 用户详情
-      this.$api.systemManageInterface.userDetail(this.id).then(async (res) => {
+    if (this.id) {
+      this.$api.sunFollow.getWarnTemplateDetail({ id: this.id }).then(async (res) => {
         const { data } = res;
-        this.staffForm = Object.assign(this.staffForm, data.data || {});
-        // type为0: 超级管理员，下拉选项添加超级管理员选项
-        if (this.staffForm.type) {
-          this.queryRoleDetail(this.staffForm.roleId);
-        } else {
-          this.newRoleOptions.push({
-            id: this.staffForm.roleId,
-            name: this.staffForm.roleName,
-          });
-        }
+        this.staffForm.name = data.data.name;
+        this.staffForm.trackingLv = data.data.trackingLv;
+        this.staffForm.gender = data.data.gender;
+        this.staffForm.minAge = data.data.minAge;
+        this.staffForm.maxAge = data.data.maxAge;
+        this.staffForm.sectionName = data.data.sectionName;
+        this.planUserName = data.data.itemName;
+        this.staffForm.itemName = data.data.itemName;
+        this.staffForm.itemCondition = data.data.itemCondition;
+        this.staffForm.itemValue = data.data.itemValue;
+        this.staffForm.minItemValue = data.data.minItemValue;
+        this.staffForm.maxItemValue = data.data.maxItemValue;
       });
-    } else if (this.roleOptions.length > 0) {
-      this.staffForm.roleId = this.roleOptions[0].id;
-      this.queryRoleDetail(this.staffForm.roleId);
-    }*/
+    }
   },
   methods: {
-    handleMobileChange() {
-      this.staffForm.mobileNo = this.staffForm.mobileNo.replace(/[^0-9]/g, '');
-    },
-    async queryList() {
-      const res = await this.$api.physicalProjectListInterface.listOrganItemLibrary();
-      //   const res = await this.$api.PhysicalProjectListInterface.listOrganItemLibrary({
-      //     keywords: this.keyword,
-      //     pageNo: this.currentPage,
-      //     pageSize: this.pageSize,
-      //   });
-      console.log(res.data);
-      const { data } = res.data;
-      if (data) {
-        this.gridList = data || [];
-      }
-    },
-    async queryRoleDetail(id) {
-      // 角色详情
-      await this.$api.systemManageInterface.roleDetail(id).then((res) => {
-        const { data } = res;
-        const role = data.data || {};
-        this.roleMenuIds = role.menuIds;
-        this.roleMenuIdsMap[id] = this.roleMenuIds;
-      });
-    },
-    // 关闭干预人列表
+    // 关闭小项列表
     handlePlanuserSelectChange(dataList) {
       this.$refs.userPopover.doClose();
       this.planuserModalVisible = false;
-      const list = [];
-      dataList.forEach((value) => {
-        list.push(value.itemName);
-        this.selectPlanuser.push(value);
-      });
-      console.log(dataList);
-      this.planUserName = list.join(',');
+      this.planUserName = dataList.itemName;
+      this.staffForm.sectionName = dataList.sectionName;
+      this.staffForm.itemName = dataList.itemName;
     },
     handlePlanuserClose() {
       this.planuserModalVisible = false;
       this.$refs.userPopover.doClose();
     },
-    inspectionAdd() {
-      console.log(this.selectPlanuser);
-      if (this.selectPlanuser.length === 0) {
-        this.$message({
-          message: '请选择检查项目',
-          type: 'warning',
-        });
-        return;
-      }
-      this.selectPlanuser.forEach((val) => {
-        const arr = {
-          name: val.sectionName,
-          contactName: val.itemName,
-          contactCondition: '',
-          contactVal: '',
-          contactLowVal: '',
-          contactHighVal: '',
-          isActive: 2,
-        };
-        this.detailDatalist.push(arr);
-      });
-      this.selectPlanuser = [];
-      this.planUserName = '';
-    },
-    btnlooker(index, data) {
-      data.isActive = 2;
-      this.$set(this.detailDatalist, index, data);
-    },
-    removekeys(index, data) {
-      console.log(data);
-      /* if (data.hospitalDepartmentId) {
-        this.deletedHospitalDepartmentIds.push(data.hospitalDepartmentId); // push进要删除的科室的数组
-      }*/
-      this.detailDatalist.splice(index, 1);
-    },
-    baocun(index, data) {
-      if (data.contactCondition && data.contactVal && data.contactLowVal && data.contactHighVal) {
-        data.isActive = 1;
-        this.$set(this.detailDatalist, index, data);
+    changeItemCondition(val) {
+      console.log(val);
+      if (val === 6) {
+        this.staffForm.itemValue = '';
+        this.$refs.itemValue.clearValidate();
+      } else {
+        this.staffForm.minItemValue = '';
+        this.staffForm.maxItemValue = '';
+        this.$refs.minItemValue.clearValidate();
+        this.$refs.maxItemValue.clearValidate();
       }
     },
     submit() {
       this.$refs.staffForm.validate((valid) => {
         if (valid) {
-          /* const fn = this.staffForm.id ? 'editUser' : 'addUser';
-          this.$api.systemManageInterface[fn](this.staffForm).then(() => {
+          this.$api.sunFollow.saveWarnTemplate(this.staffForm).then(() => {
             this.$message.success('操作成功');
             this.$emit('afterSubmit');
           });
-        }*/
-          if (this.detailDatalist.length === 0) {
-            return this.$message({
-              message: '请选择检查项目',
-              type: 'warning',
-            });
-          }
-          this.$message.success('操作成功');
-          this.$emit('afterSubmit');
         }
       });
     },
@@ -455,18 +308,8 @@ export default {
     }
     .el-input__suffix{
       width: 25px;
+      right: 5px;
     }
-  }
-  .inspectionAdd{
-    width: 90px;
-    height: 40px;
-    background: #36BF2F;
-    border-radius: 5px;
-    margin-left: 20px;
-    text-align: center;
-    line-height: 40px;
-    color: #ffffff;
-    font-size: 14px;
   }
   .form-buttons {
     text-align: center;
@@ -481,27 +324,5 @@ export default {
       display: none;
     }
   }
-  /deep/ .el-button--small{
-    padding: 0 !important;
-  }
-  /*/deep/ .el-radio__input.is-disabled {
-    cursor: auto;
-    .el-radio__inner {
-      cursor: auto;
-    }
-    + span.el-radio__label {
-      color: #333;
-      cursor: auto;
-    }
-    &.is-checked .el-radio__inner {
-      background-color: #fff;
-      border-color: #4991fd;
-      cursor: auto;
-      &::after {
-        cursor: auto;
-        background: #4991fd;
-      }
-    }
-  }*/
 }
 </style>

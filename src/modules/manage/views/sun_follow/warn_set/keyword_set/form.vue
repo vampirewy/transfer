@@ -14,52 +14,41 @@
       </div>
       <el-row>
         <el-col :span="6">
-          <el-form-item label="模板名称" prop="realName">
+          <el-form-item label="模板名称" prop="name">
             <el-input
               :disabled="detail"
               type="text"
               placeholder="请输入"
-              v-model="staffForm.realName"></el-input>
+              v-model="staffForm.name"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="科室" class="form-item-sex" prop="subject">
-            <el-select
+          <el-form-item label="科室" class="form-item-sex" prop="sectionName">
+            <el-input
                     :disabled="detail"
-                    v-model="staffForm.subject"
-                    placeholder="请选择"
-            >
-              <el-option label="外科" :value="0"></el-option>
-              <el-option label="内科" :value="1"></el-option>
-              <el-option label="五官" :value="0"></el-option>
-              <el-option label="检验科" :value="0"></el-option>
-              <el-option label="心血管科" :value="0"></el-option>
-            </el-select>
+                    type="text"
+                    placeholder="请输入"
+                    v-model="staffForm.sectionName"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="项目" class="form-item-sex"  prop="project">
-            <el-select
+          <el-form-item label="项目" class="form-item-sex"  prop="itemName">
+            <el-input
                     :disabled="detail"
-                    v-model="staffForm.project"
-                    placeholder="请选择"
-            >
-              <el-option label="胸部CT" :value="0"></el-option>
-              <el-option label="腹部CT" :value="1"></el-option>
-              <el-option label="B超" :value="0"></el-option>
-              <el-option label="脑部CT" :value="0"></el-option>
-            </el-select>
+                    type="text"
+                    placeholder="请输入"
+                    v-model="staffForm.itemName"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="预警分类" prop="dataRange">
+          <el-form-item label="预警分类" prop="trackingLv">
             <el-select
                     :disabled="detail"
-                    v-model="staffForm.dataRange"
+                    v-model="staffForm.trackingLv"
                     placeholder="请选择"
             >
-              <el-option label="红色预警" :value="0"></el-option>
-              <el-option label="橙色预警" :value="1"></el-option>
+              <el-option label="红色预警" :value="1"></el-option>
+              <el-option label="橙色预警" :value="2"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -69,7 +58,7 @@
           <el-form-item label="适用性别" class="form-item-sex">
             <el-select
                     :disabled="detail"
-                    v-model="staffForm.sex"
+                    v-model="staffForm.gender"
                     placeholder="请选择"
             >
               <el-option label="不限" :value="0">不限</el-option>
@@ -85,14 +74,14 @@
                     type="text"
                     style="width: 140px"
                     placeholder="请输入"
-                    v-model="staffForm.startAge"></el-input>
+                    v-model="staffForm.minAge"></el-input>
             -
             <el-input
                     :disabled="detail"
                     style="width: 140px"
                     type="text"
                     placeholder="请输入"
-                    v-model="staffForm.endAge"></el-input>
+                    v-model="staffForm.maxAge"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -103,21 +92,24 @@
       <el-row>
         <el-col :span="24">
           <el-form-item label="包含以下全部关键字" label-width="170px">
-            <el-input v-model="staffForm.haveAllText" placeholder="多个关键字用“；”隔开"></el-input>
+            <el-input v-model="staffForm.warnTemplateItemKeywordsSaveRequests[0].keyword"
+                      placeholder="多个关键字用“；”隔开"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="24">
           <el-form-item label="包含以下任意关键字" label-width="170px">
-            <el-input v-model="staffForm.haveSomeText" placeholder="多个关键字用“；”隔开"></el-input>
+            <el-input v-model="staffForm.warnTemplateItemKeywordsSaveRequests[1].keyword"
+                      placeholder="多个关键字用“；”隔开"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="24">
           <el-form-item label="不包含以下全部关键字" label-width="170px">
-            <el-input v-model="staffForm.notHaveAllText" placeholder="多个关键字用“；”隔开"></el-input>
+            <el-input v-model="staffForm.warnTemplateItemKeywordsSaveRequests[2].keyword"
+                      placeholder="多个关键字用“；”隔开"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -154,92 +146,57 @@ export default {
   data() {
     return {
       gridList: [],
-      formData: {
-        gridId: '',
-      },
       relationOptions: [{ value: 0, name: '<' }, { value: 1, name: '≤' }, { value: 2, name: '>' },
         { value: 3, name: '≥' }, { value: 4, name: '区间' }],
       staffForm: {
         id: this.id,
-        mobileNo: '',
-        realName: '',
-        subject: '',
-        project: '',
-        sex: '',
-        roleId: '',
-        dataRange: '',
-        // menuIds: [],
+        templateType: 2,
+        name: '',
+        sectionName: '',
+        itemName: '',
+        trackingLv: '',
+        gender: '',
+        minAge: '',
+        maxAge: '',
+        warnTemplateItemKeywordsSaveRequests: [
+          { keyword: '', keywordType: 1 },
+          { keyword: '', keywordType: 2 },
+          { keyword: '', keywordType: 3 },
+        ],
       },
       staffRules: {
-        realName: [{ required: true, message: '模板名称不能为空' }],
-        subject: [{ required: true, message: '请选择科室' }],
-        project: [{ required: true, message: '请选择项目' }],
-        dataRange: [{ required: true, message: '请选择预警分类' }],
+        name: [{ required: true, message: '请输入模板名称' }],
+        sectionName: [{ required: true, message: '请输入科室名称' }],
+        itemName: [{ required: true, message: '请输入项目名称' }],
+        trackingLv: [{ required: true, message: '请选择预警分类' }],
       },
-      roleMenuIds: [],
-      roleMenuIdsMap: {},
-      newRoleOptions: [...this.roleOptions],
     };
   },
   mounted() {
-    this.queryList();
-    /* if (this.id) {
-      // 用户详情
-      this.$api.systemManageInterface.userDetail(this.id).then(async (res) => {
+    if (this.id) {
+      // 详情
+      this.$api.sunFollow.getWarnTemplateDetail({ id: this.id }).then(async (res) => {
         const { data } = res;
-        this.staffForm = Object.assign(this.staffForm, data.data || {});
-        // type为0: 超级管理员，下拉选项添加超级管理员选项
-        if (this.staffForm.type) {
-          this.queryRoleDetail(this.staffForm.roleId);
-        } else {
-          this.newRoleOptions.push({
-            id: this.staffForm.roleId,
-            name: this.staffForm.roleName,
-          });
-        }
+        this.staffForm.name = data.data.name;
+        this.staffForm.sectionName = data.data.sectionName;
+        this.staffForm.itemName = data.data.itemName;
+        this.staffForm.trackingLv = data.data.trackingLv;
+        this.staffForm.gender = data.data.gender;
+        this.staffForm.minAge = data.data.minAge;
+        this.staffForm.maxAge = data.data.maxAge;
+        this.staffForm.warnTemplateItemKeywordsSaveRequests =
+          data.data.warnTemplateItemKeywordsDtos;
       });
-    } else if (this.roleOptions.length > 0) {
-      this.staffForm.roleId = this.roleOptions[0].id;
-      this.queryRoleDetail(this.staffForm.roleId);
-    }*/
+    }
   },
   methods: {
-    handleMobileChange() {
-      this.staffForm.mobileNo = this.staffForm.mobileNo.replace(/[^0-9]/g, '');
-    },
-    async queryList() {
-      const res = await this.$api.physicalProjectListInterface.listOrganItemLibrary();
-      //   const res = await this.$api.PhysicalProjectListInterface.listOrganItemLibrary({
-      //     keywords: this.keyword,
-      //     pageNo: this.currentPage,
-      //     pageSize: this.pageSize,
-      //   });
-      console.log(res.data);
-      const { data } = res.data;
-      if (data) {
-        this.gridList = data || [];
-      }
-    },
-    async queryRoleDetail(id) {
-      // 角色详情
-      await this.$api.systemManageInterface.roleDetail(id).then((res) => {
-        const { data } = res;
-        const role = data.data || {};
-        this.roleMenuIds = role.menuIds;
-        this.roleMenuIdsMap[id] = this.roleMenuIds;
-      });
-    },
     submit() {
       this.$refs.staffForm.validate((valid) => {
         if (valid) {
-          /* const fn = this.staffForm.id ? 'editUser' : 'addUser';
-          this.$api.systemManageInterface[fn](this.staffForm).then(() => {
+          this.$api.sunFollow.saveWarnTemplate(this.staffForm).then(() => {
             this.$message.success('操作成功');
             this.$emit('afterSubmit');
           });
-        }*/
-          this.$message.success('操作成功');
-          this.$emit('afterSubmit');
         }
       });
     },
@@ -262,24 +219,5 @@ export default {
       display: none;
     }
   }
-  /*/deep/ .el-radio__input.is-disabled {
-    cursor: auto;
-    .el-radio__inner {
-      cursor: auto;
-    }
-    + span.el-radio__label {
-      color: #333;
-      cursor: auto;
-    }
-    &.is-checked .el-radio__inner {
-      background-color: #fff;
-      border-color: #4991fd;
-      cursor: auto;
-      &::after {
-        cursor: auto;
-        background: #4991fd;
-      }
-    }
-  }*/
 }
 </style>

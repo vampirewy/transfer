@@ -1,8 +1,8 @@
 <template>
   <div class="health-monitor">
     <tab-bars @messageData='TabbarBtn'></tab-bars>
-    <target-set v-if="tabIndex == 0" ref="targetSet"></target-set>
-    <keyword-set v-if="tabIndex == 1"></keyword-set>
+    <target-set v-if="tabIndex === 0" ref="targetSet"></target-set>
+    <keyword-set v-if="tabIndex === 1" ref="keywordSet"></keyword-set>
   </div>
 </template>
 
@@ -28,7 +28,14 @@ export default {
       tabIndex: 0,
     };
   },
-  mounted() {
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      console.log(vm);
+      if (vm.tabIndex === 0) {
+        // targetSet列表
+        vm.$refs.targetSet.queryList();
+      }
+    });
   },
   methods: {
     TabbarBtn(index) {

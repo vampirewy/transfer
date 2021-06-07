@@ -3,7 +3,7 @@
   <div class="divTop">
     <div class="divTitle" style="margin-top: 15px">
       <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
-      阳性就诊TOP排名
+      就诊科室TOP排名
     </div>
   </div>
     <div class="divRightTitleDiv">

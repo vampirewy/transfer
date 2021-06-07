@@ -43,6 +43,7 @@ import dietProgrammeInterface from './diet_manage/DietProgrammeInterface';
 import dietFinishedDishInterface from './diet_manage/DietFinishedDishInterface';
 import dietRawMaterial from './diet_manage/DietRawMaterial';
 import dietMenuTemplateInterface from './diet_manage/DietMenuTemplateInterface';
+import sunFollow from './sun/SunFollow';
 export default {
   loginInterface,
   systemManageInterface,
@@ -80,4 +81,5 @@ export default {
   dietFinishedDishInterface,
   dietRawMaterial,
   dietMenuTemplateInterface,
+  sunFollow,
 };

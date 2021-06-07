@@ -9,7 +9,7 @@
         <div class="searchCondition">
           <div class="searchLeft">
             <div class="searchInputFormItem">
-              <el-input placeholder="模板名称/条件" v-model="query">
+              <el-input placeholder="模板名称/条件" v-model="form.name">
               </el-input>
               <span class="searchBtnImgSpan" @click="search">
                 <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
@@ -17,27 +17,22 @@
             </div>
             <div>
               <span>科室：</span>
-              <el-select v-model="status" placeholder="请选择" clearable style="width: 150px">
-                <el-option label="外科" :value="0"></el-option>
-                <el-option label="内科" :value="1"></el-option>
-                <el-option label="五官" :value="0"></el-option>
-                <el-option label="检验科" :value="0"></el-option>
-                <el-option label="心血管科" :value="0"></el-option>
-              </el-select>
+              <el-input placeholder="请输入" style="width: 150px" v-model="form.sectionName">
+              </el-input>
             </div>
             <div>
               <span>预警分类：</span>
-              <el-select v-model="role" placeholder="请选择" clearable style="width: 150px">
+              <el-select v-model="form.trackingLv" placeholder="请选择" clearable style="width: 150px">
                 <el-option label="红色预警" :value="1"></el-option>
-                <el-option label="橙色预警" :value="0"></el-option>
+                <el-option label="橙色预警" :value="2"></el-option>
               </el-select>
             </div>
             <div>
               <span>适用性别：</span>
-              <el-select v-model="status" placeholder="请选择" clearable style="width: 150px">
+              <el-select v-model="form.gender" placeholder="请选择" clearable style="width: 150px">
                 <el-option label="不限" :value="0"></el-option>
                 <el-option label="男" :value="1"></el-option>
-                <el-option label="女" :value="0"></el-option>
+                <el-option label="女" :value="2"></el-option>
               </el-select>
             </div>
           </div>
@@ -64,11 +59,12 @@
           <el-button
                   class="btn-new btnDel"
                   size="small"
+                  @click="handleSomeRemove"
           ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
         </div>
       </div>
       <!--<template v-slot:right>-->
-      <el-table :data="tableData" align="center">
+      <el-table :data="tableData" align="center" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="40"></el-table-column>
         <el-table-column
                 prop="name"
@@ -76,23 +72,23 @@
                 show-overflow-tooltip
         ></el-table-column>
         <el-table-column
-                prop="subject"
+                prop="sectionName"
                 label="科室"
                 show-overflow-tooltip
         ></el-table-column>
         <el-table-column
-                prop="project"
+                prop="itemName"
                 label="项目"
                 show-overflow-tooltip
         ></el-table-column>
         <el-table-column
-                prop="activated"
+                prop="trackingLv"
                 label="预警分类"
                 min-width="90px"
                 show-overflow-tooltip>
           <template slot-scope="scope">
-                <span :class="scope.row.resultLevel === 1 ? 'warnRed' : 'warnYellow'">
-                  {{scope.row.resultLevel === 1 ? '红色预警' : '橙色预警' }}
+                <span :class="scope.row.trackingLv === 1 ? 'warnRed' : 'warnYellow'">
+                  {{scope.row.trackingLv === 1 ? '红色预警' : '橙色预警' }}
                 </span>
           </template>
         </el-table-column>
@@ -100,18 +96,43 @@
                 prop="gender"
                 label="适用性别"
                 show-overflow-tooltip
-        ></el-table-column>
+        >
+          <template slot-scope="scope">
+                <span>
+                  {{scope.row.gender | getResultGender }}
+                </span>
+          </template>
+        </el-table-column>
         <el-table-column
-                prop="age"
+                prop="minAge"
                 label="适用年龄"
                 show-overflow-tooltip
-        ></el-table-column>
+        >
+          <template slot-scope="scope">
+                <span>
+                  {{scope.row.minAge}}
+                  -
+                  {{scope.row.maxAge }}
+                </span>
+          </template>
+        </el-table-column>
         <el-table-column
-                prop="tiaojian"
+                prop="warnTemplateItemKeywordsDtos"
                 label="条件"
-                width="200px"
+                min-width="200px"
                 show-overflow-tooltip
-        ></el-table-column>
+        >
+          <template slot-scope="scope">
+                <span>
+                  包含以下全部关键字：
+                  {{scope.row.warnTemplateItemKeywordsDtos[0].keyword | getResult}}。
+                  包含以下任意关键字：
+                  {{scope.row.warnTemplateItemKeywordsDtos[1].keyword | getResult}}。
+                  不包含以下全部关键字：
+                  {{scope.row.warnTemplateItemKeywordsDtos[2].keyword | getResult}}
+                </span>
+          </template>
+        </el-table-column>
         <el-table-column
                 prop="id"
                 label="操作"
@@ -179,27 +200,30 @@ export default {
       status: '',
       role: '',
       query: '',
+      form: {
+        name: '',
+        sectionName: '',
+        gender: '',
+        trackingLv: '',
+        templateType: 2,
+      },
       tableData: [],
       total: 0,
       currentPage: 1,
       pageSize: 15,
       currentId: '',
       roleOptions: [],
+      multipleSelection: [], // 当前页选中的数据
     };
   },
   mounted() {
-    // 查询条件： 角色
-    this.queryRoleList();
     // 员工列表
-    console.log(888);
     this.queryList();
   },
   methods: {
-    queryRoleList() {
-      this.$api.systemManageInterface.roleList().then((res) => {
-        const { data } = res;
-        this.roleOptions = data.data || [];
-      });
+    handleSelectionChange(val) {
+      // table组件选中事件,
+      this.multipleSelection = val;
     },
     search() {
       this.currentPage = 1;
@@ -207,57 +231,19 @@ export default {
     },
     reset() {
       this.currentPage = 1;
-      this.query = '';
-      this.role = '';
-      this.status = '';
+      Object.assign(this.$data, this.$options.data());
       this.queryList();
     },
     queryList() {
-      // 员工列表
-      /* this.$api.systemManageInterface
-         .userList({
-           pageNo: this.currentPage,
-           pageSize: 15,
-           search: this.query,
-           roleId: this.role,
-           state: this.status,
-         })
-         .then((res) => {*/
-      const res = {
-        data: {
-          data: {
-            data: [
-              { id: '1',
-                clientNo: '2021015898745',
-                name: '肺癌指标',
-                subject: '内科',
-                project: '胸部CT',
-                gender: '不限',
-                age: '不限',
-                resultLevel: 1,
-                tiaojian: '谷丙转氨酶>400U/L;总胆红',
-              },
-              { id: '2',
-                clientNo: '20210213987451',
-                name: '胃癌指标',
-                subject: '内科',
-                project: '腹部CT',
-                gender: '不限',
-                age: '0-99',
-                resultLevel: 2,
-                tiaojian: '谷丙转氨酶<100U/L;总胆红',
-              },
-            ],
-            total: 2,
-          },
-        },
-      };
-      const { data } = res;
-      const result = data.data || {};
-      console.log(result);
-      this.tableData = result.data || [];
-      this.total = result.total || 0;
-      // });
+      this.$api.sunFollow.getWarnTemplate(
+        Object.assign({ pageNo: this.currentPage, pageSize: 15 }, this.form))
+        .then((res) => {
+          const { data } = res;
+          const result = data.data || {};
+          console.log(result);
+          this.tableData = result.data || [];
+          this.total = result.total || 0;
+        });
     },
     add() {
       // 新增页面
@@ -274,23 +260,37 @@ export default {
       this.viewIndex = 3;
       this.currentId = data.id;
     },
-    changeState(data) {
-      // 启用 / 禁用
-      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>是否确认${data.state ? '禁用' : '启用'}?</span></div>`, '提示', {
+    /**
+     * 批量删除
+     */
+    handleSomeRemove() {
+      if (this.multipleSelection.length === 0) {
+        this.$message({
+          message: '请选择要删除的记录',
+          type: 'warning',
+        });
+        return;
+      }
+      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认删除！</span></div>`, '删除提示', {
         dangerouslyUseHTMLString: true,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         customClass: 'message-box-customize',
         showClose: true,
-      }).then(() => {
-        const state = data.state ? 0 : 1;
-        this.$api.systemManageInterface
-          .changeUserState(data.id, state)
-          .then(() => {
-            this.$message.success('操作成功');
-            this.queryList();
+      }).then(
+        async () => {
+          const idsList = [];
+          this.multipleSelection.forEach((value) => {
+            idsList.push(value.id);
           });
-      }).catch(() => {});
+          const reqBody = idsList;
+          await this.$api.sunFollow.deletedWarnTemplate(
+            reqBody,
+          );
+          this.$message.success('操作成功');
+          return this.queryList();
+        },
+      );
     },
     handleCurrentChange(page) {
       this.currentPage = page;

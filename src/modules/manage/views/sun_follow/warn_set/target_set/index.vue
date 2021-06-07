@@ -9,7 +9,7 @@
         <div class="searchCondition">
           <div class="searchLeft">
             <div class="searchInputFormItem">
-              <el-input placeholder="模板名称/条件" v-model="query">
+              <el-input placeholder="模板名称/条件" v-model="form.name">
               </el-input>
               <span class="searchBtnImgSpan" @click="search">
                 <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
@@ -17,17 +17,17 @@
             </div>
             <div>
               <span>适用性别：</span>
-              <el-select v-model="status" placeholder="请选择" clearable style="width: 150px">
+              <el-select v-model="form.gender" placeholder="请选择" clearable style="width: 150px">
                 <el-option label="不限" :value="0"></el-option>
                 <el-option label="男" :value="1"></el-option>
-                <el-option label="女" :value="0"></el-option>
+                <el-option label="女" :value="2"></el-option>
               </el-select>
             </div>
             <div>
               <span>预警分类：</span>
-              <el-select v-model="role" placeholder="请选择" clearable style="width: 150px">
+              <el-select v-model="form.trackingLv" placeholder="请选择" clearable style="width: 150px">
                 <el-option label="红色预警" :value="1"></el-option>
-                <el-option label="橙色预警" :value="0"></el-option>
+                <el-option label="橙色预警" :value="2"></el-option>
               </el-select>
             </div>
           </div>
@@ -54,11 +54,12 @@
           <el-button
                   class="btn-new btnDel"
                   size="small"
+                  @click="handleSomeRemove"
           ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
         </div>
       </div>
         <!--<template v-slot:right>-->
-          <el-table :data="tableData" align="center">
+          <el-table :data="tableData" align="center" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="40"></el-table-column>
             <el-table-column
               prop="name"
@@ -69,19 +70,33 @@
               prop="gender"
               label="适用性别"
               show-overflow-tooltip
-            ></el-table-column>
+            >
+              <template slot-scope="scope">
+                <span>
+                  {{scope.row.gender | getResultGender }}
+                </span>
+              </template>
+            </el-table-column>
             <el-table-column
               prop="age"
               label="适用年龄"
               show-overflow-tooltip
-            ></el-table-column>
+            >
+              <template slot-scope="scope">
+                <span>
+                  {{scope.row.minAge}}
+                  -
+                  {{scope.row.maxAge }}
+                </span>
+              </template>
+            </el-table-column>
             <el-table-column
-              prop="activated"
+              prop="trackingLv"
               label="预警分类"
               show-overflow-tooltip>
               <template slot-scope="scope">
-                <span :class="scope.row.resultLevel === 1 ? 'warnRed' : 'warnYellow'">
-                  {{scope.row.resultLevel === 1 ? '红色预警' : '橙色预警' }}
+                <span :class="scope.row.trackingLv === 1 ? 'warnRed' : 'warnYellow'">
+                  {{scope.row.trackingLv === 1 ? '红色预警' : '橙色预警' }}
                 </span>
               </template>
             </el-table-column>
@@ -90,7 +105,24 @@
               label="条件"
               width="200px"
               show-overflow-tooltip
-            ></el-table-column>
+            >
+              <template slot-scope="scope">
+                <span>
+                  {{ scope.row.itemName | getResult }}
+                </span>
+                <span v-if="relationOptions.filter(res =>
+                res.value === scope.row.itemCondition)[0].value === 6">
+                  {{ scope.row.minItemValue }}
+                  -
+                  {{ scope.row.maxItemValue }}
+                </span>
+                <span v-if="relationOptions.filter(res =>
+                res.value === scope.row.itemCondition)[0].value !== 6">
+                  {{ relationOptions.filter(res => res.value === scope.row.itemCondition)[0].name }}
+                  {{ scope.row.itemValue }}
+                </span>
+              </template>
+            </el-table-column>
             <el-table-column
               prop="id"
               label="操作"
@@ -146,7 +178,6 @@
 import StaffForm from './form.vue';
 import StaffDetail from './detail.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
-
 export default {
   name: 'Staff',
   components: {
@@ -159,28 +190,27 @@ export default {
       status: '',
       role: '',
       query: '',
+      form: {
+        name: '',
+        gender: '',
+        trackingLv: '',
+        templateType: 1,
+      },
       tableData: [],
       total: 0,
       currentPage: 1,
       pageSize: 15,
+      relationOptions: [{ value: 1, name: '>' }, { value: 2, name: '=' }, { value: 3, name: '<' },
+        { value: 4, name: '≥' }, { value: 5, name: '≤' }, { value: 6, name: '区间' }],
       currentId: '',
       roleOptions: [],
+      multipleSelection: [], // 当前页选中的数据
     };
   },
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      // 查询条件： 角色
-      vm.queryRoleList();
-      // 员工列表
-      vm.queryList();
-    });
-  },
   methods: {
-    queryRoleList() {
-      this.$api.systemManageInterface.roleList().then((res) => {
-        const { data } = res;
-        this.roleOptions = data.data || [];
-      });
+    handleSelectionChange(val) {
+      // table组件选中事件,
+      this.multipleSelection = val;
     },
     search() {
       this.currentPage = 1;
@@ -188,52 +218,18 @@ export default {
     },
     reset() {
       this.currentPage = 1;
-      this.query = '';
-      this.role = '';
-      this.status = '';
+      Object.assign(this.$data, this.$options.data());
       this.queryList();
     },
     queryList() {
-      // 员工列表
-      /* this.$api.systemManageInterface
-        .userList({
-          pageNo: this.currentPage,
-          pageSize: 15,
-          search: this.query,
-          roleId: this.role,
-          state: this.status,
-        })
-        .then((res) => {*/
-      const res = {
-        data: {
-          data: {
-            data: [
-              { id: '1',
-                clientNo: '2021015898745',
-                name: '肺癌指标',
-                gender: '不限',
-                age: '不限',
-                resultLevel: 1,
-                tiaojian: '谷丙转氨酶>400U/L;总胆红',
-              },
-              { id: '2',
-                clientNo: '20210213987451',
-                name: '胃癌指标',
-                gender: '不限',
-                age: '不限',
-                resultLevel: 2,
-                tiaojian: '谷丙转氨酶<100U/L;总胆红',
-              },
-            ],
-            total: 2,
-          },
-        },
-      };
-      const { data } = res;
-      const result = data.data || {};
-      this.tableData = result.data || [];
-      this.total = result.total || 0;
-      // });
+      // 获取列表
+      this.$api.sunFollow.getWarnTemplate(
+        Object.assign({ pageNo: this.currentPage, pageSize: 15 }, this.form)).then((res) => {
+        const { data } = res;
+        const result = data.data || {};
+        this.tableData = result.data || [];
+        this.total = result.total || 0;
+      });
     },
     add() {
       // 新增页面
@@ -250,23 +246,37 @@ export default {
       this.viewIndex = 3;
       this.currentId = data.id;
     },
-    changeState(data) {
-      // 启用 / 禁用
-      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>是否确认${data.state ? '禁用' : '启用'}?</span></div>`, '提示', {
+    /**
+     * 批量删除
+     */
+    handleSomeRemove() {
+      if (this.multipleSelection.length === 0) {
+        this.$message({
+          message: '请选择要删除的记录',
+          type: 'warning',
+        });
+        return;
+      }
+      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认删除！</span></div>`, '删除提示', {
         dangerouslyUseHTMLString: true,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         customClass: 'message-box-customize',
         showClose: true,
-      }).then(() => {
-        const state = data.state ? 0 : 1;
-        this.$api.systemManageInterface
-          .changeUserState(data.id, state)
-          .then(() => {
-            this.$message.success('操作成功');
-            this.queryList();
+      }).then(
+        async () => {
+          const idsList = [];
+          this.multipleSelection.forEach((value) => {
+            idsList.push(value.id);
           });
-      }).catch(() => {});
+          const reqBody = idsList;
+          await this.$api.sunFollow.deletedWarnTemplate(
+            reqBody,
+          );
+          this.$message.success('操作成功');
+          return this.queryList();
+        },
+      );
     },
     handleCurrentChange(page) {
       this.currentPage = page;
