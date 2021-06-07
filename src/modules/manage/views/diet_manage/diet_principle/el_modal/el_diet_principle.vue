@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="新增"
+    :title="EditList.Look ? '查看' :EditList.id ? '编辑':'新增'"
     class="dialog-detail"
     :modal-append-to-body="false"
     width="550px"
@@ -10,21 +10,25 @@
   >
     <el-form  label-width="90px" class="form-content">
       <el-form-item  label="原则名称：">
-        <el-input placeholder="请输入"></el-input>
+          <div v-if="EditList.Look">{{EditList.name}}</div>
+        <el-input placeholder="请输入" v-model="EditList.name"
+        v-else></el-input>
       </el-form-item>
       <div class="template-intro">
         <el-form-item  label="原则内容：">
+          <div v-if="EditList.Look">{{EditList.content}}</div>
           <el-input
             type="textarea"
             :rows="4"
             placeholder="请输入"
             maxlength="300"
             show-word-limit
-          ></el-input>
+            v-model="EditList.content"
+          v-else></el-input>
         </el-form-item>
       </div>
     </el-form>
-    <div slot="footer" class="dialog-footer">
+    <div slot="footer" class="dialog-footer" style="background:#ffffff" v-if="!EditList.Look">
       <el-button size="small" @click="visibles = false" class="cancelBtn"
         >取消</el-button
       >
@@ -47,9 +51,13 @@ export default {
         return {};
       },
     },
+    EditList: Object,
   },
   data() {
-    return {};
+    return {
+      name: '',
+      content: '',
+    };
   },
   computed: {
     visibles: {
@@ -62,7 +70,29 @@ export default {
     },
   },
   methods: {
-    submit() {},
+    submit() {
+      if (this.EditList.name === '') {
+        this.$message.warning('请填写名称');
+        return false;
+      }
+      if (this.EditList.content === '') {
+        this.$message.warning('请填写内容');
+        return false;
+      }
+      // const params = {
+      //   id: this.id,
+      //   name: this.name,
+      //   content: this.content,
+      // };
+      this.$api.dietProgrammeInterface.principlesaveDietPrinciple(this.EditList).then((res) => {
+        const { data } = res;
+        if (data.success) {
+          this.$message.success('操作成功');
+          // this.$parent.viewIndex = 1;
+          this.$emit('cancel');
+        }
+      });
+    },
   },
 };
 </script>

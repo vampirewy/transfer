@@ -12,8 +12,8 @@
                   placeholder="请选择"
                   style="width: 140px"
           >
-            <el-option label="是" value="1" key="1"></el-option>
-            <el-option label="否" value="2" key="0"></el-option>
+            <el-option label="全部" value="1" key="1"></el-option>
+            <el-option label="任意" value="2" key="2"></el-option>
           </el-select>
           </div>
           <div v-if="TabTitle === 'Minterm'">
@@ -27,7 +27,7 @@
             <el-option label="女" value="2" key="2"></el-option>
           </el-select>
           </div>
-          <div class="row" style="display: flex">
+          <div class="row" style="display: flex" v-if="TabTitle !== 'Constitution'">
             <el-form-item :label="labelName" prop="clientName" style="background:#ffffff">
               <el-popover
                 ref="userPopovers"
@@ -61,7 +61,21 @@
                 <div @click="othertestAdd">添加</div>
             </div>
           </div>
-
+          <div v-if="TabTitle === 'Constitution'">
+            <span>体质名称：</span>
+           <el-select
+                  v-model="ConstituList"
+                  placeholder="请选择"
+                  style="width: 140px"
+                  @change="handleChange"
+          >
+          <el-option :label="item.name" :value="{value:item.code,label:item.name}"
+                       v-for="(item, index) in Constitu" :key="index"></el-option>
+            <!-- <el-option label="男" value="1" key="1"></el-option>
+            <el-option label="女" value="2" key="2"></el-option> -->
+          </el-select>
+          <span style="color: #ffffff;" class="ConstitutionAdd" @click="ConstitutionAdd">添加</span>
+          </div>
             </div>
           </div>
         </div>
@@ -96,8 +110,11 @@
                               placeholder="请选择"
                               style="width: 140px"
                       >
-                        <el-option label="男" value="1" key="1"></el-option>
-                        <el-option label="女" value="2" key="2"></el-option>
+                        <el-option label=">" value="1" key="1"></el-option>
+                        <el-option label="<" value="2" key="2"></el-option>
+                        <el-option label="≥" value="3" key="3"></el-option>
+                        <el-option label="≤" value="4" key="4"></el-option>
+                        <el-option label="~" value="5" key="5"></el-option>
                       </el-select>
                     </div>
                   </span>
@@ -112,9 +129,12 @@
                               v-model="scope.row[item.prop]"
                               placeholder="请选择"
                               style="width: 140px"
+                              @change="Changeestates(scope.$index,$event)"
                       >
-                        <el-option label="男" value="1" key="1"></el-option>
-                        <el-option label="女" value="2" key="2"></el-option>
+                        <el-option label="低危" value="2" key="2"></el-option>
+                        <el-option label="中危" value="3" key="3"></el-option>
+                        <el-option label="高危" value="4" key="4"></el-option>
+                        <el-option label="很高危" value="5" key="5"></el-option>
                       </el-select>
                     </div>
                   </span>
@@ -125,8 +145,10 @@
                               placeholder="请选择"
                               style="width: 140px"
                       >
-                        <el-option label="男" value="1" key="1"></el-option>
-                        <el-option label="女" value="2" key="2"></el-option>
+                        <el-option label="是" value="1" key="1"></el-option>
+                        <el-option label="基本是" value="2" key="2"></el-option>
+                        <el-option label="倾向是" value="3" key="3"></el-option>
+                        <el-option label="否" value="4" key="4"></el-option>
                       </el-select>
                     </div>
                   </span>
@@ -144,7 +166,7 @@
             </el-table-column>
             <el-table-column label="操作" prop="index"  width="150">
               <template slot-scope="scope">
-                <span v-if="NameType === 'Minterm'">
+                <!-- <span v-if="NameType === 'Minterm'">
                   <el-button type="text" v-if="scope.row.isshow"
                 @click="ModifyListBtn(scope.$index, scope.row.id)">
                   <img
@@ -160,7 +182,7 @@
                     src="@/assets/images/service/compile.png"
                   />
                 </el-button>
-                </span>
+                </span> -->
                 <span>
                   <el-button type="text" @click="deleteField(scope.$index, scope.row.id)">
                     <img
@@ -172,7 +194,7 @@
           </template>
             </el-table-column>
           </el-table>
-          <div style="text-align: right">
+          <div style="text-align: right;width:99%;margin-bottom: 20px;">
             <el-pagination
                     style="margin-top: 15px"
                     @current-change="onChangePage"
@@ -213,7 +235,7 @@ const COLUMNS = {
     { label: '小项名称', prop: 'itemName' },
     { label: '小项条件', prop: 'isMain' },
     { label: '条件的值', prop: 'isMainText' },
-    { label: '低值', prop: 'minAge' },
+    { label: '低值', prop: 'minValue' },
     { label: '高值', prop: 'maxValue' },
   ],
   Category: [
@@ -233,11 +255,11 @@ const COLUMNS = {
   ],
   Disease: [
     { label: '评估模型名称', prop: 'name' },
-    { label: '风险等级', prop: 'name' },
+    { label: '风险等级', prop: 'estates' },
   ],
   Constitution: [
     { label: '体质名称', prop: 'name' },
-    { label: '判定结果', prop: 'name' },
+    { label: '判定结果', prop: 'judgeResult' },
   ],
 };
 export default {
@@ -267,7 +289,7 @@ export default {
       dialogTableVisible: false,
       clientId: '',
       formData: {
-        state: '',
+        state: '1',
         keywords: '',
         gender: '',
       },
@@ -292,17 +314,26 @@ export default {
       labelName: '小项名称',
       NameType: '',
       // timer: '',
+      Constitu: [],
+      ConstituList: '',
     };
   },
   mounted() {
-    // console.log(this.indexs, this.TabTitle);
+    console.log(this.InterventionList, '接收的数据');
     this.NameType = this.TabTitle;
     this.dataSource.columns = COLUMNS[this.TabTitle];
     if (this.InterventionList.length !== 0) {
       this.dataSource.list = this.InterventionList;
-    } else {
-      this.dataSource.list = [];
+      if (this.InterventionList[0].conditionRelation === 1 &&
+      this.InterventionList[0].conditionRelation === 2) {
+        this.formData.state = String(this.InterventionList[0].conditionRelation);
+      } else {
+        this.formData.state = '1';
+      }
     }
+    // else {
+    //   this.dataSource.list = [];
+    // }
     if (this.TabTitle === 'Minterm') {
       this.labelName = '小项名称';
     }
@@ -320,11 +351,29 @@ export default {
     }
     if (this.TabTitle === 'Constitution') {
       this.labelName = '体质名称';
+      this.ConstitutionList();
     }
     // this.timer = new Date().getTime();
     // console.log(this.InterventionList, 'cccccc');
   },
   methods: {
+    handleChange(params) {
+      const { value, label } = params;
+      console.log(value, label);
+    },
+    Changeestates(index, event) {
+      this.$set(this.dataSource.list[index], 'estates', event);
+      // console.log(index, event);
+      // console.log(this.dataSource.list);
+      this.$forceUpdate();
+    },
+    ConstitutionList() {
+      this.$api.reportInterface
+        .getTcmList()
+        .then(({ data }) => {
+          this.Constitu = data.data;
+        });
+    },
     othertestAdd() {
       this.detectionInfo.forEach((val) => {
         this.dataSource.list.push(val);
@@ -333,13 +382,24 @@ export default {
       this.detectioninfoSource.clientName = '';
       this.detectionInfo = [];
     },
+    ConstitutionAdd() {
+      const json = {
+        tizhiCode: this.ConstituList.value,
+        name: this.ConstituList.label,
+        judgeResult: '',
+        conditionRelation: this.formData.state,
+      };
+      this.dataSource.list.push(json);
+      this.$emit('change', this.dataSource.list, this.TabTitle);
+      console.log(this.dataSource.list);
+    },
     detectionhandlePopoperClose() {
       this.detectionpopoverStatus = false;
     },
     // 选择检测项目
     detectiononSelectUser(data, NameType) {
-      // console.log(data, NameType, '123123选择检测项目');
       if (data) {
+        // data.conditionRelation = this.formData.state;
         data.forEach((val) => {
           if (NameType === 'Minterm') {
             this.detectioninfoSource.clientName += `${val.sectionName}、`;
@@ -350,8 +410,21 @@ export default {
           if (NameType === 'Exception') {
             this.detectioninfoSource.clientName += `${val.abnormalTypeName}、`;
           }
+          if (NameType === 'Composition') {
+            this.detectioninfoSource.clientName += `${val.name}、`;
+          }
+          if (NameType === 'Disease') {
+            this.detectioninfoSource.clientName += `${val.name}、`;
+          }
+          if (NameType === 'Constitution') {
+            this.detectioninfoSource.clientName += `${val.name}、`;
+          }
           this.detectionInfo.push(val);
         });
+        for (let i = 0; i < this.detectionInfo.length; i++) {
+          this.detectionInfo[i].conditionRelation = this.formData.state;
+        }
+        console.log(this.detectionInfo, '123123选择检测项目');
         this.$refs.userPopovers.doClose();
         this.detectionpopoverStatus = false;
       } else {
@@ -639,5 +712,10 @@ export default {
 }
 .icon-delete{
     width: 30px;
+}
+.ConstitutionAdd{
+  background: #31c529;
+  padding: 10px 15px;
+  border-radius: 10px;
 }
 </style>

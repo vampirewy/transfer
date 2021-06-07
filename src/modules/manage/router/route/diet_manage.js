@@ -54,6 +54,13 @@ export default [
       },
       component: () => import('../../views/diet_manage/diet_tyerapy_chinese/index'),
     }, {
+      path: '/chinese_info',
+      name: 'chinese_info',
+      meta: {
+        title: '查看中医食疗',
+      },
+      component: () => import('../../views/diet_manage/diet_tyerapy_chinese/edit_form/info_form.vue'),
+    }, {
       path: '/diet_principle',
       name: 'diet_principle',
       meta: {

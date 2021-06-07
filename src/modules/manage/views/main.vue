@@ -194,14 +194,14 @@ export default {
     $route(newRoute) {
       const { name, query, params, meta } = newRoute;
       this.personalHealthPageCheck(meta); // 判断是否是个人管理页
-      console.log(meta);
+      // console.log(meta);
       this.addTag({
         route: { name, query, params, meta },
         type: 'push',
       });
       this.setTagNavList(getNewTagList(this.tagNavList, newRoute));
       this.$refs.sideMenu.updateOpenName(newRoute.name);
-      console.log(this.tagNavList);
+      // console.log(this.tagNavList);
       this.dehuancun();
     },
   },
@@ -211,7 +211,7 @@ export default {
      * @description
      */
     this.getCheckMenuList();
-    console.log(this.menuList);
+    // console.log(this.menuList);
     this.setTagNavList();
     this.setHomeRoute(routers);
     const { name, params, query, meta } = this.$route;
@@ -247,7 +247,7 @@ export default {
       this.tagNavList.forEach((val) => {
         routerComponentNameList.push(val.name);
       });
-      console.log(routerComponentNameList);
+      // console.log(routerComponentNameList);
       this.$store.commit('app/setKeepAliveLists', routerComponentNameList.join());
     },
     personalHealthPageCheck(meta) {
@@ -261,9 +261,9 @@ export default {
       // 获取当前登录人权限
       const res = await this.$api.loginInterface.getCheckedMenu({});
       const { data } = res.data;
-      console.log(data);
+      // console.log(data);
       this.menuList = data.synthesisMenuList;
-      console.log(this.menuList);
+      // console.log(this.menuList);
       localSave('HK_ACCESS', JSON.stringify(data.checkList));
       this.$store.commit('user/SET_ACCESS', data.checkList);
     },

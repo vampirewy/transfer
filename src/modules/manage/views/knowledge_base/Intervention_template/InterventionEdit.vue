@@ -64,16 +64,16 @@
                   show-overflow-tooltip
           >
             <el-table-column type="selection" min-width="40"></el-table-column>
-            <el-table-column label="阶段" prop="planWayName" min-width="80" show-overflow-tooltip>
+            <el-table-column label="阶段" prop="month" min-width="80" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>
-                  {{ scope.row.planWayName }}
+                  {{ scope.row.month }}
                 </span>
               </template>
             </el-table-column>
-            <el-table-column label="干预形式" prop="planWay" min-width="80" show-overflow-tooltip />
+            <el-table-column label="干预形式" prop="planWayTxt" min-width="80" show-overflow-tooltip />
             <el-table-column label="主要内容" prop="planContent" min-width="80" show-overflow-tooltip />
-            <el-table-column label="干预提示" prop="remarik" min-width="80" show-overflow-tooltip />
+            <el-table-column label="干预提示" prop="day" min-width="80" show-overflow-tooltip />
             <!-- <el-table-column label="附件" prop="attachment">
               <template slot-scope="scope">
                 <div
@@ -95,7 +95,7 @@
                 <el-button
                         type="text"
                         size="small"
-                        @click="edits(scope.row.id)"
+                        @click="edits(scope.row)"
                         v-if="getAccess('customer_pool_edit')"
                 >编辑</el-button>
                 <el-button type="text"
@@ -105,7 +105,7 @@
                 <el-button
                         type="text"
                         size="small"
-                        @click="LookInfo(scope.row.id)"
+                        @click="LookInfo(scope.row)"
                 >查看</el-button
                 >
                 <!-- <el-button
@@ -133,7 +133,7 @@
               </template>
             </el-table-column>
           </el-table>
-          <div style="text-align: right">
+          <!-- <div style="text-align: right">
             <el-pagination
                     style="margin-top: 15px"
                     @current-change="onChangePage"
@@ -143,7 +143,7 @@
                     :pageSizes="[15]"
                     :page-size="15"
             ></el-pagination>
-          </div>
+          </div> -->
         </div>
       <!-- </template> -->
     <edit-detail
@@ -219,15 +219,14 @@ export default {
       templateName: '', // 模版名称
       qualification: '', // 模版名称
       valueid: '', // 当前id
-      valueidInfo: '', // 查看详情
+      valueidInfo: {}, // 查看详情
     };
   },
   mounted() {
-    // console.log(this.ids, 'asdasdasd');
     // this.getUserList();
     // this.getGridList(); // 获取人员列类别
     // this.getDoctor(); // 获取医生列表
-    this.getDetail();
+    // this.getDetail();
     this.fetch();
   },
   methods: {
@@ -248,16 +247,17 @@ export default {
     },
     fetch() {
       this.$api.interventionTemplateInterface
-        .getInterveneTemplatePlanListPage(Object.assign({}, this.params))
+        .getInterveneTemplatePlanList(this.params.interveneTemplateId)
         .then(({ data }) => {
           if (data.success) {
-            this.total = data.data.total;
-            this.dataSource = data.data.data;
+            this.total = data.total;
+            this.dataSource = data.data;
+            console.log(this.dataSource);
           }
         });
     },
-    LookInfo(id) {
-      this.valueidInfo = id;
+    LookInfo(row) {
+      this.valueidInfo = row;
       this.modalVisibleInfo = true;
       this.modalVisible = false;
     },
@@ -274,10 +274,12 @@ export default {
       // console.log(this.ids, 'asdasd');
       this.modalVisible = true;
     },
-    edits(id) {
-      this.valueid = id;
+    edits(row) {
+      this.currentValue = row;
+      this.valueid = row.id;
       this.modalVisible = true;
       this.modalVisibleInfo = false;
+      // console.log(this.ids, this.valueid, 'asdasdasd');
     },
     cancel() {
       this.modalVisible = false;

@@ -39,22 +39,22 @@
         ></el-input>
       </el-form-item> -->
       <div style="display: flex;">
-        <el-form-item label="性别限制：" >
-          <el-select v-model="gender" disabled placeholder="请选择">
-            <el-option label="男" value="1" key="1"></el-option>
-            <el-option label="女" value="2" key="2"></el-option>
+        <el-form-item label="选择月份：" >
+          <el-select v-model="id.month" disabled placeholder="请选择">
+            <!-- <el-option label="男" value="1" key="1"></el-option>
+            <el-option label="女" value="2" key="2"></el-option> -->
           </el-select>
         </el-form-item>
-        <el-form-item label="是否启用：" >
-          <el-select v-model="Status" disabled placeholder="请选择">
-            <el-option label="是" value="1" key="1"></el-option>
-            <el-option label="否" value="2" key="2"></el-option>
+        <el-form-item label="选择日期：" >
+          <el-select v-model="id.day" disabled placeholder="请选择">
+            <!-- <el-option label="是" value="1" key="1"></el-option>
+            <el-option label="否" value="2" key="2"></el-option> -->
           </el-select>
         </el-form-item>
       </div>
       <div style="display: flex;">
         <el-form-item label="干预形式：" >
-          <el-select style="width:160px" v-model="interfereform" disabled placeholder="请选择">
+          <el-select style="width:160px" v-model="id.planWayTxt" disabled placeholder="请选择">
             <el-option
               v-for="item in form.planWayList"
               :key="item.id"
@@ -65,7 +65,8 @@
         </el-form-item>
         <el-col :span="6">
           <el-form-item label="主要内容：" >
-            <el-input v-model="results" style="width:160px" disabled placeholder="请输入" ></el-input>
+            <el-input v-model="id.planContent"
+            style="width:160px" disabled placeholder="请输入" ></el-input>
           </el-form-item>
         </el-col>
         <!-- <el-form-item label="主要内容：" >
@@ -85,7 +86,7 @@
           <el-form-item label="干预提示：" prop="result">
             <el-input
               type="textarea"
-              v-model="Prompt"
+              v-model="id.planWay"
               :rows="5"
               disabled
               placeholder="请输入"
@@ -123,7 +124,7 @@ export default {
   name: 'edit_or_detail',
   props: {
     visible: Boolean,
-    id: String,
+    id: Object,
   },
   data() {
     return {
@@ -147,8 +148,8 @@ export default {
     };
   },
   mounted() {
-    console.log(this.id, '接收的数据');
-    this.getDetail();
+    console.log(this.id, '接收的数据123');
+    // this.getDetail();
   },
   methods: {
     async getDetail() {

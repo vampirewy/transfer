@@ -24,6 +24,10 @@ class MedicalHistoryInterface extends BaseModule {
   medicalInfoDetail(id) {
     return this.get(`/medical_info/detail/${id}`);
   }
+
+  updateInterveneTemplate(data) {
+    return this.get(`/intervene_template/get_intervene_template/${data}`);
+  }
   // 删除
   deleteMedicalInfo(id) {
     return this.delete(`/medical_info/${id}`);

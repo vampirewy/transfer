@@ -37,6 +37,9 @@ class ReportInterface extends BaseModule {
   getAbnormalList(params) {
     return this.get(`/organ_abnormal/list_page?${convertObj(params)}`);
   }
+  abnormalListPages(params) {
+    return this.post('/group_abnormal/list_page', params);
+  }
   getAbnormalAliasList(params) {
     return this.get(`/organ_abnormal_alias/list_page?${convertObj(params)}`);
   }
@@ -51,6 +54,9 @@ class ReportInterface extends BaseModule {
   }
   getTemplateDetail(id) {
     return this.get(`/report_template/detail_by_report/${id}`);
+  }
+  getTcmList() {
+    return this.get('/intervene_template/get_tcm_list');
   }
 }
 
