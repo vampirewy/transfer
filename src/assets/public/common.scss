@@ -317,7 +317,7 @@ a {
   /deep/ .el-textarea__inner,
   /deep/ .el-input.is-disabled .el-input__inner,
   /deep/ .el-textarea.is-disabled .el-textarea__inner {
-    background-color: #F4F4F6;
+    // background-color: #F4F4F6;
     color: #333333;
     border: none;
     resize: none;

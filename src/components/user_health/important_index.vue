@@ -1,30 +1,31 @@
 <template>
   <div class="follow-plan">
     <el-table :data="tableData" style="width: 100%" align="center">
-      <el-table-column prop="clientName" label="指标名称" show-overflow-tooltip>
-        <!-- <template slot-scope="scope">
+      <el-table-column prop="itemName" label="指标名称" show-overflow-tooltip>
+        <template slot-scope="scope">
           <span>{{ scope.row.itemName | getResult}}</span>
-        </template> -->
+        </template>
       </el-table-column>
-      <el-table-column prop="gridName" label="结果" show-overflow-tooltip>
-        <!-- <template slot-scope="scope">
+      <el-table-column prop="itemValue" label="结果" show-overflow-tooltip>
+        <template slot-scope="scope">
           <span>{{ scope.row.itemValue | getResult}}</span>
-        </template> -->
+        </template>
       </el-table-column>
-      <el-table-column prop="executePlanWayName" label="参考范围" show-overflow-tooltip>
-        <!-- <template slot-scope="scope">
+      <el-table-column prop="refRange" label="参考范围" show-overflow-tooltip>
+        <template slot-scope="scope">
           <span>{{ scope.row.refRange | getResult }}</span>
-        </template> -->
+        </template>
       </el-table-column>
-      <el-table-column prop="executeTime" label="单位" show-overflow-tooltip>
-        <!-- <template slot-scope="scope">
+      <el-table-column prop="itemUnit" label="单位" show-overflow-tooltip>
+        <template slot-scope="scope">
           <span>{{ scope.row.itemUnit | getResult }}</span>
-        </template> -->
+        </template>
       </el-table-column>
     </el-table>
     <el-pagination
       background
       layout="prev, pager, next, jumper, total, sizes"
+      :current-page="currentPage"
       :total="total"
       :page-size="15"
       @current-change="pageClick"
@@ -39,58 +40,58 @@ export default {
   data() {
     return {
       tableData: [
-        {
-          clientName: '空腹血糖',
-          gridName: '4.12',
-          executeTime: 'mmol/L',
-          executePlanWayName: '3.6~5.8',
-        },
-        {
-          clientName: '空腹血糖',
-          gridName: '4.12',
-          executeTime: 'mmol/L',
-          executePlanWayName: '3.6~5.8',
-        },
-        {
-          clientName: '空腹血糖',
-          gridName: '4.12',
-          executeTime: 'mmol/L',
-          executePlanWayName: '3.6~5.8',
-        },
-        {
-          clientName: '空腹血糖',
-          gridName: '4.12',
-          executeTime: 'mmol/L',
-          executePlanWayName: '3.6~5.8',
-        },
-        {
-          clientName: '空腹血糖',
-          gridName: '4.12',
-          executeTime: 'mmol/L',
-          executePlanWayName: '3.6~5.8',
-        },
+        // {
+        //   clientName: '空腹血糖',
+        //   gridName: '4.12',
+        //   executeTime: 'mmol/L',
+        //   executePlanWayName: '3.6~5.8',
+        // },
+        // {
+        //   clientName: '空腹血糖',
+        //   gridName: '4.12',
+        //   executeTime: 'mmol/L',
+        //   executePlanWayName: '3.6~5.8',
+        // },
+        // {
+        //   clientName: '空腹血糖',
+        //   gridName: '4.12',
+        //   executeTime: 'mmol/L',
+        //   executePlanWayName: '3.6~5.8',
+        // },
+        // {
+        //   clientName: '空腹血糖',
+        //   gridName: '4.12',
+        //   executeTime: 'mmol/L',
+        //   executePlanWayName: '3.6~5.8',
+        // },
+        // {
+        //   clientName: '空腹血糖',
+        //   gridName: '4.12',
+        //   executeTime: 'mmol/L',
+        //   executePlanWayName: '3.6~5.8',
+        // },
       ],
       currentPage: 1,
       total: 0,
     };
   },
   mounted() {
-    // this.getImportantIndex();
+    this.getImportantIndex();
   },
   methods: {
-    // pageClick(page) {
-    //   this.currentPage = page;
-    //   this.getImportantIndex();
-    // },
-    // getImportantIndex() {
-    //   this.$api.health
-    //     .getReportItem(this.clientId)
-    //     .then((res) => {
-    //       const { data } = res;
-    //       const result = data.data;
-    //       this.tableData = result || [];
-    //     });
-    // },
+    pageClick(page) {
+      this.currentPage = page;
+      this.getImportantIndex();
+    },
+    getImportantIndex() {
+      this.$api.health
+        .getReportItem(this.clientId)
+        .then((res) => {
+          const { data } = res;
+          const result = data.data;
+          this.tableData = result || [];
+        });
+    },
   },
 };
 </script>
@@ -106,7 +107,7 @@ export default {
 
   /deep/ .is-background {
     margin-top: 10px;
-    float: right;
+    // float: right;
   }
 }
 </style>

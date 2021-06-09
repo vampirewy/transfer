@@ -59,12 +59,13 @@
                     class="btn-new btnDel"
                     v-if="getAccess('customer_pool_distribute')"
             ><img src="@/assets/images/common/deliverBtn.png" />分配</el-button> -->
-            <el-button
+            <!-- <el-button
             style="width:120px;"
                     size="small"
                     class="btn-new btnDel"
+                    @click="Sort"
                     v-if="getAccess('customer_pool_distribute')"
-            ><img src="@/assets/images/common/createReport.png" />生成报告</el-button>
+            ><img src="@/assets/images/common/createReport.png" />排序</el-button> -->
           </div>
         </div>
         <div>
@@ -87,8 +88,8 @@
               <template slot-scope="scope">
                 <el-switch
                   v-model="scope.row.state "
-                  active-value="1"
-                  inactive-value="0"
+                  :active-value="1"
+                  :inactive-value="0"
                   active-color="#13ce66"
                   @change=changeStatus(scope,scope.row.state)
                   >
@@ -107,7 +108,7 @@
                 <el-button
                         type="text"
                         size="small"
-                        @click="edits(scope.row.id)"
+                        @click="edits(scope.row)"
                         v-if="getAccess('customer_pool_edit')"
                 >编辑</el-button>
                 <!-- <el-button type="text"
@@ -159,6 +160,7 @@
         </div>
       <!-- </template> -->
     <edit-detail
+      v-if="modalVisible"
       :visible="modalVisible"
       :value="currentValue"
       :libraryList="form.libraryList"
@@ -261,18 +263,30 @@ export default {
         this.total = data.total;
       }
     },
+    Sort() {
+      this.$router.push({
+        name: 'physical_sort',
+        params: {
+          type: 'edit',
+        },
+      });
+    },
     // 展开更多
     upMore() {
       this.isTrue = !this.isTrue;
     },
     // 编辑
     adds(id) {
-      this.currentValue.type = id;
+      this.currentValue = [];
+      this.currentValue.id = id;
       this.modalVisible = true;
       // this.getLibraryList();
     },
-    edits(id) {
-      this.currentValue.type = id;
+    edits(row) {
+      console.log(row);
+      this.currentValue = row;
+      // this.currentValue.name = row.name;
+      // this.currentValue.state = row.state;
       this.modalVisible = true;
       // this.getLibraryList();
     },
@@ -497,6 +511,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .font-enable {
   color: #31c529;
 }

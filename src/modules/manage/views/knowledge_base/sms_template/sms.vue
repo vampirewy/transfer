@@ -213,9 +213,6 @@
             <span v-if="scope.row.suitSeason === 2">老人</span>
             <span v-if="scope.row.suitSeason === 3">少儿</span>
           </template>
-           <!-- <template slot-scope="scope">
-            {{scope.row.gender === 1 ? '男' : (scope.row.gender === 2 ? '女' : '')}}
-          </template> -->
         </el-table-column>
         <!-- <el-table-column prop="clientGridName" label="人员类别" show-overflow-tooltip>
           <template slot-scope="scope">

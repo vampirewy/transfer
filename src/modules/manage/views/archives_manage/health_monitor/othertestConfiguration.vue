@@ -115,8 +115,8 @@
             <div v-if="scope.row.isshow">
                 <el-switch
                 v-model="ModifyList.state"
-                active-value="1"
-                inactive-value="2"
+                :active-value="1"
+                :inactive-value="2"
                 active-color="#13ce66">
                 </el-switch>
             </div>
@@ -423,14 +423,9 @@ export default {
         paramList: this.drugsList,
       };
 
-      if (!this.infoSource.clientId) {
-        return this.$message.warning('请选择客户');
+      if (!this.infoSource.specification) {
+        return this.$message.warning('请填写姓名');
       }
-
-      if (!this.drugsList.length) {
-        return this.$message.warning('请添加药品');
-      }
-
       this.$api.medication.add(reqBody).then(({ data }) => {
         if (data.code === 200) {
           this.$router.go(-1);

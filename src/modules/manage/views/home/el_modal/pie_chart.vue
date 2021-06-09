@@ -32,6 +32,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    centerText: {
+      type: String,
+      default: '0.00',
+    },
   },
   data() {
     return {
@@ -84,6 +88,28 @@ export default {
           bottom: '15',
           data: this.xList,
         },*/
+        graphic: {
+          type: 'text',
+          left: '35%',
+          top: '50%',
+          style: {
+            text: this.centerText, // 圈中的文字值
+            textAlign: 'center',
+            fill: '#333333',
+            fontSize: 20,
+            fontWeight: 600,
+          },
+        },
+        title: {
+          text: '总费用',
+          left: '34%',
+          top: '62%',
+          textStyle: {
+            color: '#999999',
+            fontSize: 14,
+            align: 'center',
+          },
+        },
         series: [
           {
             name: '随访数量',
@@ -92,7 +118,7 @@ export default {
             // roseType: 'radius', //可以根据大小控制长短
             radius: [50, 75], // 中间可设置空心
             center: ['45%', '55%'],
-            hoverAnimation: false,
+            hoverAnimation: true,
             label: {
               normal: {
                 show: true,
@@ -133,11 +159,11 @@ export default {
                 // 每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组中的颜色
                 color(params) {
                   const colorList = [
-                    '#5B8FF9',
-                    '#5AD8A6',
-                    '#6C6CE5',
-                    '#F6BD16',
-                    '#E8684A',
+                    '#333333',
+                    '#806CE5',
+                    '#3154AC',
+                    '#36BF2F',
+                    '#FA912B',
                     '#6DC8EC',
                     '#31C529',
                     '#54c9b6',

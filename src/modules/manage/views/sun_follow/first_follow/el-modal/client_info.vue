@@ -19,9 +19,6 @@
         </div>
       </div>
     </div>
-    <div class="containerTag">
-       <span class="tag" v-for="(item, index) in formData.tagList" :key="index">{{item}}</span>
-    </div>
     <div>
     </div>
   </div>
@@ -34,7 +31,6 @@ import ManHead from '~/src/assets/images/body/manHead.png';
 import WomanHead from '~/src/assets/images/body/womanHead.png';
 export default {
   name: 'ClientInfo',
-  props: ['info'],
   data() {
     return {
       manIcon: ManIcon,
@@ -45,47 +41,14 @@ export default {
     };
   },
   mounted() {
-    // this.getClientUserInfo(this.$route.params.id);
-    this.formData = this.info;
+    this.getClientUserInfo(this.$route.params.clientId);
   },
   methods: {
-    /* getClientUserInfo(id) {
+    getClientUserInfo(id) {
       this.$api.userManagerInterface.getDetail(id).then(({ data }) => {
-        if (data.code === 200) {
-          console.log(data.data);
-          this.setData(data.data);
-        }
+        this.formData = data.data;
       });
-    },*/
-    /* setData(data) {
-      this.formData.name = data.name;
-      this.formData.age = data.age;
-      this.formData.gender = data.gender;
-      this.formData.mobile = data.mobile;
-      this.formData.gridName = data.gridName;
-      this.formData.workUnitName = data.workUnitName;
-      const DoctorList = [];
-      if (data.userList.length > 0) {
-        data.userList.forEach((item) => {
-          DoctorList.push(item.realName);
-        });
-        this.formData.doctorListName = DoctorList.join('、');
-      }
-      const TagList = [];
-      if (data.tagList.length > 0) {
-        data.tagList.forEach((item) => {
-          TagList.push(item.tag);
-        });
-        this.formData.tagList = TagList;
-      }
-      /!* if (data.gender === 2) {
-        this.formData.genderName = '女';
-      } else if (data.gender === 1) {
-        this.formData.genderName = '男';
-      } else {
-        this.formData.genderName = '未知';
-      } *!/
-    },*/
+    },
   },
 };
 </script>

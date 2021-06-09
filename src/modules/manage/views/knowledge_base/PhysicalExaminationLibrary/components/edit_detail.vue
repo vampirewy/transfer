@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :title="value.type === 1 ? '编辑' : '编辑体检库'"
+    :title="value.id ? '编辑体检库' : '新增体检库'"
     class="dialog-detail"
     :modal-append-to-body="false"
     width="570px"
@@ -30,9 +30,7 @@
       </el-form-item> -->
       <el-form-item label="体检库名称：">
         <el-input
-          v-model="value.address"
-          :disabled="value.type === 2"
-          :placeholder="value.type === 1 ? '请输入' : ''"
+          v-model="name"
           :maxlength="180"
           style="width: 410px"
         ></el-input>
@@ -101,22 +99,19 @@ export default {
   data() {
     return {
       modalTitle: '编辑',
+      name: '', // 项目库名称
       result: '',
       results: '',
       state: '',
       importLibraryId: '',
-      resultOptions: [
-        // { value: 1, label: '未指定' },
-        // { value: 2, label: '治疗中' },
-        // { value: 3, label: '转诊' },
-        // { value: 4, label: '转为慢病' },
-        // { value: 5, label: '痊愈' },
-        // { value: 6, label: '其他' },
-      ],
+      resultOptions: [],
     };
   },
   mounted() {
-    console.log(this.libraryList, '接收的数据');
+    console.log(this.value, '接收的数据');
+    this.name = this.value.name;
+    this.importLibraryId = this.value.reportTotal;
+    this.state = this.value.state;
     this.getLibraryList();
   },
   methods: {
@@ -130,7 +125,7 @@ export default {
     },
     async submit() {
       await this.$api.physicalProjectListInterface.saveOrganItemLibrary({
-        name: this.value.address,
+        name: this.name,
         state: this.state,
         importLibraryId: this.importLibraryId,
       });
@@ -143,6 +138,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/deep/  .form-content .el-input__inner{
+  background: #ffffff !important;
+}
 .dialog-detail /deep/ {
   .form-title {
     display: flex;

@@ -93,11 +93,12 @@ export default {
       this.queryList();
     },
     search() {
-      this.keyword = '';
       this.currentPage = 1;
       this.queryList();
     },
     reset() {
+      this.keyword = '';
+      this.questionType = '';
       this.currentPage = 1;
       this.queryList();
     },

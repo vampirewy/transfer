@@ -10,10 +10,10 @@
             </div>
             <div class="searchCondition">
               <div class="searchLeft">
-                <div class="searchInputFormItem">
+                <div class="searchInputFormItem" >
                   <el-input placeholder="名称/原料" v-model="query.names">
                   </el-input>
-                  <span class="searchBtnImgSpan" @click="search">
+                  <span class="searchBtnImgSpan" @click="search" style="right:-3px">
                     <img
                       class="searchBtnImg"
                       src="@/assets/images/common/topsearch.png"

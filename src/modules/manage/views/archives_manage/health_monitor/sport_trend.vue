@@ -66,8 +66,12 @@
         :total="table.total"
       ></el-pagination>
     </div>
-    <div class="buttons">
+    <!-- <div class="buttons">
       <el-button plain size="small" @click="blackReturn()">返回</el-button>
+    </div> -->
+    <div class="handle-btn mt30 mb30">
+      <el-button class="reset-btn" size="small" @click="blackReturn"
+        >返回</el-button>
     </div>
   </div>
 </template>
@@ -190,5 +194,26 @@ export default {
     position: absolute;
     margin-top: 17px;
     opacity: 0.5;
+  }
+   .handle-btn {
+    text-align: center;
+  .reset-btn {
+      width: 90px;
+      height: 40px;
+      background: rgba(49, 84, 172, 0.1);
+      border-radius: 20px;
+      border: 1px solid #3154AC;
+      text-align:center;
+      color: #3154AC;
+    }
+    .add-btn {
+      width: 90px;
+      height: 40px;
+      background: rgba(49, 84, 172, 0.1);
+      border-radius: 20px;
+      background: #3154AC;
+      border: 1px solid #3154AC;
+      text-align:center;
+    }
   }
 </style>

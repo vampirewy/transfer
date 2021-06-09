@@ -88,6 +88,10 @@ class UserManagerInterface extends BaseModule {
   getclientMsgList(params = {}) {
     return this.post('/client_info/get_client_info_create_msg_list_page', params);
   }
+  // 短信平台 - 创建短信 - 短信模板
+  getMessageTemplate(params = {}) {
+    return this.post('/message_template/get_list_page', params);
+  }
   // 短信记录
   getMsgRecordList(params = {}) {
     return this.post('/message_record/page_list', params);

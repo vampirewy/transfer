@@ -116,9 +116,9 @@
                   v-model="form.startReportDate"
                   type="date"
                   value-format="yyyy-MM-dd"
-                  :max-date="form.endReportDate"
+                  :max-date="form.endReportDate || new Date()"
                   placeholder="开始时间"
-                  style="width: 120px"
+                  style="width: 140px"
           >
           </el-date-picker>
           <span class="timing">-</span>
@@ -127,8 +127,9 @@
                   type="date"
                   value-format="yyyy-MM-dd"
                   :min-date="form.startReportDate"
+                  :max-date="new Date()"
                   placeholder="结束时间"
-                  style="width: 120px"
+                  style="width: 140px"
           >
           </el-date-picker>
         </div>
@@ -163,7 +164,7 @@
             >
               <template slot-scope="scope">
                 <span class="clientName"
-                      @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
+                      @click="commonHref.toPersonalHealth(scope.row.id, $router)">
                   {{ scope.row.name | getResult}}
                 </span>
               </template>

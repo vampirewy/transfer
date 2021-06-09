@@ -105,7 +105,7 @@
 
 <script>
 export default {
-  name: 'subject',
+  name: 'sun',
   data() {
     return {
       form: {

@@ -8,7 +8,7 @@
       <div class="searchCondition">
       <div class="searchLeft">
         <div class="searchInputFormItem">
-          <el-input placeholder="名称/项目" v-model="formData.keyWord">
+          <el-input placeholder="搜索条件" v-model="formData.name">
           </el-input>
           <span class="searchBtnImgSpan" @click="search(1)">
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
@@ -25,21 +25,34 @@
       </div>
     </div>
     </div>
-    <el-table :data="tableData" @row-click="rowClick" class="openTable">
+     <!-- @row-click="rowClick" -->
+    <el-table :data="dataSource.list" @selection-change="handleSelectionChange" class="openTable">
       <!-- <el-table-column width="80">
         <template slot-scope="scope">
           <el-radio v-model="selectRadio" :label="scope.row.id">&nbsp;</el-radio>
         </template>
       </el-table-column> -->
       <el-table-column type="selection" width="40" align="center"></el-table-column>
-      <el-table-column prop="name" label="科室名称"></el-table-column>
+      <el-table-column
+        v-for="(item, index) in dataSource.columns"
+        :key="index"
+        :label="item.label"
+        :prop="item.prop"
+        :min-width="item.minWidth"
+        align="center">
+        <template slot-scope="scope">
+          <span class="clientName" v-if="item.prop === 'clientName'"
+                @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
+            {{scope.row[item.prop]}}
+          </span>
+          <span v-else>{{item.formatter ? item.formatter(scope.row[item.prop]) :
+            scope.row[item.prop]}}</span>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column prop="name" label="科室名称"></el-table-column>
       <el-table-column prop="unit" label="小项名称"></el-table-column>
       <el-table-column prop="intro" label="正常参考">
-        <!-- <template slot-scope="scope">
-          <span v-if="scope.row.gender === 1">男</span>
-          <span v-if="scope.row.gender === 2">女</span>
-        </template> -->
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
     <el-pagination
       background
@@ -66,12 +79,47 @@
 </template>
 
 <script>
+const SEX = {
+  0: '男',
+  1: '女',
+};
+const COLUMNS = {
+  Minterm: [
+    { label: '科室名称', prop: 'sectionName' },
+    { label: '小项名称', prop: 'itemName' },
+    { label: '正常参考', prop: 'refRange' },
+  ],
+  Category: [
+    { label: '类别名称', prop: 'gridName' },
+  ],
+  Exception: [
+    { label: '异常名称', prop: 'abnormalTypeName' },
+    { label: '性别',
+      prop: 'gender',
+      formatter(val) {
+        return SEX[val];
+      },
+    },
+  ],
+  Composition: [
+    { label: '组合异常', prop: 'name' },
+  ],
+  Disease: [
+    { label: '评估模称', prop: 'name' },
+  ],
+  Constitution: [
+    { label: '体质名称', prop: 'name' },
+  ],
+};
 export default {
   name: 'MedicalHistorySelectUser',
+  props: {
+    NameType: String,
+  },
   data() {
     return {
       formData: {
-        keyword: '',
+        name: '',
       },
       keyword: '',
       tableData: [],
@@ -79,28 +127,134 @@ export default {
       currentPage: 1,
       pageSize: 5,
       selectRadio: '',
+      multipleSelection: [],
+      dataSource: {
+        list: [],
+        columns: COLUMNS.Minterm,
+      },
+      params: {
+        pageNo: '',
+        pageSize: '',
+      },
     };
   },
   mounted() {
-    this.queryList();
+    console.log(this.NameType, '类型名字');
+    this.dataSource.columns = COLUMNS[this.NameType];
+    this.loadList(this.NameType);
   },
   methods: {
-    rowClick(scope) {
-      this.selectRadio = scope.id;
-      this.$emit('change', scope);
+    loadList(NameType) {
+      if (NameType === 'Minterm') {
+        this.getList();
+      }
+      if (NameType === 'Category') {
+        this.getGridList();
+      }
+      if (NameType === 'Exception') {
+        this.ExceptionName();
+      }
+      if (NameType === 'Composition') {
+        this.CompositionList();
+      }
+      if (NameType === 'Disease') {
+        this.DiseaseList();
+      }
+      // if (NameType === 'Constitution') {
+      //   this.ConstitutionList();
+      // }
+    },
+    // 小项
+    async getList() {
+      const reqBody = {
+        itemName: this.formData.name,
+        pageNo: this.currentPage,
+        pageSize: this.pageSize,
+      };
+      const res = await this.$api.physicalProjectListInterface.listPage(
+        reqBody,
+      );
+      const { data } = res.data;
+      if (data) {
+        this.dataSource.list = data.data || [];
+        this.total = data.total;
+      }
+    },
+    // 获取人员列表
+    async getGridList() {
+      const res = await
+      this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
+      const { data } = res.data;
+      this.dataSource.list = data.data;
+      this.total = data.total;
+    },
+    // 异常名称
+    ExceptionName() {
+      this.params.pageNo = this.currentPage;
+      this.params.pageSize = this.pageSize;
+      this.$api.reportInterface
+        .getAbnormalList(Object.assign(this.params, this.formData))
+        .then(({ data }) => {
+          this.total = data.data.total;
+          this.dataSource.list = data.data.data;
+          // this.dataSource.forEach((val) => {
+          //   this.$set(this.map, val.id, val);
+          // });
+        });
+    },
+    CompositionList() {
+      this.params.pageNo = this.currentPage;
+      this.params.pageSize = this.pageSize;
+      this.$api.reportInterface
+        .abnormalListPages(Object.assign(this.params, this.formData))
+        .then(({ data }) => {
+          this.total = data.data.total;
+          this.dataSource.list = data.data.data;
+          // this.dataSource.forEach((val) => {
+          //   this.$set(this.map, val.id, val);
+          // });
+        });
+    },
+    DiseaseList() {
+      this.params.pageNo = this.currentPage;
+      this.params.pageSize = this.pageSize;
+      this.$api.systemManageInterface
+        .getListPage(Object.assign(this.params, this.formData))
+        .then(({ data }) => {
+          this.total = data.data.total;
+          this.dataSource.list = data.data.data;
+          // for (let i = 0; i < this.dataSource.list.length; i++) {
+          //   this.dataSource.list[i].estate = '';
+          // }
+          console.log(this.dataSource.list, 'estate');
+          // this.dataSource.forEach((val) => {
+          //   this.$set(this.map, val.id, val);
+          // });
+        });
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+    goBack() {
+      this.$emit('change');
+    },
+    submit() {
+      // this.selectRadio = scope.id;
+      // this.$emit('change', scope);
+      this.$emit('change', this.multipleSelection, this.NameType);
     },
     handleCurrentChange(page) {
       this.currentPage = page;
-      this.queryList();
+      this.loadList(this.NameType);
     },
     handleSizeChange(size) {
       this.pageSize = size;
       this.currentPage = 1;
-      this.queryList();
+      this.loadList(this.NameType);
     },
     search() {
       this.currentPage = 1;
-      this.queryList();
+      this.loadList(this.NameType);
     },
     reset() {
 
@@ -111,11 +265,11 @@ export default {
         pageNo: this.currentPage,
         pageSize: this.pageSize,
       });
-      console.log(res.data);
+      // console.log(res.data);
       const { data } = res.data;
       if (data) {
-        this.tableData = data.data || [];
-        console.log(this.tableData);
+        this.dataSource.list = data.data || [];
+        // console.log(this.tableData);
         this.total = data.total;
       }
     },

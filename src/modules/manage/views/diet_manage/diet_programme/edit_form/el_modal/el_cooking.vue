@@ -54,6 +54,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .cooking-box {
+  /deep/ .el-dialog{
+    border-radius: 8px !important;
+  }
   .cooking-item {
     display: flex;
     font-size: 14px;

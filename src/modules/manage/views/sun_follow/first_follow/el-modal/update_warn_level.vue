@@ -17,12 +17,12 @@
           <el-row>
             <el-col :span="12">
             <el-form-item label="项目名称：">
-              {{form.projectName}}
+              {{form.itemName}}
             </el-form-item>
             </el-col>
             <el-col :span="12">
             <el-form-item label="项目结果：">
-              {{form.result}}
+              {{form.itemValue}}
             </el-form-item>
             </el-col>
           </el-row>
@@ -30,7 +30,7 @@
             <el-col :span="12">
               <el-form-item label="预警等级：">
                 <el-select
-                        v-model="form.resultLevel"
+                        v-model="form.reportLv"
                         placeholder="请选择"
                 >
                   <el-option label="红色预警" :value="1"></el-option>
@@ -79,14 +79,23 @@ export default {
      */
     save() {
       this.$refs.form.validate(async (valid) => {
-        console.log('发送');
+        console.log(this.form);
         if (valid) {
           const obj = {
-            resultLevel: this.form.resultLevel,
+            positiveTrackingId: this.form.positiveTrackingId,
+            reportLv: this.form.reportLv,
           };
-          if (this.confirmfunc) {
-            this.confirmfunc.call(this, obj);
-          }
+          this.$api.sunFollow
+            .updateReportLv(obj)
+            .then(({ data }) => {
+              if (data.success) {
+                if (this.confirmfunc) {
+                  this.confirmfunc.call(this, obj);
+                }
+                this.$message.success('操作成功');
+                this.cancel();
+              }
+            });
           this.cancel();
         }
       });

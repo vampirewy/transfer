@@ -26,7 +26,7 @@
         <a href="javascript:;" class="name">{{ userName }}</a>
       </span>
       <span class="ge">|</span>
-      <span class="quitSpan" @click="logout">修改密码</span>
+      <span class="quitSpan" @click="updatePsd">修改密码</span>
     <span class="ge">|</span>
     <span class="quitSpan" @click="logout">退出登录</span>
   </div>
@@ -36,8 +36,12 @@
 import HeaderImg from '~/src/assets/images/headerImg.png';
 import { localSave } from '~/src/libs/util';
 import avatarImg from '@/assets/images/body/avatar.png';
+import updatePsd from './el_modal/updatePsd.vue';
 export default {
   name: 'User',
+  components: {
+    updatePsd,
+  },
   props: {
     userAvatar: {
       type: String,
@@ -87,6 +91,20 @@ export default {
       } else if (name === 'back') {
         this.back();
       }
+    },
+    /**
+     * 修改密码
+     */
+    updatePsd() {
+      this.$jDynamic.show({
+        component: 'updatePsd',
+        data: {
+          confirmfunc: async (value) => {
+            console.log(value);
+          },
+        },
+        render: h => h(updatePsd),
+      });
     },
     logout() {
       this.$api.loginInterface.logout().then(() => {

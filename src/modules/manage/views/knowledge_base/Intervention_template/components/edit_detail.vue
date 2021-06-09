@@ -17,6 +17,7 @@
       label-width="100px"
       label-text-align="center"
       :model="value"
+      ref="form"
       class="form-content"
     >
       <!-- <el-form-item label="企业名称：">
@@ -37,33 +38,80 @@
           style="width: 410px"
         ></el-input>
       </el-form-item> -->
-      <div style="display: flex;">
-        <el-form-item label="性别限制：" >
-          <el-select v-model="result" placeholder="请选择">
-            <el-option label="男" value="1" key="1"></el-option>
-            <el-option label="女" value="2" key="2"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="是否启用：" >
-          <el-select v-model="results" placeholder="请选择">
-            <el-option label="是" value="1" key="1"></el-option>
-            <el-option label="否" value="2" key="2"></el-option>
-          </el-select>
-        </el-form-item>
+      <div style="display: flex;margin-bottom:20px">
+        <!-- <el-col :span="8">
+          <el-form-item label="选择月份" > -->
+            <!-- <el-select v-model="gender" placeholder="请选择"> -->
+              <span style="white-space: nowrap;margin: 10px 10px 10px 20px;">选择月份：</span>
+              <el-select
+                      v-model="form.monthsModel"
+                      @change="dateChange(2)"
+                      placeholder="请选择"
+                      style="width:200px;"
+              >
+                <el-option
+                        v-for="item in months"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                >
+                </el-option>
+              </el-select>
+              <!-- <el-date-picker
+                v-model="gender"
+                type="month"
+                placeholder="选择月"
+                style="width:160px;">
+              </el-date-picker> -->
+          <!-- </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="选择日期：" > -->
+            <span style="white-space: nowrap;margin: 10px 10px 10px 20px;">选择日期：</span>
+            <el-select
+                    v-model="form.daysModel"
+                    @change="dateChange(3)"
+                    placeholder="请选择"
+                    style="width:200px;"
+            >
+              <el-option
+                      v-for="item in days"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+              >
+              </el-option>
+            </el-select>
+            <!-- <el-date-picker
+              v-model="value1"
+              format="dd"
+              type="date"
+              placeholder="选择日期"
+              style="width:160px;">
+            </el-date-picker> -->
+          <!-- </el-form-item>
+        </el-col> -->
       </div>
       <div style="display: flex;">
         <el-form-item label="干预形式：" >
-          <el-select v-model="result" placeholder="请选择">
+          <el-select style="width:160px" v-model="interfereform" placeholder="请选择">
             <el-option
-              v-for="item in resultOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              v-for="item in formData.planWayList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="主要内容：" >
+        <el-col :span="6">
+          <el-form-item label="主要内容：" >
+            <el-input v-model="results" style="width:160px" placeholder="请输入" ></el-input>
+          </el-form-item>
+        </el-col>
+        <!-- <el-form-item label="主要内容：" >
           <el-select v-model="results" placeholder="请选择">
+            <el-input>
+            </el-input>
             <el-option
               v-for="item in resultOptions"
               :key="item.value"
@@ -71,13 +119,13 @@
               :value="item.value"
             ></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
       </div>
       <el-col :span="24">
           <el-form-item label="干预提示：" prop="result">
             <el-input
               type="textarea"
-              v-model="hpi"
+              v-model="Prompt"
               :rows="5"
               placeholder="请输入"
               :maxlength="300"
@@ -115,37 +163,177 @@ export default {
   props: {
     visible: Boolean,
     value: Object,
+    id: String,
+    interveneTemplateId: String,
   },
   data() {
     return {
+      monthsModel: '',
+      daysModel: '',
       modalTitle: '编辑',
-      result: '',
+      gender: '', // 性别
+      Status: '', // 状态
+      interfereform: '', // 干预形式
       results: '',
-      hpi: '',
-      resultOptions: [
-        { value: 1, label: '未指定' },
-        { value: 2, label: '治疗中' },
-        { value: 3, label: '转诊' },
-        { value: 4, label: '转为慢病' },
-        { value: 5, label: '痊愈' },
-        { value: 6, label: '其他' },
-      ],
+      Prompt: '', // 提示
+      // resultOptions: [
+      //   { value: 1, label: '未指定' },
+      //   { value: 2, label: '治疗中' },
+      //   { value: 3, label: '转诊' },
+      //   { value: 4, label: '转为慢病' },
+      //   { value: 5, label: '痊愈' },
+      //   { value: 6, label: '其他' },
+      // ],
+      formData: {
+        planWayList: [],
+      },
+      form: {
+        date: null,
+        yearsModel: null, // 年份
+        monthsModel: null, // 月份
+        daysModel: null, // 日期
+        selectTime: null,
+        title: '',
+        planWay: '',
+        planContent: '',
+        planWayList: [],
+      },
+      months: [],
+      days: [],
     };
   },
+  mounted() {
+    const date = new Date();
+    const year = date.getFullYear(); // 获取当前年
+    this.yearsModel = year;
+    this.initSelectMonth(); // 加载月份
+    // console.log(this.value, this.id, this.interveneTemplateId, '接收的数据');
+    this.form.monthsModel = this.value.month;
+    this.form.daysModel = this.value.day;
+    this.results = this.value.planContent;
+    this.interfereform = this.value.planWayTxt;
+    this.Prompt = this.value.planWay;
+    this.getPlanWayList();
+  },
   methods: {
+    async getPlanWayList() {
+      const res = await this.$api.userFollowInterface.getIntervenePlanWayList();
+      const { data } = res.data;
+      const list = data.map((it) => {
+        const { id, name } = it;
+        return { id, name };
+      });
+      this.formData.planWayList = list;
+    },
+    initSelectMonth() {
+      this.months = [];
+      this.months.push({ value: '', label: '请选择' });
+      for (let i = 1; i <= 12; i++) {
+        this.months.push({ value: i, label: `${i}月` });
+      }
+    },
+    initSelectDay(year, month) {
+      const maxDay = this.getMaxDay(year, month);
+      this.days = [];
+      this.days.push({ value: '', label: '请选择' });
+      for (let i = 1; i <= maxDay; i++) {
+        this.days.push({ value: i, label: `${i}日` });
+      }
+    },
+    getMaxDay(year, month) {
+      let newYear = year; // 取当前的年份
+      let m = month;
+      let newMonth = m++; // 取下一个月的第一天，方便计算（最后一天不固定）
+      if (month > 12) {
+        // 如果当前大于12月，则年份转到下一年
+        newMonth -= 12; // 月份减
+        newYear++; // 年份增
+      }
+      const newDate = new Date(newYear, newMonth, 1); // 取当年当月中的第一天
+      return new Date(newDate.getTime() - (1000 * 60 * 60 * 24)).getDate(); // 获取当月最后一天日期
+    },
+    dateChange(type) {
+      // 1年 2月 3日 4 左 5右
+      if (type === 1) {
+        this.form.monthsModel = null;
+        this.form.daysModel = null;
+      } else if (type === 2) {
+        this.form.daysModel = null;
+      }
+      if (type === 1 || type === 2) {
+        if (this.form.monthsModel === 0) {
+          this.form.daysModel = 0;
+          this.initSelectDay(this.yearsModel, 1);
+        } else {
+          this.initSelectDay(this.yearsModel, this.form.monthsModel);
+        }
+      }
+      // 操作父组件方法
+      const obj = {
+        month: this.form.monthsModel,
+        day: this.form.daysModel,
+      };
+      // console.log(obj);
+      this.form.date = {
+        year: obj.year,
+        month: obj.month,
+        day: obj.day,
+      };
+      // this.$emit('date-change', obj);
+    },
     cancel() {
       this.$emit('cancel');
     },
     async submit() {
-      await this.$api.companyManageInterface.updateWorkUnit({
-        id: this.value.id,
-        workUnitName: this.value.workUnitName,
-        contact: this.value.contact,
-        mobile: this.value.mobile,
-        address: this.value.address,
+      // await this.$api.companyManageInterface.updateWorkUnit({
+      //   id: this.value.id,
+      //   workUnitName: this.value.workUnitName,
+      //   contact: this.value.contact,
+      //   mobile: this.value.mobile,
+      //   address: this.value.address,
+      // });
+      // this.$message.success('操作成功');
+      // this.cancel();
+      this.$refs.form.validate(async (valid) => {
+        if (valid) {
+          const obj = {
+            interveneTemplateId: this.interveneTemplateId,
+            month: this.form.monthsModel,
+            day: this.form.daysModel,
+            remarik: '',
+            title: this.results,
+            planWay: this.interfereform,
+            planContent: this.Prompt,
+          };
+          console.log('obj', obj);
+          if (this.id === '') {
+            this.$api.interventionTemplateInterface
+              .saveInterveneTemplatePlan(obj)
+              .then(({ data }) => {
+                if (data.success) {
+                  this.$message.success('操作成功');
+                  // if (this.confirmfunc) {
+                  //   this.confirmfunc.call(this, obj);
+                  // }
+                  this.cancel();
+                }
+              });
+          } else {
+            obj.id = this.id;
+            this.$api.interventionTemplateInterface
+              .updateInterveneTemplatePlan(obj)
+              .then(({ data }) => {
+                if (data.success) {
+                  this.$message.success('操作成功');
+                  // if (this.confirmfunc) {
+                  //   this.confirmfunc.call(this, obj);
+                  // }
+                  this.cancel();
+                }
+              });
+          }
+        }
       });
-      this.$message.success('操作成功');
-      this.cancel();
     },
   },
 };

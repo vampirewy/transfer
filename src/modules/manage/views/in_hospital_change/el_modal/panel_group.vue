@@ -118,7 +118,7 @@ export default {
       home5: _home5,
       low: _low,
       high: _high,
-      yList1: [['20', '19', '16', '20', '23', '30', '28', '25', '20', '15', '23', '30', '35', '40', '20']],
+      yList1: [],
       name1: ['次数'],
       xList1: ['04/07', '04/08', '04/09', '04/10', '04/11', '04/12', '04/13', '04/14', '04/15', '04/16', '04/17', '04/18', '04/19', '04/20', '04/21'],
       yList2: [['20', '19', '16', '20', '23', '30', '28', '25', '20', '15', '23', '30', '35', '40', '20']],
@@ -132,7 +132,37 @@ export default {
       xList4: ['04/07', '04/08', '04/09', '04/10', '04/11', '04/12', '04/13', '04/14', '04/15', '04/16', '04/17', '04/18', '04/19', '04/20', '04/21'],
     };
   },
+  mounted() {
+    this.getY1();
+  },
   methods: {
+    // 院内转诊总次数
+    getY1() {
+      console.log('getY1');
+      /* const sendDataGet = Object.assign({}, this.checkAfterPercent);
+      sendDataGet.planType = 4;*/
+      this.yList1 = [];
+      /* this.$api.personal.echartIntervenePlan(sendDataGet).then((res) => {
+        const lineIntervenePlanListMap = res.data.data.lineIntervenePlanListMap;
+        const xListInit = [];
+        const yListInit = [];
+        if (
+          lineIntervenePlanListMap != null &&
+          JSON.stringify(lineIntervenePlanListMap) !== '{}'
+        ) {
+          Object.keys(lineIntervenePlanListMap).forEach((key) => {
+            xListInit.push(key);
+            yListInit.push(lineIntervenePlanListMap[key]);
+          });
+          this.intervenePlanXList = xListInit;
+          this.intervenePlanYList.push(yListInit);
+        } else {
+          this.intervenePlanXList = [];
+          this.intervenePlanYList = [];
+        }
+      });*/
+      this.yList1 = [['20', '19', '16', '20', '23', '30', '28', '25', '20', '15', '23', '30', '35', '40', '20']];
+    },
     toRouterPage(type) {
       console.log(type);
       // this.$emit('toRouterPage', type);

@@ -1,7 +1,7 @@
 <template>
   <div class="staff-form">
     <el-form
-      :class="{ 'staff-form inputCommon': true, 'staff-detail-form': detail }"
+      class="staff-form inputCommon staff-detail-form"
       :model="staffForm"
       ref="staffForm"
       :rules="staffRules"
@@ -43,8 +43,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="体检编号" prop="birthday">
-            <el-input v-model="staffForm.no" disabled></el-input>
+          <el-form-item label="客户编号" prop="clientNo">
+            <el-input v-model="staffForm.clientNo" disabled></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -55,65 +55,62 @@
       </el-row>
       <el-row>
         <el-col :span="6">
-          <el-form-item label="项目名称" prop="realName">
+          <el-form-item label="项目名称" prop="itemName">
             <el-input
               type="text"
               placeholder="请输入"
-              v-model="staffForm.realName"></el-input>
+              v-model="staffForm.itemName"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="上报等级" prop="dataRange">
+          <el-form-item label="上报等级" prop="reportLv">
             <el-select
-                    v-model="staffForm.dataRange"
+                    v-model="staffForm.reportLv"
                     placeholder="请选择"
             >
-              <el-option label="红色预警" :value="0"></el-option>
-              <el-option label="橙色预警" :value="1"></el-option>
+              <el-option label="红色预警" :value="1"></el-option>
+              <el-option label="橙色预警" :value="2"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="结果" prop="result">
+          <el-form-item label="结果" prop="itemValue">
             <el-input
                     type="text"
                     placeholder="请输入"
-                    v-model="staffForm.result"></el-input>
+                    v-model="staffForm.itemValue"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="上报科室" class="form-item-sex" prop="subject">
-            <el-select
-                    :disabled="detail"
-                    v-model="staffForm.subject"
-                    placeholder="请选择"
-            >
-              <el-option label="外科" :value="0"></el-option>
-              <el-option label="内科" :value="1"></el-option>
-              <el-option label="五官" :value="0"></el-option>
-              <el-option label="检验科" :value="0"></el-option>
-              <el-option label="心血管科" :value="0"></el-option>
-            </el-select>
+          <el-form-item label="上报科室" class="form-item-sex" prop="reportDepartment">
+            <el-input
+                    type="text"
+                    placeholder="请输入"
+                    v-model="staffForm.reportDepartment"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="6">
-          <el-form-item label="上报医生" prop="doctor">
-            <el-input
-                    type="text"
-                    placeholder="请输入"
-                    v-model="staffForm.doctor"></el-input>
+          <el-form-item label="上报医生" prop="reportUserId">
+            <el-select
+                    v-model="staffForm.reportUserId"
+                    placeholder="请选择"
+                    @change="getUserName"
+            >
+              <el-option :label="item.realName" :value="item.id" v-for="(item, index) in userList"
+                         :key="index"></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="上报时间" class="form-item-sex" prop="createTime">
+          <el-form-item label="上报时间" class="form-item-sex" prop="reportDate">
             <el-date-picker
                     style="width: 100%"
-                    v-model="staffForm.createTime"
-                    type="date"
-                    format="yyyy-MM-dd"
-                    value-format="yyyy-MM-dd"
+                    v-model="staffForm.reportDate"
+                    type="datetime"
+                    format="yyyy-MM-dd HH:mm:ss"
+                    value-format="yyyy-MM-dd HH:mm:ss"
                     placeholder="请选择">
             </el-date-picker>
           </el-form-item>
@@ -121,10 +118,10 @@
       </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="备注说明" prop="desc">
+            <el-form-item label="备注说明">
               <el-input
                       type="textarea"
-                      v-model="staffForm.desc"
+                      v-model="staffForm.remark"
                       :rows="4"
                       placeholder="请输入"
                       :maxlength="300"
@@ -136,7 +133,7 @@
         </el-row>
       <div class="form-buttons">
         <el-button size="small" class="cancelBtn" @click="cancel">取消</el-button>
-        <el-button size="small" v-if="!detail" class="sureBtn" type="primary" @click="submit"
+        <el-button size="small" class="sureBtn" type="primary" @click="submit"
           >保存</el-button
         >
       </div>
@@ -146,137 +143,67 @@
 
 <script>
 import SelectUser from '../../archives_manage/medical_history_select_user.vue';
+import * as dayjs from 'dayjs';
 export default {
   name: 'StaffForm',
   components: {
     SelectUser,
   },
-  props: {
-    detail: {
-      type: Boolean,
-      default: false,
-    },
-    id: {
-      type: [String, Number],
-      required: false,
-      default: '',
-    },
-    roleOptions: {
-      type: Array,
-      default: () => [],
-    },
-  },
   data() {
     return {
-      gridList: [],
-      formData: {
-        gridId: '',
-      },
-      relationOptions: [{ value: 0, name: '<' }, { value: 1, name: '≤' }, { value: 2, name: '>' },
-        { value: 3, name: '≥' }, { value: 4, name: '区间' }],
+      userList: [],
       popoverStatus: false,
       staffForm: {
-        id: this.id,
-        no: '',
+        clientNo: '',
         gender: '',
         clientId: '',
         clientName: '',
-        mobileNo: '',
-        realName: '',
-        subject: '',
-        project: '',
-        doctor: '',
-        createTime: '',
-        sex: '',
-        roleId: '',
-        dataRange: '',
-        result: '',
-        desc: '',
-        // menuIds: [],
+        itemName: '',
+        reportLv: '',
+        itemValue: '',
+        reportDepartment: '',
+        reportUserId: '',
+        reportUserName: '',
+        reportDate: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+        remark: '',
       },
       staffRules: {
         clientName: [{ required: true, message: '请选择客户' }],
-        realName: [{ required: true, message: '请输入项目名称' }],
-        subject: [{ required: true, message: '请选择上报科室' }],
-        result: [{ required: true, message: '请输入结果' }],
-        dataRange: [{ required: true, message: '请选择上报等级' }],
-        doctor: [{ required: true, message: '请输入上报医生' }],
-        createTime: [{ required: true, message: '请选择上报时间' }],
+        itemName: [{ required: true, message: '请输入项目名称' }],
+        reportDepartment: [{ required: true, message: '请选择上报科室' }],
+        itemValue: [{ required: true, message: '请输入结果' }],
+        reportLv: [{ required: true, message: '请选择上报等级' }],
+        reportUserId: [{ required: true, message: '请输入上报医生' }],
+        reportDate: [{ required: true, message: '请选择上报时间' }],
       },
-      roleMenuIds: [],
-      roleMenuIdsMap: {},
-      newRoleOptions: [...this.roleOptions],
     };
   },
   mounted() {
-    this.queryList();
-    /* if (this.id) {
-      // 用户详情
-      this.$api.systemManageInterface.userDetail(this.id).then(async (res) => {
-        const { data } = res;
-        this.staffForm = Object.assign(this.staffForm, data.data || {});
-        // type为0: 超级管理员，下拉选项添加超级管理员选项
-        if (this.staffForm.type) {
-          this.queryRoleDetail(this.staffForm.roleId);
-        } else {
-          this.newRoleOptions.push({
-            id: this.staffForm.roleId,
-            name: this.staffForm.roleName,
-          });
-        }
-      });
-    } else if (this.roleOptions.length > 0) {
-      this.staffForm.roleId = this.roleOptions[0].id;
-      this.queryRoleDetail(this.staffForm.roleId);
-    }*/
+    this.getUserList();
   },
   methods: {
-    handleMobileChange() {
-      this.staffForm.mobileNo = this.staffForm.mobileNo.replace(/[^0-9]/g, '');
-    },
     handlePopoperClose(data) {
       console.log(data);
       this.$refs.userPopover.doClose();
       this.popoverStatus = false;
       this.staffForm.clientName = data.name;
       this.staffForm.clientId = data.id;
-      this.staffForm.no = '201806084856';
+      this.staffForm.clientNo = data.clientNo;
       this.staffForm.age = data.age;
       this.staffForm.gender = data.gender;
-      // this.getClientUserInfo(this.staffForm.clientId);
-      // this.$refs.form.validateField('clientId');
     },
-    /* getClientUserInfo(id) {
-      this.$api.userManagerInterface.getDetail(id).then(({ data }) => {
-        this.setData(data.data);
-      });
-    },
-    setData(data) {
-      this.staffForm.no = '201806084856';
-      this.staffForm.age = data.age;
-      this.staffForm.gender = data.gender;
-    },*/
-    async queryList() {
-      const res = await this.$api.physicalProjectListInterface.listOrganItemLibrary();
-      //   const res = await this.$api.PhysicalProjectListInterface.listOrganItemLibrary({
-      //     keywords: this.keyword,
-      //     pageNo: this.currentPage,
-      //     pageSize: this.pageSize,
-      //   });
+    async getUserList() {
+      const res = await this.$api.systemManageInterface
+        .userList({ pageNo: 1, pageSize: 999999 });
       console.log(res.data);
       const { data } = res.data;
       if (data) {
-        this.gridList = data || [];
+        this.userList = data.data || [];
       }
     },
-    async queryRoleDetail(id) {
-      // 角色详情
-      await this.$api.systemManageInterface.roleDetail(id).then((res) => {
-        const { data } = res;
-        const role = data.data || {};
-        this.roleMenuIds = role.menuIds;
-        this.roleMenuIdsMap[id] = this.roleMenuIds;
-      });
+    getUserName() {
+      this.staffForm.reportUserName =
+        this.userList.filter(res => res.id === this.staffForm.reportUserId)[0].realName;
     },
     cancel() {
       this.$router.go(-1);
@@ -284,15 +211,11 @@ export default {
     submit() {
       this.$refs.staffForm.validate((valid) => {
         if (valid) {
-          /* const fn = this.staffForm.id ? 'editUser' : 'addUser';
-          this.$api.systemManageInterface[fn](this.staffForm).then(() => {
+          this.$api.sunFollow.savePositiveTracking(this.staffForm).then(() => {
             this.$message.success('操作成功');
-            this.$emit('afterSubmit');
-          });
-        }*/
-          this.$message.success('操作成功');
-          this.$router.push({
-            path: '/first_follow',
+            this.$router.push({
+              path: '/first_follow',
+            });
           });
         }
       });

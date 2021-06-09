@@ -2,22 +2,22 @@
   <div class="staff-page">
       <el-table :data="tableData" align="center" class="openTable">
         <el-table-column
-                prop="name"
+                prop="itemName"
                 label="项目名称"
                 show-overflow-tooltip
         ></el-table-column>
         <el-table-column
-                prop="activated"
+                prop="itemValue"
                 label="结果"
                 show-overflow-tooltip>
           <template slot-scope="scope">
-                <span :class="scope.row.resultLevel === 1 ? 'warnRed' : 'warnYellow'">
-                  {{scope.row.resultLevel === 1 ? '红色预警' : '橙色预警' }}
+                <span :class="scope.row.reportLv === 1 ? 'warnRed' : 'warnYellow'">
+                  {{scope.row.itemValue}}
                 </span>
           </template>
         </el-table-column>
         <el-table-column
-                prop="createTime"
+                prop="reportDate"
                 label="上报时间"
                 show-overflow-tooltip
         ></el-table-column>
@@ -28,12 +28,14 @@
         >
           <template slot-scope="scope">
             <el-select
-                    v-model="scope.row.resultState"
+                    v-model="scope.row.state"
                     placeholder="请选择"
                     style="width: 110px"
+                    @change="emitTable"
             >
-              <el-option label="尚未联系" :value="1" key="1"></el-option>
-              <el-option label="已联系" :value="2" key="2"></el-option>
+              <el-option :label="item.name" :value="item.paramValue"  :key="index"
+                         v-for="(item, index) in stateList"
+              ></el-option>
             </el-select>
           </template>
         </el-table-column>
@@ -43,7 +45,8 @@
                 show-overflow-tooltip
         >
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.resultLevel"
+            <el-switch v-model="scope.row.isCloseCase"
+                       @change="emitTable"
                        :active-value="1"
                        :inactive-value="2"
                        active-color="#13ce66">
@@ -68,13 +71,14 @@
 <script>
 import deleteIcon from '~/src/assets/images/deleteicon.png';
 export default {
-  name: 'Staff',
+  name: 'follow_content',
   data() {
     return {
       viewIndex: 1, // 1:列表页，2:新增，3:编辑，4:详情
       status: '',
       role: '',
       query: '',
+      stateList: [],
       tableData: [],
       total: 0,
       currentPage: 1,
@@ -84,12 +88,18 @@ export default {
     };
   },
   mounted() {
+    this.getSystemParamBySC002();
     // 查询条件： 角色
     this.queryRoleList();
     // 员工列表
     this.queryList();
   },
   methods: {
+    async getSystemParamBySC002() {
+      const res = await this.$api.userManagerInterface.getSystemParamByCode('SC002');
+      const { data } = res.data;
+      this.stateList = data;
+    },
     queryRoleList() {
       this.$api.systemManageInterface.roleList().then((res) => {
         const { data } = res;
@@ -108,17 +118,12 @@ export default {
       this.queryList();
     },
     queryList() {
-      // 员工列表
-      /* this.$api.systemManageInterface
-         .userList({
-           pageNo: this.currentPage,
-           pageSize: 15,
-           search: this.query,
-           roleId: this.role,
-           state: this.status,
-         })
-         .then((res) => {*/
-      const res = {
+      // 列表
+      this.$api.sunFollow.getClientPositiveContent({
+        clientId: this.$route.params.clientId,
+        sourceType: this.$route.params.sourceType, // 请求来源 1-首次跟踪列表进入 2-跟踪回访任务列表进入
+      }).then((res) => {
+      /* const res = {
         data: {
           data: {
             data: [
@@ -146,12 +151,15 @@ export default {
             total: 2,
           },
         },
-      };
-      const { data } = res;
-      const result = data.data || {};
-      this.tableData = result.data || [];
-      this.total = result.total || 0;
-      // });
+      };*/
+        const { data } = res;
+        const result = data.data || {};
+        this.tableData = result || [];
+        this.emitTable();
+      });
+    },
+    emitTable() {
+      this.$emit('getTable', this.tableData);
     },
     add() {
       // 新增页面

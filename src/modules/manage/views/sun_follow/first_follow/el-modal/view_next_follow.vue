@@ -17,19 +17,20 @@
           <el-row>
             <el-col :span="12">
             <el-form-item label="回访时间：">
-              {{form.nextFollowTime}}
+              {{form.nextTrackingDate ? form.nextTrackingDate.split(' ')[0] : '' }}
+              ({{form.nextTrackingDay | getResult}}天后)
             </el-form-item>
             </el-col>
             <el-col :span="12">
             <el-form-item label="回访方式：">
-              {{form.planWayTypeName}}
+              {{form.nextTrackingWayName}}
             </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="24">
               <el-form-item label="回访提示：" class="followDesc">
-                {{form.followDesc}}
+                {{form.nextTrackingTip}}
               </el-form-item>
             </el-col>
           </el-row>

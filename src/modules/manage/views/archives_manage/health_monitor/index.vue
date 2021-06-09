@@ -78,18 +78,19 @@
             <el-date-picker
               v-model="forms.physicalstartTime"
               type="date"
-              :max-date="options.startTime"
+              :max-date="forms.physicalendTime || new Date()"
               placeholder="选择开始日期"
-              style="width: 100px"
+              style="width: 150px"
             >
             </el-date-picker>
             <span class="timing">-</span>
             <el-date-picker
               v-model="forms.physicalendTime"
               type="date"
-              :min-date="options.endTime"
+              :min-date="forms.physicalstartTime"
+              :max-date="new Date()"
               placeholder="选择结束日期"
-              style="width: 100px"
+              style="width: 150px"
             >
             </el-date-picker>
           </div>
@@ -147,7 +148,8 @@
             :label="item.label"
             :prop="item.prop"
             :min-width="item.minWidth"
-            align="center">
+            align="center"
+            show-overflow-tooltip>
             <template slot-scope="scope">
               <span class="clientName" v-if="item.prop === 'clientName'"
                     @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
@@ -300,7 +302,7 @@ const SEX = {
 };
 const COLUMNS = {
   BP: [
-    { label: '客户编号', prop: 'clientName' },
+    { label: '客户编号', prop: 'clientId' },
     { label: '姓名', prop: 'clientName' },
     {
       label: '性别',
@@ -317,7 +319,7 @@ const COLUMNS = {
     { label: '备注', prop: 'result' },
   ],
   BG: [
-    { label: '客户编号', prop: 'clientName' },
+    { label: '客户编号', prop: 'clientId' },
     { label: '姓名', prop: 'clientName' },
     {
       label: '性别',
@@ -333,7 +335,7 @@ const COLUMNS = {
     { label: '备注', prop: 'result' },
   ],
   weight: [
-    { label: '客户编号', prop: 'clientName' },
+    { label: '客户编号', prop: 'clientId' },
     { label: '姓名', prop: 'clientName' },
     {
       label: '性别',
@@ -352,7 +354,7 @@ const COLUMNS = {
     { label: '备注', prop: 'result' },
   ],
   sport: [
-    { label: '客户编号', prop: 'clientName' },
+    { label: '客户编号', prop: 'clientId' },
     { label: '姓名', prop: 'clientName' },
     {
       label: '性别',
@@ -370,7 +372,7 @@ const COLUMNS = {
     { label: '备注', prop: 'result' },
   ],
   other: [
-    { label: '客户编号', prop: 'clientNo' },
+    { label: '客户编号', prop: 'clientId' },
     { label: '姓名', prop: 'clientName' },
     {
       label: '性别',
@@ -545,7 +547,11 @@ export default {
         this.$message.error('请先选择数据');
         return false;
       }
-      this.remove(this.multipleSelection.map(item => item.id), true);
+      if (this.tabIndex === 'other') {
+        this.remove(this.multipleSelection.map(item => item.healthDataOtherId), true);
+      } else {
+        this.remove(this.multipleSelection.map(item => item.id), true);
+      }
     },
     remove(list, batch = false) {
       this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认${batch ? '批量' : ''}删除！</span></div>`, '删除提示', {
@@ -588,6 +594,7 @@ export default {
           });
         }
         if (this.tabIndex === 'other') {
+          console.log(list, 'shanchujsklfjllw');
           this.$api.healthMonitorInterface.deletedhealthbloodpressure(list).then(({ data }) => {
             if (data.success) {
               this.$message.success('操作成功');

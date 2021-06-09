@@ -14,7 +14,7 @@
       </div>
       <el-row>
         <el-col :span="6">
-          <el-form-item label="客户姓名：" >
+          <el-form-item label="客户姓名" >
             <span>{{form.name | getResult}}</span>
           </el-form-item>
         </el-col>
@@ -24,29 +24,29 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="体检编号：" >
+          <el-form-item label="客户编号" >
             <span>{{form.clientNo | getResult}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="客户年龄：" >
+          <el-form-item label="客户年龄" >
             <span>{{form.age | getResult}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="手机号：" >
+          <el-form-item label="手机号" >
             <span>{{form.mobile | getResult}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="项目名称：" >
-            <span>{{form.projectName | getResult}}</span>
+          <el-form-item label="项目名称" >
+            <span>{{form.itemName | getResult}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="项目结果：" >
-            <span :class="form.resultLevel === 1 ? 'warnRed' : 'warnYellow'">
-              {{form.result | getResult}}</span>
+          <el-form-item label="项目结果" >
+            <span :class="form.reportLv === 1 ? 'warnRed' : 'warnYellow'">
+              {{form.itemValue | getResult}}</span>
           </el-form-item>
         </el-col>
       </el-row>
@@ -63,25 +63,57 @@
           </div>
         </div>
         <div class="interventionCon">
-          <el-row>
+          <el-row v-if="Tabactive === 0">
             <el-col :span="6">
-              <el-form-item label="上报时间：" >
-                <span>2021-04-21 14:00</span>
+              <el-form-item label="上报时间" >
+                <span>{{reportForm.reportDate}}</span>
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="上报科室：" >
-                <span>内科</span>
+              <el-form-item label="上报科室" >
+                <span>{{reportForm.reportDepartment}}</span>
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="上报医生：" >
-                <span>陈良</span>
+              <el-form-item label="上报医生" >
+                <span>{{reportForm.reportUserName}}</span>
               </el-form-item>
             </el-col>
             <el-col :span="24">
-              <el-form-item label="上报备注：" >
-                <span>患者各项指标均已超出正常值，请注意观察，继续跟踪回访</span>
+              <el-form-item label="上报备注" >
+                <span>{{reportForm.remark}}</span>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row v-else>
+            <el-col :span="6">
+              <el-form-item label="跟踪时间" >
+                <span>{{trackingList[Tabactive - 1].trackingDate.split(' ')[0]}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="跟踪方式" >
+                <span>{{trackingList[Tabactive - 1].trackingWayName}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="跟踪人员" >
+                <span>{{trackingList[Tabactive - 1].trackingUserName}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="短信通知" >
+                <span>{{trackingList[Tabactive - 1].isSendMsg === 1 ? '是' : '否'}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="跟踪记录" >
+                <span>{{trackingList[Tabactive - 1].trackingRemark}}</span>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="短信小结" >
+                <span>{{trackingList[Tabactive - 1].messageRecordContent}}</span>
               </el-form-item>
             </el-col>
           </el-row>
@@ -125,25 +157,21 @@ export default {
     return {
       popoverStatus: false,
       isstate: true,
-      form: { id: '1',
-        clientNo: '2021015898745',
-        name: '吴白',
-        gender: 1,
-        mobile: '15899856354',
-        age: 30,
-        projectName: '肺部CT',
-        result: '疑似肺癌',
-        resultLevel: 1,
-        subjectName: '内科',
-        doctor: '陈良',
-        createdTime: '2021-04-27 14：00',
-        receiveName: '郑西',
-        receiveTime: '2021-04-29 19：20',
-        zongName: '否',
+      form: {
+        clientNo: '',
+        name: '',
+        gender: '',
+        mobile: '',
+        age: '',
+        itemName: JSON.parse(localStorage.getItem('positiveTrackingDetail')).itemName,
+        itemValue: JSON.parse(localStorage.getItem('positiveTrackingDetail')).itemValue,
+        reportLv: JSON.parse(localStorage.getItem('positiveTrackingDetail')).reportLv,
       },
-      tabbor: ['首次上报', '2021-04-21', '2021-04-15'],
+      reportForm: {},
+      trackingList: [],
+      planWayList: [],
+      tabbor: [],
       Tabactive: 0,
-      tabIndex: 0,
       options: {
         inDate: {
           disabledDate: (cur) => {
@@ -181,42 +209,60 @@ export default {
         hpi: [{ required: true, message: '现病史不能为空' }],
         diagnosis: [{ required: true, message: '诊断不能为空' }],
       },
-      resultOptions: [
-        { value: 1, label: '未指定' },
-        { value: 2, label: '治疗中' },
-        { value: 3, label: '转诊' },
-        { value: 4, label: '转为慢病' },
-        { value: 5, label: '痊愈' },
-        { value: 6, label: '其他' },
-      ],
-      typeOptions: [
-        { value: 1, label: '门诊' },
-        { value: 2, label: '住院' },
-      ],
       currentUser: {},
       ids: this.$route.query.id,
     };
   },
   mounted() {
-    if (this.ids) {
-      this.$api.medicalHistoryInterface.medicalInfoDetail(this.ids).then((res) => {
-        const { data } = res;
-        console.log(data, '撒打算大的');
-        this.form = Object.assign(this.form, data.data || {});
-        this.currentUser = {
-          id: this.form.clientInfoId,
-          name: this.form.clientName,
-          age: this.form.age,
-          gender: this.form.gender,
-          gridName: this.form.clientGridName,
-        };
+    this.getClientUserInfo(this.$route.params.clientId);
+    this.getPlanWayList();
+    this.$api.sunFollow.getItemTrackingRecordList({
+      clientId: this.$route.params.clientId,
+      positiveTrackingId: this.$route.params.positiveTrackingId }).then((res) => {
+      const { data } = res;
+      console.log(data);
+      this.tabbor = [];
+      data.data.forEach((val) => {
+        val.trackingWayName = this.planWayList.find(t => t.id === val.trackingWay).name;
+        this.tabbor.push(val.trackingDate.split(' ')[0]);
+        this.trackingList.push(val);
       });
-    }
+      if (this.tabbor.length > 0) {
+        this.tabbor.unshift('首次上报');
+      }
+      this.reportForm = {
+        reportDate: data.data[0].reportDate,
+        reportDepartment: data.data[0].reportDepartment,
+        reportUserName: data.data[0].reportUserName,
+        remark: data.data[0].remark,
+      };
+    });
   },
   methods: {
     TabbarBtn(index) {
       this.Tabactive = index;
-      // this.$emit('messageData', index, this.tabIndex);
+    },
+    getClientUserInfo(id) {
+      this.$api.userManagerInterface.getDetail(id).then(({ data }) => {
+        this.form.clientNo = data.data.clientNo;
+        this.form.name = data.data.name;
+        this.form.gender = data.data.gender;
+        this.form.mobile = data.data.mobile;
+        this.form.age = data.data.age;
+      });
+    },
+    /**
+     * 获取随访方式
+     * @return {Promise<void>}
+     */
+    async getPlanWayList() {
+      const res = await this.$api.userFollowInterface.getIntervenePlanWayList();
+      const { data } = res.data;
+      const list = data.map((it) => {
+        const { id, name } = it;
+        return { id, name };
+      });
+      this.planWayList = list;
     },
     handleStartDateChange() {
       if (this.form.medicalType === 1 && this.form.inDate) {
@@ -440,8 +486,8 @@ export default {
     border-radius: 8px 5px 0 0;
     display: block;
     width: 100px;
-    height: 36px;
-    line-height: 36px;
+    height: 37px;
+    line-height: 37px;
     text-align: center;
     border-bottom: solid 1px #EEF1F5;
   }
@@ -449,7 +495,7 @@ export default {
     content: '';
     display: block;
     width: 21px;
-    height: 36px;
+    height: 37px;
     position: absolute;
     -webkit-transform: skewX(23deg);
     transform: skewX(23deg);
@@ -463,7 +509,7 @@ export default {
     content: '';
     display: block;
     width: 10px;
-    height: 36px;
+    height: 37px;
     position: absolute;
     -webkit-transform: skewX(165deg);
     transform: skewX(163deg);
@@ -486,8 +532,8 @@ export default {
     border-radius: 8px 5px 0 0;
     display: block;
     width: 100px;
-    height: 36px;
-    line-height: 36px;
+    height: 37px;
+    line-height: 37px;
     text-align: center;
     border-top: solid 1px #DDE0E6;
   }
@@ -495,7 +541,7 @@ export default {
     content: '';
     display: block;
     width: 21px;
-    height: 36px;
+    height: 37px;
     position: absolute;
     -webkit-transform: skewX(23deg);
     transform: skewX(23deg);
@@ -509,7 +555,7 @@ export default {
     content: '';
     display: block;
     width: 10px;
-    height: 36px;
+    height: 37px;
     position: absolute;
     -webkit-transform: skewX(165deg);
     transform: skewX(163deg);

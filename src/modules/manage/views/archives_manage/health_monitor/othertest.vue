@@ -465,13 +465,12 @@ export default {
       this.queryList();
     },
     submit() {
-      console.log(this.detectionInfos, 'qweqweqweqwe');
-      if (!this.infoSource.clientId === '') {
-        return this.$message.warning('请选择客户');
-      }
-
-      if (!this.detectioninfoSource.clientId === '') {
+      // console.log(this.detectionInfos, 'qweqweqweqwe');
+      if (!this.infoSource.clientName) {
         return this.$message.warning('请添加检测项目');
+      }
+      if (!this.infoSource.startDate) {
+        return this.$message.warning('请填写时间');
       }
       const arrars = [];
       for (let i = 0; i < this.detectionInfos.length; i++) {

@@ -13,7 +13,7 @@
                 <div class="searchInputFormItem">
                   <el-input placeholder="名称/原料" v-model="query.name">
                   </el-input>
-                  <span class="searchBtnImgSpan" @click="search">
+                  <span class="searchBtnImgSpan" @click="search" style="right:-3px">
                     <img
                       class="searchBtnImg"
                       src="@/assets/images/common/topsearch.png"
@@ -295,6 +295,10 @@ export default {
       background-color: #dde0e6 !important;
     }
   }
+}
+/deep/ .el-tabs .el-tabs__item.is-active{
+ height: 48px;
+ line-height: 48px;
 }
 .search-title {
   height: 22px;

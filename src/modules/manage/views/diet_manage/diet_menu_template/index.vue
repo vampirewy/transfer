@@ -156,7 +156,7 @@ export default {
   },
   data() {
     return {
-      viewIndex: 2,
+      viewIndex: 1,
       dietMenuConfigId: '1388090523102408706',
       isShowDietMenuTemplate: false,
       isShowDietMenuTemplateType: false,

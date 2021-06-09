@@ -431,7 +431,7 @@ export default {
   }
   .el-input__inner,
   .el-textarea__inner {
-    background-color: #f4f4f6;
+    // background-color: #f4f4f6;
     border: 0;
     color: #333333;
   }

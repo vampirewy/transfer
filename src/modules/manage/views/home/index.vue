@@ -1,5 +1,5 @@
 <template>
-<div style="margin:-20px -15px;">
+<div style="margin:-20px -15px;background: #F5F8FC46;">
 <div style="display: flex;">
   <div class="dashboard-editor-container">
     <search-group @searchData="getSearchData" />
@@ -138,8 +138,16 @@
             </div>
             <div class="chart-wrapper" v-else>
               <div class="pieDiv" style="margin:0 3% 0 5%;">
-                <pie-chart :xList="intervenePlanPieXList" :yList="intervenePlanPieYList" />
+                <pie-chart :xList="intervenePlanPieXList"
+                :yList="intervenePlanPieYList"
+                :centerText="checkAfterFeeTotal"/>
               </div>
+              <!-- <div style="position: relative;">
+                <div class="totals">
+                  <div class="num">1280</div>
+                  <div class="name">客户总数</div>
+                </div>
+              </div> -->
               <div class="pieDiv" style="height:110px">
                 <div class="pieDivTips" v-for="(item, index) in dianPieList" :key="item.name">
                   <div class="pieDivTipsLeft">
@@ -156,7 +164,9 @@
 </div>
 <div>
   <div class="TabBars">
-    <div v-for="(item,index) in tabbor" :key="index">
+    <div  :class="Tabactive === index?'TabBarsNameone':'TabBarsNamesone'"
+    @click="TabbarBtn(index)">当日任务</div>
+    <div v-for="(item,index) in tabbor" :key="index" style="margin-top:9px">
       <span :class="Tabactive === index?'TabBarsName':'TabBarsNames'" @click="TabbarBtn(index)">
         {{item}}
         <div class="Tabunread">3</div>
@@ -294,6 +304,7 @@ export default {
       serviceOrderXList: [],
       serviceOrderYList: [],
       intervenePlanPieXList: ['10', '20', '30', '10', '40'],
+      checkAfterFeeTotal: '1280',
       intervenePlanPieYList: [
         {
           value: 400,
@@ -344,8 +355,8 @@ export default {
           value: '钻石会员',
         },
       ],
-      dianColorList: ['#5B8FF9', '#5AD8A6', '#6C6CE5', '#F6BD16', '#E8684A', '#6DC8EC', '#31C529', '#54c9b6', '#F53626', '#f5c8be'],
-      tabbor: ['当日任务', '阳性跟踪', '随访任务'],
+      dianColorList: ['#FA912B', '#333333', '#806CE5', '#3154AC', '#36BF2F', '#6DC8EC', '#31C529', '#54c9b6', '#F53626', '#f5c8be'],
+      tabbor: ['阳性跟踪', '随访任务'],
       Tabactive: 0,
     };
   },
@@ -505,6 +516,21 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.totals{
+  position: absolute;
+  margin-top: -95px;
+  margin-left: 87px;
+  text-align: center;
+  .num{
+    font-weight: 600;
+    color: #333333;
+    font-size: 20px;
+  }
+  .name{
+    font-size: 12px;
+    color: #999999;
+  }
+}
 .divTitle{
   margin: 26px 0 0 0px;
   font-size: 16px;
@@ -649,6 +675,57 @@ export default {
   display: flex;
   margin-top: 30px;
   // margin-left: 10px;
+  .TabBarsNameone{
+    cursor: pointer;
+    background: #ffffff;
+    border-color: transparent;
+    color: #333333;
+    font-weight: 500;
+    position: relative;
+    margin-right: 30px;
+    padding:11px 18px 9px 24px;
+    font-size: 14px;
+    border-radius: 8px 5px 0 0;
+    box-shadow: 0px 6px 24px 0px rgba(14, 37, 87, 0.06);
+  }
+  .TabBarsNameone:after{
+    content: '';
+    display: block;
+    width: 25px;
+    height: 40px;
+    position: absolute;
+    -webkit-transform: skewX(23deg);
+    transform: skewX(23deg);
+    background: white;
+    border-top-right-radius: 8px;
+    top: 0px;
+    right: -13px;
+  }
+  .TabBarsNamesone{
+    cursor: pointer;
+    background: #EEF1F5;
+    border-color: transparent;
+    color: #666666;
+    position: relative;
+    margin-right: 30px;
+    padding:11px 18px 9px 24px;
+    font-size: 14px;
+    border-radius: 8px 5px 0 0;
+  }
+  .TabBarsNamesone:after{
+    content: '';
+    display: block;
+    width: 25px;
+    height: 40px;
+    position: absolute;
+    -webkit-transform: skewX(23deg);
+    transform: skewX(23deg);
+    background: #EEF1F5;
+    border-top-right-radius: 8px;
+    top: 0px;
+    right: -13px;
+  }
+
   .TabBarsNames{
     cursor: pointer;
     background: #EEF1F5;
@@ -748,7 +825,7 @@ export default {
   box-shadow: 0px 6px 24px 0px rgba(14, 37, 87, 0.06);
   border-radius: 0px 0px 8px 8px;
   padding: 20px;
-  margin-top: 10px;
+  // margin-top: 10px;
 }
 /*@media (max-width: 1024px) {
   .chart-wrapper {

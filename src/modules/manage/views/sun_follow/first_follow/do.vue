@@ -2,7 +2,7 @@
   <div class="medical-history-form">
     <el-row style="display:flex;">
       <el-col :span="11" style="padding-right: 20px;border-right: 2px solid #F6F8FC">
-        <client-info :info="clientInfoObj"></client-info>
+        <client-info></client-info>
           <div>
             <div class="TabBars">
               <div v-for="(item,index) in tabbor" :key="index">
@@ -24,7 +24,7 @@
           <div class="divRightTitle" style="margin-top: 0">跟踪内容
             <div class="titleBiao"></div></div>
         </div>
-        <follow-content></follow-content>
+        <follow-content @getTable="getFollowContent"></follow-content>
         <el-form
                 :model="form"
                 ref="staffForm"
@@ -40,7 +40,7 @@
               <el-form-item label="跟踪时间">
                 <el-date-picker
                         style="width: 100%"
-                        v-model="form.createdTime"
+                        v-model="form.trackingDate"
                         type="date"
                         format="yyyy-MM-dd"
                         value-format="yyyy-MM-dd"
@@ -49,18 +49,19 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="跟踪人员" prop="realName">
+              <el-form-item label="跟踪人员" prop="trackingUserName">
                 <el-input
                         type="text"
+                        disabled
                         placeholder="请输入"
-                        v-model="form.realName"></el-input>
+                        v-model="form.trackingUserName"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="24">
               <el-form-item label="跟踪方式">
-                <el-select v-model="form.planWay" placeholder="请选择">
+                <el-select v-model="form.trackingWay" placeholder="请选择">
                   <el-option :label="it.name" :value="it.id" :key="it.id"
                              v-for="it in planWayList">
                   </el-option>
@@ -70,10 +71,10 @@
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="跟踪记录" prop="desc">
+              <el-form-item label="跟踪记录" prop="trackingRemark">
                 <el-input
                         type="textarea"
-                        v-model="form.desc"
+                        v-model="form.trackingRemark"
                         :rows="4"
                         placeholder="请输入"
                         :maxlength="300"
@@ -86,9 +87,9 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="发送短信">
-                <el-radio-group v-model="form.postSms">
-                  <el-radio :label="0">发送</el-radio>
-                  <el-radio :label="1">不发送</el-radio>
+                <el-radio-group v-model="form.isSendMsg">
+                  <el-radio :label="1">发送</el-radio>
+                  <el-radio :label="2">不发送</el-radio>
                 </el-radio-group>
               </el-form-item>
             </el-col>
@@ -98,7 +99,7 @@
               <el-form-item label="短信小结">
                 <el-input
                         type="textarea"
-                        v-model="form.smsDesc"
+                        v-model="form.messageContent"
                         :rows="4"
                         placeholder="请输入"
                         :maxlength="300"
@@ -116,15 +117,12 @@
             <el-col :span="12">
               <el-form-item label="回访时间">
                 <el-select
-                        v-model="form.afterDay"
+                        v-model="form.nextTrackingDay"
                         placeholder="请选择"
                         @change="changeAfterDay"
                 >
                   <el-option label="10天后" :value="10" key="10"></el-option>
-                  <el-option label="15天后" :value="15" key="15"></el-option>
                   <el-option label="30天后" :value="30" key="30"></el-option>
-                  <el-option label="45天后" :value="45" key="45"></el-option>
-                  <el-option label="60天后" :value="60" key="60"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -132,10 +130,11 @@
               <el-form-item label="对应日期">
                 <el-date-picker
                         style="width: 100%"
-                        v-model="form.nextFollowTime"
+                        v-model="form.nextTrackingDate"
                         type="date"
                         format="yyyy-MM-dd"
                         value-format="yyyy-MM-dd"
+                        :min-date="new Date()"
                         placeholder="请选择">
                 </el-date-picker>
               </el-form-item>
@@ -144,7 +143,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="回访方式">
-                <el-select v-model="form.followWay" placeholder="请选择">
+                <el-select v-model="form.nextTrackingWay" placeholder="请选择">
                   <el-option :label="it.name" :value="it.id" :key="it.id"
                              v-for="it in planWayList">
                   </el-option>
@@ -157,7 +156,7 @@
               <el-form-item label="回访提示">
                 <el-input
                         type="textarea"
-                        v-model="form.followDesc"
+                        v-model="form.nextTrackingTip"
                         :rows="4"
                         placeholder="请输入"
                         :maxlength="300"
@@ -214,40 +213,24 @@ export default {
   data() {
     return {
       popoverStatus: false,
-      isstate: true,
-      clientInfoObj: {
-        clientNo: '2021015898745',
-        name: '吴白',
-        age: 30,
-        gender: 1,
-        mobile: '15899856354',
-        workUnitName: '杭州仅一科技有限公司',
-      },
       form: {
-        id: '',
-        clientNo: '',
-        name: '',
-        gender: '',
-        mobile: '',
-        age: '',
-        projectName: '',
-        result: '',
-        resultLevel: '',
-        subjectName: '',
-        doctor: '',
-        createdTime: new Date(),
-        receiveName: '',
-        receiveTime: '',
-        zongName: '',
-        postSms: 1,
-        smsDesc: '',
-        afterDay: 10,
-        nextFollowTime: new Date(new Date().getTime() + (8.64e7 * 10)),
-        followWay: '',
-        followDesc: '',
+        clientId: this.$route.params.clientId,
+        trackingDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        trackingUserId: '',
+        trackingUserName: '',
+        trackingWay: '',
+        trackingRemark: '',
+        isSendMsg: 2,
+        messageContent: '',
+        nextTrackingDay: 10,
+        nextTrackingDate: dayjs(new Date(new Date().getTime() + (8.64e7 * 10))).format('YYYY-MM-DD'),
+        nextTrackingWay: '',
+        nextTrackingTip: '',
+        contentSaveRequests: [],
       },
+      contentSaveRequestsList: [],
       planWayList: [],
-      tabbor: ['跟踪记录', '体检信息', '历史阳性', '就诊记录'],
+      tabbor: ['跟踪记录', '体检信息', '历史阳性'], // , '就诊记录'
       Tabactive: 0,
       tabIndex: 0,
       options: {
@@ -304,6 +287,7 @@ export default {
     };
   },
   mounted() {
+    this.getUserInfo();
     this.getPlanWayList();
     if (this.ids) {
       this.$api.medicalHistoryInterface.medicalInfoDetail(this.ids).then((res) => {
@@ -322,7 +306,13 @@ export default {
   },
   methods: {
     changeAfterDay(val) {
-      this.form.nextFollowTime = new Date(new Date().getTime() + (8.64e7 * val));
+      this.form.nextTrackingDate = dayjs(new Date(new Date().getTime() + (8.64e7 * val))).format('YYYY-MM-DD');
+    },
+    async getUserInfo() {
+      const res = await this.$api.userManagerInterface.getUserInfo();
+      const { data } = res.data;
+      this.form.trackingUserId = data.userId;
+      this.form.trackingUserName = data.realName;
     },
     /**
      * 获取随访方式
@@ -338,6 +328,10 @@ export default {
       // list.unshift({ name: '全部', value: '' });
       this.planWayList = list;
     },
+    getFollowContent(list) {
+      console.log(list);
+      this.contentSaveRequestsList = list;
+    },
     TabbarBtn(index) {
       this.Tabactive = index;
       // this.$emit('messageData', index, this.tabIndex);
@@ -346,9 +340,22 @@ export default {
       this.$router.go(-1);
     },
     submit() {
-      this.$message.success('操作成功');
-      this.$router.push({
-        path: '/first_follow',
+      const sendData = Object.assign({}, this.form);
+      sendData.contentSaveRequests = [];
+      this.contentSaveRequestsList.forEach((val) => {
+        sendData.contentSaveRequests.push({
+          positiveTrackingId: val.id,
+          isCloseCase: val.isCloseCase,
+          state: val.state || 1,
+        });
+      });
+      sendData.trackingDate = `${sendData.trackingDate.split(' ')[0]} 00:00:00`;
+      sendData.nextTrackingDate = `${sendData.nextTrackingDate.split(' ')[0]} 00:00:00`;
+      this.$api.sunFollow.savePositiveReturn(sendData).then(() => {
+        this.$message.success('操作成功');
+        this.$router.push({
+          path: '/first_follow',
+        });
       });
     },
   },
@@ -518,7 +525,7 @@ export default {
     border-radius: 8px 8px 0 0;
     display: block;
     width: 72px;
-    height: 36px;
+    height: 37px;
     line-height: 38px;
     text-align: center;
     border-bottom: solid 1px #EEF1F5;
@@ -527,7 +534,7 @@ export default {
     content: '';
     display: block;
     width: 16px;
-    height: 36px;
+    height: 37px;
     position: absolute;
     -webkit-transform: skewX(23deg);
     transform: skewX(23deg);
@@ -541,7 +548,7 @@ export default {
     content: '';
     display: block;
     width: 12px;
-    height: 36px;
+    height: 37px;
     position: absolute;
     -webkit-transform: skewX(165deg);
     transform: skewX(163deg);
@@ -564,8 +571,8 @@ export default {
     border-radius: 8px 8px 0 0;
     display: block;
     width: 72px;
-    height: 36px;
-    line-height: 36px;
+    height: 37px;
+    line-height: 37px;
     text-align: center;
     border-top: solid 1px #DDE0E6;
   }
@@ -573,7 +580,7 @@ export default {
     content: '';
     display: block;
     width: 16px;
-    height: 36px;
+    height: 37px;
     position: absolute;
     -webkit-transform: skewX(23deg);
     transform: skewX(23deg);
@@ -587,7 +594,7 @@ export default {
     content: '';
     display: block;
     width: 12px;
-    height: 36px;
+    height: 37px;
     position: absolute;
     -webkit-transform: skewX(165deg);
     transform: skewX(163deg);

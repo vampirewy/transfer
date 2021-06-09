@@ -19,7 +19,7 @@
       class="form-content"
     >
     <div>
-      <div><span></span><span style="color:#333333;font-size:16px">项目信息</span></div>
+      <div><span></span><span class="outlierTitle">项目信息</span></div>
       <div class="lookPressure">
         <div><span>项目名称：</span><span>{{expandData.itemName}}</span></div>
         <div><span>科室名称：</span><span>{{expandData.sectionName}}</span></div>
@@ -28,7 +28,7 @@
         <div><span>适宜性别：</span><span>{{expandData.genderTxt}}</span></div>
         <div><span>正常参考：</span><span>123123</span></div>
       </div>
-      <div><span></span><span style="color:#333333;font-size:16px">匹配</span></div>
+      <div><span></span><span class="outlierTitles">匹配</span></div>
       <!-- <div class="row" style="display: flex">
           <el-form-item label="项目匹配：" prop="hpi">
               <el-input
@@ -290,6 +290,46 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/deep/ .el-dialog__body{
+  padding: 5px 26px 10px 26px !important;
+}
+/deep/ .el-input__inner{
+  background: #ffffff !important;
+}
+.outlierTitle{
+   color:#333333;
+   font-size:16px;
+   position: relative;
+   &::after{
+    content: '';
+    display: block;
+    width: 5px;
+    height: 5px;
+    border-radius: 5px;
+    border: solid 1px #B4BBC9;
+    position: absolute;
+    background: #fff;
+    top: 6px;
+    left: -11px;
+   }
+}
+.outlierTitles{
+   color:#333333;
+   font-size:16px;
+   position: relative;
+   &::after{
+    content: '';
+    display: block;
+    width: 5px;
+    height: 5px;
+    border-radius: 5px;
+    border: solid 1px #B4BBC9;
+    position: absolute;
+    background: #fff;
+    top: 6px;
+    left: -11px;
+   }
+}
 .dialog-detail /deep/ {
   .form-title {
     display: flex;

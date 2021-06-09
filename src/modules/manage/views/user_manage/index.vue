@@ -264,8 +264,8 @@
               <template slot-scope="scope">
                 <el-switch
                   v-model="scope.row.state "
-                  active-value="1"
-                  inactive-value="0"
+                  :active-value="1"
+                  :inactive-value="0"
                   active-color="#13ce66"
                   @change=changeStatus(scope,scope.row.state)
                   >

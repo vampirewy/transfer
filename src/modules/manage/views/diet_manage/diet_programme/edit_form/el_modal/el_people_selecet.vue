@@ -16,9 +16,10 @@
                 <el-option label="女" :value="0"></el-option>
               </el-select>
             </div>
-            <div class="searchInputFormItem">
-              <el-input placeholder="输入条件搜索" v-model="query"> </el-input>
-              <span class="searchBtnImgSpan" @click="search">
+            <div class="searchInputFormItem" style="width:108px">
+              <el-input placeholder="输入条件搜索"
+              v-model="query"> </el-input>
+              <span class="searchBtnImgSpan" @click="search" style="right:-3px">
                 <img
                   class="searchBtnImg"
                   src="@/assets/images/common/topsearch.png"

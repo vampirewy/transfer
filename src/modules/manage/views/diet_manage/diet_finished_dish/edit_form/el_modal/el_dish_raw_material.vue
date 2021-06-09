@@ -11,7 +11,7 @@
       <div class="divTitle">
         <div class="searchCondition">
           <div class="searchLeft">
-            <div>
+            <div style="margin-top: 8px;">
               <span>食品类别：</span>
               <el-select
                 v-model="query.foodSort"
@@ -34,7 +34,7 @@
                 v-model="query.names"
               >
               </el-input>
-              <span class="searchBtnImgSpan" @click="search">
+              <span class="searchBtnImgSpan" @click="search" style="right:-3px">
                 <img
                   class="searchBtnImg"
                   src="@/assets/images/common/topsearch.png"

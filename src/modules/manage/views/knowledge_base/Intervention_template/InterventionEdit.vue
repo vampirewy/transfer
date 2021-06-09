@@ -11,15 +11,13 @@
         </div>
         <el-row>
           <el-col :span="6">
-              <div class="isEnabled"><span>模版名称：</span>白内障</div>
+              <div class="isEnabled"><span>模版名称：</span>{{templateName}}</div>
         </el-col>
         <el-col :span="6">
           <div class="isEnabled">
             <span>是否启用：</span>
                 <el-switch
                   v-model="isstate"
-                  active-value="1"
-                  inactive-value="0"
                   active-color="#13ce66"
                   @change=changeStatus()
                   >
@@ -29,7 +27,7 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <div class="isEnabled"><span>模版条件：</span>1231231312123131212</div>
+            <div class="isEnabled"><span>模版条件：</span>{{qualification}}</div>
           </el-col>
         </el-row>
         <!-- <div class="divTop">
@@ -66,16 +64,16 @@
                   show-overflow-tooltip
           >
             <el-table-column type="selection" min-width="40"></el-table-column>
-            <el-table-column label="阶段" prop="clientNo" min-width="80" show-overflow-tooltip>
+            <el-table-column label="阶段" prop="month" min-width="80" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>
-                  {{ scope.row.clientNo }}
+                  {{ scope.row.month }}
                 </span>
               </template>
             </el-table-column>
-            <el-table-column label="干预形式" prop="createTime" min-width="80" show-overflow-tooltip />
-            <el-table-column label="主要内容" prop="createTime" min-width="80" show-overflow-tooltip />
-            <el-table-column label="干预提示" prop="createTime" min-width="80" show-overflow-tooltip />
+            <el-table-column label="干预形式" prop="planWayTxt" min-width="80" show-overflow-tooltip />
+            <el-table-column label="主要内容" prop="planContent" min-width="80" show-overflow-tooltip />
+            <el-table-column label="干预提示" prop="day" min-width="80" show-overflow-tooltip />
             <!-- <el-table-column label="附件" prop="attachment">
               <template slot-scope="scope">
                 <div
@@ -97,7 +95,7 @@
                 <el-button
                         type="text"
                         size="small"
-                        @click="edits()"
+                        @click="edits(scope.row)"
                         v-if="getAccess('customer_pool_edit')"
                 >编辑</el-button>
                 <el-button type="text"
@@ -107,7 +105,7 @@
                 <el-button
                         type="text"
                         size="small"
-                        @click="claim(scope)"
+                        @click="LookInfo(scope.row)"
                 >查看</el-button
                 >
                 <!-- <el-button
@@ -135,7 +133,7 @@
               </template>
             </el-table-column>
           </el-table>
-          <div style="text-align: right">
+          <!-- <div style="text-align: right">
             <el-pagination
                     style="margin-top: 15px"
                     @current-change="onChangePage"
@@ -145,14 +143,23 @@
                     :pageSizes="[15]"
                     :page-size="15"
             ></el-pagination>
-          </div>
+          </div> -->
         </div>
       <!-- </template> -->
     <edit-detail
+      v-if="modalVisible"
       :visible="modalVisible"
       :value="currentValue"
+      :id="valueid"
+      :interveneTemplateId="ids"
       @cancel="cancel"
     ></edit-detail>
+    <edit-detail-info
+      v-if="modalVisibleInfo"
+      :visible="modalVisibleInfo"
+      :id="valueidInfo"
+      @cancels="cancels"
+    ></edit-detail-info>
   </div>
 </template>
 
@@ -165,6 +172,7 @@ import QueryFilter from '~/src/components/query_page/query_filter.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
 import * as dayjs from 'dayjs';
 import editDetail from './components/edit_detail.vue';
+import editDetailInfo from './components/edit_detail_info.vue';
 
 export default {
   name: 'index',
@@ -175,6 +183,7 @@ export default {
     QueryPage,
     QueryFilter,
     editDetail,
+    editDetailInfo,
   },
   data() {
     return {
@@ -200,14 +209,58 @@ export default {
       params: {
         pageNo: 1,
         pageSize: 15,
-        type: 0,
+        interveneTemplateId: this.$route.params.id,
       },
       isCollapse: true,
       modalVisible: false,
+      modalVisibleInfo: false,
       currentValue: {},
+      ids: this.$route.params.id,
+      templateName: '', // 模版名称
+      qualification: '', // 模版名称
+      valueid: '', // 当前id
+      valueidInfo: {}, // 查看详情
     };
   },
+  mounted() {
+    // this.getUserList();
+    // this.getGridList(); // 获取人员列类别
+    // this.getDoctor(); // 获取医生列表
+    // this.getDetail();
+    this.fetch();
+  },
   methods: {
+    async getDetail() {
+      const reqBody = { id: this.ids };
+      const res = await this.$api.interventionTemplateInterface.getInterveneTemplateById(
+        reqBody,
+      );
+      const { data } = res.data;
+      // console.log(data);
+      this.templateName = data.name;
+      if (data.state === 1) {
+        this.isstate = true;
+      } else {
+        this.isstate = false;
+      }
+      this.qualification = data.qualification;
+    },
+    fetch() {
+      this.$api.interventionTemplateInterface
+        .getInterveneTemplatePlanList(this.params.interveneTemplateId)
+        .then(({ data }) => {
+          if (data.success) {
+            this.total = data.total;
+            this.dataSource = data.data;
+            console.log(this.dataSource);
+          }
+        });
+    },
+    LookInfo(row) {
+      this.valueidInfo = row;
+      this.modalVisibleInfo = true;
+      this.modalVisible = false;
+    },
     // 展开更多
     upMore() {
       this.isTrue = !this.isTrue;
@@ -218,10 +271,24 @@ export default {
       // this.$router.push({
       //   name: 'InterventionAdd',
       // });
+      // console.log(this.ids, 'asdasd');
       this.modalVisible = true;
+    },
+    edits(row) {
+      this.currentValue = row;
+      this.valueid = row.id;
+      this.modalVisible = true;
+      this.modalVisibleInfo = false;
+      // console.log(this.ids, this.valueid, 'asdasdasd');
     },
     cancel() {
       this.modalVisible = false;
+      this.modalVisibleInfo = false;
+      this.fetch();
+    },
+    cancels() {
+      this.modalVisibleInfo = false;
+      // this.fetch();
     },
     // 获取人员列表
     async getGridList() {
@@ -255,14 +322,17 @@ export default {
         showClose: true,
       }).then(() => {
         const params = {
-          clientIdList: this.chooseUserList.map(user => user.id),
+          interveneTemplatePlanIds: this.chooseUserList.map(user => user.id),
         };
-        this.$api.userManagerInterface.deleteClientInfo(params).then(({ data }) => {
-          if (data.code === 200) {
+        this.$api.interventionTemplateInterface.removeInterveneTemplatePlan(params).then(({
+          data,
+        }) => {
+          if (data.success) {
             this.$message.success('操作成功');
-            this.search();
-            this.chooseUserList = [];
-            this.$refs.multipleTable.clearSelection();
+            this.fetch();
+            // this.search();
+            // this.chooseUserList = [];
+            // this.$refs.multipleTable.clearSelection();
           }
         });
       });
@@ -274,7 +344,7 @@ export default {
     },
     onChangePage(current = 1) {
       this.params.pageNo = current;
-      this.getUserList();
+      this.fetch();
     },
     search() {
       const hasOnlyStartTime = this.formData.startTime
@@ -421,11 +491,6 @@ export default {
           }
         });
     },
-  },
-  mounted() {
-    this.getUserList();
-    this.getGridList(); // 获取人员列类别
-    this.getDoctor(); // 获取医生列表
   },
 };
 </script>

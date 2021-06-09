@@ -57,6 +57,7 @@
                           value-format="yyyy-MM-dd"
                           placeholder="请选择"
                           v-if="questionType === 1"
+                          :max-date="new Date()"
                   >
                   </el-date-picker>
                   <el-input
@@ -100,7 +101,7 @@
                          slot="suffix"></i>
                     </el-input>
                   </el-popover>-->
-                  <el-input disabled style="width: 200px"
+                  <el-input disabled
                             v-model="form.planDoctorName" placeholder="">
                   </el-input>
                 </el-form-item>
@@ -221,6 +222,7 @@
 <script>
 import ManagerList from '@/components/user_health/manager_list.vue';
 import QuestionEdit from './question_edit.vue';
+import * as dayjs from 'dayjs';
 export default {
   name: 'followplanDetail',
   components: {
@@ -298,7 +300,7 @@ export default {
       this.formGet.planTitle = data.planTitle;
       this.formGet.planContent = data.planContent;
       if (this.questionType === 1) {
-        this.form.planDate = data.planDate ? data.planDate.split(' ')[0] : '';
+        this.form.planDate = dayjs(new Date()).format('YYYY-MM-DD'); // data.planDate ? data.planDate.split(' ')[0] : '';
         this.form.planWay = data.planWay;
         this.form.planTitle = data.planTitle;
         this.form.planDoctor = data.currentOperateUserId; // this.$store.state.user.userId;

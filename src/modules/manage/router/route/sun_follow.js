@@ -41,7 +41,7 @@ export default [
         component: () => import('../../views/sun_follow/first_follow/form'),
       },
       {
-        path: '/first_follow_do/:id',
+        path: '/first_follow_do/:clientId/:sourceType',
         name: 'first_follow_do',
         meta: {
           title: '首次跟踪-处理',
@@ -83,7 +83,7 @@ export default [
         component: () => import('../../views/sun_follow/follow_record'),
       },
       {
-        path: '/follow_record_detail/:id',
+        path: '/follow_record_detail/:clientId/:positiveTrackingId',
         name: 'follow_record_detail',
         meta: {
           title: '查看跟踪记录',
