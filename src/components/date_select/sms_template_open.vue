@@ -10,7 +10,7 @@
     <div class="searchCondition">
       <div class="searchLeft">
         <div class="searchInputFormItem">
-          <el-input placeholder="姓名/编号/单位" v-model="keyword">
+          <el-input placeholder="请输入模板名称" v-model="keyword">
           </el-input>
           <span class="searchBtnImgSpan" @click="search">
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
@@ -39,19 +39,14 @@
     </div>
   </div>
     <el-table :data="tableData" @row-click="handleRowClick" class="openTable">
-      <el-table-column width="80">
+      <el-table-column width="70">
         <template slot-scope="scope">
           <el-radio v-model="selectRadio" :label="scope.row.id">&nbsp;</el-radio>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="姓名"></el-table-column>
-      <el-table-column prop="age" label="年龄"></el-table-column>
-      <el-table-column prop="gender" label="性别">
-        <template slot-scope="scope">
-          <span v-if="scope.row.gender === 1">男</span>
-          <span v-if="scope.row.gender === 2">女</span>
-        </template>
-      </el-table-column>
+      <el-table-column prop="themName" label="模板名称" min-width="50px"
+                       show-overflow-tooltip></el-table-column>
+      <el-table-column prop="content" label="短信内容" show-overflow-tooltip></el-table-column>
     </el-table>
     <el-pagination
       background
@@ -69,7 +64,7 @@
 
 <script>
 export default {
-  name: 'MedicalHistorySelectUser',
+  name: 'sms_template_open',
   data() {
     return {
       keyword: '',
@@ -106,7 +101,7 @@ export default {
       this.queryList();
     },
     async queryList() {
-      const res = await this.$api.userFollowInterface.getClientInfoListPage({
+      const res = await this.$api.userManagerInterface.getMessageTemplate({
         keywords: this.keyword,
         pageNo: this.currentPage,
         pageSize: this.pageSize,

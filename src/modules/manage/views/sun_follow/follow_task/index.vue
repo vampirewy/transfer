@@ -8,7 +8,7 @@
     <div class="searchCondition">
       <div class="searchLeft">
         <div class="searchInputFormItem">
-          <el-input placeholder="姓名/编号/科室" v-model="form.keywords">
+          <el-input placeholder="姓名/编号" v-model="form.keywords">
           </el-input>
           <span class="searchBtnImgSpan" @click="onSearch">
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
@@ -32,9 +32,9 @@
                   v-model="form.startReportDate"
                   type="date"
                   value-format="yyyy-MM-dd"
-                  :max-date="form.endReportDate"
+                  :max-date="form.endReportDate || new Date()"
                   placeholder="开始时间"
-                  style="width: 120px"
+                  style="width: 140px"
           >
           </el-date-picker>
           <span class="timing">-</span>
@@ -43,8 +43,9 @@
                   type="date"
                   value-format="yyyy-MM-dd"
                   :min-date="form.startReportDate"
+                  :max-date="new Date()"
                   placeholder="结束时间"
-                  style="width: 120px"
+                  style="width: 140px"
           >
           </el-date-picker>
         </div>
@@ -86,7 +87,7 @@
                 value-format="yyyy-MM-dd"
                 :max-date="form.endTrackingDate"
                 placeholder="开始时间"
-                style="width: 120px"
+                style="width: 140px"
         >
         </el-date-picker>
         <span class="timing">-</span>
@@ -96,7 +97,7 @@
                 value-format="yyyy-MM-dd"
                 :min-date="form.startTrackingDate"
                 placeholder="结束时间"
-                style="width: 120px"
+                style="width: 140px"
         >
         </el-date-picker>
       </div>
@@ -226,7 +227,7 @@
       >
         <template slot-scope="scope">
              <span class="clientName"
-                   @click="commonHref.toPersonalHealth(scope.row.id, $router)">
+                   @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
                {{ scope.row.clientName | getResult}}
              </span>
         </template>
@@ -410,7 +411,20 @@ export default {
      * @return {Promise<void>}
      */
     async getList() {
-      const res = await this.$api.sunFollow.getPositiveTaskdListPage(this.form);
+      const sendData = Object.assign({}, this.form);
+      if (this.form.startReportDate) {
+        sendData.startReportDate = `${this.form.startReportDate} 00:00:00`;
+      }
+      if (this.form.endReportDate) {
+        sendData.endReportDate = `${this.form.endReportDate} 23:59:59`;
+      }
+      if (this.form.startTrackingDate) {
+        sendData.startTrackingDate = `${this.form.startTrackingDate} 00:00:00`;
+      }
+      if (this.form.endTrackingDate) {
+        sendData.endTrackingDate = `${this.form.endTrackingDate} 23:59:59`;
+      }
+      const res = await this.$api.sunFollow.getPositiveTaskdListPage(sendData);
       const { data } = res.data;
       console.log(data);
       if (data) {

@@ -170,9 +170,9 @@
                 v-model="form.startTime"
                 type="date"
                 value-format="yyyy-MM-dd"
-                :max-date="form.endTime"
+                :max-date="form.endTime || new Date()"
                 placeholder="开始时间"
-                style="width: 120px"
+                style="width: 140px"
         >
         </el-date-picker>
         <span class="timing">-</span>
@@ -181,8 +181,9 @@
                 type="date"
                 value-format="yyyy-MM-dd"
                 :min-date="form.startTime"
+                :max-date="new Date()"
                 placeholder="结束时间"
-                style="width: 120px"
+                style="width: 140px"
         >
         </el-date-picker>
       </div>
@@ -192,9 +193,9 @@
                 v-model="form.startReportDate"
                 type="date"
                 value-format="yyyy-MM-dd"
-                :max-date="form.endReportDate"
+                :max-date="form.endReportDate || new Date()"
                 placeholder="开始时间"
-                style="width: 120px"
+                style="width: 140px"
         >
         </el-date-picker>
         <span class="timing">-</span>
@@ -203,8 +204,9 @@
                 type="date"
                 value-format="yyyy-MM-dd"
                 :min-date="form.startReportDate"
+                :max-date="new Date()"
                 placeholder="结束时间"
-                style="width: 120px"
+                style="width: 140px"
         >
         </el-date-picker>
       </div>
@@ -214,9 +216,9 @@
                 v-model="form.startCollectionDate"
                 type="date"
                 value-format="yyyy-MM-dd"
-                :max-date="form.endCollectionDate"
+                :max-date="form.endCollectionDate || new Date()"
                 placeholder="开始时间"
-                style="width: 120px"
+                style="width: 140px"
         >
         </el-date-picker>
         <span class="timing">-</span>
@@ -225,8 +227,9 @@
                 type="date"
                 value-format="yyyy-MM-dd"
                 :min-date="form.startCollectionDate"
+                :max-date="new Date()"
                 placeholder="结束时间"
-                style="width: 120px"
+                style="width: 140px"
         >
         </el-date-picker>
       </div>

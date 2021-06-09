@@ -46,6 +46,7 @@
               layout="prev, pager, next, jumper, total, sizes"
               :total="total"
               :page-size="5"
+              :current-page="pageNo"
               @current-change="pageClick"
               :pageSizes="[5]"
       ></el-pagination>
@@ -152,7 +153,7 @@ export default {
         width: 99.99%!important;
       }
       /deep/ td{
-        padding: 18.5px 0;
+        // padding: 18.5px 0;
       }
       .red{
         color: red;

@@ -1,45 +1,5 @@
 <template>
   <div>
-  <!--<query-page @reset="reset" @search="search">-->
-    <!--<template v-slot:left>
-      <search>
-        <div class="searchInputFormItem">
-          <el-input placeholder="姓名/手机号搜索"
-          v-model="formData.keyWord">
-            &lt;!&ndash; <el-button slot="append" icon="el-icon-search"
-            @click="onSearch"></el-button>&ndash;&gt;
-          </el-input>
-          <span class="searchBtnImgSpan"  @click="search(1)">
-            <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
-          </span>
-        </div>
-      </search>
-      <query-filter>
-        <el-select placeholder="问卷类型" v-model="formData.questionType">
-          <el-option v-for="item in types" :label="item.name" :value="item.paramValue"
-                     :key="item.paramValue"></el-option>
-        </el-select>
-        <el-date-picker
-                v-model="formData.startTime"
-                type="date"
-                value-format="yyyy-MM-dd"
-                :picker-options="pickerStartTime"
-                placeholder="选择开始日期"
-                style="width: 180px"
-        >
-        </el-date-picker>
-        <el-date-picker
-                v-model="formData.endTime"
-                type="date"
-                value-format="yyyy-MM-dd"
-                :picker-options="pickerEndTime"
-                placeholder="选择结束日期"
-                style="width: 180px"
-        >
-        </el-date-picker>
-      </query-filter>
-    </template>-->
-    <!--<template v-slot:right>-->
   <div class="divTop">
     <div class="divTitle">
       <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
@@ -127,7 +87,7 @@
                   v-model="formData.startTime"
                   type="date"
                   value-format="yyyy-MM-dd"
-                  :max-date="formData.endTime"
+                  :max-date="formData.endTime || new Date()"
                   placeholder="选择开始日期"
                   style="width: 140px"
           >
@@ -138,6 +98,7 @@
                   type="date"
                   value-format="yyyy-MM-dd"
                   :min-date="formData.startTime"
+                  :max-date="new Date()"
                   placeholder="选择结束日期"
                   style="width: 140px"
           >

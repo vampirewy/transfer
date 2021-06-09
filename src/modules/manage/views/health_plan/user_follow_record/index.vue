@@ -411,6 +411,8 @@ export default {
       this.form.planWay = '';
       this.form.planUserId = '';
       this.form.planUserName = '';
+      this.form.assortLevel = '';
+      this.form.pleasedLevel = '';
       this.onLoad();
     },
     /**

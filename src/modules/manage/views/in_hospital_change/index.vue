@@ -27,7 +27,7 @@
             <el-option label="已取消" :value="2"></el-option>
           </el-select>
         </div>
-        <div>
+        <div style="margin-top: 10px;">
           <span>预约时间：</span>
           <el-date-picker
                   v-model="form.startTime"
@@ -35,7 +35,7 @@
                   value-format="yyyy-MM-dd"
                   :max-date="form.endTime"
                   placeholder="开始时间"
-                  style="width: 120px"
+                  style="width: 140px"
           >
           </el-date-picker>
           <span class="timing">-</span>
@@ -45,7 +45,7 @@
                   value-format="yyyy-MM-dd"
                   :min-date="form.startTime"
                   placeholder="结束时间"
-                  style="width: 120px"
+                  style="width: 140px"
           >
           </el-date-picker>
         </div>

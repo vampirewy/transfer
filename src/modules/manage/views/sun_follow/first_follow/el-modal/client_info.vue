@@ -19,9 +19,6 @@
         </div>
       </div>
     </div>
-    <div class="containerTag">
-       <span class="tag" v-for="(item, index) in formData.tagList" :key="index">{{item}}</span>
-    </div>
     <div>
     </div>
   </div>

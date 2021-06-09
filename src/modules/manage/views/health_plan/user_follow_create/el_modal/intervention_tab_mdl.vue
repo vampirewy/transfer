@@ -1,6 +1,6 @@
 <template>
   <div class="intervention_tab_div">
-  <div class="intvTmpl_left">
+  <div class="intvTmpl_left_csx">
     <div class="intvTmpl_left_title">干预模板菜单</div>
     <ul class="intv_menulist">
       <li :class="{'active':active === index}" @click="clickMenu(index, item.id)"
@@ -42,10 +42,11 @@
     </el-table>
     <el-pagination
       background
+      @current-change="pageClick"
+      :current-page="pageNo"
+      :page-size="pageSize"
       layout="prev, pager, next, jumper, total, sizes"
       :total="total"
-      :page-size="10"
-      @current-change="pageClick"
       :pageSizes="[10]"
     ></el-pagination>
   </div>
@@ -63,9 +64,12 @@ export default {
       form: {
         templateId: '',
         templateList: [],
+        planDoctor: '',
+        planDoctorName: '',
       },
       total: 0,
       pageNo: 1,
+      pageSize: 10,
       multipleSelectionAll: [], // 所有选中的数据包含跨页数据
       multipleSelection: [], // 当前页选中的数据
       idKey: 'id', // 标识列表数据中每一行的唯一键的名称(需要按自己的数据改一下)
@@ -73,6 +77,7 @@ export default {
   },
   mounted() {
     this.getTemplateList();// 获取干预模板名
+    this.getUserInfo();
   },
   methods: {
     clickMenu(index, id) {
@@ -82,6 +87,12 @@ export default {
       this.form.templateId = id;
       this.pageNo = 1;
       this.getList();
+    },
+    async getUserInfo() {
+      const res = await this.$api.userManagerInterface.getUserInfo();
+      const { data } = res.data;
+      this.form.planDoctor = data.userId;
+      this.form.planDoctorName = data.realName;
     },
     // 设置选中的方法
     setSelectRow() {
@@ -162,6 +173,8 @@ export default {
           }
         });
         if (same === false) { // 如果没有相同的则push
+          valuePageCheck.planDoctor = this.form.planDoctor;
+          valuePageCheck.planDoctorName = this.form.planDoctorName;
           getStateTplList.push(valuePageCheck);
         }
       });
@@ -260,7 +273,59 @@ export default {
 <style lang="scss" scoped>
   .intervention_tab_div{
     display: flex;
-    .intvTmpl_left{
+    // 侧边栏
+    .intvTmpl_left_csx {
+      width: 150px;
+      max-height: 685px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      border-radius: 8px;
+      text-align: center;
+      margin-right: 20px;
+      min-height: 600px;
+      border: 1px solid #E5E7EF;
+      border-top: none;
+
+      .intvTmpl_left_title {
+        position: absolute;
+        width: 150px;
+        height: 48px;
+        line-height: 48px;
+        background: #DDE0E6;
+        color: #333333;
+        font-size: 14px;
+        border-radius: 8px 8px 0 0;
+      }
+
+      .intv_menulist {
+        width: 150px;
+        margin-top: 48px;
+
+        li {
+          padding: 0 10px;
+          font-size: 12px;
+          color: #333333;
+          height: 48px;
+          line-height: 48px;
+          cursor: pointer;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+          text-align: left;
+
+          &.active {
+            background: #3154AC;
+            color: white;
+          }
+
+          &:hover {
+            color: white;
+            background: #3154AC;
+          }
+        }
+      }
+    }
+    .intvTmpl_left_csx{
       min-width: 216px;
       max-height: calc(100vh - 235px);
       min-height: calc(100vh - 235px);

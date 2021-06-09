@@ -545,7 +545,7 @@ export default {
         min-width: 180px;
         height: 48px;
         line-height: 21px;
-        border-radius: 24px;
+        border-radius: 24px!important;
         box-shadow: none;
       }
       &.is-active .el-radio-button__inner{
@@ -558,12 +558,13 @@ export default {
       &:first-child .el-radio-button__inner{
         border-left: 1px solid #B4BBC9;
         margin-right: 20px;
+        border-radius: 24px;
       }
       &.is-disabled .el-radio-button__inner{
         border: 1px solid #f5f5f5;
       }
     }
-    .containerOtherCheckBox{
+    /*.containerOtherCheckBox{
       .el-form-item{
         margin-bottom: 0;
       }
@@ -618,6 +619,6 @@ export default {
       &.is-disabled .el-checkbox-button__inner{
         border: 1px solid #f5f5f5;
       }
-    }
+    }*/
   }
 </style>

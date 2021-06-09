@@ -40,6 +40,7 @@
       background
       layout="prev, pager, next, jumper, total, sizes"
       :total="total"
+      :current-page="pageNo"
       :page-size="5"
       @current-change="pageClick"
       :pageSizes="[5]"

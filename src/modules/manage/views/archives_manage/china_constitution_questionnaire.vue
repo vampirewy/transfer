@@ -114,7 +114,7 @@
                   v-model="formData.startTime"
                   type="date"
                   value-format="yyyy-MM-dd"
-                  :max-date="formData.endTime"
+                  :max-date="formData.endTime || new Date()"
                   placeholder="选择开始日期"
                   style="width: 140px"
                   clearable
@@ -126,6 +126,7 @@
                   type="date"
                   value-format="yyyy-MM-dd"
                   :min-date="formData.startTime"
+                  :max-date="new Date()"
                   placeholder="选择结束日期"
                   style="width: 140px"
                   clearable

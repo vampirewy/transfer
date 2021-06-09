@@ -202,7 +202,7 @@
                   value-format="yyyy-MM-dd"
                   :max-date="form.endPlanTime"
                   placeholder="开始时间"
-                  style="width: 120px"
+                  style="width: 140px"
           >
           </el-date-picker>
           <span class="timing">-</span>
@@ -212,7 +212,7 @@
                   value-format="yyyy-MM-dd"
                   :min-date="form.startPlanTime"
                   placeholder="结束时间"
-                  style="width: 120px"
+                  style="width: 140px"
           >
           </el-date-picker>
         </div>
@@ -224,7 +224,7 @@
                   value-format="yyyy-MM-dd"
                   :max-date="form.endCreatedTime"
                   placeholder="开始时间"
-                  style="width: 120px"
+                  style="width: 140px"
           >
           </el-date-picker>
           <span class="timing">-</span>
@@ -234,7 +234,7 @@
                   value-format="yyyy-MM-dd"
                   :min-date="form.startCreatedTime"
                   placeholder="结束时间"
-                  style="width: 120px"
+                  style="width: 140px"
           >
           </el-date-picker>
         </div>

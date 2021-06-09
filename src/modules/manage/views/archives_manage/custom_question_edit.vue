@@ -518,6 +518,7 @@ export default {
       .el-radio-button {
         .el-radio-button__inner {
           min-width: 100px;
+          border-radius: 24px;
         }
         &:first-child .el-radio-button__inner{
           margin-right: 30px;
