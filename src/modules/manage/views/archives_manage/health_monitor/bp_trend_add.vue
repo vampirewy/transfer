@@ -86,10 +86,10 @@
             <el-form-item label="收缩压" prop="SBP">
               <el-input
                 v-model="infoSource.SBP"
-                type='number'
+                onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"
                 placeholder="请输入"
                 :maxlength="100"
-                style="width: 130px"
+                style="width: 130px;height:40px"
               ></el-input>
               <span style="color:333333;font-size:14px">mmHg</span>
             </el-form-item>
@@ -98,10 +98,10 @@
             <el-form-item label="舒张压" prop="DBP">
               <el-input
                 v-model="infoSource.DBP"
-                type='number'
+                onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"
                 placeholder="请输入"
                 :maxlength="30"
-                style="width: 130px"
+                style="width: 130px;height:40px"
               ></el-input>
               <span style="color:333333;font-size:14px">mmHg</span>
             </el-form-item>
@@ -110,7 +110,7 @@
             <el-form-item label="脉搏" >
               <el-input
                 v-model="infoSource.pulse"
-                type='number'
+                onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"
                 placeholder="请输入"
                 :maxlength="30"
                 style="width: 130px"
@@ -127,6 +127,7 @@
                 value-format="yyyy-MM-dd"
                 placeholder="请选择时间"
                 style="width: 100%"
+                :max-date="new Date()"
               ></el-date-picker>
             </el-form-item>
             </el-col>
@@ -155,7 +156,7 @@
             <el-col :span="6">
             <el-form-item label="血糖值" prop="drugsName">
               <el-input
-                type='number'
+                onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"
                 v-model="infoSource.bloodsugarvalue"
                 placeholder="请输入"
                 :maxlength="100"
@@ -173,6 +174,7 @@
                 value-format="yyyy-MM-dd"
                 placeholder="请选择时间"
                 style="width: 100%"
+                :max-date="new Date()"
               ></el-date-picker>
             </el-form-item>
             </el-col>
@@ -182,7 +184,7 @@
                 <el-col :span="6">
                 <el-form-item label="身高">
                 <el-input
-                    type='number'
+                    onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"
                     v-model="infoSource.Height"
                     placeholder="请输入"
                     :maxlength="30"
@@ -194,7 +196,7 @@
                 <el-col :span="6">
                 <el-form-item label="体重" prop="Weight">
                 <el-input
-                    type='number'
+                    onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"
                     v-model="infoSource.Weight"
                     placeholder="请输入"
                     :maxlength="100"
@@ -206,7 +208,7 @@
                 <el-col :span="6">
                 <el-form-item label="腰围" prop="Waist">
                 <el-input
-                    type='number'
+                    onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"
                     v-model="infoSource.Waist"
                     placeholder="请输入"
                     :maxlength="30"
@@ -218,7 +220,7 @@
                 <el-col :span="6">
                 <el-form-item label="体脂率" prop="specification">
                 <el-input
-                    type='number'
+                    onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"
                     v-model="infoSource.specification"
                     placeholder="请输入"
                     :maxlength="30"
@@ -238,6 +240,7 @@
                     value-format="yyyy-MM-dd"
                     placeholder="请选择时间"
                     style="width: 100%"
+                    :max-date="new Date()"
                 ></el-date-picker>
                 </el-form-item>
                 </el-col>
@@ -248,7 +251,7 @@
                 <el-col :span="6">
                 <el-form-item label="运动时间" >
                 <el-input
-                    type='number'
+                    onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"
                     v-model="infoSource.sportTime"
                     placeholder="请输入"
                     :maxlength="30"
@@ -260,7 +263,7 @@
                     <el-col :span="6">
                 <el-form-item label="运动路程" >
                 <el-input
-                    type='number'
+                    onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"
                     v-model="infoSource.sportDistance"
                     placeholder="请输入"
                     :maxlength="30"
@@ -272,7 +275,7 @@
                 <el-col :span="6">
                 <el-form-item label="运动步数" >
                 <el-input
-                    type='number'
+                    onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"
                     v-model="infoSource.steps"
                     placeholder="请输入"
                     :maxlength="30"
@@ -301,7 +304,8 @@
                     type="date"
                     value-format="yyyy-MM-dd"
                     placeholder="请选择时间"
-                    style="width: 100%"
+                    style="width: 200px"
+                    :max-date="new Date()"
                 ></el-date-picker>
                 </el-form-item>
                 </el-row>
@@ -564,9 +568,18 @@ export default {
     },
     submit() {
       if (this.infoSource.clientId === '') {
-        this.$message.error('项目名称不能为空');
+        return this.$message.error('项目名称不能为空');
       }
       if (this.id === 0) {
+        if (!this.infoSource.SBP) {
+          return this.$message.warning('请填写收缩压');
+        }
+        if (!this.infoSource.DBP) {
+          return this.$message.warning('请填写舒张压');
+        }
+        if (!this.infoSource.startDate) {
+          return this.$message.warning('请填写时间');
+        }
         return this.$api.healthMonitorInterface.saveHealthBloodPressure({
           id: this.editId,
           clientId: this.infoSource.clientId,
@@ -578,9 +591,19 @@ export default {
         }).then(({ data }) => {
           this.$message.success('操作成功');
           console.log(data);
+          this.goBack();
         });
       }
       if (this.id === 1) {
+        if (!this.infoSource.bloodsugar) {
+          return this.$message.warning('请填写血糖值');
+        }
+        if (!this.infoSource.bloodsugarvalue) {
+          return this.$message.warning('请填写血压值');
+        }
+        if (!this.infoSource.startDate) {
+          return this.$message.warning('请填写时间');
+        }
         return this.$api.healthMonitorInterface.savehealthbloodsugar({
           id: this.editId,
           clientId: this.infoSource.clientId,
@@ -591,9 +614,22 @@ export default {
         }).then(({ data }) => {
           this.$message.success('操作成功');
           console.log(data);
+          this.goBack();
         });
       }
       if (this.id === 2) {
+        if (!this.infoSource.Weight) {
+          return this.$message.warning('请填写体重');
+        }
+        if (!this.infoSource.Waist) {
+          return this.$message.warning('请填写腰围');
+        }
+        if (!this.infoSource.specification) {
+          return this.$message.warning('请填写体脂率');
+        }
+        if (!this.infoSource.startDate) {
+          return this.$message.warning('请填写时间');
+        }
         return this.$api.healthMonitorInterface.savehealthweight({
           id: this.editId,
           clientId: this.infoSource.clientId,
@@ -606,9 +642,13 @@ export default {
         }).then(({ data }) => {
           this.$message.success('操作成功');
           console.log(data);
+          this.goBack();
         });
       }
       if (this.id === 3) {
+        if (!this.infoSource.startDate) {
+          return this.$message.warning('请填写时间');
+        }
         return this.$api.healthMonitorInterface.savehealthsport({
           id: this.editId,
           clientId: this.infoSource.clientId,
@@ -621,6 +661,7 @@ export default {
         }).then(({ data }) => {
           this.$message.success('操作成功');
           console.log(data);
+          this.goBack();
         });
       }
     },

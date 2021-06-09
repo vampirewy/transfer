@@ -369,6 +369,10 @@ export default {
     transform: translateY(-50%);
   }
 }
+/deep/ .el-dialog__footer{
+  background: #ffffff;
+  padding-bottom: 10px;
+}
 .dialog-detail /deep/ {
   .el-dialog {
     height: 90vh;

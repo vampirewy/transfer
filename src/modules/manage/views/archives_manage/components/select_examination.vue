@@ -17,7 +17,7 @@
         </el-select>
     </div> -->
     <div style="width:250px;margin-left:20px">
-      <el-input v-model="keyword" placeholder="输入条件搜索"></el-input>
+      <el-input v-model="keyword" placeholder="输入检查项目"></el-input>
     </div>
       <el-button class="search-button" @click="search">
         <i class="el-icon-search"></i>
@@ -36,7 +36,11 @@
       <el-table-column type="selection" width="40" align="center"></el-table-column>
       <el-table-column prop="sectionName" label="科室"></el-table-column>
       <el-table-column prop="itemName" label="项目名称"></el-table-column>
-      <el-table-column prop="refRange" label="参考范围"></el-table-column>
+      <el-table-column prop="refRange" label="参考范围">
+        <template slot-scope="scope">
+          <span>{{ statusrefRange(scope.row.refRange) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="unit" label="单位"></el-table-column>
     </el-table>
     <el-pagination
@@ -85,6 +89,12 @@ export default {
     console.log(this.examination, '接收的数据');
   },
   methods: {
+    statusrefRange(Range) {
+      const arr = Range.split('-');
+      const ss = Number(arr[0]).toFixed(2);
+      const aa = Number(arr[1]).toFixed(2);
+      return `${ss}-${aa}`;
+    },
     submit() {
       // console.log(this.multipleSelection, '多选');
       this.$emit('change', this.multipleSelection);
@@ -124,7 +134,7 @@ export default {
       //   const res = await this.$api.PhysicalProjectListInterface.listPage();
       const res = await this.$api.reportInterface.getOrganList({
         // keywords: this.keyword,
-        pageno: this.currentPage,
+        pageNo: this.currentPage,
         pagesize: this.pageSize,
         itemName: this.keyword,
         gender: '',

@@ -150,7 +150,7 @@
                 <el-date-picker
                   v-model="form.endInputStartTime"
                   type="date"
-                  :max-date="form.endTime"
+                  :max-date="form.endInputEndTime || new Date()"
                   placeholder="选择开始日期"
                   style="width: 140px"
                 >
@@ -159,7 +159,8 @@
                 <el-date-picker
                   v-model="form.endInputEndTime"
                   type="date"
-                  :min-date="form.startTime"
+                  :min-date="form.endInputStartTime"
+                  :max-date="new Date()"
                   placeholder="选择结束日期"
                   style="width: 140px"
                 >

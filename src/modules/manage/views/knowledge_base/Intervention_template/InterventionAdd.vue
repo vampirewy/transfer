@@ -19,14 +19,14 @@
       <el-row>
         <el-col :span="6">
           <el-form-item label="模版名称" >
-            <el-input v-model="form.patientNo" placeholder="请输入" @input="replace"></el-input>
+            <el-input v-model="form.name" placeholder="请输入" ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="适用性别" >
-            <el-select v-model="form.result" placeholder="请选择当前状态">
-              <el-option label="男" value="1" key="1"></el-option>
-              <el-option label="女" value="2" key="2"></el-option>
+            <el-select v-model="form.gender" placeholder="请选择当前状态">
+              <el-option label="男" value="0" key="0"></el-option>
+              <el-option label="女" value="1" key="1"></el-option>
               <!-- <el-option
                 v-for="item in resultOptions"
                 :key="item.value"
@@ -38,31 +38,27 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="条件关系" >
-            <el-select v-model="form.result" placeholder="请选择当前状态" width="150">
-              <el-option
-                v-for="item in resultOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
+            <el-select v-model="form.conditionRelation" placeholder="请选择当前状态" width="150">
+              <el-option label="全部" value="1" key="1"></el-option>
+              <el-option label="任意" value="2" key="2"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="组别" >
-            <el-input v-model="form.patientNo" placeholder="请输入" @input="replace"></el-input>
+            <el-input v-model="form.groupCode" placeholder="请输入" ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="级别" >
-            <el-input v-model="form.patientNo" placeholder="请输入" @input="replace"></el-input>
+            <el-input v-model="form.lvCode" placeholder="请输入" ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <div class="isEnabled">
             <span>是否启用：</span>
                 <el-switch
-                  v-model="isstate"
+                  v-model="form.state"
                   :active-value="1"
                   :inactive-value="0"
                   active-color="#13ce66"
@@ -163,23 +159,13 @@ export default {
   data() {
     return {
       popoverStatus: false,
-      isstate: true,
       form: {
-        clientInfoId: '',
-        hospital: '',
-        department: '',
-        medicalType: '',
-        patientNo: '',
-        inDate: '',
-        outDate: '',
-        doctorName: '',
-        result: '',
-        complaint: '主诉', // 主诉
-        hpi: '现病史', // 现病史
-        examination: '检查', // 检查
-        diagnosis: '诊断', // 诊断
-        therapy: '方案', // 方案
-        orgCode: '',
+        name: '',
+        gender: '',
+        conditionRelation: '1',
+        groupCode: '',
+        lvCode: '',
+        state: 0,
       },
       timer: '',
       tabbor: ['小项', '人员类别', '异常', '组合异常', '疾病评估', '体质辨识'],
@@ -245,22 +231,69 @@ export default {
       ],
       currentUser: {},
       ids: this.$route.params.id,
+      // ids: 4,
     };
   },
   mounted() {
-    // console.log(this.ids, '编辑');
     if (this.ids) {
-      this.$api.medicalHistoryInterface.medicalInfoDetail(this.ids).then((res) => {
+      this.$api.medicalHistoryInterface.updateInterveneTemplate(this.ids).then((res) => {
         const { data } = res;
-        // console.log(data, '撒打算大的');
-        this.form = Object.assign(this.form, data.data || {});
-        this.currentUser = {
-          id: this.form.clientInfoId,
-          name: this.form.clientName,
-          age: this.form.age,
-          gender: this.form.gender,
-          gridName: this.form.clientGridName,
-        };
+        this.form.name = data.data.name;
+        this.form.gender = String(data.data.gender);
+        this.form.conditionRelation = String(data.data.conditionRelation);
+        this.form.state = data.data.state;
+        this.form.groupCode = data.data.groupCode;
+        this.form.lvCode = data.data.lvCode;
+        this.Minterm = data.data.interveneTemplateDetailItemDtoList;
+        this.Category = data.data.interveneTemplateDetailGridDtoList;
+        for (let i = 0; i < data.data.interveneTemplateDetailOrganAbnormalDtoList.length; i++) {
+          const json = {
+            abnormalTypeName: data.data.interveneTemplateDetailOrganAbnormalDtoList[i]
+              .organAbnormalName,
+            gender: data.data.interveneTemplateDetailOrganAbnormalDtoList[i].genderTxt,
+            abnormalCode: data.data.interveneTemplateDetailOrganAbnormalDtoList[i]
+              .organAbnormalCode,
+            conditionRelation: data.data.interveneTemplateDetailOrganAbnormalDtoList[i]
+              .conditionRelation,
+          };
+          this.Exception.push(json);
+        }
+        for (let i = 0; i < data.data.interveneTemplateDetailGroupAbnormalDtoList.length; i++) {
+          const json = {
+            name: data.data.interveneTemplateDetailGroupAbnormalDtoList[i]
+              .groupAbnormalName,
+            code: data.data.interveneTemplateDetailGroupAbnormalDtoList[i]
+              .groupAbnormalCode,
+            conditionRelation: data.data.interveneTemplateDetailGroupAbnormalDtoList[i]
+              .conditionRelation,
+          };
+          this.Composition.push(json);
+        }
+        for (let i = 0; i < data.data.interveneTemplateDetailAssessDtoList.length; i++) {
+          const json = {
+            name: data.data.interveneTemplateDetailAssessDtoList[i]
+              .modeAssessName,
+            estates: String(data.data.interveneTemplateDetailAssessDtoList[i].modeAssessLv),
+            code: data.data.interveneTemplateDetailAssessDtoList[i]
+              .modeAssessCode,
+            conditionRelation: data.data.interveneTemplateDetailAssessDtoList[i]
+              .conditionRelation,
+          };
+          this.Disease.push(json);
+        }
+        for (let i = 0; i < data.data.interveneTemplateDetailTcmDtoList.length; i++) {
+          const json = {
+            name: data.data.interveneTemplateDetailTcmDtoList[i]
+              .tizhiName,
+            judgeResult: String(data.data.interveneTemplateDetailTcmDtoList[i].judgeResult),
+            tizhiCode: data.data.interveneTemplateDetailTcmDtoList[i]
+              .tizhiCode,
+            conditionRelation: data.data.interveneTemplateDetailTcmDtoList[i]
+              .conditionRelation,
+          };
+          this.Constitution.push(json);
+        }
+        this.TabbarBtn(0);
       });
     }
   },
@@ -332,12 +365,107 @@ export default {
       this.form.patientNo = str;
     },
     submit() {
-      console.log(this.Minterm, '小项数据');
-      console.log(this.Category, '人员类别');
-      console.log(this.Exception, '异常');
-      console.log(this.Composition, '组合异常');
-      console.log(this.Disease, '疾病评估');
-      console.log(this.Constitution, '体质辨识');
+      // console.log(this.Minterm, '小项数据');
+      // console.log(this.Category, '人员类别');
+      // console.log(this.Exception, '异常');
+      // console.log(this.Composition, '组合异常');
+      // console.log(this.Disease, '疾病评估');
+      // console.log(this.Constitution, '体质辨识');
+      const jsons = {
+        interveneTemplateItemRequestList: [],
+        interveneTemplateGridRequestList: [],
+        interveneTemplateOrganAbnormalRequestList: [],
+        interveneTemplateGroupAbnormalRequestList: [],
+        interveneTemplateAssessRequestList: [],
+        interveneTemplateTcmRequestList: [],
+      };
+      if (this.Minterm.length !== 0) {
+        for (let i = 0; i < this.Minterm.length; i++) {
+          const prms = {
+            sectionName: this.Minterm[i].sectionName,
+            itemName: this.Minterm[i].itemName,
+            judgeRelation: this.Minterm[i].judgeRelation,
+            itemValue: this.Minterm[i].itemValue,
+            conditionRelation: this.Minterm[i].conditionRelation,
+            minValue: this.Minterm[i].minValue,
+            maxValue: this.Minterm[i].maxValue,
+          };
+          jsons.interveneTemplateItemRequestList.push(prms);
+        }
+      }
+      if (this.Category.length !== 0) {
+        for (let i = 0; i < this.Category.length; i++) {
+          const prms = {
+            gridId: this.Category[i].id,
+          };
+          jsons.interveneTemplateGridRequestList.push(prms);
+        }
+      }
+      if (this.Exception.length !== 0) {
+        for (let i = 0; i < this.Exception.length; i++) {
+          const prms = {
+            organAbnormalCode: this.Exception[i].abnormalCode,
+            conditionRelation: this.Exception[i].conditionRelation,
+          };
+          jsons.interveneTemplateOrganAbnormalRequestList.push(prms);
+        }
+        // console.log(jsons.interveneTemplateOrganAbnormalRequestList, 'xczxczcxxs');
+      }
+      if (this.Composition.length !== 0) {
+        for (let i = 0; i < this.Composition.length; i++) {
+          const prms = {
+            groupAbnormalCode: this.Composition[i].code,
+            conditionRelation: this.Composition[i].conditionRelation,
+          };
+          jsons.interveneTemplateGroupAbnormalRequestList.push(prms);
+        }
+      }
+      if (this.Disease.length !== 0) {
+        for (let i = 0; i < this.Disease.length; i++) {
+          const prms = {
+            modeAssessCode: this.Disease[i].code,
+            modeAssessLv: this.Disease[i].estates,
+            conditionRelation: this.Disease[i].conditionRelation,
+          };
+          jsons.interveneTemplateAssessRequestList.push(prms);
+        }
+      }
+      if (this.Constitution.length !== 0) {
+        console.log(this.Constitution);
+        for (let i = 0; i < this.Constitution.length; i++) {
+          const prms = {
+            conditionRelation: this.Constitution[i].conditionRelation,
+            judgeResult: this.Constitution[i].judgeResult,
+            // name: this.Constitution[i].name,
+            tizhiCode: this.Constitution[i].tizhiCode,
+          };
+          jsons.interveneTemplateTcmRequestList.push(prms);
+        }
+      }
+      if (!this.ids) {
+        this.$api.interventionTemplateInterface.saveInterveneTemplate(
+          Object.assign(jsons, this.form),
+        ).then((res) => {
+          const { data } = res;
+          if (data.success) {
+            this.$message.success('操作成功');
+            this.$emit('afterSubmit');
+          }
+        });
+      } else {
+        // console.log(456);
+        this.form.id = this.ids;
+        console.log(Object.assign(jsons, this.form));
+        this.$api.interventionTemplateInterface.updateInterveneTemplate(
+          Object.assign(jsons, this.form),
+        ).then((res) => {
+          const { data } = res;
+          if (data.success) {
+            this.$message.success('操作成功');
+            this.$emit('afterSubmit');
+          }
+        });
+      }
     //   this.$refs.form.validate((valid) => {
     //     if (valid) {
     //       const params = {

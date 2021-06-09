@@ -174,7 +174,8 @@
                 {{scope.row.gender === 0 ? '男' : (scope.row.gender === 1 ? '女' : '')}}
               </template>
             </el-table-column>
-            <el-table-column label="条件" prop="qualification" min-width="80" show-overflow-tooltip />
+            <el-table-column label="条件" prop="conditionRelationTxt"
+            min-width="80" show-overflow-tooltip />
             <!-- <el-table-column label="组别" prop="orgCode" min-width="80" show-overflow-tooltip />
             <el-table-column label="级别" prop="checked" min-width="80" show-overflow-tooltip /> -->
             <el-table-column label="是否启用" min-width="150"  prop="state">
@@ -304,12 +305,11 @@ export default {
         state: '',
         keywords: '',
         gender: '',
+        groupCode: '',
       },
       params: {
         pageNo: 1,
         pageSize: 15,
-        type: 0,
-        total: 0,
       },
       isCollapse: true,
       modalVisible: false,
@@ -391,11 +391,14 @@ export default {
         customClass: 'message-box-customize',
         showClose: true,
       }).then(() => {
-        const params = {
-          clientIdList: this.chooseUserList.map(user => user.id),
-        };
-        this.$api.userManagerInterface.deleteClientInfo(params).then(({ data }) => {
-          if (data.code === 200) {
+        const params = this.chooseUserList[0].id;
+        // {
+        //   clientIdList: this.chooseUserList.map(user => user.id),
+        // };
+        this.$api.interventionTemplateInterface.removeInterveneTemplateList(params).then((
+          { data },
+        ) => {
+          if (data.success) {
             this.$message.success('操作成功');
             this.search();
             this.chooseUserList = [];
@@ -416,7 +419,7 @@ export default {
     },
     onChangePage(current = 1) {
       this.params.pageNo = current;
-      this.getUserList();
+      this.fetch();
     },
     search() {
       const hasOnlyStartTime = this.formData.startTime
@@ -502,7 +505,7 @@ export default {
         this.$api.userManagerInterface.deleteClientInfo(params).then(({ data }) => {
           if (data.code === 200) {
             this.$message.success('操作成功');
-            this.getUserList();
+            this.fetch();
             this.chooseUserList = [];
             this.$refs.multipleTable.clearSelection();
           }

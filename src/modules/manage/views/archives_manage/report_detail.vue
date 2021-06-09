@@ -51,8 +51,8 @@
         </div>
         <div class="center">
           <el-table :data="item.itemList">
-            <el-table-column prop="itemName" label="名称"></el-table-column>
-            <el-table-column prop="itemValue" label="结果">
+            <el-table-column prop="itemName" label="名称" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="itemValue" label="结果" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>
                   <span>{{scope.row.itemValue}}</span>
@@ -63,9 +63,9 @@
                 </span>
               </template>
             </el-table-column>
-            <el-table-column prop="refRange" label="正常参考"></el-table-column>
-            <el-table-column prop="itemUnit" label="单位"></el-table-column>
-            <el-table-column prop="attention" label="是否关注指标">
+            <el-table-column prop="refRange" label="正常参考" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="itemUnit" label="单位" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="attention" label="是否关注指标" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>
                   {{scope.row.attention === '2' ? '是' : (scope.row.attention === '0' ? '否' : '')}}

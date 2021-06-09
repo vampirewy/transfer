@@ -144,12 +144,11 @@ export default {
   mounted() {
     if (this.id) {
       this.fetch(this.id);
+      document.title = '编辑体检报告';
     }
-    console.log(this.id, '接受id');
   },
   methods: {
     handleSelectUser(data) {
-      console.log(data, '接收的数据');
       this.$refs.userPopover.doClose();
       this.popoverStatus = false;
       this.formData.clientName = data.name;

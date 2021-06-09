@@ -154,6 +154,15 @@ export default {
       if (NameType === 'Exception') {
         this.ExceptionName();
       }
+      if (NameType === 'Composition') {
+        this.CompositionList();
+      }
+      if (NameType === 'Disease') {
+        this.DiseaseList();
+      }
+      // if (NameType === 'Constitution') {
+      //   this.ConstitutionList();
+      // }
     },
     // 小项
     async getList() {
@@ -188,6 +197,36 @@ export default {
         .then(({ data }) => {
           this.total = data.data.total;
           this.dataSource.list = data.data.data;
+          // this.dataSource.forEach((val) => {
+          //   this.$set(this.map, val.id, val);
+          // });
+        });
+    },
+    CompositionList() {
+      this.params.pageNo = this.currentPage;
+      this.params.pageSize = this.pageSize;
+      this.$api.reportInterface
+        .abnormalListPages(Object.assign(this.params, this.formData))
+        .then(({ data }) => {
+          this.total = data.data.total;
+          this.dataSource.list = data.data.data;
+          // this.dataSource.forEach((val) => {
+          //   this.$set(this.map, val.id, val);
+          // });
+        });
+    },
+    DiseaseList() {
+      this.params.pageNo = this.currentPage;
+      this.params.pageSize = this.pageSize;
+      this.$api.systemManageInterface
+        .getListPage(Object.assign(this.params, this.formData))
+        .then(({ data }) => {
+          this.total = data.data.total;
+          this.dataSource.list = data.data.data;
+          // for (let i = 0; i < this.dataSource.list.length; i++) {
+          //   this.dataSource.list[i].estate = '';
+          // }
+          console.log(this.dataSource.list, 'estate');
           // this.dataSource.forEach((val) => {
           //   this.$set(this.map, val.id, val);
           // });

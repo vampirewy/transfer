@@ -52,7 +52,7 @@
                 class="end-date"
                 v-model="formData.reportDate"
                 type="date"
-                :min-date="formData.startDate"
+                :max-date="formData.startDate || new Date()"
                 value-format="yyyy-MM-dd"
                 placeholder="请选择"
                 style="width: 100%"
@@ -76,9 +76,9 @@
                     placeholder="请选择"
                     style="width: 100%"
             >
-            <el-option label="未知" value="0" key="0"></el-option>
-            <el-option label="已总检" value="1" key="1"></el-option>
-            <el-option label="未总检" value="2" key="2"></el-option>
+            <el-option label="未知" :value="0" key="0"></el-option>
+            <el-option label="已总检" :value="1" key="1"></el-option>
+            <el-option label="未总检" :value="2" key="2"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
