@@ -100,7 +100,7 @@
                 <div>
                   <span>是否总检：</span>
                   <el-select
-                    v-model="formData.TotalTest"
+                    v-model="formData.reportState"
                     placeholder="请选择"
                     style="width: 140px"
                   >
@@ -134,7 +134,7 @@
                 <el-date-picker
                   v-model="formData.minReportDate"
                   type="date"
-                  :max-date="formData.pickerStartTime"
+                  :max-date="formData.maxReportDate || new Date()"
                   placeholder="选择开始日期"
                   style="width: 140px"
                 >
@@ -143,7 +143,8 @@
                 <el-date-picker
                   v-model="formData.maxReportDate"
                   type="date"
-                  :min-date="formData.pickerEndTime"
+                  :min-date="formData.minReportDate"
+                  :max-date="new Date()"
                   placeholder="选择结束日期"
                   style="width: 140px"
                 >
@@ -154,7 +155,7 @@
                 <el-date-picker
                   v-model="formData.minCreateDate"
                   type="date"
-                  :max-date="formData.pickerStartTime"
+                  :max-date="formData.maxCreateDate || new Date()"
                   placeholder="选择开始日期"
                   style="width: 140px"
                 >
@@ -163,7 +164,8 @@
                 <el-date-picker
                   v-model="formData.maxCreateDate"
                   type="date"
-                  :min-date="formData.pickerEndTime"
+                  :min-date="formData.minCreateDate"
+                  :max-date="new Date()"
                   placeholder="选择结束日期"
                   style="width: 140px"
                 >
@@ -410,22 +412,22 @@ export default {
         list: [],
       },
       loading: false,
-      // pickerStartTime: {
-      //   disabledDate: (time) => {
-      //     if (this.formData.maxReportDate) {
-      //       const endTime = new Date(this.formData.maxReportDate);
-      //       return time.getTime() > new Date(endTime).getTime() - (3600 * 1000 * 23 * 1);
-      //     }
-      //   },
-      // },
-      // pickerEndTime: {
-      //   disabledDate: (time) => {
-      //     if (this.formData.minReportDate) {
-      //       const startTime = new Date(this.formData.minReportDate);
-      //       return time.getTime() < new Date(startTime).getTime() - (3600 * 1000 * 23 * 1);
-      //     }
-      //   },
-      // },
+      pickerStartTime: {
+        disabledDate: (time) => {
+          if (this.formData.maxReportDate) {
+            const endTime = new Date(this.formData.maxReportDate);
+            return time.getTime() > new Date(endTime).getTime() - (3600 * 1000 * 23 * 1);
+          }
+        },
+      },
+      pickerEndTime: {
+        disabledDate: (time) => {
+          if (this.formData.minReportDate) {
+            const startTime = new Date(this.formData.minReportDate);
+            return time.getTime() < new Date(startTime).getTime() - (3600 * 1000 * 23 * 1);
+          }
+        },
+      },
     };
   },
   activated() {

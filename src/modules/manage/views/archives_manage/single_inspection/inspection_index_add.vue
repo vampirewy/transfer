@@ -16,7 +16,7 @@
         <h3 v-else class="name">新增单项检查</h3>
       </div>-->
         <div class="divRightTitleDiv" style="margin-top: -20px">
-            <div class="divRightTitle">{{id ? '编辑就医用户信息' : '新增单项检查'}}
+            <div class="divRightTitle">{{id ? '编辑-单项检查' : '新增-单项检查'}}
                 <div class="titleBiao"></div></div>
         </div>
       <div class="medicate-record mt20">
@@ -41,6 +41,7 @@
                 disabled
                 v-model="infoSource.clientName"
                 placeholder="请选择客户"
+                style="width:190px"
               >
                 <i
                   :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
@@ -62,6 +63,7 @@
               v-model="infoSource.age"
               disabled
               class="age-input"
+              style="width:190px"
             ></el-input>
           </el-form-item>
           </el-col>
@@ -70,6 +72,7 @@
             <el-input
               v-model="infoSource.gridName"
               disabled
+              style="width:190px"
             ></el-input>
           </el-form-item>
           </el-col>
@@ -89,6 +92,8 @@
                 v-model="infoSource.drugsName"
                 placeholder="请输入"
                 :maxlength="100"
+                onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"
+                style="width:190px"
               ></el-input>
             </el-form-item>
             </el-col>
@@ -98,6 +103,7 @@
                 v-model="infoSource.specification"
                 placeholder="请输入"
                 :maxlength="30"
+                style="width:190px"
               ></el-input>
             </el-form-item>
             </el-col>
@@ -107,10 +113,10 @@
                 class="end-date"
                 v-model="infoSource.endDate"
                 type="date"
-                :min-date="infoSource.startDate"
+                :max-date="new Date()"
                 value-format="yyyy-MM-dd"
                 placeholder="请选择"
-                style="width: 100%"
+                style="width:190px"
               ></el-date-picker>
             </el-form-item>
             </el-col>
@@ -222,7 +228,7 @@
                 <!-- <span>体检库：</span> -->
             <el-form-item label="体检库" prop="gridId">
                 <el-select
-                v-model="formData.gridId"
+                v-model="infoSource.gridId"
                 placeholder="请选择"
                 style="width: 140px"
                 >
@@ -414,7 +420,6 @@ export default {
       },
       formData: {
         pageNo: 1,
-        gridId: '',
       },
       StatusCheck: [],
     };
@@ -454,6 +459,8 @@ export default {
       this.$api.healthMonitorInterface.SinglegetDetail(id).then(({ data }) => {
         if (data.success) {
           this.infoSource.gridName = data.data.clientId;
+          this.infoSource.clientName = data.data.clientName;
+          this.infoSource.age = data.data.age;
           this.id = data.data.id;
           this.infoSource.endDate = data.data.inspectionDate;
           this.infoSource.drugsName = data.data.inspectionNo;
@@ -574,7 +581,15 @@ export default {
       if (!this.infoSource.clientId) {
         return this.$message.warning('请选择客户');
       }
-
+      if (!this.infoSource.drugsName) {
+        return this.$message.warning('请填写检查编号');
+      }
+      if (!this.infoSource.specification) {
+        return this.$message.warning('请填写检查机构');
+      }
+      if (!this.infoSource.endDate) {
+        return this.$message.warning('请填写检查时间');
+      }
       // if (!this.drugsList.length) {
       //   return this.$message.warning('请添加检查项目');
       // }

@@ -25,8 +25,8 @@
         <el-col :span="6">
           <el-form-item label="适用性别" >
             <el-select v-model="form.gender" placeholder="请选择当前状态">
-              <el-option label="男" value="1" key="1"></el-option>
-              <el-option label="女" value="2" key="2"></el-option>
+              <el-option label="男" value="0" key="0"></el-option>
+              <el-option label="女" value="1" key="1"></el-option>
               <!-- <el-option
                 v-for="item in resultOptions"
                 :key="item.value"
@@ -230,34 +230,70 @@ export default {
         { value: 2, label: '住院' },
       ],
       currentUser: {},
-      // ids: this.$route.params.id,
-      ids: 4,
+      ids: this.$route.params.id,
+      // ids: 4,
     };
   },
   mounted() {
-    // console.log(this.ids, '编辑');
     if (this.ids) {
       this.$api.medicalHistoryInterface.updateInterveneTemplate(this.ids).then((res) => {
         const { data } = res;
         this.form.name = data.data.name;
+        this.form.gender = String(data.data.gender);
         this.form.conditionRelation = String(data.data.conditionRelation);
         this.form.state = data.data.state;
+        this.form.groupCode = data.data.groupCode;
+        this.form.lvCode = data.data.lvCode;
         this.Minterm = data.data.interveneTemplateDetailItemDtoList;
         this.Category = data.data.interveneTemplateDetailGridDtoList;
-        this.Exception = data.data.interveneTemplateDetailOrganAbnormalDtoList;
-        this.Composition = data.data.interveneTemplateDetailGroupAbnormalDtoList;
-        this.Disease = data.data.interveneTemplateDetailAssessDtoList;
-        this.Constitution = data.data.interveneTemplateDetailTcmDtoList;
-        // this.Intervention = data.data.interveneTemplateDetailItemDtoList;
+        for (let i = 0; i < data.data.interveneTemplateDetailOrganAbnormalDtoList.length; i++) {
+          const json = {
+            abnormalTypeName: data.data.interveneTemplateDetailOrganAbnormalDtoList[i]
+              .organAbnormalName,
+            gender: data.data.interveneTemplateDetailOrganAbnormalDtoList[i].genderTxt,
+            abnormalCode: data.data.interveneTemplateDetailOrganAbnormalDtoList[i]
+              .organAbnormalCode,
+            conditionRelation: data.data.interveneTemplateDetailOrganAbnormalDtoList[i]
+              .conditionRelation,
+          };
+          this.Exception.push(json);
+        }
+        for (let i = 0; i < data.data.interveneTemplateDetailGroupAbnormalDtoList.length; i++) {
+          const json = {
+            name: data.data.interveneTemplateDetailGroupAbnormalDtoList[i]
+              .groupAbnormalName,
+            code: data.data.interveneTemplateDetailGroupAbnormalDtoList[i]
+              .groupAbnormalCode,
+            conditionRelation: data.data.interveneTemplateDetailGroupAbnormalDtoList[i]
+              .conditionRelation,
+          };
+          this.Composition.push(json);
+        }
+        for (let i = 0; i < data.data.interveneTemplateDetailAssessDtoList.length; i++) {
+          const json = {
+            name: data.data.interveneTemplateDetailAssessDtoList[i]
+              .modeAssessName,
+            estates: String(data.data.interveneTemplateDetailAssessDtoList[i].modeAssessLv),
+            code: data.data.interveneTemplateDetailAssessDtoList[i]
+              .modeAssessCode,
+            conditionRelation: data.data.interveneTemplateDetailAssessDtoList[i]
+              .conditionRelation,
+          };
+          this.Disease.push(json);
+        }
+        for (let i = 0; i < data.data.interveneTemplateDetailTcmDtoList.length; i++) {
+          const json = {
+            name: data.data.interveneTemplateDetailTcmDtoList[i]
+              .tizhiName,
+            judgeResult: String(data.data.interveneTemplateDetailTcmDtoList[i].judgeResult),
+            tizhiCode: data.data.interveneTemplateDetailTcmDtoList[i]
+              .tizhiCode,
+            conditionRelation: data.data.interveneTemplateDetailTcmDtoList[i]
+              .conditionRelation,
+          };
+          this.Constitution.push(json);
+        }
         this.TabbarBtn(0);
-        // this.form = Object.assign(this.form, data.data || {});
-        // this.currentUser = {
-        //   id: this.form.clientInfoId,
-        //   name: this.form.clientName,
-        //   age: this.form.age,
-        //   gender: this.form.gender,
-        //   gridName: this.form.clientGridName,
-        // };
       });
     }
   },
@@ -348,8 +384,8 @@ export default {
           const prms = {
             sectionName: this.Minterm[i].sectionName,
             itemName: this.Minterm[i].itemName,
-            judgeRelation: this.Minterm[i].isMain,
-            itemValue: this.Minterm[i].isMainText,
+            judgeRelation: this.Minterm[i].judgeRelation,
+            itemValue: this.Minterm[i].itemValue,
             conditionRelation: this.Minterm[i].conditionRelation,
             minValue: this.Minterm[i].minValue,
             maxValue: this.Minterm[i].maxValue,
@@ -373,11 +409,12 @@ export default {
           };
           jsons.interveneTemplateOrganAbnormalRequestList.push(prms);
         }
+        // console.log(jsons.interveneTemplateOrganAbnormalRequestList, 'xczxczcxxs');
       }
       if (this.Composition.length !== 0) {
         for (let i = 0; i < this.Composition.length; i++) {
           const prms = {
-            organAbnormalCode: this.Composition[i].code,
+            groupAbnormalCode: this.Composition[i].code,
             conditionRelation: this.Composition[i].conditionRelation,
           };
           jsons.interveneTemplateGroupAbnormalRequestList.push(prms);
@@ -399,13 +436,12 @@ export default {
           const prms = {
             conditionRelation: this.Constitution[i].conditionRelation,
             judgeResult: this.Constitution[i].judgeResult,
-            name: this.Constitution[i].name,
+            // name: this.Constitution[i].name,
             tizhiCode: this.Constitution[i].tizhiCode,
           };
           jsons.interveneTemplateTcmRequestList.push(prms);
         }
       }
-      console.log(Object.assign(jsons, this.form));
       if (!this.ids) {
         this.$api.interventionTemplateInterface.saveInterveneTemplate(
           Object.assign(jsons, this.form),
@@ -417,16 +453,18 @@ export default {
           }
         });
       } else {
-        console.log(456);
-        // this.$api.interventionTemplateInterface.updateInterveneTemplate(
-        //   Object.assign(jsons, this.form),
-        // ).then((res) => {
-        //   const { data } = res;
-        //   if (data.success) {
-        //     this.$message.success('操作成功');
-        //     this.$emit('afterSubmit');
-        //   }
-        // });
+        // console.log(456);
+        this.form.id = this.ids;
+        console.log(Object.assign(jsons, this.form));
+        this.$api.interventionTemplateInterface.updateInterveneTemplate(
+          Object.assign(jsons, this.form),
+        ).then((res) => {
+          const { data } = res;
+          if (data.success) {
+            this.$message.success('操作成功');
+            this.$emit('afterSubmit');
+          }
+        });
       }
     //   this.$refs.form.validate((valid) => {
     //     if (valid) {

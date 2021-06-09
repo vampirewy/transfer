@@ -64,6 +64,7 @@
                   <el-input
                     placeholder="姓名/手机号/企业单位"
                     v-model="formData.keywords"
+                    style="width: 144px"
                   >
                   </el-input>
                   <span class="searchBtnImgSpan" @click="search">
@@ -78,7 +79,7 @@
                   <el-select
                     v-model="formData.gender"
                     placeholder="请选择"
-                    style="width: 140px"
+                    style="width: 145px"
                   >
                     <el-option label="男" value="1" key="1"></el-option>
                     <el-option label="女" value="2" key="2"></el-option>
@@ -89,7 +90,7 @@
                   <el-select
                     v-model="formData.clientGrid"
                     placeholder="请选择"
-                    style="width: 140px"
+                    style="width: 145px"
                   >
                    <el-option
                     :label="item.gridName"
@@ -105,9 +106,9 @@
                   v-model="formData.startTime"
                   value-format="yyyy-MM-dd hh:mm:ss"
                   type="date"
-                  :max-date="formData.endTime"
+                  :max-date="formData.endTime || new Date()"
                   placeholder="选择开始日期"
-                  style="width: 100px"
+                  style="width: 120px"
                 >
                 </el-date-picker>
                 <span class="timing">-</span>
@@ -116,8 +117,9 @@
                   value-format="yyyy-MM-dd hh:mm:ss"
                   type="date"
                   :min-date="formData.startTime"
+                  :max-date="new Date()"
                   placeholder="选择结束日期"
-                  style="width: 100px"
+                  style="width: 120px"
                 >
                 </el-date-picker>
               </div>
@@ -275,6 +277,12 @@
                 align="center"
                 prop="clientName"
                 show-overflow-tooltip>
+                <template slot-scope="scope">
+                  <span class="clientName"
+                        @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
+                    {{ scope.row.clientName || '-'}}
+                  </span>
+                </template>
               </el-table-column>
                 <el-table-column label="性别" prop="gender" align="center">
                 <template slot-scope="scope">
@@ -681,6 +689,9 @@ export default {
 
 <style lang="scss" scoped>
 .medical-history {
+  .searchCondition .searchInputFormItem{
+    width: 180px;
+  }
   background: #fff;
   /deep/ .search-button {
     &:hover {

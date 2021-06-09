@@ -1,7 +1,7 @@
 <template>
   <div class="health-monitor-trend">
     <div class="lines"></div>
-    <div class="titless">查看就医用户信息</div>
+    <div class="titless">查看单项检查信息</div>
     <div class="lookPressure">
       <div><span>姓名：</span><span>{{data.clientName}}</span></div>
       <div><span>性别：</span><span>{{data.gender}}</span></div>
@@ -15,6 +15,8 @@
       <div><span>检查编号：</span><span>{{data.inspectionNo}}</span></div>
       <div><span>检查机构：</span><span>{{data.inspectionOrg}}</span></div>
       <div><span>检查时间：</span><span>{{data.inspectionDate}}</span></div>
+      <div></div>
+
     </div>
      <div class="lookPressure">
       <div style="width:100%;display: flex;">
@@ -23,7 +25,7 @@
       </div>
     </div>
     <div class="lines"></div>
-    <div class="titless">检查项目</div>
+    <div class="titless">单项检查项目</div>
      <el-table class="medicate-list mt20 openTable"
      :data="data.inspectionRecordConfigDtos"
      align="center">
@@ -166,6 +168,7 @@ export default {
     padding-left: 20px;
     font-size: 14px;
     color: #333333;
+    white-space: nowrap;
   }
 }
 .titless {

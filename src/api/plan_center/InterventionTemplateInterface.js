@@ -11,7 +11,7 @@ import BaseModule from '../BaseModule';
 class InterventionTemplateInterface extends BaseModule {
   // 修改干预模板
   updateInterveneTemplate(data = {}) {
-    return this.post('/intervene_template/update_intervene_template', data);
+    return this.put('/intervene_template/update_intervene_template', data);
   }
 
   // 查询干预模板

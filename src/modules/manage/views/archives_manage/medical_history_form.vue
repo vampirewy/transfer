@@ -10,12 +10,12 @@
     >
       <!--<div class="basic-info-title">{{id ? '' : '新增'}}就医用户信息</div>-->
       <div class="divRightTitleDiv" style="margin-top: -20px">
-        <div class="divRightTitle">{{id ? '' : '新增'}}就医用户信息
+        <div class="divRightTitle">{{ids ? '编辑' : '新增'}}-就医用户信息
           <div class="titleBiao"></div></div>
       </div>
       <el-row>
         <el-col :span="6">
-          <el-form-item label="姓名" prop="clientInfoId">
+          <el-form-item label="姓名" prop="name">
             <el-popover
               ref="userPopover"
               placement="bottom-start"
@@ -60,7 +60,8 @@
       <el-row>
         <el-col :span="6">
           <el-form-item label="就医编号" prop="MedicalNumber">
-            <el-input v-model="form.MedicalNumber" placeholder="请输入"></el-input>
+            <el-input v-model="form.MedicalNumber" placeholder="请输入"
+            onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -77,7 +78,8 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="医保卡号">
-            <el-input v-model="form.patientNo" placeholder="请输入"></el-input>
+            <el-input v-model="form.patientNo" placeholder="请输入"
+            onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -102,8 +104,7 @@
               type="date"
               placeholder="请选择就医时间"
               value-format="yyyy-MM-dd"
-              :picker-options="options.inDate"
-              @change="handleStartDateChange"
+              :max-date="form.outDate || new Date()"
             ></el-date-picker>
           </el-form-item>
         </el-col>
@@ -114,13 +115,16 @@
               type="date"
               placeholder="请选择出院时间"
               value-format="yyyy-MM-dd"
-              :picker-options="options.outDate"
+              :min-date="form.inDate"
+              :max-date="new Date()"
             ></el-date-picker>
+            <!-- :picker-options="options.outDate" -->
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="就医金额" prop="amountofmoney">
-            <el-input v-model="form.amountofmoney" placeholder="请输入" :maxlength="300"></el-input>
+          <el-form-item label="就医金额" prop="money">
+            <el-input v-model="form.money" placeholder="请输入" :maxlength="300"
+            onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -237,7 +241,7 @@ export default {
       popoverStatus: false,
       form: {
         MedicalNumber: '', // 就医编号
-        amountofmoney: '', // 金额
+        money: '', // 金额
         clientInfoId: '', // 客户ID
         hospital: '', // 医院（医疗机构）
         department: '', // 科室
@@ -270,16 +274,24 @@ export default {
         },
         outDate: {
           disabledDate: (cur) => {
+            // // eslint-disable-next-line no-underscore-dangle
+            // const _now = this.form.inDate
+            //   ? dayjs(this.form.inDate).format('YYYY-MM-DD')
+            //   : dayjs(new Date()).format('YYYY-MM-DD');
+            // // eslint-disable-next-line no-underscore-dangle
+            // const _cur = dayjs(cur);
+            // if (_cur.isSameOrAfter(_now)) {
+            //   return false;
+            // }
+            // return true;
             // eslint-disable-next-line no-underscore-dangle
-            const _now = this.form.inDate
-              ? dayjs(this.form.inDate).format('YYYY-MM-DD')
-              : dayjs(new Date()).format('YYYY-MM-DD');
+            const _now = dayjs(new Date()).format('YYYY-MM-DD');
             // eslint-disable-next-line no-underscore-dangle
             const _cur = dayjs(cur);
-            if (_cur.isSameOrAfter(_now)) {
-              return false;
+            if (_cur.isAfter(_now, 'day')) {
+              return true;
             }
-            return true;
+            return false;
           },
         },
       },
@@ -290,8 +302,9 @@ export default {
         hpi: [{ required: true, message: '现病史不能为空' }],
         complaint: [{ required: true, message: '主诉不能为空' }],
         diagnosis: [{ required: true, message: '诊断不能为空' }],
-        amountofmoney: [{ required: true, message: '金额不能为空' }],
+        money: [{ required: true, message: '金额不能为空' }],
         MedicalNumber: [{ required: true, message: '就医编号不能为空' }],
+        name: [{ required: true, message: '客户不能为空' }],
       },
       resultOptions: [
         { value: 1, label: '未指定' },
@@ -311,6 +324,7 @@ export default {
   },
   mounted() {
     if (this.ids) {
+      document.title = '编辑就医用户信息';
       this.$api.medicalHistoryInterface.medicalInfoDetail(this.ids).then((res) => {
         const { data } = res;
         console.log(data, '撒打算大的');

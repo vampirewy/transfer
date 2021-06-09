@@ -4,7 +4,7 @@
     <div class="titless">查看-就医用户信息</div>
     <div class="lookPressure">
       <div><span>姓名：</span><span>{{data.clientName}}</span></div>
-      <div><span>性别：</span><span>{{data.gender}}</span></div>
+      <div><span>性别：</span><span v-if="data.gender === 1">男</span><span v-else>女</span></div>
       <div><span>年龄：</span><span>{{data.age}}</span></div>
       <div><span>客户编号：</span><span>{{data.clientGrid}}</span></div>
     </div>
@@ -13,7 +13,8 @@
     <!-- <div class="title">数据列表</div> -->
     <div class="lookPressure">
       <div><span>就医编号：</span><span>{{data.orgCode}}</span></div>
-      <div><span>就医类型：</span><span>{{data.medicalType}}</span></div>
+      <div><span>就医类型：</span><span v-if="data.medicalType === 1">
+        门诊</span><span v-else>住院</span></div>
       <div><span>医保卡号：</span><span>{{data.patientNo}}</span></div>
       <div><span>就医机构：</span><span>{{data.hospital}}</span></div>
     </div>
@@ -24,8 +25,15 @@
       <div><span>出院时间：</span><span>{{data.outDate}}</span></div>
     </div>
     <div class="lookPressure">
-      <div><span>就医金额：</span><span>是否健康</span></div>
-      <div><span>当前状态：</span><span>{{data.result}}</span></div>
+      <div><span>就医金额：</span><span>{{data.money}}</span></div>
+      <div><span>当前状态：</span>
+      <span v-if="data.result===1">未指定</span>
+      <span v-if="data.result===2">治疗中</span>
+      <span v-if="data.result===3">转诊</span>
+      <span v-if="data.result===4">转为慢病</span>
+      <span v-if="data.result===5">痊愈</span>
+      <span v-if="data.result===6">其他</span>
+      </div>
       <div></div>
       <div></div>
     </div>

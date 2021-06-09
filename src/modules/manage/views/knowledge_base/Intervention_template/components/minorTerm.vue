@@ -109,6 +109,7 @@
                               v-model="scope.row[item.prop]"
                               placeholder="请选择"
                               style="width: 140px"
+                              @change="Changeestates(scope.$index,$event)"
                       >
                         <el-option label=">" value="1" key="1"></el-option>
                         <el-option label="<" value="2" key="2"></el-option>
@@ -233,8 +234,8 @@ const COLUMNS = {
   Minterm: [
     { label: '科室名称', prop: 'sectionName' },
     { label: '小项名称', prop: 'itemName' },
-    { label: '小项条件', prop: 'isMain' },
-    { label: '条件的值', prop: 'isMainText' },
+    { label: '小项条件', prop: 'judgeRelation' },
+    { label: '条件的值', prop: 'itemValue' },
     { label: '低值', prop: 'minValue' },
     { label: '高值', prop: 'maxValue' },
   ],
@@ -423,6 +424,9 @@ export default {
         });
         for (let i = 0; i < this.detectionInfo.length; i++) {
           this.detectionInfo[i].conditionRelation = this.formData.state;
+          if (NameType === 'Minterm') {
+            this.detectionInfo[i].judgeRelation = '1';
+          }
         }
         console.log(this.detectionInfo, '123123选择检测项目');
         this.$refs.userPopovers.doClose();

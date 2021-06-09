@@ -57,9 +57,9 @@
                     placeholder="请选择"
                     style="width: 140px"
                   >
-                  <el-option label="未知" value="0" key="0"></el-option>
-                  <el-option label="已总检" value="1" key="1"></el-option>
-                  <el-option label="未总检" value="2" key="2"></el-option>
+                  <!-- <el-option label="未知" value="0" key="0"></el-option> -->
+                  <el-option label="门诊" value="1" key="1"></el-option>
+                  <el-option label="住院" value="2" key="2"></el-option>
                   </el-select>
                 </div>
               </div>
@@ -87,7 +87,7 @@
                 <el-date-picker
                   v-model="formData.inDateStartTime"
                   type="date"
-                  :max-date="formData.endTime"
+                  :max-date="formData.inDateEndTime || new Date()"
                   placeholder="选择开始日期"
                   style="width: 140px"
                 >
@@ -96,7 +96,8 @@
                 <el-date-picker
                   v-model="formData.inDateEndTime"
                   type="date"
-                  :min-date="formData.startTime"
+                  :min-date="formData.inDateStartTime"
+                  :max-date="new Date()"
                   placeholder="选择结束日期"
                   style="width: 140px"
                 >
@@ -107,7 +108,7 @@
                 <el-date-picker
                   v-model="formData.outDateStartTime"
                   type="date"
-                  :max-date="formData.endTime"
+                  :max-date="formData.outDateEndTime || new Date()"
                   placeholder="选择开始日期"
                   style="width: 140px"
                 >
@@ -116,7 +117,8 @@
                 <el-date-picker
                   v-model="formData.outDateEndTime"
                   type="date"
-                  :min-date="formData.startTime"
+                  :min-date="formData.outDateStartTime"
+                  :max-date="new Date()"
                   placeholder="选择结束日期"
                   style="width: 140px"
                 >
@@ -163,16 +165,20 @@
               @expand-change="handleExpandChange">
               <el-table-column type="expand" width="1" class-name="hide-expand-column">
                 <el-table :data="expandData.list" class="expand-table">
-                  <el-table-column label="就医日期" prop="inDate" align="center"></el-table-column>
-                  <el-table-column label="医疗机构" prop="hospital" align="center"></el-table-column>
-                  <el-table-column label="就医科室" prop="department" align="center"></el-table-column>
+                  <el-table-column label="就医日期" prop="inDate" align="center"
+                  show-overflow-tooltip></el-table-column>
+                  <el-table-column label="医疗机构" prop="hospital" align="center"
+                  show-overflow-tooltip></el-table-column>
+                  <el-table-column label="就医科室" prop="department" align="center"
+                  show-overflow-tooltip></el-table-column>
                   <el-table-column
                     label="诊断"
                     prop="diagnosis"
                     show-overflow-tooltip
                     align="center">
                   </el-table-column>
-                  <el-table-column label="当前状态" prop="result" align="center">
+                  <el-table-column label="当前状态" prop="result" align="center"
+                  show-overflow-tooltip>
                     <template slot-scope="scope">{{ statusMap[scope.row.result] }}</template>
                   </el-table-column>
                   <el-table-column label="操作" prop="index" width="160" align="center">
@@ -206,7 +212,13 @@
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column label="性名" prop="clientName" align="center"
-              show-overflow-tooltip></el-table-column>
+              show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span class="clientName"
+                      @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
+                {{ scope.row.clientName }}</span>
+              </template>
+              </el-table-column>
               <el-table-column label="性别" prop="gender" align="center">
                 <template slot-scope="scope">
                   {{scope.row.gender === 1 ? '男' : (scope.row.gender === 2 ? '女' : '')}}
@@ -223,6 +235,9 @@
                 align="center"
                 prop="medicalType"
                 show-overflow-tooltip>
+                <template slot-scope="scope">
+                  {{scope.row.medicalType === 1 ? '门诊' : (scope.row.medicalType === 2 ? '住院' : '')}}
+                </template>
               </el-table-column>
                 <el-table-column
                 label="医疗机构"
@@ -259,13 +274,13 @@
                 align="center"
                 prop="result"
                 show-overflow-tooltip>
+                <template slot-scope="scope">{{ statusMap[scope.row.result] }}</template>
               </el-table-column>
               <el-table-column
                 label="就医次数"
                 align="center"
                 prop="medicalCount"
                 show-overflow-tooltip>
-                <template slot-scope="scope">{{ statusMap[scope.row.result] }}</template>
               </el-table-column>
               <el-table-column label="操作" prop="id" width="120" align="center">
                 <template slot-scope="scope">

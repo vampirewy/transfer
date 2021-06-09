@@ -88,8 +88,10 @@ export default [
         path: '/medical_history_form',
         name: 'medical_history_form',
         meta: {
-          title: '就医记录新增',
+          title: '新增就医用户信息',
           access: 'medical_history_form',
+          hideInMenu: true,
+          hideInTag: true,
         },
         component: () =>
           import('../../views/archives_manage/medical_history_form.vue'),
