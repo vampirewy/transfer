@@ -29,5 +29,16 @@ class Statics extends BaseModule {
   intervene(data = {}) {
     return this.post('/job_performance/intervene_count_chart', data);
   }
+  // 统计
+  abnormal(data = {}) {
+    return this.post('/report_abnormal_statistics/statistics_list', data);
+  }
+  // BMI统计类
+  reportList(data = {}) {
+    return this.post('/static_report_item/cake_statistics_list', data);
+  }
+  // reportList(data = {}) {
+  //   return this.post('/report_abnormal_statistics/statistics_list', data);
+  // }
 }
 export default new Statics();

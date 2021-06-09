@@ -488,11 +488,10 @@ export default {
       border-color: transparent;
       color: #666666;
       position: relative;
-      margin-right: 20px;
       padding: 14px 16px;
       font-size: 14px;
       border-radius: 8px 8px 0 0;
-      margin: 0 20px;
+      margin: 0 24px;
     }
     .fristName:nth-child(1) {
       border-radius: 0px 5px 0 0;
@@ -535,7 +534,7 @@ export default {
       color: #333333;
       font-weight: 600;
       position: relative;
-      margin: 0 20px;
+      margin: 0 24px;
       padding: 14px 16px;
       font-size: 14px;
       border-radius: 8px 8px 0 0;

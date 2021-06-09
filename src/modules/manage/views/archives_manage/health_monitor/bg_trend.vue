@@ -90,7 +90,6 @@ export default {
           { label: '血糖类型', prop: 'sugarTypeName' },
           { label: '血糖值', prop: 'sugar' },
           { label: '备注', prop: 'sugar' },
-
         ],
         list: [],
         total: 0,

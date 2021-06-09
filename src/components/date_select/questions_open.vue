@@ -17,9 +17,10 @@
           <span>生活方式问卷</span>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" label="填写日期" min-width="50%" show-overflow-tooltip>
+      <el-table-column prop="questionDate" label="填写日期" min-width="50%" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span v-if="scope.row.createTime">{{ scope.row.createTime.split(' ')[0]  || '-'}}</span>
+          <span v-if="scope.row.questionDate">
+            {{ scope.row.questionDate.split(' ')[0] || '-'}}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -55,7 +56,6 @@ export default {
   },
   methods: {
     handleRowClick(row) {
-      console.log(row);
       this.$emit('change', row);
     },
     handleCurrentChange(page) {
@@ -79,6 +79,7 @@ export default {
         pageSize: this.pageSize,
       });
       const { data } = res.data;
+      console.log(data.data, 1111);
       if (data) {
         this.tableData = data.data || [];
         this.total = data.total;

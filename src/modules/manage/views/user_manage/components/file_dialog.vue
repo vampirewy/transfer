@@ -78,7 +78,7 @@ export default {
       fileList: [],
       rules: {
         title: [{ required: true, message: '请输入附件标题' }],
-        route: [{ required: true, message: '请上传附件' }],
+        route: [{ required: false, message: '' }],
       },
       readonly: true,
     };

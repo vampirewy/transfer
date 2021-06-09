@@ -1,5 +1,6 @@
 <template>
   <el-dialog
+    :modal-append-to-body="false"
     class="match-exception-dialog"
     title="未匹配异常"
     :visible="true"

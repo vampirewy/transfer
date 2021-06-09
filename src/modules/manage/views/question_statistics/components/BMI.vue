@@ -118,6 +118,7 @@ export default {
           },
         ],
       };
+      // option.series[0].data = data;
       myChartDrawer.setOption(option);
     },
   },

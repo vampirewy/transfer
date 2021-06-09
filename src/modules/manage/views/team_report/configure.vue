@@ -185,23 +185,23 @@ export default {
      * @return {Promise<void>}
      */
     async getDetail() {
-      const reqBody = { id: this.$route.params.id };
-      const res = await this.$api.categoryManage.getdetails(reqBody);
-      const { data } = res.data;
-      this.form.gridName = data.gridName;
-      this.form.reportName = data.reportName;
-      this.form.state = data.state;
-      this.form.dangerShow = data.dangerShow;
-      this.tablest.forEach((value) => {
-        value.contentList.forEach((valCode) => {
-          const ValCode = valCode;
-          data.paramCodeList.forEach((valGetCode) => {
-            if (ValCode.code === valGetCode) {
-              ValCode.checked = true;
-            }
-          });
-        });
-      });
+      // const reqBody = { id: this.$route.query.id };
+      // const res = await this.$api.categoryManage.getdetails(reqBody);
+      // const { data } = res.data;
+      // this.form.gridName = data.gridName;
+      // this.form.reportName = data.reportName;
+      // this.form.state = data.state;
+      // this.form.dangerShow = data.dangerShow;
+      // this.tablest.forEach((value) => {
+      //   value.contentList.forEach((valCode) => {
+      //     const ValCode = valCode;
+      //     data.paramCodeList.forEach((valGetCode) => {
+      //       if (ValCode.code === valGetCode) {
+      //         ValCode.checked = true;
+      //       }
+      //     });
+      //   });
+      // });
     },
     // 获取管理人员类别参数push
     async getDetailtypePush(type) {
@@ -250,8 +250,8 @@ export default {
           };
           reqBody.id = this.$route.params.id;
           await this.$api.categoryManage.clientGridSave(reqBody);
-          this.$message.success('操作成功');
-          this.cancel();
+          // this.$message.success('操作成功');
+          // this.cancel();
         }
       });
     },

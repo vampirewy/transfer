@@ -1,5 +1,6 @@
 <template>
   <el-dialog
+    :modal-append-to-body="false"
     class="match-exception-dialog"
     title="未匹配异常"
     :visible="true"
@@ -41,7 +42,7 @@
       @size-change="handleSizeChange"
     ></el-pagination>
     <div class="buttons">
-      <el-button size="small" plain @click="$emit('close')">取消</el-button>
+      <el-button size="small" class="cancelBtn" @click="$emit('close')">取消</el-button>
       <el-button size="small" type="primary" @click="submit">确定</el-button>
     </div>
   </el-dialog>
@@ -105,7 +106,7 @@ export default {
       });
       const { data } = res.data;
       if (data) {
-        this.tableData = data.list || [];
+        this.tableData = data.data || [];
         this.total = data.total;
       }
     },
@@ -176,11 +177,10 @@ export default {
     }
   }
   .buttons {
-    text-align: right;
+    text-align: center;
     margin-top: 20px;
     button {
       width: 80px;
-      border-radius: 8px;
       border: none;
     }
     button + button {

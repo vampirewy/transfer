@@ -7,7 +7,7 @@
     </match-exception>
     <comment
       v-else-if="view === 3"
-      :id="currentData.reportId"
+      :id="currentData.id"
       @close="handleClose">
     </comment>
     <div v-else>
@@ -51,7 +51,7 @@
             <div class="searchFor" @click="onSearch">
             <img src="@/assets/images/common/topsearchblue.png" alt="">
           </div>
-          <div class="resetAll">重置</div>
+          <div class="resetAll" @click="reset">重置</div>
           <div class="more" v-if="isTrue"  @click="upMore">
             <span>></span>
             展开更多</div>
@@ -71,7 +71,7 @@
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
             style="width: 140px;"
-            :picker-options="pickerStartTime"
+            :picker-options="pickerStartTime1"
             placeholder="选择开始时间">
             </el-date-picker>
             <span class="timing">-</span>
@@ -81,7 +81,7 @@
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
             style="width: 140px"
-            :picker-options="pickerEndTime"
+            :picker-options="pickerEndTime1"
             placeholder="选择结束时间">
           </el-date-picker>
           </div>
@@ -93,7 +93,7 @@
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
             style="width: 140px;"
-            :picker-options="pickerStartTime"
+            :picker-options="pickerStartTime2"
             placeholder="选择开始时间">
             </el-date-picker>
             <span class="timing">-</span>
@@ -103,7 +103,7 @@
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
             style="width: 140px"
-            :picker-options="pickerEndTime"
+            :picker-options="pickerEndTime2"
             placeholder="选择结束时间">
           </el-date-picker>
           </div>
@@ -163,8 +163,11 @@
               </el-table-column>
               <el-table-column label="团队名称" prop="teamName" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
-                  <span class="clientName"
+                  <!-- <span class="clientName"
                         @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
+                    {{ scope.row.teamName || '-'}}
+                  </span> -->
+                  <span>
                     {{ scope.row.teamName || '-'}}
                   </span>
                 </template>
@@ -285,49 +288,49 @@ export default {
       currentData: {},
       currentUnMatchData: {},
       pickerStartTime: {
-        disabledDate: (time) => {
-          if (this.form.maxReportDate) {
-            const endTime = new Date(this.form.maxReportDate);
-            return time.getTime() > new Date(endTime).getTime() - (3600 * 1000 * 23 * 1);
-          }
+        disabledDate(time) {
+          return time.getTime() > Date.now() - 8.64e7;
         },
       },
       pickerEndTime: {
         disabledDate: (time) => {
-          if (this.form.minReportDate) {
-            const startTime = new Date(this.form.minReportDate);
-            return time.getTime() < new Date(startTime).getTime() - (3600 * 1000 * 23 * 1);
+          if (this.form.startCreatedTime) {
+            const startTime = new Date(this.form.startCreatedTime);
+            return (time.getTime() < new Date(startTime).getTime() - (3600 * 1000 * 23 * 1)
+             || time.getTime() > Date.now() - 8.64e7);
           }
         },
       },
       pickerStartTime1: {
-        disabledDate: (time) => {
-          if (this.form.maxAssessReportDate) {
-            const endTime = new Date(this.form.maxAssessReportDate);
-            return time.getTime() > new Date(endTime).getTime() - (3600 * 1000 * 23 * 1);
-          }
+        disabledDate(time) {
+          return time.getTime() > Date.now() - 8.64e7;
         },
       },
       pickerEndTime1: {
         disabledDate: (time) => {
-          if (this.form.minAssessReportDate) {
-            const startTime = new Date(this.form.minAssessReportDate);
-            return time.getTime() < new Date(startTime).getTime() - (3600 * 1000 * 23 * 1);
+          if (this.form.startPEStartTime) {
+            const startTime = new Date(this.form.startPEStartTime);
+            return (time.getTime() < new Date(startTime).getTime() - (3600 * 1000 * 23 * 1)
+             || time.getTime() > Date.now() - 8.64e7);
+          }
+        },
+      },
+      pickerStartTime2: {
+        disabledDate(time) {
+          return time.getTime() > Date.now() - 8.64e7;
+        },
+      },
+      pickerEndTime2: {
+        disabledDate: (time) => {
+          if (this.form.startPEndTime) {
+            const startTime = new Date(this.form.startPEndTime);
+            return (time.getTime() < new Date(startTime).getTime() - (3600 * 1000 * 23 * 1)
+             || time.getTime() > Date.now() - 8.64e7);
           }
         },
       },
     };
   },
-  /* mounted() {
-    if (localStorage.getItem('homeSearchData')) {
-      const HomeSearchData = JSON.parse(localStorage.getItem('homeSearchData'));
-      this.form.minAssessReportDate = HomeSearchData.startDate;
-      this.form.maxAssessReportDate = HomeSearchData.lastDate;
-      this.form.searchRange = HomeSearchData.searchRange;
-    }
-    this.getClientTypeList();
-    this.queryPageList();
-  },*/
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       if (localStorage.getItem('homeSearchData')) {
@@ -345,6 +348,17 @@ export default {
     localStorage.removeItem('homeSearchData');
   },
   methods: {
+    reset() {
+      this.form.keywords = '';
+      this.form.startCreatedTime = null;
+      this.form.endCreatedTime = null;
+      this.form.startPEStartTime = null;
+      this.form.endPEStartTime = null;
+      this.form.startPEndTime = null;
+      this.form.endPEndTime = null;
+      this.table.pageNo = 1;
+      this.queryPageList();
+    },
     // 展开更多
     upMore() {
       this.isTrue = !this.isTrue;
@@ -382,17 +396,6 @@ export default {
     },
     handleClose() {
       this.view = 1;
-      this.queryPageList();
-    },
-    reset() {
-      this.form.keywords = '';
-      this.form.workUnitName = '';
-      this.form.gridId = '';
-      this.form.minReportDate = null;
-      this.form.maxReportDate = null;
-      this.form.minAssessReportDate = null;
-      this.form.maxAssessReportDate = null;
-      this.table.pageNo = 1;
       this.queryPageList();
     },
     onSearch() {
@@ -490,34 +493,9 @@ export default {
     },
     // 配置
     generateReport() {
-      if (this.multipleSelection.length === 0) {
-        this.$message.warning('请先选择数据');
-      } else if (this.multipleSelection.length > 1) {
-        this.$message.warning('请选择一条数据');
-      } else {
-        this.$router.push({
-          path: '/team_configure',
-          query: {
-            id: this.multipleSelection[0].reportId,
-          },
-        });
-      }
-      // if (this.multipleSelection.length === 0) {
-      //   this.$message.warning('请先选择数据');
-      //   return false;
-      // }
-      // const params = this.multipleSelection.map(({ clientId, lifeQuestionId, reportId }) => {
-      //   const data = {
-      //     clientId,
-      //     lifeQuestionId,
-      //     reportInfoId: reportId,
-      //   };
-      //   return data;
-      // });
-      // this.$api.accessReport.generateReport(params).then(() => {
-      //   this.$message.success('操作成功');
-      //   this.queryPageList();
-      // });
+      this.$router.push({
+        path: '/team_configure',
+      });
     },
     // 生成
     createReport() {

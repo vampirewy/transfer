@@ -63,7 +63,7 @@
                   style="width: 140px"
           >
             <el-option :label="item.gridName"
-            :value="item.id" v-for="(item, index) in clientTypeList"
+            :value="item.id" v-for="(item, index) in gridList"
                        :key="index"></el-option>
           </el-select>
           </div>
@@ -92,12 +92,12 @@
             <div v-else>
             <span>问卷来源：</span>
             <el-select
-                  v-model="form.doctorId"
+                  v-model="form.source"
                   placeholder="请选择"
                   style="width: 140px"
           >
-            <el-option :label="item.realName" :value="item.id" v-for="(item, index) in doctorList"
-                       :key="index"></el-option>
+            <el-option :label="item.name" :value="item.paramValue"
+                       v-for="(item, index) in questionFromList" :key="index"></el-option>
           </el-select>
           </div>
             </div>
@@ -106,7 +106,7 @@
             <div class="searchFor" @click="onSearch">
             <img src="@/assets/images/common/topsearchblue.png" alt="">
           </div>
-          <div class="resetAll">重置</div>
+          <div class="resetAll" @click="reset">重置</div>
           <div class="more" v-if="isTrue"  @click="upMore">
             <span>></span>
             展开更多</div>
@@ -197,9 +197,9 @@
               :row-key="getRowKeys"
               @expand-change="handleExpandChange"
               align="center"
-              :data="table.list">
+              :data="clientTypeList">
               <el-table-column type="expand" width="1" class-name="hide-expand-column">
-                <el-table :data="expandData.list" class="expand-table">
+                <!-- <el-table :data="expandData.list" class="expand-table">
                   <el-table-column
                     label="异常名称"
                     prop="abnormalName"
@@ -217,47 +217,78 @@
                       <el-button type="text" @click="handleMatch(scope.row)">匹配</el-button>
                     </template>
                   </el-table-column>
-                </el-table>
+                </el-table> -->
               </el-table-column>
               <el-table-column type="selection" width="40"></el-table-column>
-              <el-table-column label="客户编号" prop="reportNo" width="90" show-overflow-tooltip>
+              <el-table-column label="客户编号" prop="id" width="90" show-overflow-tooltip>
               </el-table-column>
-              <el-table-column label="姓名" prop="clientName" align="center" show-overflow-tooltip>
+              <el-table-column label="姓名" prop="createdByName" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
                   <span class="clientName"
                         @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
-                    {{ scope.row.clientName || '-'}}
+                    {{ scope.row.createdByName || '-'}}
                   </span>
                 </template>
               </el-table-column>
-              <el-table-column label="性别" prop="genderTxt" width="55" show-overflow-tooltip>
+              <el-table-column label="性别" prop="gender" width="55" show-overflow-tooltip>
+                <template slot-scope="scope">
+            <span>{{scope.row.gender | getResultGender}}</span>
+          </template>
               </el-table-column>
               <el-table-column label="年龄" prop="age" width="55" show-overflow-tooltip>
+                <template slot-scope="scope">
+            <span>{{ scope.row.age | getResult}}</span>
+          </template>
               </el-table-column>
               <el-table-column
                 label="人员类别"
-                prop="gradeName"
+                prop="clientGridName"
                 min-width="80"
                 show-overflow-tooltip>
+                <template slot-scope="scope">
+            <span>{{ scope.row.clientGridName | getResult}}</span>
+          </template>
               </el-table-column>
               <el-table-column
                 label="单位"
                 prop="workUnitName"
                 min-width="80"
                 show-overflow-tooltip>
+                <template slot-scope="scope">
+            <span>{{ scope.row.workUnitName | getResult}}</span>
+          </template>
               </el-table-column>
-              <el-table-column label="填写日期" prop="reportDate" min-width="90" show-overflow-tooltip>
+              <el-table-column label="填写日期" prop="questionDate"
+              min-width="90"
+              show-overflow-tooltip>
+                <template slot-scope="scope">
+            <span>{{ scope.row.questionDate | getResultDate}}</span>
+          </template>
               </el-table-column>
-              <el-table-column label="总分" prop="reportDate" min-width="90" show-overflow-tooltip>
+              <el-table-column label="总分" prop="psyTotalScore" min-width="90" show-overflow-tooltip>
+                <template slot-scope="scope">
+            <span>{{scope.row.psyTotalScore | getResult}}</span>
+          </template>
               </el-table-column>
-              <el-table-column label="问卷来源" prop="reportDate" min-width="90" show-overflow-tooltip>
+              <el-table-column label="问卷来源" prop="sourceName" min-width="90" show-overflow-tooltip>
+                <template slot-scope="scope">
+            {{ scope.row.sourceName | getResult}}
+          </template>
               </el-table-column>
               <el-table-column label="操作" align="center" width="60">
                 <template slot-scope="scope">
                   <el-button
                     type='text'
                     size="small"
-                    @click="openPdf(scope.row)">查看</el-button>
+                    @click="
+                $router.push({
+                  name: 'health_questionnaire_detail',
+                  params: {
+                    qusType: scope.row.questionType,
+                    id: scope.row.id,
+                  },
+                })">
+                查看</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -367,7 +398,6 @@
                       v-if="popoverStatus && popoverRefIndex === scope.row.reportId"
                       :clientId="scope.row.clientId"
                       @change="handlePopoperClose"></questions-open>
-                    <!--v-if="popoverStatus"-->
                     <el-input
                             class="select-user-trigger disabled"
                             slot="reference"
@@ -584,6 +614,8 @@ export default {
         total: 0,
       },
       clientTypeList: [],
+      gridList: [],
+      questionFromList: [],
       multipleSelection: [],
       expands: [],
       getRowKeys: row => row.reportId,
@@ -598,34 +630,16 @@ export default {
       currentData: {},
       currentUnMatchData: {},
       pickerStartTime: {
-        disabledDate: (time) => {
-          if (this.form.maxReportDate) {
-            const endTime = new Date(this.form.maxReportDate);
-            return time.getTime() > new Date(endTime).getTime() - (3600 * 1000 * 23 * 1);
-          }
+        disabledDate(time) {
+          return time.getTime() > Date.now() - 8.64e7;
         },
       },
       pickerEndTime: {
         disabledDate: (time) => {
           if (this.form.minReportDate) {
             const startTime = new Date(this.form.minReportDate);
-            return time.getTime() < new Date(startTime).getTime() - (3600 * 1000 * 23 * 1);
-          }
-        },
-      },
-      pickerStartTime1: {
-        disabledDate: (time) => {
-          if (this.form.maxAssessReportDate) {
-            const endTime = new Date(this.form.maxAssessReportDate);
-            return time.getTime() > new Date(endTime).getTime() - (3600 * 1000 * 23 * 1);
-          }
-        },
-      },
-      pickerEndTime1: {
-        disabledDate: (time) => {
-          if (this.form.minAssessReportDate) {
-            const startTime = new Date(this.form.minAssessReportDate);
-            return time.getTime() < new Date(startTime).getTime() - (3600 * 1000 * 23 * 1);
+            return (time.getTime() < new Date(startTime).getTime() - (3600 * 1000 * 23 * 1)
+             || time.getTime() > Date.now() - 8.64e7);
           }
         },
       },
@@ -651,6 +665,8 @@ export default {
       }
       vm.getClientTypeList();
       vm.queryPageList();
+      vm.getGridList();
+      vm.getQuestionFromList();
     });
   },
   destroyed() {
@@ -658,12 +674,25 @@ export default {
     localStorage.removeItem('homeSearchData');
   },
   methods: {
+    // 人员类别
+    async getGridList() {
+      const res = await this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
+      const { data } = res.data;
+      this.gridList = data.data;
+    },
+    // 问卷来源
+    async getQuestionFromList() {
+      const res = await this.$api.health.getQuestionFromList({ pageNo: 1, pageSize: 10000 });
+      const { data } = res.data;
+      this.questionFromList = data;
+    },
     // 展开更多
     upMore() {
       this.isTrue = !this.isTrue;
     },
     TabbarBtn(index) {
       this.Tabactive = index;
+      this.reset();
       this.$forceUpdate();
     },
     popoverStatusShow(row) {
@@ -675,7 +704,7 @@ export default {
       const Index = `popover-${this.popoverRefIndex}`;
       this.$refs[Index].doClose();
       this.popoverStatus = false;
-      this.popoverRow.lifeQuestionDate = data.createTime ? data.createTime.split(' ')[0] : '';
+      this.popoverRow.lifeQuestionDate = data.questionDate ? data.questionDate.split(' ')[0] : '';
       this.popoverRow.lifeQuestionId = data.id;
     },
     // 查看pdf
@@ -695,25 +724,24 @@ export default {
       this.currentData = data;
     },
     handleExamine() {
-      // if (this.multipleSelection.length === 0) {
-      //   this.$message.warning('请先选择数据');
-      //   return false;
-      // }
-      // this.view = 5;
-      // debugger;
-      // const params = this.multipleSelection.map(({ clientId, lifeQuestionId, reportId }) => {
-      //   const data = {
-      //     clientId,
-      //     lifeQuestionId,
-      //     reportInfoId: reportId,
-      //   };
-      //   return data;
-      // });
-      // console.log(params, 123456);
-      // this.$api.accessReport.generateReport(params).then(() => {
-      //   this.$message.success('操作成功');
-      //   this.queryPageList();
-      // });
+      if (this.multipleSelection.length === 0) {
+        this.$message.warning('请先选择数据');
+        return false;
+      }
+      this.view = 5;
+      debugger;
+      const params = this.multipleSelection.map(({ clientId, lifeQuestionId, reportId }) => {
+        const data = {
+          clientId,
+          lifeQuestionId,
+          reportInfoId: reportId,
+        };
+        return data;
+      });
+      this.$api.accessReport.generateReport(params).then(() => {
+        this.$message.success('操作成功');
+        this.queryPageList();
+      });
     },
     handleClose() {
       this.view = 1;
@@ -748,6 +776,7 @@ export default {
       if (sendData.maxAssessReportDate) {
         sendData.maxAssessReportDate = `${sendData.maxAssessReportDate} 23:59:59`;
       }
+      // 生活方式评估
       await this.$api.accessReport.fetchUserList({
         ...sendData,
         pageNo: this.table.pageNo,
@@ -757,6 +786,7 @@ export default {
         this.table.list = data.data.data;
       });
     },
+    // 心理问卷
     getClientTypeList() {
       this.$api.medicalHistoryInterface.clientTypeList({
         pageNo: 1,

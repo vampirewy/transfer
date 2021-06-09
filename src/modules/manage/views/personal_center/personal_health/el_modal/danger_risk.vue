@@ -1,271 +1,155 @@
 <template>
-  <div class="intervention_tab_div">
-    <div class="formSearchTitle" style="font-size: 14px;margin-top: 0;margin-bottom: 20px;">
-      <span class="dianLv"></span>危险因素
-    </div>
-    <el-form :inline="false">
-      <el-form-item label="问卷时间：">
-    <el-popover
-            ref="userPopover"
-            placement="bottom-start"
-            width="570"
-            trigger="click"
-            @show="popoverStatus = true"
-            @hide="popoverStatus = false"
-    >
-      <questions-open v-if="popoverStatus"
-                      :clientId="$route.params.id"
-                      @change="handlePopoperClose"></questions-open>
-      <el-input
-              class="select-user-trigger disabled"
-              slot="reference"
-              disabled
-              v-model="formData.questionTime"
-              placeholder="请选择">
-        <i :class="`el-icon-arrow-${popoverStatus ? 'up' : 'down'}`" slot="suffix"></i>
-      </el-input>
-    </el-popover>
-      </el-form-item>
-    </el-form>
-    <div class="follow-plan">
-      <el-table :data="tableData" style="width: 100%" align="center"
-                :cell-style="columnStyle"
-                :span-method="objectSpanMethod">
-        <el-table-column prop="typeName" label="分类" width="200px" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{ scope.row.typeName | getResult}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="factor" label="因素" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{scope.row.factor | getResult }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="advice" label="建议" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{ scope.row.advice | getResult }}</span>
-          </template>
-        </el-table-column>
-        <!--<el-table-column label="操作" width="150">
-          <template slot-scope="scope">
-            <el-button type="text" size="small" @click="handleViewPlan(scope.row)">查看</el-button>
-          </template>
-        </el-table-column>-->
-      </el-table>
+  <div>
+    <div class="content">
+      <div class="content-left">
+        <div class="formSearchTitle">
+          <span class="dianLves"
+            ><img src="@/assets/images/common/titleLeft.png" alt="" /></span
+          >危险因素
+        </div>
+        <dangerous :clientId="$route.params.id"></dangerous>
+      </div>
     </div>
   </div>
 </template>
 <script>
-import dangerRiskDetail from '../components/danger_risk_detail.vue';
-import QuestionsOpen from '~/src/components/date_select/questions_open.vue';
-let columlet = 1; // 用作行颜色切换
+// import { formatDate } from '~/src/libs/util';
+import Disease from '@/components/user_health/disease.vue';
+import RiskAssess from '@/components/user_health/risk_assess.vue';
+import ImportantIndex from '@/components/user_health/important_index.vue';
+import dangerous from '@/components/user_health/dangerous.vue';
+import Progress from '@/components/user_health/progress.vue';
 export default {
-  name: 'DanderRisk',
+  name: 'Intervention_tab_userdetail_mdl',
   components: {
-    QuestionsOpen,
+    Disease,
+    RiskAssess,
+    ImportantIndex,
+    dangerous,
+    Progress,
   },
   data() {
     return {
+      protent: '30',
+      colors: '#24499D',
+      protentes: '70',
+      colorses: '#7CA7FF',
+      title: '整体评分',
+      titles: '依从度',
       menuNum: 0,
       active: 0,
-      spanArr: [], // 用于存放每一行记录的合并数
       checkTplPlanList: [],
       tableData: [],
-      popoverStatus: false,
+      assessList: {
+        assess2: [],
+        assess3: [],
+        assess4: [],
+        assess5: [],
+      }, // 慢性病风险评估
       form: {
         templateId: '',
         templateList: [],
+        reportAbnormalList: [], // 用户疾病
+        questionLifestyle: {
+          questionLifestyle1: { paramValue: '' },
+          questionLifestyle2: { paramValue: '' },
+          questionLifestyle3: { paramValue: '' },
+          questionLifestyle4: { paramValue: '' },
+          questionLifestyle5: { paramValue: '' },
+        },
       },
       formData: {
-        questionId: '',
-        questionTime: '',
+        birth: '', // 1992-01-04
+        gridId: '',
+        userRealName: '',
+        profession: '',
+        address: '',
+        tagList: [],
+        mobile: '',
+        name: '',
+        age: '',
+        gender: '',
+        cardNo: '',
+        marriage: '',
+        ethnicGroup: '',
+        educationLevel: '',
+        remark: '',
+        tag: '',
+        workUnitName: '',
+        workUnitAddress: '',
+        userIdList: [],
+        workIdList: [],
+        selectedDoctors: [],
+        workUnitDepartment: '',
       },
+      total: 0,
+      pageNo: 1,
     };
   },
   mounted() {
-    this.queryList(); // 找出第一份问卷
+    this.getUserHealthDetail(); // 获取健康信息
+    this.getAssessReportDetail(); // 获取慢性病风险评估
   },
   methods: {
-    columnStyle({ columnIndex }) {
-      // let Name = '';row, column, rowIndex, columnIndex
-      if (columnIndex === 0) {
-        if (columlet === 1) {
-          columlet = 2;
-          return 'background: #FAFAFA';
-        } else if (columlet !== 1) {
-          columlet = 1;
-          return 'background: #F4F4F6';
-        }
-      }
-      /* if (rowIndex % 2 === 0 && columnIndex === 0) {
-        return 'background: white';
-      } else if (rowIndex % 2 !== 0 && columnIndex === 0) {
-        return 'background: white';
-      }*/
+    clickMenu(index, id) {
+      this.total = 0;
+      this.active = index;
+      this.form.templateId = id;
+      this.pageNo = 1;
+      this.getList();
     },
-    handlePopoperClose(data) {
-      this.$refs.userPopover.doClose();
-      this.popoverStatus = false;
-      this.formData.questionId = data.id;
-      this.formData.questionTime = data.createTime ? data.createTime.split(' ')[0] : '';
-      this.getDangerRiskInfo(this.formData.questionId);
-    },
-    async queryList() {
-      const res = await this.$api.health.fetch({
-        questionType: 1,
-        clientId: this.$route.params.id,
-        pageNo: 1,
-        pageSize: 1,
-      });
+    async getUserHealthDetail() {
+      const reqBody = {
+        clientId: this.$route.params.id, // '1304360297670119426'
+        sugarType: 2,
+        type: 2, // 监管数据类型：1血压 2血糖 3体重 4运动
+      };
+      const res = await this.$api.interventionPlanInterface.getInterveneSchemeCharts(
+        reqBody,
+      );
       const { data } = res.data;
-      if (data) {
-        if (data.list.length > 0) {
-          this.formData.questionId = data.list[0].id;
-          this.formData.questionTime = data.list[0].createTime ? data.list[0].createTime.split(' ')[0] : '';
-          this.getDangerRiskInfo(this.formData.questionId);
-        }
+      this.form.reportAbnormalList = data.reportAbnormalList || null;
+      this.form.questionLifestyleFamilyHistory =
+        data.questionLifestyleFamilyHistory || null;
+      this.form.questionLifestyleParamValueList =
+        data.questionLifestyleParamValueList || [];
+      if (this.form.questionLifestyleParamValueList.length > 0) {
+        this.form.questionLifestyleParamValueList.forEach((value) => {
+          if (value.paramNo === 'j01') {
+            this.form.questionLifestyle.questionLifestyle1.paramValue =
+              value.valueInfo;
+          } else if (value.paramNo === 'j05') {
+            this.form.questionLifestyle.questionLifestyle2.paramValue =
+              value.valueInfo;
+          } else if (value.paramNo === 'f01') {
+            this.form.questionLifestyle.questionLifestyle3.paramValue =
+              value.valueInfo;
+          } else if (value.paramNo === 'g04') {
+            this.form.questionLifestyle.questionLifestyle4.paramValue =
+              value.valueInfo;
+          } else if (value.paramNo === 'j20') {
+            this.form.questionLifestyle.questionLifestyle5.paramValue =
+              value.valueInfo;
+          }
+        });
       }
     },
-    getDangerRiskInfo(id) {
-      this.$api.health.getQuestionRiskFactor(id).then(({ data }) => {
-        if (data.code === 200) {
-          console.log(data.data);
-          this.tableData = [];
-          data.data.forEach((value) => {
-            value.riskFactorInfoDTOList.forEach((valueChild) => {
-              this.tableData.push({
-                typeName: value.typeName,
-                advice: valueChild.advice,
-                factor: valueChild.factor,
-              });
-            });
-          });
-          this.getSpanArr(this.tableData);
+    async getAssessReportDetail() {
+      const reqBody = this.$route.params.id;
+      const res = await this.$api.health.getAssessReportDetail(reqBody);
+      const { data } = res.data;
+      data.forEach((value) => {
+        if (value.lv === 2) {
+          this.assessList.assess2.push(value.modelName);
+        } else if (value.lv === 3) {
+          this.assessList.assess3.push(value.modelName);
+        } else if (value.lv === 4) {
+          this.assessList.assess4.push(value.modelName);
+        } else if (value.lv === 5) {
+          this.assessList.assess5.push(value.modelName);
         }
-      });
-    },
-    getSpanArr(data) {
-      // data就是我们从后台拿到的数据
-      this.spanArr = [];
-      for (let i = 0; i < data.length; i++) {
-        if (i === 0) {
-          this.spanArr.push(1);
-          this.pos = 0;
-        } else if (data[i].typeName === data[i - 1].typeName) { // 判断当前元素与上一个元素是否相同
-          this.spanArr[this.pos] += 1;
-          this.spanArr.push(0);
-        } else {
-          this.spanArr.push(1);
-          this.pos = i;
-        }
-        console.log(this.spanArr);
-      }
-    },
-    objectSpanMethod({ rowIndex, columnIndex }) {
-      if (columnIndex === 0) {
-        const Row = this.spanArr[rowIndex];
-        const Col = Row > 0 ? 1 : 0;
-        // console.log(`rowspan:${Row} colspan:${Col}`);
-        return {
-          // [0,0] 表示这一行不显示， [2,1]表示行的合并数
-          rowspan: Row,
-          colspan: Col,
-        };
-      }
-    },
-    /**
-     * 查看计划
-     */
-    handleViewPlan(row) {
-      this.$jDynamic.show({// 有planId的都是自己编辑的
-        component: 'dangerRiskDetail',
-        data: {
-          executeState: 1, // 记录
-          modalTitle: '查看',
-          /* planId: this.checkPlanList[0].planId,
-          id: this.checkPlanList[0].id, */
-          propsData: row,
-          confirmfunc: async (value) => {
-            console.log(value);
-          },
-        },
-        render: h => h(dangerRiskDetail),
       });
     },
   },
 };
 </script>
-<style lang="scss" scoped>
-  .intervention_tab_div{
-    .select-user-trigger {
-      width: 220px;
-      /deep/ .el-input__suffix{
-        right: 15px;
-      }
-      /deep/ input, i {
-        cursor: pointer;
-        &::placeholder{
-          color: #666666;
-        }
-      }
-    }
-    .follow-plan {
-   /*   flex: 1;
-      width: 75%;*/
-      .el-table{
-        width: 99.99%!important;
-      }
-      /*/deep/ tr{
-        &:nth-child(odd){
-          td{
-            &:first-child{
-              background:red;
-            }
-          }
-        }
-      }*/
-      /deep/ td{
-        padding: 18.5px 0;
-        border-bottom: 1px solid #f4f4f6;
-      }
-      /deep/ .el-table .el-table__header-wrapper th{
-        background: #4991FD;
-        .cell{
-          color: white;
-        }
-      }
-      .red{
-        color: red;
-      }
-      .warn{
-        width: 200px;
-        height: 32px;
-        line-height: 32px;
-        background-color: #fee9e9;
-        border-radius: 5px;
-        text-align: center;
-        font-size: 12px;
-        color: #FE2B2A;
-        margin-top: 10px;
-      }
-      .btnDiv{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        .doImg{
-          width: 24px;
-          height: 24px;
-          margin-right: 5px;
-        }
-      }
-      .el-pagination{
-        float: right;
-      }
-      /deep/ .is-background {
-        margin-top: 10px;
-        float: right;
-      }
-    }
-  }
-
-</style>
