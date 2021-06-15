@@ -46,7 +46,7 @@
                 slot="reference"
                 disabled
                 v-model="detectioninfoSource.clientName"
-                placeholder="请选择(可多选)"
+                placeholder="请选择"
                 style="width:380px"
               >
                 <i

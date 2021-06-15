@@ -39,7 +39,7 @@ class ProjectList extends BaseModule {
   }
   // 删除列表数据
   removeSome(data) {
-    return this.get('/message_template/deleted', data);
+    return this.post('/message_template/deleted', data);
   }
   // ------------------危险因素 ---------------
   // 危险因素列表

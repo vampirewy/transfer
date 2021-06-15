@@ -16,7 +16,7 @@
               <div class="searchInputFormItem">
                 <el-input placeholder="输入条件搜索" v-model="query">
                 </el-input>
-                <span class="searchBtnImgSpan" @click="search">
+                <span class="searchBtnImgSpan" style="right: -3px;">
                   <img
                     class="searchBtnImg"
                     src="@/assets/images/common/topsearch.png"

@@ -19,12 +19,18 @@
           <div v-if="TabTitle === 'Minterm'">
             <span>体检库：</span>
            <el-select
-                  v-model="formData.gender"
+                  v-model="formData.resultOptionsId"
                   placeholder="请选择"
                   style="width: 140px"
           >
-            <el-option label="男" value="1" key="1"></el-option>
-            <el-option label="女" value="2" key="2"></el-option>
+          <el-option
+            v-for="item in resultOptions"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+            <!-- <el-option label="男" value="1" key="1"></el-option>
+            <el-option label="女" value="2" key="2"></el-option> -->
           </el-select>
           </div>
           <div class="row" style="display: flex" v-if="TabTitle !== 'Constitution'">
@@ -153,6 +159,11 @@
                       </el-select>
                     </div>
                   </span>
+                  <span v-else-if="item.label === '性别'">
+                    <span>
+{{scope.row[item.prop] === 1 ? '男' : (scope.row[item.prop] === 2 ? '女' : '不限')}}
+                    </span>
+                  </span>
                   <span v-else>
                     <span>{{scope.row[item.prop]}}</span>
                   </span>
@@ -227,8 +238,9 @@ import deleteIcon from '~/src/assets/images/deleteicon.png';
 import detectionuser from './detection_user.vue';
 // import editDetail from 'edit_detail.vue';
 const SEX = {
-  0: '男',
-  1: '女',
+  0: '不限',
+  1: '男',
+  2: '女',
 };
 const COLUMNS = {
   Minterm: [
@@ -293,6 +305,7 @@ export default {
         state: '1',
         keywords: '',
         gender: '',
+        resultOptionsId: '',
       },
       params: {
         pageNo: 1,
@@ -317,6 +330,7 @@ export default {
       // timer: '',
       Constitu: [],
       ConstituList: '',
+      resultOptions: [],
     };
   },
   mounted() {
@@ -354,10 +368,17 @@ export default {
       this.labelName = '体质名称';
       this.ConstitutionList();
     }
+    this.getLibraryList();
     // this.timer = new Date().getTime();
     // console.log(this.InterventionList, 'cccccc');
   },
   methods: {
+    // 体检库下拉数据
+    async getLibraryList() {
+      const res = await this.$api.physicalProjectListInterface.listOrganItemLibrary();
+      const { data } = res.data;
+      this.resultOptions = data;
+    },
     handleChange(params) {
       const { value, label } = params;
       console.log(value, label);
@@ -376,12 +397,27 @@ export default {
         });
     },
     othertestAdd() {
-      this.detectionInfo.forEach((val) => {
-        this.dataSource.list.push(val);
-      });
-      this.$emit('change', this.dataSource.list, this.TabTitle);
-      this.detectioninfoSource.clientName = '';
-      this.detectionInfo = [];
+      console.log(this.dataSource.list, '处理前');
+      if (this.detectionInfo.length !== 0) {
+        // if (this.dataSource.list.length !== 0) {
+        //   for (let i = 0; i < this.dataSource.list.length; i++) {
+        //     for (let j = 0; j < this.detectionInfo.length; j++) {
+        //       if (this.dataSource.list[i].id !== this.detectionInfo[j].id) {
+        //         this.dataSource.list.push(this.detectionInfo[j]);
+        //       }
+        //     }
+        //     break;
+        //   }
+        // } else {
+        this.detectionInfo.forEach((val) => {
+          this.dataSource.list.push(val);
+        });
+        // }
+        console.log(this.dataSource.list, '处理后');
+        this.$emit('change', this.dataSource.list, this.TabTitle);
+        this.detectioninfoSource.clientName = '';
+        this.detectionInfo = [];
+      }
     },
     ConstitutionAdd() {
       const json = {

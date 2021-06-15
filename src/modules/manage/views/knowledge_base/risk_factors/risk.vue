@@ -5,7 +5,7 @@
       <search>
         <div class="searchInputFormItem">
           <el-input placeholder="姓名/手机号搜索"
-          v-model="formData.keyWord">
+          v-model="formData.keywords">
             &lt;!&ndash; <el-button slot="append" icon="el-icon-search"
             @click="onSearch"></el-button>&ndash;&gt;
           </el-input>
@@ -48,13 +48,13 @@
     <div class="searchCondition">
       <div class="searchLeft">
         <div class="searchInputFormItem">
-          <el-input placeholder="危险因素搜索" v-model="formData.keyWord">
+          <el-input placeholder="危险因素搜索" v-model="formData.keywords">
           </el-input>
           <span class="searchBtnImgSpan" @click="search(1)">
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
               </span>
         </div>
-        <div>
+        <!-- <div>
           <span>危险分类：</span>
           <el-select
                   v-model="formData.riskType"
@@ -77,7 +77,7 @@
             <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
                        :key="index"></el-option>
           </el-select>
-        </div>
+        </div> -->
         <!-- <div>
           <span>适宜季节：</span>
           <el-select
@@ -189,12 +189,12 @@
           </template>
         </el-table-column>
         <el-table-column label="题目类型" prop="riskType" show-overflow-tooltip>
-          <template slot-scope="scope">
+          <!-- <template slot-scope="scope">
                 <span class="clientName"
                       @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
                   {{ scope.row.riskType | getResult}}
                 </span>
-          </template>
+          </template> -->
         </el-table-column>
         <el-table-column prop="state" label="分类" min-width="80px">
           <template slot-scope="scope">
@@ -272,12 +272,15 @@
       <div style="text-align: right">
         <el-pagination
           style="margin-top: 15px"
-          @current-change="search"
           background
-          layout="prev, pager, next, jumper, total, sizes"
+          layout="prev,pager,next,jumper,total,sizes"
+          :page-sizes="[15]"
+          :pager-count="15"
           :total="total"
-          :page-size="params.pageSize"
-          :pageSizes="[15]"
+          :page-size="formData.pageSize"
+          :current-page="formData.pageNo"
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
         ></el-pagination>
       </div>
       <!-- <report :visible="visible" :id="current.id" @cancel="visible = false"></report> -->
@@ -314,7 +317,7 @@ export default {
       lifeStyleList: [], // 生活方式
       questionFromList: [], // 问卷来源
       formData: {
-        keyWord: '', // 危险因素
+        keywords: '', // 危险因素
         // riskType: '', // 危险分类
         // clientGrid: '', // 题目类型
         pageNo: 1,
@@ -383,19 +386,22 @@ export default {
       this.multipleSelection = val;
     },
     reset() {
-      this.params.pageNo = 1;
-      this.formData.keyWord = '';
-      this.formData.gender = '';
-      this.formData.clientGrid = '';
-      this.formData.lifeStyleLv = '';
-      this.formData.source = '';
-      this.formData.startTime = undefined;
-      this.formData.endTime = undefined;
+      this.formData.pageNo = 1;
+      this.formData.keywords = '';
       // this.getQuestionType();
       this.fetch();
     },
     search(current = 1) {
-      this.params.pageNo = current;
+      this.formData.pageNo = current;
+      this.fetch();
+    },
+    handleCurrentChange(page) {
+      this.formData.pageNo = page;
+      this.fetch();
+    },
+    handleSizeChange(size) {
+      this.pageSize = size;
+      this.formData.pageNo = 1;
       this.fetch();
     },
     /**
@@ -479,8 +485,9 @@ export default {
     },
     async fetch() {
       const res = await this.$api.projectList.riskList(this.formData);
-      const { data } = res.data.data;
-      this.dataSource = data;
+      const { data } = res.data;
+      this.dataSource = data.data;
+      this.total = data.total;
       // console.log(this.dataSource, '危险列表');
       // if (this.formData.startTime) {
       //   this.formData.startTime = `${this.formData.startTime} 00:00:00`;

@@ -62,6 +62,7 @@
                   style="width: 140px"
                   clearable
           >
+            <el-option label="不限" :value="0" key="0"></el-option>
             <el-option label="男" value="1" key="1"></el-option>
             <el-option label="女" value="2" key="2"></el-option>
           </el-select>
@@ -194,12 +195,12 @@
           </template>
         </el-table-column>
         <el-table-column label="短信主题" prop="categoryName" show-overflow-tooltip>
-          <template slot-scope="scope">
+          <!-- <template slot-scope="scope">
                 <span class="clientName"
                       @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
                   {{ scope.row.categoryName | getResult}}
                 </span>
-          </template>
+          </template> -->
         </el-table-column>
         <el-table-column prop="suitGender" label="适宜性别" min-width="100px">
           <template slot-scope="scope">

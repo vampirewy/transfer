@@ -117,7 +117,7 @@ class HealthMonitorInterface extends BaseModule {
   getClientHealthDataOtherListPage(params) {
     return this.post('/client_health_data/get_client_health_data_other_list_page', params);
   }
-  // 血压列表
+  // 删除健康监测-其它
   DeletedHealthDataOther(params) {
     return this.post('/client_health_data/deleted_health_data_other', params);
   }

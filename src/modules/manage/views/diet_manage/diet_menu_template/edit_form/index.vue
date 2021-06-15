@@ -9,14 +9,14 @@
             <p class="desc">膳食平衡宝塔</p>
           </div>
         </div>
-        <div class="diet-type-item">
+        <div class="diet-type-item" @click="isShowDietPagodaGuide = true">
           <img src="@/assets/images/diet/diet_image2.png" alt="膳食指南" />
           <div>
             <p class="title">中国居民</p>
             <p class="desc">膳食指南</p>
           </div>
         </div>
-        <div class="diet-type-item">
+        <div class="diet-type-item" @click="isShowDietPagodaExchange = true">
           <img src="@/assets/images/diet/diet_image3.png" alt="食物交换份" />
           <div>
             <p class="title">常见</p>
@@ -211,6 +211,8 @@
     ></el-food-op>
     <el-cooking :visible.sync="isShowCooking"></el-cooking>
     <el-diet-pagoda :visible.sync="isShowDietPagoda"></el-diet-pagoda>
+    <el-diet-pagoda-guide :visible.sync="isShowDietPagodaGuide"></el-diet-pagoda-guide>
+    <el-diet-pagoda-exchange :visible.sync="isShowDietPagodaExchange"></el-diet-pagoda-exchange>
   </div>
 </template>
 
@@ -221,6 +223,8 @@ import dietDistributionChart from '../../chart_data/diet_distribution.vue'; // �
 import elFoodOp from '../../diet_programme/edit_form/el_modal/el_food_op.vue'; // 食物操作
 import elCooking from '../../diet_programme/edit_form/el_modal/el_cooking.vue'; // 食谱烹饪方式
 import elDietPagoda from '../../diet_programme/edit_form/el_modal/el_diet_pagoda.vue'; // 膳食宝塔
+import elDietPagodaGuide from '../../diet_programme/edit_form/el_modal/el_diet_pagoda_guide.vue'; // 膳食宝塔
+import elDietPagodaExchange from '../../diet_programme/edit_form/el_modal/el_diet_pagoda_exchange.vue'; // 膳食宝塔
 
 export default {
   name: 'diet_form',
@@ -231,6 +235,8 @@ export default {
     dietProportionChart,
     dietProteinroportionChart,
     dietDistributionChart,
+    elDietPagodaGuide,
+    elDietPagodaExchange,
   },
   props: {
     id: {
@@ -240,6 +246,8 @@ export default {
   },
   data() {
     return {
+      isShowDietPagodaGuide: false, // 膳食指南
+      isShowDietPagodaExchange: false, // 食物交换
       isShowDietPagoda: false,
       isShowCooking: false,
       isShowDietRule: false,
@@ -298,6 +306,7 @@ export default {
         ],
       };
       this.editableTabs.push(meal);
+      console.log(this.editableTabs, '123123213');
     },
     foodAdd(index, inx) {
       this.selectDietMenuIndex = [index, inx];
@@ -329,6 +338,7 @@ export default {
       this.editableTabs[index].mealTypeDtos[inx].dietTemplateConfigDtos.push(
         ...e,
       );
+      console.log(this.editableTabs);
     },
     submit() {
       const obj = [];
@@ -359,11 +369,12 @@ export default {
           });
         });
       });
-      this.$api.dietMenuTemplateInterface
-        .saveDietMenuTemConfig(obj)
-        .then(() => {
-          this.$message.success('操作成功!');
-        });
+      console.dir(obj);
+      // this.$api.dietMenuTemplateInterface
+      //   .saveDietMenuTemConfig(obj)
+      //   .then(() => {
+      //     this.$message.success('操作成功!');
+      //   });
     },
   },
 };
