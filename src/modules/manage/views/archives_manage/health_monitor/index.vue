@@ -494,21 +494,6 @@ export default {
       this.isGetinfo = true;
       this.isAddInfo = true;
       this.editId = '';
-      // if (index === 0) {
-      //   this.tabIndex = 'BP';
-      // }
-      // if (index === 1) {
-      //   this.tabIndex = 'BG';
-      // }
-      // if (index === 2) {
-      //   this.tabIndex = 'weight';
-      // }
-      // if (index === 3) {
-      //   this.tabIndex = 'sport';
-      // }
-      // if (index === 4) {
-      //   this.tabIndex = 'other';
-      // }
       this.reset();
       this.resetTable();
       this.search();

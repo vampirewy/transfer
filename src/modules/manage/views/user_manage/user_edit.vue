@@ -32,6 +32,7 @@
                           type="date"
                           placeholder="选择出生日期"
                           style="width: 100%"
+                          :picker-options="pickerOptions0"
                   >
                   </el-date-picker>
                 </el-form-item>
@@ -352,6 +353,11 @@ export default {
     };
 
     return {
+      pickerOptions0: {
+        disabledDate(time) {
+          return time.getTime() > Date.now() - 8.64e7;
+        },
+      },
       activeName: 'first',
       currentUser: {
         name: '',

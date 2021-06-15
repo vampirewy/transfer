@@ -8,7 +8,7 @@
     <div class="searchCondition">
       <div class="searchLeft">
         <div class="searchInputFormItem">
-          <el-input placeholder="姓名/编号/科室" v-model="form.keywords">
+          <el-input placeholder="姓名/编号" v-model="form.keywords">
           </el-input>
           <span class="searchBtnImgSpan" @click="onSearch">
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
@@ -94,9 +94,9 @@
                 v-model="form.startTime"
                 type="date"
                 value-format="yyyy-MM-dd"
-                :max-date="form.endTime"
+                :max-date="form.endTime || new Date()"
                 placeholder="开始时间"
-                style="width: 120px"
+                style="width: 140px"
         >
         </el-date-picker>
         <span class="timing">-</span>
@@ -105,8 +105,9 @@
                 type="date"
                 value-format="yyyy-MM-dd"
                 :min-date="form.startTime"
+                :max-date="new Date()"
                 placeholder="结束时间"
-                style="width: 120px"
+                style="width: 140px"
         >
         </el-date-picker>
       </div>
@@ -169,7 +170,7 @@
       >
         <template slot-scope="scope">
              <span class="clientName"
-                   @click="commonHref.toPersonalHealth(scope.row.id, $router)">
+                   @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
                {{ scope.row.clientName | getResult}}
              </span>
         </template>
@@ -184,7 +185,7 @@
           <span>{{ scope.row.age | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="itemName" label="项目名称" width="60px">
+      <el-table-column prop="itemName" label="项目名称" min-width="80px" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{ scope.row.itemName | getResult }}</span>
         </template>
@@ -407,7 +408,6 @@ export default {
     },
     onLoad() {
       this.getList();
-      this.getPlanWayList();
       this.getGridList(); // 获取人员列类别
     },
     // 关闭异常列表
@@ -465,20 +465,6 @@ export default {
       const res = await this.$api.sunFollow.exportPositiveFirst(this.form);
       const { data } = res.data;
       window.open(this.upload_url + data);
-    },
-    /**
-     * 获取随访方式
-     * @return {Promise<void>}
-     */
-    async getPlanWayList() {
-      const res = await this.$api.userFollowInterface.getIntervenePlanWayList();
-      const { data } = res.data;
-      const list = data.map((it) => {
-        const { id, name } = it;
-        return { id, name };
-      });
-      list.unshift({ name: '全部', value: '' });
-      this.form.planWayList = list;
     },
     /**
      * 获取人员类别

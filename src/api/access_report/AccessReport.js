@@ -37,6 +37,10 @@ class AccessReport extends BaseModule {
   groupReportList(params = {}) {
     return this.post('/group_report/page_list', params);
   }
+  // 团报配置
+  groupReportdetail(params = {}) {
+    return this.post('/group_report_catalog_config/get_detail', params);
+  }
 }
 
 export default new AccessReport();

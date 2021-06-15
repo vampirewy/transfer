@@ -53,7 +53,7 @@ export default [
         path: '/company_manage',
         name: 'company_manage',
         meta: {
-          title: '企业管理',
+          title: '团队管理',
           access: 'company_manage',
           keepAlive: true,
         },

@@ -27,7 +27,7 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="性别" prop="gender">
-                            {{formData.genderName | getResultGender}}
+                            {{formData.gender | getResultGender}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">

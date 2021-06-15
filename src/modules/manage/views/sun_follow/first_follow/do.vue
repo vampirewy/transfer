@@ -134,6 +134,7 @@
                         type="date"
                         format="yyyy-MM-dd"
                         value-format="yyyy-MM-dd"
+                        :min-date="new Date()"
                         placeholder="请选择">
                 </el-date-picker>
               </el-form-item>

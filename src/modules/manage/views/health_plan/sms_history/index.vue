@@ -112,7 +112,7 @@
             >
               <template slot-scope="scope">
                 <span class="clientName"
-                      @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
+                      @click="commonHref.toPersonalHealth(scope.row.id, $router)">
                   {{ scope.row.clientName | getResult}}
                 </span>
               </template>

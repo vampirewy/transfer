@@ -8,7 +8,7 @@
     <div class="searchCondition">
       <div class="searchLeft">
         <div class="searchInputFormItem">
-          <el-input placeholder="姓名/编号/科室" v-model="form.keywords">
+          <el-input placeholder="姓名/编号" v-model="form.keywords">
           </el-input>
           <span class="searchBtnImgSpan" @click="onSearch">
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
@@ -94,9 +94,9 @@
                 v-model="form.startTime"
                 type="date"
                 value-format="yyyy-MM-dd"
-                :max-date="form.endTime"
+                :max-date="form.endTime || new Date()"
                 placeholder="开始时间"
-                style="width: 120px"
+                style="width: 140px"
         >
         </el-date-picker>
         <span class="timing">-</span>
@@ -105,8 +105,9 @@
                 type="date"
                 value-format="yyyy-MM-dd"
                 :min-date="form.startTime"
+                :max-date="new Date()"
                 placeholder="结束时间"
-                style="width: 120px"
+                style="width: 140px"
         >
         </el-date-picker>
       </div>
@@ -162,7 +163,7 @@
           <span>{{ scope.row.age | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="itemName" label="项目名称" width="60px">
+      <el-table-column prop="itemName" label="项目名称" min-width="80px">
         <template slot-scope="scope">
           <span>{{ scope.row.itemName | getResult }}</span>
         </template>

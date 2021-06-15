@@ -49,17 +49,7 @@
             <el-row>
               <el-col :span="12">
                <el-form-item label="是否启用：">
-                 <!--<el-select v-model="formData.state" placeholder="是否启用">
-                   <el-option label="是" :value="1" :key="1"></el-option>
-                   <el-option label="否" :value="0" :key="0"></el-option>
-                 </el-select>-->
-                 <el-switch
-                         v-model="formData.state "
-                         :active-value="1"
-                         :inactive-value="0"
-                         active-color="#13ce66"
-                 >
-                 </el-switch>
+                 {{formData.state | getResultState}}
                </el-form-item>
              </el-col>
             </el-row>

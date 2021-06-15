@@ -21,19 +21,27 @@
                  class="form-inline">
           <el-row>
             <el-col :span="12">
-              <el-form-item label="短信模板：" prop="planWay">
-                <el-select
-                        v-model="form.planWay"
-                        placeholder="请选择"
-                        style="width: 100%"
+              <el-form-item label="短信模板：" prop="smsId">
+                <el-popover
+                        ref="userPopover"
+                        placement="bottom-start"
+                        width="550"
+                        trigger="click"
+                        :disabled="!!id"
+                        @show="popoverStatus = true"
+                        @hide="popoverStatus = false"
                 >
-                  <el-option
-                          :label="it.name"
-                          :value="it.id"
-                          :key="it.id"
-                          v-for="it in form.planWayList"
-                  ></el-option>
-                </el-select>
+                  <sms-template-open v-if="popoverStatus" @change="handlePopoperClose">
+                  </sms-template-open>
+                  <el-input
+                          :class="`select-user-trigger disabled}`"
+                          slot="reference"
+                          disabled
+                          v-model="form.smsName"
+                          placeholder="请选择客户">
+                    <i :class="`el-icon-arrow-${popoverStatus ? 'up' : 'down'}`" slot="suffix"></i>
+                  </el-input>
+                </el-popover>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -90,14 +98,11 @@
 </template>
 
 <script>
-import ManagerList from '@/components/user_health/manager_list.vue';
-import QuestionOpen from '@/components/date_select/question_open.vue';
-
+import SmsTemplateOpen from '@/components/date_select/sms_template_open.vue';
 export default {
   name: 'InterventionAddMdl',
   components: {
-    ManagerList,
-    QuestionOpen,
+    SmsTemplateOpen,
   },
   data() {
     return {
@@ -107,29 +112,21 @@ export default {
       modalTitle: '创建短信',
       planId: '',
       id: '',
+      popoverStatus: false,
       selectCheck: [],
-      openCheckVisible: false,
-      checkClintIds: [],
-      openCheckQuestionVisible: false,
       form: {
         planTime: '',
-        selectTime: null,
         state: 1,
-        planTitle: '',
-        planWay: '',
-        planDoctor: '',
-        planDoctorName: '',
         planContent: '',
-        planWayList: [],
-        templateQuestionId: '',
-        templateQuestionName: '',
+        smsId: '',
+        smsName: '',
       },
       pickerStartTime: {
         disabledDate: time => time.getTime() < Date.now() - 8.64e7,
       },
       rules: {
         planTime: [{ required: true, message: '请选择发送时间' }],
-        planWay: [{ required: true, message: '请选择短信模板' }],
+        smsId: [{ required: true, message: '请选择短信模板' }],
         planContent: [{ required: true, message: '请输入短信内容' }],
       },
     };
@@ -141,21 +138,15 @@ export default {
     onLoad() {
       this.$nextTick(async () => {
         console.log(this.selectCheck);
-        await this.getPlanWayList();
       });
     },
-    /**
-     * 获取随访方式列表
-     * @return {Promise<void>}
-     */
-    async getPlanWayList() {
-      const res = await this.$api.userFollowInterface.getIntervenePlanWayList();
-      const { data } = res.data;
-      const list = data.map((it) => {
-        const { id, name } = it;
-        return { id, name };
-      });
-      this.form.planWayList = list;
+    handlePopoperClose(data) {
+      this.$refs.userPopover.doClose();
+      this.popoverStatus = false;
+      this.form.smsName = data.themName;
+      this.form.smsId = data.id;
+      this.form.planContent = data.content;
+      this.$refs.form.validateField('smsId');
     },
     onVisible(value) {
       if (!value) {
@@ -171,13 +162,7 @@ export default {
         if (valid) {
           const obj = {
             planTime: this.form.planTime,
-            planWay: this.form.planWay,
-            planDoctor: this.form.planDoctor,
-            planDoctorName: this.form.planDoctorName,
-            planTitle: this.form.planTitle,
             planContent: this.form.planContent,
-            templateQuestionId: this.form.templateQuestionId,
-            templateQuestionName: this.form.templateQuestionName,
           };
           if (this.modalType === 1 || this.modalType === 3) {
             obj.planId = new Date().getTime();
@@ -243,22 +228,24 @@ export default {
     }
     // 下拉弹框
     /deep/ .select-user-trigger {
-      line-height: 37px;
+      .el-input__suffix{
+        right: 15px;
+      }
       input{
-        border: 1px solid #DDE0E6 !important;
+        border: 1px solid #DDE0E6!important;
       }
       input, i {
-        color: #333333;
-        cursor: pointer;
         background-color: white!important;
+        cursor: pointer;
+        color: #333333;
+        &::placeholder{
+          color: #999999!important;
+        }
       }
       &.disabled {
         input, i {
           cursor: not-allowed;
         }
-      }
-      .el-input__suffix{
-        width: 20px;
       }
     }
   }

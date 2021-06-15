@@ -317,7 +317,7 @@ export default {
           reqBody.id = this.$route.params.id;
           await this.$api.categoryManage.clientGridSave(reqBody);
           this.$message.success('操作成功');
-          this.cancel();
+          this.$router.go(-1);
         }
       });
     },

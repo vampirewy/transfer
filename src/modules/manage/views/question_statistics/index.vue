@@ -99,7 +99,9 @@
             show-overflow-tooltip
           >
             <template slot-scope="scope">
-              <span style="color:#36BF2F;">{{ scope.row.clientCount | getResult }}</span>
+              <span style="color: #36bf2f">{{
+                scope.row.clientCount | getResult
+              }}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -129,9 +131,15 @@
               <span>{{ scope.row.reportMoreTwoCount | getResult }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="问卷时间" prop="contact" show-overflow-tooltip>
+          <el-table-column
+            label="问卷时间"
+            prop="contact"
+            show-overflow-tooltip
+          >
             <template slot-scope="scope">
-              <span style="color:#3154AC;">{{ scope.row.contact | getResult }}</span>
+              <span style="color: #3154ac">{{
+                scope.row.contact | getResult
+              }}</span>
             </template>
           </el-table-column>
           <!-- <el-table-column label="操作" prop="index" width="150px">
@@ -171,68 +179,68 @@
       <div v-if="tabcheckidx === 0">
         <div class="echarts">
           <lifestyle
-          v-if="Tabactive === 0"
-          :data="tabcheckidx"
-          :visible="modalVisible"
-          :value="currentValue"
-          @cancel="cancel"
-        ></lifestyle>
+            v-if="Tabactive === 0"
+            :data="tabcheckidx"
+            :visible="modalVisible"
+            :value="currentValue"
+            @cancel="cancel"
+          ></lifestyle>
           <smoke
-          v-if="Tabactive === 1"
-          :data="tabcheckidx"
-          :visible="modalVisible"
-          :value="currentValue"
-          @cancel="cancel"
-        ></smoke>
-        <drink
-          v-if="Tabactive === 2"
-          :data="tabcheckidx"
-          :visible="modalVisible"
-          :value="currentValue"
-          @cancel="cancel"
-        ></drink>
-        <food
-          v-if="Tabactive === 3"
-          :data="tabcheckidx"
-          :visible="modalVisible"
-          :value="currentValue"
-          @cancel="cancel"
-        ></food>
-        <sport
-          v-if="Tabactive === 4"
-          :data="tabcheckidx"
-          :visible="modalVisible"
-          :value="currentValue"
-          @cancel="cancel"
-        ></sport>
-        <sleep
-          v-if="Tabactive === 5"
-          :data="tabcheckidx"
-          :visible="modalVisible"
-          :value="currentValue"
-          @cancel="cancel"
-        ></sleep>
-        <spirit
-          v-if="Tabactive === 6"
-          :data="tabcheckidx"
-          :visible="modalVisible"
-          :value="currentValue"
-          @cancel="cancel"
-        ></spirit>
-        <physique
-          v-if="Tabactive === 7"
-          :data="tabcheckidx"
-          :visible="modalVisible"
-          :value="currentValue"
-          @cancel="cancel"
-        ></physique>
-        <psychology
-          v-if="Tabactive === 8"
-          :data="tabcheckidx"
-          :visible="modalVisible"
-          :value="currentValue"
-          @cancel="cancel"
-        ></psychology>
+            v-if="Tabactive === 1"
+            :data="tabcheckidx"
+            :visible="modalVisible"
+            :value="currentValue"
+            @cancel="cancel"
+          ></smoke>
+          <drink
+            v-if="Tabactive === 2"
+            :data="tabcheckidx"
+            :visible="modalVisible"
+            :value="currentValue"
+            @cancel="cancel"
+          ></drink>
+          <food
+            v-if="Tabactive === 3"
+            :data="statisticsList"
+            :visible="modalVisible"
+            :value="currentValue"
+            @cancel="cancel"
+          ></food>
+          <sport
+            v-if="Tabactive === 4"
+            :data="tabcheckidx"
+            :visible="modalVisible"
+            :value="currentValue"
+            @cancel="cancel"
+          ></sport>
+          <sleep
+            v-if="Tabactive === 5"
+            :data="tabcheckidx"
+            :visible="modalVisible"
+            :value="currentValue"
+            @cancel="cancel"
+          ></sleep>
+          <spirit
+            v-if="Tabactive === 6"
+            :data="tabcheckidx"
+            :visible="modalVisible"
+            :value="currentValue"
+            @cancel="cancel"
+          ></spirit>
+          <physique
+            v-if="Tabactive === 7"
+            :data="tabcheckidx"
+            :visible="modalVisible"
+            :value="currentValue"
+            @cancel="cancel"
+          ></physique>
+          <psychology
+            v-if="Tabactive === 8"
+            :data="tabcheckidx"
+            :visible="modalVisible"
+            :value="currentValue"
+            @cancel="cancel"
+          ></psychology>
         </div>
       </div>
     </div>
@@ -250,9 +258,9 @@ import drink from './components/drink.vue';
 import food from './components/food.vue';
 import sport from './components/sport.vue';
 import sleep from './components/sleep.vue';
-import spirit from './components/spirit.vue';// 精神压力
-import physique from './components/physique.vue';// 中医体质辨识
-import psychology from './components/psychology.vue';// 心理测评分析
+import spirit from './components/spirit.vue'; // 精神压力
+import physique from './components/physique.vue'; // 中医体质辨识
+import psychology from './components/psychology.vue'; // 心理测评分析
 export default {
   name: 'stats_index',
   components: {
@@ -274,7 +282,6 @@ export default {
     return {
       form: {
         keywords: '',
-        workUnitName: '', // 单位
         startTime: '', // 开始时间
         endTime: '', // 结束时间
       },
@@ -300,12 +307,19 @@ export default {
       tabcheck: ['图表', '列表'],
       Tabactive: 0,
       tabcheckidx: 0,
+      statisticsList: {
+        statisticsListman: [],
+        statisticsListwoman: [],
+      },
     };
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       vm.queryList();
     });
+  },
+  mounted() {
+    this.queryList();
   },
   methods: {
     TabbarBtn(index) {
@@ -314,6 +328,7 @@ export default {
     },
     check(idx) {
       this.tabcheckidx = idx;
+      this.queryList();
     },
     onSearch() {
       this.table.currentPage = 1;
@@ -325,13 +340,20 @@ export default {
       this.queryList();
     },
     async queryList() {
-      const res = await this.$api.companyManageInterface.getWorkUnitPage({
+      const res = await this.$api.statics.abnormal({
         ...this.form,
-        pageNo: this.table.currentPage,
-        pageSize: this.table.pageSize,
       });
-      this.table.list = res.data.data.data;
-      this.table.totalCount = res.data.data.data.total || 0;
+      // let arr = [];
+      this.statisticsList = res.data.data;
+      // arr.forEach((item) => {
+      //   this.statisticsList.statisticsListman.push(
+      //     item.genderMapList[0].manCount,
+      //   );
+      //   this.statisticsList.statisticsListwoman.push(
+      //     item.genderMapList[1].womanCount,
+      //   );
+      // });
+      console.log(res.data, 123456);
     },
     handleEdit() {
       const selection = this.$refs.table.selection;
@@ -525,11 +547,11 @@ export default {
     }
   }
 }
-.echarts{
+.echarts {
   width: 100%;
   height: 500px;
 }
-/deep/ .el-table tr{
+/deep/ .el-table tr {
   height: 48px;
 }
 </style>

@@ -566,7 +566,7 @@ export default {
         min-width: 100px;
         height: 48px;
         line-height: 21px;
-        border-radius: 24px;
+        border-radius: 24px!important;
         box-shadow: none;
       }
       &.is-active .el-radio-button__inner{

@@ -32,12 +32,12 @@
               v-model="form.keywords"
             >
             </el-input>
-            <span class="searchBtnImgSpan" @click="onSearch">
+            <!-- <span class="searchBtnImgSpan" @click="onSearch">
               <img
                 class="searchBtnImg"
                 src="@/assets/images/common/topsearch.png"
               />
-            </span>
+            </span> -->
           </div>
         </div>
         <div class="searchRight">
