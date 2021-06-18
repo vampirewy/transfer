@@ -6,10 +6,12 @@ import echarts from 'echarts';
 export default {
   name: 'lifestyle',
   props: {
-    data: Object,
+    data: Array,
   },
   data() {
-    return {};
+    return {
+      lifeList: [],
+    };
   },
   methods: {
     draw() {
@@ -41,7 +43,7 @@ export default {
         },
         // X轴
         xAxis: {
-          data: ['充足', '一般', '不足', '严重不足'],
+          data: [],
           axisLabel: {
             show: true,
           },
@@ -66,7 +68,7 @@ export default {
           {
             name: '男性',
             type: 'bar',
-            data: [120, 100, 440, 320],
+            data: [],
             barWidth: 25, // 柱图宽度
             itemStyle: {
               normal: {
@@ -97,7 +99,7 @@ export default {
           {
             name: '女性',
             type: 'bar',
-            data: [200, 120, 240, 330],
+            data: [],
             barWidth: 25, // 柱图宽度
             itemStyle: {
               normal: {
@@ -118,13 +120,24 @@ export default {
           },
         ],
       };
+      this.lifeList.forEach((element) => {
+        option.xAxis.data.push(element.codeName);
+        option.series[0].data.push(element.genderMapCount[0].manCount);
+        option.series[1].data.push(element.genderMapCount[1].womanCount);
+      });
       myChartDrawer.setOption(option);
+    },
+    async queryList() {
+      const res = await this.$api.statics.lifeclientList({
+        ...this.data,
+        type: 7,
+      });
+      this.lifeList = res.data.data;
+      this.draw();
     },
   },
   mounted() {
-    console.log(this.data, 123456);
-    // 调用绘制图表的方法
-    this.draw();
+    this.queryList();
   },
 };
 </script>

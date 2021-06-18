@@ -500,7 +500,9 @@ export default {
     // 生成
     createReport() {
       if (this.multipleSelection.length === 0) {
-        this.$message.warning('请先选择数据');
+        this.$router.push({
+          path: '/team_create',
+        });
       } else if (this.multipleSelection.length > 1) {
         this.$message.warning('请选择一条数据');
       } else {
@@ -511,18 +513,6 @@ export default {
           },
         });
       }
-      // const params = this.multipleSelection.map(({ clientId, lifeQuestionId, reportId }) => {
-      //   const data = {
-      //     clientId,
-      //     lifeQuestionId,
-      //     reportInfoId: reportId,
-      //   };
-      //   return data;
-      // });
-      // this.$api.accessReport.generateReport(params).then(() => {
-      //   this.$message.success('操作成功');
-      //   this.queryPageList();
-      // });
     },
   },
 };

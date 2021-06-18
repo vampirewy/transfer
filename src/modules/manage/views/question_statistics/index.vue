@@ -12,7 +12,7 @@
             <el-date-picker
               v-model="form.startTime"
               type="date"
-              value-format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd HH:mm:ss"
               :max-date="form.endTime"
               placeholder="选择开始日期"
               style="width: 140px"
@@ -22,7 +22,7 @@
             <el-date-picker
               v-model="form.endTime"
               type="date"
-              value-format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd HH:mm:ss"
               :min-date="form.startTime"
               placeholder="选择结束日期"
               style="width: 140px"
@@ -85,7 +85,45 @@
         >
           <el-table-column type="selection" width="55"> </el-table-column>
           <el-table-column
-            label="体检编号"
+            label="客户编号"
+            prop="clientNo"
+            show-overflow-tooltip
+          >
+            <template slot-scope="scope">
+              <span>{{ scope.row.clientNo | getResult }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="姓名"
+            prop="clientName"
+            show-overflow-tooltip
+          >
+            <template slot-scope="scope">
+              <span style="color: #36bf2f">{{
+                scope.row.clientName | getResult
+              }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="性别"
+            prop="gender"
+            show-overflow-tooltip
+          >
+            <template slot-scope="scope">
+              <span>{{ scope.row.gender == 1 ? '男':'女'}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="年龄"
+            prop="age"
+            show-overflow-tooltip
+          >
+            <template slot-scope="scope">
+              <span>{{ scope.row.age | getResult }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="单位"
             prop="workUnitName"
             show-overflow-tooltip
           >
@@ -94,51 +132,13 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="姓名"
-            prop="clientCount"
-            show-overflow-tooltip
-          >
-            <template slot-scope="scope">
-              <span style="color: #36bf2f">{{
-                scope.row.clientCount | getResult
-              }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="性别"
-            prop="reportOneCount"
-            show-overflow-tooltip
-          >
-            <template slot-scope="scope">
-              <span>{{ scope.row.reportOneCount | getResult }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="年龄"
-            prop="reportTwoCount"
-            show-overflow-tooltip
-          >
-            <template slot-scope="scope">
-              <span>{{ scope.row.reportTwoCount | getResult }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="单位"
-            prop="reportMoreTwoCount"
-            show-overflow-tooltip
-          >
-            <template slot-scope="scope">
-              <span>{{ scope.row.reportMoreTwoCount | getResult }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
             label="问卷时间"
-            prop="contact"
+            prop="questionDate"
             show-overflow-tooltip
           >
             <template slot-scope="scope">
               <span style="color: #3154ac">{{
-                scope.row.contact | getResult
+                scope.row.questionDate | getResult
               }}</span>
             </template>
           </el-table-column>
@@ -179,64 +179,66 @@
       <div v-if="tabcheckidx === 0">
         <div class="echarts">
           <lifestyle
+            :key="times"
             v-if="Tabactive === 0"
-            :data="tabcheckidx"
+            :data="form"
             :visible="modalVisible"
             :value="currentValue"
             @cancel="cancel"
           ></lifestyle>
           <smoke
+            :key="times"
             v-if="Tabactive === 1"
-            :data="tabcheckidx"
+            :data="form"
             :visible="modalVisible"
             :value="currentValue"
             @cancel="cancel"
           ></smoke>
           <drink
             v-if="Tabactive === 2"
-            :data="tabcheckidx"
+            :data="form"
             :visible="modalVisible"
             :value="currentValue"
             @cancel="cancel"
           ></drink>
           <food
             v-if="Tabactive === 3"
-            :data="statisticsList"
+            :data="form"
             :visible="modalVisible"
             :value="currentValue"
             @cancel="cancel"
           ></food>
           <sport
             v-if="Tabactive === 4"
-            :data="tabcheckidx"
+            :data="form"
             :visible="modalVisible"
             :value="currentValue"
             @cancel="cancel"
           ></sport>
           <sleep
             v-if="Tabactive === 5"
-            :data="tabcheckidx"
+            :data="form"
             :visible="modalVisible"
             :value="currentValue"
             @cancel="cancel"
           ></sleep>
           <spirit
             v-if="Tabactive === 6"
-            :data="tabcheckidx"
+            :data="form"
             :visible="modalVisible"
             :value="currentValue"
             @cancel="cancel"
           ></spirit>
           <physique
             v-if="Tabactive === 7"
-            :data="tabcheckidx"
+            :data="form"
             :visible="modalVisible"
             :value="currentValue"
             @cancel="cancel"
           ></physique>
           <psychology
             v-if="Tabactive === 8"
-            :data="tabcheckidx"
+            :data="form"
             :visible="modalVisible"
             :value="currentValue"
             @cancel="cancel"
@@ -285,6 +287,8 @@ export default {
         startTime: '', // 开始时间
         endTime: '', // 结束时间
       },
+      times: '',
+      typeindex: 1,
       table: {
         list: [],
         totalCount: 0,
@@ -315,45 +319,91 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
-      vm.queryList();
+      vm.queryList(1);
     });
   },
   mounted() {
-    this.queryList();
+    this.queryList(this.typeindex);
   },
   methods: {
     TabbarBtn(index) {
       this.Tabactive = index;
+      this.times = new Date().getTime();
+      if (this.Tabactive === 0) {
+        this.typeindex = 1;
+      } else if (this.Tabactive === 1) {
+        this.typeindex = 2;
+        this.queryList(this.typeindex);
+      } else if (this.Tabactive === 2) {
+        this.typeindex = 4;
+        this.queryList(this.typeindex);
+      } else if (this.Tabactive === 3) {
+        this.typeindex = 5;
+        this.queryList(this.typeindex);
+      } else if (this.Tabactive === 4) {
+        this.typeindex = 6;
+        this.queryList(this.typeindex);
+      } else if (this.Tabactive === 5) {
+        this.typeindex = 7;
+        this.queryList(this.typeindex);
+      } else if (this.Tabactive === 6) {
+        this.typeindex = 8;
+        this.queryList(this.typeindex);
+      } else if (this.Tabactive === 7) {
+        this.tcmqueryList();
+      } else {
+        this.psyqueryList();
+      }
       this.$forceUpdate();
     },
     check(idx) {
       this.tabcheckidx = idx;
       this.queryList();
     },
+    // 搜索
     onSearch() {
       this.table.currentPage = 1;
-      this.queryList();
+      if (this.Tabactive === 7) {
+        this.tcmqueryList();
+      } else if (this.Tabactive === 8) {
+        this.psyqueryList();
+      }
+      this.queryList(this.typeindex);
+      // 调取子组件的方法
+      this.TabbarBtn(this.Tabactive);
     },
     onReset() {
       this.form = [];
       this.table.currentPage = 1;
       this.queryList();
     },
-    async queryList() {
-      const res = await this.$api.statics.abnormal({
+    async queryList(types) {
+      const res = await this.$api.statics.getlifeclientList({
         ...this.form,
+        type: types,
+        pageNo: this.table.currentPage,
+        pageSize: this.table.pageSize,
       });
-      // let arr = [];
-      this.statisticsList = res.data.data;
-      // arr.forEach((item) => {
-      //   this.statisticsList.statisticsListman.push(
-      //     item.genderMapList[0].manCount,
-      //   );
-      //   this.statisticsList.statisticsListwoman.push(
-      //     item.genderMapList[1].womanCount,
-      //   );
-      // });
-      console.log(res.data, 123456);
+      this.table.list = res.data.data.data;
+      this.table.totalCount = res.data.data.data.total || 0;
+    },
+    async tcmqueryList() {
+      const res = await this.$api.statics.tcmlifeclientList({
+        ...this.form,
+        pageNo: this.table.currentPage,
+        pageSize: this.table.pageSize,
+      });
+      this.table.list = res.data.data.data;
+      this.table.totalCount = res.data.data.data.total || 0;
+    },
+    async psyqueryList() {
+      const res = await this.$api.statics.psylifeclientList({
+        ...this.form,
+        pageNo: this.table.currentPage,
+        pageSize: this.table.pageSize,
+      });
+      this.table.list = res.data.data.data;
+      this.table.totalCount = res.data.data.data.total || 0;
     },
     handleEdit() {
       const selection = this.$refs.table.selection;

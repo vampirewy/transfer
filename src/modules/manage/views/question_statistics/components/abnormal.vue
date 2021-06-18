@@ -11,7 +11,9 @@ export default {
     data: Object,
   },
   data() {
-    return {};
+    return {
+      toplist: [],
+    };
   },
   methods: {
     draw() {
@@ -46,17 +48,7 @@ export default {
         },
         xAxis: {
           type: 'category',
-          data: [
-            '屈光不正',
-            '异常名称',
-            '异常名称',
-            '异常名称',
-            '慢性咽炎',
-            '异常名称',
-            '异常名称',
-            '异常名称',
-            '异常名称',
-          ],
+          data: [],
         },
         series: [
           {
@@ -69,7 +61,7 @@ export default {
             emphasis: {
               focus: 'series',
             },
-            data: [320, 302, 301, 234, 120, 132, 101, 134, 120, 132],
+            data: [],
             barWidth: 16, // 柱图宽度
             itemStyle: {
               color: 'red',
@@ -108,7 +100,7 @@ export default {
             emphasis: {
               focus: 'series',
             },
-            data: [120, 132, 101, 134, 120, 132, 101, 134, 120, 132],
+            data: [],
             barWidth: 16, // 柱图宽度
             itemStyle: {
               normal: {
@@ -138,13 +130,26 @@ export default {
           },
         ],
       };
+      this.toplist.forEach((element) => {
+        option.xAxis.data.push(element.abnormalName);
+        option.series[0].data.push(element.genderMapList[0].manCount);
+        option.series[1].data.push(element.genderMapList[1].womanCount);
+      });
       myChartDrawer.setOption(option);
+    },
+    // top10数据
+    async queryList() {
+      const res = await this.$api.statics.abnormalclientList({
+        ...this.form,
+      });
+      this.toplist = res.data.data;
+      this.draw();
     },
   },
   mounted() {
-    console.log(this.data, 123456);
+    this.queryList();
     // 调用绘制图表的方法
-    this.draw();
+    // this.draw();
   },
 };
 </script>

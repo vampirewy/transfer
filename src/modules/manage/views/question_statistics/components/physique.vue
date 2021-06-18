@@ -6,119 +6,17 @@ import echarts from 'echarts';
 export default {
   name: 'lifestyle',
   props: {
-    data: Object,
+    data: Array,
   },
   data() {
-    return {};
+    return {
+      lifeList: [],
+    };
   },
   methods: {
     draw() {
       // 实例化echarts对象
       const myChartDrawer = echarts.init(document.getElementById('myChart'));
-
-      // 绘制条形图
-      // const option =
-      // {
-      //   title: {
-      //     text: '',
-      //     top: 5,
-      //     right: 5,
-      //     left: 'center',
-      //   },
-      //   tooltip: {
-      //     trigger: 'axis',
-      //     axisPointer: {
-      //       type: 'shadow',
-      //       shadowStyle: {
-      //         opacity: 0,
-      //       },
-      //     },
-      //   },
-      //   legend: {
-      //     data: ['男性', '女性'],
-      //     top: 5,
-      //     right: 5,
-      //     icon: 'circle',
-      //   },
-      //   // X轴
-      //   xAxis: {
-      //     data: ['充足', '一般', '不足', '严重不足'],
-      //     axisLabel: {
-      //       show: true,
-      //     },
-      //   },
-      //   // Y轴
-      //   yAxis: {
-      //     // y 轴线
-      //     axisLine: {
-      //       show: false,
-      //     },
-      //     splitLine: {
-      //       show: true,
-      //       lineStyle: {
-      //         color: ['#eef1f5'],
-      //         width: 1,
-      //         type: 'solid',
-      //       },
-      //     },
-      //   },
-      //   // 数据
-      //   series: [
-      //     {
-      //       name: '男性',
-      //       type: 'bar',
-      //       data: [120, 100, 440, 320],
-      //       barWidth: 25, // 柱图宽度
-      //       itemStyle: {
-      //         normal: {
-      //           // 柱形图圆角，初始化效果
-      //           barBorderRadius: [15, 15, 0, 0],
-      //           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-      //             {
-      //               offset: 0,
-      //               color: '#3154AC',
-      //             },
-      //             {
-      //               offset: 1,
-      //               color: '#4B86FF',
-      //             },
-      //           ]),
-      //           label: {
-      //             show: false, // 开启显示
-      //             position: 'top', // 在上方显示
-      //             textStyle: {
-      //               // 数值样式
-      //               color: '#333',
-      //               fontSize: 14,
-      //             },
-      //           },
-      //         },
-      //       },
-      //     },
-      //     {
-      //       name: '女性',
-      //       type: 'bar',
-      //       data: [200, 120, 240, 330],
-      //       barWidth: 25, // 柱图宽度
-      //       itemStyle: {
-      //         normal: {
-      //           // 柱形图圆角，初始化效果
-      //           barBorderRadius: [15, 15, 0, 0],
-      //           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-      //             {
-      //               offset: 0,
-      //               color: '#F33D21',
-      //             },
-      //             {
-      //               offset: 1,
-      //               color: '#FF5085',
-      //             },
-      //           ]),
-      //         },
-      //       },
-      //     },
-      //   ],
-      // };
       const option = {
         tooltip: {
           trigger: 'axis',
@@ -151,7 +49,7 @@ export default {
         },
         yAxis: {
           type: 'category',
-          data: ['血瘀质', '湿热质', '痰湿质', '阴虚质', '阳虚质', '气虚质', '平和质'],
+          data: [],
         },
         series: [
           {
@@ -164,7 +62,7 @@ export default {
             emphasis: {
               focus: 'series',
             },
-            data: [320, 302, 301, 234, 290, 330, 310],
+            data: [],
             barWidth: 25, // 柱图宽度
             itemStyle: {
               normal: {
@@ -202,7 +100,7 @@ export default {
             emphasis: {
               focus: 'series',
             },
-            data: [120, 132, 101, 134, 90, 230, 210],
+            data: [],
             itemStyle: {
               normal: {
                 // 柱形图圆角，初始化效果
@@ -239,7 +137,7 @@ export default {
             emphasis: {
               focus: 'series',
             },
-            data: [220, 182, 191, 234, 290, 330, 310],
+            data: [],
             itemStyle: {
               normal: {
                 // 柱形图圆角，初始化效果
@@ -268,14 +166,24 @@ export default {
           },
         ],
       };
-      // option.series[1].data = data;
+      this.lifeList.forEach((element) => {
+        option.yAxis.data.push(element.paramName);
+        option.series[0].data.push(element.judgeResultMapList[0].yesCount);
+        option.series[1].data.push(element.judgeResultMapList[1].basicCount);
+        option.series[2].data.push(element.judgeResultMapList[2].noCount);
+      });
       myChartDrawer.setOption(option);
+    },
+    async queryList() {
+      const res = await this.$api.statics.lifedoctorList({
+        ...this.data,
+      });
+      this.lifeList = res.data.data;
+      this.draw();
     },
   },
   mounted() {
-    console.log(this.data, 123456);
-    // 调用绘制图表的方法
-    this.draw();
+    this.queryList();
   },
 };
 </script>

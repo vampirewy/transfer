@@ -6,10 +6,12 @@ import echarts from 'echarts';
 export default {
   name: 'lifestyle',
   props: {
-    data: Object,
+    data: Array,
   },
   data() {
-    return {};
+    return {
+      lifeList: [],
+    };
   },
   methods: {
     draw() {
@@ -41,7 +43,7 @@ export default {
         },
         // X轴
         xAxis: {
-          data: ['未知', '糟糕', '一般', '合理'],
+          data: [],
           axisLabel: {
             show: true,
           },
@@ -66,7 +68,7 @@ export default {
           {
             name: '男性',
             type: 'bar',
-            data: [120, 100, 440, 320],
+            data: [],
             barWidth: 25, // 柱图宽度
             itemStyle: {
               normal: {
@@ -82,22 +84,13 @@ export default {
                     color: '#4B86FF',
                   },
                 ]),
-                // label: {
-                //   show: true, // 开启显示
-                //   position: 'top', // 在上方显示
-                //   textStyle: {
-                //     // 数值样式
-                //     color: '#333',
-                //     fontSize: 14,
-                //   },
-                // },
               },
             },
           },
           {
             name: '女性',
             type: 'bar',
-            data: [200, 120, 240, 330],
+            data: [],
             barWidth: 25, // 柱图宽度
             itemStyle: {
               normal: {
@@ -118,13 +111,25 @@ export default {
           },
         ],
       };
+      this.lifeList.forEach((element) => {
+        option.xAxis.data.push(element.codeName);
+        option.series[0].data.push(element.genderMapCount[0].manCount);
+        option.series[1].data.push(element.genderMapCount[1].womanCount);
+      });
       myChartDrawer.setOption(option);
+    },
+    // top10数据
+    async queryList() {
+      const res = await this.$api.statics.lifeclientList({
+        ...this.data,
+        type: 1,
+      });
+      this.lifeList = res.data.data;
+      this.draw();
     },
   },
   mounted() {
-    console.log(this.data, 123456);
-    // 调用绘制图表的方法
-    this.draw();
+    this.queryList();
   },
 };
 </script>
