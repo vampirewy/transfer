@@ -8,112 +8,11 @@
       label-width="90px"
       label-suffix="："
     >
-      <!-- <div class="basic-info-title">{{id ? '' : '新增'}}短信模版</div> -->
-      <!-- <el-row>
-        <el-col :span="6">
-          <el-form-item label="姓名" prop="clientInfoId">
-            <el-popover
-              ref="userPopover"
-              placement="bottom-start"
-              width="650"
-              trigger="click"
-              @show="popoverStatus = true"
-              @hide="popoverStatus = false">
-              <select-user v-if="popoverStatus"  @change="handleSelectUser"></select-user>
-              <el-input
-                class="select-user-trigger"
-                slot="reference"
-                disabled
-                v-model="currentUser.name"
-                placeholder="请选择客户">
-                <i :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`" slot="suffix"></i>
-              </el-input>
-            </el-popover>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="性别" prop="gender">
-            <el-radio v-model="currentUser.gender" :label="2" disabled>女</el-radio>
-            <el-radio v-model="currentUser.gender" :label="1" disabled>男</el-radio>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="年龄" prop="age">
-            <el-input v-model="currentUser.age" disabled></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="客户编号" prop="customerType">
-            <el-input v-model="currentUser.gridName" disabled></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row> -->
-      <!-- <div class="main-info-title">新增异常库</div> -->
       <div class="form-title">
         <div class="line"></div>
-        <h3 class="name">新增异常库</h3>
+        <h3 class="name"><span v-if="ids">编辑</span><span v-else>新增</span>异常库</h3>
       </div>
       <el-row>
-        <!-- <el-col :span="6">
-          <el-form-item label="就医编号" prop="hospital">
-            <el-input v-model="form.hospital" placeholder="请输入"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="就医类型" prop="medicalType">
-            <el-select v-model="form.medicalType" placeholder="请选择就医类型">
-              <el-option
-                v-for="item in typeOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="医保卡号" prop="department">
-            <el-input v-model="form.department" placeholder="请输入"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="就医机构" prop="patientNo">
-            <el-input v-model="form.patientNo" placeholder="请输入" @input="replace"></el-input>
-          </el-form-item>
-        </el-col> -->
-        <!-- <el-col :span="6">
-          <el-form-item label="就医科室" prop="doctorName">
-            <el-input v-model="form.doctorName" placeholder="请输入"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="主管医生" prop="hpi">
-            <el-input v-model="form.hpi" placeholder="请输入" :maxlength="300"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="就医时间" prop="inDate">
-            <el-date-picker
-              v-model="form.inDate"
-              type="date"
-              placeholder="请选择就医时间"
-              value-format="yyyy-MM-dd"
-              :picker-options="options.inDate"
-              @change="handleStartDateChange"
-            ></el-date-picker>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="出院时间" prop="outDate">
-            <el-date-picker
-              v-model="form.outDate"
-              type="date"
-              placeholder="请选择出院时间"
-              value-format="yyyy-MM-dd"
-              :picker-options="options.outDate"
-            ></el-date-picker>
-          </el-form-item>
-        </el-col> -->
         <el-col :span="6">
           <el-form-item label="异常名称" >
             <el-input v-model="form.clientInfoId" placeholder="请输入" ></el-input>
@@ -134,8 +33,8 @@
         <el-col :span="6">
           <el-form-item label="性别限制" >
             <el-select v-model="form.gender" placeholder="请选择当前状态">
-              <el-option label="男" value="1" key="1"></el-option>
-              <el-option label="女" value="2" key="2"></el-option>
+              <el-option label="男" :value="1" key="1"></el-option>
+              <el-option label="女" :value="2" key="2"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -241,7 +140,7 @@
               v-model="form.interpret"
               :rows="5"
               placeholder="请输入"
-              :maxlength="4000"
+              :maxlength="1000"
               show-word-limit
             ></el-input>
           </el-form-item>
@@ -253,7 +152,7 @@
               v-model="form.Reason"
               :rows="5"
               placeholder="请输入"
-              :maxlength="4000"
+              :maxlength="1000"
               show-word-limit
             ></el-input>
           </el-form-item>
@@ -265,7 +164,7 @@
               v-model="form.Suggestion"
               :rows="5"
               placeholder="请输入"
-              :maxlength="4000"
+              :maxlength="1000"
               show-word-limit
             ></el-input>
           </el-form-item>
@@ -296,17 +195,17 @@ export default {
   components: {
     // SelectUser,
   },
-  props: {
-    detail: {
-      type: Boolean,
-      default: false,
-    },
-    id: {
-      type: [String, Number],
-      required: false,
-      default: '',
-    },
-  },
+  // props: {
+  //   detail: {
+  //     type: Boolean,
+  //     default: false,
+  //   },
+  //   id: {
+  //     type: [String, Number],
+  //     required: false,
+  //     default: '',
+  //   },
+  // },
   data() {
     return {
       popoverStatus: false,
@@ -380,7 +279,7 @@ export default {
         { value: 2, label: '住院' },
       ],
       currentUser: {},
-      ids: this.$route.query.id,
+      ids: this.$route.params.id,
       options: [],
       value: [],
       list: [],
@@ -389,47 +288,37 @@ export default {
     };
   },
   mounted() {
-    this.getDetail();
     this.getOrganTypeList();
     this.getImportList();
     this.getQuickList();
     this.listRecommendDepartment();
     this.listRecommendInspect();
-    // if (this.ids) {
-    //   this.$api.medicalHistoryInterface.medicalInfoDetail(this.ids).then((res) => {
-    //     const { data } = res;
-    //     console.log(data, '撒打算大的');
-    //     this.form = Object.assign(this.form, data.data || {});
-    //     this.currentUser = {
-    //       id: this.form.clientInfoId,
-    //       name: this.form.clientName,
-    //       age: this.form.age,
-    //       gender: this.form.gender,
-    //       gridName: this.form.clientGridName,
-    //     };
-    //   });
-    // }
+    console.log(this.ids, 'qqqqqqq');
+    if (this.ids) {
+      this.getDetail();
+    }
   },
   methods: {
     async getDetail() {
-      const reqBody = { id: 1 };
+      const reqBody = { id: this.ids };
       const res = await this.$api.unusualListInterface.getOrganAbnormal(
         reqBody,
       );
       const { data } = res.data;
-      this.form.abnormalName = data.abnormalName;
+      this.form.clientInfoId = data.abnormalName;
+      this.form.hospital = data.abnormalType;
       this.form.gender = data.gender;
-      this.form.dangerLevel = data.dangerLevel;
-      this.form.medicalLimit = data.medicalLimit;
-      this.form.state = data.state;
-      this.form.medicalExplain = data.medicalExplain;
-      this.form.commonCause = data.commonCause;
-      this.form.advice = data.advice;
-      this.form.abnormalType = data.abnormalType;
-
-      this.form.abnormalAlias = data.abnormalAlias.map(it => ({ name: it }));
-      this.list = this.states.map(item => ({ value: `value:${item}`, label: `label:${item}` }));
-      console.log(this.list, '123123');
+      this.form.medicalType = data.icdCode;
+      this.form.inDate = data.dangerLevel;
+      this.form.outDate = data.medicalLimit;
+      this.form.doctorNameId = data.recommendDepartmentName;
+      this.form.RecommendInspectsId = data.recommendInspectName;
+      this.form.interpret = data.medicalExplain;
+      this.form.Reason = data.commonCause;
+      this.form.Suggestion = data.advice;
+      // this.form.abnormalAlias = data.abnormalAlias.map(it => ({ name: it }));
+      // this.list = this.states.map(item => ({ value: `value:${item}`, label: `label:${item}` }));
+      // console.log(this.list, '123123');
     },
     async listRecommendInspect() {
       const { data } = await this.$api.unusualListInterface.RecommendInspect();
@@ -508,17 +397,29 @@ export default {
             recommendDepartmentName: this.form.doctorNameId,
             icdCode: this.form.medicalType,
           };
-          if (this.id) {
+          if (this.ids) {
             params.id = this.id;
           }
-          this.$api.unusualListInterface.saveOrganAbnormal(params).then((res) => {
-            const { data } = res;
-            if (data.success) {
-              this.$message.success('操作成功');
-              this.$emit('afterSubmit');
-              this.$router.go(-1);
-            }
-          });
+          if (this.ids) {
+            const reqBody = { id: this.ids };
+            this.$api.unusualListInterface.updateOrganAbnormal(reqBody, params).then((res) => {
+              const { data } = res;
+              if (data.success) {
+                this.$message.success('操作成功');
+                this.$emit('afterSubmit');
+                this.$router.go(-1);
+              }
+            });
+          } else {
+            this.$api.unusualListInterface.saveOrganAbnormal(params).then((res) => {
+              const { data } = res;
+              if (data.success) {
+                this.$message.success('操作成功');
+                this.$emit('afterSubmit');
+                this.$router.go(-1);
+              }
+            });
+          }
         }
       });
     },

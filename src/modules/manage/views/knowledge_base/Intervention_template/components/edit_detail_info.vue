@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="查看体检库"
+    title="查看计划"
     class="dialog-detail"
     :modal-append-to-body="false"
     width="570px"

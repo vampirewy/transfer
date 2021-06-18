@@ -595,7 +595,7 @@ export default {
         }
         if (this.tabIndex === 'other') {
           console.log(list, 'shanchujsklfjllw');
-          this.$api.healthMonitorInterface.deletedhealthbloodpressure(list).then(({ data }) => {
+          this.$api.healthMonitorInterface.DeletedHealthDataOther(list).then(({ data }) => {
             if (data.success) {
               this.$message.success('操作成功');
               this.queryPageList();

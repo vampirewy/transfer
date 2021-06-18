@@ -103,6 +103,7 @@
         <el-form label-position="left">
           <el-form-item label="日期范围: " label-width="80px">
             <el-date-picker
+              v-model="stateDate"
               type="date"
               value-format="yyyy-MM-dd"
               placeholder="开始时间"
@@ -111,6 +112,7 @@
             </el-date-picker>
             <span style="margin: 0 9px">-</span>
             <el-date-picker
+              v-model="endDate"
               type="date"
               value-format="yyyy-MM-dd"
               placeholder="结束时间"
@@ -501,6 +503,8 @@ export default {
       isShowTemplateInput: false,
       isShowPeopleSelect: false,
       isActive: false,
+      stateDate: '',
+      endDate: '',
       analysisData: [
         { title: '能量', title2: '2205.23 kcal', title3: '2203.23 kcal' },
       ],

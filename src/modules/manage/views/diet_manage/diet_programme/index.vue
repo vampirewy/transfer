@@ -103,25 +103,26 @@
                   </el-select>
                 </div>
                 <div>
-                  <span class="label">创建日期：</span>
-                  <el-date-picker
-                    type="date"
-                    value-format="yyyy-MM-dd"
-                    :picker-options="pickerStartTime"
-                    placeholder="开始时间"
-                    style="width: 121px"
-                  >
-                  </el-date-picker>
-                  <span>-</span>
-                  <el-date-picker
-                    type="date"
-                    value-format="yyyy-MM-dd"
-                    :picker-options="pickerStartTime"
-                    placeholder="结束时间"
-                    style="width: 121px"
-                  >
-                  </el-date-picker>
-                </div>
+                <span>采集日期：</span>
+                <el-date-picker
+                  v-model="minCreateDate"
+                  type="date"
+                  :max-date="maxCreateDate || new Date()"
+                  placeholder="选择开始日期"
+                  style="width: 140px"
+                >
+                </el-date-picker>
+                <span class="timing">-</span>
+                <el-date-picker
+                  v-model="maxCreateDate"
+                  type="date"
+                  :min-date="minCreateDate"
+                  :max-date="new Date()"
+                  placeholder="选择结束日期"
+                  style="width: 140px"
+                >
+                </el-date-picker>
+              </div>
               </div>
             </div>
           </div>
@@ -223,6 +224,8 @@ export default {
       role: '',
       status: '',
       query: '',
+      minCreateDate: '',
+      maxCreateDate: '',
       pickerStartTime: {
         disabledDate: (time) => {
           if (this.form.endTime) {
@@ -260,6 +263,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .searchCondition .searchInputFormItem{
+    width: 200px;
+  }
 .search-title {
   height: 22px;
   font-size: 16px;

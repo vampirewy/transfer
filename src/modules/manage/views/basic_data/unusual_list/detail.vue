@@ -10,31 +10,70 @@
     >
       <div class="divRight">
         <div class="lines"></div>
-        <div class="titless">编辑用药记录</div>
+        <div class="titless">查看异常库</div>
         <!-- <div class="divRightTitleDiv">
           <div class="divRightTitle"><span>|</span>查看-异常库</div>
         </div> -->
       </div>
       <el-row>
         <el-col :span="6">
-          <el-form-item label="异常名称">
+          <el-form-item label="异常名称：">
             <el-input
               v-model="form.abnormalName"
               show-word-limit
             ></el-input>
           </el-form-item>
         </el-col>
+        <el-col :span="6">
+          <el-form-item label="异常类型：">
+            <el-input
+              v-model="form.abnormalTypeName"
+              show-word-limit
+            ></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="性别限制：">
+            <el-input
+              v-model="form.gender"
+              show-word-limit
+            ></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="ICD10：">
+            <el-input
+              v-model="form.icdCode"
+              show-word-limit
+            ></el-input>
+          </el-form-item>
+        </el-col>
       </el-row>
-      <el-form-item label="其他名称">
+      <!-- <el-form-item label="其他名称">
         <el-tag
           v-for="(it, i) in form.abnormalAlias"
           :key="i"
           style="margin-right: 6px"
           >{{ it.name }}</el-tag
         >
-      </el-form-item>
+      </el-form-item> -->
       <el-row>
         <el-col :span="6">
+          <el-form-item label="重要性：">
+            <el-input v-model="form.dangerLevelName"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="紧急性：">
+            <el-input v-model="form.medicalLimitName"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="推荐科室：">
+            <el-input v-model="form.recommendDepartmentName"></el-input>
+          </el-form-item>
+        </el-col>
+        <!-- <el-col :span="6">
           <el-form-item label="性别">
             <el-select v-model="form.gender">
               <el-option label="不限" :value="0">不限</el-option>
@@ -42,20 +81,10 @@
               <el-option label="女" :value="2">女</el-option>
             </el-select>
           </el-form-item>
-        </el-col>
+        </el-col> -->
         <el-col :span="6">
-          <el-form-item label="异常类型">
-            <el-input v-model="form.abnormalTypeName"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="重要性">
-            <el-input v-model="form.dangerLevelName"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="紧急性">
-            <el-input v-model="form.medicalLimitName"></el-input>
+          <el-form-item label="推荐检查：">
+            <el-input v-model="form.recommendInspectName"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -112,7 +141,7 @@ export default {
             name: '',
           },
         ],
-        gender: 0,
+        gender: '',
         state: 1,
         dangerLevel: 1,
         // dangerLevelList,
@@ -126,6 +155,7 @@ export default {
         medicalExplain: '',
         advice: '',
         abnormalTypeName: '',
+        icdCode: '',
       },
       table: [],
       id: this.$route.params.id,
@@ -169,7 +199,11 @@ export default {
       );
       const { data } = res.data;
       this.form.abnormalName = data.abnormalName;
-      this.form.gender = data.gender;
+      if (data.gender === 1) {
+        this.form.gender = '男';
+      } else {
+        this.form.gender = '女';
+      }
       this.form.dangerLevel = data.dangerLevel;
       this.form.medicalLimit = data.medicalLimit;
       this.form.state = data.state;
@@ -179,6 +213,9 @@ export default {
       this.form.medicalLimitName = data.medicalLimitName;
       this.form.dangerLevelName = data.dangerLevelName;
       this.form.advice = data.advice;
+      this.form.icdCode = data.icdCode;
+      this.form.recommendDepartmentName = data.recommendDepartmentName;
+      this.form.recommendInspectName = data.recommendInspectName;
       this.form.abnormalAlias = data.abnormalAlias.map(it => ({ name: it }));
     },
     /**

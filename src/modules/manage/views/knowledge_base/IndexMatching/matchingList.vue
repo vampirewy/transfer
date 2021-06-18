@@ -54,7 +54,7 @@
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
               </span>
         </div>
-        <div>
+        <!-- <div>
           <span>显示列表：</span>
           <el-select
                   v-model="form.isAssess"
@@ -65,7 +65,7 @@
             <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
                        :key="index"></el-option>
           </el-select>
-        </div>
+        </div> -->
       </div>
       <div class="searchRight">
         <div class="buttones">
@@ -137,16 +137,16 @@
                 class="btn-new btnAdd"
                 size="small"
                 style="margin: 16px 0;padding: 0 16px;"
-                @click="handleAddCheck(1)"
+                @click="handleSomeRemove(1)"
                 v-if="getAccess('life_style_questionnaire_add')"
         ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
-        <el-button
+        <!-- <el-button
                 class="btn-new btnAdd"
                 size="small"
                 style="margin: 16px 0;float: right;padding: 0 16px;"
                 @click="handleAddCheck(1)"
                 v-if="getAccess('life_style_questionnaire_add')"
-        ><img src="@/assets/images/common/Sort.png" />默认排序</el-button>
+        ><img src="@/assets/images/common/Sort.png" />默认排序</el-button> -->
       </div>
     </div>
       <div class="user-follow">
@@ -259,16 +259,6 @@
             <el-button
               type="text"
               size="small"
-              @click="
-                $router.push({
-                  name: 'risk_factors_add',
-                  params: {
-                    type: 'edit',
-                    qusType: scope.row.questionType,
-                    id: scope.row.id,
-                  },
-                })
-              "
               v-if="getAccess('life_style_questionnaire_edit') && scope.row.questionType !== 4"
             >忽略</el-button>
             <span style="color:#DDE0E6">|</span>
@@ -371,6 +361,7 @@ export default {
         currentPage: 1,
         pageSize: 15,
       },
+      loading: false,
       options: {},
       types: [],
       multipleSelection: [], // 当前页选中的数据
@@ -452,29 +443,29 @@ export default {
     handleExpandChange(row, expandRows) {
       this.expands = expandRows;
     },
-    expandsHandle(row, type) {
-      // if (this.loading) {
-      //   return false;
-      // }
+    expandsHandle(row) {
+      if (this.loading) {
+        return false;
+      }
       this.expands.forEach((data) => {
         // 其他展开的行收起
         if (data.id !== row.id) {
           this.$refs.table.toggleRowExpansion(data);
         }
       });
-      console.log(row, type);
-      // if (this.expands.includes(row)) {
-      this.$refs.table.toggleRowExpansion(row);
-      // } else {
-      //   this.expandData.clientId = row.id;
-      //   this.expandData.pageNo = 1;
-      //   this.excuteType = type;
-      this.getReoprtList(row).then(() => {
+      if (this.expands.includes(row)) {
         this.$refs.table.toggleRowExpansion(row);
-      });
-      // }
+      } else {
+        //   this.expandData.clientId = row.id;
+        //   this.expandData.pageNo = 1;
+        //   this.excuteType = type;
+        this.getReoprtList(row).then(() => {
+          this.$refs.table.toggleRowExpansion(row);
+        });
+      }
     },
     getReoprtList(row) {
+      this.loading = true;
       return this.$api.reportInterface.fetchReportList({
         pageNo: this.table.currentPage,
         pageSize: this.table.pageSize,
@@ -482,7 +473,10 @@ export default {
       }).then((res) => {
         this.expandData.list = res.data.data.data;
         this.dataSource = [...this.dataSource];
+        this.loading = false;
         this.$forceUpdate();
+      }).catch(() => {
+        this.loading = false;
       });
     },
     reset() {
@@ -505,6 +499,7 @@ export default {
     },
     cancel() {
       this.modalVisible = false;
+      this.getList();
     },
     /**
      * 新增

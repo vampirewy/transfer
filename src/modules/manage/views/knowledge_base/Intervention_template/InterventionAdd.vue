@@ -13,7 +13,7 @@
       <div class="main-info-title">新增异常库</div> -->
       <div class="form-title">
         <div class="line"></div>
-        <h3 class="name" v-if="ids === ''">新增-干预模版</h3>
+        <h3 class="name" v-if="!ids">新增-干预模版</h3>
         <h3 class="name" v-else>编辑-干预模版</h3>
       </div>
       <el-row>
@@ -25,8 +25,9 @@
         <el-col :span="6">
           <el-form-item label="适用性别" >
             <el-select v-model="form.gender" placeholder="请选择当前状态">
-              <el-option label="男" value="0" key="0"></el-option>
-              <el-option label="女" value="1" key="1"></el-option>
+              <el-option label="不限" value="0" key="0"></el-option>
+              <el-option label="男" value="1" key="1"></el-option>
+              <el-option label="女" value="2" key="2"></el-option>
               <!-- <el-option
                 v-for="item in resultOptions"
                 :key="item.value"
@@ -235,6 +236,7 @@ export default {
     };
   },
   mounted() {
+    console.log(this.ids, 'qwqwq');
     if (this.ids) {
       this.$api.medicalHistoryInterface.updateInterveneTemplate(this.ids).then((res) => {
         const { data } = res;
@@ -450,6 +452,7 @@ export default {
           if (data.success) {
             this.$message.success('操作成功');
             this.$emit('afterSubmit');
+            this.$router.go(-1);
           }
         });
       } else {
@@ -463,6 +466,7 @@ export default {
           if (data.success) {
             this.$message.success('操作成功');
             this.$emit('afterSubmit');
+            this.$router.go(-1);
           }
         });
       }

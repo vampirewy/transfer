@@ -48,7 +48,7 @@
     <div class="searchCondition">
       <div class="searchLeft">
         <div class="searchInputFormItem">
-          <el-input placeholder="体检库/ICD10" v-model="form.name">
+          <el-input placeholder="异常名称" v-model="form.name">
           </el-input>
           <span class="searchBtnImgSpan" @click="search(1)">
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
@@ -80,14 +80,17 @@
         </div>
         <div>
           <span>推荐检查：</span>
-          <el-select
+          <el-input placeholder="推荐检查" v-model="formData.lifeStyleLv"
+          style="width:140px">
+          </el-input>
+          <!-- <el-select
                   v-model="formData.lifeStyleLv"
                   placeholder="请选择"
                   style="width: 140px"
           >
             <el-option :label="item.name" :value="item.paramValue"
                        v-for="(item, index) in lifeStyleList" :key="index"></el-option>
-          </el-select>
+          </el-select> -->
         </div>
       </div>
       <div class="searchRight">
@@ -180,11 +183,11 @@
             <span>{{ scope.row.abnormalName | getResult}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="JCD10编码" prop="abnormalCode" show-overflow-tooltip>
+        <el-table-column label="JCD10编码" prop="icdCode" show-overflow-tooltip>
           <template slot-scope="scope">
                 <span class="clientName"
                       @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
-                  {{ scope.row.abnormalCode | getResult}}
+                  {{ scope.row.icdCode | getResult}}
                 </span>
           </template>
         </el-table-column>
@@ -230,21 +233,12 @@
         </el-table-column> -->
         <el-table-column label="操作" prop="index" width="120">
           <template slot-scope="scope">
-            <!-- <el-button
+            <el-button
               type="text"
               size="small"
-              @click="
-                $router.push({
-                  name: 'knowledge_smsAdd',
-                  params: {
-                    type: 'edit',
-                    qusType: scope.row.questionType,
-                    id: scope.row.id,
-                  },
-                })
-              "
-              v-if="getAccess('life_style_questionnaire_edit') && scope.row.questionType !== 4"
-            >编辑</el-button> -->
+              @click="editException(scope.row)"
+              v-if="getAccess('life_style_questionnaire_edit')"
+            >编辑</el-button>
             <el-button
               type="text"
               size="small"
@@ -438,6 +432,14 @@ export default {
         },
       });
     },
+    editException(row) {
+      this.$router.push({
+        name: 'ExceptionAddEdit',
+        params: {
+          id: row.id,
+        },
+      });
+    },
     /**
      * 勾选编辑
      */
@@ -496,11 +498,11 @@ export default {
             idsList.push(value.id);
           });
           const reqBody = idsList;
-          await this.$api.health.removeSome(
+          await this.$api.unusualListInterface.organBatchDelete(
             reqBody,
           );
           this.$message.success('操作成功');
-          return this.fetch();
+          return this.getList();
         },
       );
     },

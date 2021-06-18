@@ -21,7 +21,7 @@
           <div class="searchCondition">
           <div class="searchLeft">
           <div class="searchInputFormItem">
-            <el-input placeholder="姓名/手机号/企业单位" v-model="formData.keywords">
+            <el-input placeholder="体检库名称" v-model="formData.keywords">
             </el-input>
             <span class="searchBtnImgSpan" @click="search">
                 <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
@@ -98,11 +98,12 @@
             </el-table-column>
             <el-table-column label="建档时间"
             prop="createdTime" min-width="130" show-overflow-tooltip />
-            <el-table-column label="报告数" prop="reportTotal" min-width="130" show-overflow-tooltip>
+            <!-- <el-table-column label="报告数"
+            prop="reportTotal" min-width="130" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>{{ scope.row.reportTotal || '0'}}</span>
               </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column label="操作" prop="index"  width="150">
               <template slot-scope="scope">
                 <el-button

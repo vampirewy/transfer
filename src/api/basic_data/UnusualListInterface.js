@@ -13,6 +13,10 @@ class UnusualListInterface extends BaseModule {
   listPage(data = {}) {
     return this.get('/organ_abnormal/list_page', { params: data });
   }
+  // 批量删除异常列表
+  organBatchDelete(data = {}) {
+    return this.post('/organ_abnormal/batch/delete', data);
+  }
   // 推荐科室下拉
   RecommendDepartment() {
     return this.get('/organ_abnormal/list_recommend_department');
@@ -22,8 +26,8 @@ class UnusualListInterface extends BaseModule {
     return this.get('/organ_abnormal/list_recommend_inspect');
   }
   // 修改异常
-  updateOrganAbnormal(data = {}) {
-    return this.put(`/organ_abnormal/update/${data.id}`, data);
+  updateOrganAbnormal(data = {}, List = {}) {
+    return this.put(`/organ_abnormal/update/${data.id}`, List);
   }
 
   // 删除异常

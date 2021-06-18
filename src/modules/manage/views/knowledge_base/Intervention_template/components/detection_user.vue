@@ -10,17 +10,18 @@
         <div class="searchInputFormItem">
           <el-input placeholder="搜索条件" v-model="formData.name">
           </el-input>
-          <span class="searchBtnImgSpan" @click="search(1)">
-                  <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
+          <span class="searchBtnImgSpan" style="background:#ffffff;margin:1px">
+                  <img class="searchBtnImg" style="width:35px"
+                  src="@/assets/images/common/topsearch.png"/>
               </span>
         </div>
       </div>
       <div class="searchRight">
-        <div class="buttones" style="margin: 10px 10px 0 0;">
-          <div class="searchFor" @click="search(1)" style="margin: 10px 10px 0 0;">
+        <div class="buttones" style="margin: 5px 10px 0 0;">
+          <div class="searchFor" @click="search(1)" style="margin:11px 10px 0 0;">
             <img src="@/assets/images/common/topsearchblue.png" alt="">
           </div>
-          <div class="resetAll" @click="reset">重置</div>
+          <div class="resetAll" style="margin-top:12px;" @click="reset">重置</div>
         </div>
       </div>
     </div>
@@ -32,7 +33,8 @@
           <el-radio v-model="selectRadio" :label="scope.row.id">&nbsp;</el-radio>
         </template>
       </el-table-column> -->
-      <el-table-column type="selection" width="40" align="center"></el-table-column>
+      <el-table-column type="selection" width="40" align="center"
+      ></el-table-column>
       <el-table-column
         v-for="(item, index) in dataSource.columns"
         :key="index"
@@ -80,8 +82,9 @@
 
 <script>
 const SEX = {
-  0: '男',
-  1: '女',
+  0: '不限',
+  1: '男',
+  2: '女',
 };
 const COLUMNS = {
   Minterm: [
@@ -93,7 +96,7 @@ const COLUMNS = {
     { label: '类别名称', prop: 'gridName' },
   ],
   Exception: [
-    { label: '异常名称', prop: 'abnormalTypeName' },
+    { label: '异常名称', prop: 'abnormalName' },
     { label: '性别',
       prop: 'gender',
       formatter(val) {
@@ -257,7 +260,9 @@ export default {
       this.loadList(this.NameType);
     },
     reset() {
-
+      this.currentPage = 1;
+      this.formData.name = '';
+      this.loadList(this.NameType);
     },
     async queryList() {
       const res = await this.$api.healthMonitorInterface.healthDataItemGetAll({

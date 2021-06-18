@@ -15,7 +15,7 @@
       <el-row>
         <el-col :span="6">
           <el-form-item label="项目库" prop="gridListId" >
-            <el-select v-model="gridListId" placeholder="请选择" width="150">
+            <el-select v-model="form.gridListId" placeholder="请选择" width="150">
               <el-option
                 v-for="item in gridList"
                 :key="item.id"
@@ -27,14 +27,15 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="项目科室" prop="SectionListId">
-            <el-select v-model="SectionListId" placeholder="请选择">
+            <el-input v-model="form.SectionListId" placeholder="请输入"></el-input>
+            <!-- <el-select v-model="SectionListId" placeholder="请选择">
               <el-option
                 v-for="item in SectionList"
-                :key="item.organItemLibraryId"
+                :key="item.id"
                 :label="item.sectionName"
-                :value="item.organItemLibraryId"
+                :value="item.id"
               ></el-option>
-            </el-select>
+            </el-select> -->
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -47,6 +48,7 @@
         <el-col :span="6">
           <el-form-item label="适宜性别" >
             <el-select v-model="form.Gender" placeholder="请选择">
+              <el-option label="不限" value="0" key="0"></el-option>
               <el-option label="男" value="1" key="1"></el-option>
               <el-option label="女" value="2" key="2"></el-option>
             </el-select>
@@ -151,10 +153,9 @@ export default {
     return {
       popoverStatus: false,
       gridList: [],
-      gridListId: '', // 项目库
       SectionList: [],
-      SectionListId: '', // 项目科室
       form: {
+        gridListId: '', // 项目库
         checked1: 1, // 默认重要指标
         checked2: 0, // 参与报告对比
         riskFactor: '', // 危险因素
@@ -163,6 +164,7 @@ export default {
         riskType: '',
         orgCode: '',
         MinorItemsName: '', // 小项名称
+        SectionListId: '', // 项目科室
         Gender: '', // 性别
         minAge: '', // 年龄范围
         maxAge: '', // 年龄范围
@@ -202,7 +204,7 @@ export default {
       },
       rules: {
         gridListId: [{ required: true, message: '项目库不能为空' }],
-        SectionListId: [{ required: true, message: '科室不能为空' }],
+        SectionListId: [{ required: true, message: '项目科室不能为空' }],
         MinorItemsName: [{ required: true, message: '小项名称不能为空' }],
         inDate: [{ required: true, message: '就医时间不能为空' }],
         result: [{ required: true, message: '当前状态不能为空' }],
@@ -253,7 +255,7 @@ export default {
       const { data } = res.data;
       if (data) {
         this.gridList = data || [];
-        this.gridListId = data[0].id;
+        this.form.gridListId = data[0].id;
         this.getSectionList();
       }
     },
@@ -261,7 +263,7 @@ export default {
       const res = await this.$api.physicalProjectListInterface.getSectionList({
         pageNo: 1,
         pageSize: 100,
-        organItemLibraryId: this.gridListId,
+        organItemLibraryId: this.form.gridListId,
       });
       const { data } = res.data;
       if (data) {
@@ -287,8 +289,8 @@ export default {
     },
     submit() {
       const params = {
-        organItemLibraryId: this.gridListId,
-        sectionName: this.SectionListId,
+        organItemLibraryId: this.form.gridListId,
+        sectionName: this.form.SectionListId,
         itemName: this.form.MinorItemsName,
         gender: this.form.Gender,
         isCompare: this.form.checked2, // 是否对比

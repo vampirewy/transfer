@@ -37,7 +37,10 @@
           </div>
           <div>
             <span>科室名称：</span>
-            <el-select
+            <el-input placeholder="科室名称" v-model="SectionListId"
+            style="width:120px">
+            </el-input>
+            <!-- <el-select
                     v-model="SectionListId"
                     placeholder="请选择"
                     style="width: 140px"
@@ -47,7 +50,7 @@
               :label="item.sectionName"
               :value="item.organItemLibraryId"
               v-for="(item, index) in SectionList" :key="index"></el-option>
-            </el-select>
+            </el-select> -->
           </div>
           <div>
             <span>重要指标：</span>
@@ -86,6 +89,7 @@
                   style="width: 140px"
                   clearable
           >
+            <el-option label="不限" value="0" key="0"></el-option>
             <el-option label="男" value="1" key="1"></el-option>
             <el-option label="女" value="2" key="2"></el-option>
           </el-select>
@@ -170,11 +174,23 @@
                 {{ scope.row.gender === 1 ? '男' :scope.row.gender === 1?'不限': '女' }}
               </template>
             </el-table-column>
-            <el-table-column label="重要指标" prop="isMainText" min-width="80" show-overflow-tooltip />
+            <el-table-column label="重要指标" prop="isMainText" min-width="80" show-overflow-tooltip >
+              <template slot-scope="scope">
+                <span>{{ scope.row.isMainText || '-'}}</span>
+              </template>
+            </el-table-column>
             <el-table-column label="是否对比" prop="isCompareText"
-             min-width="80" show-overflow-tooltip />
+             min-width="80" show-overflow-tooltip >
+             <template slot-scope="scope">
+                <span>{{ scope.row.isCompareText || '-'}}</span>
+              </template>
+             </el-table-column>
             <el-table-column label="范围或参考" prop="maxAge" min-width="100" show-overflow-tooltip />
-            <el-table-column label="单位" prop="unit" min-width="80" show-overflow-tooltip />
+            <el-table-column label="单位" prop="unit" min-width="80" show-overflow-tooltip >
+              <template slot-scope="scope">
+                <span>{{ scope.row.unit || '-'}}</span>
+              </template>
+            </el-table-column>
             <el-table-column label="项目介绍" prop="intro" min-width="100" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>{{ scope.row.intro || '0'}}</span>

@@ -10,17 +10,18 @@
         <div class="searchInputFormItem">
           <el-input placeholder="名称/项目" v-model="formData.keyWord">
           </el-input>
-          <span class="searchBtnImgSpan" @click="search(1)">
-                  <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
+          <span class="searchBtnImgSpan" style="background:#ffffff;margin:1px" @click="search(1)">
+                  <img class="searchBtnImg" style="width:35px"
+                  src="@/assets/images/common/topsearch.png"/>
               </span>
         </div>
       </div>
       <div class="searchRight">
         <div class="buttones" style="margin: 10px 10px 0 0;">
-          <div class="searchFor" @click="search(1)" style="margin: 10px 10px 0 0;">
+          <div class="searchFor" @click="search(1)" style="margin: 7px 10px 0 0;">
             <img src="@/assets/images/common/topsearchblue.png" alt="">
           </div>
-          <div class="resetAll" @click="reset">重置</div>
+          <div class="resetAll" style="margin:5px;" @click="reset">重置</div>
         </div>
       </div>
     </div>
@@ -133,6 +134,9 @@ export default {
 <style lang="scss" scoped>
 .medical-history-select-user {
   padding: 13px 18px 21px 18px;
+  /deep/ .el-pagination{
+    white-space: inherit !important;
+  }
   .query {
     display: flex;
     align-items: center;

@@ -407,15 +407,9 @@ export default {
       this.multipleSelection = val;
     },
     reset() {
+      this.formData.itemName = '';
       this.params.pageNo = 1;
-      this.formData.keyWord = '';
-      this.formData.gender = '';
-      this.formData.clientGrid = '';
-      this.formData.lifeStyleLv = '';
-      this.formData.source = '';
-      this.formData.startTime = undefined;
-      this.formData.endTime = undefined;
-      // this.getQuestionType();
+      this.formData.isAssess = '';
       this.getList();
     },
     search() {
