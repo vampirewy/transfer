@@ -1,7 +1,7 @@
 <template>
   <div class="diet-form">
-    <div class="diet-form_center">
-      <div class="diet-type">
+    <div class="diet-form_center" style="padding: 0px 5px 0;">
+      <!-- <div class="diet-type">
         <div class="diet-type-item" @click="isShowDietPagoda = true">
           <img src="@/assets/images/diet/diet_image1.png" alt="膳食平衡宝塔" />
           <div>
@@ -23,22 +23,22 @@
             <p class="desc">食物交换份</p>
           </div>
         </div>
-      </div>
+      </div> -->
       <div class="diet-plan-box">
         <el-form>
           <div class="diet-formulate">
-            <div
+            <!-- <div
               class="diet-formulate-head"
               style="margin-bottom: 20px; position: relative"
             >
               <div class="item-title">制定食谱</div>
-            </div>
+            </div> -->
             <el-tabs
+              @tab-click="handleTabsEdit"
               type="card"
               editable
               @tab-remove="removeTab"
               @tab-add="addTab"
-              @tab-click="handleTabsEdit"
               v-model="editableTabsValue"
             >
               <el-tab-pane
@@ -49,7 +49,7 @@
               >
                 <el-collapse v-model="dietCollapseActiveNames">
                   <el-collapse-item
-                    v-for="(it, inx) in item.mealTypeDtos"
+                    v-for="(it, inx) in item.clientDietPlanConfigList"
                     :key="it.mealType"
                     :name="it.mealType"
                   >
@@ -99,15 +99,18 @@
                           />
                           {{ its.name }}
                           <i
+                            v-show="its.configType === 1"
                             @click="isShowCooking = true"
                             class="el-icon-warning"
                           ></i>
                         </p>
                         <div class="input-box">
-                          <el-input type="text" v-model="its.weight" />
+                          <el-input v-if="type !== 'info'" type="text" v-model="its.weight" />
+                          <el-input v-else type="text" disabled v-model="its.weight" />
                           g
                         </div>
                         <img
+                          v-if="type !== 'info'"
                           class="food-del"
                           @click="
                             deleteDietTempPlateConfigDtos(index, inx, inxs)
@@ -133,7 +136,7 @@
                         >
                           <p>{{ its2.name }}</p>
                           <div class="input-box">
-                            <el-input type="text" v-model="its2.weight" />
+                            <el-input disabled type="text" v-model="its2.weight" />
                             g
                           </div>
                         </div>
@@ -145,17 +148,17 @@
             </el-tabs>
           </div>
         </el-form>
-        <div class="form-buttons">
+        <!-- <div class="form-buttons">
           <el-button size="small" class="cancelBtn" @click="back">
             返回
           </el-button>
           <el-button size="small" class="sureBtn" type="primary" @click="submit"
             >保存</el-button
           >
-        </div>
+        </div> -->
       </div>
     </div>
-    <div class="diet-form_right">
+    <!-- <div class="diet-form_right">
       <el-tabs value="1" stretch type="border-card">
         <el-tab-pane name="1" label="食谱营养素分析">
           <div class="sign">
@@ -167,16 +170,16 @@
             header-row-class-name="table-row"
             :data="analysisData"
           >
-            <el-table-column align="center" prop="name" label="成分">
+            <el-table-column align="center" prop="title" label="成分">
             </el-table-column>
-            <el-table-column align="center" prop="recommendQuantity" label="推荐量">
+            <el-table-column align="center" prop="title2" label="推荐量">
               <template slot-scope="scope">
-                <span class="analysis-high">{{ scope.row.recommendQuantity }}</span>
+                <span class="analysis-high">{{ scope.row.title2 }}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="provideQuantity" label="提供量">
+            <el-table-column align="center" prop="title3" label="提供量">
               <template slot-scope="scope">
-                <span class="analysis-low">{{ scope.row.provideQuantity }}</span>
+                <span class="analysis-low">{{ scope.row.title3 }}</span>
               </template>
             </el-table-column>
           </el-table>
@@ -184,64 +187,58 @@
         <el-tab-pane lazy name="2" label="物质及能量分配">
           <div class="chart-box">
             <p class="item-title">三大营养素供能比</p>
-            <diet-proportion-chart :list="dietTemplateMaterial"></diet-proportion-chart>
+            <diet-proportion-chart></diet-proportion-chart>
             <p class="chart-desc">
               三大营养素推荐比值：蛋白质10%~15%，脂肪20%~30%，碳水化合物55%~65%
             </p>
           </div>
           <div class="chart-box">
             <p class="item-title">动物性及豆类蛋白质占总蛋白质比例</p>
-            <diet-proteinroportion-chart :list="dietTemplateMaterial"></diet-proteinroportion-chart>
+            <diet-proteinroportion-chart></diet-proteinroportion-chart>
             <p class="chart-desc">
               一般推荐动物性蛋白质和豆类蛋白质占膳食蛋白质总量30%~50%。
             </p>
           </div>
           <div class="chart-box">
             <p class="item-title">三餐能量分配比</p>
-            <diet-distribution-chart :list="dietTemplateMaterial"></diet-distribution-chart>
+            <diet-distribution-chart></diet-distribution-chart>
             <p class="chart-desc">
               三餐推荐分配比：早餐30%，午餐40%，晚餐30%。
             </p>
           </div>
         </el-tab-pane>
       </el-tabs>
-    </div>
+    </div> -->
     <el-food-op
       @change="handleFoodSelect"
       :visible.sync="isShowFoodOp"
     ></el-food-op>
     <el-cooking :visible.sync="isShowCooking"></el-cooking>
-    <el-diet-pagoda :visible.sync="isShowDietPagoda"></el-diet-pagoda>
-    <el-diet-pagoda-guide :visible.sync="isShowDietPagodaGuide"></el-diet-pagoda-guide>
-    <el-diet-pagoda-exchange :visible.sync="isShowDietPagodaExchange"></el-diet-pagoda-exchange>
   </div>
 </template>
 
 <script>
-import dietProportionChart from '../../chart_data/diet_proportion.vue'; // 三大营养素供能比
-import dietProteinroportionChart from '../../chart_data/diet_protein_proportion.vue'; // 动物性及豆类蛋白质占总蛋白质比例
-import dietDistributionChart from '../../chart_data/diet_distribution.vue'; // 三餐能量分配比
-import elFoodOp from '../../diet_programme/edit_form/el_modal/el_food_op.vue'; // 食物操作
-import elCooking from '../../diet_programme/edit_form/el_modal/el_cooking.vue'; // 食谱烹饪方式
-import elDietPagoda from '../../diet_programme/edit_form/el_modal/el_diet_pagoda.vue'; // 膳食宝塔
-import elDietPagodaGuide from '../../diet_programme/edit_form/el_modal/el_diet_pagoda_guide.vue'; // 膳食宝塔
-import elDietPagodaExchange from '../../diet_programme/edit_form/el_modal/el_diet_pagoda_exchange.vue'; // 膳食宝塔
+import elFoodOp from './el_food_op.vue'; // 食物操作
+import elCooking from './el_cooking.vue'; // 食谱烹饪方式
 import deleteIcon from '~/src/assets/images/common/editIcon.png';
-
 export default {
   name: 'diet_form',
   components: {
     elFoodOp,
     elCooking,
-    elDietPagoda,
-    dietProportionChart,
-    dietProteinroportionChart,
-    dietDistributionChart,
-    elDietPagodaGuide,
-    elDietPagodaExchange,
+    // elDietPagoda,
+    // dietProportionChart,
+    // dietProteinroportionChart,
+    // dietDistributionChart,
+    // elDietPagodaGuide,
+    // elDietPagodaExchange,
   },
   props: {
     id: {
+      type: String,
+      default: '',
+    },
+    type: {
       type: String,
       default: '',
     },
@@ -258,24 +255,80 @@ export default {
       isShowTemplateInput: false,
       isShowPeopleSelect: false,
       isActive: false,
-      analysisData: [],
+      analysisData: [
+        { title: '能量', title2: '2205.23 kcal', title3: '2203.23 kcal' },
+      ],
       mealTypeText: ['早餐', '午餐', '晚餐', '加餐'],
       dietCollapseActiveNames: '1',
       activeCaiDtoIndex: '',
       editableTabsValue: '1',
       editableTabs: [],
-      arrList: [],
-      dietTemplateMaterial: {},
     };
   },
   created() {
+    console.log(this.type, '类型');
     if (this.id) {
-      this.loadData();
+      this.getDetailList();
     }
   },
   methods: {
+    handleTabsEdit(e) {
+      this.$emit('makeIndex', e.index);
+    },
+    getDetailList() {
+      this.$api.dietRawMaterial
+        .clientDietPlanPageGetDetail(this.id)
+        .then((res) => {
+          if (res.data.success) {
+            // this.$emit('change', res.data.data);
+            this.deitsLists(res.data.data);
+            // this.deitsLists(res.data.data.templateConfigDayDtoList);
+            // this.$message.success('操作成功');
+          }
+        });
+    },
+    deitsLists(data) {
+      // this.editableTabs = list;
+      // console.log(list, '1212121');
+      const list = data.templateConfigDayDtoList;
+      list.forEach((item1) => {
+        const json = {};
+        json.day = item1.day;
+        json.clientDietPlanConfigList = [];
+        item1.mealTypeDtos.forEach((item2) => {
+          const json2 = {};
+          json2.mealType = item2.mealType;
+          json2.dietTemplateConfigDtos = [];
+          json.clientDietPlanConfigList.push(json2);
+          item2.dietTemplateConfigDtos.forEach((item3) => {
+            const json3 = {};
+            json3.mealType = item2.mealType;
+            json3.configType = item3.configType;
+            json3.name = item3.name;
+            json3.dietIngredientId = item3.dietIngredientId;
+            json3.caiId = item3.caiId;
+            json3.weight = item3.weight;
+            json3.templateDietIngredientDtoList = [];
+            json2.dietTemplateConfigDtos.push(json3);
+            if (item3.templateDietIngredientDtoList) {
+              item3.templateDietIngredientDtoList.forEach((item4) => {
+                const json4 = {};
+                json4.dietIngredientId = item4.dietIngredientId;
+                json4.name = item4.name;
+                json4.weight = item4.weight;
+                json4.dietIngredientName = item4.scale;
+                json3.templateDietIngredientDtoList.push(json4);
+              });
+            }
+          });
+        });
+        this.editableTabs.push(json);
+      });
+      data.templateConfigDayDtoList = this.editableTabs;
+      this.$emit('change', data);
+    },
     deleteDietTempPlateConfigDtos(index, inx, inxs) {
-      this.editableTabs[index].mealTypeDtos[inx].dietTemplateConfigDtos.splice(
+      this.editableTabs[index].clientDietPlanConfigList[inx].dietTemplateConfigDtos.splice(
         inxs,
         1,
       );
@@ -283,98 +336,42 @@ export default {
     switchCaiDtoIndex(index) {
       this.activeCaiDtoIndex = index === this.activeCaiDtoIndex ? '' : index;
     },
-    async Analysis() {
-      await this.$api.dietRawMaterial
-        .clientDietTemplateAnalysis({
-          dietTemplateMealList: this.arrListInfo,
-          // clientIdList: this.pageList,
-        })
-        .then((res) => {
-          if (res.data.success) {
-            this.analysisData = res.data.data.dietTemplateNutritionList;
-            this.dietTemplateMaterial = res.data.data.dietTemplateMaterial;
-            // console.log(res.data.data, '右侧数据');
-          }
-        });
-    },
     loadData() {
       this.$api.dietMenuTemplateInterface
         .getDietMenuTemConfigDetail(this.id)
         .then((res) => {
           this.editableTabs = res.data.data;
-          this.DataProcessing(res.data.data);
         });
-    },
-    // 数据处理
-    DataProcessing(lists) {
-      console.log(lists, '1221212');
-      const arr = [];
-      for (let i = 0; i < lists.length; i++) {
-        const json = {};
-        json.day = lists[i].day;
-        json.clientDietPlanConfigList = [];
-        for (let j = 0; j < lists[i].mealTypeDtos.length; j++) {
-          if (lists[i].mealTypeDtos[j].dietTemplateConfigDtos.length !== 0) {
-            for (let x = 0;
-              x < lists[i].mealTypeDtos[j].dietTemplateConfigDtos.length;
-              x++) {
-              const jsons = {
-                caiType:
-                lists[i].mealTypeDtos[j].dietTemplateConfigDtos[x].configType,
-                mealType:
-                lists[i].mealTypeDtos[j].dietTemplateConfigDtos[x].mealType,
-                weight: lists[i].mealTypeDtos[j].dietTemplateConfigDtos[x].weight,
-              };
-              if (jsons.caiType === 1) {
-                jsons.caiId =
-                lists[i].mealTypeDtos[j].dietTemplateConfigDtos[x].caiId;
-              }
-              if (jsons.caiType === 2) {
-                jsons.ingredientId =
-                lists[i].mealTypeDtos[j].dietTemplateConfigDtos[x].dietIngredientId;
-              }
-              json.clientDietPlanConfigList.push(jsons);
-            }
-          }
-        }
-        arr.push(json);
-      }
-      this.arrList = arr;
-      this.makeIndex(0);
-    },
-    makeIndex(index) {
-      if (this.arrList[index]) {
-        this.arrListInfo = this.arrList[index].clientDietPlanConfigList;
-        this.Analysis();
-      }
-    },
-    handleTabsEdit(e) {
-      this.makeIndex(e.index);
     },
     back() {
       this.$parent.viewIndex = 1;
     },
     removeTab(day) {
-      const index = this.editableTabs.findIndex(item => item.day === day * 1);
-      this.editableTabs.splice(index, 1);
-      this.editableTabs.forEach((val, indexs) => {
-        val.day = indexs + 1;
-      });
+      if (this.type !== 'info') {
+        const index = this.editableTabs.findIndex(item => item.day === day * 1);
+        this.editableTabs.splice(index, 1);
+        this.editableTabs.forEach((val, indexs) => {
+          val.day = indexs + 1;
+        });
+      }
     },
     addTab() {
-      if (this.editableTabs.length < 7) {
-        const day = this.editableTabs.length + 1;
-        const meal = {
-          day,
-          mealTypeDtos: [
-            { mealType: 1, dietTemplateConfigDtos: [] },
-            { mealType: 2, dietTemplateConfigDtos: [] },
-            { mealType: 3, dietTemplateConfigDtos: [] },
-          ],
-        };
-        this.editableTabs.push(meal);
-      } else {
-        this.remove();
+      if (this.type !== 'info') {
+        if (this.editableTabs.length < 7) {
+          const day = this.editableTabs.length + 1;
+          const meal = {
+            day,
+            clientDietPlanConfigList: [
+              { mealType: 1, dietTemplateConfigDtos: [] },
+              { mealType: 2, dietTemplateConfigDtos: [] },
+              { mealType: 3, dietTemplateConfigDtos: [] },
+              // { mealType: 4, dietTemplateConfigDtos: [] },
+            ],
+          };
+          this.editableTabs.push(meal);
+        } else {
+          this.remove();
+        }
       }
     },
     remove() {
@@ -386,14 +383,18 @@ export default {
       );
     },
     foodAdd(index, inx) {
-      this.selectDietMenuIndex = [index, inx];
-      this.isShowFoodOp = true;
+      if (this.type !== 'info') {
+        this.selectDietMenuIndex = [index, inx];
+        this.isShowFoodOp = true;
+      }
     },
     handleFoodSelect(e) {
+      // console.log(e, '接收的数据哈哈哈');
       // 选择食物回调
+      const [index, inx] = this.selectDietMenuIndex;
       e = e.map((item) => {
         const obj = {};
-        if (item.name) {
+        if (item.name) { // 判断是成品菜还是原料 原料是names
           obj.name = item.name;
           obj.configType = 1;
           obj.caiId = item.id;
@@ -408,20 +409,19 @@ export default {
           obj.configType = 2;
           obj.dietIngredientId = item.id;
         }
-        obj.weight = 0;
+        obj.mealType = inx + 1;
+        obj.weight = '';
         return obj;
       });
-      const [index, inx] = this.selectDietMenuIndex;
-      this.editableTabs[index].mealTypeDtos[inx].dietTemplateConfigDtos.push(
+      this.editableTabs[index].clientDietPlanConfigList[inx].dietTemplateConfigDtos.push(
         ...e,
       );
-      console.log(this.editableTabs);
     },
     submit() {
-      // console.dir(this.editableTabs);
+      console.dir(this.editableTabs);
       const obj = [];
       this.editableTabs.forEach((item) => {
-        item.mealTypeDtos.forEach((item2) => {
+        item.clientDietPlanConfigList.forEach((item2) => {
           item2.dietTemplateConfigDtos.forEach((item3) => {
             if (item3.templateDietIngredientDtoList) {
               item3.templateDietIngredientDtoList.forEach((item4) => {
@@ -447,17 +447,23 @@ export default {
           });
         });
       });
-      // console.dir(obj);
-      this.$api.dietMenuTemplateInterface
-        .saveDietMenuTemConfig(obj)
-        .then(() => {
-          this.$message.success('操作成功!');
-        });
+      console.dir(obj);
+      // this.$api.dietMenuTemplateInterface
+      //   .saveDietMenuTemConfig(obj)
+      //   .then(() => {
+      //     this.$message.success('操作成功!');
+      //   });
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import './index.scss';
+  .diet-form{
+    /deep/ .el-tabs__nav-wrap.is-scrollable{
+      padding: 0;
+    }
+  }
+
+@import '../../../diet_menu_template/edit_form/index.scss';
 </style>

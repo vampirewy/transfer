@@ -198,8 +198,8 @@ export default {
         this.form = {
           result: data.data.content,
           gender: data.data.suitGender,
-          smsTypeName: data.data.categoryName,
-          ThemeListName: data.data.themName,
+          smsTypeName: data.data.themName,
+          ThemeListName: String(data.data.categoryId),
           Crowd: data.data.suitCrowd,
           Season: data.data.suitSeason,
         };

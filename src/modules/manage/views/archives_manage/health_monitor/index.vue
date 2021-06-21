@@ -503,6 +503,7 @@ export default {
       console.log(id, ids);
       this.isGetinfo = id;
       this.isAddInfo = ids;
+      this.queryPageList();
     },
     editGray() {
       this.isGetinfo = false;

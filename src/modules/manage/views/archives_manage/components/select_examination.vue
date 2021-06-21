@@ -90,10 +90,12 @@ export default {
   },
   methods: {
     statusrefRange(Range) {
-      const arr = Range.split('-');
-      const ss = Number(arr[0]).toFixed(2);
-      const aa = Number(arr[1]).toFixed(2);
-      return `${ss}-${aa}`;
+      if (Range) {
+        const arr = Range.split('-');
+        const ss = Number(arr[0]).toFixed(2);
+        const aa = Number(arr[1]).toFixed(2);
+        return `${ss}-${aa}`;
+      }
     },
     submit() {
       // console.log(this.multipleSelection, '多选');
@@ -135,7 +137,7 @@ export default {
       const res = await this.$api.reportInterface.getOrganList({
         // keywords: this.keyword,
         pageNo: this.currentPage,
-        pagesize: this.pageSize,
+        pageSize: this.pageSize,
         itemName: this.keyword,
         gender: '',
         isMain: '',

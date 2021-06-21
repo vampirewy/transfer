@@ -194,6 +194,7 @@ export default {
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       vm.getList();
+      vm.viewIndex = 1;
     });
   },
   methods: {

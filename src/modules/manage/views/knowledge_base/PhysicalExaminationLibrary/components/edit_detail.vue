@@ -92,7 +92,7 @@ export default {
   name: 'edit_or_detail',
   props: {
     visible: Boolean,
-    value: Boolean,
+    value: {},
     libraryList: {},
   },
   // props: ['id', 'editId'],
@@ -103,15 +103,15 @@ export default {
       result: '',
       results: '',
       state: '',
-      importLibraryId: '1',
+      importLibraryId: '0',
       resultOptions: [],
     };
   },
   mounted() {
-    console.log(this.value, '接收的数据');
+    // console.log(this.value, '接收的数据');
     this.name = this.value.name;
-    this.importLibraryId = String(this.value.reportTotal);
-    console.log(this.importLibraryId, '接收的数据111');
+    this.importLibraryId = this.value.reportTotal;
+    // console.log(this.importLibraryId, '接收的数据111');
     this.state = this.value.state;
     this.getLibraryList();
   },

@@ -15,7 +15,7 @@
       </div>
       <el-row>
         <el-col :span="6">
-          <el-form-item label="姓名" prop="name">
+          <el-form-item label="姓名" >
             <el-popover
               ref="userPopover"
               placement="bottom-start"

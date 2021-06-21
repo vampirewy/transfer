@@ -78,19 +78,35 @@
             <el-option label="否" value="0" key="0"></el-option>
           </el-select>
         </div>
-        <div>
+        <!-- <div>
           <span>推荐检查：</span>
           <el-input placeholder="推荐检查" v-model="formData.lifeStyleLv"
           style="width:140px">
           </el-input>
-          <!-- <el-select
+          <el-select
                   v-model="formData.lifeStyleLv"
                   placeholder="请选择"
                   style="width: 140px"
           >
             <el-option :label="item.name" :value="item.paramValue"
                        v-for="(item, index) in lifeStyleList" :key="index"></el-option>
-          </el-select> -->
+          </el-select>
+        </div> -->
+        <div>
+          <span>紧急性：</span>
+          <el-select
+                  v-model="formData.medicalLimitListId"
+                  placeholder="请选择"
+                  style="width: 140px"
+                  clearable
+          >
+            <el-option
+              v-for="item in medicalLimitList"
+              :key="item.paramValue"
+              :label="item.name"
+              :value="item.paramValue"
+            ></el-option>
+          </el-select>
         </div>
       </div>
       <div class="searchRight">
@@ -110,22 +126,6 @@
   </div>
     <div v-if="!isTrue" class="searchCondition" style="width:80%;">
       <div class="searchLeft" style="padding-left:5px;">
-        <div>
-          <span>紧急性：</span>
-          <el-select
-                  v-model="formData.medicalLimitListId"
-                  placeholder="请选择"
-                  style="width: 140px"
-                  clearable
-          >
-            <el-option
-              v-for="item in medicalLimitList"
-              :key="item.paramValue"
-              :label="item.name"
-              :value="item.paramValue"
-            ></el-option>
-          </el-select>
-        </div>
         <div>
           <span>重要性：</span>
           <el-select

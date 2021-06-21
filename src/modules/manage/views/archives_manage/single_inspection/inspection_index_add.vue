@@ -241,7 +241,7 @@
                 </el-select>
             </el-form-item>
             </div>
-          <el-form-item label="检查项目" prop="clientName">
+          <el-form-item label="检查项目" prop="clientNameCheck">
             <el-popover
               ref="userPopoverCheck"
               placement="bottom-start"
@@ -411,6 +411,7 @@ export default {
       resultList: [],
       gridList: [],
       rules: {
+        clientNameCheck: [{ required: true, message: '检查项目不能为空' }],
         clientName: [{ required: true, message: '客户不能为空' }],
         drugsName: [{ required: true, message: '检查编号不能为空' }],
         specification: [{ required: true, message: '检查机构不能为空' }],
@@ -603,6 +604,9 @@ export default {
         json.unit = this.drugsList[i].unit;
         json.advice = this.drugsList[i].Suggestion;
         arrars.push(json);
+      }
+      if (arrars.length === 0) {
+        return this.$message.warning('请选择检查项目');
       }
       this.$api.healthMonitorInterface.saveInspectRecord({
         clientId: this.infoSource.clientId,
