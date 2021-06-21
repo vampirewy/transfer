@@ -13,7 +13,7 @@
       </div>
       <el-row>
         <el-col :span="6">
-          <el-form-item label="客户姓名：" >
+          <el-form-item label="客户姓名" >
             <span>{{form.name | getResult}}</span>
           </el-form-item>
         </el-col>
@@ -23,33 +23,33 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="体检编号：" >
+          <el-form-item label="客户编号" >
             <span>{{form.clientNo | getResult}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="客户年龄：" >
+          <el-form-item label="客户年龄" >
             <span>{{form.age | getResult}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="手机号码：" >
+          <el-form-item label="手机号码" >
             <span>{{form.mobile | getResult}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="身份证号：" >
+          <el-form-item label="身份证号" >
             <span>{{form.cardNo | getResult}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="初步印象：" >
-            <span>{{form.firstDesc | getResult}}</span>
+          <el-form-item label="初步印象" >
+            <span>{{form.primaFacie | getResult}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="转诊说明：" >
-            <span>{{form.desc | getResult}}</span>
+          <el-form-item label="转诊说明" >
+            <span>{{form.referralIntro | getResult}}</span>
           </el-form-item>
         </el-col>
       </el-row>
@@ -60,57 +60,64 @@
       <div>
           <el-row>
             <el-col :span="6">
-              <el-form-item label="就诊状态：" >
-                <span class="warnStatus1" v-if="form.status === 1">
+              <el-form-item label="就诊状态" >
+                <span class="warnStatus1" v-if="form.state === 2">
                 待就诊
               </span>
-                <span v-if="form.status === 2">
+                  <span v-if="form.state === 3">
                 已就诊
               </span>
-                <span class="warnStatus3" v-if="form.status === 3">
+                  <span class="warnStatus3" v-if="form.state === 1">
                 已取消
+              </span>
+                  <span v-if="form.state === 0">
+                待确认
               </span>
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="就诊时间：" >
-                <span>{{form.createdTime | getResult}}</span>
+              <el-form-item label="就诊时间" >
+                  <span v-if="!form.appointmentDate"> - </span>
+                  <span v-else>{{ form.appointmentDate}} {{ form.appointmentHourStart}}
+            ~ {{ form.appointmentHourEnd}}</span>
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="就诊科室：" >
-                <span>{{form.subjectName | getResult}}</span>
+              <el-form-item label="就诊科室" >
+                <span>{{form.departmentName | getResult}}</span>
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="就诊医生：" >
-                <span>{{form.doctor | getResult}}</span>
+              <el-form-item label="就诊医生" >
+                <span>{{form.doctorName | getResult}}</span>
               </el-form-item>
             </el-col>
-            <div v-if="form.status === 2">
+          </el-row>
+          <el-row>
+            <div v-if="form.state !== 1">
             <el-col :span="6">
-              <el-form-item label="总支出：" >
-                <span>{{form.fee | getResult}}</span>
+              <el-form-item label="总支出" >
+                <span>{{form.price | getResult}}</span>
               </el-form-item>
             </el-col>
             <el-col :span="24">
-              <el-form-item label="主诉：" >
-                <span>{{form.zhusu | getResult}}</span>
+              <el-form-item label="主诉" >
+                <span>{{form.orderConfigDtoList.complaint | getResult}}</span>
               </el-form-item>
             </el-col>
             <el-col :span="24">
-              <el-form-item label="检查：" >
-                <span>{{form.jiancha | getResult}}</span>
+              <el-form-item label="检查" >
+                <span>{{form.orderConfigDtoList.inspect | getResult}}</span>
               </el-form-item>
             </el-col>
             <el-col :span="24">
-              <el-form-item label="诊断：" >
-                <span>{{form.zhenduan | getResult}}</span>
+              <el-form-item label="诊断" >
+                <span>{{form.orderConfigDtoList.diagnosis | getResult}}</span>
               </el-form-item>
             </el-col>
             <el-col :span="24">
-              <el-form-item label="方案：" >
-                <span>{{form.fangan | getResult}}</span>
+              <el-form-item label="方案" >
+                <span>{{form.orderConfigDtoList.scheme | getResult}}</span>
               </el-form-item>
             </el-col>
             </div>
@@ -119,7 +126,8 @@
        <div class="handle-btn">
         <el-button class="cancelBtn" size="small" @click="goBack"
           >返回</el-button>
-         <el-button v-if="form.status === 1" class="cancelReservationBtn" size="small"
+         <el-button v-if="form.state === 2" class="cancelReservationBtn" size="small"
+                    @click="cancelReservation"
          >取消预约</el-button>
       </div>
     </el-form>
@@ -127,48 +135,86 @@
 </template>
 
 <script>
+import deleteIcon from '~/src/assets/images/common/editIcon.png';
 export default {
   name: 'in_hospitable_change_detail',
   data() {
     return {
-      form: { id: this.$route.query.id,
-        clientNo: '2021015898745',
-        name: '吴白',
-        gender: 1,
-        cardNo: '330726199210158956',
-        mobile: '15899856354',
-        age: 30,
+      form: {
+        clientNo: '',
+        name: '',
+        gender: '',
+        cardNo: '',
+        mobile: '',
+        age: '',
+        primaFacie: '', // 初步印象
+        referralIntro: '', // 转诊说明
+        orderConfigDtoList: {
+          complaint: '', inspect: '', diagnosis: '', scheme: '',
+        },
+        /* state: '',
         subjectName: '内科',
         doctor: '陈良',
         createdTime: '2021-04-27 14：00',
         fee: '239.00',
-        status: 2,
-        firstDesc: '肺部CT（疑似肺癌）',
-        desc: '',
         zhusu: '呼吸不畅，咳嗽，胸闷',
         jiancha: '患者各项指标均已超出正常值，请注意，白细胞严重偏高，嗜血细胞偏低',
         zhenduan: '肺炎',
-        fangan: '每日服用消炎药物，隔一周检查',
+        fangan: '每日服用消炎药物，隔一周检查',*/
       },
     };
   },
   mounted() {
-    /* if (this.ids) {
-      this.$api.medicalHistoryInterface.medicalInfoDetail(this.ids).then((res) => {
-        const { data } = res;
-        console.log(data, '撒打算大的');
-        this.form = Object.assign(this.form, data.data || {});
-        this.currentUser = {
-          id: this.form.clientInfoId,
-          name: this.form.clientName,
-          age: this.form.age,
-          gender: this.form.gender,
-          gridName: this.form.clientGridName,
-        };
-      });
-    }*/
+    this.getDetail();
   },
   methods: {
+    getClientUserInfo(id) {
+      this.$api.userManagerInterface.getDetail(id).then(({ data }) => {
+        this.form.clientNo = data.data.clientNo;
+        this.form.name = data.data.name;
+        this.form.gender = data.data.gender;
+        this.form.mobile = data.data.mobile;
+        this.form.age = data.data.age;
+        this.form.cardNo = data.data.cardNo;
+      });
+    },
+    getDetail() {
+      this.$api.InhospitalChange.getRegistrationDetail({
+        id: this.$route.params.id }).then((res) => {
+        const { data } = res;
+        this.getClientUserInfo(data.data.clientId);
+        this.form = Object.assign(this.form, data.data || {});
+        if (data.data.orderConfigDtoList.length === 0) {
+          this.form.orderConfigDtoList.complaint = '';
+          this.form.orderConfigDtoList.inspect = '';
+          this.form.orderConfigDtoList.diagnosis = '';
+          this.form.orderConfigDtoList.scheme = '';
+        }
+        console.log(this.form);
+      });
+    },
+    /**
+     * 取消预约
+     */
+    cancelReservation() {
+      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认取消预约！</span></div>`, '取消提示', {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        customClass: 'message-box-customize',
+        showClose: true,
+      }).then(
+        async () => {
+          const reqBody = {
+            id: this.$route.params.id,
+            state: 1,
+          };
+          await this.$api.InhospitalChange.upstateRegistrationState(reqBody);
+          this.$message.success('操作成功');
+          return this.getDetail();
+        },
+      );
+    },
     goBack() {
       this.$router.go(-1);
     },

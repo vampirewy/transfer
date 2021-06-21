@@ -44,7 +44,7 @@
         </template>
       </el-table-column>
       <el-table-column prop="name" label="问卷名称"></el-table-column>
-      <el-table-column prop="sortTypeName" label="问卷分类"></el-table-column>
+      <el-table-column prop="sortTypeName" label="问卷类型"></el-table-column>
       <el-table-column prop="createdByName" label="创建人"></el-table-column>
       <el-table-column prop="writeTotal" min-width="150" label="已填人数"></el-table-column>
     </el-table>

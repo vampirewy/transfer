@@ -1,7 +1,7 @@
 <template>
   <div class="staff-form">
     <el-form
-      :class="{ 'staff-form inputCommon': true, 'staff-detail-form': detail }"
+      :class="{ 'staff-form inputCommon': true }"
       :model="staffForm"
       ref="staffForm"
       :rules="staffRules"
@@ -43,8 +43,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="体检编号" prop="birthday">
-            <el-input v-model="staffForm.no" disabled></el-input>
+          <el-form-item label="客户编号" prop="clientNo">
+            <el-input v-model="staffForm.clientNo" disabled></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -67,10 +67,10 @@
       </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="初步印象" prop="firstDesc">
+            <el-form-item label="初步印象" prop="primaFacie">
               <el-input
                       type="textarea"
-                      v-model="staffForm.firstDesc"
+                      v-model="form.primaFacie"
                       :rows="4"
                       placeholder="请输入"
                       :maxlength="300"
@@ -82,10 +82,10 @@
         </el-row>
       <el-row>
         <el-col :span="24">
-          <el-form-item label="转诊说明" prop="desc">
+          <el-form-item label="转诊说明" prop="referralIntro">
             <el-input
                     type="textarea"
-                    v-model="staffForm.desc"
+                    v-model="form.referralIntro"
                     :rows="4"
                     placeholder="请输入"
                     :maxlength="300"
@@ -97,7 +97,7 @@
       </el-row>
       <div class="form-buttons">
         <el-button size="small" class="cancelBtn" @click="cancel">取消</el-button>
-        <el-button size="small" v-if="!detail" class="sureBtn" type="primary" @click="submit"
+        <el-button size="small" class="sureBtn" type="primary" @click="submit"
           >保存</el-button
         >
       </div>
@@ -114,9 +114,10 @@ export default {
   },
   data() {
     return {
+      popoverStatus: false,
       staffForm: {
-        id: this.id,
-        no: '',
+        // id: this.id,
+        clientNo: '',
         gender: '',
         age: '',
         clientId: '',
@@ -125,6 +126,11 @@ export default {
         cardNo: '',
         firstDesc: '',
         desc: '',
+      },
+      form: {
+        clientId: '',
+        primaFacie: '',
+        referralIntro: '',
       },
       staffRules: {
         clientName: [{ required: true, message: '请选择客户' }],
@@ -160,11 +166,12 @@ export default {
       this.popoverStatus = false;
       this.staffForm.clientName = data.name;
       this.staffForm.clientId = data.id;
-      this.staffForm.no = '201806084856';
+      this.staffForm.clientNo = data.clientNo;
       this.staffForm.age = data.age;
       this.staffForm.gender = data.gender;
       this.staffForm.mobile = data.mobile;
       this.staffForm.cardNo = data.cardNo;
+      this.form.clientId = data.id;
       // this.getClientUserInfo(this.staffForm.clientId);
       // this.$refs.form.validateField('clientId');
     },
@@ -206,15 +213,11 @@ export default {
     submit() {
       this.$refs.staffForm.validate((valid) => {
         if (valid) {
-          /* const fn = this.staffForm.id ? 'editUser' : 'addUser';
-          this.$api.systemManageInterface[fn](this.staffForm).then(() => {
+          this.$api.InhospitalChange.saveRegistration(this.form).then(() => {
             this.$message.success('操作成功');
-            this.$emit('afterSubmit');
-          });
-        }*/
-          this.$message.success('操作成功');
-          this.$router.push({
-            path: '/in_hospital_change',
+            this.$router.push({
+              path: '/in_hospital_change',
+            });
           });
         }
       });

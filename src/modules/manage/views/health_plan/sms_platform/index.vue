@@ -159,7 +159,7 @@
             <el-table-column
                     prop="name"
                     label="姓名"
-                    width="90"
+                    min-width="90"
                     show-overflow-tooltip
             >
               <template slot-scope="scope">
@@ -169,17 +169,17 @@
                 </span>
               </template>
             </el-table-column>
-            <el-table-column prop="gender" label="性别" width="80px">
+            <el-table-column prop="gender" label="性别" min-width="80px">
               <template slot-scope="scope">
                 <span>{{scope.row.gender | getResultGender}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="age" label="年龄" width="80px">
+            <el-table-column prop="age" label="年龄" min-width="80px">
               <template slot-scope="scope">
                 <span>{{ scope.row.age | getResult }}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="birthday" label="出生日期" width="130px">
+            <el-table-column prop="birthday" label="出生日期" min-width="130px">
               <template slot-scope="scope">
                 <span>{{ scope.row.birthday | getResult }}</span>
               </template>
@@ -189,18 +189,19 @@
                 <span>{{ scope.row.gridName | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="tags" label="标签" show-overflow-tooltip>
+            <el-table-column prop="tags" label="标签" min-width="130px" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>{{ scope.row.tags | getResult}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="newstReportDate"
-                             label="最新体检日期" width="120px" show-overflow-tooltip>
+                             label="最新体检日期" min-width="120px" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>{{ scope.row.newstReportDate | getResultDate}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="createdTime" label="建档日期" width="120px" show-overflow-tooltip>
+            <el-table-column prop="createdTime" label="建档日期"
+                             min-width="120px" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>{{ scope.row.createdTime | getResultDate}}</span>
               </template>

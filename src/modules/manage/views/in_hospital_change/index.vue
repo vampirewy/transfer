@@ -17,14 +17,15 @@
         <div>
           <span>就诊状态：</span>
           <el-select
-                  v-model="form.status"
+                  v-model="form.state"
                   placeholder="请选择"
                   style="width: 140px"
                   clearable
           >
-            <el-option label="待就诊" :value="0"></el-option>
-            <el-option label="已就诊" :value="1"></el-option>
-            <el-option label="已取消" :value="2"></el-option>
+            <el-option label="待确认" :value="0"></el-option>
+            <el-option label="已取消" :value="1"></el-option>
+            <el-option label="待就诊" :value="2"></el-option>
+            <el-option label="已就诊" :value="3"></el-option>
           </el-select>
         </div>
         <div style="margin-top: 10px;">
@@ -73,6 +74,7 @@
         <el-button
                 class="btn-new btnAdd"
                 size="small"
+                @click="exportList"
         ><img src="@/assets/images/common/export.png" />导出</el-button>
         </div>
       </div>
@@ -82,7 +84,7 @@
               @selection-change="handleSelectionChange"
              >
       <el-table-column type="selection" width="40"></el-table-column>
-      <el-table-column prop="orderNo" label="订单编号" min-width="100px" show-overflow-tooltip>
+      <el-table-column prop="orderNo" label="订单编号" min-width="80px" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{scope.row.orderNo | getResult}}</span>
         </template>
@@ -94,60 +96,66 @@
       >
         <template slot-scope="scope">
              <span class="clientName"
-                   @click="commonHref.toPersonalHealth(scope.row.id, $router)">
-               {{ scope.row.name | getResult}}
+                   @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
+               {{ scope.row.clientName | getResult}}
              </span>
         </template>
       </el-table-column>
-      <el-table-column prop="clientNo" label="体检编号" min-width="100px" show-overflow-tooltip>
+      <el-table-column prop="clientNo" label="客户编号" min-width="100px" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{scope.row.clientNo | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="mobile" label="手机号码" min-width="100px">
+      <el-table-column prop="clientPhone" label="手机号码" min-width="90px">
         <template slot-scope="scope">
-          <span>{{ scope.row.mobile | getResult }}</span>
+          <span>{{ scope.row.clientPhone | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="subjectName" label="就诊科室"  min-width="80px">
+      <el-table-column prop="departmentName" label="就诊科室"  min-width="80px">
         <template slot-scope="scope">
-          <span>{{ scope.row.subjectName | getResult }}</span>
+          <span>{{ scope.row.departmentName | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="就诊医生" prop="doctor" show-overflow-tooltip>
+      <el-table-column label="就诊医生" prop="doctorName" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.doctor | getResult}}</span>
+          <span>{{ scope.row.doctorName | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="预约时间" prop="createdTime" min-width="90px" show-overflow-tooltip>
+      <el-table-column label="预约时间" prop="appointmentDate" min-width="120px" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.createdTime | getResult}}</span>
+          <span v-if="!scope.row.appointmentDate"> - </span>
+          <span v-else>{{ scope.row.appointmentDate}} {{ scope.row.appointmentHourStart}}
+            ~ {{ scope.row.appointmentHourEnd}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="费用" prop="fee" min-width="80px" show-overflow-tooltip>
+      <el-table-column label="费用" prop="price" min-width="70px" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.fee | getResult}}</span>
+          <span>{{ scope.row.price | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态" prop="result" min-width="100px">
+      <el-table-column label="状态" prop="result" min-width="90px">
         <template slot-scope="scope">
-              <span class="warnStatus1" v-if="scope.row.status === 1">
+              <span class="warnStatus1" v-if="scope.row.state === 2">
                 待就诊
               </span>
-              <span v-if="scope.row.status === 2">
+              <span v-if="scope.row.state === 3">
                 已就诊
               </span>
-              <span class="warnStatus3" v-if="scope.row.status === 3">
+              <span class="warnStatus3" v-if="scope.row.state === 1">
                 已取消
+              </span>
+              <span v-if="scope.row.state === 0">
+                待确认
               </span>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="130">
         <template slot-scope="scope">
           <el-button
-                  v-if="scope.row.status === 1"
+                  v-if="scope.row.state === 2"
                   type="text"
                   size="small"
+                  @click="cancelReservation(scope.row)"
           >取消预约</el-button>
           <el-button
                   type="text"
@@ -175,47 +183,16 @@
 </template>
 
 <script>
-import { genderList, executeStateList } from '~/src/constant/health_plan';
-import QueryPage from '~/src/components/query_page/index.vue';
-import Search from '~/src/components/query_page/search.vue';
-import QueryFilter from '~/src/components/query_page/query_filter.vue';
-import OperateButton from '~/src/components/query_page/operate_button.vue';
-import ManagerList from '@/components/user_health/manager_list.vue';
-
+import deleteIcon from '~/src/assets/images/common/editIcon.png';
 export default {
   name: 'in_hospital_change',
-  components: {
-    QueryPage,
-    Search,
-    QueryFilter,
-    OperateButton,
-    ManagerList,
-  },
   data() {
     return {
+      upload_url: process.env.api.upload_url,
       warnType: 0,
       form: {
         keywords: '', // 关键字
-        gender: '', // 性别
-        gridId: '', // 人员类别
-        status: '',
-        zongCheck: '',
-        hasIntervenePlan: '', // 剩余计划
-        hasReport: '', // 体检报告
-        tag: '', // 客户标签
-        startReportDate: '', // 体检日期
-        endReportDate: '', // 体检日期
-        startCollectionDate: '', // 采集日期
-        endCollectionDate: '', // 采集日期
-        workUnitName: '', // 企业单位
-        planUserId: '',
-        planUserName: '',
-        planWay: '', // 随访方式
-        executeState: '', // 状态
-        selectTime: [], // 选择时间
-        planWayList: [],
-        genderList,
-        executeStateList,
+        state: '',
         startTime: '',
         endTime: '',
       },
@@ -278,50 +255,16 @@ export default {
      * @return {Promise<void>}
      */
     async getList() {
-      /* console.log(this.form);
+      const reqBody = Object.assign({ pageNo: this.table.pageNo,
+        pageSize: this.table.pageSize }, this.form);
       if (this.form.startTime) {
-        this.form.startTime = `${this.form.startTime.split(' ')[0]} 00:00:00`;
+        reqBody.startTime = `${this.form.startTime} 00:00:00`;
       }
       if (this.form.endTime) {
-        this.form.endTime = `${this.form.endTime.split(' ')[0]} 23:59:59`;
+        reqBody.endTime = `${this.form.endTime} 23:59:59`;
       }
-      if (this.form.startReportDate) {
-        this.form.startReportDate = `${this.form.startReportDate.split(' ')[0]} 00:00:00`;
-      }
-      if (this.form.endReportDate) {
-        this.form.endReportDate = `${this.form.endReportDate.split(' ')[0]} 23:59:59`;
-      }
-      if (this.form.startCollectionDate) {
-        this.form.startCollectionDate = `${this.form.startCollectionDate.split(' ')[0]} 00:00:00`;
-      }
-      if (this.form.endCollectionDate) {
-        this.form.endCollectionDate = `${this.form.endCollectionDate.split(' ')[0]} 23:59:59`;
-      }
-      const reqBody = {
-        planWay: this.form.planWay,
-        executeState: this.form.executeState,
-        gender: this.form.gender,
-        gridId: this.form.gridId,
-        planUserId: this.form.planUserId,
-        reportAbnormalCodes: this.form.abnormalId,
-        hasIntervenePlan: this.form.hasIntervenePlan,
-        hasReport: this.form.hasReport,
-        /!* tag: this.form.tag,*!/
-        startReportDate: this.form.startReportDate,
-        endReportDate: this.form.endReportDate,
-        startCollectionDate: this.form.startCollectionDate,
-        endCollectionDate: this.form.endCollectionDate,
-        workUnitName: this.form.workUnitName,
-        startTime: this.form.startTime,
-        endTime: this.form.endTime,
-        keywords: this.form.keywords,
-        pageNo: this.table.pageNo,
-        pageSize: this.table.pageSize,
-      };
-      const res = await this.$api.userFollowInterface.getIntervenePlanPageList(
-        reqBody,
-      );*/
-      const res = {
+      const res = await this.$api.InhospitalChange.getRegistrationListPage(reqBody);
+      /* const res = {
         data: {
           data: {
             data: [
@@ -368,7 +311,7 @@ export default {
             total: 3,
           },
         },
-      };
+      };*/
       const { data } = res.data;
       console.log(data);
       if (data) {
@@ -376,6 +319,39 @@ export default {
         this.table.totalCount = data.total;
         console.log(this.table.list);
       }
+    },
+    /**
+     * 导出列表
+     * @return {Promise<void>}
+     */
+    async exportList() {
+      const reqBody = Object.assign({ pageNo: 1,
+        pageSize: 999999 }, this.form);
+      const res = await this.$api.InhospitalChange.exportRegistrationListPage(reqBody);
+      const { data } = res.data;
+      window.open(this.upload_url + data);
+    },
+    /**
+     * 取消预约
+     */
+    cancelReservation(row) {
+      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认取消预约！</span></div>`, '取消提示', {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        customClass: 'message-box-customize',
+        showClose: true,
+      }).then(
+        async () => {
+          const reqBody = {
+            id: row.id,
+            state: 1,
+          };
+          await this.$api.InhospitalChange.upstateRegistrationState(reqBody);
+          this.$message.success('操作成功');
+          return this.getList();
+        },
+      );
     },
     add() {
       this.$router.push({

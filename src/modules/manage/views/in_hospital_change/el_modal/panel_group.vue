@@ -5,17 +5,19 @@
     style="margin: 0 0 20px 0;display: flex;width: 100%;"
   >
     <el-col class="card-panel-col" style="padding-left: 0">
-      <div class="card-panel" @click="toRouterPage(1)">
+      <div class="card-panel">
         <div class="card-panel-top">
           <div class="card-panel-description">
             <div class="card-panel-number">
-              {{ formData.clientInfoCount || 1820 }}
+              {{ formData1.count }}
             </div>
             <div class="card-panel-text">院内转诊总次数（次）</div>
           </div>
           <div class="card-panel-icon-wrapper">
-            <span class="percent high">15.9%</span>
-            <img class="card-panel-icon" :src="high" />
+            <span class="percent" :class="formData1.percentageType === 2 ? 'low' : 'high'">
+              {{formData1.percentageNumber}}
+            </span>
+            <img class="card-panel-icon" :src="formData1.percentageType === 2 ? low : high" />
           </div>
         </div>
         <div class="card-panel-line">
@@ -27,17 +29,19 @@
       </div>
     </el-col>
     <el-col class="card-panel-col">
-      <div class="card-panel" @click="toRouterPage(2)">
+      <div class="card-panel">
         <div class="card-panel-top">
           <div class="card-panel-description">
             <div class="card-panel-number">
-              {{ formData.reportInfoCount || 1820 }}
+              {{ formData2.count }}
             </div>
             <div class="card-panel-text">院内转诊总人次（人）</div>
           </div>
           <div class="card-panel-icon-wrapper">
-            <span class="percent high">13.9%</span>
-            <img class="card-panel-icon" :src="high" />
+            <span class="percent" :class="formData2.percentageType === 2 ? 'low' : 'high'">
+              {{formData2.percentageNumber}}
+            </span>
+            <img class="card-panel-icon" :src="formData2.percentageType === 2 ? low : high" />
           </div>
         </div>
         <div class="card-panel-line">
@@ -49,17 +53,19 @@
       </div>
     </el-col>
     <el-col class="card-panel-col">
-      <div class="card-panel" @click="toRouterPage(3)">
+      <div class="card-panel">
         <div class="card-panel-top">
           <div class="card-panel-description">
             <div class="card-panel-number">
-              {{ formData.questionInfoCount || 1820 }}
+              {{ formData3.count }}
             </div>
             <div class="card-panel-text">院内转诊总收入（万元）</div>
           </div>
           <div class="card-panel-icon-wrapper">
-            <span class="percent low">8.9%</span>
-            <img class="card-panel-icon" :src="low" />
+            <span class="percent" :class="formData3.percentageType === 2 ? 'low' : 'high'">
+              {{formData3.percentageNumber}}
+            </span>
+            <img class="card-panel-icon" :src="formData3.percentageType === 2 ? low : high" />
           </div>
         </div>
         <div class="card-panel-line">
@@ -71,17 +77,19 @@
       </div>
     </el-col>
     <el-col class="card-panel-col" style="padding-right: 0">
-      <div class="card-panel" @click="toRouterPage(4)">
+      <div class="card-panel">
         <div class="card-panel-top">
           <div class="card-panel-description">
             <div class="card-panel-number">
-              {{ formData.assessReportCount || 1820 }}
+              {{ formData4.count }}
             </div>
             <div class="card-panel-text">检后就医转化率（%）</div>
           </div>
           <div class="card-panel-icon-wrapper">
-            <span class="percent high">80.3%</span>
-            <img class="card-panel-icon" :src="high" />
+            <span class="percent" :class="formData4.percentageType === 2 ? 'low' : 'high'">
+              {{formData4.percentageNumber}}
+            </span>
+            <img class="card-panel-icon" :src="formData4.percentageType === 2 ? low : high" />
           </div>
         </div>
         <div class="card-panel-line">
@@ -105,12 +113,15 @@ import _low from '~/src/assets/images/home/low.png';
 import _high from '~/src/assets/images/home/high.png';
 import LineChart from './line_chart_group.vue';
 export default {
-  props: ['formData'],
   components: {
     LineChart,
   },
   data() {
     return {
+      formData1: {},
+      formData2: {},
+      formData3: {},
+      formData4: {},
       home1: _home1,
       home2: _home2,
       home3: _home3,
@@ -118,54 +129,98 @@ export default {
       home5: _home5,
       low: _low,
       high: _high,
-      yList1: [],
       name1: ['次数'],
-      xList1: ['04/07', '04/08', '04/09', '04/10', '04/11', '04/12', '04/13', '04/14', '04/15', '04/16', '04/17', '04/18', '04/19', '04/20', '04/21'],
-      yList2: [['20', '19', '16', '20', '23', '30', '28', '25', '20', '15', '23', '30', '35', '40', '20']],
+      xList1: [],
+      yList1: [],
       name2: ['人次'],
-      xList2: ['04/07', '04/08', '04/09', '04/10', '04/11', '04/12', '04/13', '04/14', '04/15', '04/16', '04/17', '04/18', '04/19', '04/20', '04/21'],
-      yList3: [['20', '19', '16', '20', '23', '30', '28', '25', '20', '15', '23', '30', '35', '40', '20']],
+      xList2: [],
+      yList2: [],
       name3: ['收入'],
-      xList3: ['04/07', '04/08', '04/09', '04/10', '04/11', '04/12', '04/13', '04/14', '04/15', '04/16', '04/17', '04/18', '04/19', '04/20', '04/21'],
-      yList4: [['20', '19', '16', '20', '23', '30', '28', '25', '20', '15', '23', '30', '35', '40', '20']],
+      xList3: [],
+      yList3: [],
       name4: ['转化'],
-      xList4: ['04/07', '04/08', '04/09', '04/10', '04/11', '04/12', '04/13', '04/14', '04/15', '04/16', '04/17', '04/18', '04/19', '04/20', '04/21'],
+      xList4: [],
+      yList4: [],
     };
   },
   mounted() {
     this.getY1();
+    this.getY2();
+    this.getY3();
+    this.getY4();
   },
   methods: {
     // 院内转诊总次数
     getY1() {
-      console.log('getY1');
-      /* const sendDataGet = Object.assign({}, this.checkAfterPercent);
-      sendDataGet.planType = 4;*/
+      const sendDataGet = Object.assign({}, { chartType: 1 });
+      this.xList1 = [];
       this.yList1 = [];
-      /* this.$api.personal.echartIntervenePlan(sendDataGet).then((res) => {
-        const lineIntervenePlanListMap = res.data.data.lineIntervenePlanListMap;
-        const xListInit = [];
-        const yListInit = [];
-        if (
-          lineIntervenePlanListMap != null &&
-          JSON.stringify(lineIntervenePlanListMap) !== '{}'
-        ) {
-          Object.keys(lineIntervenePlanListMap).forEach((key) => {
-            xListInit.push(key);
-            yListInit.push(lineIntervenePlanListMap[key]);
-          });
-          this.intervenePlanXList = xListInit;
-          this.intervenePlanYList.push(yListInit);
-        } else {
-          this.intervenePlanXList = [];
-          this.intervenePlanYList = [];
-        }
-      });*/
-      this.yList1 = [['20', '19', '16', '20', '23', '30', '28', '25', '20', '15', '23', '30', '35', '40', '20']];
+      this.$api.InhospitalChange.getRegistrationStatistics(sendDataGet).then((res) => {
+        const { data } = res.data;
+        this.formData1.count = data.count;
+        this.formData1.percentageNumber = data.percentageNumber;
+        this.formData1.percentageType = data.percentageType;
+        const yList = [];
+        data.chartList.forEach((val) => {
+          this.xList1.push(val.dayDate);
+          yList.push(val.dayCount);
+        });
+        this.yList1.push(yList);
+      });
     },
-    toRouterPage(type) {
-      console.log(type);
-      // this.$emit('toRouterPage', type);
+    //
+    getY2() {
+      const sendDataGet = Object.assign({}, { chartType: 2 });
+      this.xList2 = [];
+      this.yList2 = [];
+      this.$api.InhospitalChange.getRegistrationStatistics(sendDataGet).then((res) => {
+        const { data } = res.data;
+        this.formData2.count = data.count;
+        this.formData2.percentageNumber = data.percentageNumber;
+        this.formData2.percentageType = data.percentageType;
+        const yList = [];
+        data.chartList.forEach((val) => {
+          this.xList2.push(val.dayDate);
+          yList.push(val.dayCount);
+        });
+        this.yList2.push(yList);
+      });
+    },
+    //
+    getY3() {
+      const sendDataGet = Object.assign({}, { chartType: 3 });
+      this.xList3 = [];
+      this.yList3 = [];
+      this.$api.InhospitalChange.getRegistrationStatistics(sendDataGet).then((res) => {
+        const { data } = res.data;
+        this.formData3.count = data.count;
+        this.formData3.percentageNumber = data.percentageNumber;
+        this.formData3.percentageType = data.percentageType;
+        const yList = [];
+        data.chartList.forEach((val) => {
+          this.xList3.push(val.dayDate);
+          yList.push(val.dayCount);
+        });
+        this.yList3.push(yList);
+      });
+    },
+    //
+    getY4() {
+      const sendDataGet = Object.assign({}, { chartType: 4 });
+      this.xList4 = [];
+      this.yList4 = [];
+      this.$api.InhospitalChange.getRegistrationStatistics(sendDataGet).then((res) => {
+        const { data } = res.data;
+        this.formData4.count = data.count;
+        this.formData4.percentageNumber = data.percentageNumber;
+        this.formData4.percentageType = data.percentageType;
+        const yList = [];
+        data.chartList.forEach((val) => {
+          this.xList4.push(val.dayDate);
+          yList.push(val.dayCount);
+        });
+        this.yList4.push(yList);
+      });
     },
   },
 };
