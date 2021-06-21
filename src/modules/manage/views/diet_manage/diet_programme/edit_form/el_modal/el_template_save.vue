@@ -7,18 +7,37 @@
     :visible.sync="visibles"
     @close="visibles = false"
   >
-    <el-form inline label-width="90px" :model="value" class="form-content">
-      <el-form-item required label="模版类别：">
-        <el-select placeholder="请选择" clearable style="width: 148px">
+    <el-form inline :rules="rules"
+    :model="ruleForm"
+    label-width="90px"
+     class="form-content">
+      <el-form-item required label="模版类别：" prop="Category">
+        <el-select placeholder="请选择" v-model="ruleForm.Category" style="width: 148px">
           <el-option label="男" :value="1"></el-option>
           <el-option label="女" :value="0"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item required label="模版名称：">
-        <el-input style="width: 148px" placeholder="请输入"></el-input>
+      <el-form-item required label="模版名称：" prop="name">
+        <el-input style="width: 148px" v-model="ruleForm.name" placeholder="请输入"></el-input>
+      </el-form-item>
+      <el-form-item prop="minKcal" label="参考范围：">
+        <el-input
+        v-model="ruleForm.minKcal"
+          style="width: 189px"
+          placeholder="请输入"
+        ></el-input>
+      </el-form-item>
+      <span class="line">-</span>
+      <el-form-item prop="maxKcal">
+        <el-input
+        v-model="ruleForm.maxKcal"
+          style="width: 189px"
+          placeholder="请输入"
+        ></el-input>
       </el-form-item>
       <el-form-item label="模版介绍：">
         <el-input
+          v-model="ruleForm.Introduction"
           placeholder="请输入"
           type="textarea"
           :rows="5"
@@ -53,7 +72,21 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      ruleForm: {
+        Category: '',
+        name: '',
+        minKcal: '',
+        maxKcal: '',
+        Introduction: '',
+      },
+      rules: {
+        Category: [{ required: true, message: '请选择模版类别' }],
+        name: [{ required: true, message: '请输入模版名称' }],
+        minKcal: [{ required: true, message: '请输入最小卡路里' }],
+        maxKcal: [{ required: true, message: '请输入最大卡路里' }],
+      },
+    };
   },
   computed: {
     visibles: {

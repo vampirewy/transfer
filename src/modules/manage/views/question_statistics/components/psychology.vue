@@ -6,10 +6,12 @@ import echarts from 'echarts';
 export default {
   name: 'lifestyle',
   props: {
-    data: Object,
+    data: Array,
   },
   data() {
-    return {};
+    return {
+      psylist: [],
+    };
   },
   methods: {
     draw() {
@@ -29,7 +31,7 @@ export default {
           },
         },
         legend: {
-          data: ['是', '基本是/倾向是', '否'],
+          data: ['男', '女'],
           top: 5,
           right: 5,
           icon: 'circle',
@@ -45,19 +47,11 @@ export default {
         },
         yAxis: {
           type: 'category',
-          data: [
-            '血瘀质',
-            '湿热质',
-            '痰湿质',
-            '阴虚质',
-            '阳虚质',
-            '气虚质',
-            '平和质',
-          ],
+          data: [],
         },
         series: [
           {
-            name: '是',
+            name: '男',
             type: 'bar',
             stack: 'total',
             label: {
@@ -66,7 +60,7 @@ export default {
             emphasis: {
               focus: 'series',
             },
-            data: [320, 302, 301, 234, 290, 330, 310],
+            data: [],
             barWidth: 25, // 柱图宽度
             itemStyle: {
               color: 'red',
@@ -96,7 +90,7 @@ export default {
             },
           },
           {
-            name: '基本是/倾向是',
+            name: '女',
             type: 'bar',
             stack: 'total',
             label: {
@@ -105,13 +99,13 @@ export default {
             emphasis: {
               focus: 'series',
             },
-            data: [120, 132, 101, 134, 90, 230, 210],
+            data: [],
             barWidth: 25, // 柱图宽度
             itemStyle: {
               normal: {
                 // 柱形图圆角，初始化效果
-                // barBorderRadius: [0, 15, 15, 0],
-                color: new echarts.graphic.LinearGradient(1, 1, 0, 0, [
+                barBorderRadius: [0, 15, 15, 0],
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                   {
                     offset: 0,
                     color: '#F33D21',
@@ -133,53 +127,25 @@ export default {
               },
             },
           },
-          {
-            name: '否',
-            type: 'bar',
-            stack: 'total',
-            label: {
-              show: true,
-            },
-            emphasis: {
-              focus: 'series',
-            },
-            data: [220, 182, 191, 234, 290, 330, 310],
-            barWidth: 25, // 柱图宽度
-            itemStyle: {
-              normal: {
-                // 柱形图圆角，初始化效果
-                barBorderRadius: [0, 15, 15, 0],
-                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                  {
-                    offset: 0,
-                    color: '#F6F8FC',
-                  },
-                  {
-                    offset: 1,
-                    color: '#F6F8FC',
-                  },
-                ]),
-                label: {
-                  show: false, // 开启显示
-                  position: 'top', // 在上方显示
-                  textStyle: {
-                    // 数值样式
-                    color: '#333',
-                    fontSize: 14,
-                  },
-                },
-              },
-            },
-          },
         ],
       };
+      this.psylist.forEach((element) => {
+        option.yAxis.data.push(element.paramName);
+        option.series[0].data.push(element.genderMapList[0].manCount);
+        option.series[1].data.push(element.genderMapList[1].womanCount);
+      });
       myChartDrawer.setOption(option);
+    },
+    async queryList() {
+      const res = await this.$api.statics.psydoctorList({
+        ...this.data,
+      });
+      this.psylist = res.data.data;
+      this.draw();
     },
   },
   mounted() {
-    console.log(this.data, 123456);
-    // 调用绘制图表的方法
-    this.draw();
+    this.queryList();
   },
 };
 </script>

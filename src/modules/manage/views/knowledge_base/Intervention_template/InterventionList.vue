@@ -58,7 +58,7 @@
           <div class="searchCondition">
           <div class="searchLeft">
           <div class="searchInputFormItem">
-            <el-input placeholder="姓名/手机号/企业单位" v-model="formData.keywords">
+            <el-input placeholder="模版名称" v-model="formData.keywords">
             </el-input>
             <span class="searchBtnImgSpan" @click="search">
                 <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
@@ -82,6 +82,7 @@
                   placeholder="请选择"
                   style="width: 140px"
           >
+            <el-option label="不限" value="0" key="0"></el-option>
             <el-option label="男" value="1" key="1"></el-option>
             <el-option label="女" value="2" key="2"></el-option>
           </el-select>
@@ -171,7 +172,7 @@
             </el-table-column>
             <el-table-column label="适用性别" prop="gender" min-width="80" show-overflow-tooltip >
               <template slot-scope="scope">
-                {{scope.row.gender === 0 ? '男' : (scope.row.gender === 1 ? '女' : '')}}
+                {{scope.row.gender === 1 ? '男' : (scope.row.gender === 2 ? '女' : '不限')}}
               </template>
             </el-table-column>
             <el-table-column label="条件" prop="conditionRelationTxt"
@@ -408,6 +409,7 @@ export default {
       });
     },
     reset() {
+      this.formData.state = '';
       this.formData.Enabled = '';
       this.formData.keywords = '';
       this.formData.gender = '';

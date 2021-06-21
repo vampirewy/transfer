@@ -34,7 +34,7 @@ export default [
         meta: {
           title: '短信模版新增',
           hideInMenu: true,
-          hideInBread: true,
+          hideInTag: true,
         },
         component: () => import('../../views/knowledge_base/sms_template/smsAdd.vue'),
       },
@@ -44,7 +44,7 @@ export default [
         meta: {
           title: '短信模版查看',
           hideInMenu: true,
-          hideInBread: true,
+          hideInTag: true,
         },
         component: () => import('../../views/knowledge_base/sms_template/smsLook.vue'),
       },
@@ -63,7 +63,7 @@ export default [
         meta: {
           title: '危险因素库新增',
           hideInMenu: true,
-          hideInBread: true,
+          hideInTag: true,
         },
         component: () => import('../../views/knowledge_base/risk_factors/riskAdd.vue'),
       },
@@ -73,7 +73,7 @@ export default [
         meta: {
           title: '危险因素库查看',
           hideInMenu: true,
-          hideInBread: true,
+          hideInTag: true,
         },
         component: () => import('../../views/knowledge_base/risk_factors/riskLook.vue'),
       },
@@ -92,7 +92,7 @@ export default [
         meta: {
           title: '添加异常库',
           hideInMenu: true,
-          hideInBread: true,
+          hideInTag: true,
         },
         component: () => import('../../views/knowledge_base/ExceptionLibrary/ExceptionAddEdit.vue'),
       },
@@ -138,7 +138,7 @@ export default [
         meta: {
           title: '自从匹配',
           hideInMenu: true,
-          hideInBread: true,
+          hideInTag: true,
         },
         component: () => import('../../views/knowledge_base/Outlier_matching/Automatic_matching.vue'),
       },
@@ -157,7 +157,7 @@ export default [
         meta: {
           title: '新增异常匹配',
           hideInMenu: true,
-          hideInBread: true,
+          hideInTag: true,
         },
         component: () => import('../../views/knowledge_base/IndexMatching/MatchingAddEdit.vue'),
       },
@@ -176,7 +176,7 @@ export default [
         meta: {
           title: '新增干预模版',
           hideInMenu: true,
-          hideInBread: true,
+          hideInTag: true,
         },
         component: () => import('../../views/knowledge_base/Intervention_template/InterventionAdd.vue'),
       },
@@ -186,7 +186,7 @@ export default [
         meta: {
           title: '编辑计划',
           hideInMenu: true,
-          hideInBread: true,
+          hideInTag: true,
         },
         component: () => import('../../views/knowledge_base/Intervention_template/InterventionEdit.vue'),
       },

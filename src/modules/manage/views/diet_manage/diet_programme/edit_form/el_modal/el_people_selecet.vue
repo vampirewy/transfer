@@ -7,7 +7,7 @@
             <div>
               <span>客户性别：</span>
               <el-select
-                v-model="status"
+                v-model="gender"
                 placeholder="选择"
                 clearable
                 style="width: 139px"
@@ -18,7 +18,7 @@
             </div>
             <div class="searchInputFormItem" style="width:108px">
               <el-input placeholder="输入条件搜索"
-              v-model="query"> </el-input>
+              v-model="keyword"> </el-input>
               <span class="searchBtnImgSpan" @click="search" style="right:-3px">
                 <img
                   class="searchBtnImg"
@@ -38,16 +38,17 @@
         </div>
       </div>
     </div>
-    <el-table row-class-name="table-row" :data="tableData">
+    <el-table row-class-name="table-row" :data="tableData"
+    @selection-change="handleSelectionChange">
       <el-table-column type="selection" align="center" width="55">
       </el-table-column>
-      <el-table-column align="center" prop="title" label="编号">
+      <el-table-column align="center" prop="clientNo" label="编号">
       </el-table-column>
-      <el-table-column align="center" prop="title2" label="姓名">
+      <el-table-column align="center" prop="name" label="姓名">
       </el-table-column>
-      <el-table-column align="center" prop="title3" label="年龄">
+      <el-table-column align="center" prop="age" label="年龄">
       </el-table-column>
-      <el-table-column align="center" prop="title4" label="性别">
+      <el-table-column align="center" prop="gender" label="性别">
       </el-table-column>
     </el-table>
     <el-pagination
@@ -63,7 +64,7 @@
         取消
       </el-button>
       <el-button size="small" class="sureBtn" type="primary"
-        >确定添加</el-button
+        @click="addBtn">确定添加</el-button
       >
     </div>
   </div>
@@ -85,8 +86,9 @@ export default {
       currentPage: 1,
       total: 0,
       pageSize: 15,
-      status: '',
-      query: '',
+      gender: '',
+      keyword: '',
+      multipleSelection: [],
     };
   },
   computed: {
@@ -99,10 +101,34 @@ export default {
       },
     },
   },
+  mounted() {
+    this.queryList();
+  },
   methods: {
+    async queryList() {
+      const res = await this.$api.userFollowInterface.getClientInfoListPage({
+        keywords: this.keyword,
+        pageNo: this.currentPage,
+        pageSize: this.pageSize,
+      });
+      console.log(res.data);
+      const { data } = res.data;
+      if (data) {
+        this.tableData = data.data || [];
+        this.total = data.total;
+      }
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
     search() {},
     reset() {},
     handleCurrentChange() {},
+    addBtn() {
+      this.$emit('change', this.multipleSelection);
+      console.log(this.multipleSelection);
+      this.actives = false;
+    },
   },
 };
 </script>

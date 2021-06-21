@@ -9,10 +9,13 @@ import echarts from 'echarts';
 export default {
   name: 'lifestyle',
   props: {
-    data: Object,
+    data: Array,
   },
   data() {
-    return {};
+    return {
+      lifeList: [],
+      lifedList: [],
+    };
   },
   methods: {
     draw() {
@@ -21,6 +24,109 @@ export default {
       const myChartDrawers = echarts.init(document.getElementById('myCharts'));
       // 绘制条形图
       const option = {
+        title: {
+          text: '',
+          top: 5,
+          right: 5,
+          left: 'center',
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow',
+            shadowStyle: {
+              opacity: 0,
+            },
+          },
+        },
+        // legend: {
+        //   data: ['男性', '女性'],
+        //   top: 5,
+        //   right: 5,
+        //   icon: 'circle',
+        // },
+        // X轴
+        xAxis: {
+          type: 'value',
+          splitLine: {
+            show: true,
+            lineStyle: {
+              color: ['#eef1f5'],
+              width: 1,
+              type: 'solid',
+            },
+          },
+          axisLabel: {
+            show: true,
+          },
+          // y 轴线
+          axisLine: {
+            show: false,
+          },
+        },
+        // Y轴
+        yAxis: {
+          type: 'category',
+          data: [],
+        },
+        // 数据
+        series: [
+          {
+            name: '男性',
+            type: 'bar',
+            data: [],
+            barWidth: 25, // 柱图宽度
+            itemStyle: {
+              normal: {
+                // 柱形图圆角，初始化效果
+                barBorderRadius: [0, 15, 15, 0],
+                color: new echarts.graphic.LinearGradient(1, 1, 0, 0, [
+                  {
+                    offset: 0,
+                    color: '#3154AC',
+                  },
+                  {
+                    offset: 1,
+                    color: '#4B86FF',
+                  },
+                ]),
+                // label: {
+                //   show: true, // 开启显示
+                //   position: 'top', // 在上方显示
+                //   textStyle: {
+                //     // 数值样式
+                //     color: '#333',
+                //     fontSize: 14,
+                //   },
+                // },
+              },
+            },
+          },
+          {
+            name: '女性',
+            type: 'bar',
+            data: [],
+            barWidth: 25, // 柱图宽度
+            itemStyle: {
+              normal: {
+                // 柱形图圆角，初始化效果
+                barBorderRadius: [0, 15, 15, 0],
+                color: new echarts.graphic.LinearGradient(1, 1, 0, 0, [
+                  {
+                    offset: 0,
+                    color: '#F33D21',
+                  },
+                  {
+                    offset: 1,
+                    color: '#FF5085',
+                  },
+                ]),
+              },
+            },
+          },
+        ],
+      };
+      const optiones = {
         title: {
           text: '',
           top: 5,
@@ -64,14 +170,14 @@ export default {
         // Y轴
         yAxis: {
           type: 'category',
-          data: ['未知', '糟糕', '一般', '合理'],
+          data: [],
         },
         // 数据
         series: [
           {
             name: '男性',
             type: 'bar',
-            data: [120, 100, 440, 320],
+            data: [],
             barWidth: 25, // 柱图宽度
             itemStyle: {
               normal: {
@@ -102,7 +208,7 @@ export default {
           {
             name: '女性',
             type: 'bar',
-            data: [200, 120, 240, 330],
+            data: [],
             barWidth: 25, // 柱图宽度
             itemStyle: {
               normal: {
@@ -123,14 +229,36 @@ export default {
           },
         ],
       };
+      this.lifeList.forEach((element) => {
+        option.yAxis.data.push(element.codeName);
+        option.series[0].data.push(element.genderMapCount[0].manCount);
+        option.series[1].data.push(element.genderMapCount[1].womanCount);
+      });
       myChartDrawer.setOption(option);
-      myChartDrawers.setOption(option);
+      this.lifedList.forEach((element) => {
+        optiones.yAxis.data.push(element.codeName);
+        optiones.series[0].data.push(element.genderMapCount[0].manCount);
+        optiones.series[1].data.push(element.genderMapCount[1].womanCount);
+      });
+      myChartDrawers.setOption(optiones);
+    },
+    // 吸烟情况
+    async queryList() {
+      const res = await this.$api.statics.lifeclientList({
+        ...this.data,
+        type: 2,
+      });
+      this.lifeList = res.data.data;
+      const resd = await this.$api.statics.lifeclientList({
+        ...this.data,
+        type: 3,
+      });
+      this.lifedList = resd.data.data;
+      this.draw();
     },
   },
   mounted() {
-    console.log(this.data, 123456);
-    // 调用绘制图表的方法
-    this.draw();
+    this.queryList();
   },
 };
 </script>

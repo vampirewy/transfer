@@ -149,6 +149,11 @@ export default {
     this.loadData();
     this.loadCateData();
   },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.viewIndex = 1;
+    });
+  },
   methods: {
     add() {
       this.type = 'add';

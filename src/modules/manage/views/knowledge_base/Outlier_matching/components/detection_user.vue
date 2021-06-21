@@ -1,5 +1,5 @@
 <template>
-  <div class="medical-history-select-user">
+  <div class="medical-history-select-user" >
     <div class="query" style="background:#FFFFFF">
       <!-- <el-input v-model="keyword" placeholder="输入条件搜索"></el-input>
       <el-button class="search-button" @click="search">
@@ -8,19 +8,20 @@
       <div class="searchCondition">
       <div class="searchLeft">
         <div class="searchInputFormItem">
-          <el-input placeholder="名称/项目" v-model="formData.keyWord">
+          <el-input placeholder="名称/项目" v-model="formData.name">
           </el-input>
-          <span class="searchBtnImgSpan" @click="search(1)">
-                  <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
+          <span class="searchBtnImgSpan" style="background:#fff;margin: 1px;">
+                  <img class="searchBtnImg" style="width:35px"
+                  src="@/assets/images/common/topsearch.png"/>
               </span>
         </div>
       </div>
       <div class="searchRight">
         <div class="buttones" style="margin: 10px 10px 0 0;">
-          <div class="searchFor" @click="search(1)" style="margin: 10px 10px 0 0;">
+          <div class="searchFor" @click="search(1)" style="margin: 5px 10px 0 0;">
             <img src="@/assets/images/common/topsearchblue.png" alt="">
           </div>
-          <div class="resetAll" @click="reset">重置</div>
+          <div class="resetAll" @click="reset" style="margin: 5px 10px 0 0;">重置</div>
         </div>
       </div>
     </div>
@@ -74,9 +75,8 @@ export default {
   data() {
     return {
       formData: {
-        keyword: '',
+        name: '',
       },
-      keyword: '',
       tableData: [],
       total: 0,
       currentPage: 1,
@@ -114,13 +114,17 @@ export default {
       this.queryList();
     },
     reset() {
-
+      this.formData.name = '';
+      this.currentPage = 1;
+      this.queryList();
     },
     async queryList() {
+      const vm = this;
+      console.log(vm.formData.name, '12122');
       const reqBody = {
-        itemName: this.formData.keyword,
-        pageno: this.currentPage,
-        pagesize: this.pageSize,
+        itemName: this.formData.name,
+        pageNo: this.currentPage,
+        pageSize: this.pageSize,
       };
       const res = await this.$api.physicalProjectListInterface.listPage(
         reqBody,

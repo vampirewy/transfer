@@ -277,7 +277,6 @@ export default {
       const reqBody = { paramType: type };
       const res = await this.$api.categoryManage.getdetailtype(reqBody);
       const { data } = res.data;
-      console.log(data);
       data.forEach((item) => {
         this.tablest[Type - 1].contentList.push({
           name: item.name, code: item.code, checked: false,
@@ -288,9 +287,7 @@ export default {
      * 取消
      */
     cancel() {
-      this.$router.push({
-        path: '/category_manage',
-      });
+      this.$router.go(-1);
     },
     /**
      * 体检库项目新增/更新

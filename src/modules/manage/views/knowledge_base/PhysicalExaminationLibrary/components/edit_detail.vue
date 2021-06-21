@@ -57,8 +57,8 @@
               :label="item.label"
               :value="item.value"
             ></el-option> -->
-            <el-option label="是" value="1" key="1"></el-option>
-            <el-option label="否" value="2" key="2"></el-option>
+            <el-option label="是" :value="1" key="1"></el-option>
+            <el-option label="否" :value="2" key="2"></el-option>
           </el-select>
         </el-form-item>
       <!-- </el-col> -->
@@ -92,7 +92,7 @@ export default {
   name: 'edit_or_detail',
   props: {
     visible: Boolean,
-    value: Boolean,
+    value: {},
     libraryList: {},
   },
   // props: ['id', 'editId'],
@@ -103,14 +103,15 @@ export default {
       result: '',
       results: '',
       state: '',
-      importLibraryId: '',
+      importLibraryId: '0',
       resultOptions: [],
     };
   },
   mounted() {
-    console.log(this.value, '接收的数据');
+    // console.log(this.value, '接收的数据');
     this.name = this.value.name;
     this.importLibraryId = this.value.reportTotal;
+    // console.log(this.importLibraryId, '接收的数据111');
     this.state = this.value.state;
     this.getLibraryList();
   },

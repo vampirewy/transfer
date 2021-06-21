@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :title="value.type === 1 ? '编辑' : '编辑体检库'"
+    :title="id? '编辑计划' : '新增计划'"
     class="dialog-detail"
     :modal-append-to-body="false"
     width="570px"
@@ -203,16 +203,28 @@ export default {
     };
   },
   mounted() {
+    // if (!this.id) {
+    //   console.log('新增');
+    //   this.form.monthsModel = null;
+    //   this.form.daysModel = null;
+    //   this.form.planWay = '';
+    //   this.form.planContent = '';
+    //   this.form.results = '';
+    //   this.form.interfereform = '';
+    //   this.form.Prompt = '';
+    // }
     const date = new Date();
     const year = date.getFullYear(); // 获取当前年
     this.yearsModel = year;
     this.initSelectMonth(); // 加载月份
-    // console.log(this.value, this.id, this.interveneTemplateId, '接收的数据');
-    this.form.monthsModel = this.value.month;
-    this.form.daysModel = this.value.day;
-    this.results = this.value.planContent;
-    this.interfereform = this.value.planWayTxt;
-    this.Prompt = this.value.planWay;
+    if (this.id) {
+      console.log(this.value, this.id, this.interveneTemplateId, '接收的数据');
+      this.form.monthsModel = this.value.month;
+      this.form.daysModel = this.value.day;
+      this.results = this.value.planContent;
+      this.interfereform = this.value.planWay;
+      this.Prompt = this.value.planWay;
+    }
     this.getPlanWayList();
   },
   methods: {
@@ -305,6 +317,15 @@ export default {
             planWay: this.interfereform,
             planContent: this.Prompt,
           };
+          if (!this.form.monthsModel) {
+            return this.$message.warning('请选择月份');
+          }
+          if (!this.form.daysModel) {
+            return this.$message.warning('请选择日期');
+          }
+          if (this.interfereform === '') {
+            return this.$message.warning('请选择干预形式');
+          }
           console.log('obj', obj);
           if (this.id === '') {
             this.$api.interventionTemplateInterface

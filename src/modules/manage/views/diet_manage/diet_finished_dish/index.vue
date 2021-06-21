@@ -177,6 +177,11 @@ export default {
     this.loadData();
     this.loadCaiCategory(1);
   },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.viewIndex = 1;
+    });
+  },
   methods: {
     add() {
       this.id = '';

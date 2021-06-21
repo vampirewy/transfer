@@ -67,7 +67,7 @@
                        :key="index"></el-option>
           </el-select>
           </div>
-          <div v-if="Tabactive == 0">
+          <!-- <div v-if="Tabactive == 0">
             <span>审核状态：</span>
             <el-select
                   v-model="form.doctorId"
@@ -77,8 +77,8 @@
             <el-option :label="item.realName" :value="item.id" v-for="(item, index) in doctorList"
                        :key="index"></el-option>
           </el-select>
-          </div>
-          <div v-else-if="Tabactive == 1">
+          </div> -->
+          <!-- <div v-if="Tabactive == 1">
             <span>总分数段：</span>
             <el-select
                   v-model="form.doctorId"
@@ -88,8 +88,8 @@
             <el-option :label="item.realName" :value="item.id" v-for="(item, index) in doctorList"
                        :key="index"></el-option>
           </el-select>
-          </div>
-            <div v-else>
+          </div> -->
+            <div>
             <span>问卷来源：</span>
             <el-select
                   v-model="form.source"
@@ -191,6 +191,7 @@
           <div v-if="Tabactive == 1">
             <el-table
               ref="table"
+              :key="Tabactive"
               class="has-expand-table"
               style="width: 100%"
               @selection-change="handleSelectionChange"
@@ -222,18 +223,20 @@
               <el-table-column type="selection" width="40"></el-table-column>
               <el-table-column label="客户编号" prop="id" width="90" show-overflow-tooltip>
               </el-table-column>
-              <el-table-column label="姓名" prop="createdByName" align="center" show-overflow-tooltip>
+              <el-table-column label="姓名" prop="clientName" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
                   <span class="clientName"
                         @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
-                    {{ scope.row.createdByName || '-'}}
+                    {{ scope.row.clientName || '-'}}
                   </span>
                 </template>
               </el-table-column>
               <el-table-column label="性别" prop="gender" width="55" show-overflow-tooltip>
                 <template slot-scope="scope">
-            <span>{{scope.row.gender | getResultGender}}</span>
-          </template>
+                  <span>
+                    {{ scope.row.gender == '1' ? '男': '女'}}
+                  </span>
+                </template>
               </el-table-column>
               <el-table-column label="年龄" prop="age" width="55" show-overflow-tooltip>
                 <template slot-scope="scope">
@@ -309,6 +312,7 @@
           <!-- 生活方式评估 -->
           <div v-if="Tabactive == 0">
             <el-table
+              :key="Tabactive"
               ref="table"
               class="has-expand-table"
               style="width: 100%"
@@ -476,14 +480,15 @@
           <!-- 中医体质评估 -->
           <div v-if="Tabactive == 2">
             <el-table
-              ref="table"
+              :key="Tabactive"
+              ref="tables"
               class="has-expand-table"
               style="width: 100%"
               @selection-change="handleSelectionChange"
               :row-key="getRowKeys"
               @expand-change="handleExpandChange"
               align="center"
-              :data="table.list">
+              :data="dataSource">
               <el-table-column type="expand" width="1" class-name="hide-expand-column">
                 <el-table :data="expandData.list" class="expand-table">
                   <el-table-column
@@ -506,7 +511,7 @@
                 </el-table>
               </el-table-column>
               <el-table-column type="selection" width="40"></el-table-column>
-              <el-table-column label="体检编号" prop="reportNo" show-overflow-tooltip>
+              <el-table-column label="体检编号" prop="clientNo" show-overflow-tooltip>
               </el-table-column>
               <el-table-column label="姓名" prop="clientName" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
@@ -516,13 +521,18 @@
                   </span>
                 </template>
               </el-table-column>
-              <el-table-column label="性别" prop="genderTxt" show-overflow-tooltip>
+              <el-table-column label="性别" prop="gender" show-overflow-tooltip>
+                <template slot-scope="scope">
+                  <span class="clientName">
+                    {{ scope.row.gender == '1' ? '男': '女'}}
+                  </span>
+                </template>
               </el-table-column>
               <el-table-column label="年龄" prop="age" show-overflow-tooltip>
               </el-table-column>
               <el-table-column
                 label="人员类别"
-                prop="gradeName"
+                prop="clientGridName"
                 min-width="80"
                 show-overflow-tooltip>
               </el-table-column>
@@ -532,15 +542,26 @@
                 min-width="80"
                 show-overflow-tooltip>
               </el-table-column>
-              <el-table-column label="体检日期" prop="reportDate" min-width="90" show-overflow-tooltip>
+              <el-table-column label="体检日期" prop="questionDate"
+              min-width="90" show-overflow-tooltip>
               </el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
-                  <el-button
-                    type='text'
+            <el-button
+                    type="text"
                     size="small"
-                    @click="openPdf(scope.row)">查看</el-button>
-                </template>
+                    @click="
+                $router.push({
+                  name: 'health_questionnaire_detail',
+                  params: {
+                    qusType: scope.row.questionType,
+                    id: scope.row.id,
+                  },
+                })
+              " v-if="getAccess('china_constitution_questionnaire_view')
+              "
+            >查看</el-button>
+          </template>
               </el-table-column>
             </el-table>
             <div style="text-align: right">
@@ -573,7 +594,7 @@ import Examine from './examine.vue';
 import Comment from './comment.vue';
 import MatchException from './match_exception.vue';
 import QuestionsOpen from '~/src/components/date_select/questions_open.vue';
-import { MAX_PAGESIZE } from '~/src/libs/util/index';
+// import { MAX_PAGESIZE } from '~/src/libs/util/index';
 
 export default {
   name: 'assessment_report',
@@ -602,6 +623,7 @@ export default {
         reportNo: '',
         workUnitName: '',
         gridId: '',
+        gender: '',
         minReportDate: null,
         maxReportDate: null,
         minAssessReportDate: null,
@@ -613,6 +635,7 @@ export default {
         pageNo: 1,
         total: 0,
       },
+      dataSource: [],
       clientTypeList: [],
       gridList: [],
       questionFromList: [],
@@ -663,7 +686,7 @@ export default {
         vm.form.maxAssessReportDate = HomeSearchData.lastDate;
         vm.form.searchRange = HomeSearchData.searchRange;
       }
-      vm.getClientTypeList();
+      // vm.getClientTypeList();
       vm.queryPageList();
       vm.getGridList();
       vm.getQuestionFromList();
@@ -748,6 +771,7 @@ export default {
       this.queryPageList();
     },
     reset() {
+      this.form.gender = '';
       this.form.keywords = '';
       this.form.workUnitName = '';
       this.form.gridId = '';
@@ -785,16 +809,46 @@ export default {
         this.table.total = data.data.total;
         this.table.list = data.data.data;
       });
+      // 中医体质评估
+      this.$api.health
+        .fetch(Object.assign({
+          clientGrid: '',
+          gender: '',
+          keyWord: '',
+          pageNo: 1,
+          pageSize: 15,
+          questionType: 2,
+          source: '',
+        }))
+        .then(({ data }) => {
+          this.total = data.data.total;
+          this.dataSource = data.data.data;
+        });
+      // 心理问卷
+      this.$api.health
+        .fetch(Object.assign({
+          clientGrid: '',
+          gender: '',
+          keyWord: '',
+          pageNo: 1,
+          pageSize: 15,
+          questionType: 3,
+          source: '',
+        }))
+        .then(({ data }) => {
+          this.total = data.data.total;
+          this.clientTypeList = data.data.data;
+        });
     },
     // 心理问卷
-    getClientTypeList() {
-      this.$api.medicalHistoryInterface.clientTypeList({
-        pageNo: 1,
-        pageSize: MAX_PAGESIZE,
-      }).then((res) => {
-        this.clientTypeList = res.data.data.data;
-      });
-    },
+    // getClientTypeList() {
+    //   this.$api.medicalHistoryInterface.clientTypeList({
+    //     pageNo: 1,
+    //     pageSize: MAX_PAGESIZE,
+    //   }).then((res) => {
+    //     this.clientTypeList = res.data.data.data;
+    //   });
+    // },
     checkRangeDate() {
       if (this.form.minReportDate && this.form.maxReportDate
       && new Date(this.form.minReportDate) > new Date(this.form.maxReportDate)) {

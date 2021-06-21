@@ -18,6 +18,8 @@
             <span>是否启用：</span>
                 <el-switch
                   v-model="isstate"
+                  :active-value="1"
+                  :inactive-value="0"
                   active-color="#13ce66"
                   @change=changeStatus()
                   >
@@ -160,6 +162,12 @@
       :id="valueidInfo"
       @cancels="cancels"
     ></edit-detail-info>
+    <div class="handle-btn mt30 mb30">
+      <el-button class="reset-btn" size="small" @click="goBack"
+        >返回</el-button>
+      <!-- <el-button class="add-btn" type="primary" size="small" @click="submit"
+        >保存</el-button> -->
+    </div>
   </div>
 </template>
 
@@ -187,7 +195,7 @@ export default {
   },
   data() {
     return {
-      isstate: true,
+      isstate: 0,
       isTrue: true,
       value: true,
       total: 0,
@@ -228,8 +236,18 @@ export default {
     // this.getDoctor(); // 获取医生列表
     // this.getDetail();
     this.fetch();
+    this.TemplateList();
   },
   methods: {
+    TemplateList() {
+      this.$api.medicalHistoryInterface.updateInterveneTemplate(this.ids).then((res) => {
+        const { data } = res.data;
+        this.templateName = data.name;
+        this.isstate = data.state;
+        this.qualification = data.conditionTxt;
+        // console.log(data, 'sdadas');
+      });
+    },
     async getDetail() {
       const reqBody = { id: this.ids };
       const res = await this.$api.interventionTemplateInterface.getInterveneTemplateById(
@@ -272,6 +290,7 @@ export default {
       //   name: 'InterventionAdd',
       // });
       // console.log(this.ids, 'asdasd');
+      this.valueid = '';
       this.modalVisible = true;
     },
     edits(row) {
@@ -491,6 +510,9 @@ export default {
           }
         });
     },
+    goBack() {
+      this.$router.go(-1);
+    },
   },
 };
 </script>
@@ -617,5 +639,26 @@ export default {
     }
   }
 }
-
+.handle-btn {
+    text-align: center;
+    margin-top: 30px;
+    .reset-btn {
+      width: 90px;
+      height: 40px;
+      background: rgba(49, 84, 172, 0.1);
+      border-radius: 20px;
+      border: 1px solid #3154AC;
+      text-align:center;
+      color: #3154AC;
+    }
+    .add-btn {
+      width: 90px;
+      height: 40px;
+      background: rgba(49, 84, 172, 0.1);
+      border-radius: 20px;
+      background: #3154AC;
+      border: 1px solid #3154AC;
+      text-align:center;
+    }
+  }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="sport-template">
     <div class="searchInputFormItem">
-      <el-input v-model="name" placeholder="输入运动名称搜索"></el-input>
+      <el-input v-model="name" placeholder="输入名称搜索"></el-input>
       <span class="searchBtnImgSpan" @click="search">
         <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
       </span>
@@ -12,28 +12,14 @@
           <el-checkbox-group v-model="selected">
             <el-checkbox
               name="selected"
-              :label="scope.row.id"
+              :label="scope.row.workUnitName"
               @change="val => checkedChange(val, scope.row)">&nbsp;
             </el-checkbox>
           </el-checkbox-group>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="运动名称" align="center"></el-table-column>
-      <el-table-column prop="sportType" label="运动类型" align="center">
-        <template slot-scope="scope">{{sportTypeMap[scope.row.sportType]}}</template>
-      </el-table-column>
-      <el-table-column prop="sportSort" label="运动分类" align="center">
-        <template slot-scope="scope">{{sportSortMap[scope.row.sportSort]}}</template>
-      </el-table-column>
-      <el-table-column prop="strengthDegree" label="运动强度" align="center">
-        <template slot-scope="scope">{{strengthDegreeMap[scope.row.strengthDegree]}}</template>
-      </el-table-column>
-      <el-table-column prop="met" label="代谢当量" align="center"></el-table-column>
-      <el-table-column
-        prop="desease"
-        label="运动禁忌疾病"
-        align="center"
-        min-width="120">
+      <el-table-column prop="workUnitName" label="名称" align="center"></el-table-column>
+      <el-table-column prop="total" label="人数" align="center">
       </el-table-column>
     </el-table>
     <el-pagination
@@ -73,7 +59,7 @@ export default {
     sportTypeMap() {
       const map = {};
       sportTypeList.forEach((item) => {
-        map[item.value] = item.name;
+        map[item.value] = item.workUnitName;
       });
       return map;
     },
@@ -120,7 +106,7 @@ export default {
       this.queryList();
     },
     async queryList() {
-      const res = await this.$api.sportListInterface.getSportLibraryListPage({
+      const res = await this.$api.accessReport.groupReportinfo({
         keywords: this.name,
         pageNo: this.currentPage,
         pageSize: this.pageSize,

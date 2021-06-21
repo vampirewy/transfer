@@ -46,6 +46,7 @@
               placement="bottom-start"
               width="650"
               trigger="click"
+              popover-class="popoverCss"
               @show="detectionpopoverStatus = true"
               @hide="detectionhandlePopoperClose"
             >
@@ -267,6 +268,9 @@ export default {
       }
     },
     async submit() {
+      if (this.addProject.length === 0) {
+        return this.$message.warning('请选择检测项目');
+      }
       const arr = [];
       this.addProject.forEach((val) => {
         arr.push(val.itemName);
@@ -274,6 +278,7 @@ export default {
       const reqBody = { id: this.value, nameList: arr };
       await this.$api.projectList.systemIteMatch(reqBody);
       this.$message.success('操作成功');
+      this.$emit('cancel');
       // this.cancel('refreash');
       // await this.$api.companyManageInterface.updateWorkUnit({
       //   id: this.value.id,
@@ -290,6 +295,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .popoverCss{
+    margin-top: -30px;
+  }
 /deep/ .el-dialog__body{
   padding: 5px 26px 10px 26px !important;
 }

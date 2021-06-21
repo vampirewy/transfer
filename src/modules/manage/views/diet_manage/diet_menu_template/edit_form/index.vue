@@ -9,14 +9,14 @@
             <p class="desc">膳食平衡宝塔</p>
           </div>
         </div>
-        <div class="diet-type-item">
+        <div class="diet-type-item" @click="isShowDietPagodaGuide = true">
           <img src="@/assets/images/diet/diet_image2.png" alt="膳食指南" />
           <div>
             <p class="title">中国居民</p>
             <p class="desc">膳食指南</p>
           </div>
         </div>
-        <div class="diet-type-item">
+        <div class="diet-type-item" @click="isShowDietPagodaExchange = true">
           <img src="@/assets/images/diet/diet_image3.png" alt="食物交换份" />
           <div>
             <p class="title">常见</p>
@@ -38,6 +38,7 @@
               editable
               @tab-remove="removeTab"
               @tab-add="addTab"
+              @tab-click="handleTabsEdit"
               v-model="editableTabsValue"
             >
               <el-tab-pane
@@ -166,16 +167,16 @@
             header-row-class-name="table-row"
             :data="analysisData"
           >
-            <el-table-column align="center" prop="title" label="成分">
+            <el-table-column align="center" prop="name" label="成分">
             </el-table-column>
-            <el-table-column align="center" prop="title2" label="推荐量">
+            <el-table-column align="center" prop="recommendQuantity" label="推荐量">
               <template slot-scope="scope">
-                <span class="analysis-high">{{ scope.row.title2 }}</span>
+                <span class="analysis-high">{{ scope.row.recommendQuantity }}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" prop="title3" label="提供量">
+            <el-table-column align="center" prop="provideQuantity" label="提供量">
               <template slot-scope="scope">
-                <span class="analysis-low">{{ scope.row.title3 }}</span>
+                <span class="analysis-low">{{ scope.row.provideQuantity }}</span>
               </template>
             </el-table-column>
           </el-table>
@@ -183,21 +184,21 @@
         <el-tab-pane lazy name="2" label="物质及能量分配">
           <div class="chart-box">
             <p class="item-title">三大营养素供能比</p>
-            <diet-proportion-chart></diet-proportion-chart>
+            <diet-proportion-chart :list="dietTemplateMaterial"></diet-proportion-chart>
             <p class="chart-desc">
               三大营养素推荐比值：蛋白质10%~15%，脂肪20%~30%，碳水化合物55%~65%
             </p>
           </div>
           <div class="chart-box">
             <p class="item-title">动物性及豆类蛋白质占总蛋白质比例</p>
-            <diet-proteinroportion-chart></diet-proteinroportion-chart>
+            <diet-proteinroportion-chart :list="dietTemplateMaterial"></diet-proteinroportion-chart>
             <p class="chart-desc">
               一般推荐动物性蛋白质和豆类蛋白质占膳食蛋白质总量30%~50%。
             </p>
           </div>
           <div class="chart-box">
             <p class="item-title">三餐能量分配比</p>
-            <diet-distribution-chart></diet-distribution-chart>
+            <diet-distribution-chart :list="dietTemplateMaterial"></diet-distribution-chart>
             <p class="chart-desc">
               三餐推荐分配比：早餐30%，午餐40%，晚餐30%。
             </p>
@@ -211,6 +212,8 @@
     ></el-food-op>
     <el-cooking :visible.sync="isShowCooking"></el-cooking>
     <el-diet-pagoda :visible.sync="isShowDietPagoda"></el-diet-pagoda>
+    <el-diet-pagoda-guide :visible.sync="isShowDietPagodaGuide"></el-diet-pagoda-guide>
+    <el-diet-pagoda-exchange :visible.sync="isShowDietPagodaExchange"></el-diet-pagoda-exchange>
   </div>
 </template>
 
@@ -221,6 +224,9 @@ import dietDistributionChart from '../../chart_data/diet_distribution.vue'; // �
 import elFoodOp from '../../diet_programme/edit_form/el_modal/el_food_op.vue'; // 食物操作
 import elCooking from '../../diet_programme/edit_form/el_modal/el_cooking.vue'; // 食谱烹饪方式
 import elDietPagoda from '../../diet_programme/edit_form/el_modal/el_diet_pagoda.vue'; // 膳食宝塔
+import elDietPagodaGuide from '../../diet_programme/edit_form/el_modal/el_diet_pagoda_guide.vue'; // 膳食宝塔
+import elDietPagodaExchange from '../../diet_programme/edit_form/el_modal/el_diet_pagoda_exchange.vue'; // 膳食宝塔
+import deleteIcon from '~/src/assets/images/common/editIcon.png';
 
 export default {
   name: 'diet_form',
@@ -231,6 +237,8 @@ export default {
     dietProportionChart,
     dietProteinroportionChart,
     dietDistributionChart,
+    elDietPagodaGuide,
+    elDietPagodaExchange,
   },
   props: {
     id: {
@@ -240,6 +248,8 @@ export default {
   },
   data() {
     return {
+      isShowDietPagodaGuide: false, // 膳食指南
+      isShowDietPagodaExchange: false, // 食物交换
       isShowDietPagoda: false,
       isShowCooking: false,
       isShowDietRule: false,
@@ -248,14 +258,14 @@ export default {
       isShowTemplateInput: false,
       isShowPeopleSelect: false,
       isActive: false,
-      analysisData: [
-        { title: '能量', title2: '2205.23 kcal', title3: '2203.23 kcal' },
-      ],
+      analysisData: [],
       mealTypeText: ['早餐', '午餐', '晚餐', '加餐'],
       dietCollapseActiveNames: '1',
       activeCaiDtoIndex: '',
       editableTabsValue: '1',
       editableTabs: [],
+      arrList: [],
+      dietTemplateMaterial: {},
     };
   },
   created() {
@@ -273,12 +283,73 @@ export default {
     switchCaiDtoIndex(index) {
       this.activeCaiDtoIndex = index === this.activeCaiDtoIndex ? '' : index;
     },
+    async Analysis() {
+      await this.$api.dietRawMaterial
+        .clientDietTemplateAnalysis({
+          dietTemplateMealList: this.arrListInfo,
+          // clientIdList: this.pageList,
+        })
+        .then((res) => {
+          if (res.data.success) {
+            this.analysisData = res.data.data.dietTemplateNutritionList;
+            this.dietTemplateMaterial = res.data.data.dietTemplateMaterial;
+            // console.log(res.data.data, '右侧数据');
+          }
+        });
+    },
     loadData() {
       this.$api.dietMenuTemplateInterface
         .getDietMenuTemConfigDetail(this.id)
         .then((res) => {
           this.editableTabs = res.data.data;
+          this.DataProcessing(res.data.data);
         });
+    },
+    // 数据处理
+    DataProcessing(lists) {
+      console.log(lists, '1221212');
+      const arr = [];
+      for (let i = 0; i < lists.length; i++) {
+        const json = {};
+        json.day = lists[i].day;
+        json.clientDietPlanConfigList = [];
+        for (let j = 0; j < lists[i].mealTypeDtos.length; j++) {
+          if (lists[i].mealTypeDtos[j].dietTemplateConfigDtos.length !== 0) {
+            for (let x = 0;
+              x < lists[i].mealTypeDtos[j].dietTemplateConfigDtos.length;
+              x++) {
+              const jsons = {
+                caiType:
+                lists[i].mealTypeDtos[j].dietTemplateConfigDtos[x].configType,
+                mealType:
+                lists[i].mealTypeDtos[j].dietTemplateConfigDtos[x].mealType,
+                weight: lists[i].mealTypeDtos[j].dietTemplateConfigDtos[x].weight,
+              };
+              if (jsons.caiType === 1) {
+                jsons.caiId =
+                lists[i].mealTypeDtos[j].dietTemplateConfigDtos[x].caiId;
+              }
+              if (jsons.caiType === 2) {
+                jsons.ingredientId =
+                lists[i].mealTypeDtos[j].dietTemplateConfigDtos[x].dietIngredientId;
+              }
+              json.clientDietPlanConfigList.push(jsons);
+            }
+          }
+        }
+        arr.push(json);
+      }
+      this.arrList = arr;
+      this.makeIndex(0);
+    },
+    makeIndex(index) {
+      if (this.arrList[index]) {
+        this.arrListInfo = this.arrList[index].clientDietPlanConfigList;
+        this.Analysis();
+      }
+    },
+    handleTabsEdit(e) {
+      this.makeIndex(e.index);
     },
     back() {
       this.$parent.viewIndex = 1;
@@ -286,18 +357,33 @@ export default {
     removeTab(day) {
       const index = this.editableTabs.findIndex(item => item.day === day * 1);
       this.editableTabs.splice(index, 1);
+      this.editableTabs.forEach((val, indexs) => {
+        val.day = indexs + 1;
+      });
     },
     addTab() {
-      const day = this.editableTabs.length + 1;
-      const meal = {
-        day,
-        mealTypeDtos: [
-          { mealType: 1, dietTemplateConfigDtos: [] },
-          { mealType: 2, dietTemplateConfigDtos: [] },
-          { mealType: 3, dietTemplateConfigDtos: [] },
-        ],
-      };
-      this.editableTabs.push(meal);
+      if (this.editableTabs.length < 7) {
+        const day = this.editableTabs.length + 1;
+        const meal = {
+          day,
+          mealTypeDtos: [
+            { mealType: 1, dietTemplateConfigDtos: [] },
+            { mealType: 2, dietTemplateConfigDtos: [] },
+            { mealType: 3, dietTemplateConfigDtos: [] },
+          ],
+        };
+        this.editableTabs.push(meal);
+      } else {
+        this.remove();
+      }
+    },
+    remove() {
+      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>最多只能创建七天模板哦~</span></div>`, '提示', {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: '确定',
+        customClass: 'message-box-customize',
+      }).then(
+      );
     },
     foodAdd(index, inx) {
       this.selectDietMenuIndex = [index, inx];
@@ -329,8 +415,10 @@ export default {
       this.editableTabs[index].mealTypeDtos[inx].dietTemplateConfigDtos.push(
         ...e,
       );
+      console.log(this.editableTabs);
     },
     submit() {
+      // console.dir(this.editableTabs);
       const obj = [];
       this.editableTabs.forEach((item) => {
         item.mealTypeDtos.forEach((item2) => {
@@ -359,6 +447,7 @@ export default {
           });
         });
       });
+      // console.dir(obj);
       this.$api.dietMenuTemplateInterface
         .saveDietMenuTemConfig(obj)
         .then(() => {

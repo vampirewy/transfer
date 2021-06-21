@@ -39,7 +39,35 @@ class AccessReport extends BaseModule {
   }
   // 团报配置
   groupReportdetail(params = {}) {
-    return this.post('/group_report_catalog_config/get_detail', params);
+    return this.get('/group_report_catalog_config/get_detail', params);
+  }
+  // 更新团报
+  groupReportsave(params = {}) {
+    return this.post('/group_report_catalog_config/save', params);
+  }
+  // 参检团队列表
+  groupReportinfo(params = {}) {
+    return this.post('/report_info/get_report_work_unit_name_page_list', params);
+  }
+  // 参检团队限定日期内的总人数
+  groupnametotal(params = {}) {
+    return this.post('/report_info/get_report_work_unit_name_total', params);
+  }
+  // 参检单位列表
+  groupworklist(params = {}) {
+    return this.post('/report_info/get_client_work_unit_name_page_list', params);
+  }
+  // 参检单位限定日期内的总人数
+  groupworktotal(params = {}) {
+    return this.post('/report_info/get_client_work_unit_name_total', params);
+  }
+  // 参检部门列表
+  departmentlist(params = {}) {
+    return this.post('/report_info/get_client_department_name_page_list', params);
+  }
+  // 参检部门限定日期内的总人数
+  departmenttotal(params = {}) {
+    return this.post('/report_info/get_client_department_name_total', params);
   }
 }
 

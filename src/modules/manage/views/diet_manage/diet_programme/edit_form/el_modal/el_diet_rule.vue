@@ -38,10 +38,13 @@
       row-class-name="table-row"
       header-row-class-name="table-row"
       :data="tableData"
+      @selection-change="handleSelectionChange"
     >
-      <el-table-column align="center" type="selection" width="55">
+      <el-table-column type="selection" align="center" width="55">
       </el-table-column>
-      <el-table-column align="center" prop="title" label="规则名称">
+      <!-- <el-table-column align="center" type="selection" width="55">
+      </el-table-column> -->
+      <el-table-column align="center" prop="name" label="规则名称">
       </el-table-column>
     </el-table>
     <el-pagination
@@ -58,15 +61,23 @@
         <el-radio :label="1">直接添加</el-radio>
         <el-radio :label="2">覆盖当前</el-radio>
       </el-radio-group>
-      <el-button type="primary" class="add-btn">确定添加</el-button>
+      <el-button type="primary" class="add-btn" @click="DetermineAdd">确定添加</el-button>
     </div>
     <p class="item-title">已添加规则</p>
-    <div class="added-rule-box">
-      <p>1.限制总能量，保持适宜体重。每天总能量一般给予每公斤体重20~25千卡。</p>
-      <p>
-        2.多食用素食为主的碱性食物，如各种蔬菜、水果、鲜果汁、马铃薯、甘薯、海藻、紫菜、海带、西瓜、冬瓜等。
-      </p>
+    <div class="row">
+      <el-input
+        type="textarea"
+        :rows="5"
+        v-model="ingrenient"
+        placeholder="请输入"
+        show-word-limit
+      ></el-input>
     </div>
+    <!-- <div class="added-rule-box">
+      <div v-for="(item, index) in ruleList" :key="index">
+        <p>{{item.content}}</p>
+      </div>
+    </div> -->
     <div slot="footer" class="dialog-footer">
       <el-button size="small" @click="visibles = false" class="cancelBtn"
         >取消</el-button
@@ -84,6 +95,12 @@ export default {
       type: Boolean,
       default: false,
     },
+    DietRule: {
+      type: String,
+      default() {
+        return {};
+      },
+    },
     value: {
       type: Object,
       default() {
@@ -98,6 +115,9 @@ export default {
       currentPage: 1,
       pageSize: 15,
       tableData: [{ title: '高血压病合并高血糖的营养食疗原则' }],
+      multipleSelection: [],
+      ruleList: '',
+      ingrenient: '',
     };
   },
   computed: {
@@ -110,8 +130,50 @@ export default {
       },
     },
   },
+  mounted() {
+    this.getList();
+    this.ruleList = this.DietRule;
+  },
   methods: {
-    submit() {},
+    DetermineAdd() {
+      if (this.multipleSelection.length !== 0) {
+        if (this.type === 1) {
+          this.$emit('change', this.multipleSelection);
+          this.visibles = false;
+        } else {
+          this.multipleSelection.forEach((val) => {
+            this.ruleList.push(val);
+          });
+          // this.ruleList = this.multipleSelection;
+        }
+        // this.ruleList.forEach((val) => {
+        this.ingrenient = this.ruleList;
+        // });
+      }
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+    async getList() {
+      const reqBody = {
+        keywords: this.keywords,
+        pageNo: this.currentPage,
+        pageSize: this.pageSize,
+      };
+      const res = await this.$api.dietProgrammeInterface.principlegetListPage(
+        reqBody,
+      );
+      const { data } = res.data;
+      if (data) {
+        this.tableData = data.data || [];
+        this.total = data.total;
+      }
+    },
+    submit() {
+      this.$emit('change', this.multipleSelection);
+      this.multipleSelection = [];
+      this.visibles = false;
+    },
     handleCurrentChange() {},
   },
 };

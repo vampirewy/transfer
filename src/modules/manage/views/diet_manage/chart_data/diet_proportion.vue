@@ -3,52 +3,74 @@
 </template>
 <script>
 import * as echarts from 'echarts';
-const options = {
-  tooltip: {
-    trigger: 'item',
-  },
-  legend: {
-    bottom: '0%',
-    left: 'center',
-    itemWidth: 10,
-    itemHeight: 10,
-    textStyle: {
-      color: '#666666',
-    },
-  },
-  series: [
-    {
-      name: '三餐能量分配比',
-      type: 'pie',
-      radius: ['45%', '70%'],
-      avoidLabelOverlap: false,
-      label: {
-        show: true,
-        position: 'inside',
-        formatter: '{c}',
-      },
-      emphasis: {
-        label: {
-          show: false,
-          fontSize: '40',
-          fontWeight: 'bold',
-        },
-      },
-      labelLine: {
-        show: false,
-      },
-      data: [
-        { value: 15, name: '早餐', itemStyle: { color: '#806CE5' } },
-        { value: 30, name: '午餐', itemStyle: { color: '#3154AC' } },
-        { value: 55, name: '晚餐', itemStyle: { color: '#36BF2F' } },
-      ],
-    },
-  ],
-};
 export default {
+  props: {
+    list: {
+      type: Object,
+      default: () => [],
+    },
+  },
+  data() {
+    return {
+      arrlist: [],
+    };
+  },
   mounted() {
-    const myChart = echarts.init(document.getElementById('diet-proportion'));
-    myChart.setOption(options);
+    this.$nextTick(() => {
+      this.initChart();
+    });
+    // const myChart = echarts.init(document.getElementById('diet-proportion'));
+    // myChart.setOption(options);
+    const arr = [
+      { value: this.list.proteinKcal, name: '蛋白质', itemStyle: { color: '#806CE5' } },
+      { value: this.list.fatKcal, name: '脂肪', itemStyle: { color: '#3154AC' } },
+      { value: this.list.choKcal, name: '碳水化合物', itemStyle: { color: '#36BF2F' } },
+    ];
+    this.arrlist = arr;
+  },
+  methods: {
+    initChart() {
+      const myChart = echarts.init(document.getElementById('diet-proportion'));
+      const options = {
+        tooltip: {
+          trigger: 'item',
+        },
+        legend: {
+          bottom: '0%',
+          left: 'center',
+          itemWidth: 10,
+          itemHeight: 10,
+          textStyle: {
+            color: '#666666',
+          },
+        },
+        series: [
+          {
+            name: '三餐能量分配比',
+            type: 'pie',
+            radius: ['45%', '70%'],
+            avoidLabelOverlap: false,
+            label: {
+              show: true,
+              position: 'inside',
+              formatter: '{c}',
+            },
+            emphasis: {
+              label: {
+                show: false,
+                fontSize: '40',
+                fontWeight: 'bold',
+              },
+            },
+            labelLine: {
+              show: false,
+            },
+            data: this.arrlist,
+          },
+        ],
+      };
+      myChart.setOption(options);
+    },
   },
 };
 </script>

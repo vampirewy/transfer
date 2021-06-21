@@ -8,114 +8,13 @@
       label-width="90px"
       label-suffix="："
     >
-      <!-- <div class="basic-info-title">{{id ? '' : '新增'}}短信模版</div> -->
-      <!-- <el-row>
-        <el-col :span="6">
-          <el-form-item label="姓名" prop="clientInfoId">
-            <el-popover
-              ref="userPopover"
-              placement="bottom-start"
-              width="650"
-              trigger="click"
-              @show="popoverStatus = true"
-              @hide="popoverStatus = false">
-              <select-user v-if="popoverStatus"  @change="handleSelectUser"></select-user>
-              <el-input
-                class="select-user-trigger"
-                slot="reference"
-                disabled
-                v-model="currentUser.name"
-                placeholder="请选择客户">
-                <i :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`" slot="suffix"></i>
-              </el-input>
-            </el-popover>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="性别" prop="gender">
-            <el-radio v-model="currentUser.gender" :label="2" disabled>女</el-radio>
-            <el-radio v-model="currentUser.gender" :label="1" disabled>男</el-radio>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="年龄" prop="age">
-            <el-input v-model="currentUser.age" disabled></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="客户编号" prop="customerType">
-            <el-input v-model="currentUser.gridName" disabled></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row> -->
-      <!-- <div class="main-info-title">新增短信</div> -->
       <div class="form-title">
         <div class="line"></div>
-        <h3 class="name">{{ids ? '编辑' : '新增'}}计划</h3>
+        <h3 class="name">{{ids ? '编辑' : '新增'}}短信</h3>
       </div>
       <el-row>
-        <!-- <el-col :span="6">
-          <el-form-item label="就医编号" prop="hospital">
-            <el-input v-model="form.hospital" placeholder="请输入"></el-input>
-          </el-form-item>
-        </el-col>
         <el-col :span="6">
-          <el-form-item label="就医类型" prop="medicalType">
-            <el-select v-model="form.medicalType" placeholder="请选择就医类型">
-              <el-option
-                v-for="item in typeOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="医保卡号" prop="department">
-            <el-input v-model="form.department" placeholder="请输入"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="就医机构" prop="patientNo">
-            <el-input v-model="form.patientNo" placeholder="请输入" @input="replace"></el-input>
-          </el-form-item>
-        </el-col> -->
-        <!-- <el-col :span="6">
-          <el-form-item label="就医科室" prop="doctorName">
-            <el-input v-model="form.doctorName" placeholder="请输入"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="主管医生" prop="hpi">
-            <el-input v-model="form.hpi" placeholder="请输入" :maxlength="300"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="就医时间" prop="inDate">
-            <el-date-picker
-              v-model="form.inDate"
-              type="date"
-              placeholder="请选择就医时间"
-              value-format="yyyy-MM-dd"
-              :picker-options="options.inDate"
-              @change="handleStartDateChange"
-            ></el-date-picker>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="出院时间" prop="outDate">
-            <el-date-picker
-              v-model="form.outDate"
-              type="date"
-              placeholder="请选择出院时间"
-              value-format="yyyy-MM-dd"
-              :picker-options="options.outDate"
-            ></el-date-picker>
-          </el-form-item>
-        </el-col> -->
-        <el-col :span="6">
-          <el-form-item label="短信类别" prop="result" >
+          <el-form-item label="短信类别" prop="smsTypeName" >
             <el-select v-model="form.smsTypeName" placeholder="请选择当前状态" width="150">
               <el-option
                 v-for="item in smsTypes"
@@ -127,7 +26,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="短信主题" prop="result">
+          <el-form-item label="短信主题" prop="ThemeListName">
             <el-select v-model="form.ThemeListName" placeholder="请选择当前状态">
               <el-option
                 v-for="item in ThemeList"
@@ -139,31 +38,32 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="适宜性别" prop="result">
+          <el-form-item label="适宜性别" prop="gender">
             <el-select v-model="form.gender" placeholder="请选择当前状态">
-              <el-option label="男" value="1" key="1"></el-option>
-              <el-option label="女" value="2" key="2"></el-option>
+              <el-option label="不限" :value="0" key="0"></el-option>
+              <el-option label="男" :value="1" key="1"></el-option>
+              <el-option label="女" :value="2" key="2"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="适宜人群" prop="result">
+          <el-form-item label="适宜人群" prop="Crowd">
             <el-select v-model="form.Crowd" placeholder="请选择当前状态">
-              <el-option label="不限" value="0" key="0"></el-option>
-              <el-option label="成人" value="1" key="1"></el-option>
-              <el-option label="老人" value="2" key="2"></el-option>
-              <el-option label="少儿" value="3" key="3"></el-option>
+              <el-option label="不限" :value="0" key="0"></el-option>
+              <el-option label="成人" :value="1" key="1"></el-option>
+              <el-option label="老人" :value="2" key="2"></el-option>
+              <el-option label="少儿" :value="3" key="3"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="适宜季节" prop="result">
+          <el-form-item label="适宜季节" prop="Season">
             <el-select v-model="form.Season" placeholder="请选择当前状态">
-              <el-option label="不限" value="0">不限</el-option>
-              <el-option label="春" value="1">春</el-option>
-              <el-option label="夏" value="2">夏</el-option>
-              <el-option label="秋" value="3">秋</el-option>
-              <el-option label="冬" value="4">冬</el-option>
+              <el-option label="不限" :value="0">不限</el-option>
+              <el-option label="春" :value="1">春</el-option>
+              <el-option label="夏" :value="2">夏</el-option>
+              <el-option label="秋" :value="3">秋</el-option>
+              <el-option label="冬" :value="4">冬</el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -268,13 +168,12 @@ export default {
         },
       },
       rules: {
-        clientInfoId: [{ required: true, message: '客户不能为空' }],
-        medicalType: [{ required: true, message: '就医类型不能为空' }],
-        hospital: [{ required: true, message: '医疗机构不能为空' }],
-        inDate: [{ required: true, message: '就医时间不能为空' }],
-        result: [{ required: true, message: '当前状态不能为空' }],
-        hpi: [{ required: true, message: '现病史不能为空' }],
-        diagnosis: [{ required: true, message: '诊断不能为空' }],
+        smsTypeName: [{ required: true, message: '请选择短信类别' }],
+        ThemeListName: [{ required: true, message: '请选择短信主题' }],
+        gender: [{ required: true, message: '请选择性别' }],
+        Crowd: [{ required: true, message: '请选择适宜人群' }],
+        Season: [{ required: true, message: '请选择适宜季节' }],
+        result: [{ required: true, message: '请填写短信内容' }],
       },
       resultOptions: [
         { value: 1, label: '未指定' },
@@ -299,8 +198,8 @@ export default {
         this.form = {
           result: data.data.content,
           gender: data.data.suitGender,
-          smsTypeName: data.data.categoryName,
-          ThemeListName: data.data.themName,
+          smsTypeName: data.data.themName,
+          ThemeListName: String(data.data.categoryId),
           Crowd: data.data.suitCrowd,
           Season: data.data.suitSeason,
         };

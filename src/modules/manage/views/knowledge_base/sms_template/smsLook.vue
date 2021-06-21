@@ -12,9 +12,10 @@
     <div class="titless">查看短信</div>
     <!-- <div class="title">数据列表</div> -->
     <div class="lookPressure">
-      <div><span>短信类别：</span><span>{{data.categoryId}}</span></div>
+      <div><span>短信类别：</span><span>{{data.themName}}</span></div>
       <div><span>短信主题：</span><span>{{data.categoryName}}</span></div>
       <div><span>适宜性别：</span>
+      <span v-if="data.suitGender === 0">不限</span>
       <span v-if="data.suitGender === 1">男</span>
       <span v-if="data.suitGender === 2">女</span>
       </div>
