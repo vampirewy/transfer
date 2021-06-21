@@ -2,7 +2,6 @@
   <div class="create-edit">
     <el-form
       ref="form"
-      :rules="rules"
       :inline="false"
       :model="form"
       :label-position="'right'"
@@ -15,19 +14,19 @@
         </h3>
       </div>
       <div class="mt20">
-        <div style="display: inline-block;">
-          <div v-for="item in tablest" :key="item.id">
-            <div class="wltitle">
+        <div style="display: inline-block">
+          <div>
+            <!-- <div class="wltitle">
               <div class="quan"></div>
               <span>{{ item.name }}</span>
-            </div>
+            </div> -->
             <el-checkbox
-              style="width:25%;margin:20px 0 !important;"
-              v-for="it in item.contentList"
-              :key="it.id"
-              v-model="it.checked"
+              style="width: 33.3333%; margin: 20px 0 !important"
+              v-for="item in tablest"
+              :key="item.id"
+              v-model="item.checked"
             >
-              {{ it.name }}
+              {{ item.paramName }}
             </el-checkbox>
           </div>
         </div>
@@ -35,11 +34,7 @@
           <el-button class="cancelBtn" size="small" @click="cancel"
             >返回</el-button
           >
-          <el-button
-            class="sureBtn"
-            type="primary"
-            size="small"
-            @click="save"
+          <el-button class="sureBtn" type="primary" size="small" @click="save"
             >保存</el-button
           >
         </div>
@@ -64,12 +59,6 @@ export default {
         state: '',
         dangerShow: '',
         labelWidth: '113px',
-      },
-      rules: {
-        gridName: [{ required: true, message: '请输入类别名称' }],
-        reportName: [{ required: true, message: '请输入报告名称' }],
-        state: [{ required: true, message: '请选择是否启用' }],
-        dangerShow: [{ required: true, message: '请选择低危评估' }],
       },
       routeType: '', // 1新增 2编辑
       popoverStatus: false,
@@ -104,33 +93,7 @@ export default {
           value: '1',
         },
       ],
-      tablest: [
-        {
-          name: '封面前言',
-          type: 1,
-          contentList: [],
-        },
-        {
-          name: '综合健康信息',
-          type: 2,
-          contentList: [],
-        },
-        {
-          name: '疾病风险评估',
-          type: 3,
-          contentList: [],
-        },
-        {
-          name: '日常保健建议',
-          type: 4,
-          contentList: [],
-        },
-        {
-          name: '其他分析建议',
-          type: 5,
-          contentList: [],
-        },
-      ],
+      tablest: [],
       table: [],
       section: {
         organItemLibraryId: '',
@@ -142,25 +105,9 @@ export default {
     };
   },
   mounted() {
-    this.onLoad();
+    this.getDetail();
   },
   methods: {
-    onLoad() {
-      const route = this.$route;
-      this.getLibraryList();
-      [1, 2, 3, 4, 5].forEach((value) => {
-        this.getDetailtypePush(value);
-      });
-      if (route.meta.type === '1') {
-        this.routeType = 1;
-      } else if (route.meta.type === '2') {
-        this.routeType = 2;
-        this.getDetail();
-      } else {
-        this.routeType = 3;
-        this.getDetail();
-      }
-    },
     handlePopoperClose() {
       this.popoverStatus = false;
     },
@@ -176,7 +123,8 @@ export default {
      * @return {Promise<void>}
      */
     async getLibraryList() {
-      const res = await this.$api.physicalProjectListInterface.listOrganItemLibrary();
+      const res =
+        await this.$api.physicalProjectListInterface.listOrganItemLibrary();
       const { data } = res.data;
       this.form.libraryList = data;
     },
@@ -185,75 +133,38 @@ export default {
      * @return {Promise<void>}
      */
     async getDetail() {
-      // const reqBody = { id: this.$route.query.id };
-      // const res = await this.$api.categoryManage.getdetails(reqBody);
-      // const { data } = res.data;
-      // this.form.gridName = data.gridName;
-      // this.form.reportName = data.reportName;
-      // this.form.state = data.state;
-      // this.form.dangerShow = data.dangerShow;
-      // this.tablest.forEach((value) => {
-      //   value.contentList.forEach((valCode) => {
-      //     const ValCode = valCode;
-      //     data.paramCodeList.forEach((valGetCode) => {
-      //       if (ValCode.code === valGetCode) {
-      //         ValCode.checked = true;
-      //       }
-      //     });
-      //   });
-      // });
-    },
-    // 获取管理人员类别参数push
-    async getDetailtypePush(type) {
-      const Type = type;
-      const reqBody = { paramType: type };
-      const res = await this.$api.categoryManage.getdetailtype(reqBody);
+      const res = await this.$api.accessReport.groupReportdetail();
       const { data } = res.data;
-      console.log(data);
-      data.forEach((item) => {
-        this.tablest[Type - 1].contentList.push({
-          name: item.name,
-          code: item.code,
-          checked: false,
-        });
+      this.tablest = data;
+      this.tablest.forEach((value) => {
+        if (value.checked === 1) {
+          value.checked = true;
+        } else {
+          value.checked = false;
+        }
       });
     },
     /**
      * 取消
      */
     cancel() {
-      this.$router.push({
-        path: '/category_manage',
-      });
+      this.$router.go(-1);
     },
     /**
      * 体检库项目新增/更新
      * @return {Promise<ElMessageComponent>}
      */
     async save() {
-      const ParamCodeList = [];
       this.tablest.forEach((value) => {
-        value.contentList.forEach((valCode) => {
-          if (valCode.checked === true) {
-            ParamCodeList.push(valCode.code);
-          }
-        });
-      });
-      this.$refs.form.validate(async (valid) => {
-        if (valid) {
-          const reqBody = {
-            gridName: this.form.gridName,
-            reportName: this.form.reportName,
-            state: this.form.state,
-            dangerShow: this.form.dangerShow,
-            paramCodeList: ParamCodeList,
-          };
-          reqBody.id = this.$route.params.id;
-          await this.$api.categoryManage.clientGridSave(reqBody);
-          // this.$message.success('操作成功');
-          // this.cancel();
+        if (value.checked === true) {
+          value.checked = 1;
+        } else {
+          value.checked = 2;
         }
       });
+      await this.$api.accessReport.groupReportsave(this.tablest);
+      this.$message.success('操作成功');
+      this.cancel();
     },
   },
 };

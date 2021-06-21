@@ -46,17 +46,7 @@ export default {
         },
         xAxis: {
           type: 'category',
-          data: [
-            '屈光不正',
-            '异常名称',
-            '异常名称',
-            '异常名称',
-            '慢性咽炎',
-            '异常名称',
-            '异常名称',
-            '异常名称',
-            '异常名称',
-          ],
+          data: [],
         },
         series: [
           {
@@ -122,24 +112,34 @@ export default {
           },
         ],
       };
-      const data = [320, 302, 301, 234, 120, 132, 101, 134, 120, 132];
+      const data = [];
+      this.toplist.forEach((element) => {
+        option.xAxis.data.push(element.abnormalName);
+        data.push(element.codeCount);
+      });
       let max = 0;
       const bgData = [];
       data.forEach((item) => {
         if (max < item) max = item;
       });
       data.forEach(() => {
-        bgData.push(max + 50);
+        bgData.push(Number(max) + 5);
       });
       option.series[0].data = data;
       option.series[1].data = bgData;
       myChartDrawer.setOption(option);
     },
+    // top10数据
+    async queryList() {
+      const res = await this.$api.statics.womanabnormalclientList({
+        ...this.form,
+      });
+      this.toplist = res.data.data;
+      this.draw();
+    },
   },
   mounted() {
-    console.log(this.data, 123456);
-    // 调用绘制图表的方法
-    this.draw();
+    this.queryList();
   },
 };
 </script>

@@ -5,11 +5,13 @@
 import echarts from 'echarts';
 export default {
   name: 'lifestyle',
-  props: {
-    data: Object,
-  },
+  // props: {
+  //   data: Array,
+  // },
   data() {
-    return {};
+    return {
+      bmilist: [],
+    };
   },
   methods: {
     draw() {
@@ -41,7 +43,7 @@ export default {
         },
         // X轴
         xAxis: {
-          data: ['未知', '偏瘦', '正常', '偏高', '肥胖'],
+          data: [],
           axisLabel: {
             show: true,
           },
@@ -66,7 +68,7 @@ export default {
           {
             name: '男性',
             type: 'bar',
-            data: [120, 100, 440, 320, 250],
+            data: [],
             barWidth: 25, // 柱图宽度
             itemStyle: {
               normal: {
@@ -97,7 +99,7 @@ export default {
           {
             name: '女性',
             type: 'bar',
-            data: [200, 120, 240, 330, 220],
+            data: [],
             barWidth: 25, // 柱图宽度
             itemStyle: {
               normal: {
@@ -118,14 +120,26 @@ export default {
           },
         ],
       };
-      // option.series[0].data = data;
+      this.bmilist.forEach((element) => {
+        option.xAxis.data.push(element.resultName);
+        option.series[0].data.push(element.genderMapCount[0].manCount);
+        option.series[1].data.push(element.genderMapCount[1].womanCount);
+      });
       myChartDrawer.setOption(option);
+    },
+    async queryList() {
+      const res = await this.$api.statics.reportList({
+        ...this.form,
+        type: 1,
+      });
+      this.bmilist = res.data.data;
+      this.draw();
     },
   },
   mounted() {
-    console.log(this.data, 123456);
+    this.queryList();
     // 调用绘制图表的方法
-    this.draw();
+    // this.draw();
   },
 };
 </script>

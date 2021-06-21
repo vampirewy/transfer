@@ -83,9 +83,45 @@
           ref="table"
           align="center"
         >
-          <el-table-column type="selection" width="55"> </el-table-column>
+          <!-- <el-table-column type="selection" width="55"> </el-table-column> -->
           <el-table-column
-            label="体检编号"
+            label="客户编号"
+            prop="clientNo"
+            show-overflow-tooltip
+          >
+            <template slot-scope="scope">
+              <span>{{ scope.row.clientNo | getResult }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="姓名"
+            prop="clientName"
+            show-overflow-tooltip
+          >
+            <template slot-scope="scope">
+              <span style="color:#36BF2F;">{{ scope.row.clientName | getResult }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="性别"
+            prop="gender"
+            show-overflow-tooltip
+          >
+            <template slot-scope="scope">
+              <span>{{ scope.row.gender == 1 ? '男':'女'}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="年龄"
+            prop="age"
+            show-overflow-tooltip
+          >
+            <template slot-scope="scope">
+              <span>{{ scope.row.age | getResult }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="单位"
             prop="workUnitName"
             show-overflow-tooltip
           >
@@ -93,45 +129,9 @@
               <span>{{ scope.row.workUnitName | getResult }}</span>
             </template>
           </el-table-column>
-          <el-table-column
-            label="姓名"
-            prop="clientCount"
-            show-overflow-tooltip
-          >
+          <el-table-column label="问卷时间" prop="reportDate" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span style="color:#36BF2F;">{{ scope.row.clientCount | getResult }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="性别"
-            prop="reportOneCount"
-            show-overflow-tooltip
-          >
-            <template slot-scope="scope">
-              <span>{{ scope.row.reportOneCount | getResult }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="年龄"
-            prop="reportTwoCount"
-            show-overflow-tooltip
-          >
-            <template slot-scope="scope">
-              <span>{{ scope.row.reportTwoCount | getResult }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="单位"
-            prop="reportMoreTwoCount"
-            show-overflow-tooltip
-          >
-            <template slot-scope="scope">
-              <span>{{ scope.row.reportMoreTwoCount | getResult }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="问卷时间" prop="contact" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <span style="color:#3154AC;">{{ scope.row.contact | getResult }}</span>
+              <span style="color:#3154AC;">{{ scope.row.reportDate | getResult }}</span>
             </template>
           </el-table-column>
           <!-- <el-table-column label="操作" prop="index" width="150px">
@@ -172,42 +172,36 @@
         <div class="echarts">
           <lBMI
           v-if="Tabactive === 0"
-          :data="tabcheckidx"
           :visible="modalVisible"
           :value="currentValue"
           @cancel="cancel"
         ></lBMI>
           <blood
           v-if="Tabactive === 1"
-          :data="tabcheckidx"
           :visible="modalVisible"
           :value="currentValue"
           @cancel="cancel"
         ></blood>
         <bloodfat
           v-if="Tabactive === 2"
-          :data="tabcheckidx"
           :visible="modalVisible"
           :value="currentValue"
           @cancel="cancel"
         ></bloodfat>
         <abnormal
           v-if="Tabactive === 3"
-          :data="tabcheckidx"
           :visible="modalVisible"
           :value="currentValue"
           @cancel="cancel"
         ></abnormal>
         <manabnor
           v-if="Tabactive === 4"
-          :data="tabcheckidx"
           :visible="modalVisible"
           :value="currentValue"
           @cancel="cancel"
         ></manabnor>
         <wonmenabnormal
           v-if="Tabactive === 5"
-          :data="tabcheckidx"
           :visible="modalVisible"
           :value="currentValue"
           @cancel="cancel"
@@ -277,14 +271,39 @@ export default {
   },*/
   beforeRouteEnter(to, from, next) {
     next((vm) => {
-      vm.queryList();
+      vm.queryList(1);
     });
   },
   methods: {
     TabbarBtn(index) {
       this.Tabactive = index;
-      this.queryList();
+      if (this.Tabactive === 0) {
+        this.queryList(1);
+      } else if (this.Tabactive === 1) {
+        this.queryList(9999);
+      } else if (this.Tabactive === 2) {
+        this.queryList(8888);
+      } else if (this.Tabactive === 3) {
+        this.queryListtop(3);
+      } else if (this.Tabactive === 4) {
+        this.queryListtop(1);
+      } else if (this.Tabactive === 5) {
+        this.queryListtop(2);
+      } else {
+        this.queryList(4);
+      }
       this.$forceUpdate();
+    },
+    async queryListtop(types) {
+      const res = await this.$api.statics.staticclientList({
+        ...this.form,
+        type: types,
+        pageNo: this.table.currentPage,
+        pageSize: this.table.pageSize,
+        exportName: '',
+      });
+      this.table.list = res.data.data.data;
+      this.table.totalCount = res.data.data.data.total || 0;
     },
     check(idx) {
       this.tabcheckidx = idx;
@@ -298,14 +317,13 @@ export default {
       this.table.currentPage = 1;
       this.queryList();
     },
-    async queryList() {
-      const res = await this.$api.statics.reportList({
+    async queryList(types) {
+      const res = await this.$api.statics.reportclientList({
         ...this.form,
-        type: 1,
+        type: types,
       });
-      console.log(res.data);
-      // this.table.list = res.data.data.data;
-      // this.table.totalCount = res.data.data.data.total || 0;
+      this.table.list = res.data.data.data;
+      this.table.totalCount = res.data.data.data.total || 0;
     },
     handleEdit() {
       const selection = this.$refs.table.selection;
