@@ -56,8 +56,8 @@
     </div>
 
         <div class="noDataLine" v-if="intervenePlanXList.length === 0">
-          <img src="@/assets/images/noDataLine.png"/>
-          <span>暂无数据</span>
+          <img style="margin-top: 70px" src="@/assets/images/noDataLine.png"/>
+          <!--<span>暂无数据</span>-->
         </div>
         <!-- <bar-chart-line
         :xList="intervenePlanName" :yList="intervenePlanYList" :height="'300px'"
@@ -94,7 +94,7 @@
         </div>
         <div class="noDataLine" v-if="checkAfterPercentYList.length === 0" style="height: 215px">
           <img src="@/assets/images/noDataLine.png" style="width: 200px;margin-top: 100px"/>
-          <span>暂无数据</span>
+          <!--<span>暂无数据</span>-->
         </div>
         <div class="chart-wrapper" v-else>
           <div class="pieDiv" style="margin:0 5% 10px 5%;">
@@ -137,7 +137,7 @@
         </div>
         <div class="noDataLine" v-if="checkAfterFeePieYList.length === 0" style="height: 215px">
           <img src="@/assets/images/noDataLine.png" style="width: 200px;margin-top: 100px"/>
-          <span>暂无数据</span>
+          <!--<span>暂无数据</span>-->
         </div>
         <div class="chart-wrapper" v-else>
           <div class="pieDiv" style="margin:18px 5% 0 5%;">

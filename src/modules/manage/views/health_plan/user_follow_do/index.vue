@@ -315,7 +315,7 @@
             {{ scope.row.gridName | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="workUnitName" label="单位">
+            <el-table-column prop="workUnitName" label="单位" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span :class="{'redToday': scope.row.sortIndex === 1,
                           'overToday': scope.row.sortIndex === 2}">

@@ -12,11 +12,13 @@
         <div>
           <span>问卷类型：</span>
           <el-select
-                  v-model="questionType"
+                  v-model="sortType"
                   placeholder="请选择"
                   style="width: 140px"
           >
-            <el-option label="随访问卷" value="4" key="4"></el-option>
+            <el-option :label="item.name" :value="item.paramValue"
+                       v-for="item in sortTypeList"
+                       :key="item.paramValue"></el-option>
           </el-select>
         </div>
         <div class="searchInputFormItem">
@@ -67,8 +69,9 @@ export default {
   name: 'MedicalHistorySelectUser',
   data() {
     return {
+      sortTypeList: [],
       keyword: '',
-      questionType: '',
+      sortType: '',
       tableData: [],
       total: 0,
       currentPage: 1,
@@ -77,6 +80,7 @@ export default {
     };
   },
   mounted() {
+    this.getSystemParamByCode('ZY007');
     this.queryList();
   },
   methods: {
@@ -98,14 +102,19 @@ export default {
     },
     reset() {
       this.keyword = '';
-      this.questionType = '';
+      this.sortType = '';
       this.currentPage = 1;
       this.queryList();
+    },
+    async getSystemParamByCode(code) {
+      const res = await this.$api.userManagerInterface.getSystemParamByCode(code);
+      const { data } = res.data;
+      this.sortTypeList = data;
     },
     async queryList() {
       const res = await this.$api.userFollowInterface.getTemplateQuestionListPage({
         name: this.keyword,
-        questionType: this.questionType,
+        sortType: this.sortType,
         pageNo: this.currentPage,
         pageSize: this.pageSize,
       });
