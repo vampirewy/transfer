@@ -177,6 +177,11 @@ export default {
   created() {
     this.loadData();
   },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.viewIndex = 1;
+    });
+  },
   methods: {
     add() {
       this.dietMenuTemDetail = { id: '' };

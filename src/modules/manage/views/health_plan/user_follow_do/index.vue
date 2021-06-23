@@ -222,7 +222,7 @@
                   v-model="form.startCreatedTime"
                   type="date"
                   value-format="yyyy-MM-dd"
-                  :max-date="form.endCreatedTime"
+                  :max-date="form.endCreatedTime || new Date()"
                   placeholder="开始时间"
                   style="width: 140px"
           >
@@ -233,6 +233,7 @@
                   type="date"
                   value-format="yyyy-MM-dd"
                   :min-date="form.startCreatedTime"
+                  :max-date="new Date()"
                   placeholder="结束时间"
                   style="width: 140px"
           >
@@ -275,8 +276,8 @@
             <el-table-column type="selection" width="40"></el-table-column>
             <el-table-column prop="clientNo" label="客户编号" min-width="90" show-overflow-tooltip>
               <template slot-scope="scope">
-          <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}">
+          <span :class="{'redToday': scope.row.sortIndex === 1,
+                          'overToday': scope.row.sortIndex === 2}">
             {{ scope.row.clientNo | getResult }}</span>
               </template>
             </el-table-column>
@@ -295,85 +296,85 @@
             </el-table-column>
             <el-table-column prop="gender" label="性别" width="55px">
               <template slot-scope="scope">
-                <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}"
+                <span :class="{'redToday': scope.row.sortIndex === 1,
+                          'overToday': scope.row.sortIndex === 2}"
                       >{{scope.row.gender | getResultGender}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="age" label="年龄" width="60px">
               <template slot-scope="scope">
-                <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}">
+                <span :class="{'redToday': scope.row.sortIndex === 1,
+                          'overToday': scope.row.sortIndex === 2}">
               {{ scope.row.age | getResult }}</span>
               </template>
             </el-table-column>
             <el-table-column prop="gridName" label="人员类别" show-overflow-tooltip>
               <template slot-scope="scope">
-          <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}">
+          <span :class="{'redToday': scope.row.sortIndex === 1,
+                          'overToday': scope.row.sortIndex === 2}">
             {{ scope.row.gridName | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="workUnitName" label="单位">
+            <el-table-column prop="workUnitName" label="单位" show-overflow-tooltip>
               <template slot-scope="scope">
-                <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}">
+                <span :class="{'redToday': scope.row.sortIndex === 1,
+                          'overToday': scope.row.sortIndex === 2}">
             {{ scope.row.workUnitName | getResult}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="mobile" label="手机号码" width="90px" show-overflow-tooltip>
               <template slot-scope="scope">
-                <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}">
+                <span :class="{'redToday': scope.row.sortIndex === 1,
+                          'overToday': scope.row.sortIndex === 2}">
             {{ scope.row.mobile | getResult}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="planUserName" label="随访标题" show-overflow-tooltip>
               <template slot-scope="scope">
-          <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}">
+          <span :class="{'redToday': scope.row.sortIndex === 1,
+                          'overToday': scope.row.sortIndex === 2}">
             {{ scope.row.planTitle | getResult}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="planUserName" label="随访方式" show-overflow-tooltip>
               <template slot-scope="scope">
-          <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}">
+          <span :class="{'redToday': scope.row.sortIndex === 1,
+                          'overToday': scope.row.sortIndex === 2}">
             {{ scope.row.planWayName | getResult}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="planUserName" label="随访内容" show-overflow-tooltip>
               <template slot-scope="scope">
-          <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}">
+          <span :class="{'redToday': scope.row.sortIndex === 1,
+                          'overToday': scope.row.sortIndex === 2}">
             {{ scope.row.planContent | getResult}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="templateQuestionName" label="随访问卷" show-overflow-tooltip>
               <template slot-scope="scope">
-          <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}">
+          <span :class="{'redToday': scope.row.sortIndex === 1,
+                          'overToday': scope.row.sortIndex === 2}">
             {{ scope.row.templateQuestionName | getResult}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="planUserName" label="干预人" show-overflow-tooltip>
               <template slot-scope="scope">
-          <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}">
+          <span :class="{'redToday': scope.row.sortIndex === 1,
+                          'overToday': scope.row.sortIndex === 2}">
             {{ scope.row.planUserName | getResult}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="executeTime" label="随访日期" width="120px" show-overflow-tooltip>
               <template slot-scope="scope">
-          <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}"
+          <span :class="{'redToday': scope.row.sortIndex === 1,
+                          'overToday': scope.row.sortIndex === 2}"
           >{{ scope.row.planDate | getResultDate}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="createdByName" label="创建人" show-overflow-tooltip>
               <template slot-scope="scope">
-          <span :class="{'redToday': scope.row.todayPlanDate === 1,
-                          'overToday': scope.row.executeState === 3}"
+          <span :class="{'redToday': scope.row.sortIndex === 1,
+                          'overToday': scope.row.sortIndex === 2}"
           >{{ scope.row.createdByName | getResult}}</span>
               </template>
             </el-table-column>

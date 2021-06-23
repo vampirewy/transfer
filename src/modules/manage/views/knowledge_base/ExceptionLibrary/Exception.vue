@@ -78,19 +78,35 @@
             <el-option label="否" value="0" key="0"></el-option>
           </el-select>
         </div>
-        <div>
+        <!-- <div>
           <span>推荐检查：</span>
           <el-input placeholder="推荐检查" v-model="formData.lifeStyleLv"
           style="width:140px">
           </el-input>
-          <!-- <el-select
+          <el-select
                   v-model="formData.lifeStyleLv"
                   placeholder="请选择"
                   style="width: 140px"
           >
             <el-option :label="item.name" :value="item.paramValue"
                        v-for="(item, index) in lifeStyleList" :key="index"></el-option>
-          </el-select> -->
+          </el-select>
+        </div> -->
+        <div>
+          <span>紧急性：</span>
+          <el-select
+                  v-model="form.medicalLimitListId"
+                  placeholder="请选择"
+                  style="width: 140px"
+                  clearable
+          >
+            <el-option
+              v-for="item in medicalLimitList"
+              :key="item.paramValue"
+              :label="item.name"
+              :value="item.paramValue"
+            ></el-option>
+          </el-select>
         </div>
       </div>
       <div class="searchRight">
@@ -110,22 +126,6 @@
   </div>
     <div v-if="!isTrue" class="searchCondition" style="width:80%;">
       <div class="searchLeft" style="padding-left:5px;">
-        <div>
-          <span>紧急性：</span>
-          <el-select
-                  v-model="formData.medicalLimitListId"
-                  placeholder="请选择"
-                  style="width: 140px"
-                  clearable
-          >
-            <el-option
-              v-for="item in medicalLimitList"
-              :key="item.paramValue"
-              :label="item.name"
-              :value="item.paramValue"
-            ></el-option>
-          </el-select>
-        </div>
         <div>
           <span>重要性：</span>
           <el-select
@@ -183,7 +183,7 @@
             <span>{{ scope.row.abnormalName | getResult}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="JCD10编码" prop="icdCode" show-overflow-tooltip>
+        <el-table-column label="ICD10编码" prop="icdCode" show-overflow-tooltip>
           <template slot-scope="scope">
                 <span class="clientName"
                       @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
@@ -203,7 +203,7 @@
         </el-table-column>
         <el-table-column prop="gender" label="性别" show-overflow-tooltip>
           <template slot-scope="scope">
-            {{ scope.row.gender === 1 ? '男' :scope.row.gender === 1?'不限': '女' }}
+            {{ scope.row.gender === 1 ? '男' :scope.row.gender === 2?'女': '不限' }}
           </template>
         </el-table-column>
         <el-table-column prop="dangerLevelName" label="重要性" show-overflow-tooltip>
@@ -294,7 +294,6 @@ export default {
       lifeStyleList: [], // 异常类型
       questionFromList: [], // 紧急类型
       medicalLimitList: [],
-      medicalLimitListId: '', // 紧急性
       formData: {
         Types: '',
         keyWord: '',
@@ -322,6 +321,7 @@ export default {
         abnormalType: '',
         gender: '',
         source: '',
+        medicalLimitListId: '', // 紧急性
       },
       table: {
         list: [],
@@ -411,6 +411,7 @@ export default {
       this.form.source = '';
       this.form.gender = '';
       this.form.abnormalType = '';
+      this.form.medicalLimitListId = '';
       this.table.currentPage = 1;
       this.getList();
     },
@@ -423,14 +424,15 @@ export default {
      * 新增
      * @param val
      */
-    handleAddCheck(val) {
-      this.$router.push({
+    handleAddCheck() {
+      /* this.$router.push({
         name: 'ExceptionAddEdit',
         params: {
           type: 'edit',
           qusType: Number(val),
         },
-      });
+      });*/
+      this.$router.push('ExceptionAddEdit');
     },
     editException(row) {
       this.$router.push({

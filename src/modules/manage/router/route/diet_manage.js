@@ -57,6 +57,8 @@ export default [
       path: '/chinese_info',
       name: 'chinese_info',
       meta: {
+        hideInMenu: true,
+        hideInTag: true,
         title: '查看中医食疗',
       },
       component: () => import('../../views/diet_manage/diet_tyerapy_chinese/edit_form/info_form.vue'),

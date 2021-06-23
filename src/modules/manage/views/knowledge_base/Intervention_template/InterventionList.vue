@@ -71,8 +71,8 @@
                   placeholder="请选择"
                   style="width: 140px"
           >
-            <el-option label="是" value="1" key="1"></el-option>
-            <el-option label="否" value="2" key="0"></el-option>
+            <el-option label="启用" value="1" key="1"></el-option>
+            <el-option label="未启用" value="2" key="2"></el-option>
           </el-select>
           </div>
           <div>

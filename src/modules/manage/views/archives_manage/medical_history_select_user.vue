@@ -12,7 +12,7 @@
         <div class="searchInputFormItem">
           <el-input placeholder="姓名/编号/单位" v-model="keyword">
           </el-input>
-          <span class="searchBtnImgSpan" >
+          <span class="searchBtnImgSpan" @click="search">
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
               </span>
         </div>

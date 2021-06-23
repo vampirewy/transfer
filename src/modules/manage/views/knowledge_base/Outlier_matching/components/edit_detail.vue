@@ -39,7 +39,7 @@
               <div @click="othertestAdd">添加</div>
           </div>
         </div> -->
-      <div class="row" style="display: flex">
+      <div class="row" style="display: flex;margin-top:30px;">
           <el-form-item label="检测项目：" prop="clientName" style="background:#ffffff">
             <el-popover
               ref="userPopovers"
@@ -238,9 +238,20 @@ export default {
     },
     othertestAdd() {
       const vm = this;
-      for (let i = 0; i < vm.MatchingInfo.length; i++) {
-        vm.addProject.push(vm.MatchingInfo[i]);
-      }
+      vm.MatchingInfo.forEach((valQusOne) => {
+        let same = false;
+        vm.addProject.forEach((valAnswer) => {
+          if (valQusOne.id === valAnswer.id) { // 如果有一样 就回答过了
+            same = true;
+          }
+        });
+        if (same === false) { // 如果没有相同的则push
+          vm.addProject.push(valQusOne);
+        }
+      });
+      // for (let i = 0; i < vm.MatchingInfo.length; i++) {
+      //   vm.addProject.push(vm.MatchingInfo[i]);
+      // }
       vm.MatchingInfo = [];
       vm.detectioninfoSource.clientName = '';
     },

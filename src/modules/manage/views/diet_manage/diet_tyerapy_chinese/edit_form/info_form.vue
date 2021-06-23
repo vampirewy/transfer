@@ -9,11 +9,15 @@
       <div><span>客户编号：</span><span>{{data.orgCode}}</span></div>
     </div> -->
     <div class="lines"></div>
-    <div class="titless">查看中医食疗</div>
+    <div class="titless">查看-中医食疗</div>
     <!-- <div class="title">数据列表</div> -->
     <div class="lookPressure">
       <div><span>食疗名称：</span><span>{{name}}</span></div>
-      <div><span>适宜性别：</span><span>{{gender}}</span></div>
+      <div><span>适宜性别：</span>
+        <span v-if="gender === 1">男</span>
+        <span v-if="gender === 2">女</span>
+        <span v-if="gender === 0">不限</span>
+      </div>
     </div>
     <div class="lookPressure">
       <span style="white-space: nowrap;margin-left: 30px;font-size: 14px;">适宜体质：</span>
@@ -33,22 +37,30 @@
               label="阴虚质"
               v-model="checked4"
             disabled></el-checkbox></div>
+      <div><el-checkbox
+              label="痰湿质"
+              v-model="checked4"
+            disabled></el-checkbox></div>
     </div>
     <div class="lookPressure" style="margin-left:100px">
       <div><el-checkbox
-              label="平和质"
+              label="湿热质"
               v-model="checked5"
             disabled></el-checkbox></div>
       <div><el-checkbox
-              label="气虚质"
+              label="血瘀质"
               v-model="checked6"
             disabled></el-checkbox></div>
       <div><el-checkbox
-              label="阳虚质"
+              label="气郁质"
               v-model="checked7"
             disabled></el-checkbox></div>
       <div><el-checkbox
-              label="阴虚质"
+              label="特禀质"
+              v-model="checked8"
+            disabled></el-checkbox></div>
+      <div><el-checkbox
+              label="不限"
               v-model="checked8"
             disabled></el-checkbox></div>
     </div>

@@ -95,6 +95,13 @@ export default {
               type: 'solid',
             },
           },
+          splitLine: {
+            show: true, // 决定是否显示坐标中网格
+            lineStyle: {
+              color: '#EEF1F5', // 网格颜色
+              width: 1, // 网格线宽度
+            },
+          },
         },
         grid: { // 折线图整体的位置
           left: 15,
@@ -111,6 +118,7 @@ export default {
               color: '#cccccc',
             },
           },
+          backgroundColor: '#000', // 背景颜色（此时为默认色
           padding: [5, 10],
         },
         yAxis: {

@@ -76,17 +76,35 @@
           </el-row>
           <el-row>
           <el-col :span="6">
-        <el-form-item label="时间" prop="startDate">
-        <el-date-picker
+        <el-form-item label="日期时间" prop="startDate">
+          <el-date-picker
+              v-model="infoSource.startDate"
+              type="datetime"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              :max-date="new Date()"
+              placeholder="选择日期时间">
+            </el-date-picker>
+        <!-- <el-date-picker
             class="start-date"
             v-model="infoSource.startDate"
             type="date"
             value-format="yyyy-MM-dd"
-            placeholder="请选择时间"
+            placeholder="请选择日期"
             style="width: 100%"
-        ></el-date-picker>
+        ></el-date-picker> -->
         </el-form-item>
           </el-col>
+          <!-- <el-col :span="6">
+            <el-form-item label="时间" prop="Timevalue">
+              <el-time-picker
+              v-model="infoSource.Timevalue"
+              :picker-options="{
+                selectableRange: '00:00:00 - 23:00:00'
+              }"
+              placeholder="请选择时间">
+            </el-time-picker>
+            </el-form-item>
+          </el-col> -->
           </el-row>
       </div>
       <!-- <div class="form-title">
@@ -323,6 +341,7 @@ export default {
         gender: '',
         gridName: '',
         startDates: ' 00:00:00',
+        Timevalue: '',
       },
       detectioninfoSource: {
         Customer: '', // 客户id
@@ -337,6 +356,7 @@ export default {
       drugsList: [],
       resultList: [],
       rules: {
+        Timevalue: [{ required: true, message: '时间不能为空' }],
         clientName: [{ required: true, message: '客户不能为空' }],
         drugsName: [{ required: true, message: '药品名称不能为空' }],
         startDate: [{ required: true, message: '开始时间不能为空' }],
@@ -355,14 +375,25 @@ export default {
   methods: {
     operates(index) {
       this.$set(this.detectionInfos[index], 'isshow', true);
-      console.log(this.detectionInfos);
+      // console.log(this.detectionInfos);
       this.$forceUpdate();
     },
     othertestAdd() {
       if (this.detectioninfoSource.Customer !== '') {
-        for (let i = 0; i < this.detectionInfo.length; i++) {
-          this.detectionInfos.push(this.detectionInfo[i]);
-        }
+        this.detectionInfo.forEach((valQusOne) => {
+          let same = false;
+          this.detectionInfos.forEach((valAnswer) => {
+            if (valQusOne.id === valAnswer.id) { // 如果有一样 就回答过了
+              same = true;
+            }
+          });
+          if (same === false) { // 如果没有相同的则push
+            this.detectionInfos.push(valQusOne);
+          }
+        });
+        // for (let i = 0; i < this.detectionInfo.length; i++) {
+        //   this.detectionInfos.push(this.detectionInfo[i]);
+        // }
         this.detectioninfoSource.clientName = '';
         // console.log(this.detectionInfos, 'dfafdsfsdfds12312');
         this.detectionInfo = [];
@@ -394,11 +425,9 @@ export default {
     },
     // 选择检测项目
     detectiononSelectUser(data) {
-      console.log(data, '选择检测项目');
+      // console.log(data, '选择检测项目');
       if (data) {
-        // data.clientId = this.infoSource.clientId;
-        // data.ingrenient = this.infoSource.ingrenient;
-        // data.consequences = '123132';
+        // console.log(this.detectionInfo, '000000');
         data.forEach((val) => {
           this.detectioninfoSource.clientName += `${val.intro}、`;
           this.detectionInfo.push(val);
@@ -406,11 +435,6 @@ export default {
         // this.detectionInfo.push(data);
         this.$refs.userPopovers.doClose();
         this.detectionpopoverStatus = false;
-        // this.detectioninfoSource.clientName += data.name;
-        // this.detectioninfoSource.clientId = data.id;
-        // this.detectioninfoSource.age = data.age;
-        // this.detectioninfoSource.gender = data.gender;
-        // this.detectioninfoSource.gridName = data.gridName;
       } else {
         this.$refs.userPopovers.doClose();
       }
@@ -478,13 +502,14 @@ export default {
         json.clientId = this.infoSource.clientId;
         json.result = this.detectionInfos[i].consequences;
         json.healthDataItemId = this.detectionInfos[i].id;
-        json.detectDate = this.infoSource.startDate + this.infoSource.startDates;
+        json.detectDate = this.infoSource.startDate;
         arrars.push(json);
       }
-      console.log(arrars, '结果');
+      // console.log(arrars, '结果');
       this.$api.healthMonitorInterface.saveHealthDataOther(arrars).then(({ data }) => {
         if (data.success) {
           this.$message.success('操作成功');
+          this.$emit('messageData', true, true);
         }
       });
     //   this.$api.medication.add(reqBody).then(({ data }) => {

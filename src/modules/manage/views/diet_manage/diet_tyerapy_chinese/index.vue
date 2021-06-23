@@ -44,8 +44,16 @@
                     clearable
                     style="width: 150px"
                   >
-                    <el-option label="男" :value="1"></el-option>
-                    <el-option label="女" :value="0"></el-option>
+                    <el-option label="平和质" :value="1"></el-option>
+                    <el-option label="气虚质" :value="2"></el-option>
+                    <el-option label="阳虚质" :value="3"></el-option>
+                    <el-option label="阴虚质" :value="4"></el-option>
+                    <el-option label="痰湿质" :value="5"></el-option>
+                    <el-option label="湿热质" :value="6"></el-option>
+                    <el-option label="血瘀质" :value="7"></el-option>
+                    <el-option label="气郁质" :value="8"></el-option>
+                    <el-option label="特禀质" :value="9"></el-option>
+                    <el-option label="不限" :value="10"></el-option>
                   </el-select>
                 </div>
                 <!-- <div>
@@ -63,13 +71,13 @@
                     />
                   </div>
                   <div class="resetAll" @click="reset">重置</div>
-                  <div class="more" v-if="isTrue" @click="isTrue = !isTrue">
+                  <!-- <div class="more" v-if="isTrue" @click="isTrue = !isTrue">
                     <span>></span>
                     展开更多
                   </div>
                   <div class="more noMore" v-else @click="isTrue = !isTrue">
                     <span>></span>收起筛选
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
@@ -122,9 +130,12 @@
           {{ scope.row.gender === 1 ? '男' :scope.row.gender === 0?'不限': '女' }}
         </template>
         </el-table-column>
-        <el-table-column prop="formula" label="菜品原料"> </el-table-column>
-        <el-table-column prop="effect" label="菜品功效"> </el-table-column>
-        <el-table-column prop="useMethod" label="用法"> </el-table-column>
+        <el-table-column prop="formula" label="菜品原料"
+        show-overflow-tooltip> </el-table-column>
+        <el-table-column prop="effect" label="菜品功效"
+        show-overflow-tooltip> </el-table-column>
+        <el-table-column prop="useMethod" label="用法"
+        show-overflow-tooltip> </el-table-column>
         <el-table-column prop="id" label="操作" width="160px">
           <template slot-scope="scope">
             <el-button
@@ -194,6 +205,7 @@ export default {
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       vm.getList();
+      vm.viewIndex = 1;
     });
   },
   methods: {

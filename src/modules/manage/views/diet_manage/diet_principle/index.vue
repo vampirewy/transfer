@@ -11,7 +11,7 @@
             <div class="searchLeft">
               <div class="searchInputFormItem">
                 <el-input
-                  placeholder="姓名/编号/单位"
+                  placeholder="原则名称"
                   style="width: 210px"
                   v-model="keywords"
                 >

@@ -44,6 +44,7 @@ import dietFinishedDishInterface from './diet_manage/DietFinishedDishInterface';
 import dietRawMaterial from './diet_manage/DietRawMaterial';
 import dietMenuTemplateInterface from './diet_manage/DietMenuTemplateInterface';
 import sunFollow from './sun/SunFollow';
+import InhospitalChange from './inhospital_change/InhospitalChange';
 export default {
   loginInterface,
   systemManageInterface,
@@ -82,4 +83,5 @@ export default {
   dietRawMaterial,
   dietMenuTemplateInterface,
   sunFollow,
+  InhospitalChange,
 };

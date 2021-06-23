@@ -192,21 +192,21 @@ export default {
     };
   },
   mounted() {
+    this.getGridList();
+    this.getGridType();
     if (this.ids) {
       this.$api.projectList.smsListInfo(this.ids).then((res) => {
         const { data } = res;
         this.form = {
           result: data.data.content,
           gender: data.data.suitGender,
-          smsTypeName: data.data.categoryName,
-          ThemeListName: data.data.themName,
+          smsTypeName: data.data.categoryId,
+          ThemeListName: String(data.data.themId),
           Crowd: data.data.suitCrowd,
           Season: data.data.suitSeason,
         };
       });
     }
-    this.getGridList();
-    this.getGridType();
   },
   methods: {
     async getGridList() {

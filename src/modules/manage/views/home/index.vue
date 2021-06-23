@@ -149,12 +149,13 @@
                 </div>
               </div> -->
               <div class="pieDiv" style="height:110px">
-                <div class="pieDivTips" v-for="(item, index) in dianPieList" :key="item.name">
+                <div class="pieDivTips" v-for="(item, index) in intervenePlanPieYList"
+                :key="item.name">
                   <div class="pieDivTipsLeft">
                     <p class="dian" :style="{'background-color': dianColorList[index]}"></p>
-                    <p class="dianSize">{{item.name}}</p>
+                    <!-- <p class="dianSize">{{item.name}}</p> -->
                   </div>
-                  <p class="dianNum">{{item.value}}</p>
+                  <p  class="dianNum">{{item.name}}</p>
                 </div>
               </div>
             </div>
@@ -164,12 +165,12 @@
 </div>
 <div>
   <div class="TabBars">
-    <div  :class="Tabactive === index?'TabBarsNameone':'TabBarsNamesone'"
-    @click="TabbarBtn(index)">当日任务</div>
+    <div  :class="Tabactive === 3?'TabBarsNameone':'TabBarsNamesone'"
+    @click="TabbarBtn(3)">阳性跟踪</div>
     <div v-for="(item,index) in tabbor" :key="index" style="margin-top:9px">
       <span :class="Tabactive === index?'TabBarsName':'TabBarsNames'" @click="TabbarBtn(index)">
         {{item}}
-        <div class="Tabunread">3</div>
+        <div class="Tabunread">{{dataSource.length}}</div>
       </span>
     </div>
   </div>
@@ -177,43 +178,55 @@
     <!-- <tab-list></tab-list> -->
       <el-table style="width: 100%;text-align: center" align="center"
       class="openTable"
-               :data="dataSource">
-        <!-- <el-table-column type="selection" width="150"></el-table-column> -->
-        <el-table-column label="姓名" prop="matchItemName" max-width="200" show-overflow-tooltip>
-          <!-- <template slot-scope="scope">
-                <span class="clientName"
-                      @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
-                  {{ scope.row.clientName | getResult}}
-                </span>
-          </template> -->
+               :data="dataSourceList" v-if="Tabactive === 3">
+        <el-table-column label="姓名" prop="clientName" max-width="200" show-overflow-tooltip>
         </el-table-column>
-        <el-table-column label="客户编号" prop="code" max-width="180" show-overflow-tooltip>
-          <!-- <template slot-scope="scope">
-            <span>{{ scope.row.clientNo | getResult}}</span>
-          </template> -->
+        <el-table-column label="客户编号" prop="clientNo" max-width="180" show-overflow-tooltip>
         </el-table-column>
         <el-table-column prop="gender" label="性别" max-width="180px">
-          <!-- <template slot-scope="scope">
-            <span>{{scope.row.gender | getResultGender}}</span>
-          </template> -->
+          <template slot-scope="scope">
+                  {{scope.row.gender === 1 ? '男' : (scope.row.gender === 2 ? '女' : '')}}
+                </template>
         </el-table-column>
         <el-table-column label="年龄" prop="age" max-width="180">
-          <!-- <template slot-scope="scope">
-            <span>{{ scope.row.age | getResult}}</span>
-          </template> -->
         </el-table-column>
-        <el-table-column label="任务名称" prop="itemName" max-width="180" show-overflow-tooltip>
-          <!-- <template slot-scope="scope">
-            <span>{{ scope.row.createTime | getResultDate}}</span>
-          </template> -->
+        <!-- <el-table-column label="任务名称" prop="itemName" max-width="180" show-overflow-tooltip>
         </el-table-column>
         <el-table-column label="任务提示" prop="sectionName" max-width="200">
-          <!-- <template slot-scope="scope">
-            <span>{{ scope.row.createTime | getResultDate}}</span>
-          </template> -->
+        </el-table-column> -->
+      </el-table>
+      <el-table style="width: 100%;text-align: center" align="center"
+      class="openTable"
+               :data="dataSource" v-if="Tabactive === 0">
+        <el-table-column label="姓名" prop="clientName" max-width="200" show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column label="客户编号" prop="clientNo" max-width="180" show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column prop="gender" label="性别" max-width="180px">
+          <template slot-scope="scope">
+                  {{scope.row.gender === 1 ? '男' : (scope.row.gender === 2 ? '女' : '')}}
+                </template>
+        </el-table-column>
+        <el-table-column label="年龄" prop="age" max-width="180">
+        </el-table-column>
+        <el-table-column label="任务名称" prop="planTitle" max-width="180" show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column label="任务提示" prop="planContent" max-width="200"
+        show-overflow-tooltip>
         </el-table-column>
       </el-table>
-
+      <div style="text-align: right">
+        <el-pagination
+          style="margin-top: 15px"
+          @current-change="search"
+          background
+          :total="total"
+          :page-size="params.pageSize"
+          :current-page="params.pageNo"
+          :page-sizes="[15]"
+          layout="prev, pager, next, jumper, total, sizes"
+        ></el-pagination>
+      </div>
   </div>
 </div>
 </div>
@@ -244,58 +257,8 @@ export default {
 
   data() {
     return {
-      dataSource: [
-        {
-          sectionName: '生化检测',
-          itemName: '胰岛素释放试验',
-          code: 'F10070',
-          total: 0,
-          matchItemName: '小明',
-          id: '1',
-          gender: '男',
-          age: '18',
-        },
-        {
-          sectionName: '生化检测',
-          itemName: '胰岛素释放试验',
-          code: 'F10070',
-          total: 0,
-          matchItemName: '小明',
-          id: '1',
-          gender: '男',
-          age: '18',
-        },
-        {
-          sectionName: '生化检测',
-          itemName: '胰岛素释放试验',
-          code: 'F10070',
-          total: 0,
-          matchItemName: '小明',
-          id: '1',
-          gender: '男',
-          age: '18',
-        },
-        {
-          sectionName: '生化检测',
-          itemName: '胰岛素释放试验',
-          code: 'F10070',
-          total: 0,
-          matchItemName: '小明',
-          id: '1',
-          gender: '男',
-          age: '18',
-        },
-        {
-          sectionName: '生化检测',
-          itemName: '胰岛素释放试验',
-          code: 'F10070',
-          total: 0,
-          matchItemName: '小明',
-          id: '1',
-          gender: '男',
-          age: '18',
-        },
-      ],
+      dataSourceList: [],
+      dataSource: [],
       searchData: {},
       listQuery: {
         planType: '4',
@@ -304,73 +267,77 @@ export default {
       serviceOrderXList: [],
       serviceOrderYList: [],
       intervenePlanPieXList: ['10', '20', '30', '10', '40'],
-      checkAfterFeeTotal: '1280',
-      intervenePlanPieYList: [
-        {
-          value: 400,
-          name: ' 高级会员',
-        },
-        {
-          value: 548,
-          name: '体验客户',
-        },
-        {
-          value: 300,
-          name: 'VIP会员',
-        },
-        {
-          value: 100,
-          name: '普通会员',
-        },
-        {
-          value: 200,
-          name: '钻石会员',
-        },
-      ],
+      checkAfterFeeTotal: '',
+      intervenePlanPieYList: [],
       clientTypeXList: [],
       clientTypeYList: [],
       clientTotal: 0,
-      intervenePlanYList: [['20', '19', '16', '20', '23', '30', '28', '25', '20', '15', '23', '30', '35', '40', '20']],
+      intervenePlanYList: [],
       intervenePlanName: ['客户趋势'], // 随访任务折线图
       intervenePlanXList: ['04/07', '04/08', '04/09', '04/10', '04/11', '04/12', '04/13', '04/14', '04/15', '04/16', '04/17', '04/18', '04/19', '04/20', '04/21'],
-      dianPieList: [
-        {
-          namne: '高级会员',
-          value: '高级会员',
-        },
-        {
-          namne: '高级会员',
-          value: '体验客户',
-        },
-        {
-          namne: '高级会员',
-          value: 'VIP会员',
-        },
-        {
-          namne: '高级会员',
-          value: '普通会员',
-        },
-        {
-          namne: '高级会员',
-          value: '钻石会员',
-        },
-      ],
+      dianPieList: [],
       dianColorList: ['#FA912B', '#333333', '#806CE5', '#3154AC', '#36BF2F', '#6DC8EC', '#31C529', '#54c9b6', '#F53626', '#f5c8be'],
-      tabbor: ['阳性跟踪', '随访任务'],
-      Tabactive: 0,
+      tabbor: ['随访任务'],
+      Tabactive: 3,
+      total: 0,
+      params: {
+        pageSize: 10,
+        pageNo: 1,
+      },
     };
   },
+  mounted() {
+    this.PositiveClient();
+    this.InterveneClient();
+  },
   methods: {
+    PositiveClient() {
+      this.$api.personal.homePositiveClient({
+        pageNo: this.params.pageNo,
+        pageSize: this.params.pageSize,
+      }).then((res) => {
+        const { data } = res.data;
+        this.dataSourceList = data.data;
+        this.total = data.total;
+      });
+    },
+    InterveneClient() {
+      this.$api.personal.homeInterveneClient({
+        pageNo: this.params.pageNo,
+        pageSize: this.params.pageSize,
+      }).then((res) => {
+        const { data } = res.data;
+        this.dataSource = data.data;
+        this.total = data.total;
+      });
+    },
     TabbarBtn(index) {
       this.Tabactive = index;
+      this.params.pageNo = 1;
+      // if (index === 3) {
+      //   this.PositiveClient();
+      // }
+      // if (index === 0) {
+      //   this.InterveneClient();
+      // }
       // console.log(index);
     },
+    search() {
+      this.params.pageNo = 1;
+      if (this.Tabactive === 3) {
+        this.PositiveClient();
+      }
+      if (this.Tabactive === 0) {
+        this.InterveneClient();
+      }
+    },
     getSearchData(data) {
+      console.log(data, '首页数据');
       this.searchData = data;
-      // this.getHomeFindCount(data); // 查询五数据
-      // this.getEchartIntervenePlan(data);// 随访任务折线图
+      this.getHomeFindCount(data); // 查询五数据
+      this.getEchartIntervenePlan(data);// 随访任务折线图
       // this.getServiceOrderInfo(data); // 服务订单
-      // this.getEchartIntervenePlanPie(data); // 随访任务饼图
+      this.getEchartIntervenePlanPie(data); // 随访任务饼图
     },
     choosePlanType() { // 随访计划，随访记录切换
       const sendData = Object.assign(this.searchData, this.listQuery);
@@ -395,8 +362,11 @@ export default {
       }
     },
     // 查询五数据
-    getHomeFindCount(sendData) {
-      this.$api.personal.homeFindcount(sendData).then((res) => {
+    getHomeFindCount() {
+      // this.$api.personal.homeFindcount(sendData).then((res) => {
+      //   this.homeFindCountData = res.data.data;
+      // });
+      this.$api.personal.homeClientClientCount().then((res) => {
         this.homeFindCountData = res.data.data;
       });
     },
@@ -406,25 +376,32 @@ export default {
       sendDataGet.planType = 4;
       this.intervenePlanXList = [];
       this.intervenePlanYList = [];
-      this.$api.personal.echartIntervenePlan(sendDataGet).then((res) => {
-        const lineIntervenePlanListMap = res.data.data.lineIntervenePlanListMap;
-        const xListInit = [];
-        const yListInit = [];
-        if (
-          lineIntervenePlanListMap != null &&
-          JSON.stringify(lineIntervenePlanListMap) !== '{}'
-        ) {
-          Object.keys(lineIntervenePlanListMap).forEach((key) => {
-            xListInit.push(key);
-            yListInit.push(lineIntervenePlanListMap[key]);
-          });
-          this.intervenePlanXList = xListInit;
-          this.intervenePlanYList.push(yListInit);
-        } else {
-          this.intervenePlanXList = [];
-          this.intervenePlanYList = [];
-        }
-        this.getEchartIntervenePlanAll(sendData);
+      // this.$api.personal.echartIntervenePlan(sendDataGet).then((res) => {
+      this.$api.personal.neardayClientCount(sendDataGet).then((res) => {
+        const lineIntervenePlanListMap = res.data.data;
+        const arr = [];
+        lineIntervenePlanListMap.forEach((val) => {
+          this.intervenePlanXList.push(val.date.replace('-', '/').split('/')[1].replace('-', '/'));
+          arr.push(val.newClientCount);
+        });
+        this.intervenePlanYList.push(arr);
+        // const xListInit = [];
+        // const yListInit = [];
+        // if (
+        //   lineIntervenePlanListMap != null &&
+        //   JSON.stringify(lineIntervenePlanListMap) !== '{}'
+        // ) {
+        //   Object.keys(lineIntervenePlanListMap).forEach((key) => {
+        //     xListInit.push(key);
+        //     yListInit.push(lineIntervenePlanListMap[key]);
+        //   });
+        //   this.intervenePlanXList = xListInit;
+        //   this.intervenePlanYList.push(yListInit);
+        // } else {
+        //   this.intervenePlanXList = [];
+        //   this.intervenePlanYList = [];
+        // }
+        // this.getEchartIntervenePlanAll(sendData);
       });
     },
     // 随访任务 折线图全部任务
@@ -487,31 +464,40 @@ export default {
     // 随访任务饼图
     getEchartIntervenePlanPie(sendData) {
       const sendDataGet = Object.assign(sendData, this.listQuery);
-      this.$api.personal.echartIntervenePlanPie(sendDataGet).then((res) => {
-        const intervenePlanListMap = res.data.data.intervenePlanListMap;
-        const xListInit = [];
-        const yListInit = [];
-        const dianObjList = [];
-        if (
-          intervenePlanListMap != null &&
-          JSON.stringify(intervenePlanListMap) !== '{}'
-        ) {
-          Object.keys(intervenePlanListMap).forEach((key) => {
-            xListInit.push(key);
-            yListInit.push({ name: key, value: intervenePlanListMap[key] });
-            dianObjList.push({ name: key, value: intervenePlanListMap[key] });
-          });
-          this.intervenePlanPieXList = xListInit;
-          this.intervenePlanPieYList = yListInit;
-          this.dianPieList = dianObjList;
-        } else {
-          this.intervenePlanPieXList = [];
-          this.intervenePlanPieYList = [];
-          this.dianPieList = [];
-        }
+      this.$api.personal.homeGridClientCount(sendDataGet).then((res) => {
+      // this.$api.personal.echartIntervenePlanPie(sendDataGet).then((res) => {
+        const intervenePlanListMap = res.data.data.gridClientCount;
+        this.checkAfterFeeTotal = res.data.data.allClientCount;
+        intervenePlanListMap.forEach((val) => {
+          const json = {
+            value: val.clientCount,
+            name: val.gridName,
+          };
+          this.intervenePlanPieYList.push(json);
+        });
+        // console.log(this.intervenePlanPieYList, '121212');
+        // const xListInit = [];
+        // const yListInit = [];
+        // const dianObjList = [];
+        // if (
+        //   intervenePlanListMap != null &&
+        //   JSON.stringify(intervenePlanListMap) !== '{}'
+        // ) {
+        //   Object.keys(intervenePlanListMap).forEach((key) => {
+        //     xListInit.push(key);
+        //     yListInit.push({ name: key, value: intervenePlanListMap[key] });
+        //     dianObjList.push({ name: key, value: intervenePlanListMap[key] });
+        //   });
+        //   this.intervenePlanPieXList = xListInit;
+        //   this.intervenePlanPieYList = yListInit;
+        //   this.dianPieList = dianObjList;
+        // } else {
+        //   this.intervenePlanPieXList = [];
+        //   this.intervenePlanPieYList = [];
+        //   this.dianPieList = [];
+        // }
       });
     },
-
   },
 };
 </script>

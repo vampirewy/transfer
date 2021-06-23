@@ -37,7 +37,7 @@
             <div class="searchInputFormItem">
               <el-input
                 placeholder="姓名/手机号/企业单位"
-                v-model="forms.keywords"
+                v-model="forms.clientName"
               >
               </el-input>
               <span class="searchBtnImgSpan" @click="search">
@@ -313,9 +313,9 @@ const COLUMNS = {
     },
     { label: '年龄', prop: 'age' },
     { label: '检测时间', prop: 'testDate', minWidth: '100' },
-    { label: '收缩压（mmHg）', prop: 'sbp' },
-    { label: '舒张压（mmHg）', prop: 'dbp' },
-    { label: '脉搏（次/分钟）', prop: 'hd' },
+    { label: '收缩压（mmHg）', prop: 'sbp', minWidth: '120' },
+    { label: '舒张压（mmHg）', prop: 'dbp', minWidth: '120' },
+    { label: '脉搏（次/分钟）', prop: 'hd', minWidth: '120' },
     { label: '备注', prop: 'result' },
   ],
   BG: [
@@ -331,7 +331,7 @@ const COLUMNS = {
     { label: '年龄', prop: 'age' },
     { label: '检测时间', prop: 'testDate', minWidth: '100' },
     { label: '血糖类型', prop: 'sugarTypeName' },
-    { label: '血糖值（mmol/L）', prop: 'sugar' },
+    { label: '血糖值（mmol/L）', prop: 'sugar', minWidth: '120' },
     { label: '备注', prop: 'result' },
   ],
   weight: [
@@ -345,10 +345,10 @@ const COLUMNS = {
       },
     },
     { label: '年龄', prop: 'age' },
-    { label: '检测时间', prop: 'testDate', minWidth: '100' },
-    { label: '身高(cm)', prop: 'workUnitName' },
+    { label: '检测时间', prop: 'testDate', minWidth: '120' },
+    { label: '身高(cm)', prop: 'height' },
     { label: '体重(kg)', prop: 'weight' },
-    { label: '腰围(cm)', prop: 'weight' },
+    { label: '腰围(cm)', prop: 'wc' },
     { label: 'BMI', prop: 'weight' },
     { label: '体脂率(%)', prop: 'bdPercent' },
     { label: '备注', prop: 'result' },
@@ -365,10 +365,10 @@ const COLUMNS = {
     },
     { label: '年龄', prop: 'age' },
     { label: '检测时间', prop: 'testDate', minWidth: '100' },
-    { label: '运动时长(min)', prop: 'workUnitName' },
-    { label: '运动路程(km)', prop: 'workUnitName' },
-    { label: '运动消耗(Kcal)', prop: 'workUnitName' },
-    { label: '运动步数(步)', prop: 'steps' },
+    { label: '运动时长(min)', prop: 'sportTime', minWidth: '120' },
+    { label: '运动路程(km)', prop: 'sportDistance', minWidth: '120' },
+    { label: '运动消耗(Kcal)', prop: 'kcal', minWidth: '120' },
+    { label: '运动步数(步)', prop: 'steps', minWidth: '120' },
     { label: '备注', prop: 'result' },
   ],
   other: [
@@ -413,7 +413,7 @@ export default {
       isGetinfo: true,
       isAddInfo: true,
       forms: {
-        keywords: '',
+        clientName: '',
         gender: '',
         workUnitName: '',
         physicalstartTime: '', // 开始时间
@@ -503,6 +503,7 @@ export default {
       console.log(id, ids);
       this.isGetinfo = id;
       this.isAddInfo = ids;
+      this.queryPageList();
     },
     editGray() {
       this.isGetinfo = false;
@@ -520,7 +521,7 @@ export default {
       this.isAddInfo = false;
     },
     reset() {
-      this.forms.keywords = '';
+      this.forms.clientName = '';
       this.forms.workUnitName = '';
       this.forms.gender = '';
       this.forms.physicalstartTime = '';

@@ -50,7 +50,7 @@
         <div class="searchInputFormItem">
           <el-input placeholder="名称/项目" v-model="formData.itemName">
           </el-input>
-          <span class="searchBtnImgSpan">
+          <span class="searchBtnImgSpan" @click="search(1)">
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
               </span>
         </div>

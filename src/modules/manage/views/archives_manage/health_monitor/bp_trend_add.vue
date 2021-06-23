@@ -119,18 +119,37 @@
             </el-form-item>
             </el-col>
             <el-col :span="6">
-            <el-form-item label="时间" prop="startDate">
+            <el-form-item label="日期时间" prop="startDate">
               <el-date-picker
+                v-model="infoSource.startDate"
+                type="datetime"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                :max-date="new Date()"
+                placeholder="选择日期时间">
+              </el-date-picker>
+              <!-- <el-date-picker
                 class="start-date"
                 v-model="infoSource.startDate"
                 type="date"
                 value-format="yyyy-MM-dd"
-                placeholder="请选择时间"
+                placeholder="请选择日期"
                 style="width: 100%"
                 :max-date="new Date()"
-              ></el-date-picker>
+              ></el-date-picker> -->
             </el-form-item>
             </el-col>
+            <!-- <el-col :span="6">
+              <el-form-item label="时间" prop="Timevalue">
+                <el-time-picker
+                v-model="infoSource.Timevalue"
+                :picker-options="{
+                  selectableRange: '00:00:00 - 23:00:00'
+                }"
+                value-format="HH:mm:ss"
+                placeholder="请选择时间">
+              </el-time-picker>
+              </el-form-item>
+            </el-col> -->
         </el-row>
         <el-row v-if="id === 1">
             <!-- <el-form-item label="血糖类型" prop="drugsName" style="width:25%">
@@ -154,7 +173,7 @@
             </el-form-item>
             </el-col>
             <el-col :span="6">
-            <el-form-item label="血糖值" prop="drugsName">
+            <el-form-item label="血糖值" prop="bloodsugarvalue">
               <el-input
                 onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"
                 v-model="infoSource.bloodsugarvalue"
@@ -166,18 +185,27 @@
             </el-form-item>
             </el-col>
             <el-col :span="6">
-            <el-form-item label="时间" prop="startDate">
+            <el-form-item label="日期时间" prop="startDate">
               <el-date-picker
-                class="start-date"
                 v-model="infoSource.startDate"
-                type="date"
-                value-format="yyyy-MM-dd"
-                placeholder="请选择时间"
-                style="width: 100%"
+                type="datetime"
+                value-format="yyyy-MM-dd HH:mm:ss"
                 :max-date="new Date()"
-              ></el-date-picker>
+                placeholder="选择日期时间">
+              </el-date-picker>
             </el-form-item>
             </el-col>
+            <!-- <el-col :span="6">
+              <el-form-item label="时间" prop="Timevalue">
+                <el-time-picker
+                v-model="infoSource.Timevalue"
+                :picker-options="{
+                  selectableRange: '00:00:00 - 23:00:00'
+                }"
+                placeholder="请选择时间">
+              </el-time-picker>
+              </el-form-item>
+            </el-col> -->
         </el-row>
         <div v-if="id === 2">
             <el-row>
@@ -232,18 +260,27 @@
             </el-row>
             <el-row>
                 <el-col :span="6">
-                <el-form-item label="时间" prop="startDate">
-                <el-date-picker
-                    class="start-date"
-                    v-model="infoSource.startDate"
-                    type="date"
-                    value-format="yyyy-MM-dd"
-                    placeholder="请选择时间"
-                    style="width: 100%"
-                    :max-date="new Date()"
-                ></el-date-picker>
+                <el-form-item label="日期时间" prop="startDate">
+                  <el-date-picker
+                  v-model="infoSource.startDate"
+                  type="datetime"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  :max-date="new Date()"
+                  placeholder="选择日期时间">
+                </el-date-picker>
                 </el-form-item>
                 </el-col>
+                <!-- <el-col :span="6">
+              <el-form-item label="时间" prop="Timevalue">
+                <el-time-picker
+                  v-model="infoSource.Timevalue"
+                  :picker-options="{
+                    selectableRange: '00:00:00 - 23:00:00'
+                  }"
+                  placeholder="请选择时间">
+                </el-time-picker>
+                </el-form-item>
+              </el-col> -->
             </el-row>
         </div>
         <div v-if="id === 3">
@@ -297,17 +334,28 @@
                 </el-col>
                 </el-row>
                 <el-row>
-                <el-form-item label="时间" prop="startDate">
-                <el-date-picker
-                    class="start-date"
+                <el-col :span="6">
+                <el-form-item label="日期时间" prop="startDate">
+                  <el-date-picker
                     v-model="infoSource.startDate"
-                    type="date"
-                    value-format="yyyy-MM-dd"
-                    placeholder="请选择时间"
-                    style="width: 200px"
+                    type="datetime"
+                    value-format="yyyy-MM-dd HH:mm:ss"
                     :max-date="new Date()"
-                ></el-date-picker>
+                    placeholder="选择日期时间">
+                  </el-date-picker>
                 </el-form-item>
+              </el-col>
+                <!-- <el-col :span="6">
+                  <el-form-item label="时间" prop="Timevalue">
+                    <el-time-picker
+                    v-model="infoSource.Timevalue"
+                    :picker-options="{
+                      selectableRange: '00:00:00 - 23:00:00'
+                    }"
+                    placeholder="请选择时间">
+                  </el-time-picker>
+                  </el-form-item>
+                </el-col> -->
                 </el-row>
         </div>
         <div class="row">
@@ -381,13 +429,15 @@ export default {
         sportDistance: '', // 运动路程
         steps: '', // 步数
         kcal: '', // 消耗
+        Timevalue: '',
       },
       drugsList: [],
       resultList: [],
       rules: {
+        Timevalue: [{ required: true, message: '时间不能为空' }],
         clientName: [{ required: true, message: '客户不能为空' }],
-        drugsName: [{ required: true, message: '药品名称不能为空' }],
-        startDate: [{ required: true, message: '开始时间不能为空' }],
+        bloodsugarvalue: [{ required: true, message: '血糖值不能为空' }],
+        startDate: [{ required: true, message: '日期时间不能为空' }],
         endDate: [{ required: true, message: '结束时间不能为空' }],
         result: [{ required: true, message: '当前状态不能为空' }],
         SBP: [{ required: true, message: '收缩压不能为空' }],
@@ -567,6 +617,7 @@ export default {
       this.queryList();
     },
     submit() {
+      // this.infoSource.startDates = this.infoSource.Timevalue;
       if (this.infoSource.clientId === '') {
         return this.$message.error('项目名称不能为空');
       }
@@ -583,7 +634,7 @@ export default {
         return this.$api.healthMonitorInterface.saveHealthBloodPressure({
           id: this.editId,
           clientId: this.infoSource.clientId,
-          testDate: this.infoSource.startDate + this.infoSource.startDates,
+          testDate: this.infoSource.startDate,
           sbp: this.infoSource.SBP,
           dbp: this.infoSource.DBP,
           hd: this.infoSource.pulse,
@@ -609,7 +660,7 @@ export default {
           clientId: this.infoSource.clientId,
           sugar: this.infoSource.bloodsugarvalue,
           sugarType: this.infoSource.bloodsugar,
-          testDate: this.infoSource.startDate + this.infoSource.startDates,
+          testDate: this.infoSource.startDate,
           result: this.infoSource.conclusion,
         }).then(({ data }) => {
           this.$message.success('操作成功');
@@ -637,7 +688,7 @@ export default {
           weight: this.infoSource.Weight,
           wc: this.infoSource.Waist,
           bdPercent: this.infoSource.specification,
-          testDate: this.infoSource.startDate + this.infoSource.startDates,
+          testDate: this.infoSource.startDate,
           result: this.infoSource.conclusion,
         }).then(({ data }) => {
           this.$message.success('操作成功');
@@ -653,7 +704,7 @@ export default {
           id: this.editId,
           clientId: this.infoSource.clientId,
           sportTime: this.infoSource.sportTime,
-          testDate: this.infoSource.startDate + this.infoSource.startDates,
+          testDate: this.infoSource.startDate,
           sportDistance: this.infoSource.sportDistance,
           steps: this.infoSource.steps,
           kcal: this.infoSource.kcal,
