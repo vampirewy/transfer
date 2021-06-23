@@ -8,7 +8,7 @@
       <div class="searchCondition">
       <div class="searchLeft">
         <div class="searchInputFormItem">
-          <el-input placeholder="名称/项目" v-model="formData.keyWord">
+          <el-input placeholder="名称/项目" v-model="formData.name">
           </el-input>
           <span class="searchBtnImgSpan" style="background:#ffffff;margin:1px" @click="search(1)">
                   <img class="searchBtnImg" style="width:35px"
@@ -79,9 +79,8 @@ export default {
   data() {
     return {
       formData: {
-        keyword: '',
+        name: '',
       },
-      keyword: '',
       tableData: [],
       total: 0,
       currentPage: 1,
@@ -107,15 +106,18 @@ export default {
       this.queryList();
     },
     search() {
+      console.log(this.formData.name);
       this.currentPage = 1;
       this.queryList();
     },
     reset() {
-
+      this.formData.name = '';
+      this.currentPage = 1;
+      this.queryList();
     },
     async queryList() {
       const res = await this.$api.unusualListInterface.listPage({
-        projectName: this.keyword,
+        name: this.formData.name,
         pageNo: this.currentPage,
         pageSize: this.pageSize,
       });

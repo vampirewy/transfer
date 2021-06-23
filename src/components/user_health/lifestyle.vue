@@ -24,7 +24,7 @@
 <script>
 export default {
   name: 'disease',
-  props: ['questionLifestyle'],
+  props: ['clientId'],
   data() {
     return {
       formNew: {
@@ -34,14 +34,29 @@ export default {
         questionLifestyle4: { paramValue: '' },
         questionLifestyle5: { paramValue: '' },
       },
+      assessListData: [],
     };
   },
   watch: {
-    questionLifestyle: {
-      handler(val) {
-        this.formNew = val;
-      },
-      deep: true, // 为true，表示深度监听，这时候就能监测到a值变化
+    // questionLifestyle: {
+    //   handler(val) {
+    //     this.formNew = val;
+    //   },
+    //   deep: true, // 为true，表示深度监听，这时候就能监测到a值变化
+    // },
+  },
+  mounted() {
+    this.getImportantIndex();
+  },
+  methods: {
+    getImportantIndex() {
+      this.$api.health
+        .getabnormalList(this.clientId)
+        .then((res) => {
+          const { data } = res;
+          const result = data.data;
+          this.assessListData = result || [];
+        });
     },
   },
 };

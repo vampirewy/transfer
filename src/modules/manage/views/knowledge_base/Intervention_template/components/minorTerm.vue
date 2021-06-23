@@ -38,7 +38,7 @@
               <el-popover
                 ref="userPopovers"
                 placement="bottom-start"
-                width="650"
+                width="700"
                 trigger="click"
                 @show="detectionpopoverStatus = true"
                 @hide="detectionhandlePopoperClose"
@@ -117,11 +117,11 @@
                               style="width: 140px"
                               @change="ChangeestatesJudg(scope.$index,$event)"
                       >
-                        <el-option label=">" value="1" key="1"></el-option>
-                        <el-option label="<" value="2" key="2"></el-option>
-                        <el-option label="≥" value="3" key="3"></el-option>
-                        <el-option label="≤" value="4" key="4"></el-option>
-                        <el-option label="~" value="5" key="5"></el-option>
+                        <el-option label=">" :value="1" key="1"></el-option>
+                        <el-option label="<" :value="2" key="2"></el-option>
+                        <el-option label="≥" :value="3" key="3"></el-option>
+                        <el-option label="≤" :value="4" key="4"></el-option>
+                        <el-option label="~" :value="5" key="5"></el-option>
                       </el-select>
                     </div>
                   </span>
@@ -255,7 +255,7 @@ const COLUMNS = {
     { label: '人员类别', prop: 'gridName' },
   ],
   Exception: [
-    { label: '异常名称', prop: 'abnormalTypeName' },
+    { label: '异常名称', prop: 'abnormalName' },
     { label: '性别',
       prop: 'gender',
       formatter(val) {
@@ -337,6 +337,7 @@ export default {
     this.NameType = this.TabTitle;
     this.dataSource.columns = COLUMNS[this.TabTitle];
     if (this.InterventionList.length !== 0) {
+      console.log(this.InterventionList, 'asdadadas');
       this.dataSource.list = this.InterventionList;
       if (this.InterventionList[0].conditionRelation === 1 &&
       this.InterventionList[0].conditionRelation === 2) {
@@ -384,11 +385,8 @@ export default {
       this.$set(this.dataSource.list[index], 'estates', event);
       this.$forceUpdate();
     },
-    ChangeestatesJudg(index, event) {
-      console.log(index, event);
-      this.$set(this.dataSource.list[index], 'estates', event);
-      // this.$forceUpdate();
-      console.log(this.dataSource.list);
+    ChangeestatesJudg(index) {
+      this.$set(this.dataSource.list[index], `${new Date()}`, '');
     },
     ConstitutionList() {
       this.$api.reportInterface
@@ -483,7 +481,7 @@ export default {
         for (let i = 0; i < this.detectionInfo.length; i++) {
           this.detectionInfo[i].conditionRelation = this.formData.state;
           if (NameType === 'Minterm') {
-            this.detectionInfo[i].judgeRelation = '1';
+            this.detectionInfo[i].judgeRelation = '';
           }
         }
         this.$refs.userPopovers.doClose();

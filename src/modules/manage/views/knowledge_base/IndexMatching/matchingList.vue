@@ -187,8 +187,8 @@
             </el-table-column>
             <el-table-column label="性别" prop="gender" min-width="15%" show-overflow-tooltip>
               <template slot-scope="scope">
-                <span>{{ scope.row.gender | getResult}}</span>
-              </template>
+                  {{scope.row.gender === 1 ? '男' : (scope.row.gender === 2 ? '女' : '')}}
+                </template>
             </el-table-column>
             <el-table-column
               label="年龄"

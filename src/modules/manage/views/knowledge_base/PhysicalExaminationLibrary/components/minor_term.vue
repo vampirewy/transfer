@@ -188,7 +188,7 @@
              </el-table-column>
             <el-table-column label="范围或参考" prop="refRange" min-width="100" show-overflow-tooltip >
             <template slot-scope="scope">
-              <span>{{ scope.row.refRange || '-'}}</span>
+              <span>{{ statusrefRange(scope.row.refRange) || '-'}}</span>
             </template>
             </el-table-column>
             <el-table-column label="单位" prop="unit" min-width="80" show-overflow-tooltip >
@@ -333,6 +333,17 @@ export default {
       //     id: '',
       //   },
       // });
+    },
+    statusrefRange(Range) {
+      if (Range) {
+        const arr = Range.split('-');
+        if (arr.length !== 1) {
+          const ss = Number(arr[0]).toFixed(2);
+          const aa = Number(arr[1]).toFixed(2);
+          return `${ss}-${aa}`;
+        }
+        return Range;
+      }
     },
     async queryList() {
       const res = await this.$api.physicalProjectListInterface.listOrganItemLibrary();

@@ -188,17 +188,17 @@
             <span>{{ scope.row.riskFactor | getResult}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="题目类型" prop="riskType" show-overflow-tooltip>
+        <!-- <el-table-column label="题目类型" prop="riskType" show-overflow-tooltip> -->
           <!-- <template slot-scope="scope">
                 <span class="clientName"
                       @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
                   {{ scope.row.riskType | getResult}}
                 </span>
           </template> -->
-        </el-table-column>
-        <el-table-column prop="state" label="分类" min-width="80px">
+        <!-- </el-table-column> -->
+        <el-table-column prop="riskType" label="分类" min-width="80px">
           <template slot-scope="scope">
-            <span>{{scope.row.state | getResultGender}}</span>
+            <span>{{scope.row.riskType || '-'}}</span>
           </template>
         </el-table-column>
         <!-- <el-table-column label="适宜人群" prop="age">

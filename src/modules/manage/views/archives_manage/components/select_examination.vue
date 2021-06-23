@@ -38,7 +38,7 @@
       <el-table-column prop="itemName" label="项目名称"></el-table-column>
       <el-table-column prop="refRange" label="参考范围">
         <template slot-scope="scope">
-          <span>{{ statusrefRange(scope.row.refRange) }}</span>
+          <span>{{ statusrefRange(scope.row.refRange) || '-'}}</span>
         </template>
       </el-table-column>
       <el-table-column prop="unit" label="单位"></el-table-column>
@@ -92,9 +92,12 @@ export default {
     statusrefRange(Range) {
       if (Range) {
         const arr = Range.split('-');
-        const ss = Number(arr[0]).toFixed(2);
-        const aa = Number(arr[1]).toFixed(2);
-        return `${ss}-${aa}`;
+        if (arr.length !== 1) {
+          const ss = Number(arr[0]).toFixed(2);
+          const aa = Number(arr[1]).toFixed(2);
+          return `${ss}-${aa}`;
+        }
+        return Range;
       }
     },
     submit() {

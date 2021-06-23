@@ -30,13 +30,28 @@ export default {
   props: ['reportAbnormalList', 'notTitle'],
   data() {
     return {
-      form: {},
+      form: [],
       reportAbnormalListNew: [],
     };
   },
   watch: {
     reportAbnormalList(val) {
       this.reportAbnormalListNew = val;
+    },
+  },
+  methods: {
+    pageClick(page) {
+      this.currentPage = page;
+      // this.getImportantIndex();
+    },
+    getImportantIndex() {
+      this.$api.health
+        .getabnormalList(this.clientId)
+        .then((res) => {
+          const { data } = res;
+          const result = data.data;
+          this.form = result || [];
+        });
     },
   },
 };

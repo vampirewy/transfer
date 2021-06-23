@@ -18,7 +18,7 @@
           <span class="dianLv"></span>生活方式
         </div>
         <lift-style
-          :questionLifestyle="form.questionLifestyle"
+          :clientId="$route.params.id"
           style="margin-left: 10px"
         ></lift-style>
         <div class="formSearchTitle" style="font-size: 14px">
@@ -26,7 +26,7 @@
         </div>
         <risk-assess
           style="margin-left: 10px"
-          :assessList="assessList"
+           :clientId="$route.params.id"
         ></risk-assess>
         <div class="formSearchTitle" style="font-size: 14px">
           <span class="dianLv"></span>危险因素
@@ -68,6 +68,7 @@ export default {
   },
   data() {
     return {
+      clientId: '',
       protent: '30',
       colors: '#24499D',
       protentes: '70',
@@ -127,8 +128,20 @@ export default {
   mounted() {
     this.getUserHealthDetail(); // 获取健康信息
     this.getAssessReportDetail(); // 获取慢性病风险评估
+    this.getImportantIndex(); // 获取主要疾病
   },
   methods: {
+    // 主要疾病
+    getImportantIndex() {
+      this.$api.health
+        .getabnormalList(this.$route.params.id)
+        .then((res) => {
+          const { data } = res;
+          const result = data.data;
+          console.log(result, 111);
+          // this.tableData = result || [];
+        });
+    },
     clickMenu(index, id) {
       this.total = 0;
       this.active = index;
