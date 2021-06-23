@@ -148,7 +148,7 @@
       >
         <template slot-scope="scope">
              <span class="clientName"
-                   @click="commonHref.toPersonalHealth(scope.row.id, $router)">
+                   @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
                {{ scope.row.clientName | getResult}}
              </span>
         </template>
