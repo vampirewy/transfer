@@ -12,7 +12,7 @@
         <div class="card-panel-description">
           <div class="card-panel-text">客户总数（人）</div>
           <div class="card-panel-number">
-            {{ formData.clientInfoCount || 1820 }}
+            {{ formData.allClientCount || 0 }}
           </div>
         </div>
         <!-- <div class="cardDian"><p></p><p></p></div> -->
@@ -26,7 +26,7 @@
         <div class="card-panel-description">
           <div class="card-panel-text">体检总数（人）</div>
           <div class="card-panel-number">
-            {{ formData.reportInfoCount || 920 }}
+            {{ formData.reportClientCount || 0 }}
           </div>
         </div>
         <!-- <div class="cardDian"><p></p><p></p></div> -->
@@ -40,7 +40,7 @@
         <div class="card-panel-description">
           <div class="card-panel-text">问卷总数（人）</div>
           <div class="card-panel-number">
-            {{ formData.questionInfoCount || 450 }}
+            {{ formData.questionClientCount || 0 }}
           </div>
         </div>
         <!-- <div class="cardDian"><p></p><p></p></div> -->
@@ -54,7 +54,7 @@
         <div class="card-panel-description">
           <div class="card-panel-text">评估报告总数（人）</div>
           <div class="card-panel-number">
-            {{ formData.assessReportCount || 560 }}
+            {{ formData.assessmentReportClientCount || 0 }}
           </div>
         </div>
         <!-- <div class="cardDian"><p></p><p></p></div> -->

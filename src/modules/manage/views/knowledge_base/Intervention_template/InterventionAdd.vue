@@ -236,7 +236,6 @@ export default {
     };
   },
   mounted() {
-    console.log(this.ids, 'qwqwq');
     if (this.ids) {
       this.$api.medicalHistoryInterface.updateInterveneTemplate(this.ids).then((res) => {
         const { data } = res;
@@ -344,7 +343,6 @@ export default {
       if (this.TabTitle === 'Constitution') {
         this.Intervention = this.Constitution;
       }
-      // console.log(this.TabTitle);
       // this.$emit('messageData', index, this.tabIndex);
     },
     handleStartDateChange() {
@@ -367,12 +365,21 @@ export default {
       this.form.patientNo = str;
     },
     submit() {
-      // console.log(this.Minterm, '小项数据');
-      // console.log(this.Category, '人员类别');
-      // console.log(this.Exception, '异常');
-      // console.log(this.Composition, '组合异常');
-      // console.log(this.Disease, '疾病评估');
-      // console.log(this.Constitution, '体质辨识');
+      if (!this.form.name) {
+        return this.$message.warning('请填写模版名称');
+      }
+      if (!this.form.gender) {
+        return this.$message.warning('请选择性别');
+      }
+      if (!this.form.conditionRelation) {
+        return this.$message.warning('请填写条件关系');
+      }
+      if (!this.form.groupCode) {
+        return this.$message.warning('请填写组别');
+      }
+      if (!this.form.lvCode) {
+        return this.$message.warning('请填写级别');
+      }
       const jsons = {
         interveneTemplateItemRequestList: [],
         interveneTemplateGridRequestList: [],
@@ -411,7 +418,6 @@ export default {
           };
           jsons.interveneTemplateOrganAbnormalRequestList.push(prms);
         }
-        // console.log(jsons.interveneTemplateOrganAbnormalRequestList, 'xczxczcxxs');
       }
       if (this.Composition.length !== 0) {
         for (let i = 0; i < this.Composition.length; i++) {
@@ -433,7 +439,6 @@ export default {
         }
       }
       if (this.Constitution.length !== 0) {
-        console.log(this.Constitution);
         for (let i = 0; i < this.Constitution.length; i++) {
           const prms = {
             conditionRelation: this.Constitution[i].conditionRelation,
@@ -456,9 +461,7 @@ export default {
           }
         });
       } else {
-        // console.log(456);
         this.form.id = this.ids;
-        console.log(Object.assign(jsons, this.form));
         this.$api.interventionTemplateInterface.updateInterveneTemplate(
           Object.assign(jsons, this.form),
         ).then((res) => {

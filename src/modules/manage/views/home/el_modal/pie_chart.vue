@@ -46,7 +46,7 @@ export default {
     this.$nextTick(() => {
       this.initChart();
     });
-    console.log(this.yList, '数据');
+    // console.log(this.yList, '数据');
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -90,8 +90,8 @@ export default {
         },*/
         graphic: {
           type: 'text',
-          left: '35%',
-          top: '50%',
+          left: '40%',
+          top: '45%',
           style: {
             text: this.centerText, // 圈中的文字值
             textAlign: 'center',
@@ -101,9 +101,9 @@ export default {
           },
         },
         title: {
-          text: '总费用',
+          text: '总人数',
           left: '34%',
-          top: '62%',
+          top: '60%',
           textStyle: {
             color: '#999999',
             fontSize: 14,
@@ -159,11 +159,21 @@ export default {
                 // 每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组中的颜色
                 color(params) {
                   const colorList = [
+                    // '#FA912B',
+                    // '#806CE5',
+                    // '#3154AC',
+                    // '#36BF2F',
+                    // '#FA912B',
+                    // '#6DC8EC',
+                    // '#31C529',
+                    // '#54c9b6',
+                    // '#F53626',
+                    // '#f5c8be',
+                    '#FA912B',
                     '#333333',
                     '#806CE5',
                     '#3154AC',
                     '#36BF2F',
-                    '#FA912B',
                     '#6DC8EC',
                     '#31C529',
                     '#54c9b6',

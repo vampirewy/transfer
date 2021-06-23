@@ -19,7 +19,7 @@
             <div class="searchInputFormItem" style="width:108px">
               <el-input placeholder="输入条件搜索"
               v-model="keyword"> </el-input>
-              <span class="searchBtnImgSpan" @click="search" style="right:-3px">
+              <span class="searchBtnImgSpan" style="right:-3px" @click="search" >
                 <img
                   class="searchBtnImg"
                   src="@/assets/images/common/topsearch.png"
@@ -107,6 +107,7 @@ export default {
   methods: {
     async queryList() {
       const res = await this.$api.userFollowInterface.getClientInfoListPage({
+        gender: this.gender,
         keywords: this.keyword,
         pageNo: this.currentPage,
         pageSize: this.pageSize,
@@ -121,8 +122,16 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-    search() {},
-    reset() {},
+    search() {
+      this.currentPage = 1;
+      this.queryList();
+    },
+    reset() {
+      this.gender = '';
+      this.keyword = '';
+      this.currentPage = 1;
+      this.queryList();
+    },
     handleCurrentChange() {},
     addBtn() {
       this.$emit('change', this.multipleSelection);
@@ -136,7 +145,7 @@ export default {
 <style lang="scss" scoped>
 .el-people-select_content {
   background-color: #ffffff;
-  padding: 25px 19px;
+  padding: 10px 19px;
   box-shadow: 0px 0px 30px 0px rgba(151, 166, 189, 0.3);
   border-radius: 5px;
 }
@@ -147,10 +156,10 @@ export default {
   text-align: center;
 }
 .el-table {
-  margin: 20px 0;
+  margin: 10px 0;
 }
 .form-buttons {
-  margin-top: 23px;
+  margin-top: 5px;
   text-align: center;
 }
 </style>

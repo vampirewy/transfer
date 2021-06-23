@@ -1,38 +1,9 @@
 <template>
   <div class="diet-form">
     <div class="diet-form_center" style="padding: 0px 5px 0;">
-      <!-- <div class="diet-type">
-        <div class="diet-type-item" @click="isShowDietPagoda = true">
-          <img src="@/assets/images/diet/diet_image1.png" alt="膳食平衡宝塔" />
-          <div>
-            <p class="title">中国居民</p>
-            <p class="desc">膳食平衡宝塔</p>
-          </div>
-        </div>
-        <div class="diet-type-item" @click="isShowDietPagodaGuide = true">
-          <img src="@/assets/images/diet/diet_image2.png" alt="膳食指南" />
-          <div>
-            <p class="title">中国居民</p>
-            <p class="desc">膳食指南</p>
-          </div>
-        </div>
-        <div class="diet-type-item" @click="isShowDietPagodaExchange = true">
-          <img src="@/assets/images/diet/diet_image3.png" alt="食物交换份" />
-          <div>
-            <p class="title">常见</p>
-            <p class="desc">食物交换份</p>
-          </div>
-        </div>
-      </div> -->
       <div class="diet-plan-box">
         <el-form>
           <div class="diet-formulate">
-            <!-- <div
-              class="diet-formulate-head"
-              style="margin-bottom: 20px; position: relative"
-            >
-              <div class="item-title">制定食谱</div>
-            </div> -->
             <el-tabs
               @tab-click="handleTabsEdit"
               type="card"
@@ -136,8 +107,9 @@
                         >
                           <p>{{ its2.name }}</p>
                           <div class="input-box">
-                            <el-input disabled type="text" v-model="its2.weight" />
-                            g
+                            <!-- <el-input disabled type="text" v-model="its2.weight" /> -->
+                            <!-- <div class="weightbox">{{its2.weight}} g</div> -->
+                            <div class="weightbox">{{(its.weight*its2.scale).toFixed(2)}} </div> g
                           </div>
                         </div>
                       </div>
@@ -148,68 +120,10 @@
             </el-tabs>
           </div>
         </el-form>
-        <!-- <div class="form-buttons">
-          <el-button size="small" class="cancelBtn" @click="back">
-            返回
-          </el-button>
-          <el-button size="small" class="sureBtn" type="primary" @click="submit"
-            >保存</el-button
-          >
-        </div> -->
       </div>
     </div>
-    <!-- <div class="diet-form_right">
-      <el-tabs value="1" stretch type="border-card">
-        <el-tab-pane name="1" label="食谱营养素分析">
-          <div class="sign">
-            <span class="sign-high">指标过高</span>
-            <span class="sign-low">指标过低</span>
-          </div>
-          <el-table
-            row-class-name="table-row"
-            header-row-class-name="table-row"
-            :data="analysisData"
-          >
-            <el-table-column align="center" prop="title" label="成分">
-            </el-table-column>
-            <el-table-column align="center" prop="title2" label="推荐量">
-              <template slot-scope="scope">
-                <span class="analysis-high">{{ scope.row.title2 }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column align="center" prop="title3" label="提供量">
-              <template slot-scope="scope">
-                <span class="analysis-low">{{ scope.row.title3 }}</span>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-tab-pane>
-        <el-tab-pane lazy name="2" label="物质及能量分配">
-          <div class="chart-box">
-            <p class="item-title">三大营养素供能比</p>
-            <diet-proportion-chart></diet-proportion-chart>
-            <p class="chart-desc">
-              三大营养素推荐比值：蛋白质10%~15%，脂肪20%~30%，碳水化合物55%~65%
-            </p>
-          </div>
-          <div class="chart-box">
-            <p class="item-title">动物性及豆类蛋白质占总蛋白质比例</p>
-            <diet-proteinroportion-chart></diet-proteinroportion-chart>
-            <p class="chart-desc">
-              一般推荐动物性蛋白质和豆类蛋白质占膳食蛋白质总量30%~50%。
-            </p>
-          </div>
-          <div class="chart-box">
-            <p class="item-title">三餐能量分配比</p>
-            <diet-distribution-chart></diet-distribution-chart>
-            <p class="chart-desc">
-              三餐推荐分配比：早餐30%，午餐40%，晚餐30%。
-            </p>
-          </div>
-        </el-tab-pane>
-      </el-tabs>
-    </div> -->
     <el-food-op
+      v-if="isShowFoodOp"
       @change="handleFoodSelect"
       :visible.sync="isShowFoodOp"
     ></el-food-op>
@@ -263,16 +177,29 @@ export default {
       activeCaiDtoIndex: '',
       editableTabsValue: '1',
       editableTabs: [],
+      TabsIndex: 0,
+      FoodList: [],
     };
   },
   created() {
-    console.log(this.type, '类型');
     if (this.id) {
       this.getDetailList();
     }
   },
+  watch: {
+    editableTabs: {
+      handler(newValue) {
+        const json = {
+          templateConfigDayDtoList: newValue,
+        };
+        this.$emit('change', json, this.TabsIndex);
+      },
+      deep: true,
+    },
+  },
   methods: {
     handleTabsEdit(e) {
+      this.TabsIndex = e.index;
       this.$emit('makeIndex', e.index);
     },
     getDetailList() {
@@ -289,7 +216,6 @@ export default {
     },
     deitsLists(data) {
       // this.editableTabs = list;
-      // console.log(list, '1212121');
       const list = data.templateConfigDayDtoList;
       list.forEach((item1) => {
         const json = {};
@@ -317,6 +243,7 @@ export default {
                 json4.name = item4.name;
                 json4.weight = item4.weight;
                 json4.dietIngredientName = item4.scale;
+                json4.scale = item4.scale;
                 json3.templateDietIngredientDtoList.push(json4);
               });
             }
@@ -325,7 +252,7 @@ export default {
         this.editableTabs.push(json);
       });
       data.templateConfigDayDtoList = this.editableTabs;
-      this.$emit('change', data);
+      this.$emit('change', data, 0);
     },
     deleteDietTempPlateConfigDtos(index, inx, inxs) {
       this.editableTabs[index].clientDietPlanConfigList[inx].dietTemplateConfigDtos.splice(
@@ -389,15 +316,15 @@ export default {
       }
     },
     handleFoodSelect(e) {
-      // console.log(e, '接收的数据哈哈哈');
       // 选择食物回调
       const [index, inx] = this.selectDietMenuIndex;
-      e = e.map((item) => {
+      e.forEach((item) => {
         const obj = {};
         if (item.name) { // 判断是成品菜还是原料 原料是names
           obj.name = item.name;
           obj.configType = 1;
           obj.caiId = item.id;
+          obj.weight = item.totalWeight;
           obj.templateDietIngredientDtoList = item.caiIngredientDtos.map(
             (it) => {
               it.name = it.dietIngredientName;
@@ -408,17 +335,40 @@ export default {
           obj.name = item.names;
           obj.configType = 2;
           obj.dietIngredientId = item.id;
+          obj.weight = '';
         }
         obj.mealType = inx + 1;
-        obj.weight = '';
-        return obj;
+        this.FoodList.push(obj);
+        // return obj;
       });
-      this.editableTabs[index].clientDietPlanConfigList[inx].dietTemplateConfigDtos.push(
-        ...e,
-      );
+      // this.editableTabs[index].clientDietPlanConfigList[inx].dietTemplateConfigDtos.push(
+      //   ...e,
+      // );
+      this.FoodList.forEach((valQusOne) => {
+        let same = false;
+        this.editableTabs[index]
+          .clientDietPlanConfigList[inx]
+          .dietTemplateConfigDtos.forEach((valAnswer) => {
+            if (valQusOne.configType === 1) {
+              if (valQusOne.caiId === valAnswer.caiId) { // 如果有一样 就回答过了
+                same = true;
+              }
+            }
+            if (valQusOne.configType === 2) {
+              if (valQusOne.dietIngredientId === valAnswer.dietIngredientId) { // 如果有一样 就回答过了
+                same = true;
+              }
+            }
+          });
+        if (same === false) { // 如果没有相同的则push
+          this.editableTabs[index].clientDietPlanConfigList[inx].dietTemplateConfigDtos.push(
+            valQusOne,
+          );
+        }
+      });
+      this.FoodList = [];
     },
     submit() {
-      console.dir(this.editableTabs);
       const obj = [];
       this.editableTabs.forEach((item) => {
         item.clientDietPlanConfigList.forEach((item2) => {
@@ -447,7 +397,6 @@ export default {
           });
         });
       });
-      console.dir(obj);
       // this.$api.dietMenuTemplateInterface
       //   .saveDietMenuTemConfig(obj)
       //   .then(() => {

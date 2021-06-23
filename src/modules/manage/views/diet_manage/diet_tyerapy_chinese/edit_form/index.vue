@@ -31,7 +31,7 @@
               :key="item"
             ></el-checkbox>
           </el-checkbox-group> -->
-          <el-col :span="6">
+          <el-col :span="5">
           <el-checkbox
               label="平和质"
               v-model="checked1"
@@ -39,7 +39,7 @@
               :false-label="0"
             ></el-checkbox>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="5">
             <el-checkbox
               label="气虚质"
               v-model="checked2"
@@ -47,7 +47,7 @@
               :false-label="0"
             ></el-checkbox>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="5">
             <el-checkbox
               label="阳虚质"
               v-model="checked3"
@@ -55,7 +55,7 @@
               :false-label="0"
             ></el-checkbox>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="5">
             <el-checkbox
               label="阴虚质"
               v-model="checked4"
@@ -63,7 +63,15 @@
               :false-label="0"
             ></el-checkbox>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="5">
+            <el-checkbox
+              label="痰湿质"
+              v-model="checked4"
+              :true-label="4"
+              :false-label="0"
+            ></el-checkbox>
+          </el-col>
+          <el-col :span="5">
             <el-checkbox
               label="阴虚质"
               v-model="checked5"
@@ -71,7 +79,7 @@
               :false-label="0"
             ></el-checkbox>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="5">
             <el-checkbox
               label="阴虚质"
               v-model="checked6"
@@ -79,7 +87,7 @@
               :false-label="0"
             ></el-checkbox>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="5">
             <el-checkbox
               label="阴虚质"
               v-model="checked7"
@@ -87,9 +95,17 @@
               :false-label="0"
             ></el-checkbox>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="5">
             <el-checkbox
               label="阴虚质"
+              v-model="checked8"
+              :true-label="8"
+              :false-label="0"
+            ></el-checkbox>
+          </el-col>
+          <el-col :span="5">
+            <el-checkbox
+              label="不限"
               v-model="checked8"
               :true-label="8"
               :false-label="0"
@@ -316,5 +332,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+  /deep/ .el-col-5{
+    width: 19.83333%;
+  }
 @import './index.scss';
 </style>

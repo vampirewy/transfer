@@ -119,17 +119,28 @@
             </el-form-item>
             </el-col>
             <el-col :span="6">
-            <el-form-item label="时间" prop="startDate">
+            <el-form-item label="日期" prop="startDate">
               <el-date-picker
                 class="start-date"
                 v-model="infoSource.startDate"
                 type="date"
                 value-format="yyyy-MM-dd"
-                placeholder="请选择时间"
+                placeholder="请选择日期"
                 style="width: 100%"
                 :max-date="new Date()"
               ></el-date-picker>
             </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="时间" prop="Timevalue">
+                <el-time-picker
+                v-model="infoSource.Timevalue"
+                :picker-options="{
+                  selectableRange: '00:00:00 - 23:00:00'
+                }"
+                placeholder="请选择时间">
+              </el-time-picker>
+              </el-form-item>
             </el-col>
         </el-row>
         <el-row v-if="id === 1">
@@ -166,17 +177,28 @@
             </el-form-item>
             </el-col>
             <el-col :span="6">
-            <el-form-item label="时间" prop="startDate">
+            <el-form-item label="日期" prop="startDate">
               <el-date-picker
                 class="start-date"
                 v-model="infoSource.startDate"
                 type="date"
                 value-format="yyyy-MM-dd"
-                placeholder="请选择时间"
+                placeholder="请选择日期"
                 style="width: 100%"
                 :max-date="new Date()"
               ></el-date-picker>
             </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="时间" prop="Timevalue">
+                <el-time-picker
+                v-model="infoSource.Timevalue"
+                :picker-options="{
+                  selectableRange: '00:00:00 - 23:00:00'
+                }"
+                placeholder="请选择时间">
+              </el-time-picker>
+              </el-form-item>
             </el-col>
         </el-row>
         <div v-if="id === 2">
@@ -232,18 +254,29 @@
             </el-row>
             <el-row>
                 <el-col :span="6">
-                <el-form-item label="时间" prop="startDate">
+                <el-form-item label="日期" prop="startDate">
                 <el-date-picker
                     class="start-date"
                     v-model="infoSource.startDate"
                     type="date"
                     value-format="yyyy-MM-dd"
-                    placeholder="请选择时间"
+                    placeholder="请选择日期"
                     style="width: 100%"
                     :max-date="new Date()"
                 ></el-date-picker>
                 </el-form-item>
                 </el-col>
+                <el-col :span="6">
+              <el-form-item label="时间" prop="Timevalue">
+                <el-time-picker
+                  v-model="infoSource.Timevalue"
+                  :picker-options="{
+                    selectableRange: '00:00:00 - 23:00:00'
+                  }"
+                  placeholder="请选择时间">
+                </el-time-picker>
+                </el-form-item>
+              </el-col>
             </el-row>
         </div>
         <div v-if="id === 3">
@@ -297,17 +330,30 @@
                 </el-col>
                 </el-row>
                 <el-row>
-                <el-form-item label="时间" prop="startDate">
+                <el-col :span="6">
+                <el-form-item label="日期" prop="startDate">
                 <el-date-picker
                     class="start-date"
                     v-model="infoSource.startDate"
                     type="date"
                     value-format="yyyy-MM-dd"
-                    placeholder="请选择时间"
+                    placeholder="请选择日期"
                     style="width: 200px"
                     :max-date="new Date()"
                 ></el-date-picker>
                 </el-form-item>
+              </el-col>
+                <el-col :span="6">
+                  <el-form-item label="时间" prop="Timevalue">
+                    <el-time-picker
+                    v-model="infoSource.Timevalue"
+                    :picker-options="{
+                      selectableRange: '00:00:00 - 23:00:00'
+                    }"
+                    placeholder="请选择时间">
+                  </el-time-picker>
+                  </el-form-item>
+                </el-col>
                 </el-row>
         </div>
         <div class="row">
@@ -381,10 +427,12 @@ export default {
         sportDistance: '', // 运动路程
         steps: '', // 步数
         kcal: '', // 消耗
+        Timevalue: '',
       },
       drugsList: [],
       resultList: [],
       rules: {
+        Timevalue: [{ required: true, message: '时间不能为空' }],
         clientName: [{ required: true, message: '客户不能为空' }],
         drugsName: [{ required: true, message: '药品名称不能为空' }],
         startDate: [{ required: true, message: '开始时间不能为空' }],

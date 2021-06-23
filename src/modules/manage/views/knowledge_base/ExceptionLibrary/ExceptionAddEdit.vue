@@ -33,6 +33,7 @@
         <el-col :span="6">
           <el-form-item label="性别限制" >
             <el-select v-model="form.gender" placeholder="请选择当前状态">
+              <el-option label="不限" :value="0" key="0"></el-option>
               <el-option label="男" :value="1" key="1"></el-option>
               <el-option label="女" :value="2" key="2"></el-option>
             </el-select>
