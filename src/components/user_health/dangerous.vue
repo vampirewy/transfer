@@ -45,59 +45,28 @@ export default {
   props: ['clientId'],
   data() {
     return {
-      tableData: [
-        {
-          clientName: '家族史',
-          gridName: '高血压、糖尿病',
-          executeTime: '2021-03-21',
-          executePlanWayName: '多运动，少吃油腻食物，荤素搭配',
-        },
-        {
-          clientName: '既往接触史',
-          gridName: '高血压、糖尿病',
-          executeTime: '2021-03-21',
-          executePlanWayName: '多运动，少吃油腻食物，荤素搭配',
-        },
-        {
-          clientName: '饮食',
-          gridName: '高血压、糖尿病',
-          executeTime: '2021-03-21',
-          executePlanWayName: '多运动，少吃油腻食物，荤素搭配',
-        },
-        {
-          clientName: '运动',
-          gridName: '高血压、糖尿病',
-          executeTime: '2021-03-21',
-          executePlanWayName: '多运动，少吃油腻食物，荤素搭配',
-        },
-        {
-          clientName: '吸烟情况',
-          gridName: '高血压、糖尿病',
-          executeTime: '2021-03-21',
-          executePlanWayName: '多运动，少吃油腻食物，荤素搭配',
-        },
-      ],
+      tableData: [],
       currentPage: 1,
       total: 0,
     };
   },
   mounted() {
-    // this.getImportantIndex();
+    this.getImportantIndex();
   },
   methods: {
-    pageClick(page) {
-      this.currentPage = page;
-      // this.getImportantIndex();
-    },
-    // getImportantIndex() {
-    //   this.$api.health
-    //     .getReportItem(this.clientId)
-    //     .then((res) => {
-    //       const { data } = res;
-    //       const result = data.data;
-    //       this.tableData = result || [];
-    //     });
+    // pageClick(page) {
+    //   this.currentPage = page;
+    //   // this.getImportantIndex();
     // },
+    getImportantIndex() {
+      this.$api.health
+        .getReportItem(this.clientId)
+        .then((res) => {
+          const { data } = res;
+          const result = data.data;
+          this.tableData = result || [];
+        });
+    },
   },
 };
 </script>

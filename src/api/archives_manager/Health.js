@@ -65,6 +65,10 @@ class HealthInterface extends BaseModule {
   getLifeStyleList() {
     return this.get('/system_param_value/SC001');
   }
+  // 生活方式评估
+  getabnormalList(id) {
+    return this.post(`/home_page/get_question_lifestyle_param_value/${id}`);
+  }
 }
 
 export default new HealthInterface();

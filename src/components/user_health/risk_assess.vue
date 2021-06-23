@@ -43,21 +43,35 @@
 <script>
 export default {
   name: 'disease',
-  props: ['assessList'],
+  props: ['clientId'],
   data() {
     return {
       assessListData: {},
     };
   },
   watch: {
-    assessList: {
-      handler(val) {
-        console.log(val);
-        this.assessListData = val;
-        this.$set(this.assessListData, 'assess2', val.assess2);
-      },
-      immediate: true,
-      deep: true, // 为true，表示深度监听，这时候就能监测到a值变化
+    // assessList: {
+    //   handler(val) {
+    //     console.log(val);
+    //     this.assessListData = val;
+    //     this.$set(this.assessListData, 'assess2', val.assess2);
+    //   },
+    //   immediate: true,
+    //   deep: true, // 为true，表示深度监听，这时候就能监测到a值变化
+    // },
+  },
+  mounted() {
+    this.getImportantIndex();
+  },
+  methods: {
+    getImportantIndex() {
+      this.$api.health
+        .getAssessReportDetail(this.clientId)
+        .then((res) => {
+          const { data } = res;
+          const result = data.data;
+          this.assessListData = result || [];
+        });
     },
   },
 };

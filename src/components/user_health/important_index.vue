@@ -16,9 +16,9 @@
           <span>{{ scope.row.refRange | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="itemUnit" label="单位" show-overflow-tooltip>
+      <el-table-column prop="sectionName" label="单位" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.itemUnit | getResult }}</span>
+          <span>{{ scope.row.sectionName | getResult }}</span>
         </template>
       </el-table-column>
     </el-table>
