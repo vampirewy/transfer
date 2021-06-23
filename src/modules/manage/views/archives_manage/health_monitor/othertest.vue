@@ -76,18 +76,25 @@
           </el-row>
           <el-row>
           <el-col :span="6">
-        <el-form-item label="日期" prop="startDate">
-        <el-date-picker
+        <el-form-item label="日期时间" prop="startDate">
+          <el-date-picker
+              v-model="infoSource.startDate"
+              type="datetime"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              :max-date="new Date()"
+              placeholder="选择日期时间">
+            </el-date-picker>
+        <!-- <el-date-picker
             class="start-date"
             v-model="infoSource.startDate"
             type="date"
             value-format="yyyy-MM-dd"
             placeholder="请选择日期"
             style="width: 100%"
-        ></el-date-picker>
+        ></el-date-picker> -->
         </el-form-item>
           </el-col>
-          <el-col :span="6">
+          <!-- <el-col :span="6">
             <el-form-item label="时间" prop="Timevalue">
               <el-time-picker
               v-model="infoSource.Timevalue"
@@ -97,7 +104,7 @@
               placeholder="请选择时间">
             </el-time-picker>
             </el-form-item>
-          </el-col>
+          </el-col> -->
           </el-row>
       </div>
       <!-- <div class="form-title">
@@ -495,13 +502,14 @@ export default {
         json.clientId = this.infoSource.clientId;
         json.result = this.detectionInfos[i].consequences;
         json.healthDataItemId = this.detectionInfos[i].id;
-        json.detectDate = this.infoSource.startDate + this.infoSource.startDates;
+        json.detectDate = this.infoSource.startDate;
         arrars.push(json);
       }
       // console.log(arrars, '结果');
       this.$api.healthMonitorInterface.saveHealthDataOther(arrars).then(({ data }) => {
         if (data.success) {
           this.$message.success('操作成功');
+          this.$emit('messageData', true, true);
         }
       });
     //   this.$api.medication.add(reqBody).then(({ data }) => {

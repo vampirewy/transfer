@@ -14,12 +14,12 @@
       </div>
       <el-row>
         <el-col :span="6">
-          <el-form-item label="异常名称" >
+          <el-form-item label="异常名称" prop="clientInfoId">
             <el-input v-model="form.clientInfoId" placeholder="请输入" ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="异常类型" >
+          <el-form-item label="异常类型" prop="hospital">
             <el-select v-model="form.hospital" placeholder="请选择当前状态" width="150">
               <el-option
                 v-for="item in organTypeList"
@@ -55,7 +55,7 @@
           </el-form-item> -->
         </el-col>
         <el-col :span="6">
-          <el-form-item label="重要性" >
+          <el-form-item label="重要性"  prop="inDate">
             <el-select v-model="form.inDate" placeholder="请选择当前状态">
               <el-option
                 v-for="item in dangerLevelList"
@@ -67,7 +67,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="紧急性">
+          <el-form-item label="紧急性" prop="outDate">
             <el-select v-model="form.outDate" placeholder="请选择当前状态">
               <el-option
                 v-for="item in medicalLimitList"
@@ -79,7 +79,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="推荐科室" >
+          <el-form-item label="推荐科室" prop="doctorNameId">
             <el-input v-model="form.doctorNameId" placeholder="请输入" ></el-input>
           </el-form-item>
           <!-- <el-form-item label="推荐科室" >
@@ -259,13 +259,11 @@ export default {
         },
       },
       rules: {
-        clientInfoId: [{ required: true, message: '客户不能为空' }],
-        medicalType: [{ required: true, message: '就医类型不能为空' }],
-        hospital: [{ required: true, message: '医疗机构不能为空' }],
-        inDate: [{ required: true, message: '就医时间不能为空' }],
-        result: [{ required: true, message: '当前状态不能为空' }],
-        hpi: [{ required: true, message: '现病史不能为空' }],
-        diagnosis: [{ required: true, message: '诊断不能为空' }],
+        clientInfoId: [{ required: true, message: '异常名称不能为空' }],
+        hospital: [{ required: true, message: '请选择异常类型' }],
+        inDate: [{ required: true, message: '请选择重要性' }],
+        outDate: [{ required: true, message: '请选择紧急性' }],
+        doctorNameId: [{ required: true, message: '推荐科室不能为空' }],
       },
       resultOptions: [
         { value: 1, label: '未指定' },

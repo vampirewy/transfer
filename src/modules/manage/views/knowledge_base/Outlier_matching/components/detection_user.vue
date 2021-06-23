@@ -157,6 +157,9 @@ export default {
 <style lang="scss" scoped>
 .medical-history-select-user {
   padding: 13px 18px 21px 18px;
+  height: 300px;
+  overflow-y: scroll;
+  overflow-x: hidden;
   .query {
     display: flex;
     align-items: center;

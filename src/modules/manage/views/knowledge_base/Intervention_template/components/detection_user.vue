@@ -22,7 +22,7 @@
           <div class="searchFor" @click="search(1)" style="margin:11px 10px 0 0;">
             <img src="@/assets/images/common/topsearchblue.png" alt="">
           </div>
-          <div class="resetAll" style="margin-top:12px;" @click="reset">重置</div>
+          <div class="resetAll" style="margin-top:10px;" @click="reset">重置</div>
         </div>
       </div>
     </div>
@@ -91,7 +91,9 @@ const COLUMNS = {
   Minterm: [
     { label: '科室名称', prop: 'sectionName' },
     { label: '小项名称', prop: 'itemName' },
-    { label: '正常参考', prop: 'refRange' },
+    { label: '正常参考',
+      prop: 'refRange',
+    },
   ],
   Category: [
     { label: '类别名称', prop: 'gridName' },
@@ -109,7 +111,7 @@ const COLUMNS = {
     { label: '组合异常', prop: 'name' },
   ],
   Disease: [
-    { label: '评估模称', prop: 'name' },
+    { label: '评估名称', prop: 'name' },
   ],
   Constitution: [
     { label: '体质名称', prop: 'name' },
@@ -168,6 +170,17 @@ export default {
       //   this.ConstitutionList();
       // }
     },
+    statusrefRange(Range) {
+      if (Range) {
+        const arr = Range.split('-');
+        if (arr.length !== 1) {
+          const ss = Number(arr[0]).toFixed(2);
+          const aa = Number(arr[1]).toFixed(2);
+          return `${ss}-${aa}`;
+        }
+        return Range;
+      }
+    },
     // 小项
     async getList() {
       const reqBody = {
@@ -180,14 +193,26 @@ export default {
       );
       const { data } = res.data;
       if (data) {
-        this.dataSource.list = data.data || [];
+        this.dataSource.list = data.data.map((val) => {
+          val.refRange = this.statusrefRange(val.refRange);
+          return val;
+        });
+        // console.log(this.dataSource.list, 'zxczxccx');
+        // data.data.forEach((val) => {
+        //   this.statusrefRange(val.refRange);
+        // });
+        // this.dataSource.list = data.data || [];
         this.total = data.total;
       }
     },
     // 获取人员列表
     async getGridList() {
       const res = await
-      this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
+      this.$api.userManagerInterface.getGridList({
+        pageNo: 1,
+        pageSize: 10000,
+        gridName: this.formData.name,
+      });
       const { data } = res.data;
       this.dataSource.list = data.data;
       this.total = data.total;
@@ -222,8 +247,9 @@ export default {
     DiseaseList() {
       this.params.pageNo = this.currentPage;
       this.params.pageSize = this.pageSize;
+      this.params.keywords = this.formData.name;
       this.$api.systemManageInterface
-        .getListPage(Object.assign(this.params, this.formData))
+        .getListPage(Object.assign(this.params))
         .then(({ data }) => {
           this.total = data.data.total;
           this.dataSource.list = data.data.data;
@@ -286,6 +312,9 @@ export default {
 <style lang="scss" scoped>
 .medical-history-select-user {
   padding: 13px 18px 21px 18px;
+  /deep/ .el-pagination {
+    // white-space: normal;
+  }
   .query {
     display: flex;
     align-items: center;

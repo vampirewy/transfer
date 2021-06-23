@@ -39,7 +39,7 @@
               <div @click="othertestAdd">添加</div>
           </div>
         </div> -->
-      <div class="row" style="display: flex">
+      <div class="row" style="display: flex;margin-top:30px;">
           <el-form-item label="检测项目：" prop="clientName" style="background:#ffffff">
             <el-popover
               ref="userPopovers"
