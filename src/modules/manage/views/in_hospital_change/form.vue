@@ -97,9 +97,11 @@
       </el-row>
       <div class="form-buttons">
         <el-button size="small" class="cancelBtn" @click="cancel">取消</el-button>
-        <el-button size="small" class="sureBtn" type="primary" @click="submit"
+        <!--<el-button size="small" class="sureBtn" type="primary" @click="submit"
           >保存</el-button
-        >
+        >-->
+        <el-button size="small" class="sureBtn" type="primary" @click="registerOpenFunc"
+        >下一步</el-button>
       </div>
     </el-form>
   </div>
@@ -107,10 +109,12 @@
 
 <script>
 import SelectUser from '../archives_manage/medical_history_select_user.vue';
+import registerOpen from './el_modal/registerOpen.vue';
 export default {
   name: 'StaffForm',
   components: {
     SelectUser,
+    registerOpen,
   },
   data() {
     return {
@@ -124,8 +128,6 @@ export default {
         clientName: '',
         mobile: '',
         cardNo: '',
-        firstDesc: '',
-        desc: '',
       },
       form: {
         clientId: '',
@@ -205,6 +207,27 @@ export default {
         const role = data.data || {};
         this.roleMenuIds = role.menuIds;
         this.roleMenuIdsMap[id] = this.roleMenuIds;
+      });
+    },
+    /**
+     * 查看
+     */
+    registerOpenFunc() {
+      this.$refs.staffForm.validate((valid) => {
+        if (valid) {
+          const Row = Object.assign({}, this.staffForm, this.form);
+          this.$jDynamic.show({
+            component: 'registerOpen',
+            data: {
+              modalTitle: '预约挂号',
+              propsData: Row,
+              confirmfunc: async (value) => {
+                console.log(value);
+              },
+            },
+            render: h => h(registerOpen),
+          });
+        }
       });
     },
     cancel() {
