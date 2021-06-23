@@ -126,7 +126,7 @@ export default {
                 textStyle: {
                   fontWeight: 300,
                   fontSize: 11,
-                  color: 'white',
+                  // color: 'white',
                 },
                 formatter: '{d}%',
               },

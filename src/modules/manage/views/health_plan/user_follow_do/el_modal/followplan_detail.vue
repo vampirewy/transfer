@@ -314,7 +314,8 @@ export default {
       }
       this.form.templateQuestionId = data.templateQuestionId;
       this.form.templateQuestionName = data.templateQuestionName;
-      this.form.batchNo = data.batchTemplateQuestionDTO ? data.batchTemplateQuestionDTO.batchNo : '';
+      this.form.batchNo = data.batchNo;
+      // data.batchTemplateQuestionDTO ? data.batchTemplateQuestionDTO.batchNo : '';
       /* this.questionSubjectist = data.batchTemplateQuestionDTO ?
         data.batchTemplateQuestionDTO.questionSubjectist : [];*/
       this.questionSubjectist = data.templateQuestionSubjectDtoList;
@@ -371,6 +372,7 @@ export default {
             executePlanWay: this.form.planWay, // 执行干预方式
             executePlanUserId: this.form.planDoctor, // 执行干预人
             executePlanTitle: this.form.planTitle, // 执行标题
+            assortLevel: this.form.assortLevel, // 依从度
             executePlanContent: this.form.planContent, // 执行内容
             templateQuestionId: this.form.templateQuestionId, // 问卷id
             batchNo: this.form.batchNo, // 问卷批次

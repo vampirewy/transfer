@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-editor-container" style="background-color: #F6F8FC;padding: 20px">
     <search-group @searchData="getSearchData" />
-    <panel-group :formData="homeFindCountData" @toRouterPage="toRouterPage" />
+    <panel-group/>
     <el-row :gutter="40" style="margin-left: 0;margin-bottom: 20px;width: 100%;">
       <el-col :span="24" class="echartBody" style="height:380px">
 
@@ -12,9 +12,7 @@
               </div>
             </div>
             <div class="divRightTitleDiv">
-
       <div class="rowTitleParent" style="padding-top: 8px;padding-bottom: 12px">
-
            <div class="rowTitleParentRight">
             <span style="background: linear-gradient(180deg, #3154AC 0%, #4B86FF 100%);
             margin-left: 0;"></span>
@@ -27,14 +25,14 @@
         <div>
           <el-radio-group
                   style="margin-top: 0;margin-right: 15px"
-                  v-model="checkAfterForm.planType"
-                  @change="chooseSunRadio"
+                  v-model="checkAfterForm.type"
+                  @change="chooseCheckAfterFormRadio"
           >
-            <el-radio-button label="1">本周</el-radio-button>
-            <el-radio-button label="2">本月</el-radio-button>
-            <el-radio-button label="3">今年</el-radio-button>
+            <el-radio-button :label="1">本周</el-radio-button>
+            <el-radio-button :label="2">本月</el-radio-button>
+            <el-radio-button :label="3">今年</el-radio-button>
           </el-radio-group>
-          <el-date-picker
+          <!--<el-date-picker
                   v-model="checkAfterForm.startTime"
                   type="date"
                   value-format="yyyy-MM-dd"
@@ -42,14 +40,24 @@
                   placeholder="选择日期范围"
                   style="width: 160px"
           >
+          </el-date-picker>-->
+          <el-date-picker
+                  v-model="checkAfterFormTime"
+                  @change="getCheckAfterFormTime"
+                  style="width: 280px;"
+                  value-format="yyyy-MM-dd"
+                  type="daterange"
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期">
           </el-date-picker>
         </div>
       </div>
     </div>
 
         <div class="noDataLine" v-if="intervenePlanXList.length === 0">
-          <img src="@/assets/images/noDataLine.png"/>
-          <span>暂无数据</span>
+          <img style="margin-top: 70px" src="@/assets/images/noDataLine.png"/>
+          <!--<span>暂无数据</span>-->
         </div>
         <!-- <bar-chart-line
         :xList="intervenePlanName" :yList="intervenePlanYList" :height="'300px'"
@@ -76,17 +84,17 @@
         </div>
         <div style="text-align: center;margin-top: 10px">
           <el-radio-group
-                  v-model="checkAfterPercent.planType"
-                  @change="choosePlanType"
+                  v-model="checkAfterPercent.type"
+                  @change="chooseCheckAfterPercenType"
           >
-            <el-radio-button label="1">总体</el-radio-button>
-            <el-radio-button label="2">红色预警</el-radio-button>
-            <el-radio-button label="3">橙色预警</el-radio-button>
+            <el-radio-button :label="1">总体</el-radio-button>
+            <el-radio-button :label="2">红色预警</el-radio-button>
+            <el-radio-button :label="3">橙色预警</el-radio-button>
           </el-radio-group>
         </div>
         <div class="noDataLine" v-if="checkAfterPercentYList.length === 0" style="height: 215px">
           <img src="@/assets/images/noDataLine.png" style="width: 200px;margin-top: 100px"/>
-          <span>暂无数据</span>
+          <!--<span>暂无数据</span>-->
         </div>
         <div class="chart-wrapper" v-else>
           <div class="pieDiv" style="margin:0 5% 10px 5%;">
@@ -120,16 +128,16 @@
         </div>
         <div style="text-align: center;margin-top: 10px">
           <el-radio-group
-                  v-model="listQuery.planType"
+                  v-model="checkAfterFee.type"
                   @change="choosePlanType"
           >
-            <el-radio-button label="4">科室</el-radio-button>
-            <el-radio-button label="5">阳性</el-radio-button>
+            <el-radio-button :label="1">科室</el-radio-button>
+            <el-radio-button :label="2">阳性</el-radio-button>
           </el-radio-group>
         </div>
         <div class="noDataLine" v-if="checkAfterFeePieYList.length === 0" style="height: 215px">
           <img src="@/assets/images/noDataLine.png" style="width: 200px;margin-top: 100px"/>
-          <span>暂无数据</span>
+          <!--<span>暂无数据</span>-->
         </div>
         <div class="chart-wrapper" v-else>
           <div class="pieDiv" style="margin:18px 5% 0 5%;">
@@ -190,18 +198,18 @@ export default {
   data() {
     return {
       searchData: {},
+      checkAfterFormTime: '',
       checkAfterForm: { // 检后就诊趋势 查询
-        planType: '2',
-        startTime: '',
-        endTime: '',
+        type: 2,
+        queryStartTime: '',
+        queryEndTime: '',
       },
-      checkAfterPercent: { // 检后就医转化率 查询
-        planType: '2',
+      checkAfterPercent: { // 检后就医转化率漏斗图 查询
+        type: 2,
       },
-      listQuery: { // 检后就医费用 查询
-        planType: '4',
+      checkAfterFee: { // 检后就医费用 查询
+        type: 1,
       },
-      homeFindCountData: {},
       // 检后就诊趋势折线图
       intervenePlanYList1: [], // 已就诊
       intervenePlanYList2: [], // 未就诊
@@ -245,146 +253,115 @@ export default {
   methods: {
     getSearchData(data) {
       this.searchData = data;
-      // this.getHomeFindCount(data); // 查询五数据
       // this.getEchartcheckAfterFeePie(data); // 随访任务饼图
     },
-    chooseSunRadio(val) {
+    chooseCheckAfterFormRadio(val) {
       console.log(val);
+      this.checkAfterFormTime = '';
+      this.checkAfterForm.queryStartTime = '';
+      this.checkAfterForm.queryEndTime = '';
+      this.getEchartIntervenePlan();
     },
-    choosePlanType() { // 随访计划，随访记录切换
-      // const sendData = Object.assign(this.searchData, this.listQuery);
-      // this.getEchartcheckAfterFeePie(sendData);
+    chooseCheckAfterPercenType() {
+      this.getCheckAfterPercent();
     },
-    toRouterPage(type) { // 点击客户总数 跳转我的客户
-      localStorage.setItem('homeSearchData', JSON.stringify({
-        startDate: this.searchData.startDate.split(' ')[0].replace(/\//g, '-'),
-        lastDate: this.searchData.lastDate.split(' ')[0].replace(/\//g, '-'),
-        searchRange: this.searchData.searchRange,
-      }));
-      if (type === 1) {
-        this.$router.push('user_duty');
-      } else if (type === 2) {
-        this.$router.push('report');
-      } else if (type === 3) {
-        this.$router.push('life_style_questionnaire');
-      } else if (type === 4) {
-        this.$router.push('estimate_report');
-      } else if (type === 5) {
-        this.$router.push('service_order');
-      }
+    choosePlanType() { // 检后就医费用切换
+      this.getCheckAfterFee();
     },
-    // 查询五数据
-    getHomeFindCount(sendData) {
-      this.$api.personal.homeFindcount(sendData).then((res) => {
-        this.homeFindCountData = res.data.data;
-      });
+    getCheckAfterFormTime(value) {
+      console.log(value);
+      this.checkAfterForm.type = '';
+      this.checkAfterForm.queryStartTime = value[0];
+      this.checkAfterForm.queryEndTime = value[1];
+      this.getEchartIntervenePlan();
     },
     // 检后就诊趋势 折线图
     getEchartIntervenePlan() {
       const sendDataGet = Object.assign({}, this.checkAfterForm);
-      sendDataGet.planType = 4;
       this.intervenePlanXList = [];
       this.intervenePlanYList1 = [];
       this.intervenePlanYList2 = [];
       this.intervenePlanYList3 = [];
-      /* this.$api.personal.echartIntervenePlan(sendDataGet).then((res) => {
-        const lineIntervenePlanListMap = res.data.data.lineIntervenePlanListMap;
-        const xListInit = [];
-        const yListInit = [];
-        if (
-          lineIntervenePlanListMap != null &&
-          JSON.stringify(lineIntervenePlanListMap) !== '{}'
-        ) {
-          Object.keys(lineIntervenePlanListMap).forEach((key) => {
-            xListInit.push(key);
-            yListInit.push(lineIntervenePlanListMap[key]);
-          });
-          this.intervenePlanXList = xListInit;
-          this.intervenePlanYList.push(yListInit);
-        } else {
-          this.intervenePlanXList = [];
-          this.intervenePlanYList = [];
-        }
-      });*/
-      this.intervenePlanXList = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+      this.$api.InhospitalChange.getCheckAfterStatistics(sendDataGet).then((res) => {
+        res.data.data.haveCheckedCount.forEach((val) => {
+          this.intervenePlanYList1.push(val.count);
+        });
+        res.data.data.notCheckCount.forEach((val) => {
+          this.intervenePlanYList2.push(val.count);
+        });
+        res.data.data.sumMoney.forEach((val) => {
+          this.intervenePlanXList.push(val.date);
+          this.intervenePlanYList3.push(val.money);
+        });
+      });
+      /* this.intervenePlanXList = ['1月', '2月', '3月', '4月',
+        '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
       this.intervenePlanYList1 =
         [17.0, 9.9, 17.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 26.5, 33.3];
       this.intervenePlanYList2 =
         [12.6, 3.9, 19.0, 26.4, 28.7, 70.7, 175.6, 192.2, 48.7, 18.8, 16.0, 22.3];
       this.intervenePlanYList3 =
-        [20.6, 12.2, 13.3, 14.5, 16.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 16.2];
+        [20.6, 12.2, 13.3, 14.5, 16.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 16.2];*/
     },
     // 检后就诊转化率 漏斗图
     getCheckAfterPercent() {
       const sendDataGet = Object.assign({}, this.checkAfterPercent);
-      sendDataGet.planType = 4;
       this.dianPieCheckAfterPercentList = [];
       this.checkAfterPercentYList = [];
-      /* this.$api.personal.echartIntervenePlan(sendDataGet).then((res) => {
-        const lineIntervenePlanListMap = res.data.data.lineIntervenePlanListMap;
-        const xListInit = [];
-        const yListInit = [];
-        if (
-          lineIntervenePlanListMap != null &&
-          JSON.stringify(lineIntervenePlanListMap) !== '{}'
-        ) {
-          Object.keys(lineIntervenePlanListMap).forEach((key) => {
-            xListInit.push(key);
-            yListInit.push(lineIntervenePlanListMap[key]);
-          });
-          this.intervenePlanXList = xListInit;
-          this.intervenePlanYList.push(yListInit);
-        } else {
-          this.intervenePlanXList = [];
-          this.intervenePlanYList = [];
-        }
-      });*/
-      this.dianPieCheckAfterPercentList = ['阳性上报', '首次跟踪', '预约挂号', '完成就诊'];
+      this.$api.InhospitalChange.getSeeDoctorRateStatistics(sendDataGet).then((res) => {
+        console.log(res.data.data);
+        res.data.data.forEach((val) => {
+          this.dianPieCheckAfterPercentList.push(val.rateType);
+          this.checkAfterPercentYList.push({ value: val.rate.split('%')[0], name: val.rateType });
+        });
+      });
+      /* this.dianPieCheckAfterPercentList = ['阳性上报', '首次跟踪', '预约挂号', '完成就诊'];
       this.checkAfterPercentYList = [
         { value: 80, name: '阳性上报' },
         { value: 60, name: '首次跟踪' },
         { value: 40, name: '完成就诊' },
         { value: 20, name: '预约挂号' },
-      ];
+      ];*/
     },
     // 随访任务饼图
-    getCheckAfterFee() {
-      const sendDataGet = Object.assign({}, this.listQuery);
-      sendDataGet.planType = 4;
+    async getCheckAfterFee() {
+      const sendDataGet = {};
       this.dianPieList = [];
       this.checkAfterFeePieYList = [];
-      /* this.$api.personal.echartcheckAfterFeePie(sendDataGet).then((res) => {
-        const intervenePlanListMap = res.data.data.intervenePlanListMap;
-        const xListInit = [];
-        const yListInit = [];
-        const dianObjList = [];
-        if (
-          intervenePlanListMap != null &&
-          JSON.stringify(intervenePlanListMap) !== '{}'
-        ) {
-          Object.keys(intervenePlanListMap).forEach((key) => {
-            xListInit.push(key);
-            yListInit.push({ name: key, value: intervenePlanListMap[key] });
-            dianObjList.push({ name: key, value: intervenePlanListMap[key] });
-          });
-          this.checkAfterFeePieXList = xListInit;
-          this.checkAfterFeePieYList = yListInit;
-          this.dianPieList = dianObjList;
-        } else {
-          this.checkAfterFeePieXList = [];
-          this.checkAfterFeePieYList = [];
-          this.dianPieList = [];
-        }
-      });*/
-      this.dianPieList = ['外科', '急诊科', '肿瘤科', '消化内科', '中医内科'];
+      let res;
+      let total;
+      if (this.checkAfterFee.type === 1) {
+        total = 0;
+        res = await this.$api.InhospitalChange.getSeeDoctorFeeStructureDepartment(sendDataGet);
+        res.data.data.forEach((val) => {
+          this.dianPieList.push(val.departmentName);
+          this.checkAfterFeePieYList.push({ value: val.fee, name: val.departmentName });
+          total += val.fee;
+        });
+      } else if (this.checkAfterFee.type === 2) {
+        total = 0;
+        res = await this.$api.InhospitalChange.getSeeDoctorFeeStructurePositive(sendDataGet);
+        res.data.data.forEach((val) => {
+          if (val.reportLv === 1) {
+            val.name = '红色';
+          } else if (val.reportLv === 2) {
+            val.name = '橙色';
+          }
+          this.dianPieList.push(val.name);
+          this.checkAfterFeePieYList.push({ value: val.fee, name: val.name });
+          total += val.fee;
+        });
+      }
+      console.log(res);
+      /* this.dianPieList = ['外科', '急诊科', '肿瘤科', '消化内科', '中医内科'];
       this.checkAfterFeePieYList = [
         { value: 700, name: ' 外科' },
         { value: 248, name: '急诊科' },
         { value: 200, name: '肿瘤科' },
         { value: 400, name: '消化内科' },
         { value: 200, name: '中医内科' },
-      ];
-      this.checkAfterFeeTotal = '74652.0';
+      ];*/
+      this.checkAfterFeeTotal = total.toFixed(2);
     },
 
   },
@@ -538,109 +515,10 @@ export default {
     }
   }
 // }
-.TabBars{
-  display: flex;
-  margin-top: 30px;
-  // margin-left: 10px;
-  .TabBarsNames{
-    cursor: pointer;
-    background: #EEF1F5;
-    border-color: transparent;
-    color: #666666;
-    position: relative;
-    margin-right: 30px;
-    padding: 10px 14px 10px 16px;
-    font-size: 14px;
-    border-radius: 8px 5px 0 0;
+/deep/ .el-range-input{
+  &::placeholder {
+    color: #999999!important;
   }
-  .TabBarsNames:after{
-    content: '';
-    display: block;
-    width: 25px;
-    height: 40px;
-    position: absolute;
-    -webkit-transform: skewX(23deg);
-    transform: skewX(23deg);
-    background: #EEF1F5;
-    border-top-right-radius: 8px;
-    top: 0px;
-    right: -13px;
-  }
-  .TabBarsNames:before {
-    content: '';
-    display: block;
-    width: 10px;
-    height: 39px;
-    position: absolute;
-    -webkit-transform: skewX(165deg);
-    transform: skewX(163deg);
-    background: #EEF1F5;
-    border-top-left-radius: 8px;
-    top: 0px;
-    left: -4px;
-    border-bottom: solid 1px #EEF1F5;
-  }
-  .TabBarsName{
-    cursor: pointer;
-    background: #ffffff;
-    border-color: transparent;
-    color: #333333;
-    font-weight: 500;
-    position: relative;
-    margin-right: 30px;
-    padding: 10px 14px 10px 16px;
-    font-size: 14px;
-    border-radius: 8px 5px 0 0;
-  }
-  .TabBarsName:before {
-    content: '';
-    display: block;
-    width: 10px;
-    height: 39px;
-    position: absolute;
-    -webkit-transform: skewX(165deg);
-    transform: skewX(163deg);
-    background: #ffffff;
-    border-top-left-radius: 8px;
-    top: 0px;
-    left: -4px;
-    border-bottom: solid 1px #ffffff;
-  }
-  .TabBarsName:after{
-    content: '';
-    display: block;
-    width: 25px;
-    height: 40px;
-    position: absolute;
-    -webkit-transform: skewX(23deg);
-    transform: skewX(23deg);
-    background: white;
-    border-top-right-radius: 8px;
-    top: 0px;
-    right: -13px;
-  }
-  .Tabunread{
-    display: inline-block;
-    background: #fa912b;
-    padding: 3px;
-    color: #ffffff;
-    width: 12px;
-    height: 12px;
-    line-height: 12px;
-    text-align: center;
-    border-radius: 10px;
-    margin-left: 5px;
-    font-size: 12px;
-  }
-}
-.TabListcss{
-  height: 380px;
-  width: 97%;
-  background: #ffffff;
-  box-shadow: 0px 6px 24px 0px rgba(14, 37, 87, 0.06);
-  border-radius: 0px 0px 8px 8px;
-  padding: 20px;
-  margin-top: 10px;
 }
 /*@media (max-width: 1024px) {
   .chart-wrapper {

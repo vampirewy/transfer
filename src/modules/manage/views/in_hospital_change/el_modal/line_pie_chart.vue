@@ -196,8 +196,8 @@ export default {
             type: 'value',
             name: '', // 就诊费用 折线图用
             min: 0,
-            max: 25,
-            interval: 5,
+            max: 500,
+            interval: 100,
             axisLabel: { // 刻度值
               formatter: '{value}',
               textStyle: {
@@ -273,7 +273,7 @@ export default {
             data: this.chartData2,
           },
           {
-            name: '平均温度',
+            name: '就诊费用',
             type: 'line',
             yAxisIndex: 1,
             smooth: true, // 线段是否平滑

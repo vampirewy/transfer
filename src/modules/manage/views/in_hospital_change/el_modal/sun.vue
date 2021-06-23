@@ -13,6 +13,7 @@
                 class="btn-new btnAdd"
                 size="small"
                 style="margin: 16px 0 10px 0"
+                @click="exportList"
         ><img src="@/assets/images/common/export.png" />导出</el-button>
         <el-button
                 class="btn-new btnAdd"
@@ -22,21 +23,31 @@
         <div>
           <el-radio-group
                   style="margin-top: 0;margin-right: 15px"
-                  v-model="form.planType"
+                  v-model="form.type"
                   @change="chooseRadio"
           >
-            <el-radio-button label="1">本周</el-radio-button>
-            <el-radio-button label="2">本月</el-radio-button>
-            <el-radio-button label="3">今年</el-radio-button>
+            <el-radio-button :label="1">本周</el-radio-button>
+            <el-radio-button :label="2">本月</el-radio-button>
+            <el-radio-button :label="3">今年</el-radio-button>
           </el-radio-group>
-          <el-date-picker
-                  v-model="form.startTime"
+          <!--<el-date-picker
+                  v-model="form.queryStartTime"
                   type="date"
                   value-format="yyyy-MM-dd"
-                  :max-date="form.endTime"
+                  :max-date="form.queryEndTime"
                   placeholder="选择日期范围"
                   style="width: 160px"
           >
+          </el-date-picker>-->
+          <el-date-picker
+                  v-model="time"
+                  @change="getTime"
+                  style="width: 280px;"
+                  value-format="yyyy-MM-dd"
+                  type="daterange"
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期">
           </el-date-picker>
         </div>
       </div>
@@ -45,46 +56,47 @@
     <el-table :data="table.list" style="width: 100%" align="center" ref="table" class="openTable">
       <el-table-column prop="number" label="排名" min-width="50px" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span v-if="scope.row.number == 1">
+          <span v-if="table.pageNo === 1 && scope.$index === 0">
             <img class="rank" src="@/assets/images/common/rank1.png"/>
           </span>
-          <span v-else-if="scope.row.number == 2">
+          <span v-else-if="table.pageNo === 1 && scope.$index === 1">
             <img class="rank" src="@/assets/images/common/rank2.png"/>
           </span>
-          <span v-else-if="scope.row.number == 3">
+          <span v-else-if="table.pageNo === 1 && scope.$index === 2">
             <img class="rank" src="@/assets/images/common/rank3.png"/>
           </span>
-          <span v-else>{{scope.row.number | getResult}}</span>
+          <span v-else>{{(table.pageNo - 1 ) * 5 + scope.$index + 1 | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="阳性名称" min-width="60px" show-overflow-tooltip>
+      <el-table-column prop="itemName" label="阳性名称" min-width="60px" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{scope.row.name | getResult}}</span>
+          <span>{{scope.row.itemName | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="count0" label="检出人数" min-width="60px" show-overflow-tooltip>
+      <el-table-column prop="checkPersonNum" label="检出人数" min-width="60px" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.count0 | getResult }}</span>
+          <span>{{ scope.row.checkPersonNum | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="count1" label="挂号人数" min-width="60px" show-overflow-tooltip>
+      <el-table-column prop="registerPersonNum" label="挂号人数" min-width="60px" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.count1 | getResult }}</span>
+          <span>{{ scope.row.registerPersonNum | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="count2" label="就诊人数" min-width="60px" show-overflow-tooltip>
+      <el-table-column prop="seeDoctorPersonNum" label="就诊人数"
+                       min-width="60px" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.count2 | getResult }}</span>
+          <span>{{ scope.row.seeDoctorPersonNum | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="count3" label="就诊总额" min-width="60px" show-overflow-tooltip>
+      <el-table-column prop="seeDoctorPrice" label="就诊总额" min-width="60px" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.count3 | getResult }}</span>
+          <span>{{ scope.row.seeDoctorPrice | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="count4" label="就医转换率" show-overflow-tooltip>
+      <el-table-column prop="seeDoctorRate" label="就医转换率" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.count4 | getResult }}</span>
+          <span>{{ scope.row.seeDoctorRate | getResult }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -108,10 +120,12 @@ export default {
   name: 'sun',
   data() {
     return {
+      upload_url: process.env.api.upload_url,
+      time: '',
       form: {
-        startTime: '',
-        planType: '2',
-        endTime: '',
+        type: 2,
+        queryStartTime: '',
+        queryEndTime: '',
       },
       loading: false,
       table: {
@@ -126,59 +140,31 @@ export default {
     this.onLoad();
   },
   methods: {
-    chooseRadio() {},
+    chooseRadio() {
+      this.time = '';
+      this.form.queryStartTime = '';
+      this.form.queryEndTime = '';
+      this.onSearch();
+    },
     onLoad() {
       this.getList();
+    },
+    getTime(value) {
+      console.log(value);
+      this.form.type = '';
+      this.form.queryStartTime = value[0];
+      this.form.queryEndTime = value[1];
+      this.onSearch();
     },
     /**
      * 获取随访列表
      * @return {Promise<void>}
      */
     async getList() {
-      /* console.log(this.form);
-      if (this.form.startTime) {
-        this.form.startTime = `${this.form.startTime.split(' ')[0]} 00:00:00`;
-      }
-      if (this.form.endTime) {
-        this.form.endTime = `${this.form.endTime.split(' ')[0]} 23:59:59`;
-      }
-      if (this.form.startReportDate) {
-        this.form.startReportDate = `${this.form.startReportDate.split(' ')[0]} 00:00:00`;
-      }
-      if (this.form.endReportDate) {
-        this.form.endReportDate = `${this.form.endReportDate.split(' ')[0]} 23:59:59`;
-      }
-      if (this.form.startCollectionDate) {
-        this.form.startCollectionDate = `${this.form.startCollectionDate.split(' ')[0]} 00:00:00`;
-      }
-      if (this.form.endCollectionDate) {
-        this.form.endCollectionDate = `${this.form.endCollectionDate.split(' ')[0]} 23:59:59`;
-      }
-      const reqBody = {
-        planWay: this.form.planWay,
-        executeState: this.form.executeState,
-        gender: this.form.gender,
-        gridId: this.form.gridId,
-        planUserId: this.form.planUserId,
-        reportAbnormalCodes: this.form.abnormalId,
-        hasIntervenePlan: this.form.hasIntervenePlan,
-        hasReport: this.form.hasReport,
-        /!* tag: this.form.tag,*!/
-        startReportDate: this.form.startReportDate,
-        endReportDate: this.form.endReportDate,
-        startCollectionDate: this.form.startCollectionDate,
-        endCollectionDate: this.form.endCollectionDate,
-        workUnitName: this.form.workUnitName,
-        startTime: this.form.startTime,
-        endTime: this.form.endTime,
-        keywords: this.form.keywords,
-        pageNo: this.table.pageNo,
-        pageSize: this.table.pageSize,
-      };
-      const res = await this.$api.userFollowInterface.getIntervenePlanPageList(
-        reqBody,
-      );*/
-      const res = {
+      const reqBody = Object.assign({ pageNo: this.table.pageNo,
+        pageSize: this.table.pageSize }, this.form);
+      const res = await this.$api.InhospitalChange.getPositiveCheckTopList(reqBody);
+      /* const res = {
         data: {
           data: {
             data: [
@@ -231,13 +217,24 @@ export default {
             total: 2,
           },
         },
-      };
+      };*/
       const { data } = res.data;
       console.log(data);
       if (data) {
         this.table.list = data.data || [];
         this.table.totalCount = data.total;
       }
+    },
+    /**
+     * 导出列表
+     * @return {Promise<void>}
+     */
+    async exportList() {
+      const reqBody = Object.assign({ pageNo: 1,
+        pageSize: 999999 }, this.form);
+      const res = await this.$api.InhospitalChange.exportPositiveCheckTopList(reqBody);
+      const { data } = res.data;
+      window.open(this.upload_url + data);
     },
     /**
      * 搜索
@@ -251,18 +248,8 @@ export default {
      * @param target
      */
     handleChange(target) {
-      // 改变页的时候调用一次，改变每页显示条数的时候也要调用一次
-      this.changePageCoreRecordData();
       this.table.pageNo = target;
       this.getList();
-    },
-    /**
-     * 分页计划
-     * @param target
-     */
-    handleChangePlan(target) {
-      this.tablePlan.pageNo = target;
-      this.expandsHandle();
     },
   },
 };
@@ -274,4 +261,9 @@ export default {
     width: 24px;
   }
 }
+  /deep/ .el-range-input{
+    &::placeholder {
+      color: #999999!important;
+    }
+  }
 </style>

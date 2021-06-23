@@ -17,7 +17,7 @@
           <el-row>
             <el-col :span="12">
             <el-form-item label="计费条数：">
-              {{form.gender | getResult}}
+              <!--{{form.gender | getResult}}-->1
             </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -34,7 +34,7 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="创建人：">
-                {{form.createdName | getResult}}
+                {{form.createdByUserName | getResult}}
               </el-form-item>
             </el-col>
           </el-row>

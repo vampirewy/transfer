@@ -424,14 +424,15 @@ export default {
      * 新增
      * @param val
      */
-    handleAddCheck(val) {
-      this.$router.push({
+    handleAddCheck() {
+      /* this.$router.push({
         name: 'ExceptionAddEdit',
         params: {
           type: 'edit',
           qusType: Number(val),
         },
-      });
+      });*/
+      this.$router.push('ExceptionAddEdit');
     },
     editException(row) {
       this.$router.push({
