@@ -97,7 +97,7 @@
         <div>
           <span>参与对比：</span>
           <el-select
-                  v-model="formData.source"
+                  v-model="form.source"
                   placeholder="请选择"
                   style="width: 140px"
                   clearable
@@ -130,12 +130,12 @@
                     class="btn-new btnDel"
                     v-if="getAccess('customer_pool_distribute')"
             ><img src="@/assets/images/common/deliverBtn.png" />分配</el-button> -->
-            <el-button
+            <!-- <el-button
             style="width:120px;"
                     size="small"
                     class="btn-new btnDel"
                     v-if="getAccess('customer_pool_distribute')"
-            ><img src="@/assets/images/common/createReport.png" />生成报告</el-button>
+            ><img src="@/assets/images/common/createReport.png" />生成报告</el-button> -->
           </div>
         </div>
         <div>
@@ -147,17 +147,17 @@
                   show-overflow-tooltip
           >
             <el-table-column type="selection" min-width="40"></el-table-column>
-            <el-table-column label="科室名称" prop="itemName" min-width="100" show-overflow-tooltip>
+            <el-table-column label="科室名称" prop="sectionName" min-width="100" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>
-                  {{ scope.row.itemName }}
+                  {{ scope.row.sectionName }}
                 </span>
               </template>
             </el-table-column>
-            <el-table-column label="小项名称" min-width="100"  prop="state">
+            <el-table-column label="小项名称" min-width="100"  prop="itemName">
               <template slot-scope="scope">
                 <span>
-                  {{ scope.row.state }}
+                  {{ scope.row.itemName }}
                 </span>
                 <!-- <el-switch
                   v-model="scope.row.state "
@@ -171,12 +171,13 @@
             </el-table-column>
             <el-table-column label="性别" prop="gender" min-width="80" show-overflow-tooltip>
               <template slot-scope="scope">
-                {{ scope.row.gender === 1 ? '男' :scope.row.gender === 1?'不限': '女' }}
+                {{ scope.row.gender === 1 ? '男' :scope.row.gender === 2?'女': '不限' }}
               </template>
             </el-table-column>
-            <el-table-column label="重要指标" prop="isMainText" min-width="80" show-overflow-tooltip >
+            <el-table-column label="重要指标" prop="isMain" min-width="80" show-overflow-tooltip >
               <template slot-scope="scope">
-                <span>{{ scope.row.isMainText || '-'}}</span>
+                {{ scope.row.isMain === 1 ? '是' :scope.row.isMain === 2?'否': '-' }}
+                <!-- <span>{{ scope.row.isMain || '-'}}</span> -->
               </template>
             </el-table-column>
             <el-table-column label="是否对比" prop="isCompareText"
@@ -185,7 +186,11 @@
                 <span>{{ scope.row.isCompareText || '-'}}</span>
               </template>
              </el-table-column>
-            <el-table-column label="范围或参考" prop="maxAge" min-width="100" show-overflow-tooltip />
+            <el-table-column label="范围或参考" prop="refRange" min-width="100" show-overflow-tooltip >
+            <template slot-scope="scope">
+              <span>{{ scope.row.refRange || '-'}}</span>
+            </template>
+            </el-table-column>
             <el-table-column label="单位" prop="unit" min-width="80" show-overflow-tooltip >
               <template slot-scope="scope">
                 <span>{{ scope.row.unit || '-'}}</span>
@@ -193,7 +198,7 @@
             </el-table-column>
             <el-table-column label="项目介绍" prop="intro" min-width="100" show-overflow-tooltip>
               <template slot-scope="scope">
-                <span>{{ scope.row.intro || '0'}}</span>
+                <span>{{ scope.row.intro || '-'}}</span>
               </template>
             </el-table-column>
             <el-table-column label="操作" prop="index"  width="150">
@@ -291,6 +296,7 @@ export default {
         stateList: '',
         isMainList: '',
         libraryList: [],
+        source: '',
       },
       table: {
         list: [],
@@ -454,6 +460,7 @@ export default {
       this.form.isMain = '';
       this.form.state = '';
       this.form.itemName = '';
+      this.form.source = '';
       this.table.pageNo = 1;
       // Object.assign(this.$data, this.$options.data());
       // this.getUserList();

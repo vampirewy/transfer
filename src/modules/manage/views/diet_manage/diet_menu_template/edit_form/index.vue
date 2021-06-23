@@ -133,8 +133,9 @@
                         >
                           <p>{{ its2.name }}</p>
                           <div class="input-box">
-                            <el-input type="text" v-model="its2.weight" />
-                            g
+                            <!-- <el-input type="text" v-model="its2.weight" />
+                            g -->
+                            <div class="weightbox">{{(its.weight*its2.scale).toFixed(2)}} </div> g
                           </div>
                         </div>
                       </div>
@@ -207,6 +208,7 @@
       </el-tabs>
     </div>
     <el-food-op
+      v-if="isShowFoodOp"
       @change="handleFoodSelect"
       :visible.sync="isShowFoodOp"
     ></el-food-op>
@@ -266,12 +268,26 @@ export default {
       editableTabs: [],
       arrList: [],
       dietTemplateMaterial: {},
+      FoodList: [],
+      TabsIndex: 0,
     };
   },
   created() {
     if (this.id) {
       this.loadData();
     }
+  },
+  watch: {
+    editableTabs: {
+      handler(newValue) {
+        // const json = {
+        //   templateConfigDayDtoList: newValue,
+        // };
+        // this.$emit('change', json, this.TabsIndex);
+        this.DataProcessing(newValue, this.TabsIndex);
+      },
+      deep: true,
+    },
   },
   methods: {
     deleteDietTempPlateConfigDtos(index, inx, inxs) {
@@ -293,7 +309,6 @@ export default {
           if (res.data.success) {
             this.analysisData = res.data.data.dietTemplateNutritionList;
             this.dietTemplateMaterial = res.data.data.dietTemplateMaterial;
-            // console.log(res.data.data, '右侧数据');
           }
         });
     },
@@ -302,12 +317,11 @@ export default {
         .getDietMenuTemConfigDetail(this.id)
         .then((res) => {
           this.editableTabs = res.data.data;
-          this.DataProcessing(res.data.data);
+          this.DataProcessing(res.data.data, 0);
         });
     },
     // 数据处理
-    DataProcessing(lists) {
-      console.log(lists, '1221212');
+    DataProcessing(lists, index) {
       const arr = [];
       for (let i = 0; i < lists.length; i++) {
         const json = {};
@@ -340,7 +354,7 @@ export default {
         arr.push(json);
       }
       this.arrList = arr;
-      this.makeIndex(0);
+      this.makeIndex(index);
     },
     makeIndex(index) {
       if (this.arrList[index]) {
@@ -349,6 +363,7 @@ export default {
       }
     },
     handleTabsEdit(e) {
+      this.TabsIndex = e.index;
       this.makeIndex(e.index);
     },
     back() {
@@ -391,12 +406,14 @@ export default {
     },
     handleFoodSelect(e) {
       // 选择食物回调
-      e = e.map((item) => {
+      const [index, inx] = this.selectDietMenuIndex;
+      e.forEach((item) => {
         const obj = {};
         if (item.name) {
           obj.name = item.name;
           obj.configType = 1;
           obj.caiId = item.id;
+          obj.weight = item.totalWeight;
           obj.templateDietIngredientDtoList = item.caiIngredientDtos.map(
             (it) => {
               it.name = it.dietIngredientName;
@@ -407,18 +424,38 @@ export default {
           obj.name = item.names;
           obj.configType = 2;
           obj.dietIngredientId = item.id;
+          obj.weight = '';
         }
-        obj.weight = 0;
-        return obj;
+        this.FoodList.push(obj);
+        // return obj;
       });
-      const [index, inx] = this.selectDietMenuIndex;
-      this.editableTabs[index].mealTypeDtos[inx].dietTemplateConfigDtos.push(
-        ...e,
-      );
-      console.log(this.editableTabs);
+      // this.editableTabs[index].mealTypeDtos[inx].dietTemplateConfigDtos.push(
+      //   ...e,
+      // );
+      this.FoodList.forEach((valQusOne) => {
+        let same = false;
+        this.editableTabs[index]
+          .mealTypeDtos[inx]
+          .dietTemplateConfigDtos.forEach((valAnswer) => {
+            if (valQusOne.configType === 1) {
+              if (valQusOne.caiId === valAnswer.caiId) { // 如果有一样 就回答过了
+                same = true;
+              }
+            }
+            if (valQusOne.configType === 2) {
+              if (valQusOne.dietIngredientId === valAnswer.dietIngredientId) { // 如果有一样 就回答过了
+                same = true;
+              }
+            }
+          });
+        if (same === false) { // 如果没有相同的则push
+          this.editableTabs[index].mealTypeDtos[inx].dietTemplateConfigDtos.push(
+            valQusOne,
+          );
+        }
+      });
     },
     submit() {
-      // console.dir(this.editableTabs);
       const obj = [];
       this.editableTabs.forEach((item) => {
         item.mealTypeDtos.forEach((item2) => {
@@ -447,11 +484,11 @@ export default {
           });
         });
       });
-      // console.dir(obj);
       this.$api.dietMenuTemplateInterface
         .saveDietMenuTemConfig(obj)
         .then(() => {
           this.$message.success('操作成功!');
+          this.$parent.viewIndex = 1;
         });
     },
   },

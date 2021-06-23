@@ -95,6 +95,26 @@ class Personal extends BaseModule {
   submitAudit(data = {}) {
     return this.post('/user/info/submit_audit', data);
   }
+  // 首页阳性跟踪列表
+  homePositiveClient(data = {}) {
+    return this.post('/home/positive/client', data);
+  }
+  // 首页获取随访计划客户列表
+  homeInterveneClient(data = {}) {
+    return this.post('/home/intervene/client', data);
+  }
+  // 获取不同类别客户数量饼状图
+  homeGridClientCount(data = {}) {
+    return this.post('/home/grid/client_count', data);
+  }
+  // 首页获取客户的数量
+  homeClientClientCount(data = {}) {
+    return this.post('/home/client/client_count', data);
+  }
+  // 最近15天的新增客户数量 折线图
+  neardayClientCount(data = {}) {
+    return this.post('/home/nearday/client_count', data);
+  }
 }
 
 export default new Personal();

@@ -484,9 +484,20 @@ export default {
     },
     inspectionAdd() {
       if (this.StatusCheck) {
-        for (let i = 0; i < this.StatusCheck.length; i++) {
-          this.drugsList.push(this.StatusCheck[i]);
-        }
+        this.StatusCheck.forEach((valQusOne) => {
+          let same = false;
+          this.drugsList.forEach((valAnswer) => {
+            if (valQusOne.id === valAnswer.id) { // 如果有一样 就回答过了
+              same = true;
+            }
+          });
+          if (same === false) { // 如果没有相同的则push
+            this.drugsList.push(valQusOne);
+          }
+        });
+        // for (let i = 0; i < this.StatusCheck.length; i++) {
+        //   this.drugsList.push(this.StatusCheck[i]);
+        // }
         this.StatusCheck = [];
         this.infoSource.clientNameCheck = '';
       } else {

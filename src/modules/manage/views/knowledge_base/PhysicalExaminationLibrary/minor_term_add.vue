@@ -48,9 +48,9 @@
         <el-col :span="6">
           <el-form-item label="适宜性别" >
             <el-select v-model="form.Gender" placeholder="请选择">
-              <el-option label="不限" value="0" key="0"></el-option>
-              <el-option label="男" value="1" key="1"></el-option>
-              <el-option label="女" value="2" key="2"></el-option>
+              <el-option label="不限" :value="0" key="0"></el-option>
+              <el-option label="男" :value="1" key="1"></el-option>
+              <el-option label="女" :value="2" key="2"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -232,9 +232,10 @@ export default {
       this.$api.physicalProjectListInterface.getOrganItem(this.id).then((res) => {
         const { data } = res;
         this.form = {
+          gridListId: data.data.organItemLibraryId,
           checked1: data.data.isMain, // 默认重要指标
           checked2: data.data.displayPosition, // 参与报告对比
-          MinorItemsName: data.data.sectionName, // 小项名称
+          MinorItemsName: data.data.itemName, // 小项名称
           Gender: data.data.gender, // 性别
           minAge: data.data.minAge, // 年龄范围
           maxAge: data.data.maxAge, // 年龄范围
@@ -243,6 +244,7 @@ export default {
           Reference: data.data.refRange, // 正常参考
           Introduction: data.data.intro, // 小项介绍
           Units: data.data.unit, // 单位
+          SectionListId: data.data.sectionName,
         };
       });
     }

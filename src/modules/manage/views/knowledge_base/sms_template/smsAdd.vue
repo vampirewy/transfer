@@ -192,6 +192,8 @@ export default {
     };
   },
   mounted() {
+    this.getGridList();
+    this.getGridType();
     if (this.ids) {
       this.$api.projectList.smsListInfo(this.ids).then((res) => {
         const { data } = res;
@@ -205,8 +207,6 @@ export default {
         };
       });
     }
-    this.getGridList();
-    this.getGridType();
   },
   methods: {
     async getGridList() {

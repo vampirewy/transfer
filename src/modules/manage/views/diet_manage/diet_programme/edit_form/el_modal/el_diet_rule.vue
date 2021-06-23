@@ -14,8 +14,8 @@
         <div class="searchCondition">
           <div class="searchLeft">
             <div class="searchInputFormItem">
-              <el-input placeholder="请输入条件搜索"> </el-input>
-              <span class="searchBtnImgSpan">
+              <el-input placeholder="请输入条件搜索" v-model="keywords"> </el-input>
+              <span class="searchBtnImgSpan"  @click="searchBtn">
                 <img
                   class="searchBtnImg"
                   src="@/assets/images/common/topsearch.png"
@@ -25,10 +25,10 @@
           </div>
           <div class="searchRight">
             <div class="buttones">
-              <div class="searchFor">
+              <div class="searchFor" @click="searchBtn">
                 <img src="@/assets/images/common/topsearchblue.png" alt="" />
               </div>
-              <div class="resetAll">重置</div>
+              <div class="resetAll" @click="resetAll">重置</div>
             </div>
           </div>
         </div>
@@ -118,6 +118,7 @@ export default {
       multipleSelection: [],
       ruleList: '',
       ingrenient: '',
+      keywords: '',
     };
   },
   computed: {
@@ -141,8 +142,9 @@ export default {
           this.$emit('change', this.multipleSelection);
           this.visibles = false;
         } else {
+          // console.log(this.multipleSelection, '123123');
           this.multipleSelection.forEach((val) => {
-            this.ruleList.push(val);
+            this.ruleList += val.content;
           });
           // this.ruleList = this.multipleSelection;
         }
@@ -153,6 +155,15 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
+    },
+    searchBtn() {
+      this.currentPage = 1;
+      this.getList();
+    },
+    resetAll() {
+      this.keywords = '';
+      this.currentPage = 1;
+      this.getList();
     },
     async getList() {
       const reqBody = {

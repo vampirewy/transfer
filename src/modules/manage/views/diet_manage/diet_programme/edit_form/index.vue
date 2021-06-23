@@ -111,6 +111,7 @@
             <el-date-picker
               v-model="stateDate"
               type="date"
+              :max-date="endDate || new Date()"
               value-format="yyyy-MM-dd"
               placeholder="开始时间"
               style="width: 121px"
@@ -120,6 +121,8 @@
             <el-date-picker
               v-model="endDate"
               type="date"
+              :min-date="stateDate"
+              :max-date="new Date()"
               value-format="yyyy-MM-dd"
               placeholder="结束时间"
               style="width: 121px"
@@ -652,17 +655,20 @@ export default {
           }
         });
     },
-    handleFoodSelect(data) {
-      this.pageList.push(data.clientId);
-      this.stateDate = data.startDate;
-      this.endDate = data.endDate;
-      this.mealList = data.dietPrincipleContent;
-      this.clientId = data.clientId;
-      this.clientName = data.clientName;
-      this.DataProcessing(data.templateConfigDayDtoList);
+    handleFoodSelect(data, index) {
+      // console.log(data, '121121');
+      if (data.clientId) {
+        this.pageList.push(data.clientId);
+        this.stateDate = data.startDate;
+        this.endDate = data.endDate;
+        this.mealList = data.dietPrincipleContent;
+        this.clientId = data.clientId;
+        this.clientName = data.clientName;
+      }
+      this.DataProcessing(data.templateConfigDayDtoList, index);
     },
     // 数据处理
-    DataProcessing(lists) {
+    DataProcessing(lists, index) {
       const arr = [];
       for (let i = 0; i < lists.length; i++) {
         const json = {};
@@ -695,14 +701,14 @@ export default {
         arr.push(json);
       }
       this.arrList = arr;
-      this.makeIndex(0);
+      this.makeIndex(index);
     },
     makeIndex(index) {
-      if (this.type !== 'add') {
-        this.arrListInfo = this.arrList[index].clientDietPlanConfigList;
-        this.Analysis();
-        console.log(index, 'tab选项卡切换');
-      }
+      // if (this.type !== 'add') {
+      this.arrListInfo = this.arrList[index].clientDietPlanConfigList;
+      this.Analysis();
+      console.log(index, 'tab选项卡切换');
+      // }
     },
     addtemplate() {
       this.dietMenuTemDetail = { id: '' };

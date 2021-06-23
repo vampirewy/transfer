@@ -115,7 +115,7 @@
                               v-model="scope.row[item.prop]"
                               placeholder="请选择"
                               style="width: 140px"
-                              @change="Changeestates(scope.$index,$event)"
+                              @change="ChangeestatesJudg(scope.$index,$event)"
                       >
                         <el-option label=">" value="1" key="1"></el-option>
                         <el-option label="<" value="2" key="2"></el-option>
@@ -334,7 +334,6 @@ export default {
     };
   },
   mounted() {
-    console.log(this.InterventionList, '接收的数据');
     this.NameType = this.TabTitle;
     this.dataSource.columns = COLUMNS[this.TabTitle];
     if (this.InterventionList.length !== 0) {
@@ -370,7 +369,6 @@ export default {
     }
     this.getLibraryList();
     // this.timer = new Date().getTime();
-    // console.log(this.InterventionList, 'cccccc');
   },
   methods: {
     // 体检库下拉数据
@@ -379,15 +377,18 @@ export default {
       const { data } = res.data;
       this.resultOptions = data;
     },
-    handleChange(params) {
-      const { value, label } = params;
-      console.log(value, label);
-    },
+    // handleChange(params) {
+    //   const { value, label } = params;
+    // },
     Changeestates(index, event) {
       this.$set(this.dataSource.list[index], 'estates', event);
-      // console.log(index, event);
-      // console.log(this.dataSource.list);
       this.$forceUpdate();
+    },
+    ChangeestatesJudg(index, event) {
+      console.log(index, event);
+      this.$set(this.dataSource.list[index], 'estates', event);
+      // this.$forceUpdate();
+      console.log(this.dataSource.list);
     },
     ConstitutionList() {
       this.$api.reportInterface
@@ -397,7 +398,6 @@ export default {
         });
     },
     othertestAdd() {
-      console.log(this.dataSource.list, '处理前');
       if (this.detectionInfo.length !== 0) {
         // if (this.dataSource.list.length !== 0) {
         //   for (let i = 0; i < this.dataSource.list.length; i++) {
@@ -409,11 +409,21 @@ export default {
         //     break;
         //   }
         // } else {
-        this.detectionInfo.forEach((val) => {
-          this.dataSource.list.push(val);
+        this.detectionInfo.forEach((valQusOne) => {
+          let same = false;
+          this.dataSource.list.forEach((valAnswer) => {
+            if (valQusOne.id === valAnswer.id) { // 如果有一样 就回答过了
+              same = true;
+            }
+          });
+          if (same === false) { // 如果没有相同的则push
+            this.dataSource.list.push(valQusOne);
+          }
         });
+        // this.detectionInfo.forEach((val) => {
+        //   this.dataSource.list.push(val);
+        // });
         // }
-        console.log(this.dataSource.list, '处理后');
         this.$emit('change', this.dataSource.list, this.TabTitle);
         this.detectioninfoSource.clientName = '';
         this.detectionInfo = [];
@@ -426,9 +436,21 @@ export default {
         judgeResult: '',
         conditionRelation: this.formData.state,
       };
-      this.dataSource.list.push(json);
+      let istrues = false;
+      if (this.dataSource.list.length !== 0) {
+        this.dataSource.list.forEach((val) => {
+          if (Number(json.tizhiCode) === Number(val.tizhiCode)) {
+            this.$message.error('请勿重复添加');
+            istrues = true;
+          }
+        });
+        if (istrues === false) {
+          this.dataSource.list.push(json);
+        }
+      } else {
+        this.dataSource.list.push(json);
+      }
       this.$emit('change', this.dataSource.list, this.TabTitle);
-      console.log(this.dataSource.list);
     },
     detectionhandlePopoperClose() {
       this.detectionpopoverStatus = false;
@@ -464,7 +486,6 @@ export default {
             this.detectionInfo[i].judgeRelation = '1';
           }
         }
-        console.log(this.detectionInfo, '123123选择检测项目');
         this.$refs.userPopovers.doClose();
         this.detectionpopoverStatus = false;
       } else {
@@ -502,7 +523,6 @@ export default {
     },
     // 新增
     InterventionAdd() {
-      console.log('12312313');
       this.$router.push({
         name: 'InterventionAdd',
       });
