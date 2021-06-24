@@ -85,7 +85,7 @@ export default {
       ],
       currentPage: 1,
       total: 0,
-      pageSize: 15,
+      pageSize: 5,
       gender: '',
       keyword: '',
       multipleSelection: [],
@@ -148,6 +148,13 @@ export default {
   padding: 10px 19px;
   box-shadow: 0px 0px 30px 0px rgba(151, 166, 189, 0.3);
   border-radius: 5px;
+  height: 450px;
+  overflow-y: scroll;
+  width: 95%;
+}
+/deep/ .el-people-select_content{
+  height: 400px;
+  overflow-y: scroll;
 }
 /deep/ .table-row {
   height: 44px;
@@ -161,5 +168,6 @@ export default {
 .form-buttons {
   margin-top: 5px;
   text-align: center;
+  margin-bottom: 20px;
 }
 </style>

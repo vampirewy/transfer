@@ -105,7 +105,7 @@ export default {
     };
   },
   mounted() {
-    console.log(this.id, this.ids, '血压新增');
+    // console.log(this.id, this.ids, '血压新增');
     this.queryChartData();
     this.queryPageList();
     this.queryChartInfo();

@@ -26,7 +26,7 @@ export default {
     };
   },
   mounted() {
-    this.queryChartData();
+    // this.queryChartData();
     this.queryPageList();
   },
   methods: {

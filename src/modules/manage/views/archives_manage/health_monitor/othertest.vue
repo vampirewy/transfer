@@ -489,9 +489,9 @@ export default {
       this.queryList();
     },
     submit() {
-      // console.log(this.detectionInfos, 'qweqweqweqwe');
+      console.log(this.infoSource.startDate, 'qweqweqweqwe');
       if (!this.infoSource.clientName) {
-        return this.$message.warning('请添加检测项目');
+        return this.$message.warning('请选择客户');
       }
       if (!this.infoSource.startDate) {
         return this.$message.warning('请填写时间');
@@ -504,6 +504,9 @@ export default {
         json.healthDataItemId = this.detectionInfos[i].id;
         json.detectDate = this.infoSource.startDate;
         arrars.push(json);
+      }
+      if (arrars.length === 0) {
+        return this.$message.warning('请选择项目');
       }
       // console.log(arrars, '结果');
       this.$api.healthMonitorInterface.saveHealthDataOther(arrars).then(({ data }) => {

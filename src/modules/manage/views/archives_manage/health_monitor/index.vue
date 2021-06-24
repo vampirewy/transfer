@@ -76,18 +76,20 @@
             <div>
             <span>检测日期：</span>
             <el-date-picker
-              v-model="forms.physicalstartTime"
+              v-model="forms.startTime"
               type="date"
-              :max-date="forms.physicalendTime || new Date()"
+              :max-date="forms.endTime || new Date()"
               placeholder="选择开始日期"
+              value-format="yyyy-MM-dd HH:mm:ss"
               style="width: 150px"
             >
             </el-date-picker>
             <span class="timing">-</span>
             <el-date-picker
-              v-model="forms.physicalendTime"
+              v-model="forms.endTime"
               type="date"
-              :min-date="forms.physicalstartTime"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              :min-date="forms.startTime"
               :max-date="new Date()"
               placeholder="选择结束日期"
               style="width: 150px"
@@ -349,7 +351,7 @@ const COLUMNS = {
     { label: '身高(cm)', prop: 'height' },
     { label: '体重(kg)', prop: 'weight' },
     { label: '腰围(cm)', prop: 'wc' },
-    { label: 'BMI', prop: 'weight' },
+    // { label: 'BMI', prop: 'weight' },
     { label: '体脂率(%)', prop: 'bdPercent' },
     { label: '备注', prop: 'result' },
   ],
@@ -416,8 +418,8 @@ export default {
         clientName: '',
         gender: '',
         workUnitName: '',
-        physicalstartTime: '', // 开始时间
-        physicalendTime: '', // 结束时间
+        startTime: '', // 开始时间
+        endTime: '', // 结束时间
       },
       form: {
         keywords: '', // 姓名
@@ -524,8 +526,8 @@ export default {
       this.forms.clientName = '';
       this.forms.workUnitName = '';
       this.forms.gender = '';
-      this.forms.physicalstartTime = '';
-      this.forms.physicalendTime = '';
+      this.forms.startTime = '';
+      this.forms.endTime = '';
       this.table.pageNo = 1;
       this.queryPageList();
     },
