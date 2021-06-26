@@ -123,6 +123,7 @@
               <el-date-picker
                 v-model="infoSource.startDate"
                 type="datetime"
+                style="width: 100%"
                 value-format="yyyy-MM-dd HH:mm:ss"
                 :max-date="new Date()"
                 placeholder="选择日期时间">
@@ -189,6 +190,7 @@
               <el-date-picker
                 v-model="infoSource.startDate"
                 type="datetime"
+                style="width: 100%"
                 value-format="yyyy-MM-dd HH:mm:ss"
                 :max-date="new Date()"
                 placeholder="选择日期时间">
@@ -210,7 +212,7 @@
         <div v-if="id === 2">
             <el-row>
                 <el-col :span="6">
-                <el-form-item label="身高">
+                <el-form-item label="身高" prop="Height">
                 <el-input
                     onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"
                     v-model="infoSource.Height"
@@ -264,6 +266,7 @@
                   <el-date-picker
                   v-model="infoSource.startDate"
                   type="datetime"
+                  style="width: 100%"
                   value-format="yyyy-MM-dd HH:mm:ss"
                   :max-date="new Date()"
                   placeholder="选择日期时间">
@@ -286,7 +289,7 @@
         <div v-if="id === 3">
                 <el-row>
                 <el-col :span="6">
-                <el-form-item label="运动时间" >
+                <el-form-item label="运动时间" prop="sportTime">
                 <el-input
                     onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"
                     v-model="infoSource.sportTime"
@@ -298,7 +301,7 @@
                 </el-form-item>
                 </el-col>
                     <el-col :span="6">
-                <el-form-item label="运动路程" >
+                <el-form-item label="运动路程" prop="sportDistance">
                 <el-input
                     onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"
                     v-model="infoSource.sportDistance"
@@ -310,7 +313,7 @@
                 </el-form-item>
                     </el-col>
                 <el-col :span="6">
-                <el-form-item label="运动步数" >
+                <el-form-item label="运动步数" prop="steps">
                 <el-input
                     onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"
                     v-model="infoSource.steps"
@@ -322,7 +325,7 @@
                 </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                <el-form-item label="运动消耗" >
+                <el-form-item label="运动消耗" prop="kcal">
                 <el-input
                     v-model="infoSource.kcal"
                     placeholder="请输入"
@@ -339,6 +342,7 @@
                   <el-date-picker
                     v-model="infoSource.startDate"
                     type="datetime"
+                    style="width: 100%"
                     value-format="yyyy-MM-dd HH:mm:ss"
                     :max-date="new Date()"
                     placeholder="选择日期时间">
@@ -444,8 +448,13 @@ export default {
         DBP: [{ required: true, message: '舒张压不能为空' }],
         bloodsugar: [{ required: true, message: '血糖类型不能为空', trigger: 'blur' }],
         Weight: [{ required: true, message: '体重不能为空' }],
+        Height: [{ required: true, message: '身高不能为空' }],
         Waist: [{ required: true, message: '腰围不能为空' }],
         specification: [{ required: true, message: '体脂率不能为空' }],
+        sportTime: [{ required: true, message: '运动时间不能为空' }],
+        sportDistance: [{ required: true, message: '运动路程不能为空' }],
+        steps: [{ required: true, message: '运动步数不能为空' }],
+        kcal: [{ required: true, message: '运动消耗不能为空' }],
       },
       formData: {
         pageNo: 1,
@@ -619,7 +628,7 @@ export default {
     submit() {
       // this.infoSource.startDates = this.infoSource.Timevalue;
       if (this.infoSource.clientId === '') {
-        return this.$message.error('项目名称不能为空');
+        return this.$message.warning('请选择客户');
       }
       if (this.id === 0) {
         if (!this.infoSource.SBP) {
@@ -647,10 +656,10 @@ export default {
       }
       if (this.id === 1) {
         if (!this.infoSource.bloodsugar) {
-          return this.$message.warning('请填写血糖值');
+          return this.$message.warning('请填写血糖类型');
         }
         if (!this.infoSource.bloodsugarvalue) {
-          return this.$message.warning('请填写血压值');
+          return this.$message.warning('请填写血糖值');
         }
         if (!this.infoSource.startDate) {
           return this.$message.warning('请填写时间');
@@ -669,6 +678,9 @@ export default {
         });
       }
       if (this.id === 2) {
+        if (!this.infoSource.Height) {
+          return this.$message.warning('请填写身高');
+        }
         if (!this.infoSource.Weight) {
           return this.$message.warning('请填写体重');
         }
@@ -697,6 +709,18 @@ export default {
         });
       }
       if (this.id === 3) {
+        if (!this.infoSource.sportTime) {
+          return this.$message.warning('运动时间不能为空');
+        }
+        if (!this.infoSource.sportDistance) {
+          return this.$message.warning('运动路程不能为空');
+        }
+        if (!this.infoSource.steps) {
+          return this.$message.warning('运动步数不能为空');
+        }
+        if (!this.infoSource.kcal) {
+          return this.$message.warning('运动消耗不能为空');
+        }
         if (!this.infoSource.startDate) {
           return this.$message.warning('请填写时间');
         }

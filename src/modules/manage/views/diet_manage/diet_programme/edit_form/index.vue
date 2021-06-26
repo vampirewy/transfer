@@ -111,7 +111,7 @@
             <el-date-picker
               v-model="stateDate"
               type="date"
-              :max-date="endDate || new Date()"
+              :min-date="new Date()"
               value-format="yyyy-MM-dd"
               placeholder="开始时间"
               style="width: 121px"
@@ -122,7 +122,6 @@
               v-model="endDate"
               type="date"
               :min-date="stateDate"
-              :max-date="new Date()"
               value-format="yyyy-MM-dd"
               placeholder="结束时间"
               style="width: 121px"
@@ -227,199 +226,6 @@
             @change="handleFoodSelect"
             @makeIndex="makeIndex"
             ></make-recipes>
-            <!-- <el-tabs
-              type="card"
-              editable
-              @tab-remove="removeTab"
-              @tab-add="addTab"
-              v-model="editableTabsValue"
-            >
-              <el-tab-pane
-                :key="item.title"
-                v-for="item in editableTabs"
-                :label="item.title"
-                :name="item.name"
-              >
-                <el-collapse v-model="dietCollapseActiveNames">
-                  <el-collapse-item name="1">
-                    <template slot="title">
-                      <div class="header">
-                        <span><i class="el-icon-arrow-down"></i>早餐</span>
-                        <i class="el-icon-plus" @click.stop="foodAdd"></i>
-                      </div>
-                    </template>
-                    <div class="food-collapse" v-for="item in 2" :key="item">
-                      <div class="food-item">
-                        <p class="food-title">
-                          <img
-                            class="food-circle"
-                            :src="
-                              isActive
-                                ? require('@/assets/images/diet/icon_line.png')
-                                : require('@/assets/images/diet/icon_add.png')
-                            "
-                            @click="isActive = !isActive"
-                            alt=""
-                          />
-                          纯牛奶
-                          <i
-                            @click="isShowCooking = true"
-                            class="el-icon-warning"
-                          ></i>
-                        </p>
-                        <div class="input-box">
-                          <el-input type="text" value="123123" />
-                          g
-                        </div>
-                        <img
-                          class="food-del"
-                          src="@/assets/images/diet/icon_del.png"
-                          alt=""
-                        />
-                      </div>
-                      <div class="food-list" :class="{ is_active: isActive }">
-                        <div class="food-item foot-list_item">
-                          <p>甜酒酿</p>
-                          <div class="input-box">
-                            <el-input type="text" value="123123" />
-                            g
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </el-collapse-item>
-                  <el-collapse-item name="2">
-                    <template slot="title">
-                      <div class="header">
-                        <span><i class="el-icon-arrow-down"></i>午餐</span>
-                        <i class="el-icon-plus" @click.stop="foodAdd"></i>
-                      </div>
-                    </template>
-                    <div class="food-collapse" v-for="item in 2" :key="item">
-                      <div class="food-item">
-                        <p class="food-title">
-                          <img
-                            class="food-circle"
-                            :src="
-                              isActive
-                                ? require('@/assets/images/diet/icon_line.png')
-                                : require('@/assets/images/diet/icon_add.png')
-                            "
-                            @click="isActive = !isActive"
-                            alt=""
-                          />
-                          纯牛奶
-                        </p>
-                        <div class="input-box">
-                          <el-input type="text" value="123123" />
-                          g
-                        </div>
-                        <img
-                          class="food-del"
-                          src="@/assets/images/diet/icon_del.png"
-                          alt=""
-                        />
-                      </div>
-                      <div class="food-list" :class="{ is_active: isActive }">
-                        <div class="food-item foot-list_item">
-                          <p>甜酒酿</p>
-                          <div class="input-box">
-                            <el-input type="text" value="123123" />
-                            g
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </el-collapse-item>
-                  <el-collapse-item name="3">
-                    <template slot="title">
-                      <div class="header">
-                        <span><i class="el-icon-arrow-down"></i>晚餐</span>
-                        <i class="el-icon-plus" @click.stop="foodAdd"></i>
-                      </div>
-                    </template>
-                    <div class="food-collapse" v-for="item in 2" :key="item">
-                      <div class="food-item">
-                        <p class="food-title">
-                          <img
-                            class="food-circle"
-                            :src="
-                              isActive
-                                ? require('@/assets/images/diet/icon_line.png')
-                                : require('@/assets/images/diet/icon_add.png')
-                            "
-                            @click="isActive = !isActive"
-                            alt=""
-                          />
-                          纯牛奶
-                        </p>
-                        <div class="input-box">
-                          <el-input type="text" value="123123" />
-                          g
-                        </div>
-                        <img
-                          class="food-del"
-                          src="@/assets/images/diet/icon_del.png"
-                          alt=""
-                        />
-                      </div>
-                      <div class="food-list" :class="{ is_active: isActive }">
-                        <div class="food-item foot-list_item">
-                          <p>甜酒酿</p>
-                          <div class="input-box">
-                            <el-input type="text" value="123123" />
-                            g
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </el-collapse-item>
-                  <el-collapse-item name="4">
-                    <template slot="title">
-                      <div class="header">
-                        <span><i class="el-icon-arrow-down"></i>加餐</span>
-                        <i class="el-icon-plus" @click.stop="foodAdd"></i>
-                      </div>
-                    </template>
-                    <div class="food-collapse" v-for="item in 2" :key="item">
-                      <div class="food-item">
-                        <p class="food-title">
-                          <img
-                            class="food-circle"
-                            :src="
-                              isActive
-                                ? require('@/assets/images/diet/icon_line.png')
-                                : require('@/assets/images/diet/icon_add.png')
-                            "
-                            @click="isActive = !isActive"
-                            alt=""
-                          />
-                          纯牛奶
-                        </p>
-                        <div class="input-box">
-                          <el-input type="text" value="123123" />
-                          g
-                        </div>
-                        <img
-                          class="food-del"
-                          src="@/assets/images/diet/icon_del.png"
-                          alt=""
-                        />
-                      </div>
-                      <div class="food-list" :class="{ is_active: isActive }">
-                        <div class="food-item foot-list_item">
-                          <p>甜酒酿</p>
-                          <div class="input-box">
-                            <el-input type="text" value="123123" />
-                            g
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </el-collapse-item>
-                </el-collapse>
-              </el-tab-pane>
-            </el-tabs> -->
           </div>
           <div class="diet-formulate diet-rule">
             <div class="diet-formulate-head" style="margin-bottom: 20px">
