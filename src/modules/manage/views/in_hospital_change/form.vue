@@ -104,6 +104,22 @@
         >下一步</el-button>
       </div>
     </el-form>
+    <el-dialog
+            title="提示"
+            :visible.sync="reservationSuccessShow"
+            :modal-append-to-body='false'
+            width="380px"
+            style="margin-top: 11vh;"
+    >
+      <div class="reservationInfo">
+        <p>您已成功预约{{reservationForm.doctorName}}医生的</p>
+        <p class="time">{{reservationForm.activeDate}}
+           {{reservationForm.activeDay}}{{reservationForm.activeAmPm === 'am' ? '上午' : '下午'}}，
+          {{reservationForm.activeTime}} &nbsp;{{reservationForm.activeNum}}号</p>
+        <p>请注意查收预约短信通知！</p>
+        <el-button size="small" class="sureBtn" type="primary" @click="sure">确定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -134,6 +150,8 @@ export default {
         primaFacie: '',
         referralIntro: '',
       },
+      reservationForm: {},
+      reservationSuccessShow: false, // 挂号成功
       staffRules: {
         clientName: [{ required: true, message: '请选择客户' }],
       },
@@ -223,12 +241,17 @@ export default {
               propsData: Row,
               confirmfunc: async (value) => {
                 console.log(value);
+                this.reservationForm = value;
+                this.reservationSuccessShow = true;
               },
             },
             render: h => h(registerOpen),
           });
         }
       });
+    },
+    sure() {
+      this.$router.push('/in_hospital_change');
     },
     cancel() {
       this.$router.go(-1);
@@ -283,6 +306,20 @@ export default {
       input, i {
         cursor: not-allowed;
       }
+    }
+  }
+  .reservationInfo{
+    text-align: center;
+    font-size: 14px;
+    color: #333333;
+    .time{
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 24px;
+      margin-top: 3px;
+    }
+    .sureBtn{
+      margin-top: 24px;
     }
   }
 }

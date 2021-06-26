@@ -5,50 +5,50 @@
       <span>基本信息</span>
     </div>
     <div class="header">
-      <el-form :inline="false" :model="form"
+      <el-form :inline="false" :model="propsForm"
                label-width="85px"
                ref="form"
                class="form-inline">
         <el-row>
           <el-col :span="8">
           <el-form-item label="客户姓名：">
-            {{form.clientName | getResult}}
+            {{propsForm.clientName | getResult}}
           </el-form-item>
           </el-col>
           <el-col :span="8">
           <el-form-item label="性别：">
-            {{form.age | getResultGender}}
+            {{propsForm.gender | getResultGender}}
           </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="客户年龄：">
-              {{form.age | getResult}}
+              {{propsForm.age | getResult}}
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
             <el-form-item label="手机号码：">
-              {{form.mobile | getResult}}
+              {{propsForm.mobile | getResult}}
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="身份证号：">
-              {{form.cardNo | getResult}}
+              {{propsForm.cardNo | getResult}}
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="初步印象：" class="desc">
-              {{form.primaFacie | getResult}}
+              {{propsForm.primaFacie | getResult}}
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="转诊说明：" class="desc">
-              {{form.referralIntro | getResult}}
+              {{propsForm.referralIntro | getResult}}
             </el-form-item>
           </el-col>
         </el-row>
@@ -66,7 +66,9 @@ export default {
   name: 'registerOpenStep1',
   props: ['form'],
   data() {
-    return {};
+    return {
+      propsForm: this.form,
+    };
   },
   methods: {
     next() {
