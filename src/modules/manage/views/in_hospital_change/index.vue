@@ -135,13 +135,13 @@
       </el-table-column>
       <el-table-column label="状态" prop="result" min-width="90px">
         <template slot-scope="scope">
-              <span class="warnStatus1" v-if="scope.row.state === 2">
+              <span class="warnStatus2" v-if="scope.row.state === 2">
                 待就诊
               </span>
               <span v-if="scope.row.state === 3">
                 已就诊
               </span>
-              <span class="warnStatus3" v-if="scope.row.state === 1">
+              <span class="warnStatus1" v-if="scope.row.state === 1">
                 已取消
               </span>
               <span v-if="scope.row.state === 0">
@@ -184,8 +184,12 @@
 
 <script>
 import deleteIcon from '~/src/assets/images/common/editIcon.png';
+import detail from './detail.vue';
 export default {
   name: 'in_hospital_change',
+  components: {
+    detail,
+  },
   data() {
     return {
       upload_url: process.env.api.upload_url,
@@ -359,8 +363,20 @@ export default {
       });
     },
     handleView(row) {
-      this.$router.push({
+      /* this.$router.push({
         path: `/in_hospital_change_detail/${row.id}`,
+      });*/
+      const Row = { id: row.id };
+      this.$jDynamic.show({
+        component: 'detail',
+        data: {
+          modalTitle: '挂号详情',
+          propsData: Row,
+          confirmfunc: async (value) => {
+            console.log(value);
+          },
+        },
+        render: h => h(detail),
       });
     },
     /**
@@ -483,9 +499,9 @@ export default {
   }
 }
   .warnStatus1{
-    color: #FA912B;
+    color: #B4BBC9;
   }
-  .warnStatus3{
-    color: #F33D21;
+  .warnStatus2{
+    color: #FA912B;
   }
 </style>

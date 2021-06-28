@@ -56,7 +56,7 @@ export default {
 <style lang="scss" scoped>
   .container{
     // width: 100%;
-    padding: 20px 0 8px 20px;
+    padding: 18px 0 18px 18px;
     background-color: #F6F8FC;
     border-radius: 8px;
     position: relative;

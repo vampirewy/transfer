@@ -4,48 +4,58 @@
             <div class="quan"></div>
             <span>医生详情</span>
         </div>
-        <div class="timeDiv">
-            <div class="timeDivOne" v-for="item in dateList" :key="item.date">
-                <div class="timeDivOneDate" :class="{'active': item.date === activeDate}">
-                    <p class="timeDivOneDate1" :class="{'active': item.date === activeDate}">
-                        {{item.date}}</p>
-                    <p class="timeDivOneDate2" :class="{'active': item.date === activeDate}">
-                        {{item.day}}</p>
-                </div>
-                <div class="timeDivOneDateAMPM">
-                    <div class="timeDivOneDateAM" @click="chooseDateAmPm(item.date, 'am')"
-                         :class="{'active': item.date === activeDate && activeAmPm === 'am'}">
-                        上午</div>
-                    <div class="timeDivOneDatePM" @click="chooseDateAmPm(item.date, 'pm')"
-                         :class="{'active': item.date === activeDate && activeAmPm === 'pm'}">
-                        下午</div>
-                </div>
-            </div>
-        </div>
-        <div class="healthContentDiv" v-for="item in doctorList" :key="item.id">
+        <div class="healthContentDiv">
             <div class="healthContent">
                 <div class="healImg">
-                    <img :src="item.avatar"/>
+                    <img :src="propsForm.doctorAvatar"/>
                 </div>
                 <div class="healRight">
                     <div class="healText">
-                        <span>{{item.name}}</span>
-                        <span class="level">（{{item.levelName}}）</span>
+                        <span>{{propsForm.doctorName}}</span>
+                        <span class="level">（{{propsForm.doctorLevelName}}）</span>
                     </div>
                     <div class="rightText">
-                        {{item.desc}}
+                        {{propsForm.doctorDesc}}
                     </div>
                 </div>
             </div>
-            <div class="healthContentRight">
-                <div class="reservationNoBtn" v-if="item.count <= 0">约满</div>
-                <div class="reservationBtn" v-if="item.count > 0">预约</div>
-                <div class="reservationDetailBtn">详情</div>
+        </div>
+        <div class="wltitle">
+            <div class="quan"></div>
+            <span>医生排班</span>
+        </div>
+        <div class="timeDiv">
+            <div class="timeDivOne">
+                <div class="timeDivOneDate">
+                    <p class="timeDivOneDate1" style="margin-top: 15px;">日期</p>
+                </div>
+                <div class="timeDivOneDateAMPM">
+                    <div class="timeDivOneDateAM">上午</div>
+                    <div class="timeDivOneDatePM">下午</div>
+                </div>
+            </div>
+            <div class="timeDivOne" v-for="item in dateList" :key="item.date">
+                <div class="timeDivOneDate">
+                    <p class="timeDivOneDate1">{{item.date}}</p>
+                    <p class="timeDivOneDate2">{{item.day}}</p>
+                </div>
+                <div class="timeDivOneDateAMPM">
+                    <div class="timeDivOneDateAM"
+                         @click="chooseDateAmPm(item.date, item.day, 'am', item.amCount)"
+                         :class="{'active': item.date === activeDate && activeAmPm === 'am',
+                         'haveCount': item.amCount > 0, 'noCount': item.amCount <= 0}">
+                        {{ item.amCount > 0 ? '有号' : '无号' }}</div>
+                    <div class="timeDivOneDatePM"
+                         @click="chooseDateAmPm(item.date, item.day, 'pm', item.pmCount)"
+                         :class="{'active': item.date === activeDate && activeAmPm === 'pm',
+                         'haveCount': item.pmCount > 0, 'noCount': item.pmCount <= 0}">
+                        {{ item.pmCount > 0 ? '有号' : '无号' }}</div>
+                </div>
             </div>
         </div>
         <div class="form-buttons">
             <el-button size="small" class="cancelBtn" @click="next(2)">上一步</el-button>
-            <el-button size="small" class="sureBtn" type="primary" @click="next(4)"
+            <el-button size="small" class="sureBtn" type="primary" @click="toChooseTimeNext(4)"
             >下一步
             </el-button>
         </div>
@@ -53,70 +63,98 @@
 </template>
 
 <script>
-import avatarImg from '@/assets/images/body/avatar.png';
 export default {
   name: 'registerOpenStep4',
-  props: ['doctorForm'],
+  props: ['form'],
   data() {
     return {
+      propsForm: this.form,
       dateList: [
         {
           date: '05-06',
           day: '周四',
+          amCount: 4,
+          pmCount: 0,
         },
         {
           date: '05-07',
           day: '周五',
+          amCount: 0,
+          pmCount: 4,
         },
         {
           date: '05-08',
           day: '周六',
+          amCount: 4,
+          pmCount: 1,
         },
         {
           date: '05-09',
           day: '周日',
+          amCount: 4,
+          pmCount: 4,
         },
         {
           date: '05-10',
           day: '周一',
+          amCount: 14,
+          pmCount: 0,
         },
         {
           date: '05-11',
           day: '周二',
+          amCount: 0,
+          pmCount: 0,
         },
         {
           date: '05-12',
           day: '周三',
-        },
-      ],
-      doctorList: [
-        { id: 1,
-          name: '吴林',
-          avatar: avatarImg,
-          levelName: '主任医师',
-          desc: '毕业于浙江大学医学院，曾赴美国加州大学洛杉矶分校（UCLA）医学中心实习，现任海现任海现任毕业于浙江大学医学院习，现任海现任海现任',
-          count: 5,
-        },
-        { id: 2,
-          name: '谢小任',
-          avatar: avatarImg,
-          levelName: '副主任医师',
-          desc: '毕业于温州医科大学，现任浙江大学附属医院客座讲师',
-          count: 0,
+          amCount: 0,
+          pmCount: 2,
         },
       ],
       activeDate: '',
+      activeDay: '',
       activeAmPm: '',
     };
   },
+  watch: {
+    form: {
+      handler(val) {
+        console.log(val);
+        this.propsForm = val;
+        this.activeDate = val.activeDate;
+        this.activeDay = val.activeDay;
+        this.activeAmPm = val.activeAmPm;
+      },
+      immediate: true,
+      deep: true,
+    },
+  },
   methods: {
-    chooseDateAmPm(date, ampm) {
+    chooseDateAmPm(date, day, ampm, count) {
       console.log(date, ampm);
-      this.activeDate = date;
-      this.activeAmPm = ampm;
+      if (count > 0) { // 有号才给选择
+        this.activeDate = date;
+        this.activeDay = day;
+        this.activeAmPm = ampm;
+      }
     },
     next(val) {
       this.$emit('prevNext', val);
+    },
+    toChooseTimeNext(val) {
+      if (!this.activeDate || !this.activeAmPm) {
+        return this.$message.warning('请选择排班');
+      }
+      // 传时间 - 上午下午 入父组件
+      const obj = {
+        activeDate: this.activeDate,
+        activeDay: this.activeDay,
+        activeAmPm: this.activeAmPm,
+      };
+      this.$emit('clickInfo', obj);
+      this.next(val);
     },
   },
 };
@@ -133,7 +171,7 @@ export default {
         margin-top: -5px;
         justify-content: space-between;
         .timeDivOne{
-            width: 90px;
+            width: 105px;
             .timeDivOneDate{
                 height: 48px;
                 background: #F6F8FC;
@@ -146,17 +184,11 @@ export default {
                     font-size: 14px;
                     color: #333333;
                     margin-top: 7px;
-                    &.active{
-                        color: white;
-                    }
                 }
                 .timeDivOneDate2{
                     font-size: 12px;
                     color: #666666;
                     margin-top: -3px;
-                    &.active{
-                        color: white;
-                    }
                 }
             }
             .timeDivOneDateAMPM{
@@ -176,6 +208,12 @@ export default {
                         background-position: 100% 100%;
                         background-color: #eaedf6;
                     }
+                    &.haveCount{
+                        color: #36BF2F;
+                    }
+                    &.noCount{
+                        color: #999999;
+                    }
                 }
                 .timeDivOneDatePM{
                     height: 40px;
@@ -191,6 +229,13 @@ export default {
                         background-position: 100% 100%;
                         background-color: #eaedf6;
                     }
+                    &.haveCount{
+                        color: #36BF2F;
+
+                    }
+                    &.noCount{
+                        color: #999999;
+                    }
                 }
             }
         }
@@ -198,7 +243,6 @@ export default {
     .healthContentDiv {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 10px;
         height: 48px;
         background: #F6F8FC;
         padding: 20px;
@@ -236,50 +280,10 @@ export default {
                     }
                 }
                 .rightText {
-                    width: 550px;
                     color: #999999;
                     font-size: 12px;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
+                    line-height: 18px;
                 }
-            }
-        }
-        .healthContentRight {
-            width: 200px;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            .reservationBtn {
-                width: 70px;
-                height: 40px;
-                line-height: 40px;
-                background: #36BF2F;
-                border-radius: 5px;
-                color: white;
-                text-align: center;
-                cursor: pointer;
-            }
-            .reservationNoBtn {
-                width: 70px;
-                height: 40px;
-                line-height: 40px;
-                background: #DDE0E6;
-                border-radius: 5px;
-                color: #B4BBC9;
-                text-align: center;
-                cursor: pointer;
-            }
-            .reservationDetailBtn {
-                width: 70px;
-                height: 40px;
-                line-height: 40px;
-                background: #B4BBC9;
-                border-radius: 5px;
-                color: #333333;
-                text-align: center;
-                margin-left: 20px;
-                cursor: pointer;
             }
         }
     }

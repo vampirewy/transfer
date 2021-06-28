@@ -4,7 +4,7 @@
       <div class="searchCondition">
         <div class="searchLeft">
           <div class="searchInputFormItem">
-            <el-input placeholder="找不到科室？试试输入科室名称搜索">
+            <el-input v-model="departmentKeyword" placeholder="找不到科室？试试输入科室名称搜索">
             </el-input>
             <span class="searchBtnImgSpan">
                   <img style="width: 36px" src="@/assets/images/common/topsearchblue.png">
@@ -47,7 +47,7 @@
     </div>
     <div class="form-buttons">
       <el-button size="small" class="cancelBtn" @click="next(0)">上一步</el-button>
-      <el-button size="small" class="sureBtn" type="primary" @click="next(2)"
+      <el-button size="small" class="sureBtn" type="primary" @click="toChooseDepartment(2)"
       >下一步</el-button>
     </div>
   </div>
@@ -56,8 +56,10 @@
 <script>
 export default {
   name: 'registerOpenStep2',
+  props: ['form'],
   data() {
     return {
+      departmentKeyword: '',
       chooseDepartmentList: [],
       chooseDepartmentId: '',
       departmentList: [
@@ -75,6 +77,21 @@ export default {
       ],
     };
   },
+  watch: {
+    form: {
+      handler(val) {
+        console.log(val);
+        if (val.departmentId) {
+          this.chooseDepartmentId = val.departmentId;
+          this.chooseDepartmentList = [
+            { name: val.departmentName, id: val.departmentId },
+          ];
+        }
+      },
+      immediate: true,
+      deep: true,
+    },
+  },
   methods: {
     chooseDepartment(item) {
       this.chooseDepartmentList = [];
@@ -84,6 +101,17 @@ export default {
     deleteDepartment() {
       this.chooseDepartmentList = [];
       this.chooseDepartmentId = '';
+    },
+    toChooseDepartment(val) {
+      if (!this.chooseDepartmentId) {
+        return this.$message.warning('请选择科室');
+      }
+      const obj = {
+        departmentId: this.chooseDepartmentList[0].id,
+        departmentName: this.chooseDepartmentList[0].name,
+      };
+      this.$emit('clickInfo', obj);
+      this.next(val);
     },
     next(val) {
       this.$emit('prevNext', val);

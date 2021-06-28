@@ -1,6 +1,18 @@
 <template>
   <div class="staff-page">
+    <div><el-button
+            class="btn-new btnAdd"
+            size="small"
+            style="margin: 2px 0 12px 0"
+            @click="registerOpenFunc"
+    ><img src="@/assets/images/common/addBtn.png" />挂号</el-button>
+      <el-button
+              class="btn-new btnAdd"
+              size="small"
+      ><img src="@/assets/images/common/over.png" />结案</el-button>
+    </div>
       <el-table :data="tableData" align="center" class="openTable">
+        <el-table-column type="selection" width="35"></el-table-column>
         <el-table-column
                 prop="itemName"
                 label="项目名称"
@@ -65,13 +77,33 @@
       ></el-pagination>
       <!--</template>
     </query-page>-->
+    <el-dialog
+            title="提示"
+            :visible.sync="reservationSuccessShow"
+            :modal-append-to-body='false'
+            width="380px"
+            style="margin-top: 11vh;"
+    >
+      <div class="reservationInfo">
+        <p>您已成功预约{{reservationForm.doctorName}}医生的</p>
+        <p class="time">{{reservationForm.activeDate}}
+          {{reservationForm.activeDay}}{{reservationForm.activeAmPm === 'am' ? '上午' : '下午'}}，
+          {{reservationForm.activeTime}} &nbsp;{{reservationForm.activeNum}}号</p>
+        <p>请注意查收预约短信通知！</p>
+        <el-button size="small" class="sureBtn" type="primary"
+                   @click="reservationSuccessShow = false">确定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import deleteIcon from '~/src/assets/images/deleteicon.png';
+import registerOpen from '../../../in_hospital_change/el_modal/registerOpen.vue';
 export default {
   name: 'follow_content',
+  components: {
+    registerOpen,
+  },
   data() {
     return {
       viewIndex: 1, // 1:列表页，2:新增，3:编辑，4:详情
@@ -83,16 +115,26 @@ export default {
       total: 0,
       currentPage: 1,
       pageSize: 15,
-      currentId: '',
-      roleOptions: [],
+      userForm: {
+        clientId: '',
+        clientNo: '',
+        gender: '',
+        age: '',
+        clientName: '',
+        mobile: '',
+        cardNo: '',
+        primaFacie: '',
+        referralIntro: '',
+      },
+      reservationForm: {},
+      reservationSuccessShow: false, // 挂号成功
     };
   },
   mounted() {
     this.getSystemParamBySC002();
-    // 查询条件： 角色
-    this.queryRoleList();
     // 员工列表
     this.queryList();
+    this.getClientUserInfo(this.$route.params.clientId);
   },
   methods: {
     async getSystemParamBySC002() {
@@ -100,21 +142,19 @@ export default {
       const { data } = res.data;
       this.stateList = data;
     },
-    queryRoleList() {
-      this.$api.systemManageInterface.roleList().then((res) => {
-        const { data } = res;
-        this.roleOptions = data.data || [];
+    getClientUserInfo(id) {
+      this.$api.userManagerInterface.getDetail(id).then(({ data }) => {
+        this.userForm.clientId = this.$route.params.clientId;
+        this.userForm.clientNo = data.data.clientNo;
+        this.userForm.gender = data.data.gender;
+        this.userForm.age = data.data.age;
+        this.userForm.clientName = data.data.name;
+        this.userForm.mobile = data.data.mobile;
+        this.userForm.cardNo = data.data.cardNo;
       });
     },
     search() {
       this.currentPage = 1;
-      this.queryList();
-    },
-    reset() {
-      this.currentPage = 1;
-      this.query = '';
-      this.role = '';
-      this.status = '';
       this.queryList();
     },
     queryList() {
@@ -123,35 +163,6 @@ export default {
         clientId: this.$route.params.clientId,
         sourceType: this.$route.params.sourceType, // 请求来源 1-首次跟踪列表进入 2-跟踪回访任务列表进入
       }).then((res) => {
-      /* const res = {
-        data: {
-          data: {
-            data: [
-              { id: '1',
-                clientNo: '2021015898745',
-                name: '肺癌指标',
-                createTime: '2021-04-27 14：00',
-                gender: '不限',
-                age: '不限',
-                resultState: 1,
-                resultLevel: 1,
-                tiaojian: '谷丙转氨酶>400U/L;总胆红',
-              },
-              { id: '2',
-                clientNo: '20210213987451',
-                name: '胃癌指标',
-                createTime: '2021-04-28 12：00',
-                gender: '不限',
-                age: '不限',
-                resultState: 1,
-                resultLevel: 1,
-                tiaojian: '谷丙转氨酶<100U/L;总胆红',
-              },
-            ],
-            total: 2,
-          },
-        },
-      };*/
         const { data } = res;
         const result = data.data || {};
         this.tableData = result || [];
@@ -161,46 +172,27 @@ export default {
     emitTable() {
       this.$emit('getTable', this.tableData);
     },
-    add() {
-      // 新增页面
-      this.viewIndex = 2;
-      this.currentId = '';
-    },
-    detail(data) {
-      // 详情页面
-      this.viewIndex = 4;
-      this.currentId = data.id;
-    },
-    edit(data) {
-      // 编辑页面
-      this.viewIndex = 3;
-      this.currentId = data.id;
-    },
-    changeState(data) {
-      // 启用 / 禁用
-      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>是否确认${data.state ? '禁用' : '启用'}?</span></div>`, '提示', {
-        dangerouslyUseHTMLString: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        customClass: 'message-box-customize',
-        showClose: true,
-      }).then(() => {
-        const state = data.state ? 0 : 1;
-        this.$api.systemManageInterface
-          .changeUserState(data.id, state)
-          .then(() => {
-            this.$message.success('操作成功');
-            this.queryList();
-          });
-      }).catch(() => {});
+    /**
+     * 查看
+     */
+    registerOpenFunc() {
+      const Row = Object.assign({}, this.userForm);
+      this.$jDynamic.show({
+        component: 'registerOpen',
+        data: {
+          modalTitle: '预约挂号',
+          propsData: Row,
+          confirmfunc: async (value) => {
+            console.log(value);
+            this.reservationForm = value;
+            this.reservationSuccessShow = true;
+          },
+        },
+        render: h => h(registerOpen),
+      });
     },
     handleCurrentChange(page) {
       this.currentPage = page;
-      this.queryList();
-    },
-    handleAfterSubmit() {
-      // 新增编辑页面保存后刷新列表
-      this.viewIndex = 1;
       this.queryList();
     },
   },
@@ -247,6 +239,20 @@ export default {
     }
     .table-buttons {
       margin-bottom: 16px;
+    }
+  }
+  .reservationInfo{
+    text-align: center;
+    font-size: 14px;
+    color: #333333;
+    .time{
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 24px;
+      margin-top: 3px;
+    }
+    .sureBtn{
+      margin-top: 24px;
     }
   }
 </style>

@@ -25,7 +25,8 @@ export default {
   data() {
     return {
       title: 'Vue Element Admin',
-      logo: 'http://health.pre.touchealth.com/logo.png',
+      // logo: 'http://health.pre.touchealth.com/logo.png',
+      logo: '',
     };
   },
 };
