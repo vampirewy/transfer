@@ -134,7 +134,6 @@
             <el-date-picker
                   v-model="formData.startTime"
                   type="date"
-                  :max-date="formData.endTime"
                   placeholder="选择开始日期"
                   style="width: 140px"
           >
@@ -473,7 +472,22 @@ export default {
       });
     },
     reset() {
-      this.formData = [];
+      this.formData.keywords = '';
+      this.formData.gridId = '';
+      this.formData.gender = '';
+      this.formData.hasReport = '';
+      this.formData.hasLifeQuestion = '';
+      this.formData.hasAssessReport = '';
+      this.formData.hasAnnex = '';
+      this.formData.cardNo = '';
+      this.formData.hasIntervenePlan = '';
+      this.formData.startReportDate = '';
+      this.formData.endReportDate = '';
+      this.formData.startCollectionDate = '';
+      this.formData.endCollectionDate = '';
+      this.formData.tag = '';
+      this.formData.startTime = '';
+      this.formData.endTime = '';
       // Object.assign(this.$data, this.$options.data());
       this.getUserList();
       this.getGridList(); // 获取人员列类别

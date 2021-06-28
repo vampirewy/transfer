@@ -351,6 +351,7 @@ export default {
     },
     TabbarBtn(index) {
       this.Tabactive = index;
+      this.queryList();
     },
     // 机构保存
     submitOrgan() {
@@ -408,9 +409,13 @@ export default {
       this.currentId = '';
     },
     detail(data) {
-      // 详情页面
       this.viewIndex = 4;
-      this.currentId = data.id;
+      // this.$api.systemManageInterface
+      //   .getassessList(dataes)
+      //   .then(({ data }) => {
+      //     this.form = data.data;
+      //   });
+      this.currentData = data;
     },
     edit(data) {
       // 编辑页面

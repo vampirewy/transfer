@@ -571,9 +571,9 @@ export default {
   .el-button + .el-button {
     margin-left: 3px;
   }
- /* .el-icon-arrow-right:before {
+  .el-icon-arrow-right:before {
     content: '';
-  }*/
+  }
 
   .expand-icon {
     color: #6c6ce5;

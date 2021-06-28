@@ -47,7 +47,7 @@ export default [
         ],
       },
       {
-        name: '团队管理',
+        name: '单位管理',
         access: 'company_manage',
         child: [
           { name: '编辑', access: 'company_manage_edit' },

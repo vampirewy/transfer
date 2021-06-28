@@ -33,6 +33,14 @@ class AccessReport extends BaseModule {
   generateReport(params) {
     return this.post('/assess_report/create_assess_info', params);
   }
+  // 生成中医报告
+  generatetcmReport(params) {
+    return this.post('/assess_report/create_tcm_assess_info', params);
+  }
+  // 生成心理报告
+  generatepsyReport(params) {
+    return this.post('/assess_report/create_psy_assess_info', params);
+  }
   // 团报告列表
   groupReportList(params = {}) {
     return this.post('/group_report/page_list', params);

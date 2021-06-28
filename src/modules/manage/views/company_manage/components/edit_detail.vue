@@ -9,7 +9,7 @@
   >
     <div class="form-title">
       <div class="point"></div>
-      <h3 class="name">企业信息</h3>
+      <h3 class="name">单位信息</h3>
     </div>
 
     <el-form

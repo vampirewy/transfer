@@ -19,7 +19,7 @@
           <el-col :span="11">
             <el-form-item label="适宜性别">
               <el-select
-                v-model="formData.profession"
+                v-model="formData.gender"
                 placeholder="请选择"
                 style="width: 100%"
               >
@@ -34,7 +34,7 @@
           </el-col>
           <el-col :span="11">
             <el-form-item label="问卷是否必填" prop="gender">
-              <el-radio-group v-model="formData.gender">
+              <el-radio-group v-model="formData.questioned">
                 <el-radio :label="1" value="1">是</el-radio>
                 <el-radio :label="2" value="2">否</el-radio>
               </el-radio-group>
@@ -45,7 +45,7 @@
           <el-col :span="11" style="margin-right: 1px">
             <el-form-item label="适宜年龄">
               <el-input
-                v-model="formData.name"
+                v-model="formData.minAge"
                 maxLength="30"
                 placeholder="输入最小年龄"
               >
@@ -57,7 +57,7 @@
           </el-col>
           <el-col :span="10">
             <el-input
-              v-model="formData.name"
+              v-model="formData.maxAge"
               maxLength="30"
               placeholder="输入最大年龄"
             >
@@ -258,11 +258,11 @@ export default {
       denger: [
         {
           name: '男',
-          id: '1',
+          id: 1,
         },
         {
           name: '女',
-          id: '2',
+          id: 2,
         },
       ],
       popoverStatus: false,
@@ -280,11 +280,11 @@ export default {
   methods: {
     // 添加
     addSportTemplate() {
-      if (this.selectTemplate && this.selectTemplate.length > 0) {
-        this.formData.tagList = this.selectTemplate;
-        this.selectTemplate = [];
-      }
-      console.log(this.formData.tagList, 123456);
+      // if (this.selectTemplate && this.selectTemplate.length > 0) {
+      //   this.formData.tagList = this.selectTemplate;
+      //   this.selectTemplate = [];
+      // }
+      console.log(this.selectTemplate, 111);
     },
     // 删除
     close(index) {
@@ -300,9 +300,9 @@ export default {
     },
     getCommentDetail() {
       this.$api.systemManageInterface
-        .getAvgList(this.id.id)
+        .getassessList(this.id.code)
         .then(({ data }) => {
-          this.form = data.data;
+          this.formData = data.data;
         });
     },
     // 点击编辑

@@ -103,6 +103,10 @@ class SystemManageInterface extends BaseModule {
   saveMainitem(data) {
     return this.post('/model_assess/save_main_item', data);
   }
+  // 获取评估设置详情
+  getassessList(modelCode) {
+    return this.get(`/model_assess/get_model_set/${modelCode}`);
+  }
 }
 
 export default new SystemManageInterface();
