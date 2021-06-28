@@ -106,9 +106,9 @@
                       class="tags"
                       closable
                       v-for="(tag, index) in formData.tagList"
-                      :key="tag.name"
+                      :key="tag.abnormalName"
                       @close="close(index)"
-              >{{ tag.name }}</el-tag>
+              >{{ tag.abnormalName }}</el-tag>
             </el-form-item>
             </el-form-item>
           </el-col>
@@ -120,18 +120,18 @@
                   width="640"
                   trigger="click"
                   @show="popoverStatus = true"
-                  @hide="handlePopoverClose"
+                  @hide="handlePopoverCloses"
                 >
-                  <abnormal
+                  <abscore
                     v-if="popoverStatus"
-                    @change="handleSportSelectChange"
+                    @change="handleSportSelectChangess"
                     @cancel="handlePopoverClose"
                   >
-                  </abnormal>
+                  </abscore>
                   <el-input
                     class="select-template-trigger"
                     slot="reference"
-                    v-model="templateStr"
+                    v-model="templateStrs"
                     style="width:80%;"
                     placeholder="请选择（可多选）"
                   >
@@ -146,16 +146,16 @@
                     ></i>
                   </el-input>
                 </el-popover>
-                <el-button @click="addSportTemplate" class="addbutton">添加</el-button>
+                <el-button @click="addSportTemplates" class="addbutton">添加</el-button>
               </div>
               <el-form-item>
               <el-tag
                       class="tags"
                       closable
-                      v-for="(tag, index) in formData.tagList"
-                      :key="tag.name"
-                      @close="close(index)"
-              >{{ tag.name }}</el-tag>
+                      v-for="(tag, index) in formData.tagLists"
+                      :key="index"
+                      @close="closes(index)"
+              >{{ tag.abnormalName }}</el-tag>
             </el-form-item>
             </el-form-item>
           </el-col>
@@ -169,16 +169,16 @@
                   @show="popoverStatus = true"
                   @hide="handlePopoverClose"
                 >
-                  <abnormal
+                  <abconfig
                     v-if="popoverStatus"
-                    @change="handleSportSelectChange"
+                    @change="handleSportSelectChangess"
                     @cancel="handlePopoverClose"
                   >
-                  </abnormal>
+                  </abconfig>
                   <el-input
                     class="select-template-trigger"
                     slot="reference"
-                    v-model="templateStr"
+                    v-model="templateStrss"
                     style="width:80%;"
                     placeholder="请选择（可多选）"
                   >
@@ -193,16 +193,16 @@
                     ></i>
                   </el-input>
                 </el-popover>
-                <el-button @click="addSportTemplate" class="addbutton">添加</el-button>
+                <el-button @click="addSportTemplatess" class="addbutton">添加</el-button>
               </div>
               <el-form-item>
               <el-tag
                       class="tags"
                       closable
-                      v-for="(tag, index) in formData.tagList"
-                      :key="tag.name"
-                      @close="close(index)"
-              >{{ tag.name }}</el-tag>
+                      v-for="(tag, index) in formData.tagListss"
+                      :key="index"
+                      @close="closess(index)"
+              >{{ tag.systemItemName }}</el-tag>
             </el-form-item>
             </el-form-item>
           </el-col>
@@ -220,16 +220,22 @@
 
 <script>
 import abnormal from './abnormal.vue';
+import abscore from './abscore.vue';
+import abconfig from './abconfig.vue';
 export default {
   name: 'Comment',
   props: ['id'],
   components: {
     abnormal,
+    abscore,
+    abconfig,
   },
   data() {
     return {
       activeIndex: '1',
       selectTemplate: [],
+      selectTemplates: [],
+      selectTemplatess: [],
       formData: {
         birth: '', // 1992-01-04
         gridId: '',
@@ -237,6 +243,8 @@ export default {
         profession: '',
         address: '',
         tagList: [],
+        tagLists: [],
+        tagListss: [],
         mobile: '',
         name: '',
         age: '',
@@ -271,7 +279,13 @@ export default {
   },
   computed: {
     templateStr() {
-      return this.selectTemplate.map(item => item.name).join(',');
+      return this.selectTemplate.map(item => item.abnormalName).join(',');
+    },
+    templateStrs() {
+      return this.selectTemplates.map(item => item.name).join(',');
+    },
+    templateStrss() {
+      return this.selectTemplatess.map(item => item.systemItemName).join(',');
     },
   },
   mounted() {
@@ -280,15 +294,45 @@ export default {
   methods: {
     // 添加
     addSportTemplate() {
-      // if (this.selectTemplate && this.selectTemplate.length > 0) {
-      //   this.formData.tagList = this.selectTemplate;
-      //   this.selectTemplate = [];
-      // }
-      console.log(this.selectTemplate, 111);
+      if (this.selectTemplate && this.selectTemplate.length > 0) {
+        this.selectTemplate.forEach((element) => {
+          this.formData.tagList.push(element);
+        });
+        this.selectTemplate = [];
+        this.$forceUpdate();
+      }
+    },
+    // 添加
+    addSportTemplates() {
+      if (this.selectTemplates && this.selectTemplates.length > 0) {
+        this.selectTemplates.forEach((element) => {
+          this.formData.tagLists.push(element);
+        });
+        this.selectTemplates = [];
+        this.$forceUpdate();
+      }
+    },
+    addSportTemplatess() {
+      if (this.selectTemplatess && this.selectTemplatess.length > 0) {
+        this.selectTemplatess.forEach((element) => {
+          this.formData.tagListss.push(element);
+        });
+        this.selectTemplatess = [];
+        this.$forceUpdate();
+      }
     },
     // 删除
     close(index) {
       this.formData.tagList.splice(index, 1);
+      this.$forceUpdate();
+    },
+    closes(index) {
+      this.formData.tagLists.splice(index, 1);
+      this.$forceUpdate();
+    },
+    closess(index) {
+      this.formData.tagListss.splice(index, 1);
+      this.$forceUpdate();
     },
     handlePopoverClose() {
       this.popoverStatus = false;
@@ -298,11 +342,22 @@ export default {
       this.selectTemplate = data;
       this.handlePopoverClose();
     },
+    handleSportSelectChanges(data) {
+      this.selectTemplates = data;
+      this.handlePopoverClose();
+    },
+    handleSportSelectChangess(data) {
+      this.selectTemplatess = data;
+      this.handlePopoverClose();
+    },
     getCommentDetail() {
       this.$api.systemManageInterface
         .getassessList(this.id.code)
         .then(({ data }) => {
           this.formData = data.data;
+          this.formData.tagList = data.data.abnormalExcludeDtos;
+          this.formData.tagLists = data.data.abnormalScoreDtos;
+          this.formData.tagListss = data.data.mustItemDtos;
         });
     },
     // 点击编辑

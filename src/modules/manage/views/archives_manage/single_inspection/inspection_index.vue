@@ -481,7 +481,6 @@ export default {
       // if (!this.checkRangeDate()) {
       //   return false;
       // }
-      console.log({ ...this.formData }, '123123');
       this.$api.medicalHistoryInterface
         .singleinspectionPageList({ ...this.formData })
         .then((res) => {

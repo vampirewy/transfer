@@ -503,7 +503,6 @@ export default {
     },
     async getQuestionType() {
       await this.$api.health.getQuestionType().then((options) => {
-        console.log(options);
         this.types = options;
         options.forEach((val) => {
           this.options[val.paramValue] = val.name;
