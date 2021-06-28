@@ -6,7 +6,10 @@
     </div>
     <div class="lookPressure">
       <div><span class="lookPressureTitle">姓名：</span><span>{{queryInfo.clientName}}</span></div>
-      <div><span class="lookPressureTitle">性别：</span><span>{{queryInfo.gender}}</span></div>
+      <div><span class="lookPressureTitle">性别：</span>
+      <span v-if="queryInfo.gender === 1">男</span>
+      <span v-if="queryInfo.gender === 2">女</span>
+      </div>
       <div><span class="lookPressureTitle">年龄：</span><span>{{queryInfo.age}}</span></div>
       <div><span class="lookPressureTitle">客户编号：</span><span>{{queryInfo.clientNo}}</span></div>
     </div>
@@ -94,7 +97,7 @@ export default {
           { label: '体重', prop: 'weight' },
           { label: '腰围', prop: 'wc' },
           { label: '体脂率', prop: 'bdPercent' },
-          { label: '备注', prop: 'bdPercent' },
+          { label: '备注', prop: 'result' },
         ],
         list: [],
         total: 0,

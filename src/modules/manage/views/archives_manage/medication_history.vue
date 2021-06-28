@@ -1,60 +1,5 @@
 <template>
   <div class="medication-history">
-    <!-- <query-page @reset="onReset" @search="onSearch">
-      <template slot="left">
-        <search>
-          <div class="searchInputFormItem">
-          <el-input placeholder="姓名/手机号/企业单位" v-model="form.keyWord">
-          </el-input>
-          <span class="searchBtnImgSpan" @click="onSearch">
-            <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
-          </span>
-          </div>
-        </search>
-        <query-filter>
-
-          <el-select
-            v-model="form.clientGrid"
-            placeholder="人员类别"
-            class="mb10"
-          >
-            <el-option
-              v-for="item in clientGridList"
-              :key="item.id"
-              :label="item.gridName"
-              :value="item.id"
-            >
-            </el-option>
-          </el-select>
-
-          <el-input
-            v-model="form.drugsName"
-            placeholder="药品名称"
-            class="mb10"
-          ></el-input>
-
-          <h3 class="filter-item-title">用药时间</h3>
-
-          <el-date-picker
-            class="start-date"
-            v-model="form.startTime"
-            type="date"
-            :max-date="form.endTime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="选择开始时间"
-          ></el-date-picker>
-
-          <el-date-picker
-            class="end-date"
-            v-model="form.endTime"
-            type="date"
-            :min-date="form.startTime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="选择结束时间"
-          ></el-date-picker>
-        </query-filter>
-      </template> -->
-      <!-- slot="right" -->
       <template >
         <div class="table-operate-buttonss" style="margin-top: -8px;">
           <!-- <span class="page-name">用药记录</span> -->
@@ -68,7 +13,7 @@
               <div class="searchLeft">
                 <div class="searchInputFormItem">
                   <el-input
-                    placeholder="姓名/手机号/企业单位"
+                    placeholder="姓名/客户编号"
                     v-model="form.keyWord"
                   >
                   </el-input>
@@ -95,6 +40,7 @@
                 <el-date-picker
                   v-model="form.startStartInputTime"
                   type="date"
+                  value-format="yyyy-MM-dd"
                   :max-date="form.endStartInputTime || new Date()"
                   placeholder="选择开始日期"
                   style="width: 140px"
@@ -104,6 +50,7 @@
                 <el-date-picker
                   v-model="form.endStartInputTime"
                   type="date"
+                  value-format="yyyy-MM-dd"
                   :min-date="form.startStartInputTime"
                   :max-date="new Date()"
                   placeholder="选择结束日期"
@@ -151,6 +98,7 @@
                 <el-date-picker
                   v-model="form.endInputStartTime"
                   type="date"
+                  value-format="yyyy-MM-dd"
                   :max-date="form.endInputEndTim || new Date()"
                   placeholder="选择开始日期"
                   style="width: 140px"
@@ -160,6 +108,7 @@
                 <el-date-picker
                   v-model="form.endInputEndTime"
                   type="date"
+                  value-format="yyyy-MM-dd"
                   :min-date="form.endInputStartTime"
                   :max-date="new Date()"
                   placeholder="选择结束日期"
@@ -236,7 +185,7 @@
               </template>
             </el-table-column>
             <el-table-column
-              label="就医时间"
+              label="开始时间"
               prop="startDate"
               show-overflow-tooltip
             >
@@ -244,7 +193,7 @@
                 <span>{{ scope.row.startDate | getResult }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="出院时间" prop="endDate" show-overflow-tooltip>
+            <el-table-column label="结束时间" prop="endDate" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>{{ scope.row.endDate | getResult }}</span>
               </template>

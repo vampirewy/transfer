@@ -66,7 +66,8 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="就医类型" prop="medicalType">
-            <el-select v-model="form.medicalType" placeholder="请选择就医类型">
+            <el-select v-model="form.medicalType" placeholder="请选择就医类型"
+            @change="Changeestates()">
               <el-option
                 v-for="item in typeOptions"
                 :key="item.value"
@@ -105,6 +106,7 @@
               placeholder="请选择就医时间"
               value-format="yyyy-MM-dd"
               :max-date="form.outDate || new Date()"
+              @change="Changeestates()"
             ></el-date-picker>
           </el-form-item>
         </el-col>
@@ -146,7 +148,7 @@
               v-model="form.hpi"
               :rows="5"
               placeholder="请输入"
-              :maxlength="4000"
+              :maxlength="300"
               show-word-limit
             ></el-input>
           </el-form-item>
@@ -158,7 +160,7 @@
               v-model="form.complaint"
               :rows="5"
               placeholder="请输入"
-              :maxlength="4000"
+              :maxlength="300"
               show-word-limit
             ></el-input>
           </el-form-item>
@@ -170,7 +172,7 @@
               v-model="form.examination"
               :rows="5"
               placeholder="请输入"
-              :maxlength="4000"
+              :maxlength="300"
               show-word-limit
             ></el-input>
           </el-form-item>
@@ -182,7 +184,7 @@
               v-model="form.diagnosis"
               :rows="5"
               placeholder="请输入"
-              :maxlength="4000"
+              :maxlength="300"
               show-word-limit
             ></el-input>
           </el-form-item>
@@ -305,6 +307,7 @@ export default {
         money: [{ required: true, message: '金额不能为空' }],
         MedicalNumber: [{ required: true, message: '就医编号不能为空' }],
         name: [{ required: true, message: '客户不能为空' }],
+        result: [{ required: true, message: '请选择当前状态' }],
       },
       resultOptions: [
         { value: 1, label: '未指定' },
@@ -340,6 +343,14 @@ export default {
     }
   },
   methods: {
+    Changeestates() {
+      if (this.form.medicalType === 1) {
+        this.form.outDate = this.form.inDate;
+      }
+      // console.log(index, this.form.medicalType);
+      // this.$set(this.form, 'medicalType', index);
+      // this.$forceUpdate();
+    },
     handleStartDateChange() {
       if (this.form.medicalType === 1 && this.form.inDate) {
         this.form.outDate = this.form.inDate;

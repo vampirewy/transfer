@@ -148,7 +148,7 @@
                   <div class="name">客户总数</div>
                 </div>
               </div> -->
-              <div class="pieDiv" style="height:110px">
+              <div class="pieDiv" style="height:55px">
                 <div class="pieDivTips" v-for="(item, index) in intervenePlanPieYList"
                 :key="item.name">
                   <div class="pieDivTipsLeft">

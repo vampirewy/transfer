@@ -13,7 +13,7 @@
         <h3 class="name">{{id ? '编辑' : '新增'}}小项</h3>
       </div>
       <el-row>
-        <el-col :span="6">
+        <!-- <el-col :span="6">
           <el-form-item label="项目库" prop="gridListId" >
             <el-select v-model="form.gridListId" placeholder="请选择" width="150">
               <el-option
@@ -24,7 +24,7 @@
               ></el-option>
             </el-select>
           </el-form-item>
-        </el-col>
+        </el-col> -->
         <el-col :span="6">
           <el-form-item label="项目科室" prop="SectionListId">
             <el-input v-model="form.SectionListId" placeholder="请输入"></el-input>
@@ -86,11 +86,11 @@
           <div style="margin:0 0 40px 80px">
             <el-checkbox
             v-model="form.checked1"
-            :checked="form.checked1==1? true:false" true-label="1" false-label="0"
+            :checked="form.checked1==1? true:false" :true-label="1" :false-label="0"
             >默认重要指标</el-checkbox>
             <el-checkbox
             v-model="form.checked2"
-            :checked="form.checked2==1? true:false" true-label="1" false-label="0"
+            :checked="form.checked2==1? true:false" :true-label="1" :false-label="0"
             >参与报告对比</el-checkbox>
           </div>
         </el-col>
@@ -203,7 +203,7 @@ export default {
         },
       },
       rules: {
-        gridListId: [{ required: true, message: '项目库不能为空' }],
+        // gridListId: [{ required: true, message: '项目库不能为空' }],
         SectionListId: [{ required: true, message: '项目科室不能为空' }],
         MinorItemsName: [{ required: true, message: '小项名称不能为空' }],
         inDate: [{ required: true, message: '就医时间不能为空' }],
@@ -248,7 +248,8 @@ export default {
         };
       });
     }
-    this.queryList();
+    // this.queryList();
+    this.getSectionList();
   },
   methods: {
     async queryList() {
@@ -291,7 +292,7 @@ export default {
     },
     submit() {
       const params = {
-        organItemLibraryId: this.form.gridListId,
+        // organItemLibraryId: this.form.gridListId,
         sectionName: this.form.SectionListId,
         itemName: this.form.MinorItemsName,
         gender: this.form.Gender,

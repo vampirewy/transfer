@@ -209,7 +209,8 @@ export default {
       this.$refs.form.validate((valid) => {
         if (valid) {
           this.$api.medication.update(this.dataSource).then(({ data }) => {
-            if (data.code === 200) {
+            if (data.success) {
+              this.$message.success('操作成功');
               this.$router.go(-1);
             }
           });

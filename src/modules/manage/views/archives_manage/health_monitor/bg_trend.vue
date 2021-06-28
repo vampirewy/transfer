@@ -6,12 +6,18 @@
     </div>
     <div class="lookPressure">
       <div><span class="lookPressureTitle">姓名：</span><span>{{queryInfo.clientName}}</span></div>
-      <div><span class="lookPressureTitle">性别：</span><span>{{queryInfo.gender}}</span></div>
+      <div><span class="lookPressureTitle">性别：</span>
+      <span v-if="queryInfo.gender === 1">男</span>
+      <span v-if="queryInfo.gender === 2">女</span>
+      </div>
       <div><span class="lookPressureTitle">年龄：</span><span>{{queryInfo.age}}</span></div>
       <div><span class="lookPressureTitle">客户编号：</span><span>{{queryInfo.clientNo}}</span></div>
     </div>
     <div class="lookPressure">
-      <div><span class="lookPressureTitle">血糖类型：</span><span>{{queryInfo.sugarType}}</span></div>
+      <div><span class="lookPressureTitle">血糖类型：</span>
+      <span v-if="queryInfo.sugarType === 1">空腹血糖</span>
+      <span v-if="queryInfo.sugarType === 2">餐后血糖</span>
+      </div>
       <div><span class="lookPressureTitle">血糖值：</span><span>{{queryInfo.sugar}}</span></div>
       <div></div>
       <div></div>
@@ -93,7 +99,7 @@ export default {
           { label: '数据时间', prop: 'testDate' },
           { label: '血糖类型', prop: 'sugarTypeName' },
           { label: '血糖值', prop: 'sugar' },
-          { label: '备注', prop: 'sugar' },
+          { label: '备注', prop: 'result' },
         ],
         list: [],
         total: 0,

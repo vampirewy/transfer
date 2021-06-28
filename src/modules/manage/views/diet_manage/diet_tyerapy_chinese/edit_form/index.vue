@@ -18,6 +18,7 @@
           style="width: 189px"
           v-model="gender"
         >
+          <el-option label="不限" :value="0"></el-option>
           <el-option label="男" :value="1"></el-option>
           <el-option label="女" :value="2"></el-option>
         </el-select>
@@ -66,14 +67,6 @@
           <el-col :span="5">
             <el-checkbox
               label="痰湿质"
-              v-model="checked4"
-              :true-label="4"
-              :false-label="0"
-            ></el-checkbox>
-          </el-col>
-          <el-col :span="5">
-            <el-checkbox
-              label="阴虚质"
               v-model="checked5"
               :true-label="5"
               :false-label="0"
@@ -81,7 +74,7 @@
           </el-col>
           <el-col :span="5">
             <el-checkbox
-              label="阴虚质"
+              label="湿热质"
               v-model="checked6"
               :true-label="6"
               :false-label="0"
@@ -89,7 +82,7 @@
           </el-col>
           <el-col :span="5">
             <el-checkbox
-              label="阴虚质"
+              label="血瘀质"
               v-model="checked7"
               :true-label="7"
               :false-label="0"
@@ -97,7 +90,7 @@
           </el-col>
           <el-col :span="5">
             <el-checkbox
-              label="阴虚质"
+              label="气郁质"
               v-model="checked8"
               :true-label="8"
               :false-label="0"
@@ -105,9 +98,17 @@
           </el-col>
           <el-col :span="5">
             <el-checkbox
+              label="特禀质"
+              v-model="checked9"
+              :true-label="9"
+              :false-label="0"
+            ></el-checkbox>
+          </el-col>
+          <el-col :span="5">
+            <el-checkbox
               label="不限"
-              v-model="checked8"
-              :true-label="8"
+              v-model="checked10"
+              :true-label="10"
               :false-label="0"
             ></el-checkbox>
           </el-col>
@@ -197,6 +198,8 @@ export default {
       checked6: 0,
       checked7: 0,
       checked8: 0,
+      checked9: 0,
+      checked10: 0,
     };
   },
   mounted() {
@@ -244,6 +247,12 @@ export default {
           }
           if (data.tizhiIds.includes(8)) {
             this.checked8 = 8;
+          }
+          if (data.tizhiIds.includes(9)) {
+            this.checked9 = 9;
+          }
+          if (data.tizhiIds.includes(10)) {
+            this.checked10 = 10;
           }
         });
     },

@@ -46,8 +46,9 @@
                   style="width: 140px"
                   clearable
           >
-            <el-option label="是" :value="1"></el-option>
-            <el-option label="否" :value="2"></el-option>
+          <el-option label="未知" value="0" key="0"></el-option>
+          <el-option label="已总检" value="1" key="1"></el-option>
+          <el-option label="未总检" value="2" key="2"></el-option>
           </el-select>
         </div>
       </div>

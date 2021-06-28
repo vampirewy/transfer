@@ -268,7 +268,6 @@ export default {
       editableTabs: [],
       arrList: [],
       dietTemplateMaterial: {},
-      FoodList: [],
       TabsIndex: 0,
     };
   },
@@ -322,6 +321,7 @@ export default {
     },
     // 数据处理
     DataProcessing(lists, index) {
+      console.log(lists, 'asdasdsad');
       const arr = [];
       for (let i = 0; i < lists.length; i++) {
         const json = {};
@@ -336,7 +336,7 @@ export default {
                 caiType:
                 lists[i].mealTypeDtos[j].dietTemplateConfigDtos[x].configType,
                 mealType:
-                lists[i].mealTypeDtos[j].dietTemplateConfigDtos[x].mealType,
+                lists[i].mealTypeDtos[j].mealType,
                 weight: lists[i].mealTypeDtos[j].dietTemplateConfigDtos[x].weight,
               };
               if (jsons.caiType === 1) {
@@ -354,6 +354,7 @@ export default {
         arr.push(json);
       }
       this.arrList = arr;
+      console.log(this.arrList, 'qweqwewe');
       this.makeIndex(index);
     },
     makeIndex(index) {
@@ -405,6 +406,7 @@ export default {
       this.isShowFoodOp = true;
     },
     handleFoodSelect(e) {
+      const FoodList = [];
       // 选择食物回调
       const [index, inx] = this.selectDietMenuIndex;
       e.forEach((item) => {
@@ -426,13 +428,13 @@ export default {
           obj.dietIngredientId = item.id;
           obj.weight = '';
         }
-        this.FoodList.push(obj);
+        FoodList.push(obj);
         // return obj;
       });
       // this.editableTabs[index].mealTypeDtos[inx].dietTemplateConfigDtos.push(
       //   ...e,
       // );
-      this.FoodList.forEach((valQusOne) => {
+      FoodList.forEach((valQusOne) => {
         let same = false;
         this.editableTabs[index]
           .mealTypeDtos[inx]
