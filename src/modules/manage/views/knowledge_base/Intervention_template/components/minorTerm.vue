@@ -16,7 +16,7 @@
             <el-option label="任意" value="2" key="2"></el-option>
           </el-select>
           </div>
-          <div v-if="TabTitle === 'Minterm'">
+          <!-- <div v-if="TabTitle === 'Minterm'">
             <span>体检库：</span>
            <el-select
                   v-model="formData.resultOptionsId"
@@ -29,10 +29,8 @@
             :label="item.name"
             :value="item.id"
           ></el-option>
-            <!-- <el-option label="男" value="1" key="1"></el-option>
-            <el-option label="女" value="2" key="2"></el-option> -->
           </el-select>
-          </div>
+          </div> -->
           <div class="row" style="display: flex" v-if="TabTitle !== 'Constitution'">
             <el-form-item :label="labelName" prop="clientName" style="background:#ffffff">
               <el-popover
@@ -465,7 +463,7 @@ export default {
             this.detectioninfoSource.clientName += `${val.gridName}、`;
           }
           if (NameType === 'Exception') {
-            this.detectioninfoSource.clientName += `${val.abnormalTypeName}、`;
+            this.detectioninfoSource.clientName += `${val.abnormalName}、`;
           }
           if (NameType === 'Composition') {
             this.detectioninfoSource.clientName += `${val.name}、`;

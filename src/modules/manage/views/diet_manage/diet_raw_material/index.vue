@@ -11,7 +11,7 @@
             <div class="searchCondition">
               <div class="searchLeft">
                 <div class="searchInputFormItem" >
-                  <el-input placeholder="名称/原料" v-model="query.names">
+                  <el-input placeholder="原料名称" v-model="query.names">
                   </el-input>
                   <span class="searchBtnImgSpan" @click="search" style="right:-3px">
                     <img

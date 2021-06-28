@@ -13,7 +13,7 @@
               <div class="searchLeft">
                 <div class="searchInputFormItem">
                   <el-input
-                    placeholder="姓名/手机号/企业单位"
+                    placeholder="姓名"
                     v-model="formData.keyWord"
                   >
                   </el-input>
@@ -87,6 +87,7 @@
                 <el-date-picker
                   v-model="formData.inDateStartTime"
                   type="date"
+                  value-format="yyyy-MM-dd"
                   :max-date="formData.inDateEndTime || new Date()"
                   placeholder="选择开始日期"
                   style="width: 140px"
@@ -96,6 +97,7 @@
                 <el-date-picker
                   v-model="formData.inDateEndTime"
                   type="date"
+                  value-format="yyyy-MM-dd"
                   :min-date="formData.inDateStartTime"
                   :max-date="new Date()"
                   placeholder="选择结束日期"
@@ -108,6 +110,7 @@
                 <el-date-picker
                   v-model="formData.outDateStartTime"
                   type="date"
+                  value-format="yyyy-MM-dd"
                   :max-date="formData.outDateEndTime || new Date()"
                   placeholder="选择开始日期"
                   style="width: 140px"
@@ -117,6 +120,7 @@
                 <el-date-picker
                   v-model="formData.outDateEndTime"
                   type="date"
+                  value-format="yyyy-MM-dd"
                   :min-date="formData.outDateStartTime"
                   :max-date="new Date()"
                   placeholder="选择结束日期"
@@ -488,7 +492,7 @@ export default {
           // if (data.code === 200) {
           const result = res.data || {};
           this.tableData = result.data.data || [];
-          this.total = result.total || 0;
+          this.total = result.data.total || 0;
           // }
         });
     },
@@ -577,10 +581,14 @@ export default {
         this.$message.error('请先选择数据');
         return false;
       }
+      let batch = false;
+      if (this.multipleSelection.length >= 2) {
+        batch = true;
+      }
       // TODO 批量删除
-      this.remove(this.multipleSelection.map(item => item.id), true);
+      this.remove(this.multipleSelection.map(item => item.id), batch);
     },
-    remove(params, batch = false) {
+    remove(params, batch) {
       this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认${batch ? '批量' : ''}删除！</span></div>`, '删除提示', {
         dangerouslyUseHTMLString: true,
         confirmButtonText: '确定',

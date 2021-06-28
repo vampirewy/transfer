@@ -39,29 +39,29 @@
             disabled></el-checkbox></div>
       <div><el-checkbox
               label="痰湿质"
-              v-model="checked4"
+              v-model="checked5"
             disabled></el-checkbox></div>
     </div>
     <div class="lookPressure" style="margin-left:100px">
       <div><el-checkbox
               label="湿热质"
-              v-model="checked5"
-            disabled></el-checkbox></div>
-      <div><el-checkbox
-              label="血瘀质"
               v-model="checked6"
             disabled></el-checkbox></div>
       <div><el-checkbox
-              label="气郁质"
+              label="血瘀质"
               v-model="checked7"
             disabled></el-checkbox></div>
       <div><el-checkbox
-              label="特禀质"
+              label="气郁质"
               v-model="checked8"
             disabled></el-checkbox></div>
       <div><el-checkbox
+              label="特禀质"
+              v-model="checked9"
+            disabled></el-checkbox></div>
+      <div><el-checkbox
               label="不限"
-              v-model="checked8"
+              v-model="checked10"
             disabled></el-checkbox></div>
     </div>
     <!-- <div class="lookPressure">

@@ -167,7 +167,7 @@
             </el-form-item>
             </el-col>
             <el-col :span="6">
-            <el-form-item label="每次计量" prop="dose" >
+            <el-form-item label="每次剂量" prop="dose" >
               <el-input
                 v-model="infoSource.dose"
                 placeholder="请输入"
@@ -299,7 +299,7 @@
             <span>{{ scope.row.resoures | getResult }}</span>
           </template>
         </el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           label="药品信息"
           prop="resoures"
           show-overflow-tooltip
@@ -307,7 +307,7 @@
           <template slot-scope="scope">
             <span>{{ scope.row.resoures | getResult }}</span>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column label="操作" prop="index">
           <template slot-scope="scope">
             <el-button type="text" @click="remove(scope)">删除</el-button>
@@ -329,6 +329,7 @@
 <script>
 import detail from './components/detail.vue';
 import selectUser from './components/select_user.vue';
+import deleteIcon from '~/src/assets/images/deleteicon.png';
 
 export default {
   name: 'medication_history_add',
@@ -415,10 +416,19 @@ export default {
       });
     },
     remove(index) {
-      this.$confirm('确定要删除该数据吗?', '提示', {
+      // this.$confirm('确定要删除该数据吗?', '提示', {
+      //   confirmButtonText: '确定',
+      //   cancelButtonText: '取消',
+      //   type: 'warning',
+      // }).then(() => {
+      //   this.drugsList.splice(index, 1);
+      // });
+      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认删除！</span></div>`, '删除提示', {
+        dangerouslyUseHTMLString: true,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning',
+        customClass: 'message-box-customize',
+        showClose: true,
       }).then(() => {
         this.drugsList.splice(index, 1);
       });
@@ -474,7 +484,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  /deep/ .el-message-box__btns-left {
+    text-align: center !important;
+  }
+  .el-message-box__btns-left {
+    text-align: center !important;
+  }
 .medication-history-add /deep/ {
+  .el-message-box__btns-left {
+    text-align: center !important;
+  }
+  .el-button--small {
+    border-radius: 30px;
+  }
   .row {
     display: flex;
     flex-direction: row;

@@ -52,20 +52,22 @@
               <span>{{ value.doseOne }}</span>
             </el-form-item>
             <el-form-item label="当前状态" prop="result" style="width:50%">
-              <span>{{ resultValue }}</span>
+              <span>{{ resultOptions[value.result] }}</span>
             </el-form-item>
           </div>
 
           <div class="row bottom">
             <el-form-item label="主要成分" prop="ingrenient" style="width:50%">
-              <el-tooltip class="item" effect="dark" :content="value.ingrenient" placement="top">
-                <span class="value">{{ value.ingrenient }}</span>
-              </el-tooltip>
+              <!-- <el-tooltip class="item" effect="dark"
+              :content="value.ingrenient" placement="top"> -->
+              <span class="value">{{ value.ingrenient }}</span>
+              <!-- </el-tooltip> -->
             </el-form-item>
             <el-form-item label="用药情况" prop="resoures" style="width:50%">
-              <el-tooltip class="item" effect="dark" :content="value.ingrenient" placement="top">
-                <span class="value">{{ value.resoures }}</span>
-              </el-tooltip>
+              <!-- <el-tooltip class="item" effect="dark"
+              :content="value.ingrenient" placement="top"> -->
+              <span class="value">{{ value.resoures }}</span>
+              <!-- </el-tooltip> -->
             </el-form-item>
           </div>
 
@@ -84,6 +86,14 @@ export default {
     return {
       resultList: [],
       resultValue: '',
+      resultOptions: {
+        1: '未指定',
+        2: '治疗中',
+        3: '转诊',
+        4: '转为慢病',
+        5: '痊愈',
+        6: '其他',
+      },
     };
   },
   watch: {

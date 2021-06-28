@@ -207,7 +207,8 @@ export default {
       isCollapse: true,
       modalVisible: false,
       currentValue: {},
-      tabbor: ['体检小项', '体检库'],
+      tabbor: ['体检小项'],
+      // , '体检库'
       Tabactive: 0,
       mintermAdd: '',
     };

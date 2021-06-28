@@ -62,8 +62,7 @@
             <el-input
                     :disabled="detail"
                     v-model="staffForm.mobileNo"
-                    @input="handleMobileChange"
-                    :maxlength="11"
+                    :maxlength="30"
                     placeholder="请输入"></el-input>
           </el-form-item>
         </el-col>
@@ -72,6 +71,7 @@
             <el-input
                     :disabled="detail"
                     type="text"
+                    :maxlength="30"
                     placeholder="请输入"
                     v-model="staffForm.password"></el-input>
           </el-form-item>
@@ -81,8 +81,8 @@
             <el-input
                     :disabled="detail"
                     type="text"
+                    @input="handleMobileChange"
                     placeholder="请输入"
-                    oninput="value = value.replace(/[^0-9]/g, '')"
                     maxlength="11"
                     v-model="staffForm.contact"></el-input>
           </el-form-item>
@@ -196,7 +196,7 @@ export default {
   },
   methods: {
     handleMobileChange() {
-      this.staffForm.mobileNo = this.staffForm.mobileNo.replace(/[^0-9]/g, '');
+      this.staffForm.contact = this.staffForm.contact.replace(/[^0-9]/g, '');
     },
     async queryRoleDetail(id) {
       // 角色详情

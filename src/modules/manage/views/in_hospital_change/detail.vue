@@ -1,4 +1,13 @@
 <template>
+  <el-dialog
+          class="el-plan-setting-mdl"
+          :title="modalTitle"
+          :visible.sync="show"
+          width="900px"
+          alignFooter="right"
+          :close-on-click-modal="false"
+          @close="onVisible"
+  >
   <div class="medical-history-form">
     <el-form
       class="medical-history-form"
@@ -7,39 +16,56 @@
       label-width="90px"
       label-suffix="："
     >
-      <div class="divRightTitleDiv">
-        <div class="divRightTitle" style="margin-top: 0">挂号详情
-          <div class="titleBiao"></div></div>
+      <div class="topStatus">
+        <el-row>
+          <div class="status" :class="'status' + form.state">{{form.state | stateFilter}}</div>
+          <el-col :span="12">
+            <el-form-item label="就诊时间" >
+              <span v-if="!form.appointmentDate"> - </span>
+              <span v-else>{{ form.appointmentDate}} {{ form.appointmentHourStart}}
+            ~ {{ form.appointmentHourEnd}}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="就诊科室" >
+              <span>{{form.departmentName | getResult}}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="就诊医生" >
+              <span>{{form.doctorName | getResult}}</span>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </div>
+      <div class="wltitle">
+        <div class="quan"></div>
+        <span>客户信息</span>
       </div>
       <el-row>
-        <el-col :span="6">
+        <el-col :span="8">
           <el-form-item label="客户姓名" >
             <span>{{form.name | getResult}}</span>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="8">
           <el-form-item label="性别" >
             <span>{{form.gender | getResultGender}}</span>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
-          <el-form-item label="客户编号" >
-            <span>{{form.clientNo | getResult}}</span>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
+        <el-col :span="8">
           <el-form-item label="客户年龄" >
             <span>{{form.age | getResult}}</span>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
-          <el-form-item label="手机号码" >
-            <span>{{form.mobile | getResult}}</span>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
+        <el-col :span="8">
           <el-form-item label="身份证号" >
             <span>{{form.cardNo | getResult}}</span>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="手机号码" >
+            <span>{{form.mobile | getResult}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -53,53 +79,32 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <div class="divRightTitleDiv">
-        <div class="divRightTitle" style="margin-top: 5px">挂号信息
-          <div class="titleBiao"></div></div>
+      <div class="wltitle" v-if="form.state === 3">
+        <div class="quan"></div>
+        <span>就诊信息</span>
       </div>
-      <div>
+      <div v-if="form.state === 3">
           <el-row>
-            <el-col :span="6">
-              <el-form-item label="就诊状态" >
-                <span class="warnStatus1" v-if="form.state === 2">
-                待就诊
-              </span>
-                  <span v-if="form.state === 3">
-                已就诊
-              </span>
-                  <span class="warnStatus3" v-if="form.state === 1">
-                已取消
-              </span>
-                  <span v-if="form.state === 0">
-                待确认
-              </span>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
+            <el-col :span="8">
               <el-form-item label="就诊时间" >
                   <span v-if="!form.appointmentDate"> - </span>
                   <span v-else>{{ form.appointmentDate}} {{ form.appointmentHourStart}}
             ~ {{ form.appointmentHourEnd}}</span>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="8">
               <el-form-item label="就诊科室" >
                 <span>{{form.departmentName | getResult}}</span>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="8">
               <el-form-item label="就诊医生" >
                 <span>{{form.doctorName | getResult}}</span>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
-            <div v-if="form.state !== 1">
-            <el-col :span="6">
-              <el-form-item label="总支出" >
-                <span>{{form.price | getResult}}</span>
-              </el-form-item>
-            </el-col>
+            <div>
             <el-col :span="24">
               <el-form-item label="主诉" >
                 <span>{{form.orderConfigDtoList.complaint | getResult}}</span>
@@ -120,6 +125,12 @@
                 <span>{{form.orderConfigDtoList.scheme | getResult}}</span>
               </el-form-item>
             </el-col>
+              <el-col :span="6">
+                <el-form-item label="费用支出" >
+                  <span style="color: #FA2B2B;font-size: 24px;font-weight: bold">
+                    {{form.price | getResult}}</span>
+                </el-form-item>
+              </el-col>
             </div>
           </el-row>
       </div>
@@ -132,14 +143,18 @@
       </div>
     </el-form>
   </div>
+  </el-dialog>
 </template>
 
 <script>
 import deleteIcon from '~/src/assets/images/common/editIcon.png';
 export default {
-  name: 'in_hospitable_change_detail',
+  name: 'detail',
   data() {
     return {
+      modalTitle: '',
+      show: true,
+      propsData: {}, // 父组件传过来的
       form: {
         clientNo: '',
         name: '',
@@ -164,8 +179,33 @@ export default {
       },
     };
   },
+  filters: {
+    stateFilter(val) {
+      let Value;
+      switch (val) {
+        case 0:
+          Value = '待确认';
+          break;
+        case 1:
+          Value = '已取消';
+          break;
+        case 2:
+          Value = '待就诊';
+          break;
+        case 3:
+          Value = '已就诊';
+          break;
+        default:
+          Value = '-';
+          break;
+      }
+      return Value;
+    },
+  },
   mounted() {
-    this.getDetail();
+    this.$nextTick(async () => {
+      this.getDetail(this.propsData);
+    });
   },
   methods: {
     getClientUserInfo(id) {
@@ -178,9 +218,9 @@ export default {
         this.form.cardNo = data.data.cardNo;
       });
     },
-    getDetail() {
+    getDetail(row) {
       this.$api.InhospitalChange.getRegistrationDetail({
-        id: this.$route.params.id }).then((res) => {
+        id: row.id }).then((res) => {
         const { data } = res;
         this.getClientUserInfo(data.data.clientId);
         this.form = Object.assign(this.form, data.data || {});
@@ -215,8 +255,13 @@ export default {
         },
       );
     },
+    onVisible(value) {
+      if (!value) {
+        this.$jDynamic.hide({ component: 'detail' });
+      }
+    },
     goBack() {
-      this.$router.go(-1);
+      this.show = false;
     },
   },
 };
@@ -226,6 +271,37 @@ export default {
 .medical-history-form {
   /deep/ .el-form-item{
     margin-bottom: 10px;
+  }
+  .topStatus{
+    background: #F6F8FC;
+    border-radius: 8px;
+    padding: 20px 0 10px 0;
+    /deep/ .el-form-item{
+      margin-bottom: 0;
+    }
+    .status{
+      width: 70px;
+      height: 24px;
+      background: #3154AC;
+      border-radius: 0px 50px 50px 0px;
+      font-size: 12px;
+      color: white;
+      text-align: center;
+      line-height: 24px;
+      margin-bottom: 8px;
+      &.status0{
+        background-color: #FA912B;
+      }
+      &.status1{
+        background-color: #B4BBC9;
+      }
+      &.status2{
+        background-color: #FA912B;
+      }
+      &.status3{
+        background-color: #3154AC;
+      }
+    }
   }
 }
 .warnStatus1{
@@ -243,5 +319,8 @@ export default {
   border: 1px solid #F33D21;
   background: rgba(243, 61, 33, 0.1);
   border-radius: 50px;
+}
+.wltitle span {
+  font-size: 14px;
 }
 </style>

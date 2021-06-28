@@ -13,10 +13,10 @@
                         {{item.day}}</p>
                 </div>
                 <div class="timeDivOneDateAMPM">
-                    <div class="timeDivOneDateAM" @click="chooseDateAmPm(item.date, 'am')"
+                    <div class="timeDivOneDateAM" @click="chooseDateAmPm(item.date, item.day, 'am')"
                          :class="{'active': item.date === activeDate && activeAmPm === 'am'}">
                         上午</div>
-                    <div class="timeDivOneDatePM" @click="chooseDateAmPm(item.date, 'pm')"
+                    <div class="timeDivOneDatePM" @click="chooseDateAmPm(item.date, item.day, 'pm')"
                          :class="{'active': item.date === activeDate && activeAmPm === 'pm'}">
                         下午</div>
                 </div>
@@ -39,13 +39,14 @@
             </div>
             <div class="healthContentRight">
                 <div class="reservationNoBtn" v-if="item.count <= 0">约满</div>
-                <div class="reservationBtn" v-if="item.count > 0">预约</div>
-                <div class="reservationDetailBtn">详情</div>
+                <div class="reservationBtn" v-if="item.count > 0"
+                     @click="toDoctorTime(4, item)">预约</div>
+                <div class="reservationDetailBtn" @click="toDoctorDetail(3, item)">详情</div>
             </div>
         </div>
         <div class="form-buttons">
             <el-button size="small" class="cancelBtn" @click="next(1)">上一步</el-button>
-            <el-button size="small" class="sureBtn" type="primary" @click="next(3)"
+            <el-button size="small" class="sureBtn" type="primary" @click="nextWarn()"
             >下一步
             </el-button>
         </div>
@@ -56,7 +57,7 @@
 import avatarImg from '@/assets/images/body/avatar.png';
 export default {
   name: 'registerOpenStep3',
-  props: ['departmentId'],
+  props: ['form'],
   data() {
     return {
       dateList: [
@@ -106,17 +107,65 @@ export default {
         },
       ],
       activeDate: '',
+      activeDay: '',
       activeAmPm: '',
     };
   },
+  watch: {
+    form: {
+      handler(val) {
+        console.log(val);
+        this.activeDate = val.activeDate;
+        this.activeDay = val.activeDay;
+        this.activeAmPm = val.activeAmPm;
+      },
+      immediate: true,
+      deep: true,
+    },
+  },
   methods: {
-    chooseDateAmPm(date, ampm) {
+    chooseDateAmPm(date, day, ampm) {
       console.log(date, ampm);
       this.activeDate = date;
+      this.activeDay = day;
       this.activeAmPm = ampm;
+    },
+    toDoctorTime(val, item) { // 预约时间
+      if (!this.activeDate) {
+        return this.$message.warning('请选择日期');
+      }
+      // 医生传详 - 时间情入父组件
+      const obj = {
+        activeDate: this.activeDate,
+        activeDay: this.activeDay,
+        activeAmPm: this.activeAmPm,
+        activeDateDoctor: true, // 时间和医生一起选择了
+        doctorId: item.id,
+        doctorAvatar: item.avatar,
+        doctorName: item.name,
+        doctorLevelName: item.levelName,
+        doctorDesc: item.desc,
+      };
+      this.$emit('clickInfo', obj);
+      this.next(val);
+    },
+    toDoctorDetail(val, item) { // 详情
+      // 医生传详情入父组件
+      const obj = {
+        doctorId: item.id,
+        doctorAvatar: item.avatar,
+        doctorName: item.name,
+        doctorLevelName: item.levelName,
+        doctorDesc: item.desc,
+      };
+      this.$emit('clickInfo', obj);
+      this.next(val);
     },
     next(val) {
       this.$emit('prevNext', val);
+    },
+    nextWarn() {
+      this.$message.warning('请选择医生预约');
     },
   },
 };

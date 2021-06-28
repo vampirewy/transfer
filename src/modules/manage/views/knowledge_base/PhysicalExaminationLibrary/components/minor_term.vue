@@ -21,7 +21,7 @@
                     <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
                 </span>
           </div>
-          <div>
+          <!-- <div>
             <span>项目库：</span>
             <el-select
                     v-model="form.examinationId"
@@ -34,7 +34,7 @@
               :value="item.id"
               v-for="(item, index) in examination" :key="index"></el-option>
             </el-select>
-          </div>
+          </div> -->
           <div>
             <span>科室名称：</span>
             <el-input placeholder="科室名称" v-model="SectionListId"
@@ -441,6 +441,10 @@ export default {
         this.$message.error('请选择需要删除客户');
         return;
       }
+      // let batch = false;
+      // if (this.multipleSelection.length >= 2) {
+      //   batch = true;
+      // }
       const deleteDom = `<div class="delete-text-content">
         <img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认删除！</span></div>
         `;
@@ -455,7 +459,6 @@ export default {
         //   clientIdList: this.chooseUserList.map(user => user.id),
         // };
         const arrs = this.chooseUserList[0];
-        console.log(arrs, '删除数据');
         this.$api.physicalProjectListInterface.deleteOrganItem(arrs).then(({ data }) => {
           if (data.success) {
             this.$message.success('操作成功');

@@ -1,45 +1,5 @@
 <template>
   <div>
-  <!--<query-page @reset="reset" @search="search">-->
-    <!--<template v-slot:left>
-      <search>
-        <div class="searchInputFormItem">
-          <el-input placeholder="姓名/手机号搜索"
-          v-model="formData.keywords">
-            &lt;!&ndash; <el-button slot="append" icon="el-icon-search"
-            @click="onSearch"></el-button>&ndash;&gt;
-          </el-input>
-          <span class="searchBtnImgSpan"  @click="search(1)">
-            <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
-          </span>
-        </div>
-      </search>
-      <query-filter>
-        <el-select placeholder="问卷类型" v-model="formData.questionType">
-          <el-option v-for="item in types" :label="item.name" :value="item.paramValue"
-                     :key="item.paramValue"></el-option>
-        </el-select>
-        <el-date-picker
-                v-model="formData.startTime"
-                type="date"
-                value-format="yyyy-MM-dd"
-                :picker-options="pickerStartTime"
-                placeholder="选择开始日期"
-                style="width: 180px"
-        >
-        </el-date-picker>
-        <el-date-picker
-                v-model="formData.endTime"
-                type="date"
-                value-format="yyyy-MM-dd"
-                :picker-options="pickerEndTime"
-                placeholder="选择结束日期"
-                style="width: 180px"
-        >
-        </el-date-picker>
-      </query-filter>
-    </template>-->
-    <!--<template v-slot:right>-->
   <div class="divTop">
     <div class="divTitle">
       <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
@@ -54,41 +14,6 @@
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
               </span>
         </div>
-        <!-- <div>
-          <span>危险分类：</span>
-          <el-select
-                  v-model="formData.riskType"
-                  placeholder="请选择"
-                  style="width: 140px"
-                  clearable
-          >
-            <el-option label="男" value="1" key="1"></el-option>
-            <el-option label="女" value="2" key="2"></el-option>
-          </el-select>
-        </div>
-        <div>
-          <span>题目类型：</span>
-          <el-select
-                  v-model="formData.clientGrid"
-                  placeholder="请选择"
-                  style="width: 140px"
-                  clearable
-          >
-            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
-                       :key="index"></el-option>
-          </el-select>
-        </div> -->
-        <!-- <div>
-          <span>适宜季节：</span>
-          <el-select
-                  v-model="formData.lifeStyleLv"
-                  placeholder="请选择"
-                  style="width: 140px"
-          >
-            <el-option :label="item.name" :value="item.paramValue"
-                       v-for="(item, index) in lifeStyleList" :key="index"></el-option>
-          </el-select>
-        </div> -->
       </div>
       <div class="searchRight">
         <div class="buttones">
@@ -105,49 +30,8 @@
       </div>
     </div>
   </div>
-    <!-- <div v-if="!isTrue" class="searchCondition" style="width:80%;">
-      <div class="searchLeft" style="padding-left:5px;">
-        <div>
-          <span>问卷来源：</span>
-          <el-select
-                  v-model="formData.source"
-                  placeholder="请选择"
-                  style="width: 140px"
-                  clearable
-          >
-            <el-option :label="item.name" :value="item.paramValue"
-                       v-for="(item, index) in questionFromList" :key="index"></el-option>
-          </el-select>
-        </div>
-        <div>
-          <span>填写日期：</span>
-          <el-date-picker
-                  v-model="formData.startTime"
-                  type="date"
-                  value-format="yyyy-MM-dd"
-                  :max-date="formData.endTime"
-                  placeholder="选择开始日期"
-                  style="width: 140px"
-                  clearable
-          >
-          </el-date-picker>
-          <span class="timing">-</span>
-          <el-date-picker
-                  v-model="formData.endTime"
-                  type="date"
-                  value-format="yyyy-MM-dd"
-                  :min-date="formData.startTime"
-                  placeholder="选择结束日期"
-                  style="width: 140px"
-                  clearable
-          >
-          </el-date-picker>
-        </div>
-      </div>
-    </div> -->
     <div class="topbottomborder"></div>
-    <div class="divRightTitleDiv">
-      <!-- <div class="divRightTitle"><span>|</span>客户池</div> -->
+    <!-- <div class="divRightTitleDiv">
       <div>
         <el-button
                 class="btn-new btnAdd"
@@ -163,7 +47,7 @@
                 v-if="getAccess('life_style_questionnaire_deleted')"
         ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
       </div>
-    </div>
+    </div> -->
       <div class="user-follow">
         <!--<div class="tableTopDoDiv">
           <div class="table-operate-buttons">
@@ -462,7 +346,11 @@ export default {
         });
         return;
       }
-      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认批量删除！</span></div>`, '删除提示', {
+      let batch = false;
+      if (this.multipleSelection.length >= 2) {
+        batch = true;
+      }
+      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认${batch ? '批量' : ''}删除！</span></div>`, '删除提示', {
         dangerouslyUseHTMLString: true,
         confirmButtonText: '确定',
         cancelButtonText: '取消',

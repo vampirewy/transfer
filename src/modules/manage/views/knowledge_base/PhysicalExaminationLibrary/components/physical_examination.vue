@@ -336,7 +336,6 @@ export default {
         //   clientIdList: this.chooseUserList.map(user => user.id),
         // };
         const arrs = this.chooseUserList[0];
-        console.log(arrs, '删除数据');
         this.$api.physicalProjectListInterface.deleteOrganItemLibrary(arrs).then(({ data }) => {
           if (data) {
             this.$message.success('操作成功');

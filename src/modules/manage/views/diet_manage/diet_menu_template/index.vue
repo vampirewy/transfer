@@ -11,7 +11,7 @@
             <div class="searchCondition">
               <div class="searchLeft">
                 <div class="searchInputFormItem">
-                  <el-input placeholder="名称" v-model="query.name"> </el-input>
+                  <el-input placeholder="模版名称" v-model="query.name"> </el-input>
                   <span class="searchBtnImgSpan" @click="search" style="right: -3px;">
                     <img
                       class="searchBtnImg"
@@ -147,6 +147,8 @@
 import elMenuTemplate from './el_modal/el_menu_template.vue';
 import elMenuTemplateType from './el_modal/el_menu_template_type.vue';
 import distMenuConfigForm from './edit_form/index.vue';
+import deleteIcon from '~/src/assets/images/deleteicon.png';
+
 export default {
   name: 'diet_menu_template',
   components: {
@@ -212,15 +214,28 @@ export default {
       }
     },
     deletes() {
-      const ids = JSON.stringify(
-        this.$refs.dietMenuTemplate.selection.map(item => item.id),
+      const ids = this.$refs.dietMenuTemplate.selection.map(item => item.id);
+      let batch = false;
+      if (ids.length >= 2) {
+        batch = true;
+      }
+      // console.log(ids);
+      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认${batch ? '批量' : ''}删除！</span></div>`, '删除提示', {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        customClass: 'message-box-customize',
+        showClose: true,
+      }).then(
+        async () => {
+          this.$api.dietMenuTemplateInterface
+            .deleteDietMenuTemplate(ids)
+            .then(() => {
+              this.$message.success('删除成功!');
+              this.loadData();
+            });
+        },
       );
-      this.$api.dietMenuTemplateInterface
-        .deleteDietMenuTemplate(ids)
-        .then(() => {
-          this.$message.success('删除成功!');
-          this.loadData();
-        });
     },
     loadData() {
       this.$api.dietMenuTemplateInterface

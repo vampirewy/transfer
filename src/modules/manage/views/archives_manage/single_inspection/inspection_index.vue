@@ -1,55 +1,6 @@
 <template>
   <div class="medical-history">
-    <!-- <template v-if="viewIndex === 2 || viewIndex === 3">
-      <medical-history-form
-        :id="currentId"
-        @cancel="viewIndex = 1"
-        @afterSubmit="handleAfterSubmit"
-      ></medical-history-form>
-    </template> -->
-    <!-- v-else -->
     <template >
-      <!-- <query-page @reset="reset" @search="search">
-        <template v-slot:left>
-          <search>
-            <div class="searchInputFormItem">
-              <el-input placeholder="姓名/手机号/企业单位" v-model="formData.keyWord"></el-input>
-              <span class="searchBtnImgSpan" @click="search">
-                <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
-              </span>
-            </div>
-          </search>
-          <query-filter>
-            <el-select placeholder="人员类别" v-model="formData.clientGrid" clearable>
-              <el-option
-                v-for="item in clientTypeList"
-                :key="item.id"
-                :label="item.gridName"
-                :value="item.id">
-              </el-option>
-            </el-select>
-            <el-input placeholder="就诊科室" v-model="formData.department"></el-input>
-            <el-input placeholder="医疗机构" v-model="formData.hospital"></el-input>
-            <div class="filter-item-title">就医日期</div>
-            <el-date-picker
-              v-model="formData.startTime"
-              type="date"
-              format="yyyy-MM-dd"
-              value-format="yyyy-MM-dd"
-              :picker-options="pickerStartTime"
-              placeholder="选择开始时间">
-              </el-date-picker>
-            <el-date-picker
-              v-model="formData.endTime"
-              type="date"
-              format="yyyy-MM-dd"
-              value-format="yyyy-MM-dd"
-              :picker-options="pickerEndTime"
-              placeholder="选择结束时间">
-            </el-date-picker>
-          </query-filter>
-        </template> -->
-        <!-- v-slot:right -->
         <template >
           <div class="table-operate-buttonss" style="margin-top: -8px">
             <!-- <span class="page-name">就医记录</span> -->
@@ -62,7 +13,7 @@
               <div class="searchLeft">
                 <div class="searchInputFormItem">
                   <el-input
-                    placeholder="姓名/手机号/企业单位"
+                    placeholder="姓名/客户编号"
                     v-model="formData.keywords"
                     style="width: 144px"
                   >
@@ -643,10 +594,14 @@ export default {
         this.$message.error('请先选择数据');
         return false;
       }
+      let batch = false;
+      if (this.multipleSelection.length >= 2) {
+        batch = true;
+      }
       // TODO 批量删除
-      this.remove(this.multipleSelection.map(item => item.id), true);
+      this.remove(this.multipleSelection.map(item => item.id), batch);
     },
-    remove(params, batch = false) {
+    remove(params, batch) {
       console.log(params, batch, '删除');
       this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认${batch ? '批量' : ''}删除！</span></div>`, '删除提示', {
         dangerouslyUseHTMLString: true,
