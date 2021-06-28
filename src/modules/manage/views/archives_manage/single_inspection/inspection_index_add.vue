@@ -257,6 +257,7 @@
               ></select-examination>
               <el-input
                 :class="`select-user-trigger ${id ? 'disabled' : ''}`"
+                ref="modifyForm"
                 slot="reference"
                 disabled
                 v-model="infoSource.clientNameCheck"
@@ -498,6 +499,7 @@ export default {
         // for (let i = 0; i < this.StatusCheck.length; i++) {
         //   this.drugsList.push(this.StatusCheck[i]);
         // }
+        this.$refs.modifyForm.resetFields();
         this.StatusCheck = [];
         this.infoSource.clientNameCheck = '';
       } else {

@@ -27,12 +27,11 @@
             <!-- <div class="form-item-value">{{formData.examinationOrgan}}</div> -->
           </el-form-item>
         </el-col>
-        <el-col :span="6">
+        <!-- <el-col :span="6">
           <el-form-item label="录入模板" prop="reportTemplateId">
             <el-input v-model="templateName"></el-input>
-            <!-- <div class="form-item-value">{{templateName}}</div> -->
           </el-form-item>
-        </el-col>
+        </el-col> -->
         <!-- <el-col :span="6">
           <el-form-item label="体检库" prop="libraryId">
             <div class="form-item-value">{{libraryName}}</div>

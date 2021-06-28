@@ -54,7 +54,7 @@
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
               </span>
         </div>
-        <div>
+        <!-- <div>
           <span>项目库：</span>
           <el-select
                   v-model="formData.isAssess"
@@ -67,7 +67,7 @@
               :value="item.id"
               v-for="(item, index) in examination" :key="index"></el-option>
           </el-select>
-        </div>
+        </div> -->
       </div>
       <div class="searchRight">
         <div class="buttones">

@@ -23,38 +23,36 @@
      style="width: 100%"
      align="center">
      <el-table-column type="selection" width="40"></el-table-column>
-      <el-table-column prop="clientName" label="随访日期" show-overflow-tooltip>
+      <el-table-column prop="reportNo" label="体检编号" show-overflow-tooltip>
         <!-- <template slot-scope="scope">
           <span>{{ scope.row.itemName | getResult}}</span>
         </template> -->
       </el-table-column>
-      <el-table-column prop="gridName" label="随访形式" show-overflow-tooltip>
-        <!-- <template slot-scope="scope">
-          <span>{{ scope.row.itemValue | getResult}}</span>
-        </template> -->
+      <el-table-column prop="reportDate" label="体检日期" show-overflow-tooltip>
       </el-table-column>
       <el-table-column
-        prop="executePlanWayName"
-        label="随访标题"
+        prop="zjDate"
+        label="总检日期"
         show-overflow-tooltip
       >
-        <!-- <template slot-scope="scope">
-          <span>{{ scope.row.refRange | getResult }}</span>
-        </template> -->
       </el-table-column>
       <el-table-column
-        prop="executeTime"
-        label="随访结果"
+        prop="workUnitName"
+        label="参检团队"
         show-overflow-tooltip
       >
-        <!-- <template slot-scope="scope">
-          <span>{{ scope.row.itemUnit | getResult }}</span>
-        </template> -->
+      </el-table-column>
+      <el-table-column
+        prop="createTime"
+        label="创建日期"
+        show-overflow-tooltip
+      >
       </el-table-column>
       <el-table-column
         prop="executePlanWayName"
         label="操作"
         show-overflow-tooltip
+         width="120"
       >
         <template slot-scope="scope">
           <el-button
@@ -91,47 +89,50 @@ export default {
   props: ['clientId'],
   data() {
     return {
+      formData: {
+        keywords: '', // 搜索客户姓名/企业名称/体检医院
+        gender: '', // 性别0-男1-女
+        minReportDate: null, // 体检日期搜索 最小体检日期搜索
+        maxReportDate: null, // 体检日期搜索 最大体检日期搜索
+        // workUnitName: '', // 所属企业名字
+        // reportNo: '', // 体检编号
+        // clientId: '', // 客户id
+        reportState: '', // 总检状态 0.未知 1.已总检 2.未总检
+        clientGrid: '', // 客户类型
+        minCreateDate: null, // 搜索条件采集时间最小时间
+        maxCreateDate: null, // 搜索条件采集时间最大时间
+        // reportAbnormalTempId: '', // 临时异常id搜索
+      },
       tableData: [
-        {
-          clientName: '2020-10-01',
-          gridName: '我是名称',
-          executeTime: '我是标题',
-          executePlanWayName: '我是提',
-        },
-        {
-          clientName: '2020-10-01',
-          gridName: '我是名称',
-          executeTime: '我是标题',
-          executePlanWayName: '我是提示啊我是提示',
-        },
-        {
-          clientName: '2020-10-01',
-          gridName: '我是名称',
-          executeTime: '我是标题',
-          executePlanWayName: '我是提示啊我是提示',
-        },
-        {
-          clientName: '2020-10-01',
-          gridName: '我是名称',
-          executeTime: '我是标题',
-          executePlanWayName: '我是提示啊我是提示',
-        },
-        {
-          clientName: '2020-10-01',
-          gridName: '我是名称',
-          executeTime: '我是标题',
-          executePlanWayName: '我是提示啊我是提示',
-        },
       ],
+      params: {
+        pageNo: 1, // 页码
+        pageSize: 15, // 页数 默认10
+        clientId: this.$route.params.id,
+      },
       currentPage: 1,
       total: 0,
       multipleSelection: [],
     };
   },
   mounted() {
-    // this.getImportantIndex();
+    this.fetch();
   },
   methods: {
+    fetch() {
+      // if (!this.checkRangeDate()) {
+      //   return false;
+      // }
+      const sendData = Object.assign({}, this.formData);
+      this.$api.reportInterface
+        .fetchReportList(Object.assign(this.params, sendData))
+        .then(({ data }) => {
+          if (data.success) {
+            this.total = data.data.total;
+            this.tableData = data.data.data;
+          }
+        });
+    },
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
@@ -186,6 +187,7 @@ export default {
         },
       });
     },
+
   },
 };
 </script>

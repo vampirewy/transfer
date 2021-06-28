@@ -18,7 +18,7 @@
           </el-checkbox-group>
         </template>
       </el-table-column>
-      <el-table-column prop="abnormalName" label="异常名称" align="center"></el-table-column>
+      <el-table-column prop="name" label="异常名称" align="center"></el-table-column>
     </el-table>
     <el-pagination
       layout="prev,pager,next,jumper,total,sizes"
@@ -101,7 +101,7 @@ export default {
       this.queryList();
     },
     async queryList() {
-      const res = await this.$api.unusualListInterface.listPage({
+      const res = await this.$api.physicalProjectListInterface.pageorganitemlibrary({
         name: this.name,
         pageNo: this.currentPage,
         pageSize: this.pageSize,

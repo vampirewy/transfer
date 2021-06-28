@@ -103,67 +103,6 @@
         </el-table-column>
       </el-table>
     </div>
-      <!-- <el-form-item label="企业名称：">
-        <el-input
-          v-model="value.workUnitName"
-          :disabled="value.type === 2"
-          :placeholder="value.type === 1 ? '请输入' : ''"
-          :maxlength="30"
-          style="width: 430px"
-        ></el-input>
-      </el-form-item> -->
-      <!-- <el-form-item label="体检库名称：">
-        <el-input
-          v-model="value.address"
-          :disabled="value.type === 2"
-          :placeholder="value.type === 1 ? '请输入' : ''"
-          :maxlength="180"
-          style="width: 410px"
-        ></el-input>
-      </el-form-item> -->
-      <!-- <div style="display: flex;">
-      <el-col :span="6">
-        <el-form-item label="性别限制：" >
-          <el-select v-model="result" placeholder="请选择">
-            <el-option
-              v-for="item in resultOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-      </el-col>
-      <el-col :span="6">
-        <el-form-item label="是否启用：" >
-          <el-select v-model="results" placeholder="请选择">
-            <el-option
-              v-for="item in resultOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-      </el-col>
-      </div> -->
-      <!-- <el-form-item label="导入体检库：">
-        <el-input
-          v-model="value.contact"
-          :disabled="value.type === 2"
-          :placeholder="value.type === 1 ? '请输入' : ''"
-          :maxlength="30"
-          style="width: 166px"
-        ></el-input>
-        <span class="tel">是否启用：</span>
-        <el-input
-          v-model="value.mobile"
-          :format="/^(1\d{0,10}){0,1}$/"
-          :disabled="value.type === 2"
-          :placeholder="value.type === 1 ? '请输入' : ''"
-          style="width: 166px"
-        ></el-input>
-      </el-form-item> -->
     </el-form>
     <div slot="footer" class="dialog-footer" >
       <el-button size="small" @click="cancel" class="cancelBtn">取消</el-button>
@@ -218,7 +157,13 @@ export default {
     async getList() {
       this.$api.physicalProjectListInterface.Exceptionsystemitem(this.value).then((res) => {
         this.expandData = res.data.data;
-        this.detectionInfos = res.data.nameList;
+        console.log(res.data.data.nameList);
+        res.data.data.nameList.forEach((val) => {
+          const json = {};
+          json.itemName = val;
+          this.addProject.push(json);
+        });
+      // this.detectionInfos = res.data.nameList;
       });
     },
     remove(index) {
@@ -241,7 +186,7 @@ export default {
       vm.MatchingInfo.forEach((valQusOne) => {
         let same = false;
         vm.addProject.forEach((valAnswer) => {
-          if (valQusOne.id === valAnswer.id) { // 如果有一样 就回答过了
+          if (valQusOne.itemName === valAnswer.itemName) { // 如果有一样 就回答过了
             same = true;
           }
         });
@@ -257,23 +202,14 @@ export default {
     },
     // 选择检测项目
     detectiononSelectUser(data) {
-      console.log(data, '选择检测项目');
       if (data) {
-        // data.clientId = this.infoSource.clientId;
-        // data.ingrenient = this.infoSource.ingrenient;
-        // data.consequences = '123132';
         data.forEach((val) => {
           this.detectioninfoSource.clientName += `${val.itemName}、`;
           this.MatchingInfo.push(val);
         });
-        // this.MatchingInfo.push(data);
+        console.log(this.MatchingInfo, '选择检测项目');
         this.$refs.userPopovers.doClose();
         this.detectionpopoverStatus = false;
-        // this.detectioninfoSource.clientName = data.name;
-        // this.detectioninfoSource.clientId = data.id;
-        // this.detectioninfoSource.age = data.age;
-        // this.detectioninfoSource.gender = data.gender;
-        // this.detectioninfoSource.gridName = data.gridName;
       } else {
         this.$refs.userPopovers.doClose();
       }

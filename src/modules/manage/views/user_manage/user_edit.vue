@@ -184,7 +184,7 @@
                             v-model="formData.userRealName"
                             placeholder="请选择"
                     ></el-input>
-                    <el-select
+                    <!-- <el-select
                           v-model="formData.marriage"
                           placeholder="请选择"
                           style="width: 100%;"
@@ -194,7 +194,7 @@
                                class="select-user-trigger"
                                :value="formData.userRealName"
                                ></el-option>
-                  </el-select>
+                  </el-select> -->
                   </el-popover>
                 </el-form-item>
               </el-col>

@@ -64,9 +64,7 @@
               <el-button
                   type="text"
                   size="small"
-                  @click="
-                    $router.push('medication_history_edit/' + scope.row.id + '')
-                  "
+                  @click="$router.push('/medication_history_edit/' + scope.row.id + '')"
                   v-if="getAccess('medication_history_edit')"
                   >编辑
                 </el-button>
@@ -74,7 +72,7 @@
               <el-button
                 type="text"
                 size="small"
-                @click="handleDetail(scope.row.id)"
+                @click="handleDetail(scope.row)"
                 v-if="getAccess('physical_examination_report_view')"
                 >查看</el-button
               >
@@ -90,13 +88,22 @@
           :pageSizes="[15]"
         ></el-pagination>
       </div>
+      <detail
+      :visible="detailModalVisible"
+      :value="currentValue"
+      @cancel="detailModalVisible = false"
+    ></detail>
     </div>
   </div>
 </template>
 <script>
+import detail from '../components/detail.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
 export default {
   name: 'InportantIndex',
+  components: {
+    detail,
+  },
   props: ['clientId'],
   data() {
     return {
@@ -116,6 +123,8 @@ export default {
       currentPage: 1,
       total: 0,
       multipleSelection: [],
+      currentValue: {},
+      detailModalVisible: false,
     };
   },
   mounted() {
@@ -125,14 +134,6 @@ export default {
   methods: {
     handleSelectionChange(val) {
       this.multipleSelection = val;
-    },
-    handleAdd() {
-      this.$router.push({
-        path: '/report_edit',
-        query: {
-          id: '',
-        },
-      });
     },
     handleDelete() {
       // 批量删除
@@ -182,13 +183,10 @@ export default {
         },
       });
     },
-    handleDetail(id) {
-      const getid = id;
-      this.$router.push({
-        path: '/report_detail',
-        query: {
-          id: getid,
-        },
+    handleDetail(scope) {
+      this.$api.medication.getDetail(scope.id).then(({ data }) => {
+        this.currentValue = data.data;
+        this.detailModalVisible = true;
       });
     },
     async queryList() {

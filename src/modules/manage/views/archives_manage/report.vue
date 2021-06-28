@@ -60,7 +60,7 @@
               <div class="searchLeft">
                 <div class="searchInputFormItem">
                   <el-input
-                    placeholder="姓名/手机号/企业单位"
+                    placeholder="姓名/体检编号"
                     v-model="formData.keywords"
                   >
                   </el-input>
@@ -134,6 +134,7 @@
                 <el-date-picker
                   v-model="formData.minReportDate"
                   type="date"
+                  value-format="yyyy-MM-dd HH:mm:ss"
                   :max-date="formData.maxReportDate || new Date()"
                   placeholder="选择开始日期"
                   style="width: 140px"
@@ -143,6 +144,7 @@
                 <el-date-picker
                   v-model="formData.maxReportDate"
                   type="date"
+                  value-format="yyyy-MM-dd HH:mm:ss"
                   :min-date="formData.minReportDate"
                   :max-date="new Date()"
                   placeholder="选择结束日期"
@@ -294,9 +296,15 @@
               </el-table-column>
                  <el-table-column
                 label="总检"
-                prop="clientName"
+                prop="reportState"
                 align="center"
-                show-overflow-tooltip></el-table-column>
+                show-overflow-tooltip>
+                <template slot-scope="scope">
+                  {{scope.row.reportState === 1 ?
+                  '已总检' : (scope.row.reportState === 2 ?
+                  '未总检' : '未知')}}
+                </template>
+                </el-table-column>
               <el-table-column
                 label="采集日期"
                 prop="createTime"
@@ -553,9 +561,13 @@ export default {
         this.$message.error('请先选择数据');
         return false;
       }
-      this.remove(this.multipleSelection.map(item => item.id), true);
+      let batch = false;
+      if (this.multipleSelection.length >= 2) {
+        batch = true;
+      }
+      this.remove(this.multipleSelection.map(item => item.id), batch);
     },
-    remove(list, batch = false) {
+    remove(list, batch) {
       this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认${batch ? '批量' : ''}删除！</span></div>`, '删除提示', {
         dangerouslyUseHTMLString: true,
         confirmButtonText: '确定',

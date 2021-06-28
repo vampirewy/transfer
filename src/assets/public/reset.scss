@@ -234,7 +234,7 @@ body .el-table th.gutter{
   .delete-text-content {
     display: flex;
     align-items: center;
-    /*padding-top: 27px;*/
+    padding-left: 25px;
     .delete-icon {
       width: 40px;
       height: 40px;
@@ -328,10 +328,10 @@ border: 1px solid #3154AC;
   }
 }
 
-.el-radio__input.is-disabled.is-checked .el-radio__inner {
-  /*background-color: #ffffff !important;
-  border-color: #4991fd !important;*/
-}
+/*.el-radio__input.is-disabled.is-checked .el-radio__inner {
+  background-color: #ffffff !important;
+  border-color: #4991fd !important;
+}*/
 .el-radio__input.is-disabled.is-checked .el-radio__inner::after {
   background-color: #4991FD;
 }
@@ -638,5 +638,10 @@ textarea:-ms-input-placeholder {
     background-color: rgba(255,255,255,0)!important;
   }
 }
-
+.has-expand-table{
+  .el-icon-arrow-right:before {
+    content: '\E6E0';
+    display: none;
+  }
+}
 

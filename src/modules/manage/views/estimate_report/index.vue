@@ -155,38 +155,24 @@
             <el-button
             style="width:120px;margin: 16px 0;"
                     size="small"
-                    @click="generateReport"
+                    @click="handleExamine"
                     class="btn-new btnDel"
                     v-if="getAccess('customer_pool_distribute')"
             ><img src="@/assets/images/common/createReport.png" />生成报告</el-button>
           </div>
-          <el-button v-if="Tabactive == 1 || Tabactive == 2"
-            style="width:120px;margin: 16px 0;"
+          <el-button v-if="Tabactive == 1" style="width:120px;margin: 16px 0;"
                     size="small"
-                    @click="generateReport"
+                    @click="generateReporte"
                     class="btn-new btnDel"
             ><img src="@/assets/images/common/createReport.png" />生成报告</el-button>
-          <!-- <div v-if="Tabactive == 1 || Tabactive == 2">
-            <el-button
-            style="margin: 16px 0;"
+            <el-button v-if="Tabactive == 2"
+            style="width:120px;margin: 16px 0;"
                     size="small"
-                    @click="generateReport"
+                    @click="generateReportes"
                     class="btn-new btnDel"
-                    v-if="getAccess('customer_pool_distribute')"
-            ><img src="@/assets/images/common/export.png" />导出</el-button>
-          </div> -->
+            ><img src="@/assets/images/common/createReport.png" />生成报告</el-button>
         </div>
         <div class="right">
-          <!-- <div class="table-operate-buttons">
-            <span class="page-name">评估报告</span>
-            <div>
-              <operate-button
-              type="generateReport"
-              v-if="getAccess('assessment_report_generate')"
-              @click="generateReport">
-              </operate-button>
-            </div>
-          </div> -->
           <!-- 心理评估 -->
           <div v-if="Tabactive == 1">
             <el-table
@@ -194,9 +180,9 @@
               :key="Tabactive"
               class="has-expand-table"
               style="width: 100%"
-              @selection-change="handleSelectionChange"
+              @selection-change="handleSelectionChangee"
               :row-key="getRowKeys"
-              @expand-change="handleExpandChange"
+              @expand-change="handleExpandChangee"
               align="center"
               :data="clientTypeList">
               <el-table-column type="expand" width="1" class-name="hide-expand-column">
@@ -432,9 +418,8 @@
                 <template slot-scope="scope">
                   <el-button
                     type='text'
-                    v-if="scope.row.notMatchAbnromalTotal > 0"
                     @click="expandsHandle(scope.row)">
-                    {{scope.row.notMatchAbnromalTotal}}
+                    {{scope.row.notMatchAbnromalTotal || 0}}
                   </el-button>
                 </template>
               </el-table-column>
@@ -484,7 +469,7 @@
               ref="tables"
               class="has-expand-table"
               style="width: 100%"
-              @selection-change="handleSelectionChange"
+              @selection-change="handleSelectionChangees"
               :row-key="getRowKeys"
               @expand-change="handleExpandChange"
               align="center"
@@ -640,6 +625,8 @@ export default {
       gridList: [],
       questionFromList: [],
       multipleSelection: [],
+      multipleSelectiones: [],
+      multipleSelectione: [],
       expands: [],
       getRowKeys: row => row.reportId,
       expandData: {
@@ -751,8 +738,7 @@ export default {
         this.$message.warning('请先选择数据');
         return false;
       }
-      this.view = 5;
-      debugger;
+      // this.view = 5;
       const params = this.multipleSelection.map(({ clientId, lifeQuestionId, reportId }) => {
         const data = {
           clientId,
@@ -764,6 +750,7 @@ export default {
       this.$api.accessReport.generateReport(params).then(() => {
         this.$message.success('操作成功');
         this.queryPageList();
+        this.getQuestionFromList();
       });
     },
     handleClose() {
@@ -813,8 +800,8 @@ export default {
       this.$api.health
         .fetch(Object.assign({
           clientGrid: '',
-          gender: '',
-          keyWord: '',
+          gender: this.form.gender,
+          keyWord: this.form.keywords,
           pageNo: 1,
           pageSize: 15,
           questionType: 2,
@@ -828,8 +815,8 @@ export default {
       this.$api.health
         .fetch(Object.assign({
           clientGrid: '',
-          gender: '',
-          keyWord: '',
+          gender: this.form.gender,
+          keyWord: this.form.keywords,
           pageNo: 1,
           pageSize: 15,
           questionType: 3,
@@ -864,6 +851,12 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
+    },
+    handleSelectionChangee(val) {
+      this.multipleSelectione = val;
+    },
+    handleSelectionChangees(val) {
+      this.multipleSelectiones = val;
     },
     handleExpandChange(row, expandRows) {
       this.expands = expandRows;
@@ -908,20 +901,31 @@ export default {
       this.queryPageList();
     },
     // 生成报告
-    generateReport() {
-      if (this.multipleSelection.length === 0) {
+    generateReporte() {
+      if (this.multipleSelectione.length === 0) {
         this.$message.warning('请先选择数据');
         return false;
       }
-      const params = this.multipleSelection.map(({ clientId, lifeQuestionId, reportId }) => {
-        const data = {
-          clientId,
-          lifeQuestionId,
-          reportInfoId: reportId,
-        };
-        return data;
+      const params = [];
+      this.multipleSelectione.forEach((value) => {
+        params.push(value.id);
       });
-      this.$api.accessReport.generateReport(params).then(() => {
+      this.$api.accessReport.generatepsyReport(params).then(() => {
+        this.$message.success('操作成功');
+        this.queryPageList();
+      });
+    },
+    // 生成中医报告
+    generateReportes() {
+      if (this.multipleSelectiones.length === 0) {
+        this.$message.warning('请先选择数据');
+        return false;
+      }
+      const params = [];
+      this.multipleSelectiones.forEach((value) => {
+        params.push(value.id);
+      });
+      this.$api.accessReport.generatetcmReport(params).then(() => {
         this.$message.success('操作成功');
         this.queryPageList();
       });

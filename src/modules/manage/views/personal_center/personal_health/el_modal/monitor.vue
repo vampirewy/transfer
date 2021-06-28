@@ -80,7 +80,7 @@
             }}</span>
           </template>
         </el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           label="操作"
           align="center"
           min-width="100"
@@ -94,16 +94,16 @@
               v-if="getAccess('physical_examination_report_edit')"
               >编辑</el-button
             >
-            <!-- <span style="color: #dde0e6">|</span> -->
-            <!-- <el-button
+            <span style="color: #dde0e6">|</span>
+            <el-button
               type="text"
               size="small"
               @click="handleTrendClick(scope.row.clientId, scope.row.id)"
               v-if="getAccess('physical_examination_report_view')"
               >查看</el-button
-            > -->
+            >
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
       <div style="text-align: right">
         <el-pagination

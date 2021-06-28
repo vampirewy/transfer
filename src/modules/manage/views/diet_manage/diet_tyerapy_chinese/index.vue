@@ -12,12 +12,12 @@
               <div class="searchLeft">
                 <div class="searchInputFormItem">
                   <el-input
-                    placeholder="姓名/编号/单位"
+                    placeholder="菜品名称"
                     style="width: 210px"
                     v-model="name"
                   >
                   </el-input>
-                  <span class="searchBtnImgSpan" >
+                  <span class="searchBtnImgSpan" @click="search">
                     <img
                       class="searchBtnImg"
                       src="@/assets/images/common/topsearch.png"
@@ -32,8 +32,9 @@
                     clearable
                     style="width: 139px"
                   >
+                    <el-option label="不限" :value="0"></el-option>
                     <el-option label="男" :value="1"></el-option>
-                    <el-option label="女" :value="0"></el-option>
+                    <el-option label="女" :value="2"></el-option>
                   </el-select>
                 </div>
                 <div>
@@ -120,14 +121,18 @@
           prop="tizhiIds"
           label="适宜体质"
           show-overflow-tooltip
-        ></el-table-column>
+        >
+          <template slot-scope="scope">
+            {{ statusMaps(scope.row.tizhiIds) }}
+          </template>
+        </el-table-column>
         <el-table-column
           prop="gender"
           label="适宜性别"
           show-overflow-tooltip
         >
         <template slot-scope="scope">
-          {{ scope.row.gender === 1 ? '男' :scope.row.gender === 0?'不限': '女' }}
+          {{ scope.row.gender === 1 ? '男' :scope.row.gender === 2?'女': '不限' }}
         </template>
         </el-table-column>
         <el-table-column prop="formula" label="菜品原料"
@@ -196,6 +201,18 @@ export default {
       tizhiIds: '', // 体质
       multipleSelection: [],
       ListId: '',
+      statusMap: {
+        1: '平和质',
+        2: '气虚质',
+        3: '阳虚质',
+        4: '阴虚质',
+        5: '痰湿质',
+        6: '湿热质',
+        7: '血瘀质',
+        8: '气郁质',
+        9: '特禀质',
+        10: '不限',
+      },
     };
   },
   // mounted() {
@@ -226,6 +243,19 @@ export default {
         this.total = data.total;
       }
     },
+    statusMaps(Range) {
+      console.log(Range);
+      const arr = Range.split(',');
+      console.log(arr);
+      if (arr.length !== 1 || arr[0] < 10) {
+        let values = '';
+        arr.forEach((val) => {
+          values += `${this.statusMap[val]}，`;
+        });
+        return values;
+      }
+      return Range;
+    },
     handleCurrentChange(current = 1) {
       this.pageNo = current;
       this.getList();
@@ -242,8 +272,12 @@ export default {
         });
         return;
       }
+      let batch = false;
+      if (this.multipleSelection.length >= 2) {
+        batch = true;
+      }
       this.$confirm(`<div class="delete-text-content"><img
-      class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认批量删除！</span></div>`, '删除提示', {
+      class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认${batch ? '批量' : ''}删除！</span></div>`, '删除提示', {
         dangerouslyUseHTMLString: true,
         confirmButtonText: '确定',
         cancelButtonText: '取消',

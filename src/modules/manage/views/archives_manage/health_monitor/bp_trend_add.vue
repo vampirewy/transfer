@@ -15,7 +15,7 @@
         <h3 class="name">新增-{{Name}}</h3>
       </div>-->
         <div class="divRightTitleDiv">
-            <div class="divRightTitle">新增-{{Name}}
+            <div class="divRightTitle">{{isType}}-{{Name}}
                 <div class="titleBiao"></div></div>
         </div>
       <div class="medicate-record mt20">
@@ -402,6 +402,7 @@ export default {
       popoverStatus: false,
       total: 0,
       typeOptions: [],
+      isType: '新增',
       infoSource: {
         SBP: '', // 收缩压
         DBP: '', // 舒张压
@@ -465,7 +466,10 @@ export default {
   mounted() {
     window.vm = this;
     // this.getResultList();
-    console.log(this.id, this.editId, '123213');
+    // console.log(this.id, this.editId, '123213');
+    if (this.editId !== '') {
+      this.isType = '编辑';
+    }
     if (this.id === 0) {
       this.Name = '血压';
       if (this.editId !== '') {
@@ -520,6 +524,7 @@ export default {
         this.infoSource.bloodsugarvalue = data.data.sugar;
         this.infoSource.startDate = data.data.testDate;
         this.infoSource.conclusion = data.data.result;
+        this.infoSource.bloodsugar = data.data.sugarType;
       });
     },
     queryChartInfoWeight(id) {

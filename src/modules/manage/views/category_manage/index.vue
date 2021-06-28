@@ -28,7 +28,7 @@
         <div class="searchLeft">
           <div class="searchInputFormItem">
             <el-input
-              placeholder="姓名/手机号/企业单位"
+              placeholder="类别名称"
               v-model="form.keywords"
             >
             </el-input>
@@ -86,7 +86,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="workUnitName"
+            prop="reportName"
             label="报告名称"
             show-overflow-tooltip
           >
@@ -94,10 +94,10 @@
               <span>{{ scope.row.reportName }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="name" label="低危显示" show-overflow-tooltip>
+          <el-table-column prop="dangerShow" label="低危显示" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span v-if="scope.row.state === '1'">显示</span>
-              <span v-if="scope.row.state === '0'">不显示</span>
+              <span v-if="scope.row.dangerShow === '1'">显示</span>
+              <span v-if="scope.row.dangerShow === '0'">不显示</span>
             </template>
           </el-table-column>
           <el-table-column prop="name" label="是否启用" show-overflow-tooltip>
@@ -107,21 +107,21 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="workUnitName"
+            prop="createdByName"
             label="创建人"
             show-overflow-tooltip
           >
             <template slot-scope="scope">
-              <span>{{ scope.row.reportName }}</span>
+              <span>{{ scope.row.createdByName }}</span>
             </template>
           </el-table-column>
           <el-table-column
-            prop="workUnitName"
+            prop="createdTime"
             label="创建时间"
             show-overflow-tooltip
           >
             <template slot-scope="scope">
-              <span>{{ scope.row.reportName }}</span>
+              <span>{{ scope.row.createdTime }}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="140">
@@ -316,7 +316,7 @@ export default {
         return;
       }
       this.$confirm(
-        `<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认批量删除！</span></div>`,
+        `<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认删除！</span></div>`,
         '删除提示',
         {
           dangerouslyUseHTMLString: true,

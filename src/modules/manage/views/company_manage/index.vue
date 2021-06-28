@@ -16,7 +16,7 @@
         <div class="divTop">
           <div class="divTitle">
             <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
-            团队管理</div>
+            单位管理</div>
           <div class="searchCondition">
           <div class="searchLeft">
           <div class="searchInputFormItem">
@@ -31,7 +31,7 @@
             <el-date-picker
                   v-model="form.startTime"
                   type="date"
-                  value-format="yyyy-MM-dd"
+                  value-format="yyyy-MM-dd HH:mm:ss"
                   :max-date="form.endTime"
                   placeholder="选择开始日期"
                   style="width: 140px"
@@ -41,7 +41,7 @@
           <el-date-picker
                   v-model="form.endTime"
                   type="date"
-                  value-format="yyyy-MM-dd"
+                  value-format="yyyy-MM-dd HH:mm:ss"
                   :min-date="form.startTime"
                   placeholder="选择结束日期"
                   style="width: 140px"
@@ -222,8 +222,7 @@ export default {
         pageSize: this.table.pageSize,
       });
       this.table.list = res.data.data.data;
-      this.table.totalCount = res.data.data.data.total || 0;
-      console.log(this.table, 111);
+      this.table.totalCount = res.data.data.total || 0;
       // const { data } = res;
       // const result = data || {};
       // this.table.list = result.list || [];

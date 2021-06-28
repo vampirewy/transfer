@@ -142,6 +142,7 @@ export default {
           this.$emit('change', this.multipleSelection);
           this.visibles = false;
         } else {
+          this.ruleList = '';
           // console.log(this.multipleSelection, '123123');
           this.multipleSelection.forEach((val) => {
             this.ruleList += val.content;
