@@ -573,6 +573,7 @@ export default {
         path: '/medical_history_form',
         query: {
           id: data.id,
+          // clientId: '1408304870765432833',
         },
       });
     },

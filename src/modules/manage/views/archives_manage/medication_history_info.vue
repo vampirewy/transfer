@@ -12,7 +12,7 @@
     <div class="titless">就医信息</div>
     <!-- <div class="title">数据列表</div> -->
     <div class="lookPressure">
-      <div><span>就医编号：</span><span>{{data.orgCode}}</span></div>
+      <div><span>就医编号：</span><span>{{data.caseNo}}</span></div>
       <div><span>就医类型：</span><span v-if="data.medicalType === 1">
         门诊</span><span v-else>住院</span></div>
       <div><span>医保卡号：</span><span>{{data.patientNo}}</span></div>

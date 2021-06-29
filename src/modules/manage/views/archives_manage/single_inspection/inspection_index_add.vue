@@ -28,6 +28,7 @@
               placement="bottom-start"
               width="650"
               trigger="click"
+              :disabled="!!id || !!clientId"
               @show="popoverStatus = true"
               @hide="handlePopoperClose"
             >
@@ -36,7 +37,7 @@
                 @change="onSelectUser"
               ></select-user>
               <el-input
-                :class="`select-user-trigger ${id ? 'disabled' : ''}`"
+                :class="`select-user-trigger ${id || clientId? 'disabled' : ''}`"
                 slot="reference"
                 disabled
                 v-model="infoSource.clientName"
@@ -114,7 +115,7 @@
                 v-model="infoSource.endDate"
                 type="date"
                 :max-date="new Date()"
-                value-format="yyyy-MM-dd"
+                value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="请选择"
                 style="width:190px"
               ></el-date-picker>
@@ -286,15 +287,15 @@
         </el-table-column>
         <el-table-column
           label="结果"
-          prop="startDate"
+          prop="itemValue"
         >
          <template slot-scope="scope">
-             <input class="Checkinput" type="text" placeholder="请输入" v-model="scope.row.outcome">
+             <input class="Checkinput" type="text" placeholder="请输入" v-model="scope.row.itemValue">
           </template>
         </el-table-column>
-        <el-table-column label="正常参考" prop="refRange" >
+        <el-table-column label="正常参考" prop="itemRef" >
           <template slot-scope="scope">
-             <input class="Checkinput" type="text" placeholder="请输入" v-model="scope.row.reference">
+             <input class="Checkinput" type="text" placeholder="请输入" v-model="scope.row.itemRef">
           </template>
         </el-table-column>
         <el-table-column label="单位" prop="unit">
@@ -302,9 +303,9 @@
              <input class="Checkinput" type="text" placeholder="请输入" v-model="scope.row.unit">
           </template>
         </el-table-column>
-        <el-table-column label="建议" prop="dose" >
+        <el-table-column label="建议" prop="advice" >
           <template slot-scope="scope">
-             <input class="Checkinput" type="text" placeholder="请输入" v-model="scope.row.Suggestion">
+             <input class="Checkinput" type="text" placeholder="请输入" v-model="scope.row.advice">
           </template>
         </el-table-column>
         <!-- <el-table-column label="每日次数" prop="countDay" show-overflow-tooltip>
@@ -424,18 +425,32 @@ export default {
         pageNo: 1,
       },
       StatusCheck: [],
+      clientId: this.$route.query.clientId,
     };
   },
   mounted() {
-    console.log(this.id);
     window.vm = this;
     // this.getResultList();
     this.queryList();
     if (this.id) {
       this.saveInspectRecord(this.id);
     }
+    if (this.clientId) {
+      this.getClientUserInfo(this.clientId);
+    }
   },
   methods: {
+    getClientUserInfo(id) {
+      this.$api.userManagerInterface.getDetail(id).then(({ data }) => {
+        if (data.success) {
+          this.infoSource.clientName = data.data.name;
+          this.infoSource.clientId = data.data.id;
+          this.infoSource.age = data.data.age;
+          this.infoSource.gender = data.data.gender;
+          this.infoSource.gridName = data.data.gridName;
+        }
+      });
+    },
     async getResultList() {
       const res = await this.$api.medication.getResultList();
       const { data } = res;
@@ -448,7 +463,6 @@ export default {
       //     pageNo: this.currentPage,
       //     pageSize: this.pageSize,
       //   });
-      console.log(res.data);
       const { data } = res.data;
       if (data) {
         this.gridList = data || [];
@@ -460,6 +474,7 @@ export default {
     saveInspectRecord(id) {
       this.$api.healthMonitorInterface.SinglegetDetail(id).then(({ data }) => {
         if (data.success) {
+          this.infoSource.clientId = data.data.clientId;
           this.infoSource.gridName = data.data.clientId;
           this.infoSource.clientName = data.data.clientName;
           this.infoSource.age = data.data.age;
@@ -472,13 +487,12 @@ export default {
             const json = {};
             json.sectionName = data.data.inspectionRecordConfigDtos[i].sectionItem;
             json.itemName = data.data.inspectionRecordConfigDtos[i].itemName;
-            json.startDate = data.data.inspectionRecordConfigDtos[i].itemValue;
-            json.refRange = data.data.inspectionRecordConfigDtos[i].itemRef;
+            json.itemValue = data.data.inspectionRecordConfigDtos[i].itemValue;
+            json.itemRef = data.data.inspectionRecordConfigDtos[i].itemRef;
             json.unit = data.data.inspectionRecordConfigDtos[i].unit;
-            json.dose = data.data.inspectionRecordConfigDtos[i].advice;
+            json.advice = data.data.inspectionRecordConfigDtos[i].advice;
             this.drugsList.push(json);
           }
-          // console.log(this.drugsList, 'sdfsfsfsdfsdf');
           // this.$message.success('操作成功');
         }
       });
@@ -522,7 +536,6 @@ export default {
       this.infoSource.gridName = data.gridName;
     },
     onSelectUserCheck(data) {
-      console.log(data, '接收的数据12323');
       if (data) {
         // data.outcome = '';
         // data.reference = '';
@@ -612,10 +625,10 @@ export default {
         const json = {};
         json.sectionItem = this.drugsList[i].sectionName;
         json.itemName = this.drugsList[i].itemName;
-        json.itemValue = this.drugsList[i].outcome;
-        json.itemRef = this.drugsList[i].reference;
+        json.itemValue = this.drugsList[i].itemValue;
+        json.itemRef = this.drugsList[i].itemRef;
         json.unit = this.drugsList[i].unit;
-        json.advice = this.drugsList[i].Suggestion;
+        json.advice = this.drugsList[i].advice;
         arrars.push(json);
       }
       if (arrars.length === 0) {
@@ -626,7 +639,7 @@ export default {
         id: this.id,
         inspectionNo: this.infoSource.drugsName,
         inspectionOrg: this.infoSource.specification,
-        inspectionDate: this.infoSource.endDate + this.infoSource.startDates,
+        inspectionDate: this.infoSource.endDate,
         intro: this.infoSource.ingrenient,
         inspectionRecordConfigRequests: arrars,
       }).then(({ data }) => {
