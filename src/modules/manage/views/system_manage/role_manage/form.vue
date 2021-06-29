@@ -20,7 +20,7 @@
                       v-model="roleForm.name"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <!--<el-col :span="8">
           <el-form-item label="是否管理员">
             <span v-if="detail">{{roleForm.adminFlag | getResultState}}</span>
             <el-radio-group v-else v-model="roleForm.adminFlag">
@@ -28,7 +28,7 @@
               <el-radio :label="0">否</el-radio>
             </el-radio-group>
           </el-form-item>
-        </el-col>
+        </el-col>-->
         <el-col :span="6">
           <el-form-item label="是否启用">
             <span v-if="detail">{{roleForm.state | getResultState}}</span>
@@ -137,6 +137,9 @@ export default {
       // 保存角色
       const fn = this.roleForm.id ? 'editRole' : 'addRole';
       const { id, name, remark, adminFlag, menuIds, state } = this.roleForm;
+      if (menuIds.length === 0) {
+        return this.$message.warning('请选择权限');
+      }
       this.$api.systemManageInterface[fn]({
         id,
         name,

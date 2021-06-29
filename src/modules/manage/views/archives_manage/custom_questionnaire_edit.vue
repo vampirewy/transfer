@@ -24,7 +24,7 @@
       <div class="editWarn">
         <img src="@/assets/images/common/editIcon.png"/>
         <span>答案选项中频率表示天数，“从不”表示0天，“偶尔”表示每周1-2天，“有时”表示每周3-4天，“经常”表示每周5-6天，“总是”表示每周7天。
-        家族病史部分，“兄”代表兄弟姐妹.</span>
+        家族病史部分，“兄”代表兄弟姐妹。</span>
       </div>
     <el-form
       ref="form"

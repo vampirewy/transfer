@@ -31,9 +31,9 @@
                   </el-input>
                 </el-form-item>
               </el-form>
-              <div class="forget-password">
+              <!--<div class="forget-password">
                 <span @click="forgetPassword">忘记密码?</span>
-              </div>
+              </div>-->
               <el-button
                 class="login-button"
                 type="primary"
