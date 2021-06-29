@@ -154,7 +154,7 @@ export default {
       this.$router.push({
         path: '/inspection_index_add',
         query: {
-          id: '',
+          clientId: this.$route.params.id,
         },
       });
     },

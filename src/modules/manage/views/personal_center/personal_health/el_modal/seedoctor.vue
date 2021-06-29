@@ -173,6 +173,9 @@ export default {
     handleAdd() {
       this.$router.push({
         path: '/medical_history_form',
+        query: {
+          clientId: this.$route.params.id,
+        },
       });
     },
     handleDelete() {

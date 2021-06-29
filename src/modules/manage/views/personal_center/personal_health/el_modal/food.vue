@@ -31,9 +31,12 @@
               class="has-expand-table"
               :data="dataSource"
             >
-              <el-table-column label="体检编号" prop="reportNo" align="center"></el-table-column>
-              <el-table-column label="体检日期" prop="reportDate" align="center"></el-table-column>
-              <el-table-column label="体检机构" prop="examinationOrgan" align="center">
+              <el-table-column label="饮食相关异常" prop="state" align="center"></el-table-column>
+              <el-table-column label="不良饮食习惯" prop="state" align="center"></el-table-column>
+              <el-table-column label="周期" prop="day" align="center">
+              </el-table-column>
+              <el-table-column label="创建日期" prop="createdTime" align="center"></el-table-column>
+              <el-table-column label="创建人" prop="examinationOrgan" align="center">
               </el-table-column>
               <el-table-column label="操作" prop="index" width="160" align="center">
                 <template slot-scope="scope">
@@ -72,16 +75,56 @@ export default {
   data() {
     return {
       dataSource: [],
+      tableData: [],
       params: {
         pageNo: 1,
         pageSize: 15,
         total: 0,
       },
+      formData: {
+        pageNo: 1,
+        pageSize: 15,
+        keywords: '',
+        gender: '',
+        clientGrid: '',
+        day: '',
+        startCreatedTime: '',
+        endCreatedTime: '',
+        clientId: this.$route.params.id,
+      },
+      total: 0,
     };
   },
+  // beforeRouteEnter(to, from, next) {
+  //   next((vm) => {
+  //     vm.loadData();
+  //   });
+  // },
   mounted() {
+    this.loadData();
   },
   methods: {
+    loadData() {
+      this.$api.dietRawMaterial
+        .clientDietPlanPageList({
+          ...this.formData,
+        })
+        .then((res) => {
+          if (!res.data.success) return;
+          const { data, total } = res.data.data;
+          this.tableData = data;
+          this.total = total;
+        });
+    },
+    handleAdd() {
+      this.$router.push({
+        path: '/diet_manage/',
+        query: {
+          type: 'add',
+          clientId: this.$route.params.id,
+        },
+      });
+    },
   },
 };
 </script>

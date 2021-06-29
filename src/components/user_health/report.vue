@@ -140,7 +140,7 @@ export default {
       this.$router.push({
         path: '/report_edit',
         query: {
-          id: '',
+          clientId: this.$route.params.id,
         },
       });
     },

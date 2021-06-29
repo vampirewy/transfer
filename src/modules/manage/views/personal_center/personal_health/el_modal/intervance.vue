@@ -4,7 +4,7 @@
       <div class="formSearchTitle">
         <span class="dianLves"
           ><img src="@/assets/images/common/titleLeft.png" alt="" /></span
-        >干预计划
+        >待随访计划
       </div>
       <div class="follow-plan">
         <div class="divRightTitleDiv">
@@ -20,51 +20,61 @@
           </div>
         </div>
         <el-table
-          :data="tableData"
+          :data="table.list"
           @selection-change="handleSelectionChange"
           style="width: 100%"
           align="center"
         >
           <el-table-column type="selection" width="40"></el-table-column>
           <el-table-column
-            prop="clientName"
-            label="随访日期"
-            show-overflow-tooltip
-          >
-            <!-- <template slot-scope="scope">
-          <span>{{ scope.row.itemName | getResult}}</span>
-        </template> -->
-          </el-table-column>
-          <el-table-column
-            prop="gridName"
-            label="随访形式"
-            show-overflow-tooltip
-          >
-            <!-- <template slot-scope="scope">
-          <span>{{ scope.row.itemValue | getResult}}</span>
-        </template> -->
-          </el-table-column>
-          <el-table-column
-            prop="executePlanWayName"
+            prop="planTitle"
             label="随访标题"
             show-overflow-tooltip
           >
-            <!-- <template slot-scope="scope">
-          <span>{{ scope.row.refRange | getResult }}</span>
-        </template> -->
+          <template slot-scope="scope">
+          <span>{{ scope.row.planTitle | getResult}}</span>
+        </template>
           </el-table-column>
           <el-table-column
             prop="executeTime"
-            label="随访结果"
+            label="随访日期"
             show-overflow-tooltip
           >
-            <!-- <template slot-scope="scope">
-          <span>{{ scope.row.itemUnit | getResult }}</span>
-        </template> -->
+            <template slot-scope="scope">
+          <span>{{ scope.row.planDate | getResult}}</span>
+        </template>
+          </el-table-column>
+          <el-table-column
+            prop="planWayName"
+            label="随访方式"
+            show-overflow-tooltip
+          >
+            <template slot-scope="scope">
+          <span>{{ scope.row.planWayName | getResult}}</span>
+        </template>
+          </el-table-column>
+          <el-table-column
+            prop="planContent"
+            label="随访内容"
+            show-overflow-tooltip
+          >
+            <template slot-scope="scope">
+          <span>{{ scope.row.planContent | getResult }}</span>
+        </template>
+          </el-table-column>
+          <el-table-column
+            prop="planUserName"
+            label="干预人"
+            show-overflow-tooltip
+          >
+            <template slot-scope="scope">
+          <span>{{ scope.row.planUserName | getResult }}</span>
+        </template>
           </el-table-column>
           <el-table-column
             prop="executePlanWayName"
             label="操作"
+            width="140"
             show-overflow-tooltip
           >
             <template slot-scope="scope">
@@ -106,44 +116,39 @@ export default {
   data() {
     return {
       tableData: [
-        {
-          clientName: '2020-10-01',
-          gridName: '我是名称',
-          executeTime: '我是标题',
-          executePlanWayName: '我是提',
-        },
-        {
-          clientName: '2020-10-01',
-          gridName: '我是名称',
-          executeTime: '我是标题',
-          executePlanWayName: '我是提示啊我是提示',
-        },
-        {
-          clientName: '2020-10-01',
-          gridName: '我是名称',
-          executeTime: '我是标题',
-          executePlanWayName: '我是提示啊我是提示',
-        },
-        {
-          clientName: '2020-10-01',
-          gridName: '我是名称',
-          executeTime: '我是标题',
-          executePlanWayName: '我是提示啊我是提示',
-        },
-        {
-          clientName: '2020-10-01',
-          gridName: '我是名称',
-          executeTime: '我是标题',
-          executePlanWayName: '我是提示啊我是提示',
-        },
       ],
       currentPage: 1,
       total: 0,
       multipleSelection: [],
+      table: {
+        list: [],
+        totalCount: 0,
+        currentPage: 1,
+        pageSize: 15,
+      },
+      form: {
+        keywords: '', // 关键字
+        gender: '', // 性别
+        workUnitName: '', // 企业单位
+        planUserId: '',
+        planDate: '',
+        planWay: '', // 随访方式
+        startTime: '',
+        endTime: '',
+        executeState: '2', // 状态
+        gridId: '', // 客户类型
+        tag: '',
+        startPlanTime: '',
+        endPlanTime: '',
+        startCreatedTime: '',
+        endCreatedTime: '',
+        planUserIdList: [],
+        createdByList: [],
+      },
     };
   },
   mounted() {
-    // this.getImportantIndex();
+    this.getList();
   },
   methods: {
     handleSelectionChange(val) {
@@ -213,6 +218,32 @@ export default {
           id: getid,
         },
       });
+    },
+    async getList() {
+      const reqBody = {
+        keywords: this.form.keywords,
+        gender: this.form.gender,
+        gridId: this.form.gridId,
+        planWay: this.form.planWay,
+        tag: this.form.tag,
+        startPlanTime: this.form.startPlanTime,
+        endPlanTime: this.form.endPlanTime,
+        startCreatedTime: this.form.startCreatedTime,
+        endCreatedTime: this.form.endCreatedTime,
+        planUserIdList: this.form.planUserIdList,
+        createdByList: this.form.createdByList,
+        pageNo: this.table.currentPage,
+        pageSize: this.table.pageSize,
+        clientId: this.$route.params.id,
+      };
+      const res = await this.$api.userFollowInterface.getIntervenePlanListPage(
+        reqBody,
+      );
+      const { data } = res.data;
+      if (data) {
+        this.table.list = data.data || [];
+        this.table.totalCount = data.total;
+      }
     },
   },
 };
