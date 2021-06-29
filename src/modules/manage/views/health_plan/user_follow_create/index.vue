@@ -645,7 +645,7 @@ export default {
         reportAbnormalCodes: this.form.abnormalId,
         hasIntervenePlan: this.form.hasIntervenePlan,
         hasReport: this.form.hasReport,
-        /* tag: this.form.tag,*/
+        tag: this.form.tag,
         startReportDate: this.form.startReportDate,
         endReportDate: this.form.endReportDate,
         startCollectionDate: this.form.startCollectionDate,

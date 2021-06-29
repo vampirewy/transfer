@@ -114,6 +114,7 @@ export default {
   },
   mounted() {
     console.log(this.roleForm);
+    this.roleForm.menuIds = []; // 为了解决首次data不更新
     if (this.id) {
       // 角色详情
       this.$api.systemManageInterface.roleDetail(this.id).then((res) => {

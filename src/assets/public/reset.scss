@@ -190,16 +190,17 @@ body .el-table th.gutter{
 }
 .message-box-customize {
   background: #EEF1F5;
-  border-radius: 5px;
+  border-radius: 10px;
   // border-color: #4991FD;
   padding: 0;
   width: 378px;
   .el-message-box__header {
     padding: 16px 19px;
     margin: 0;
-    // .el-message-box__title {
-    //   color: #fff;
-    // }
+     .el-message-box__title {
+       font-size: 14px;
+       font-weight: bold;
+     }
     // /deep/ .el-message-box__close {
     //   color: #fff;
     //   font-size: 22px;
@@ -209,6 +210,7 @@ body .el-table th.gutter{
     // border-radius: 20px 20px 0 0;
     background: #fff;
     padding: 30px;
+    color: #333333;
     .el-message-box__message {
       padding: 0;
     }
