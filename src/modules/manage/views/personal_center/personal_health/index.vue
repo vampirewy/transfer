@@ -16,8 +16,8 @@
               <img src="@/assets/images/common/usernews.png" alt="" />
             </div>
           </div>
-          <div class="username">轻那个风</div>
-          <div class="usertype">高级会员</div>
+          <div class="username">{{userlist.name}}</div>
+          <div class="usertype">{{userlist.gridName}}</div>
         </div>
         <!-- <div class="intvTmpl_left_title">个人管理中心</div> -->
         <ul class="intv_menulist">
@@ -46,14 +46,16 @@
                       alt="" /></span
                   >基本信息
                 </div>
-                <div class="wrapper-right">编号：3534634564</div>
+                <div class="wrapper-right">编号：{{userlist.clientNo}}</div>
                 <div class="wrap-content">
-                  <p>客户性别：<span>女</span></p>
-                  <p>客户年龄：<span>29</span></p>
-                  <p>手机号码：<span>13888888888</span></p>
-                  <p>所在单位：<span>杭州谢小妞网络科技有限公司</span></p>
-                  <p>管理医生：<span>谢大夫</span></p>
-                  <p>家庭成员：<span>轻风的爸、轻风的妈</span></p>
+                  <p>客户性别：<span>{{userlist.gender === 1 ? '男' : '女'}}</span></p>
+                  <p>客户年龄：<span>{{userlist.age}}</span></p>
+                  <p>手机号码：<span>{{userlist.mobile}}</span></p>
+                  <p>所在单位：<span>{{userlist.workUnitName}}</span></p>
+                  <p>管理医生：<span
+                  v-for="(item, index) in userlist.userList"
+                  :key="index">{{item.realName}},</span></p>
+                  <p>家庭成员：<span>{{userlist.age}}</span></p>
                 </div>
                 <div class="addUsers">
                   <p>客户标签：</p>
@@ -63,8 +65,9 @@
                       alt=""
                     />
                   </div> -->
-                  <div>
-                    脾气不好
+                  <div v-for="(item, index) in userlist.tagList"
+                  :key="index">
+                    {{item.tag}}
                   </div>
                   <div>
                     脾气不好
@@ -313,6 +316,7 @@ export default {
   },
   data() {
     return {
+      userlist: [],
       active: 0,
       title: '',
       showTopLeft: true,
@@ -366,6 +370,13 @@ export default {
   },
   watch: {},
   methods: {
+    getClientUserInfo(id) {
+      this.$api.userManagerInterface.getDetail(id).then(({ data }) => {
+        if (data.rc === 0) {
+          this.userlist = data.data;
+        }
+      });
+    },
     clickMenu(index, selector) {
       this.active = index;
       console.log(selector);
@@ -394,6 +405,9 @@ export default {
         }
       });
     },
+  },
+  mounted() {
+    this.getClientUserInfo(this.$route.params.id);
   },
   destroyed() {
     window.removeEventListener('scroll', this.handleScroll);
@@ -559,7 +573,7 @@ export default {
   border-radius: 8px;
   position: relative;
   .wrapper-right {
-    width: 130px;
+    // width: 130px;
     height: 24px;
     background: #36bf2f;
     border-radius: 12px 0px 0px 12px;
@@ -570,6 +584,7 @@ export default {
     position: absolute;
     top: 20px;
     right: 0;
+    padding: 0 10px;
   }
   .wrap-content {
     display: flex;

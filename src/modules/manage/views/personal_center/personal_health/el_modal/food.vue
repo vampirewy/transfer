@@ -38,15 +38,28 @@
               <el-table-column label="创建日期" prop="createdTime" align="center"></el-table-column>
               <el-table-column label="创建人" prop="examinationOrgan" align="center">
               </el-table-column>
-              <el-table-column label="操作" prop="index" width="160" align="center">
-                <template slot-scope="scope">
-                  <el-button
+              <el-table-column
+            prop="executePlanWayName"
+            label="操作"
+            width="160"
+            show-overflow-tooltip
+          >
+            <template slot-scope="scope">
+              <el-button
+                type="text"
+                size="small"
+                @click="handleEdit(scope.row)"
+                v-if="getAccess('wait_visit_plan_edit')"
+                >编辑</el-button
+              >
+              <el-button type="text" size="small">|</el-button>
+              <el-button
                           type="text"
-                          @click="handleDetail(scope.row.id)"
+                          @click="handleDetail(scope.row)"
                           v-if="getAccess('physical_examination_report_view')"
                   >查看</el-button>
-                </template>
-              </el-table-column>
+            </template>
+          </el-table-column>
             </el-table>
             <div style="text-align: right">
               <el-pagination
@@ -121,6 +134,24 @@ export default {
         path: '/diet_manage/',
         query: {
           type: 'add',
+          clientId: this.$route.params.id,
+        },
+      });
+    },
+    handleDetail() {
+      this.$router.push({
+        path: '/diet_manage/',
+        query: {
+          type: 'info',
+          clientId: this.$route.params.id,
+        },
+      });
+    },
+    handleEdit() {
+      this.$router.push({
+        path: '/diet_manage/',
+        query: {
+          type: 'edit',
           clientId: this.$route.params.id,
         },
       });
