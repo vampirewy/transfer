@@ -89,6 +89,7 @@ export default {
         .then((res) => {
           const { data } = res;
           const result = data.data;
+          this.total = data.data.length;
           this.tableData = result || [];
         });
     },

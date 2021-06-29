@@ -185,10 +185,12 @@ export default {
           QUESTIONWITHDRINK.find(key => val.code === key),
         );
       }
+      // 得到吸烟、饮酒的题目
       if (questions.length && (answer === '293' || answer === '322')) {
         questions.forEach((val) => {
-          if (val.code !== 'e05') {
-            this.$set(val, 'disabled', true);
+          if (val.code !== 'e05') { // 除了被动吸烟选项
+            this.answerMap[val.id][0].optionId = ''; // 选了从不的 把其他两道题目取消选择状态
+            this.$set(val, 'disabled', true); // 吸烟/饮酒 其他项设为禁用
           }
         });
         // questions.forEach(val => this.$set(val, 'disabled', true));
@@ -201,14 +203,14 @@ export default {
       console.log(checkedList);
       const optionList = row.optionList;
       const no = optionList.find(val => val.code === 'n');
-      if (no) {
+      if (no) { // 多选选了从不
         const item = checkedList.find(val => val === no.id);
         console.log(item);
         if (item) {
           optionList
             .filter(val => val !== no)
             .forEach(val => this.$set(val, 'disabled', true));
-          this.answerMap[row.id] = [item];
+          this.answerMap[row.id] = [item]; // 其他项清除选中状态，设为选中从不
         } else {
           optionList.forEach(val => this.$set(val, 'disabled', false));
         }
@@ -588,9 +590,18 @@ export default {
       .el-form-item{
         margin-bottom: 0;
       }
+      // 新加flex 为了铺满
+      .el-radio-group{
+        display: flex;
+        .el-radio-button{
+          width: 100%;
+          margin-right: 30px;
+        }
+      }
       .el-radio-button {
         .el-radio-button__inner {
-          min-width: 180px;
+          // min-width: 180px;
+          width: 100%;
         }
         &:first-child .el-radio-button__inner{
           margin-right: 30px;
