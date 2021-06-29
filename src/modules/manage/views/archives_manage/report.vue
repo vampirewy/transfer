@@ -418,8 +418,8 @@ export default {
       this.$router.push({
         path: '/report_edit',
         query: {
-          clientId: '1408304870765432833',
-          // id: this.currentId,
+          // clientId: '1408304870765432833',
+          id: this.currentId,
         },
       });
     },

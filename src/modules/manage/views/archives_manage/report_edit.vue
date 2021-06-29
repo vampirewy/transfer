@@ -144,12 +144,10 @@ export default {
   },
   mounted() {
     if (this.id) {
-      console.log(this.id, '平台新增');
       this.fetch(this.id);
       document.title = '编辑体检报告';
     }
     if (this.clientId) {
-      console.log(this.clientId, '个人新增');
       this.getClientUserInfo(this.clientId);
     }
   },
@@ -161,6 +159,7 @@ export default {
           this.formData.gender = data.data.gender;
           this.formData.age = data.data.age;
           this.formData.cardNo = data.data.cardNo;
+          this.formData.clientId = data.data.id;
         }
       });
     },

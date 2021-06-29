@@ -27,6 +27,7 @@
               placement="bottom-start"
               width="650"
               trigger="click"
+              :disabled="!!clientId"
               @show="popoverStatus = true"
               @hide="handlePopoperClose"
             >
@@ -35,7 +36,7 @@
                 @change="onSelectUser"
               ></select-user>
               <el-input
-                :class="`select-user-trigger ${id ? 'disabled' : ''}`"
+                :class="`select-user-trigger ${clientId ? 'disabled' : ''}`"
                 slot="reference"
                 disabled
                 v-model="infoSource.clientName"
@@ -375,15 +376,29 @@ export default {
         { value: 5, label: '痊愈' },
         { value: 6, label: '其他' },
       ],
+      clientId: this.$route.query.clientId,
     };
   },
   mounted() {
     window.vm = this;
     // this.getResultList();
     // console.log(this.id);
+    if (this.clientId) {
+      this.getClientUserInfo(this.clientId);
+    }
   },
   methods: {
-
+    getClientUserInfo(id) {
+      this.$api.userManagerInterface.getDetail(id).then(({ data }) => {
+        if (data.success) {
+          this.infoSource.clientName = data.data.name;
+          this.infoSource.clientId = data.data.id;
+          this.infoSource.age = data.data.age;
+          this.infoSource.gender = data.data.gender;
+          this.infoSource.gridName = data.data.gridName;
+        }
+      });
+    },
     async getResultList() {
       console.log('sdfsfsdf');
       this.$api.medicalHistoryInterface.medicalInfoDetail(this.id).then((res) => {

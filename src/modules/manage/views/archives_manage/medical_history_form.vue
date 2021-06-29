@@ -10,7 +10,7 @@
     >
       <!--<div class="basic-info-title">{{id ? '' : '新增'}}就医用户信息</div>-->
       <div class="divRightTitleDiv" style="margin-top: -20px">
-        <div class="divRightTitle">{{ids ? '编辑' : '新增'}}-就医用户信息
+        <div class="divRightTitle">{{ids || clientId? '编辑' : '新增'}}-就医用户信息
           <div class="titleBiao"></div></div>
       </div>
       <el-row>
@@ -21,11 +21,12 @@
               placement="bottom-start"
               width="650"
               trigger="click"
+              :disabled="!!ids || !!clientId"
               @show="popoverStatus = true"
               @hide="popoverStatus = false">
               <select-user v-if="popoverStatus"  @change="handleSelectUser"></select-user>
               <el-input
-                class="select-user-trigger"
+                :class="`select-user-trigger ${ids || clientId? 'disabled' : ''}`"
                 slot="reference"
                 disabled
                 v-model="currentUser.name"
@@ -59,8 +60,8 @@
       </div>
       <el-row>
         <el-col :span="6">
-          <el-form-item label="就医编号" prop="MedicalNumber">
-            <el-input v-model="form.MedicalNumber" placeholder="请输入"
+          <el-form-item label="就医编号" prop="caseNo">
+            <el-input v-model="form.caseNo" placeholder="请输入"
             onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"></el-input>
           </el-form-item>
         </el-col>
@@ -242,7 +243,7 @@ export default {
     return {
       popoverStatus: false,
       form: {
-        MedicalNumber: '', // 就医编号
+        caseNo: '', // 就医编号
         money: '', // 金额
         clientInfoId: '', // 客户ID
         hospital: '', // 医院（医疗机构）
@@ -305,7 +306,7 @@ export default {
         complaint: [{ required: true, message: '主诉不能为空' }],
         diagnosis: [{ required: true, message: '诊断不能为空' }],
         money: [{ required: true, message: '金额不能为空' }],
-        MedicalNumber: [{ required: true, message: '就医编号不能为空' }],
+        caseNo: [{ required: true, message: '就医编号不能为空' }],
         name: [{ required: true, message: '客户不能为空' }],
         result: [{ required: true, message: '请选择当前状态' }],
       },
@@ -323,6 +324,7 @@ export default {
       ],
       currentUser: {},
       ids: this.$route.query.id,
+      clientId: this.$route.query.clientId,
     };
   },
   mounted() {
@@ -330,7 +332,6 @@ export default {
       document.title = '编辑就医用户信息';
       this.$api.medicalHistoryInterface.medicalInfoDetail(this.ids).then((res) => {
         const { data } = res;
-        console.log(data, '撒打算大的');
         this.form = Object.assign(this.form, data.data || {});
         this.currentUser = {
           id: this.form.clientInfoId,
@@ -341,8 +342,20 @@ export default {
         };
       });
     }
+    if (this.clientId) {
+      this.getClientUserInfo(this.clientId);
+    }
   },
   methods: {
+    getClientUserInfo(id) {
+      this.$api.userManagerInterface.getDetail(id).then(({ data }) => {
+        if (data.success) {
+          this.currentUser = data.data;
+          this.form.clientInfoId = data.data.id;
+          this.$refs.form.validateField('clientInfoId');
+        }
+      });
+    },
     Changeestates() {
       if (this.form.medicalType === 1) {
         this.form.outDate = this.form.inDate;
@@ -357,7 +370,6 @@ export default {
       }
     },
     handleSelectUser(data) {
-      console.log(data, '客户选择');
       this.$refs.userPopover.doClose();
       this.popoverStatus = false;
       this.currentUser = data;
@@ -371,10 +383,11 @@ export default {
     },
     submit() {
       this.$refs.form.validate((valid) => {
-        console.log(valid, 'qqqqqqq');
         if (valid) {
           const params = {
             annexList: [],
+            caseNo: this.form.caseNo,
+            money: this.form.money,
             clientInfoId: this.form.clientInfoId,
             complaint: this.form.complaint,
             department: this.form.department,
