@@ -140,11 +140,11 @@
                 @click="handleDelete"
                 v-if="getAccess('physical_examination_report_batch_delete')
                 "></operate-button>
-                <operate-button
+                <!-- <operate-button
                 type="editGray"
                 @click="handleeditGray"
                 v-if="getAccess('physical_examination_report_batch_delete')
-                "></operate-button>
+                "></operate-button> -->
             </div>
           </div>
           <div>
