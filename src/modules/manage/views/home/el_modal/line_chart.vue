@@ -105,7 +105,7 @@ export default {
         },
         grid: { // 折线图整体的位置
           left: 15,
-          right: 15,
+          right: 20,
           bottom: 40,
           top: 40,
           containLabel: true,
@@ -127,6 +127,7 @@ export default {
             // y轴
             show: false,
             onZero: true,
+            length: 5,
             lineStyle: {
               color: '#333333', // y轴刻度字颜色
               type: 'solid',
@@ -135,7 +136,7 @@ export default {
           axisTick: {
             show: false,
           },
-          splitNumber: 6, // y轴刻度个数
+          splitNumber: 4, // y轴刻度个数
           splitArea: {
             show: false,
           },

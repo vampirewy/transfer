@@ -304,17 +304,29 @@ export default {
         refRange: this.form.Reference, // 正常范围
         intro: this.form.Introduction,
         unit: this.form.Units,
+        minValue: this.form.minnormal,
+        maxValue: this.form.maxnormal,
       };
       if (this.id) {
-        params.id = this.id;
-      }
-      this.$api.physicalProjectListInterface.saveOrganItem(params).then((res) => {
-        const { data } = res;
-        if (data.success) {
-          this.$message.success('操作成功');
-          this.$emit('cancels');
+        if (this.id) {
+          params.id = this.id;
         }
-      });
+        this.$api.physicalProjectListInterface.updateOrganItem(params).then((res) => {
+          const { data } = res;
+          if (data.success) {
+            this.$message.success('操作成功');
+            this.$emit('cancels');
+          }
+        });
+      } else {
+        this.$api.physicalProjectListInterface.saveOrganItem(params).then((res) => {
+          const { data } = res;
+          if (data.success) {
+            this.$message.success('操作成功');
+            this.$emit('cancels');
+          }
+        });
+      }
     },
     goBack() {
       // this.$router.go(-1);

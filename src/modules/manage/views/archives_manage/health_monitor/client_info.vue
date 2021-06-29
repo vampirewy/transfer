@@ -100,7 +100,7 @@
       <el-col :span="6">
         <el-form-item label="问卷日期" prop="createTime">
           <el-date-picker v-model="formData.createTime" style="width: 100%"
-                          placeholder="" disabled></el-date-picker>
+                          placeholder=""></el-date-picker>
         </el-form-item>
       </el-col>
     </el-row>
@@ -190,11 +190,6 @@ export default {
           cursor: not-allowed;
         }
       }
-    }
-    /deep/ input, /deep/ textarea {
-      border: none;
-      background: #F4F4F6;
-      border-radius: 5px;
     }
   }
 </style>

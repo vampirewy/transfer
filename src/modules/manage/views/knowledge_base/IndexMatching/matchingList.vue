@@ -166,6 +166,7 @@
           </div>
         </div>-->
       <el-table style="width: 100%" ref="table" :data="dataSource" align="center"
+                class="has-expand-table"
                 @selection-change="handleSelectionChange"
                 @expand-change="handleExpandChange">
         <div class="boxs">
@@ -636,6 +637,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  /deep/ .has-expand-table{
+    .el-icon-arrow-right:before {
+      content: '\E6E0';
+      display: none;
+    }
+  }
  .qusDrop {
     .el-dropdown-menu__item{
       padding: 0 40px;

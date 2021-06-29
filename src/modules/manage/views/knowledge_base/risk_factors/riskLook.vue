@@ -14,13 +14,13 @@
     <div class="lookPressure">
       <div>
         <span>危险分类：</span>
-        <span v-if="data.riskType === 1">未指定</span>
-        <span v-if="data.riskType === 2">治疗中</span>
-        <span v-if="data.riskType === 3">转诊</span>
-        <span v-if="data.riskType === 4">转为慢病</span>
-        <span v-if="data.riskType === 5">痊愈</span>
-        <span v-if="data.riskType === 6">其他</span>
-
+        <span v-if="data.riskType === 1">饮食</span>
+        <span v-if="data.riskType === 2">运动</span>
+        <span v-if="data.riskType === 3">吸烟情况</span>
+        <span v-if="data.riskType === 4">饮酒情况</span>
+        <span v-if="data.riskType === 5">心理及睡眠</span>
+        <span v-if="data.riskType === 6">既往接触史</span>
+        <span v-if="data.riskType === 7">家族史</span>
       </div>
       <div><span>来源：</span><span>{{data.riskFactor}}</span></div>
       <div><span>标题：</span><span>{{data.riskTypeName}}</span></div>

@@ -10,7 +10,7 @@
     <div class="searchCondition">
       <div class="searchLeft">
         <div class="searchInputFormItem">
-          <el-input placeholder="请输入模板名称" v-model="keyword">
+          <el-input placeholder="请输入短信主题" v-model="keyword">
           </el-input>
           <span class="searchBtnImgSpan" @click="search">
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
@@ -44,7 +44,7 @@
           <el-radio v-model="selectRadio" :label="scope.row.id">&nbsp;</el-radio>
         </template>
       </el-table-column>
-      <el-table-column prop="themName" label="模板名称" min-width="50px"
+      <el-table-column prop="themName" label="短信主题" min-width="50px"
                        show-overflow-tooltip></el-table-column>
       <el-table-column prop="content" label="短信内容" show-overflow-tooltip></el-table-column>
     </el-table>

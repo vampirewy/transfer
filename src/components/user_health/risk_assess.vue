@@ -3,37 +3,34 @@
     <div class="risk-assess">
       <div class="assessTitle">很高风险</div>
       <div class="assessContent">
-        <!-- <p class="assessContentOne level1" v-for="item in assessListData.assess5" :key="item">
+        <p class="assessContentOne level1" v-for="item in assessListData.assess5" :key="item">
           {{item}}
-        </p> -->
-        <p class="assessContentOne level1" v-for="item in 1" :key="item">
-             高血压
         </p>
       </div>
     </div>
     <div class="risk-assess">
       <div class="assessTitle">高风险</div>
       <div class="assessContent">
-        <p class="assessContentOne level2" v-for="item in 3" :key="item">
-          高血压
+        <p class="assessContentOne level2" v-for="item in assessListData.assess4" :key="item">
+          {{item}}
         </p>
       </div>
     </div>
     <div class="risk-assess">
       <div class="assessTitle">中度风险</div>
       <div class="assessContent">
-        <p class="assessContentOne level3" v-for="item in 4"
+        <p class="assessContentOne level3" v-for="item in assessListData.assess3"
            :key="item">
-          高血压
+          {{item}}
         </p>
       </div>
     </div>
     <div class="risk-assess">
       <div class="assessTitle">低风险</div>
       <div class="assessContent">
-        <p class="assessContentOne level4"  v-for="(item, index) in 2"
+        <p class="assessContentOne level4"  v-for="(item, index) in assessListData.assess2"
            :key="index">
-          高血压
+          {{item}}1
         </p>
       </div>
     </div>
@@ -43,35 +40,20 @@
 <script>
 export default {
   name: 'disease',
-  props: ['clientId'],
+  props: ['assessList'],
   data() {
     return {
       assessListData: {},
     };
   },
   watch: {
-    // assessList: {
-    //   handler(val) {
-    //     console.log(val);
-    //     this.assessListData = val;
-    //     this.$set(this.assessListData, 'assess2', val.assess2);
-    //   },
-    //   immediate: true,
-    //   deep: true, // 为true，表示深度监听，这时候就能监测到a值变化
-    // },
-  },
-  mounted() {
-    this.getImportantIndex();
-  },
-  methods: {
-    getImportantIndex() {
-      this.$api.health
-        .getAssessReportDetail(this.clientId)
-        .then((res) => {
-          const { data } = res;
-          const result = data.data;
-          this.assessListData = result || [];
-        });
+    assessList: {
+      handler(val) {
+        this.assessListData = val;
+        this.$set(this.assessListData, 'assess2', val.assess2);
+      },
+      immediate: true,
+      deep: true, // 为true，表示深度监听，这时候就能监测到a值变化
     },
   },
 };

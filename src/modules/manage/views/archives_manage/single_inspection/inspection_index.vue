@@ -642,6 +642,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  /deep/ .has-expand-table{
+    .el-icon-arrow-right:before {
+      content: '\E6E0';
+      display: none;
+    }
+  }
 .medical-history {
   .searchCondition .searchInputFormItem{
     width: 180px;
