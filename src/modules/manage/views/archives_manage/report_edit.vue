@@ -161,6 +161,7 @@ export default {
           this.formData.gender = data.data.gender;
           this.formData.age = data.data.age;
           this.formData.cardNo = data.data.cardNo;
+          this.formData.clientId = data.data.id;
         }
       });
     },
