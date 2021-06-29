@@ -26,17 +26,18 @@
         >
           <el-table-column type="selection" width="40"></el-table-column>
           <el-table-column
-            prop="clientName"
-            label="随访日期"
+            prop="questionType"
+            label="问卷名称"
             show-overflow-tooltip
           >
-            <!-- <template slot-scope="scope">
-          <span>{{ scope.row.itemName | getResult}}</span>
+          <!-- <template slot-scope="scope">
+          <span>{{ scope.row.questionType ===
+             1 ? '常规问卷' :scope.row.questionType === 2 ? '中医问卷' : '心理问卷'}}</span>
         </template> -->
           </el-table-column>
           <el-table-column
-            prop="gridName"
-            label="随访形式"
+            prop="questionDate"
+            label="填写日期"
             show-overflow-tooltip
           >
             <!-- <template slot-scope="scope">
@@ -44,8 +45,8 @@
         </template> -->
           </el-table-column>
           <el-table-column
-            prop="executePlanWayName"
-            label="随访标题"
+            prop="sourceName"
+            label="问卷来源"
             show-overflow-tooltip
           >
             <!-- <template slot-scope="scope">
@@ -53,16 +54,7 @@
         </template> -->
           </el-table-column>
           <el-table-column
-            prop="executeTime"
-            label="随访结果"
-            show-overflow-tooltip
-          >
-            <!-- <template slot-scope="scope">
-          <span>{{ scope.row.itemUnit | getResult }}</span>
-        </template> -->
-          </el-table-column>
-          <el-table-column
-            prop="executePlanWayName"
+            prop="index"
             label="操作"
             show-overflow-tooltip
           >
@@ -105,46 +97,38 @@ export default {
   data() {
     return {
       tableData: [
-        {
-          clientName: '2020-10-01',
-          gridName: '我是名称',
-          executeTime: '我是标题',
-          executePlanWayName: '我是提',
-        },
-        {
-          clientName: '2020-10-01',
-          gridName: '我是名称',
-          executeTime: '我是标题',
-          executePlanWayName: '我是提示啊我是提示',
-        },
-        {
-          clientName: '2020-10-01',
-          gridName: '我是名称',
-          executeTime: '我是标题',
-          executePlanWayName: '我是提示啊我是提示',
-        },
-        {
-          clientName: '2020-10-01',
-          gridName: '我是名称',
-          executeTime: '我是标题',
-          executePlanWayName: '我是提示啊我是提示',
-        },
-        {
-          clientName: '2020-10-01',
-          gridName: '我是名称',
-          executeTime: '我是标题',
-          executePlanWayName: '我是提示啊我是提示',
-        },
       ],
+      formData: {
+        keyWord: '',
+        gender: '',
+        clientGrid: '',
+        lifeStyleLv: '',
+        source: '',
+        startTime: undefined,
+        endTime: undefined,
+        clientId: this.$route.params.id,
+      },
+      params: {
+        pageNo: 1,
+        pageSize: 15,
+      },
       currentPage: 1,
       total: 0,
       multipleSelection: [],
     };
   },
   mounted() {
-    // this.getImportantIndex();
+    this.fetch();
   },
   methods: {
+    fetch() {
+      this.$api.health
+        .fetch(Object.assign(this.params, this.formData))
+        .then(({ data }) => {
+          this.total = data.data.total;
+          this.tableData = data.data.data;
+        });
+    },
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },

@@ -638,5 +638,10 @@ textarea:-ms-input-placeholder {
     background-color: rgba(255,255,255,0)!important;
   }
 }
-
+.has-expand-table{
+  .el-icon-arrow-right:before {
+    content: '\E6E0';
+    display: none;
+  }
+}
 

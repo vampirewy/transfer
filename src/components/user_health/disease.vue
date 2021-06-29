@@ -4,7 +4,15 @@
           :model="form"
           class="form-inline"
   >
+    <div class="result-top" v-if="notTitle === true">
+      <div v-for="item in topTitle" :key="item.title">
+        <div :style="{'background':item.color}"></div>{{item.title}}</div>
+    </div>
   <el-form-item label="异常信息" class="form-item" :class="{'notTitle': notTitle === true}">
+    <div class="result-top haveTitle" v-if="!notTitle">
+      <div v-for="item in topTitle" :key="item.title">
+        <div :style="{'background':item.color}"></div>{{item.title}}</div>
+    </div>
     <div class="unusual-list" v-if="reportAbnormalListNew && reportAbnormalListNew.length">
       <el-tag
               class="unusual-tag" :class="'unusual-tag' + it.dangerLevel"
@@ -27,11 +35,37 @@
 <script>
 export default {
   name: 'disease',
-  props: ['reportAbnormalList', 'notTitle'],
+  props: ['reportAbnormalList', 'notTitle'], // notTitle是否展示标题 用于与个人管理中心区分
   data() {
     return {
       form: [],
       reportAbnormalListNew: [],
+      topTitle: [
+        {
+          color: '#36BF2F',
+          title: '一般',
+        },
+        {
+          color: '#3154AC',
+          title: '轻度',
+        },
+        {
+          color: '#806CE5',
+          title: '中度',
+        },
+        {
+          color: '#FA912B',
+          title: '中重度',
+        },
+        {
+          color: '#F33D21',
+          title: '重度',
+        },
+        {
+          color: '#B4BBC9',
+          title: '未曾匹配',
+        },
+      ],
     };
   },
   watch: {
@@ -75,6 +109,9 @@ export default {
     /deep/ .el-form-item__label {
      display: none;
     }
+    /deep/ .el-form-item__content {
+      border-top: 1px solid #F4F4F6;
+    }
   }
   /deep/ .el-form-item__content {
     border-radius: 0 0 8px 8px;
@@ -85,28 +122,33 @@ export default {
   }
   .unusual-list {
     .unusual-tag {
-      margin-right: 22px;
+      margin-right: 15px;
       height: 48px;
       line-height: 45px;
       background-color: white;
       border-radius: 80px;
-      border-width: 2px;
-      padding: 0 40px 0 26px;
+      border-width: 1px;
+      padding: 0 20px 0 13px;
       margin-bottom: 20px;
       &.unusual-tag1{
         border-color: #36BF2F;
+        color: #36BF2F;
       }
       &.unusual-tag2{
-        border-color: #3154AC;
+        border-color: #24499D;
+        color: #24499D;
       }
       &.unusual-tag3{
         border-color: #806CE5;
+        color: #806CE5;
       }
       &.unusual-tag4{
         border-color: #FA912B;
+        color: #FA912B;
       }
       &.unusual-tag5{
         border-color: #F33D21;
+        color: #F33D21;
       }
       img{
         width: auto;
@@ -115,7 +157,32 @@ export default {
       }
       span{
         font-size: 14px;
-        color: #333333;
+        // color: #333333;
+      }
+    }
+  }
+  .result-top{
+    display: flex;
+    height: 32px;
+    align-items: center;
+    justify-content: flex-start;
+    margin-left: 17px;
+    &.haveTitle{
+      justify-content: center;
+      margin: -10px 0 10px 0;
+    }
+    div{
+      font-size: 12px;
+      color: #333;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      margin-right: 30px;
+      div{
+        width: 7px;
+        height: 7px;
+        border-radius: 30px;
+        margin-right: 5px;
       }
     }
   }

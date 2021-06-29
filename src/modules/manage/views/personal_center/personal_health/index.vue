@@ -57,25 +57,19 @@
                 </div>
                 <div class="addUsers">
                   <p>客户标签：</p>
-                  <div>
+                  <!-- <div>
                     脾气不好<img
                       src="@/assets/images/common/remove.png"
                       alt=""
                     />
+                  </div> -->
+                  <div>
+                    脾气不好
                   </div>
                   <div>
-                    脾气不好<img
-                      src="@/assets/images/common/remove.png"
-                      alt=""
-                    />
+                    脾气不好
                   </div>
-                  <div>
-                    脾气不好<img
-                      src="@/assets/images/common/remove.png"
-                      alt=""
-                    />
-                  </div>
-                  <div class="addtags">+</div>
+                  <!-- <div class="addtags">+</div> -->
                 </div>
               </div>
               <div class="wlall-right">
@@ -329,7 +323,7 @@ export default {
         { name: '体检报告', active: 2 },
         { name: '问卷量表', active: 3 },
         { name: '就医记录', active: 4 },
-        { name: '检查记录', active: 5 },
+        { name: '单项检查', active: 5 },
         { name: '用药记录', active: 6 },
         { name: '健康自测', active: 7 },
         { name: '个人健康报告', active: 8 },

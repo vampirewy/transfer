@@ -10,24 +10,15 @@
         <div class="formSearchTitle" style="font-size: 14px">
           <span class="dianLv"></span>异常信息
         </div>
-        <abnormal
-          :questionLifestyle="form.questionLifestyle"
-          style="margin-left: 10px"
-        ></abnormal>
+        <disease :reportAbnormalList="form.reportAbnormalList" :notTitle="true"></disease>
         <div class="formSearchTitle" style="font-size: 14px">
           <span class="dianLv"></span>生活方式
         </div>
-        <lift-style
-          :clientId="$route.params.id"
-          style="margin-left: 10px"
-        ></lift-style>
+        <lift-style :questionLifestyle="form.questionLifestyle"></lift-style>
         <div class="formSearchTitle" style="font-size: 14px">
           <span class="dianLv"></span>慢性病风险评估
         </div>
-        <risk-assess
-          style="margin-left: 10px"
-           :clientId="$route.params.id"
-        ></risk-assess>
+        <risk-assess style="margin-left: 10px" :assessList="assessList"></risk-assess>
         <div class="formSearchTitle" style="font-size: 14px">
           <span class="dianLv"></span>危险因素
         </div>

@@ -4,7 +4,7 @@
       <div class="formSearchTitle">
         <span class="dianLves"
           ><img src="@/assets/images/common/titleLeft.png" alt="" /></span
-        >检查记录
+        >单项检查
       </div>
       <div class="follow-plan">
         <div class="divRightTitleDiv">
@@ -14,13 +14,13 @@
                     size="small"
                     style="margin: 16px 0"
                     @click="handleAdd"
-                    v-if="getAccess('physical_examination_report_add')"
+                    v-if="getAccess('inspection_index_add')"
             ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
             <el-button
               size="small"
               class="btn-new btnDel"
               @click="handleDelete"
-              v-if="getAccess('physical_examination_report_batch_delete')"
+              v-if="getAccess('inspection_index_deleted')"
               ><img src="@/assets/images/common/delBtn.png" />删除</el-button
             >
           </div>
@@ -33,8 +33,8 @@
         >
           <el-table-column type="selection" width="40"></el-table-column>
           <el-table-column
-            prop="clientName"
-            label="随访日期"
+            prop="inspectionNo"
+            label="检查单号"
             show-overflow-tooltip
           >
             <!-- <template slot-scope="scope">
@@ -42,8 +42,8 @@
         </template> -->
           </el-table-column>
           <el-table-column
-            prop="gridName"
-            label="随访形式"
+            prop="inspectionOrg"
+            label="检查机构"
             show-overflow-tooltip
           >
             <!-- <template slot-scope="scope">
@@ -51,8 +51,8 @@
         </template> -->
           </el-table-column>
           <el-table-column
-            prop="executePlanWayName"
-            label="随访标题"
+            prop="inspectionDate"
+            label="检查日期"
             show-overflow-tooltip
           >
             <!-- <template slot-scope="scope">
@@ -60,8 +60,8 @@
         </template> -->
           </el-table-column>
           <el-table-column
-            prop="executeTime"
-            label="随访结果"
+            prop="itemNames"
+            label="检查项目"
             show-overflow-tooltip
           >
             <!-- <template slot-scope="scope">
@@ -77,15 +77,15 @@
               <el-button
                 type="text"
                 size="small"
-                @click="handleEdit(scope.row.id)"
-                v-if="getAccess('physical_examination_report_edit')"
+                @click="handleEdit(scope.row)"
+                v-if="getAccess('inspection_index_edit')"
                 >编辑</el-button
               >
               <el-button type="text" size="small">|</el-button>
               <el-button
                 type="text"
                 size="small"
-                @click="handleDetail(scope.row.id)"
+                @click="handleDetail(scope.row)"
                 v-if="getAccess('physical_examination_report_view')"
                 >查看</el-button
               >
@@ -112,52 +112,47 @@ export default {
   data() {
     return {
       tableData: [
-        {
-          clientName: '2020-10-01',
-          gridName: '我是名称',
-          executeTime: '我是标题',
-          executePlanWayName: '我是提',
-        },
-        {
-          clientName: '2020-10-01',
-          gridName: '我是名称',
-          executeTime: '我是标题',
-          executePlanWayName: '我是提示啊我是提示',
-        },
-        {
-          clientName: '2020-10-01',
-          gridName: '我是名称',
-          executeTime: '我是标题',
-          executePlanWayName: '我是提示啊我是提示',
-        },
-        {
-          clientName: '2020-10-01',
-          gridName: '我是名称',
-          executeTime: '我是标题',
-          executePlanWayName: '我是提示啊我是提示',
-        },
-        {
-          clientName: '2020-10-01',
-          gridName: '我是名称',
-          executeTime: '我是标题',
-          executePlanWayName: '我是提示啊我是提示',
-        },
       ],
+      formData: {
+        keywords: '',
+        startTime: '',
+        endTime: '',
+        clientGrid: '',
+        gender: '',
+        pageNo: 1,
+        pageSize: 15,
+        clientId: this.$route.params.id,
+      },
       currentPage: 1,
       total: 0,
       multipleSelection: [],
     };
   },
   mounted() {
-    // this.getImportantIndex();
+    this.queryList();
   },
   methods: {
+    queryList() {
+      // if (!this.checkRangeDate()) {
+      //   return false;
+      // }
+      this.$api.medicalHistoryInterface
+        .singleinspectionPageList({ ...this.formData })
+        .then((res) => {
+          const { data } = res;
+          if (data) {
+            const result = data.data || {};
+            this.tableData = result.data || [];
+            this.total = result.total || 0;
+          }
+        });
+    },
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
     handleAdd() {
       this.$router.push({
-        path: '/report_edit',
+        path: '/inspection_index_add',
         query: {
           id: '',
         },
@@ -189,34 +184,32 @@ export default {
         },
       )
         .then(() => {
-          this.$api.reportInterface
-            .batchRemove({
-              reportIdList: list,
-            })
+          this.$api.medicalHistoryInterface
+            .singleinspectionDelete(list)
             .then(({ data }) => {
               if (data.success) {
                 this.$message.success('操作成功');
-                this.fetch();
+                this.queryList();
               }
             });
         })
         .catch(() => {});
     },
-    handleEdit(id) {
-      const getid = id;
+    handleEdit(row) {
+      this.currentId = '';
       this.$router.push({
-        path: '/report_edit',
+        path: '/inspection_index_add',
         query: {
-          id: getid,
+          id: row.id,
         },
       });
     },
-    handleDetail(id) {
-      const getid = id;
+    handleDetail(data) {
+      this.currentId = data.id;
       this.$router.push({
-        path: '/report_detail',
+        path: '/inspection_index_info',
         query: {
-          id: getid,
+          id: data.id,
         },
       });
     },

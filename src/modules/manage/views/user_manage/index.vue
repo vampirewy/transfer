@@ -259,7 +259,7 @@
                 <span style="color:#36BF2F;">{{ scope.row.annexTotal || '0'}}</span>
               </template>
             </el-table-column>
-            <el-table-column label="是否启用" prop="state">
+            <!-- <el-table-column label="是否启用" prop="state">
               <template slot-scope="scope">
                 <el-switch
                   v-model="scope.row.state "
@@ -270,7 +270,7 @@
                   >
                 </el-switch>
               </template>
-            </el-table-column>
+            </el-table-column> -->
             <!-- <el-table-column label="附件" prop="attachment">
               <template slot-scope="scope">
                 <div
@@ -595,42 +595,42 @@ export default {
       });
     },
 
-    changeStatus({ row = {} }, status) {
-      const setRow = row;
-      this.$api.userManagerInterface.editUserStatus({
-        id: setRow.id,
-        state: status,
-      }).then(({ data }) => {
-        if (data.code === 200) {
-          this.$message.success('操作成功');
-          setRow.state = status;
-        }
-      });
-      // this.$confirm(
-      // `<div class="delete-text-content"><img class="delete-icon"
-      // src="${deleteIcon}"/><span>您确定要改变该病人状态吗？</span></div>`,
-      //   '提示',
-      //   {
-      //     dangerouslyUseHTMLString: true,
-      //     confirmButtonText: '确定',
-      //     cancelButtonText: '取消',
-      //     customClass: 'message-box-customize',
-      //     showClose: true,
-      //   },
-      // ).then(() => {
-      //   this.$api.userManagerInterface
-      //     .editUserStatus({
-      //       id: setRow.id,
-      //       state: status,
-      //     })
-      //     .then(({ data }) => {
-      //       if (data.code === 200) {
-      //         this.$message.success('操作成功');
-      //         setRow.state = status;
-      //       }
-      //     });
-      // });
-    },
+    // changeStatus({ row = {} }, status) {
+    //   const setRow = row;
+    //   this.$api.userManagerInterface.editUserStatus({
+    //     id: setRow.id,
+    //     state: status,
+    //   }).then(({ data }) => {
+    //     if (data.code === 200) {
+    //       this.$message.success('操作成功');
+    //       setRow.state = status;
+    //     }
+    //   });
+    //   this.$confirm(
+    //   `<div class="delete-text-content"><img class="delete-icon"
+    //   src="${deleteIcon}"/><span>您确定要改变该病人状态吗？</span></div>`,
+    //     '提示',
+    //     {
+    //       dangerouslyUseHTMLString: true,
+    //       confirmButtonText: '确定',
+    //       cancelButtonText: '取消',
+    //       customClass: 'message-box-customize',
+    //       showClose: true,
+    //     },
+    //   ).then(() => {
+    //     this.$api.userManagerInterface
+    //       .editUserStatus({
+    //         id: setRow.id,
+    //         state: status,
+    //       })
+    //       .then(({ data }) => {
+    //         if (data.code === 200) {
+    //           this.$message.success('操作成功');
+    //           setRow.state = status;
+    //         }
+    //       });
+    //   });
+    // },
     getUserList() {
       this.$api.userManagerInterface
         .fetchUserList(Object.assign(this.params, this.formData))

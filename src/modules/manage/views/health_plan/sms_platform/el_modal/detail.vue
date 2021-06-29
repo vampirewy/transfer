@@ -38,7 +38,7 @@
                           slot="reference"
                           disabled
                           v-model="form.smsName"
-                          placeholder="请选择客户">
+                          placeholder="请选择短信模板">
                     <i :class="`el-icon-arrow-${popoverStatus ? 'up' : 'down'}`" slot="suffix"></i>
                   </el-input>
                 </el-popover>
