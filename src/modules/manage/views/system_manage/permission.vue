@@ -55,6 +55,9 @@ export default {
   watch: {
     data(newValue) {
       this.$refs.tree.setCheckedKeys(newValue); // 编辑的时候设置，查看放在加载菜单完后设置
+      console.log('data 变化了');
+      console.log(newValue);
+      this.menuList();
       /* if (this.disabled) {
         this.filterTree(newValue);
       }
@@ -88,7 +91,7 @@ export default {
     },
   },
   mounted() {
-    this.menuList();
+    // this.menuList();
   },
   methods: {
     menuList() {
@@ -102,6 +105,7 @@ export default {
           console.log(JSON.parse(JSON.stringify(ACCESS)));
           this.permission = result.synthesisMenuList;
           if (this.disabled) {
+            console.log(this.data);
             this.filterTree(this.data); // 查看的情况下，筛选出选中的
           }
           this.setSelectAll();
