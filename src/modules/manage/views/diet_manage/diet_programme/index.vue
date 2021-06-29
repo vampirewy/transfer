@@ -230,7 +230,7 @@
       ></el-pagination>
     </template>
     <template v-else>
-      <diet-form :id="id" :type="Type"></diet-form>
+      <diet-form :id="id" :type="Type" :InfoType="InfoType"></diet-form>
     </template>
   </div>
 </template>
@@ -269,6 +269,7 @@ export default {
       },
       id: '',
       Type: '', // 是否是 查看 编辑 新增
+      InfoType: '', // 个人中心新增
       // pickerStartTime: {
       //   disabledDate: (time) => {
       //     if (this.form.endTime) {
@@ -298,7 +299,12 @@ export default {
   // },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
-      vm.viewIndex = 1;
+      if (vm.$route.query.type === 'add') {
+        vm.InfoType = 'InfoType';
+        vm.add();
+      } else {
+        vm.viewIndex = 1;
+      }
       vm.loadData();
     });
   },

@@ -158,7 +158,8 @@
             label-width="80px"
             v-if="type !== 'info'"
           >
-            <div @click="isShowPeopleSelect = true" class="select-mask" v-if="type === 'add'">
+            <div @click="isShowPeopleSelect = true"
+            class="select-mask" v-if="type === 'add' && !clientIds">
               <el-select
                 value=""
                 style="width: 100%"
@@ -186,7 +187,7 @@
             label="已选人员: "
             label-width="80px"
           >
-            <div class="selected-box" v-if="type === 'add'">
+            <div class="selected-box" v-if="type === 'add'  && !clientIds">
               <div class="selected-item" v-for="(item, index) in selectedData" :key="index">
                 <span>{{item.name}}</span>
                 <i class="el-icon-error" @click="selectedDataDelect(index)"></i>
@@ -386,6 +387,10 @@ export default {
       type: String,
       default: '',
     },
+    InfoType: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -425,19 +430,28 @@ export default {
       arrList: [], // 处理后提交的数据
       arrListInfo: [], // 第几天的数据
       dietTemplateMaterial: {}, // 图表数据
+      clientIds: this.$route.query.clientId || '',
     };
   },
   mounted() {
     if (this.type !== 'add') {
-      // this.getDetailList();
       this.HealthInfo();
-      // setTimeout(() => {
-      //   const vm = this;
-      //   vm.Analysis();
-      // }, 500);
+    }
+    if (this.clientIds) {
+      this.getClientUserInfo(this.clientIds);
     }
   },
   methods: {
+    getClientUserInfo(id) {
+      this.$api.userManagerInterface.getDetail(id).then(({ data }) => {
+        if (data.success) {
+          this.clientName = data.data.name;
+          this.clientId = data.data.id;
+          this.selectedData.push(data.data);
+          console.log(this.selectedData, 'asdasdd');
+        }
+      });
+    },
     async HealthInfo() {
       await this.$api.dietRawMaterial
         .clientDietPlanPageHealthInfo(this.pageList)
@@ -590,7 +604,7 @@ export default {
         return this.$message.warning('请选择膳食原则');
       }
       const clientId = [];
-      if (this.$refs.makeRecipes.id === '') {
+      if (this.$refs.makeRecipes.id === '') { // id等于空的时候代表不是新增
         if (this.selectedData.length !== 0) {
           this.selectedData.forEach((val) => {
             clientId.push(val.id);
