@@ -571,9 +571,6 @@ export default {
      */
     async getList() {
       const reqBody = {
-        // executeState: this.form.executeState,
-        // overdueExecuteState: 3,
-        // workbenchSort: 'workbenchSort',
         keywords: this.form.keywords,
         gender: this.form.gender,
         gridId: this.form.gridId,

@@ -451,7 +451,7 @@ export default {
     height: calc(100vh - 97px);
     overflow: hidden;
     position: absolute;
-    top: 125px;
+    top: 110px;
     .main-layout-con {
       height: 100%;
       /*  .tag-nav-wrapper {

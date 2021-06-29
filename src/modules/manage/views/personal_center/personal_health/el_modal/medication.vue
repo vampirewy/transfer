@@ -13,7 +13,7 @@
                     class="btn-new btnAdd"
                     size="small"
                     style="margin: 16px 0"
-                    @click="$router.push('medication_history_add')"
+                    @click="medication_add"
                     v-if="getAccess('medication_history_add')"
             ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
             <el-button
@@ -132,6 +132,14 @@ export default {
     this.queryList();
   },
   methods: {
+    medication_add() {
+      this.$router.push({
+        path: '/medication_history_add',
+        query: {
+          clientId: this.$route.params.id,
+        },
+      });
+    },
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },

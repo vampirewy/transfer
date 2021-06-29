@@ -380,6 +380,7 @@ export default {
         isMain: this.form.isMain,
         state: this.form.state,
         itemName: this.form.itemName,
+        isCompare: this.form.source,
         pageNo: this.table.pageNo,
         pageSize: this.table.pageSize,
       };

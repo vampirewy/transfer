@@ -6,7 +6,7 @@
     <panel-group :formData="homeFindCountData" @toRouterPage="toRouterPage" />
     <el-row :gutter="40" style="margin-left: 0">
       <el-col :span="15" class="echartBody" style="width:96%;height:300px">
-        <div class="rowTitleParent" style="padding-bottom: 5px">
+        <div class="rowTitleParent">
           <!-- <p class="rowTitle" style="margin-left: 0">近15天新增客户趋势（人）</p> -->
           <div class="divTitle">
               <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
@@ -148,7 +148,7 @@
                   <div class="name">客户总数</div>
                 </div>
               </div> -->
-              <div class="pieDiv" style="height:55px">
+              <div class="pieDiv" >
                 <div class="pieDivTips" v-for="(item, index) in intervenePlanPieYList"
                 :key="item.name">
                   <div class="pieDivTipsLeft">
@@ -163,7 +163,7 @@
         </el-row>
   </div>
 </div>
-<div>
+<div style="margin-left:-5px">
   <div class="TabBars">
     <div  :class="Tabactive === 3?'TabBarsNameone':'TabBarsNamesone'"
     @click="TabbarBtn(3)">阳性跟踪</div>
@@ -194,6 +194,13 @@
         </el-table-column>
         <el-table-column label="任务提示" prop="sectionName" max-width="200">
         </el-table-column> -->
+        <template>
+          <div slot="empty">
+            <p>
+              <img src="@/assets/images/noDataLine.png"/>
+            </p>
+          </div>
+        </template>
       </el-table>
       <el-table style="width: 100%;text-align: center" align="center"
       class="openTable"
@@ -214,6 +221,13 @@
         <el-table-column label="任务提示" prop="planContent" max-width="200"
         show-overflow-tooltip>
         </el-table-column>
+        <template>
+          <div slot="empty">
+            <p>
+              <img src="@/assets/images/noDataLine.png"/>
+            </p>
+          </div>
+        </template>
       </el-table>
       <div style="text-align: right">
         <el-pagination
@@ -518,7 +532,7 @@ export default {
   }
 }
 .divTitle{
-  margin: 26px 0 0 0px;
+  // margin: 26px 0 0 0px;
   font-size: 16px;
   font-weight: 600;
   color: #333333;
@@ -620,8 +634,8 @@ export default {
     }*/
     .pieDiv{
       width: 90%;
-      margin-left: 20%;
-      height: 170px;
+      margin-left: 15%;
+      // height: 170px;
       margin-top: 20px;
       overflow-y: auto;
       overflow: hidden;
@@ -632,7 +646,7 @@ export default {
         height: 24px;
         justify-content: space-between;
         align-items: center;
-        width: 36%;
+        width: 50%;
         .pieDivTipsLeft{
           // display: flex;
           align-items: center;
@@ -672,7 +686,8 @@ export default {
     padding:11px 18px 9px 24px;
     font-size: 14px;
     border-radius: 8px 5px 0 0;
-    box-shadow: 0px 6px 24px 0px rgba(14, 37, 87, 0.06);
+    // box-shadow: 0px 6px 24px 0px rgba(14, 37, 87, 0.06);
+    box-shadow:-10px -10px 25px rgba(14, 37, 87, 0.06);
   }
   .TabBarsNameone:after{
     content: '';
@@ -761,7 +776,8 @@ export default {
     padding: 10px 14px 10px 16px;
     font-size: 14px;
     border-radius: 8px 5px 0 0;
-    box-shadow: 0px 6px 24px 0px rgba(14, 37, 87, 0.06);
+    // box-shadow: 0px 6px 24px 0px rgba(14, 37, 87, 0.06);
+    box-shadow:-10px -10px 25px rgba(14, 37, 87, 0.06);
   }
   .TabBarsName:before {
     content: '';
@@ -806,7 +822,7 @@ export default {
 }
 .TabListcss{
   height: 380px;
-  width: 95%;
+  width: 96.5%;
   background: #ffffff;
   box-shadow: 0px 6px 24px 0px rgba(14, 37, 87, 0.06);
   border-radius: 0px 0px 8px 8px;

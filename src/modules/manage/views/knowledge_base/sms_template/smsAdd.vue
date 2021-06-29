@@ -18,9 +18,9 @@
             <el-select v-model="form.smsTypeName" placeholder="请选择当前状态" width="150">
               <el-option
                 v-for="item in smsTypes"
-                :key="item.id"
+                :key="item.name"
                 :label="item.name"
-                :value="item.id"
+                :value="item.name"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -30,9 +30,9 @@
             <el-select v-model="form.ThemeListName" placeholder="请选择当前状态">
               <el-option
                 v-for="item in ThemeList"
-                :key="item.id"
+                :key="item.name"
                 :label="item.name"
-                :value="item.id"
+                :value="item.name"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -200,8 +200,8 @@ export default {
         this.form = {
           result: data.data.content,
           gender: data.data.suitGender,
-          smsTypeName: data.data.categoryId,
-          ThemeListName: String(data.data.themId),
+          smsTypeName: data.data.categoryName,
+          ThemeListName: data.data.themName,
           Crowd: data.data.suitCrowd,
           Season: data.data.suitSeason,
         };

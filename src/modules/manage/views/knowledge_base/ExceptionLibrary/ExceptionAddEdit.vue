@@ -80,7 +80,7 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="推荐科室" prop="doctorNameId">
-            <el-input v-model="form.doctorNameId" placeholder="请输入" ></el-input>
+            <el-input v-model="form.recommendDepartmentName" placeholder="请输入" ></el-input>
           </el-form-item>
           <!-- <el-form-item label="推荐科室" >
             <el-select v-model="doctorNameId" placeholder="请选择当前状态">
@@ -315,6 +315,8 @@ export default {
       this.form.interpret = data.medicalExplain;
       this.form.Reason = data.commonCause;
       this.form.Suggestion = data.advice;
+      this.form.recommendDepartmentName = data.recommendDepartmentName;
+      this.form.recommendInspectName = data.recommendInspectName;
       // this.form.abnormalAlias = data.abnormalAlias.map(it => ({ name: it }));
       // this.list = this.states.map(item => ({ value: `value:${item}`, label: `label:${item}` }));
       // console.log(this.list, '123123');

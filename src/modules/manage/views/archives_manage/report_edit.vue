@@ -4,7 +4,7 @@
       <!-- <div class="title">{{id ? '编辑' : '新增'}}体检信息-基本信息</div> -->
       <div class="form-title">
         <div class="line"></div>
-        <h3 class="name">{{id ? '编辑' : '新增'}}体检信息-基本信息</h3>
+        <h3 class="name">{{id || clientId? '编辑' : '新增'}}体检信息-基本信息</h3>
      </div>
       <el-row>
         <el-col :span="6">
@@ -14,12 +14,12 @@
               placement="bottom-start"
               width="650"
               trigger="click"
-              :disabled="!!id"
+              :disabled="!!id || !!clientId"
               @show="popoverStatus = true"
               @hide="popoverStatus = false">
               <select-user v-if="popoverStatus" @change="handleSelectUser"></select-user>
               <el-input
-                :class="`select-user-trigger ${id ? 'disabled' : ''}`"
+                :class="`select-user-trigger ${id || clientId? 'disabled' : ''}`"
                 slot="reference"
                 disabled
                 v-model="formData.clientName"
@@ -86,6 +86,7 @@ export default {
   data() {
     return {
       id: this.$route.query.id || '',
+      clientId: this.$route.query.clientId || '',
       popoverStatus: false,
       selectUser: null,
       activeName: 'first',
@@ -143,11 +144,26 @@ export default {
   },
   mounted() {
     if (this.id) {
+      console.log(this.id, '平台新增');
       this.fetch(this.id);
       document.title = '编辑体检报告';
     }
+    if (this.clientId) {
+      console.log(this.clientId, '个人新增');
+      this.getClientUserInfo(this.clientId);
+    }
   },
   methods: {
+    getClientUserInfo(id) {
+      this.$api.userManagerInterface.getDetail(id).then(({ data }) => {
+        if (data.success) {
+          this.formData.clientName = data.data.name;
+          this.formData.gender = data.data.gender;
+          this.formData.age = data.data.age;
+          this.formData.cardNo = data.data.cardNo;
+        }
+      });
+    },
     handleSelectUser(data) {
       this.$refs.userPopover.doClose();
       this.popoverStatus = false;
