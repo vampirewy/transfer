@@ -38,6 +38,7 @@
         <span v-else>{{ names }}</span>
         <div class="mask" @click="isShowDishSelect = true"></div>
         <el-dish-select
+          v-if="isShowDishSelect"
           :active.sync="isShowDishSelect"
           :value="ruleForms.dietSortIds"
           @change="handleDishSelect"

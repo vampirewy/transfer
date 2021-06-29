@@ -244,14 +244,13 @@ export default {
       }
     },
     statusMaps(Range) {
-      console.log(Range);
       const arr = Range.split(',');
-      console.log(arr);
       if (arr.length !== 1 || arr[0] < 10) {
         let values = '';
         arr.forEach((val) => {
           values += `${this.statusMap[val]}，`;
         });
+        values = values.substring(0, values.length - 1);
         return values;
       }
       return Range;

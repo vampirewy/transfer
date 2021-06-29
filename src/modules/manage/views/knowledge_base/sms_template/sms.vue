@@ -48,7 +48,7 @@
     <div class="searchCondition">
       <div class="searchLeft">
         <div class="searchInputFormItem">
-          <el-input placeholder="内容" v-model="formData.keyWord">
+          <el-input placeholder="内容" v-model="formData.content">
           </el-input>
           <span class="searchBtnImgSpan" @click="search(1)">
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
@@ -204,15 +204,17 @@
         </el-table-column>
         <el-table-column prop="suitGender" label="适宜性别" min-width="100px">
           <template slot-scope="scope">
-            <span>{{scope.row.suitGender | getResultGender}}</span>
+            <span>{{
+              scope.row.suitGender === 1 ? '男' :scope.row.suitGender === 2?'女': '不限'
+              }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="适宜人群" prop="suitSeason">
+        <el-table-column label="适宜人群" prop="suitCrowd">
           <template slot-scope="scope">
-            <span v-if="scope.row.suitSeason === 0">不限</span>
-            <span v-if="scope.row.suitSeason === 1">成人</span>
-            <span v-if="scope.row.suitSeason === 2">老人</span>
-            <span v-if="scope.row.suitSeason === 3">少儿</span>
+            <span v-if="scope.row.suitCrowd === 0">不限</span>
+            <span v-if="scope.row.suitCrowd === 1">成人</span>
+            <span v-if="scope.row.suitCrowd === 2">老人</span>
+            <span v-if="scope.row.suitCrowd === 3">少儿</span>
           </template>
         </el-table-column>
         <!-- <el-table-column prop="clientGridName" label="人员类别" show-overflow-tooltip>
@@ -225,7 +227,7 @@
             <span>{{ scope.row.lifeStyleLvName | getResult}}</span>
           </template>
         </el-table-column> -->
-        <el-table-column prop="suitCrowd" label="适宜季节" show-overflow-tooltip>
+        <el-table-column prop="suitSeason" label="适宜季节" show-overflow-tooltip>
           <template slot-scope="scope">
             <span v-if="scope.row.suitSeason === 0">不限</span>
             <span v-if="scope.row.suitSeason === 1">春</span>
@@ -326,7 +328,7 @@ export default {
       lifeStyleList: [], // 生活方式
       questionFromList: [], // 问卷来源
       formData: {
-        keyWord: '',
+        content: '',
         suitGender: '', // 适宜性别
         suitCrowd: '', // 适宜类别
         suitSeason: '', // 适宜季节
@@ -397,7 +399,7 @@ export default {
     },
     reset() {
       this.params.pageNo = 1;
-      this.formData.keyWord = '';
+      this.formData.content = '';
       this.formData.suitGender = '';
       this.formData.suitCrowd = '';
       this.formData.suitSeason = '';

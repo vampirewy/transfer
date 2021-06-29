@@ -118,10 +118,10 @@
           <el-form-item label="危险分类" prop="riskType" >
             <el-select v-model="form.riskType" placeholder="请选择当前状态" width="150">
               <el-option
-                v-for="item in resultOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                v-for="item in DangerTypeList"
+                :key="item.paramValue"
+                :label="item.name"
+                :value="item.paramValue"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -201,7 +201,7 @@
               v-model="form.advice"
               :rows="5"
               placeholder="请输入"
-              :maxlength="4000"
+              :maxlength="300"
               show-word-limit
             ></el-input>
           </el-form-item>
@@ -253,6 +253,7 @@ export default {
         riskType: '',
         orgCode: '',
       },
+      DangerTypeList: [],
       options: {
         inDate: {
           disabledDate: (cur) => {
@@ -322,8 +323,13 @@ export default {
         // };
       });
     }
+    this.getDangerTypeList();
   },
   methods: {
+    async getDangerTypeList() {
+      const { data } = await this.$api.healthMonitorInterface.getDangerType();
+      this.DangerTypeList = data.data;
+    },
     handleStartDateChange() {
       if (this.form.medicalType === 1 && this.form.inDate) {
         this.form.outDate = this.form.inDate;

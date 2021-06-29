@@ -191,11 +191,11 @@
                 </span>
           </template>
         </el-table-column>
-        <el-table-column prop="gender" label="其他名称" min-width="100px">
+        <!-- <el-table-column prop="gender" label="其他名称" min-width="100px">
           <template slot-scope="scope">
             <span>{{scope.row.gender | getResultGender}}</span>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column label="类型" prop="abnormalTypeName">
           <template slot-scope="scope">
             <span>{{ scope.row.abnormalTypeName | getResult}}</span>
@@ -216,14 +216,15 @@
             <span>{{ scope.row.medicalLimitName | getResult}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="推荐科室" prop="questionDate" min-width="100" show-overflow-tooltip>
+        <el-table-column label="推荐科室" prop="recommendDepartmentName" min-width="100"
+        show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{ scope.row.questionDate | getResultDate}}</span>
+            <span>{{ scope.row.recommendDepartmentName | getResultDate}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="推荐检查" prop="sourceName" show-overflow-tooltip>
+        <el-table-column label="推荐检查" prop="recommendInspectName" show-overflow-tooltip>
           <template slot-scope="scope">
-            {{ scope.row.sourceName | getResult}}
+            {{ scope.row.recommendInspectName | getResult}}
           </template>
         </el-table-column>
         <!-- <el-table-column prop="gender" label="份数" width="60px">
@@ -381,6 +382,7 @@ export default {
         level: this.form.source, // 重要性 ，传下拉列表接口的值，如1，2，3
         state: this.form.gender, // 状态，0不启用 1启用
         type: this.form.abnormalType, // 异常类型，传下拉列表接口的值，如1，2，3
+        medicalLimit: this.form.medicalLimitListId,
         pageNo: this.params.pageNo,
         pageSize: this.params.pageSize,
       };
@@ -413,6 +415,7 @@ export default {
       this.form.abnormalType = '';
       this.form.medicalLimitListId = '';
       this.table.currentPage = 1;
+      this.form.medicalLimitListId = '';
       this.getList();
     },
     search(current = 1) {

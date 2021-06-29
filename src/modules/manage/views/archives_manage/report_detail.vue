@@ -67,7 +67,7 @@
             <el-table-column prop="attention" label="是否关注指标" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>
-                  {{scope.row.attention === '2' ? '是' : (scope.row.attention === '0' ? '否' : '')}}
+                  {{scope.row.attention === '1' ? '是' : (scope.row.attention === '0' ? '否' : '')}}
                 </span>
               </template>
             </el-table-column>
@@ -319,7 +319,7 @@ export default {
       &.level3:after {
         background: #6C6CE5;
       }
-      &.level4.abnormal-level {
+      &.level4:after {
         background: #E6B058;
       }
       &.level5:after {

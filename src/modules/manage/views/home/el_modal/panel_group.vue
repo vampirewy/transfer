@@ -129,13 +129,14 @@ export default {
       background: url(../../../../../assets/images/homeHover.png);
       background-repeat: no-repeat;
       background-position: right center;
+      // transition: all 1s ease-out;
       // background-size: 25px;
     }
     .card-panel-icon-wrapper {
       // width: 60px;
       margin-left: 20px;
       margin-right: 18px;
-      transition: all 0.38s ease-out;
+      // transition: all 0.38s ease-out;
       border-radius: 6px;
     }
 

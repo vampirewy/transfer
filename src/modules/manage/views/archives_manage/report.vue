@@ -1,52 +1,5 @@
 <template>
   <div class="report-page">
-    <!-- <report-edit
-      v-if="view === 2"
-      :id="currentId"
-      @close="handleClose">
-    </report-edit>
-    <report-detail
-      v-else-if="view === 3"
-      :id="currentId"
-      @close="handleClose">
-    </report-detail>
-    <query-page v-else @reset="reset" @search="search()"> -->
-      <!-- slot="left" -->
-      <!-- <template >
-        <search>
-          <div class="searchInputFormItem">
-            <el-input v-model="formData.keywords" placeholder="姓名/手机号/企业单位"></el-input>
-            <span class="searchBtnImgSpan" @click="search()">
-              <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
-            </span>
-          </div>
-        </search>
-        <query-filter>
-          <el-select placeholder="性别" v-model="formData.gender" clearable>
-            <el-option label="男" :value="1"></el-option>
-            <el-option label="女" :value="2"></el-option>
-          </el-select>
-          <el-input placeholder="体检编号" v-model="formData.reportNo"></el-input>
-          <div class="filter-item-title">体检日期</div>
-          <el-date-picker
-            v-model="formData.minReportDate"
-            type="date"
-            format="yyyy-MM-dd"
-            value-format="yyyy-MM-dd"
-            :picker-options="pickerStartTime"
-            placeholder="选择开始时间">
-            </el-date-picker>
-          <el-date-picker
-            v-model="formData.maxReportDate"
-            type="date"
-            format="yyyy-MM-dd"
-            value-format="yyyy-MM-dd"
-            :picker-options="pickerEndTime"
-            placeholder="选择结束时间">
-          </el-date-picker>
-        </query-filter>
-      </template> -->
-       <!-- slot="right" -->
       <template>
         <div>
           <div class="table-operate-buttonss" style="margin-top: -8px">
@@ -465,7 +418,8 @@ export default {
       this.$router.push({
         path: '/report_edit',
         query: {
-          id: this.currentId,
+          clientId: '1408304870765432833',
+          // id: this.currentId,
         },
       });
     },

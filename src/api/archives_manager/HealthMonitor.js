@@ -33,6 +33,10 @@ class HealthMonitorInterface extends BaseModule {
   getQuickListBloodSugar() {
     return this.get('/system_param_value/ZY004');
   }
+  // 危险分类数据
+  getDangerType() {
+    return this.get('/system_param_value/HM024');
+  }
   // 血压列表
   getBPList(params) {
     return this.post('/client_health_data/blood_pressure/list_page', params);
