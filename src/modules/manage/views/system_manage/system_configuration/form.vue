@@ -30,7 +30,7 @@
       </el-row>
       <div class="wltitle">
         <div class="quan"></div>
-        <span>问卷、膳食方案、运动方案取前后</span>
+        <span>问卷、膳食方案取前后</span>
         <el-input
           type="text"
           v-model="staffForm.mobileNo"
@@ -41,7 +41,7 @@
       </div>
       <el-row>
         <el-col :span="24">
-          <el-form-item label="是否对比">
+          <el-form-item label="报告是否审核">
             <el-switch v-model="value" active-color="#13ce66"> </el-switch>
           </el-form-item>
         </el-col>
@@ -245,9 +245,9 @@
         </el-col>
       </el-row>
       <div class="form-buttons">
-        <el-button size="small" class="cancelBtn" @click="$emit('cancel')">{{
+        <!-- <el-button size="small" class="cancelBtn" @click="$emit('cancel')">{{
           detail ? '返回' : '取消'
-        }}</el-button>
+        }}</el-button> -->
         <el-button
           size="small"
           v-if="!detail"

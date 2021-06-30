@@ -135,7 +135,7 @@ export default {
   methods: {
     returnes() {
       this.getCommentDetail();
-      this.$emit('close');
+      // this.$emit('close');
     },
     getCommentDetail() {
       this.$api.systemManageInterface
@@ -167,7 +167,7 @@ export default {
         )
         .then((response) => {
           if (response.data.rc === 0) {
-            // this.$emit('close');
+            this.$emit('close');
             this.$message.success('操作成功');
           } else {
             this.$message.error('网络异常！');

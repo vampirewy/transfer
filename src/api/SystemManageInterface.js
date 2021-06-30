@@ -71,6 +71,10 @@ class SystemManageInterface extends BaseModule {
   onoffRole(data) {
     return this.post('/role/on_of', data);
   }
+  // 机构信息获取
+  Roledetail(data) {
+    return this.post('/organ_info/get_detail', data);
+  }
   // 保存机构信息
   saveOrganInfo(data) {
     return this.post('/organ_info/save_organ_info', data);

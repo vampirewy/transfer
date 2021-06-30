@@ -2,10 +2,10 @@
   <div class="create-edit">
     <div class="form-title">
       <h3 class="name">
-        团报配置
+        参数排序
         <div class="titleBiao"></div>
       </h3>
-      <div class="titleRight">恢复默认</div>
+      <!-- <div class="titleRight">恢复默认</div> -->
     </div>
     <div class="bottom">
       <el-table class="openTable" :data="tableData" align="center">
