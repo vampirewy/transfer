@@ -8,7 +8,7 @@
     <div class="searchCondition">
       <div class="searchLeft">
         <div class="searchInputFormItem">
-          <el-input placeholder="姓名/编号/科室" v-model="form.keywords">
+          <el-input placeholder="姓名/订单编号/科室" v-model="form.keywords">
           </el-input>
           <span class="searchBtnImgSpan" @click="onSearch">
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
@@ -144,7 +144,7 @@
               <span class="warnStatus1" v-if="scope.row.state === 1">
                 已取消
               </span>
-              <span v-if="scope.row.state === 0">
+              <span class="warnStatus0" v-if="scope.row.state === 0">
                 待确认
               </span>
         </template>
@@ -498,6 +498,9 @@ export default {
     text-align: right;
   }
 }
+ .warnStatus0{
+   color: #F33D21;
+ }
   .warnStatus1{
     color: #B4BBC9;
   }

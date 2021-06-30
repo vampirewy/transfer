@@ -149,7 +149,7 @@
               <div class="pieDivTipsLeft">
                 <p class="dian" :style="{'background-color': dianPieColorList[index]}"></p>
               </div>
-              <p class="dianNum">{{item}}</p>
+              <p class="dianNum">{{item || '-'}}</p>
             </div>
           </div>
         </div>
