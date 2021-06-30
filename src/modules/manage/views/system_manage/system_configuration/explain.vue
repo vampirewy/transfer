@@ -2,7 +2,7 @@
   <el-dialog
     class="comment-dialog"
     :modal-append-to-body="false"
-    title="介绍及说明-肺癌患病风险评估"
+    :title="`介绍及说明-${form.name}患病风险评估`"
     top="3vh"
     :visible="true"
     :before-close="() => $emit('close')"

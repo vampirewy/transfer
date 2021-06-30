@@ -20,7 +20,7 @@
           <div class="searchCondition">
           <div class="searchLeft">
           <div class="searchInputFormItem">
-            <el-input placeholder="姓名/手机号/企业单位" v-model="form.keywords">
+            <el-input placeholder="输入企业名称" v-model="form.keywords">
             </el-input>
             <span class="searchBtnImgSpan" @click="onSearch">
                 <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>

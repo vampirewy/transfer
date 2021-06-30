@@ -46,7 +46,9 @@
             <el-form-item label="适宜年龄">
               <el-input
                 v-model="formData.minAge"
-                maxLength="30"
+                oninput="if(value>150)value=150;
+              if(value<0)value=0;
+              "
                 placeholder="输入最小年龄"
               >
               </el-input>
@@ -57,8 +59,10 @@
           </el-col>
           <el-col :span="10">
             <el-input
+              oninput="if(value>150)value=150;
+              if(value<0)value=0;
+              "
               v-model="formData.maxAge"
-              maxLength="30"
               placeholder="输入最大年龄"
             >
             </el-input>
@@ -273,6 +277,10 @@ export default {
           name: '女',
           id: 2,
         },
+        {
+          name: '不限',
+          id: 0,
+        },
       ],
       popoverStatus: false,
       newList: [],
@@ -305,7 +313,6 @@ export default {
     },
     // 添加
     addSportTemplates() {
-      console.log(this.selectTemplates, 111, this.formData.tagLists);
       if (this.selectTemplates && this.selectTemplates.length > 0) {
         this.selectTemplates.forEach((element) => {
           element.modelCode = this.id.code;
@@ -367,7 +374,7 @@ export default {
           this.formData.tagLists = data.data.abnormalScoreDtos;
           this.formData.tagListss = data.data.mustItemDtos;
         });
-      this.title = `评估设置${this.id.name}患病风险评估`;
+      this.title = `评估设置-${this.id.name}患病风险评估`;
     },
     // 点击编辑
     Addoperates(index) {

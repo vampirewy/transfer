@@ -244,6 +244,17 @@
             {{ scope.row.sourceName | getResult}}
           </template>
               </el-table-column>
+              <el-table-column label="查看报告" align="center" width="60">
+                <template slot-scope="scope">
+                  <el-button
+                  v-if="scope.row.assessReportName"
+                    type='text'
+                    size="small"
+                    @click="openPdf(scope.row)">
+                查看</el-button>
+                <span v-else>-</span>
+                </template>
+              </el-table-column>
               <el-table-column label="操作" align="center" width="60">
                 <template slot-scope="scope">
                   <el-button
@@ -422,9 +433,12 @@
               <el-table-column label="操作" align="center" width="60">
                 <template slot-scope="scope">
                   <el-button
+                  v-if="scope.row.assessReportName"
                     type='text'
                     size="small"
-                    @click="openPdf(scope.row)">查看</el-button>
+                    @click="openPdf(scope.row)">
+                查看</el-button>
+                <span v-else>-</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -510,6 +524,17 @@
               <el-table-column label="填写日期" prop="questionDate"
               min-width="90" show-overflow-tooltip>
               </el-table-column>
+              <el-table-column label="查看报告" align="center" width="60">
+                <template slot-scope="scope">
+                  <el-button
+                  v-if="scope.row.assessReportName"
+                    type='text'
+                    size="small"
+                    @click="openPdf(scope.row)">
+                查看</el-button>
+                <span v-else>-</span>
+                </template>
+              </el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
             <el-button
@@ -576,6 +601,7 @@ export default {
   },
   data() {
     return {
+      pdf_url: process.env.api.pdf_url,
       isTrue: true,
       tabbor: ['生活方式评估', '心理评估', '中医体质评估'],
       Tabactive: 0,
@@ -709,7 +735,7 @@ export default {
     },
     // 查看pdf
     openPdf(data) {
-      window.open(data.assessReportName);
+      window.open(this.pdf_url + data.assessReportName);
     },
     handleMatch(data) {
       this.view = 4;
