@@ -36,7 +36,7 @@
           <div class="searchLeft">
             <div class="searchInputFormItem">
               <el-input
-                placeholder="姓名"
+                placeholder="姓名/客户编号"
                 v-model="forms.clientName"
               >
               </el-input>

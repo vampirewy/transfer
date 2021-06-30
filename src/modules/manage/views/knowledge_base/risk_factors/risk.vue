@@ -82,7 +82,7 @@
         <!-- </el-table-column> -->
         <el-table-column prop="riskType" label="分类" min-width="80px">
           <template slot-scope="scope">
-            <span>{{scope.row.riskType || '-'}}</span>
+            <span>{{ statusMap[scope.row.riskType] || '-'}}</span>
           </template>
         </el-table-column>
         <!-- <el-table-column label="适宜人群" prop="age">
@@ -207,11 +207,21 @@ export default {
         pageNo: 1,
         pageSize: 15,
       },
+      DangerTypeList: [],
       visible: false,
       current: {},
       params: {
         pageNo: 1,
         pageSize: 15,
+      },
+      statusMap: {
+        1: '饮食',
+        2: '运动',
+        3: '吸烟情况',
+        4: '饮酒情况',
+        5: '心理及睡眠',
+        6: '既往接触史',
+        7: '家族史',
       },
       options: {},
       types: [],
@@ -235,6 +245,7 @@ export default {
     };
   },
   activated() {
+    this.getDangerTypeList();
     // this.getGridList();
     // this.getQuestionFromList();
     // this.getLifeStyleList();
@@ -250,6 +261,10 @@ export default {
     localStorage.removeItem('homeSearchData');
   },
   methods: {
+    async getDangerTypeList() {
+      const { data } = await this.$api.healthMonitorInterface.getDangerType();
+      this.DangerTypeList = data.data;
+    },
     async getGridList() {
       const res = await this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
       const { data } = res.data;

@@ -4,7 +4,7 @@
       <div class="formSearchTitle">
         <span class="dianLves"
           ><img src="@/assets/images/common/titleLeft.png" alt="" /></span
-        >干预记录
+        >随访记录
       </div>
       <div class="follow-plan">
         <!-- <div class="divRightTitleDiv">
@@ -28,40 +28,54 @@
           <el-table-column type="selection" width="40"></el-table-column>
           <el-table-column
             prop="clientName"
-            label="随访日期"
+            label="干预人"
             show-overflow-tooltip
           >
-            <!-- <template slot-scope="scope">
-          <span>{{ scope.row.itemName | getResult}}</span>
-        </template> -->
+            <template slot-scope="scope">
+          <span>{{ scope.row.executeUserName | getResult}}</span>
+        </template>
           </el-table-column>
           <el-table-column
-            prop="gridName"
-            label="随访形式"
-            show-overflow-tooltip
-          >
-            <!-- <template slot-scope="scope">
-          <span>{{ scope.row.itemValue | getResult}}</span>
-        </template> -->
-          </el-table-column>
-          <el-table-column
-            prop="executePlanWayName"
+            prop="planDate"
             label="随访标题"
             show-overflow-tooltip
           >
-            <!-- <template slot-scope="scope">
-          <span>{{ scope.row.refRange | getResult }}</span>
-        </template> -->
+            <template slot-scope="scope">
+          <span>{{ scope.row.executePlanTitle | getResult}}</span>
+        </template>
+          </el-table-column>
+          <el-table-column
+            prop="executePlanWayName"
+            label="随访方式"
+            show-overflow-tooltip
+          >
+            <template slot-scope="scope">
+          <span>{{ scope.row.executePlanWayName | getResult }}</span>
+        </template>
           </el-table-column>
           <el-table-column
             prop="executeTime"
-            label="随访结果"
+            label="执行日期"
             show-overflow-tooltip
           >
-            <!-- <template slot-scope="scope">
-          <span>{{ scope.row.itemUnit | getResult }}</span>
-        </template> -->
+            <template slot-scope="scope">
+          <span>{{ scope.row.executeTime | getResult }}</span>
+        </template>
           </el-table-column>
+          <el-table-column
+            prop="assortLevelName"
+            label="依从度"
+            show-overflow-tooltip
+          >
+            <template slot-scope="scope">
+          <span>{{ scope.row.assortLevelName | getResult }}</span>
+        </template>
+          </el-table-column>
+          <el-table-column prop="pleasedLevelName" label="满意度" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{ scope.row.pleasedLevelName | getResult}}</span>
+              </template>
+            </el-table-column>
           <el-table-column
             prop="executePlanWayName"
             label="操作"
@@ -71,16 +85,8 @@
               <el-button
                 type="text"
                 size="small"
-                @click="handleEdit(scope.row.id)"
-                v-if="getAccess('physical_examination_report_edit')"
-                >编辑</el-button
-              >
-              <el-button type="text" size="small">|</el-button>
-              <el-button
-                type="text"
-                size="small"
-                @click="handleDetail(scope.row.id)"
-                v-if="getAccess('physical_examination_report_view')"
+                @click="handleDetail(scope.row)"
+                v-if="getAccess('visited_record_view')"
                 >查看</el-button
               >
             </template>
@@ -106,46 +112,58 @@ export default {
   data() {
     return {
       tableData: [
-        {
-          clientName: '2020-10-01',
-          gridName: '我是名称',
-          executeTime: '我是标题',
-          executePlanWayName: '我是提',
-        },
-        {
-          clientName: '2020-10-01',
-          gridName: '我是名称',
-          executeTime: '我是标题',
-          executePlanWayName: '我是提示啊我是提示',
-        },
-        {
-          clientName: '2020-10-01',
-          gridName: '我是名称',
-          executeTime: '我是标题',
-          executePlanWayName: '我是提示啊我是提示',
-        },
-        {
-          clientName: '2020-10-01',
-          gridName: '我是名称',
-          executeTime: '我是标题',
-          executePlanWayName: '我是提示啊我是提示',
-        },
-        {
-          clientName: '2020-10-01',
-          gridName: '我是名称',
-          executeTime: '我是标题',
-          executePlanWayName: '我是提示啊我是提示',
-        },
       ],
       currentPage: 1,
       total: 0,
       multipleSelection: [],
+      form: {
+        keywords: '', // 关键字
+        gender: '', // 性别
+        workUnitName: '', // 企业单位
+        planUserId: '',
+        planUserName: '',
+        planDate: '',
+        planWay: '', // 随访方式
+        startTime: '',
+        endTime: '',
+        executeState: '1', // 状态
+        gridId: '', // 客户类型
+        assortLevel: '',
+        pleasedLevel: '',
+      },
+      table: {
+        list: [],
+        totalCount: 0,
+        currentPage: 1,
+        pageSize: 15,
+      },
     };
   },
   mounted() {
-    // this.getImportantIndex();
+    this.getList();
   },
   methods: {
+    async getList() {
+      const reqBody = {
+        keywords: this.form.keywords,
+        gridId: this.form.gridId,
+        gender: this.form.gender,
+        executePlanWay: this.form.planWay,
+        pleasedLevel: this.form.pleasedLevel,
+        assortLevel: this.form.assortLevel,
+        pageNo: this.table.currentPage,
+        pageSize: this.table.pageSize,
+        clientId: this.$route.params.id,
+      };
+      const res = await this.$api.userFollowInterface.getInterveneRecordListPage(
+        reqBody,
+      );
+      const { data } = res.data;
+      if (data) {
+        this.tableData = data.data || [];
+        this.total = data.total;
+      }
+    },
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
@@ -205,13 +223,9 @@ export default {
         },
       });
     },
-    handleDetail(id) {
-      const getid = id;
+    handleDetail(row) {
       this.$router.push({
-        path: '/report_detail',
-        query: {
-          id: getid,
-        },
+        path: `/health_plan/user_follow_do/view/${row.id}`,
       });
     },
   },

@@ -45,7 +45,7 @@ export default {
       tableData: [],
       total: 0,
       currentPage: 1,
-      pageSize: 5,
+      pageSize: 15,
       selected: [],
       selectedData: [],
     };
@@ -120,6 +120,8 @@ export default {
 .sport-template {
   padding: 13px 18px 21px 18px;
   /deep/ .el-table {
+    height: 300px;
+    overflow: auto;
     td, th {
       padding: 10px 0 !important;
     }

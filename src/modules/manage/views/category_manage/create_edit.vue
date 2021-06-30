@@ -35,7 +35,7 @@
             v-model="form.reportName"
             maxlength="30"
             v-if="routeType != 3"
-            style="width: 200px"
+            style="width: 150px"
             placeholder="请输入">
             </el-input>
           </el-form-item>
@@ -43,7 +43,7 @@
             <span  v-if="routeType == 3">{{form.state == 0 ? '否':'是'}}</span>
             <el-select v-model="form.state"
             v-if="routeType != 3"
-            style="width: 200px"
+            style="width:150px"
             placeholder="请选择是否启用">
               <el-option
                 v-for="it in isCompareList"
@@ -53,11 +53,11 @@
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="低危评估：" prop="dangerShow" label-width="83px" style="width:23%">
+          <el-form-item label="低危评估：" prop="dangerShow" label-width="83px" style="width:150px;">
             <span  v-if="routeType == 3">{{form.state == 0 ? '不显示':'显示'}}</span>
             <el-select v-model="form.dangerShow"
             v-if="routeType != 3"
-            style="width: 200px"
+            style="width: 150px"
             placeholder="请选择低危评估">
               <el-option
                 v-for="it in isCompareLists"

@@ -18,7 +18,7 @@
           </el-checkbox-group>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="异常名称" align="center"></el-table-column>
+      <el-table-column prop="itemName" label="异常名称" align="center"></el-table-column>
     </el-table>
     <el-pagination
       layout="prev,pager,next,jumper,total,sizes"
@@ -45,30 +45,37 @@ export default {
       tableData: [],
       total: 0,
       currentPage: 1,
-      pageSize: 5,
+      pageSize: 10,
       selected: [],
       selectedData: [],
+      formData: {
+      },
+      params: {
+        pageNo: 1,
+        pageSize: 10,
+        total: 0,
+      },
     };
   },
   computed: {
     sportTypeMap() {
       const map = {};
       sportTypeList.forEach((item) => {
-        map[item.value] = item.name;
+        map[item.value] = item.itemName;
       });
       return map;
     },
     sportSortMap() {
       const map = {};
       sportSortList.forEach((item) => {
-        map[item.value] = item.name;
+        map[item.value] = item.itemName;
       });
       return map;
     },
     strengthDegreeMap() {
       const map = {};
       strengthDegreeList1.forEach((item) => {
-        map[item.value] = item.name;
+        map[item.value] = item.itemName;
       });
       return map;
     },
@@ -88,24 +95,28 @@ export default {
       }
     },
     handleCurrentChange(page) {
-      this.currentPage = page;
+      this.params.pageNo = page;
       this.queryList();
     },
     handleSizeChange(size) {
-      this.pageSize = size;
+      this.params.pageSize = size;
       this.currentPage = 1;
       this.queryList();
     },
     search() {
-      this.currentPage = 1;
+      this.params.pageNo = 1;
       this.queryList();
     },
     async queryList() {
-      const res = await this.$api.physicalProjectListInterface.pageorganitemlibrary({
-        name: this.name,
-        pageNo: this.currentPage,
-        pageSize: this.pageSize,
-      });
+      const reqBody = {
+        itemName: '',
+        isAssess: '',
+        pageNo: this.params.pageNo,
+        pageSize: this.params.pageSize,
+      };
+      const res = await this.$api.physicalProjectListInterface.systemlistpage(
+        reqBody,
+      );
       const { data } = res.data;
       if (data) {
         this.tableData = data.data || [];
@@ -120,6 +131,8 @@ export default {
 .sport-template {
   padding: 13px 18px 21px 18px;
   /deep/ .el-table {
+    height: 300px;
+    overflow: auto;
     td, th {
       padding: 10px 0 !important;
     }

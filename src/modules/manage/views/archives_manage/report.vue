@@ -80,8 +80,14 @@
               </div>
             </div>
           </div>
-           <div v-if="!isTrue" class="searchCondition" style="width: 80%">
+           <div v-if="!isTrue" class="searchCondition" style="width: 90%">
             <div class="searchLeft" style="padding-left: 5px">
+              <div>
+                <span>参检团队：</span>
+                <el-input placeholder="参检团队" v-model="formData.workUnitName"
+                style="width:140px">
+                </el-input>
+              </div>
               <div>
                 <span>体检日期：</span>
                 <el-date-picker
@@ -140,11 +146,11 @@
                 @click="handleDelete"
                 v-if="getAccess('physical_examination_report_batch_delete')
                 "></operate-button>
-                <operate-button
+                <!-- <operate-button
                 type="editGray"
                 @click="handleeditGray"
                 v-if="getAccess('physical_examination_report_batch_delete')
-                "></operate-button>
+                "></operate-button> -->
             </div>
           </div>
           <div>
@@ -269,7 +275,7 @@
                 align="center"
                 show-overflow-tooltip></el-table-column>
               <el-table-column
-                label="企业单位"
+                label="参检团队"
                 prop="workUnitName"
                 align="center"
                 min-width="100"
@@ -357,6 +363,7 @@ export default {
         minCreateDate: null, // 搜索条件采集时间最小时间
         maxCreateDate: null, // 搜索条件采集时间最大时间
         // reportAbnormalTempId: '', // 临时异常id搜索
+        workUnitName: '', // 参检团队
       },
       params: {
         pageNo: 1, // 页码
@@ -494,6 +501,7 @@ export default {
     },
     reset() {
       this.formData.keywords = '';
+      this.formData.workUnitName = '';
       this.formData.gender = '';
       this.formData.clientGrid = '';
       this.formData.reportState = '';

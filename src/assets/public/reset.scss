@@ -489,6 +489,9 @@ textarea:-ms-input-placeholder {
 .el-input.is-disabled .el-input__icon{
   cursor: default;
 }
+.el-input{
+  font-size: 12px;
+}
 /* 分页 */
 .el-pagination {
   text-align: right;

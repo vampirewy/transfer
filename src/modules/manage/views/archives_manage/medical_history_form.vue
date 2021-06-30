@@ -125,7 +125,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="就医金额" prop="money">
+          <el-form-item label="就医金额">
             <el-input v-model="form.money" placeholder="请输入" :maxlength="300"
             onkeyup="this.value = this.value.replace(/[^\d.]/g,'');"></el-input>
           </el-form-item>
@@ -305,7 +305,7 @@ export default {
         hpi: [{ required: true, message: '现病史不能为空' }],
         complaint: [{ required: true, message: '主诉不能为空' }],
         diagnosis: [{ required: true, message: '诊断不能为空' }],
-        money: [{ required: true, message: '金额不能为空' }],
+        // money: [{ required: true, message: '金额不能为空' }],
         caseNo: [{ required: true, message: '就医编号不能为空' }],
         name: [{ required: true, message: '客户不能为空' }],
         result: [{ required: true, message: '请选择当前状态' }],

@@ -32,19 +32,6 @@
                 :maxlength="30"
               ></el-input>
             </el-form-item>
-          <!-- <el-form-item label="体检库">
-            <el-select
-              v-model="formData.reportTemplateId"
-              @change="templateDetail"
-              placeholder="请选择">
-              <el-option
-                v-for="template in templateList"
-                :key="template.id"
-                :label="template.name"
-                :value="template.id">
-              </el-option>
-            </el-select>
-          </el-form-item> -->
         </el-col>
         <el-col :span="6">
            <el-form-item label="体检日期" prop="reportDate">
@@ -58,16 +45,6 @@
                 style="width: 100%"
               ></el-date-picker>
             </el-form-item>
-          <!-- <el-form-item label="体检库" prop="libraryId">
-            <el-select v-model="formData.libraryId" placeholder="请选择">
-              <el-option
-                v-for="library in libraryList"
-                :key="library.id"
-                :label="library.name"
-                :value="library.id">
-              </el-option>
-            </el-select>
-          </el-form-item> -->
         </el-col>
         <el-col :span="6">
           <el-form-item label="是否总检" prop="reportState">
@@ -81,6 +58,27 @@
             <el-option label="未总检" :value="2" key="2"></el-option>
             </el-select>
           </el-form-item>
+        </el-col>
+        <el-col :span="6">
+            <el-form-item label="参检团队" prop="workUnitName">
+              <el-input
+                v-model="formData.workUnitName"
+                placeholder="请输入"
+                :maxlength="30"
+              ></el-input>
+            </el-form-item>
+        </el-col>
+        <el-col :span="6">
+           <el-form-item label="总检日期" prop="zjDate">
+              <el-date-picker
+                class="end-date"
+                v-model="formData.zjDate"
+                type="date"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                placeholder="请选择"
+                style="width: 100%"
+              ></el-date-picker>
+            </el-form-item>
         </el-col>
       </el-row>
       <div class="divRightTitleDiv">
@@ -336,6 +334,8 @@ export default {
         reportNo: '', // 检查编号
         reportDate: '', // 体检时间
         reportState: '', // 是否总检
+        workUnitName: '', // 参检团队
+        zjDate: '', // 总检日期
       },
       abnormalModalVisible: false,
       abnormalLevelMap: {
@@ -357,6 +357,12 @@ export default {
         ],
         reportState: [
           { required: true, message: '请选择是否总检', trigger: 'blur' },
+        ],
+        zjDate: [
+          { required: true, message: '请选择总检日期', trigger: 'blur' },
+        ],
+        workUnitName: [
+          { required: true, message: '请选择填写参检团队', trigger: 'blur' },
         ],
       },
     };

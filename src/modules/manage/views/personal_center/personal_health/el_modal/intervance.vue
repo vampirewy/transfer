@@ -14,7 +14,7 @@
               size="small"
               class="btn-new btnDel"
               @click="handleDelete"
-              v-if="getAccess('physical_examination_report_batch_delete')"
+              v-if="getAccess('wait_visit_plan_batch_delete')"
               ><img src="@/assets/images/common/delBtn.png" />删除</el-button
             >
           </div>
@@ -81,17 +81,17 @@
               <el-button
                 type="text"
                 size="small"
-                @click="handleEdit(scope.row.id)"
-                v-if="getAccess('physical_examination_report_edit')"
+                @click="handleEdit(scope.row)"
+                v-if="getAccess('wait_visit_plan_edit')"
                 >编辑</el-button
               >
               <el-button type="text" size="small">|</el-button>
               <el-button
                 type="text"
                 size="small"
-                @click="handleDetail(scope.row.id)"
-                v-if="getAccess('physical_examination_report_view')"
-                >查看</el-button
+                @click="handleDetail(scope.row)"
+                v-if="getAccess('wait_visit_plan_exec')"
+                >执行</el-button
               >
             </template>
           </el-table-column>
@@ -110,8 +110,12 @@
 </template>
 <script>
 import deleteIcon from '~/src/assets/images/deleteicon.png';
+import InterventionAddMdl from './intervention_add_mdl.vue';
 export default {
   name: 'InportantIndex',
+  components: {
+    InterventionAddMdl,
+  },
   props: ['clientId'],
   data() {
     return {
@@ -188,35 +192,45 @@ export default {
         },
       )
         .then(() => {
-          this.$api.reportInterface
-            .batchRemove({
-              reportIdList: list,
-            })
+          this.$api.userFollowInterface
+            .deleteSomeFollowplanDel(
+              list,
+            )
             .then(({ data }) => {
               if (data.success) {
                 this.$message.success('操作成功');
-                this.fetch();
+                this.getList();
               }
             });
         })
         .catch(() => {});
     },
-    handleEdit(id) {
-      const getid = id;
-      this.$router.push({
-        path: '/report_edit',
-        query: {
-          id: getid,
+    handleEdit(row) {
+      const Row = row;
+      Row.planTime = Row.planDate;
+      this.$jDynamic.show({// 有planId的都是自己编辑的
+        component: 'InterventionAddMdl',
+        data: {
+          modalType: 2,
+          addType: '2', // 个人创建 / 批量创建
+          editType: 2, // 计划重新编辑
+          modalTitle: '编辑',
+          // planId: this.multipleSelection[0].planId,
+          // id: this.checkPlanList[0].id,
+          propsData: Row,
+          confirmfunc: async (value) => {
+            const Value = value;
+            Value.id = Row.id;
+            Value.clientId = Row.clientId;
+            this.editUserFollow(Value);
+          },
         },
+        render: h => h(InterventionAddMdl),
       });
     },
-    handleDetail(id) {
-      const getid = id;
+    handleDetail(row) {
       this.$router.push({
-        path: '/report_detail',
-        query: {
-          id: getid,
-        },
+        path: `/health_plan/user_follow_do/do/${row.id}`,
       });
     },
     async getList() {

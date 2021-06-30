@@ -186,10 +186,10 @@
         show-overflow-tooltip> </el-table-column>
         <el-table-column prop="gridName" label="人员类别"
         show-overflow-tooltip> </el-table-column>
-        <el-table-column prop="state" label="饮食相关异常"
+        <!-- <el-table-column prop="state" label="饮食相关异常"
         show-overflow-tooltip> </el-table-column>
         <el-table-column prop="state" label="不良饮食习惯"
-        show-overflow-tooltip> </el-table-column>
+        show-overflow-tooltip> </el-table-column> -->
         <el-table-column prop="day" label="周期"
         show-overflow-tooltip> </el-table-column>
         <el-table-column
@@ -230,7 +230,7 @@
       ></el-pagination>
     </template>
     <template v-else>
-      <diet-form :id="id" :type="Type"></diet-form>
+      <diet-form :id="id" :type="Type" :InfoType="InfoType"></diet-form>
     </template>
   </div>
 </template>
@@ -269,6 +269,7 @@ export default {
       },
       id: '',
       Type: '', // 是否是 查看 编辑 新增
+      InfoType: '', // 个人中心新增
       // pickerStartTime: {
       //   disabledDate: (time) => {
       //     if (this.form.endTime) {
@@ -298,7 +299,16 @@ export default {
   // },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
-      vm.viewIndex = 1;
+      if (vm.$route.query.type === 'add') {
+        vm.InfoType = 'InfoType';
+        vm.add();
+      } else if (vm.$route.query.type === 'edit') {
+        vm.deitList(vm.$route.query.clientId);
+      } else if (vm.$route.query.type === 'info') {
+        vm.infoList(vm.$route.query.clientId);
+      } else {
+        vm.viewIndex = 1;
+      }
       vm.loadData();
     });
   },

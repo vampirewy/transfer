@@ -27,7 +27,7 @@
             </span>
           </div>
           <div>
-            <span>建档日期：</span>
+            <span>体检日期：</span>
             <el-date-picker
                   v-model="form.startTime"
                   type="date"
@@ -75,10 +75,9 @@
           <el-table
             style="width: 100%"
             :data="table.list"
-            ref="table"
             align="center"
           >
-            <el-table-column type="selection" width="55"> </el-table-column>
+            <!-- <el-table-column type="selection" width="55"> </el-table-column> -->
             <el-table-column
               label="企业名称"
               prop="workUnitName"
@@ -223,10 +222,6 @@ export default {
       });
       this.table.list = res.data.data.data;
       this.table.totalCount = res.data.data.total || 0;
-      // const { data } = res;
-      // const result = data || {};
-      // this.table.list = result.list || [];
-      // this.table.totalCount = result.total || 0;
     },
     handleEdit() {
       const selection = this.$refs.table.selection;

@@ -6,6 +6,11 @@
         <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
       </span>
     </div>
+    <div class="scores">
+      <div>异常分值：</div><el-input
+      style="width:70%;" v-model="score" placeholder="输入分值"></el-input>
+      <el-button @click="addSportTemplatess" class="addbutton">添加</el-button>
+    </div>
     <el-table :data="tableData">
       <el-table-column width="40">
         <template slot-scope="scope">
@@ -18,7 +23,7 @@
           </el-checkbox-group>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="异常名称" align="center"></el-table-column>
+      <el-table-column prop="abnormalName" label="异常名称" align="center"></el-table-column>
     </el-table>
     <el-pagination
       layout="prev,pager,next,jumper,total,sizes"
@@ -45,30 +50,31 @@ export default {
       tableData: [],
       total: 0,
       currentPage: 1,
-      pageSize: 5,
+      pageSize: 15,
       selected: [],
       selectedData: [],
+      score: '',
     };
   },
   computed: {
     sportTypeMap() {
       const map = {};
       sportTypeList.forEach((item) => {
-        map[item.value] = item.name;
+        map[item.value] = item.abnormalName;
       });
       return map;
     },
     sportSortMap() {
       const map = {};
       sportSortList.forEach((item) => {
-        map[item.value] = item.name;
+        map[item.value] = item.abnormalName;
       });
       return map;
     },
     strengthDegreeMap() {
       const map = {};
       strengthDegreeList1.forEach((item) => {
-        map[item.value] = item.name;
+        map[item.value] = item.abnormalName;
       });
       return map;
     },
@@ -78,7 +84,14 @@ export default {
   },
   methods: {
     submit() {
-      this.$emit('change', this.selectedData);
+      if (this.score) {
+        this.selectedData.forEach((item) => {
+          item.score = this.score;
+        });
+        this.$emit('change', this.selectedData);
+      } else {
+        this.$message.error('请输入异常分值！');
+      }
     },
     checkedChange(val, data) {
       if (val) {
@@ -101,7 +114,7 @@ export default {
       this.queryList();
     },
     async queryList() {
-      const res = await this.$api.physicalProjectListInterface.pageorganitemlibrary({
+      const res = await this.$api.unusualListInterface.listPage({
         name: this.name,
         pageNo: this.currentPage,
         pageSize: this.pageSize,
@@ -120,6 +133,8 @@ export default {
 .sport-template {
   padding: 13px 18px 21px 18px;
   /deep/ .el-table {
+    height: 300px;
+    overflow: auto;
     td, th {
       padding: 10px 0 !important;
     }
@@ -160,6 +175,12 @@ export default {
         color: #3154AC;
       }
     }
+  }
+  .scores{
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    justify-content: space-between;
   }
 }
 </style>

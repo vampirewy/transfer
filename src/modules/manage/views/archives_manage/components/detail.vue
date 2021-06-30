@@ -48,7 +48,7 @@
           </div>
 
           <div class="row">
-            <el-form-item label="每日剂量" prop="doseOne" style="width:50%">
+            <el-form-item label="每次剂量" prop="doseOne" style="width:50%">
               <span>{{ value.doseOne }}</span>
             </el-form-item>
             <el-form-item label="当前状态" prop="result" style="width:50%">

@@ -2,8 +2,8 @@
   <el-dialog
     class="comment-dialog"
     :modal-append-to-body="false"
-    title="评估设置-肺癌患病风险评估"
-    top="3vh"
+    :title="title"
+    top="2vh"
     :visible="true"
     :before-close="() => $emit('close')"
   >
@@ -120,7 +120,7 @@
                   width="640"
                   trigger="click"
                   @show="popoverStatus = true"
-                  @hide="handlePopoverCloses"
+                  @hide="handlePopoverClose"
                 >
                   <abscore
                     v-if="popoverStatus"
@@ -128,53 +128,6 @@
                     @cancel="handlePopoverClose"
                   >
                   </abscore>
-                  <el-input
-                    class="select-template-trigger"
-                    slot="reference"
-                    v-model="templateStrs"
-                    style="width:80%;"
-                    placeholder="请选择（可多选）"
-                  >
-                    <i
-                      class="el-select__caret el-input__icon "
-                      :class="
-                        popoverStatus
-                          ? 'el-icon-arrow-up'
-                          : 'el-icon-arrow-down'
-                      "
-                      slot="suffix"
-                    ></i>
-                  </el-input>
-                </el-popover>
-                <el-button @click="addSportTemplates" class="addbutton">添加</el-button>
-              </div>
-              <el-form-item>
-              <el-tag
-                      class="tags"
-                      closable
-                      v-for="(tag, index) in formData.tagLists"
-                      :key="index"
-                      @close="closes(index)"
-              >{{ tag.abnormalName }}</el-tag>
-            </el-form-item>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="异常得分" prop="sportLibraryDTOList">
-              <div class="template-add-wrapper">
-                <el-popover
-                  ref="sportPopover"
-                  width="640"
-                  trigger="click"
-                  @show="popoverStatus = true"
-                  @hide="handlePopoverClose"
-                >
-                  <abconfig
-                    v-if="popoverStatus"
-                    @change="handleSportSelectChangess"
-                    @cancel="handlePopoverClose"
-                  >
-                  </abconfig>
                   <el-input
                     class="select-template-trigger"
                     slot="reference"
@@ -203,6 +156,53 @@
                       :key="index"
                       @close="closess(index)"
               >{{ tag.systemItemName }}</el-tag>
+            </el-form-item>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="异常得分" prop="sportLibraryDTOList">
+              <div class="template-add-wrapper">
+                <el-popover
+                  ref="sportPopover"
+                  width="640"
+                  trigger="click"
+                  @show="popoverStatus = true"
+                  @hide="handlePopoverCloses"
+                >
+                <abconfig
+                    v-if="popoverStatus"
+                    @change="handleSportSelectChanges"
+                    @cancel="handlePopoverClose"
+                  >
+                  </abconfig>
+                  <el-input
+                    class="select-template-trigger"
+                    slot="reference"
+                    v-model="templateStrs"
+                    style="width:80%;"
+                    placeholder="请选择（可多选）"
+                  >
+                    <i
+                      class="el-select__caret el-input__icon "
+                      :class="
+                        popoverStatus
+                          ? 'el-icon-arrow-up'
+                          : 'el-icon-arrow-down'
+                      "
+                      slot="suffix"
+                    ></i>
+                  </el-input>
+                </el-popover>
+                <el-button @click="addSportTemplates" class="addbutton">添加</el-button>
+              </div>
+              <el-form-item>
+              <el-tag
+                      class="tags"
+                      closable
+                      v-for="(tag, index) in formData.tagLists"
+                      :key="index"
+                      @close="closes(index)"
+              >{{ tag.abnormalName }}({{tag.score}})</el-tag>
             </el-form-item>
             </el-form-item>
           </el-col>
@@ -263,6 +263,7 @@ export default {
         workUnitDepartment: '',
         sportLibraryDTOList: [],
       },
+      title: '',
       denger: [
         {
           name: '男',
@@ -282,7 +283,7 @@ export default {
       return this.selectTemplate.map(item => item.abnormalName).join(',');
     },
     templateStrs() {
-      return this.selectTemplates.map(item => item.name).join(',');
+      return this.selectTemplates.map(item => item.abnormalName).join(',');
     },
     templateStrss() {
       return this.selectTemplatess.map(item => item.systemItemName).join(',');
@@ -304,8 +305,10 @@ export default {
     },
     // 添加
     addSportTemplates() {
+      console.log(this.selectTemplates, 111, this.formData.tagLists);
       if (this.selectTemplates && this.selectTemplates.length > 0) {
         this.selectTemplates.forEach((element) => {
+          element.modelCode = this.id.code;
           this.formData.tagLists.push(element);
         });
         this.selectTemplates = [];
@@ -315,7 +318,12 @@ export default {
     addSportTemplatess() {
       if (this.selectTemplatess && this.selectTemplatess.length > 0) {
         this.selectTemplatess.forEach((element) => {
-          this.formData.tagListss.push(element);
+          const oabj = {
+            modelCode: this.id.code,
+            systemItemCode: element.code,
+            systemItemName: element.itemName,
+          };
+          this.formData.tagListss.push(oabj);
         });
         this.selectTemplatess = [];
         this.$forceUpdate();
@@ -359,6 +367,7 @@ export default {
           this.formData.tagLists = data.data.abnormalScoreDtos;
           this.formData.tagListss = data.data.mustItemDtos;
         });
+      this.title = `评估设置${this.id.name}患病风险评估`;
     },
     // 点击编辑
     Addoperates(index) {
@@ -376,15 +385,27 @@ export default {
     ModifyListBtn(index) {
       this.$set(this.form[index], 'isshow', false);
     },
+    // 保存评估设置this.formData.tagList
     submit() {
-      this.$api.systemManageInterface.saveAvg(this.form).then((response) => {
-        if (response.data.rc === 0) {
-          // this.$emit('close');
-          this.$message.success('操作成功');
-        } else {
-          this.$message.error('网络异常！');
-        }
-      });
+      this.$api.systemManageInterface
+        .savemodelset({
+          modelCode: this.id.code,
+          gender: this.formData.gender,
+          minAge: this.formData.minAge,
+          maxAge: this.formData.maxAge,
+          questioned: this.formData.questioned,
+          abnormalExcludeSaveRequests: this.formData.tagList,
+          mustItemSaveRequests: this.formData.tagListss,
+          abnormalScoreSaveRequests: this.formData.tagLists,
+        })
+        .then((response) => {
+          if (response.data.rc === 0) {
+            this.$message.success('操作成功');
+            this.$emit('close');
+          } else {
+            this.$message.error('网络异常！');
+          }
+        });
     },
   },
 };

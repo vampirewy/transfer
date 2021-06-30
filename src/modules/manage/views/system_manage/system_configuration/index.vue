@@ -180,7 +180,7 @@
             >
           </template>
         </el-table-column>
-        <el-table-column prop="id" label="操作">
+        <el-table-column prop="id" label="操作" width='180'>
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="detail(scope.row)"
               >评估设置</el-button
@@ -416,6 +416,7 @@ export default {
       //     this.form = data.data;
       //   });
       this.currentData = data;
+      console.log(data, 111);
     },
     edit(data) {
       // 编辑页面

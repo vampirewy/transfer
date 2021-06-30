@@ -38,7 +38,9 @@
           <div class="searchCondition">
           <div class="searchLeft">
           <div class="searchInputFormItem">
-            <el-input placeholder="姓名/手机号/单位/体检编号" v-model="form.keywords">
+            <el-input v-if="Tabactive === 0"
+            placeholder="姓名/手机号/单位/体检编号" v-model="form.keywords"></el-input>
+            <el-input v-else placeholder="姓名/手机号/单位" v-model="form.keywords">
             </el-input>
             <span class="searchBtnImgSpan" @click="onSearch">
                 <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
@@ -67,28 +69,6 @@
                        :key="index"></el-option>
           </el-select>
           </div>
-          <!-- <div v-if="Tabactive == 0">
-            <span>审核状态：</span>
-            <el-select
-                  v-model="form.doctorId"
-                  placeholder="请选择"
-                  style="width: 140px"
-          >
-            <el-option :label="item.realName" :value="item.id" v-for="(item, index) in doctorList"
-                       :key="index"></el-option>
-          </el-select>
-          </div> -->
-          <!-- <div v-if="Tabactive == 1">
-            <span>总分数段：</span>
-            <el-select
-                  v-model="form.doctorId"
-                  placeholder="请选择"
-                  style="width: 140px"
-          >
-            <el-option :label="item.realName" :value="item.id" v-for="(item, index) in doctorList"
-                       :key="index"></el-option>
-          </el-select>
-          </div> -->
             <div>
             <span>问卷来源：</span>
             <el-select
@@ -119,7 +99,7 @@
           <div v-if="!isTrue" class="searchCondition" style="width:80%;">
           <div class="searchLeft" style="padding-left:5px;">
            <div>
-            <span>填写日期：</span>
+            <span>{{Tabactive === 0 ? '体检日期':'填写日期'}}：</span>
             <el-date-picker
             v-model="form.minReportDate"
             type="date"
@@ -350,7 +330,7 @@
                 show-overflow-tooltip>
               </el-table-column>
               <el-table-column
-                label="企业单位"
+                label="单位"
                 prop="workUnitName"
                 min-width="80"
                 show-overflow-tooltip>
@@ -527,7 +507,7 @@
                 min-width="80"
                 show-overflow-tooltip>
               </el-table-column>
-              <el-table-column label="体检日期" prop="questionDate"
+              <el-table-column label="填写日期" prop="questionDate"
               min-width="90" show-overflow-tooltip>
               </el-table-column>
               <el-table-column label="操作" align="center">
@@ -641,7 +621,7 @@ export default {
       currentUnMatchData: {},
       pickerStartTime: {
         disabledDate(time) {
-          return time.getTime() > Date.now() - 8.64e7;
+          return time.getTime() > Date.now(); // - 8.64e7
         },
       },
       pickerEndTime: {
@@ -649,7 +629,7 @@ export default {
           if (this.form.minReportDate) {
             const startTime = new Date(this.form.minReportDate);
             return (time.getTime() < new Date(startTime).getTime() - (3600 * 1000 * 23 * 1)
-             || time.getTime() > Date.now() - 8.64e7);
+             || time.getTime() > Date.now());
           }
         },
       },
@@ -702,7 +682,17 @@ export default {
     },
     TabbarBtn(index) {
       this.Tabactive = index;
-      this.reset();
+      this.form.source = null;
+      this.form.gender = '';
+      this.form.keywords = '';
+      this.form.workUnitName = '';
+      this.form.gridId = '';
+      this.form.minReportDate = null;
+      this.form.maxReportDate = null;
+      this.form.minAssessReportDate = null;
+      this.form.maxAssessReportDate = null;
+      this.table.pageNo = 1;
+      this.queryPageList();
       this.$forceUpdate();
     },
     popoverStatusShow(row) {
@@ -758,6 +748,7 @@ export default {
       this.queryPageList();
     },
     reset() {
+      this.form.source = null;
       this.form.gender = '';
       this.form.keywords = '';
       this.form.workUnitName = '';
@@ -787,45 +778,49 @@ export default {
       if (sendData.maxAssessReportDate) {
         sendData.maxAssessReportDate = `${sendData.maxAssessReportDate} 23:59:59`;
       }
-      // 生活方式评估
-      await this.$api.accessReport.fetchUserList({
-        ...sendData,
-        pageNo: this.table.pageNo,
-        pageSize: this.table.pageSize,
-      }).then(({ data }) => {
-        this.table.total = data.data.total;
-        this.table.list = data.data.data;
-      });
-      // 中医体质评估
-      this.$api.health
-        .fetch(Object.assign({
-          clientGrid: '',
-          gender: this.form.gender,
-          keyWord: this.form.keywords,
-          pageNo: 1,
-          pageSize: 15,
-          questionType: 2,
-          source: '',
-        }))
-        .then(({ data }) => {
-          this.total = data.data.total;
-          this.dataSource = data.data.data;
+      if (this.Tabactive === 0) {
+        // 生活方式评估
+        await this.$api.accessReport.fetchUserList({
+          ...sendData,
+          pageNo: this.table.pageNo,
+          pageSize: this.table.pageSize,
+        }).then(({ data }) => {
+          this.table.total = data.data.total;
+          this.table.list = data.data.data;
         });
-      // 心理问卷
-      this.$api.health
-        .fetch(Object.assign({
-          clientGrid: '',
-          gender: this.form.gender,
-          keyWord: this.form.keywords,
-          pageNo: 1,
-          pageSize: 15,
-          questionType: 3,
-          source: '',
-        }))
-        .then(({ data }) => {
-          this.total = data.data.total;
-          this.clientTypeList = data.data.data;
-        });
+      } else if (this.Tabactive === 1) {
+        // 心理问卷
+        this.$api.health
+          .fetch(Object.assign({
+            clientGrid: '',
+            gender: this.form.gender,
+            keyWord: this.form.keywords,
+            pageNo: 1,
+            pageSize: 15,
+            questionType: 3,
+            source: this.form.source,
+          }))
+          .then(({ data }) => {
+            this.total = data.data.total;
+            this.clientTypeList = data.data.data;
+          });
+      } else {
+        // 中医体质评估
+        this.$api.health
+          .fetch(Object.assign({
+            clientGrid: '',
+            gender: this.form.gender,
+            keyWord: this.form.keywords,
+            pageNo: 1,
+            pageSize: 15,
+            questionType: 2,
+            source: this.form.source,
+          }))
+          .then(({ data }) => {
+            this.total = data.data.total;
+            this.dataSource = data.data.data;
+          });
+      }
     },
     // 心理问卷
     // getClientTypeList() {

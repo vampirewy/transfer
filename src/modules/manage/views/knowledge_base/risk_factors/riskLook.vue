@@ -22,9 +22,11 @@
         <span v-if="data.riskType === 6">既往接触史</span>
         <span v-if="data.riskType === 7">家族史</span>
       </div>
-      <div><span>来源：</span><span>{{data.riskFactor}}</span></div>
+      <div><span>危险因素：</span><span>{{data.riskFactor}}</span></div>
+      <div><span>排序编号：</span><span>{{data.isSystem}}</span></div>
+      <!-- <div><span>来源：</span><span>{{data.riskFactor}}</span></div>
       <div><span>标题：</span><span>{{data.riskTypeName}}</span></div>
-      <div><span>选项：</span><span>{{data.isSystem}}</span></div>
+      <div><span>选项：</span><span>{{data.isSystem}}</span></div> -->
     </div>
     <!-- <div class="lookPressure">
       <div><span>就医科室：</span><span>{{data.department}}</span></div>
@@ -32,14 +34,14 @@
       <div><span>就医时间：</span><span>{{data.inDate}}</span></div>
       <div><span>出院时间：</span><span>{{data.outDate}}</span></div>
     </div> -->
-    <div class="lookPressure">
+    <!-- <div class="lookPressure">
       <div><span>危险因素：</span><span>{{data.riskFactor}}</span></div>
       <div><span>排序编号：</span><span>{{data.isSystem}}</span></div>
       <div></div>
       <div></div>
-    </div>
+    </div> -->
     <div class="lookPressure">
-      <div><span>现病史：</span><span>{{data.advice}}</span></div>
+      <div><span>建议：</span><span>{{data.advice}}</span></div>
     </div>
     <!-- <div class="lookPressure">
       <div><span>主诉：</span><span>{{data.complaint}}</span></div>
