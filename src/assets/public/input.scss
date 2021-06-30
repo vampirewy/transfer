@@ -46,7 +46,7 @@ input:-webkit-autofill:focus {
 }
 .el-select-dropdown .el-scrollbar .el-scrollbar__wrap .el-select-dropdown__list .el-select-dropdown__item.hover {
   background: #3154AC !important;
-  color: #fff;
+  color: #fff!important;
 }
 
 .el-popper .popper__arrow::after {
@@ -67,12 +67,21 @@ input:-webkit-autofill:focus {
   border: 1px solid #3154AC;
 }
 .el-date-table td.today span{
-  border-radius: 5px !important;
-  background: #3154AC;
-  color: #fff;
+  color: #3154AC;
 }
 .el-date-table td.available:hover{
   color: #3154AC;
+}
+.el-date-table td.current:not(.disabled) span{
+  color: white;
+  background: #3154AC;
+  border-radius: 5px;
+  font-weight: bold;
+}
+.el-range-editor{
+  &.el-input__inner{
+    border-radius: 8px;
+  }
 }
 .cancelBtn,
 .resetBtn,

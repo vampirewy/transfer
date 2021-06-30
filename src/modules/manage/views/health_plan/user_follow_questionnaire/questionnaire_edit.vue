@@ -145,24 +145,27 @@
                    v-for="(itemOne, indexOne) in item.optionParamList"
                    :key="indexOne">
                 <el-row v-if="item.subjectType !== 3" style="display: flex"><!--不是填空题-->
-                  <el-col :span="11">
+                  <div style="flex: 1">
+                  <el-col :span="12">
                     <el-form-item :label="`选项标题${indexOne + 1}：`">
                       <el-input v-model="itemOne.name" :maxlength="30" placeholder="请输入"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="4">
+                  <el-col :span="6">
                     <el-form-item label="编码：" label-width="55px">
                       <el-input v-model="itemOne.code" :maxlength="6"
                                 onkeyup="value = value.replace(/[\u4e00-\u9fa5]/ig,'')"
                                 placeholder="输入"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="4">
+                  <el-col :span="6">
                     <el-form-item label="分数：" label-width="55px">
                       <el-input v-model="itemOne.score" placeholder="输入"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="5" v-if="routeType !== 3" style="width: 170px">
+                  </div>
+                  <div style="width: 162px">
+                  <el-col v-if="routeType !== 3">
                     <div class="questionOneImg">
                       <img @click="questionOneDelelte(item.optionParamList, indexOne)"
                            src="@/assets/images/healthPlan/questions/questionDelete.png"/>
@@ -192,6 +195,7 @@
                       </el-popover>-->
                     </div>
                   </el-col>
+                  </div>
                 </el-row>
                 <!--<el-row style="display: flex;" v-else>&lt;!&ndash;填空题&ndash;&gt;
                   <el-col style="flex: 1;">
@@ -520,8 +524,9 @@ export default {
       border-radius: 10px;
       .formSearchTitle{
         font-size: 14px;
-        margin:0 0 20px 18px;
+        margin:5px 0 20px 18px;
         position: relative;
+        height: auto;
         &:before{
           content: '';
           width: 5px;

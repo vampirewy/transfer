@@ -290,7 +290,7 @@ export default {
       line-height: 24px;
       margin-bottom: 8px;
       &.status0{
-        background-color: #FA912B;
+        background-color: #F33D21;
       }
       &.status1{
         background-color: #B4BBC9;
