@@ -8,7 +8,7 @@
           <div class="searchCondition">
           <div class="searchLeft">
           <div class="searchInputFormItem">
-            <el-input placeholder="姓名/手机号/企业单位" v-model="formData.keywords">
+            <el-input placeholder="姓名/手机号/企业单位/客户编号" v-model="formData.keywords">
             </el-input>
             <span class="searchBtnImgSpan" @click="search">
                 <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
@@ -228,7 +228,7 @@
             </el-table-column> -->
             <el-table-column label="体检报告" prop="reportTotal" width="80" show-overflow-tooltip>
               <template slot-scope="scope">
-                <span style="color:#36BF2F;">{{ scope.row.reportTotal || '-'}}</span>
+                <span style="color:#36BF2F;">{{ scope.row.reportTotal || '0'}}</span>
               </template>
             </el-table-column>
             <el-table-column label="基础问卷"
@@ -239,7 +239,7 @@
             </el-table-column>
             <el-table-column label="个人报告" prop="assessReportTotal" width="80" show-overflow-tooltip>
               <template slot-scope="scope">
-                <span style="color:#36BF2F;">{{ scope.row.assessReportTotal || '-'}}</span>
+                <span style="color:#36BF2F;">{{ scope.row.assessReportTotal || '0'}}</span>
               </template>
             </el-table-column>
             <el-table-column label="管理医生" prop="doctorNames" show-overflow-tooltip>
@@ -253,7 +253,11 @@
                   {{ scope.row.unExecutePlanTotal || '0'}}</span>
               </template>
             </el-table-column>
-            <el-table-column label="建档时间" prop="createTime" show-overflow-tooltip />
+            <el-table-column label="建档时间" prop="createTime" show-overflow-tooltip>
+            <template slot-scope="scope">
+                <span>{{ scope.row.createdTime || '0'}}</span>
+              </template>
+              </el-table-column>
             <el-table-column label="附件" prop="annexTotal"  width="60" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span style="color:#36BF2F;">{{ scope.row.annexTotal || '0'}}</span>
@@ -299,7 +303,7 @@
                 "
                         v-if="getAccess('customer_pool_edit')"
                 >编辑</el-button>
-                <el-button type="text"
+                <!-- <el-button type="text"
                         size="small"
                         style="color:#DDE0E6"
                         >|</el-button>
@@ -308,7 +312,7 @@
                         size="small"
                         @click="claim(scope)"
                 >删除</el-button
-                >
+                > -->
                 <!-- <el-button
                         class="font-enable"
                         type="text"

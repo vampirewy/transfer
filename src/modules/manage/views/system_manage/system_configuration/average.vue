@@ -93,7 +93,7 @@
       </el-table>
     </div>
     <span slot="footer" class="dialog-footer">
-      <el-button size="small" class="cancelBtn" @click="$emit('close')"
+      <el-button size="small" class="cancelBtn" @click="returnes"
         >还原初始值</el-button>
       <el-button size="small" type="primary" @click="submit">保存</el-button>
     </span>
@@ -133,6 +133,10 @@ export default {
     this.getCommentDetail();
   },
   methods: {
+    returnes() {
+      this.getCommentDetail();
+      this.$emit('close');
+    },
     getCommentDetail() {
       this.$api.systemManageInterface
         .getAvgList(this.id.id)
@@ -151,7 +155,6 @@ export default {
       if (ismun) {
         this.$set(this.form[index], 'isshow', true);
       }
-      console.log(this.form, 147896548);
     },
     // 点击行保存
     ModifyListBtn(index) {

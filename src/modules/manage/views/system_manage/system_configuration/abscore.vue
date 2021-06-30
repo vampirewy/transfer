@@ -48,7 +48,8 @@ export default {
       pageSize: 10,
       selected: [],
       selectedData: [],
-      formData: {},
+      formData: {
+      },
       params: {
         pageNo: 1,
         pageSize: 10,
@@ -107,14 +108,20 @@ export default {
       this.queryList();
     },
     async queryList() {
-      this.$api.reportInterface
-        .getOrganList(Object.assign(this.params, this.formData))
-        .then(({ data }) => {
-          if (data.rc === 0) {
-            this.total = data.data.total;
-            this.tableData = data.data.data;
-          }
-        });
+      const reqBody = {
+        itemName: '',
+        isAssess: '',
+        pageNo: this.params.pageNo,
+        pageSize: this.params.pageSize,
+      };
+      const res = await this.$api.physicalProjectListInterface.systemlistpage(
+        reqBody,
+      );
+      const { data } = res.data;
+      if (data) {
+        this.tableData = data.data || [];
+        this.total = data.total;
+      }
     },
   },
 };
