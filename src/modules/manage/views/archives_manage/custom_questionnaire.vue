@@ -69,19 +69,6 @@
     <div v-if="!isTrue" class="searchCondition" style="width:80%;">
       <div class="searchLeft" style="padding-left:5px;">
         <div>
-          <span>问卷类型：</span>
-          <el-select
-                  v-model="formData.sortType"
-                  placeholder="请选择"
-                  style="width: 140px"
-                  clearable
-          >
-            <el-option :label="item.name" :value="item.paramValue"
-                       v-for="item in sortTypeList"
-                       :key="item.paramValue"></el-option>
-          </el-select>
-        </div>
-        <div>
           <span>填写日期：</span>
           <el-date-picker
                   v-model="formData.startTime"
@@ -181,7 +168,7 @@
             <span>{{scope.row.gender | getResultGender}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="年龄" prop="age">
+        <el-table-column label="年龄" prop="age" width="60px">
           <template slot-scope="scope">
             <span>{{ scope.row.age | getResult}}</span>
           </template>
@@ -189,6 +176,11 @@
         <el-table-column prop="clientGridName" label="人员类别" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.clientGridName | getResult}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="workUnitName" label="单位" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{ scope.row.workUnitName | getResult}}</span>
           </template>
         </el-table-column>
         <el-table-column prop="sortTypeName" label="问卷类型" show-overflow-tooltip>
@@ -301,13 +293,11 @@ export default {
         gender: '',
         clientGrid: '',
         source: '',
-        sortType: '',
         startTime: undefined,
         endTime: undefined,
         questionType: 4,
       },
       questionFromList: [], // 问卷来源
-      sortTypeList: [], // 问卷类型
       popoverStatus: false,
       visible: false,
       current: {},
@@ -336,21 +326,6 @@ export default {
       },
     };
   },
-  activated() {
-    this.getGridList();
-    this.getQuestionFromList();
-    this.getSystemParamByCode('ZY007');
-    if (localStorage.getItem('homeSearchData')) {
-      const HomeSearchData = JSON.parse(localStorage.getItem('homeSearchData'));
-      this.formData.startTime = HomeSearchData.startDate;
-      this.formData.endTime = HomeSearchData.lastDate;
-      this.formData.searchRange = HomeSearchData.searchRange;
-    }
-  },
-  destroyed() {
-    // 清除时间 和 我的/平台
-    localStorage.removeItem('homeSearchData');
-  },
   methods: {
     async getGridList() {
       const res = await this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
@@ -361,11 +336,6 @@ export default {
       const res = await this.$api.health.getQuestionFromList({ pageNo: 1, pageSize: 10000 });
       const { data } = res.data;
       this.questionFromList = data;
-    },
-    async getSystemParamByCode(code) {
-      const res = await this.$api.userManagerInterface.getSystemParamByCode(code);
-      const { data } = res.data;
-      this.sortTypeList = data;
     },
     handleSelectionChange(val) {
       // table组件选中事件,
@@ -390,7 +360,6 @@ export default {
       this.formData.gender = '';
       this.formData.clientGrid = '';
       this.formData.source = '';
-      this.formData.sortType = '';
       this.formData.startTime = undefined;
       this.formData.endTime = undefined;
       // this.getQuestionType();
@@ -512,8 +481,9 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
-      // vm.getQuestionType();
       vm.fetch();
+      vm.getGridList();
+      vm.getQuestionFromList();
     });
   },
 };

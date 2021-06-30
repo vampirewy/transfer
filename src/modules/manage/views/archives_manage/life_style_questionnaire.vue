@@ -84,6 +84,7 @@
                   v-model="formData.lifeStyleLv"
                   placeholder="请选择"
                   style="width: 140px"
+                  clearable
           >
             <el-option :label="item.name" :value="item.paramValue"
                        v-for="(item, index) in lifeStyleList" :key="index"></el-option>
@@ -353,21 +354,6 @@ export default {
       },
     };
   },
-  activated() {
-    this.getGridList();
-    this.getQuestionFromList();
-    this.getLifeStyleList();
-    if (localStorage.getItem('homeSearchData')) {
-      const HomeSearchData = JSON.parse(localStorage.getItem('homeSearchData'));
-      this.formData.startTime = HomeSearchData.startDate;
-      this.formData.endTime = HomeSearchData.lastDate;
-      this.formData.searchRange = HomeSearchData.searchRange;
-    }
-  },
-  destroyed() {
-    // 清除时间 和 我的/平台
-    localStorage.removeItem('homeSearchData');
-  },
   methods: {
     async getGridList() {
       const res = await this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
@@ -515,8 +501,10 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
-      // vm.getQuestionType();
       vm.fetch();
+      vm.getGridList();
+      vm.getQuestionFromList();
+      vm.getLifeStyleList();
     });
   },
 };

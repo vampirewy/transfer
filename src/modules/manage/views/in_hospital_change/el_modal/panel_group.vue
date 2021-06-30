@@ -11,15 +11,15 @@
             <div class="card-panel-number">
               {{ formData1.count }}
             </div>
-            <div class="card-panel-text">院内转诊总次数（次）</div>
           </div>
           <div class="card-panel-icon-wrapper">
-            <span class="percent" :class="formData1.percentageType === 2 ? 'low' : 'high'">
+            <span class="percent" :class="setClass(formData1.percentageType)">
               {{formData1.percentageNumber}}
             </span>
-            <img class="card-panel-icon" :src="formData1.percentageType === 2 ? low : high" />
+            <img class="card-panel-icon" :src="setImg(formData1.percentageType)" />
           </div>
         </div>
+        <div class="card-panel-text">院内转诊总次数（次）</div>
         <div class="card-panel-line">
           <line-chart :chart-data="yList1"
                       :sectionName="name1"
@@ -35,15 +35,15 @@
             <div class="card-panel-number">
               {{ formData2.count }}
             </div>
-            <div class="card-panel-text">院内转诊总人次（人）</div>
           </div>
           <div class="card-panel-icon-wrapper">
-            <span class="percent" :class="formData2.percentageType === 2 ? 'low' : 'high'">
+            <span class="percent" :class="setClass(formData2.percentageType)">
               {{formData2.percentageNumber}}
             </span>
-            <img class="card-panel-icon" :src="formData2.percentageType === 2 ? low : high" />
+            <img class="card-panel-icon" :src="setImg(formData2.percentageType)" />
           </div>
         </div>
+        <div class="card-panel-text">院内转诊总人次（人）</div>
         <div class="card-panel-line">
           <line-chart :chart-data="yList2"
                       :sectionName="name2"
@@ -59,15 +59,15 @@
             <div class="card-panel-number">
               {{ formData3.count }}
             </div>
-            <div class="card-panel-text">院内转诊总收入（万元）</div>
           </div>
           <div class="card-panel-icon-wrapper">
-            <span class="percent" :class="formData3.percentageType === 2 ? 'low' : 'high'">
+            <span class="percent" :class="setClass(formData3.percentageType)">
               {{formData3.percentageNumber}}
             </span>
-            <img class="card-panel-icon" :src="formData3.percentageType === 2 ? low : high" />
+            <img class="card-panel-icon" :src="setImg(formData3.percentageType)" />
           </div>
         </div>
+        <div class="card-panel-text">院内转诊总收入（万元）</div>
         <div class="card-panel-line">
           <line-chart :chart-data="yList3"
                       :sectionName="name3"
@@ -83,15 +83,15 @@
             <div class="card-panel-number">
               {{ formData4.count }}
             </div>
-            <div class="card-panel-text">检后就医转化率（%）</div>
           </div>
           <div class="card-panel-icon-wrapper">
-            <span class="percent" :class="formData4.percentageType === 2 ? 'low' : 'high'">
+            <span class="percent" :class="setClass(formData4.percentageType)">
               {{formData4.percentageNumber}}
             </span>
-            <img class="card-panel-icon" :src="formData4.percentageType === 2 ? low : high" />
+            <img class="card-panel-icon" :src="setImg(formData4.percentageType)" />
           </div>
         </div>
+        <div class="card-panel-text">检后就医转化率（%）</div>
         <div class="card-panel-line">
           <line-chart :chart-data="yList4"
                       :sectionName="name4"
@@ -111,6 +111,7 @@ import _home4 from '~/src/assets/images/home/home44.png';
 import _home5 from '~/src/assets/images/home/home5.png';
 import _low from '~/src/assets/images/home/low.png';
 import _high from '~/src/assets/images/home/high.png';
+import _center from '~/src/assets/images/home/center.png';
 import LineChart from './line_chart_group.vue';
 export default {
   components: {
@@ -129,6 +130,7 @@ export default {
       home5: _home5,
       low: _low,
       high: _high,
+      center: _center,
       name1: ['次数'],
       xList1: [],
       yList1: [],
@@ -150,6 +152,12 @@ export default {
     this.getY4();
   },
   methods: {
+    setClass(type) {
+      return type === 2 ? 'low' : type === 1 ? 'high' : type === 3 ? 'center' : '';
+    },
+    setImg(type) {
+      return type === 2 ? this.low : type === 1 ? this.high : type === 3 ? this.center : '';
+    },
     // 院内转诊总次数
     getY1() {
       const sendDataGet = Object.assign({}, { chartType: 1 });
@@ -272,12 +280,6 @@ export default {
           margin-left: 8px;
         }
       }
-      .card-panel-text {
-        line-height: 18px;
-        color: #B4BBC9;
-        font-size: 12px;
-        white-space: nowrap;
-      }
       .card-panel-icon-wrapper {
         // width: 60px;
         /*margin-left: 20px;
@@ -293,11 +295,22 @@ export default {
           &.high{
             color: #36BF2F;
           }
+          &.center{
+            color: #B4BBC9;
+          }
         }
         img{
           width: 16px;
         }
       }
+    }
+    .card-panel-text {
+      line-height: 18px;
+      color: #B4BBC9;
+      font-size: 12px;
+      white-space: nowrap;
+      text-align: left;
+      padding-left: 20px;
     }
     .card-panel-line{
       width: 100%;
