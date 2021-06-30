@@ -124,7 +124,10 @@
                     </div>
                   </span>
                   <span v-else>
-                    <el-input placeholder="" v-model="scope.row[item.prop]">
+                    <el-input placeholder="" v-model="scope.row[item.prop]"
+                    onkeyup = "value=value.replace(/[^\d]/g,'')"
+                    >
+                    <!-- onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')" -->
                     </el-input>
                   </span>
                   </span>

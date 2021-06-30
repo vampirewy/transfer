@@ -10,7 +10,7 @@
       <span v-if="queryInfo.gender === 1">男</span>
       <span v-if="queryInfo.gender === 2">女</span>
       </div>
-      <div><span class="lookPressureTitle">年龄：</span><span>{{queryInfo.age}}</span></div>
+      <div><span class="lookPressureTitle">年龄：</span><span>{{queryInfo.age}} 岁</span></div>
       <div><span class="lookPressureTitle">客户编号：</span><span>{{queryInfo.clientNo}}</span></div>
     </div>
     <div class="lookPressure">
@@ -18,7 +18,7 @@
       <span v-if="queryInfo.sugarType === 1">空腹血糖</span>
       <span v-if="queryInfo.sugarType === 2">餐后血糖</span>
       </div>
-      <div><span class="lookPressureTitle">血糖值：</span><span>{{queryInfo.sugar}}</span></div>
+      <div><span class="lookPressureTitle">血糖值：</span><span>{{queryInfo.sugar}} mmol/L</span></div>
       <div></div>
       <div></div>
     </div>

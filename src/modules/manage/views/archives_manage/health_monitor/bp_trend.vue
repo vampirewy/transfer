@@ -10,13 +10,13 @@
       <span v-if="queryInfo.gender === 1">男</span>
       <span v-if="queryInfo.gender === 2">女</span>
       </div>
-      <div><span class="lookPressureTitle">年龄：</span><span>{{queryInfo.age}}</span></div>
+      <div><span class="lookPressureTitle">年龄：</span><span>{{queryInfo.age}} 岁</span></div>
       <div><span class="lookPressureTitle">客户编号：</span><span>{{queryInfo.clientNo}}</span></div>
     </div>
     <div class="lookPressure">
-      <div><span class="lookPressureTitle">收缩压：</span><span>{{queryInfo.sbp}}</span></div>
-      <div><span class="lookPressureTitle">舒张压：</span><span>{{queryInfo.dbp}}</span></div>
-      <div><span class="lookPressureTitle">脉搏：</span><span>{{queryInfo.hd}}</span></div>
+      <div><span class="lookPressureTitle">收缩压：</span><span>{{queryInfo.sbp}} mmHg</span></div>
+      <div><span class="lookPressureTitle">舒张压：</span><span>{{queryInfo.dbp}} mmHg</span></div>
+      <div><span class="lookPressureTitle">脉搏：</span><span>{{queryInfo.hd}} 次/分钟</span></div>
       <div></div>
     </div>
     <div class="lookPressure">

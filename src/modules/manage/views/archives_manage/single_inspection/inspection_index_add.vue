@@ -225,8 +225,7 @@
                 <div class="titleBiao"></div></div>
         </div>
         <div class="row">
-            <div>
-                <!-- <span>体检库：</span> -->
+            <!-- <div>
             <el-form-item label="体检库" prop="gridId">
                 <el-select
                 v-model="infoSource.gridId"
@@ -241,7 +240,7 @@
                 ></el-option>
                 </el-select>
             </el-form-item>
-            </div>
+            </div> -->
           <el-form-item label="检查项目" prop="clientNameCheck">
             <el-popover
               ref="userPopoverCheck"
@@ -407,7 +406,7 @@ export default {
         gridName: '',
         clientNameCheck: '', // 检查项目
         startDates: ' 00:00:00',
-        gridId: '',
+        // gridId: '',
       },
       drugsList: [],
       resultList: [],
@@ -419,7 +418,7 @@ export default {
         specification: [{ required: true, message: '检查机构不能为空' }],
         startDate: [{ required: true, message: '开始时间不能为空' }],
         endDate: [{ required: true, message: '检查时间不能为空' }],
-        gridId: [{ required: true, message: '体检库不能为空' }],
+        // gridId: [{ required: true, message: '体检库不能为空' }],
       },
       formData: {
         pageNo: 1,

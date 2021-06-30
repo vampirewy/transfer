@@ -40,17 +40,6 @@
             <el-input placeholder="科室名称" v-model="SectionListId"
             style="width:120px">
             </el-input>
-            <!-- <el-select
-                    v-model="SectionListId"
-                    placeholder="请选择"
-                    style="width: 140px"
-                    clearable
-            >
-              <el-option
-              :label="item.sectionName"
-              :value="item.organItemLibraryId"
-              v-for="(item, index) in SectionList" :key="index"></el-option>
-            </el-select> -->
           </div>
           <div>
             <span>重要指标：</span>

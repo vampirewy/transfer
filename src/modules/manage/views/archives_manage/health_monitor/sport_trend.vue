@@ -10,15 +10,16 @@
       <span v-if="queryInfo.gender === 1">男</span>
       <span v-if="queryInfo.gender === 2">女</span>
       </div>
-      <div><span class="lookPressureTitle">年龄：</span><span>{{queryInfo.age}}</span></div>
+      <div><span class="lookPressureTitle">年龄：</span><span>{{queryInfo.age}} 岁</span></div>
       <div><span class="lookPressureTitle">客户编号：</span><span>{{queryInfo.clientNo}}</span></div>
     </div>
     <div class="lookPressure">
-      <div><span class="lookPressureTitle">运动时间：</span><span>{{queryInfo.sportTime}}</span></div>
-      <div><span class="lookPressureTitle">运动路程：</span><span>{{queryInfo.steps}}</span></div>
+      <div><span class="lookPressureTitle">运动时间：</span><span>{{queryInfo.sportTime}} min</span>
+      </div>
+      <div><span class="lookPressureTitle">运动路程：</span><span>{{queryInfo.steps}} 公里</span></div>
       <div><span class="lookPressureTitle">运动步数：</span>
-        <span>{{queryInfo.sportDistance}}</span></div>
-      <div><span class="lookPressureTitle">运动消耗：</span><span>{{queryInfo.kcal}}</span></div>
+        <span>{{queryInfo.sportDistance}} 步</span></div>
+      <div><span class="lookPressureTitle">运动消耗：</span><span>{{queryInfo.kcal}} Kcai</span></div>
     </div>
     <div class="lookPressure">
       <div style="width:100%;display: flex;">

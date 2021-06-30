@@ -186,10 +186,10 @@
         show-overflow-tooltip> </el-table-column>
         <el-table-column prop="gridName" label="人员类别"
         show-overflow-tooltip> </el-table-column>
-        <el-table-column prop="state" label="饮食相关异常"
+        <!-- <el-table-column prop="state" label="饮食相关异常"
         show-overflow-tooltip> </el-table-column>
         <el-table-column prop="state" label="不良饮食习惯"
-        show-overflow-tooltip> </el-table-column>
+        show-overflow-tooltip> </el-table-column> -->
         <el-table-column prop="day" label="周期"
         show-overflow-tooltip> </el-table-column>
         <el-table-column
@@ -302,6 +302,10 @@ export default {
       if (vm.$route.query.type === 'add') {
         vm.InfoType = 'InfoType';
         vm.add();
+      } else if (vm.$route.query.type === 'edit') {
+        vm.deitList(vm.$route.query.clientId);
+      } else if (vm.$route.query.type === 'info') {
+        vm.infoList(vm.$route.query.clientId);
       } else {
         vm.viewIndex = 1;
       }

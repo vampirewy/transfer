@@ -25,7 +25,7 @@
                 style="width: 200px"
               ></el-input>
             </el-form-item>
-            <el-form-item label="姓名" prop="specification" style="width:25%">
+            <el-form-item label="计量单位" prop="specification" style="width:25%">
               <el-input
                 v-model="infoSource.specification"
                 placeholder="请输入"
@@ -229,7 +229,7 @@ export default {
       drugsList: [],
       resultList: [],
       rules: {
-        specification: [{ required: true, message: '姓名不能为空' }],
+        specification: [{ required: true, message: '计量单位不能为空' }],
         isstate: [{ required: true, message: '请选择是否启用' }],
         startDate: [{ required: true, message: '开始时间不能为空' }],
         endDate: [{ required: true, message: '结束时间不能为空' }],
