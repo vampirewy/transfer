@@ -10,14 +10,14 @@
       <span v-if="queryInfo.gender === 1">男</span>
       <span v-if="queryInfo.gender === 2">女</span>
       </div>
-      <div><span class="lookPressureTitle">年龄：</span><span>{{queryInfo.age}}</span></div>
+      <div><span class="lookPressureTitle">年龄：</span><span>{{queryInfo.age}} 岁</span></div>
       <div><span class="lookPressureTitle">客户编号：</span><span>{{queryInfo.clientNo}}</span></div>
     </div>
     <div class="lookPressure">
-      <div><span class="lookPressureTitle">身高：</span><span>{{queryInfo.height}}</span></div>
-      <div><span class="lookPressureTitle">体重：</span><span>{{queryInfo.weight}}</span></div>
-      <div><span class="lookPressureTitle">腰围：</span><span>{{queryInfo.wc}}</span></div>
-      <div><span class="lookPressureTitle">体脂率：</span><span>{{queryInfo.bdPercent}}</span></div>
+      <div><span class="lookPressureTitle">身高：</span><span>{{queryInfo.height}} cm</span></div>
+      <div><span class="lookPressureTitle">体重：</span><span>{{queryInfo.weight}} kg</span></div>
+      <div><span class="lookPressureTitle">腰围：</span><span>{{queryInfo.wc}} cm</span></div>
+      <div><span class="lookPressureTitle">体脂率：</span><span>{{queryInfo.bdPercent}} %</span></div>
     </div>
     <div class="lookPressure">
       <div style="width:100%;display: flex;">
