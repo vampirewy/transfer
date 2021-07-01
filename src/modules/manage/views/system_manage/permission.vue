@@ -8,6 +8,7 @@
       :data="permission"
       :show-checkbox="!disabled"
       node-key="menuCode"
+      :default-checked-keys="['home']"
       ref="tree"
       highlight-current
       check-strictly
@@ -21,11 +22,16 @@
 </template>
 
 <script>
-import ACCESS from '~/src/constant/access';
+// import ACCESS from '~/src/constant/access';
 
 export default {
   name: 'Permission',
   props: {
+    permission: {
+      required: true,
+      type: Array,
+      default: () => [],
+    },
     data: {
       required: true,
       type: Array,
@@ -48,7 +54,7 @@ export default {
   },
   data() {
     return {
-      permission: [], // JSON.parse(JSON.stringify(ACCESS)),
+      // permission: [], // JSON.parse(JSON.stringify(ACCESS)),
       selectAll: false,
     };
   },
@@ -57,11 +63,12 @@ export default {
       this.$refs.tree.setCheckedKeys(newValue); // 编辑的时候设置，查看放在加载菜单完后设置
       console.log('data 变化了');
       console.log(newValue);
-      this.menuList();
-      /* if (this.disabled) {
-        this.filterTree(newValue);
+      // this.menuList();
+      if (this.disabled) {
+        console.log(this.data);
+        // this.filterTree(this.data);
       }
-      this.setSelectAll(); */
+      this.setSelectAll();
     },
     roleData(newValue) {
       if (this.isFilter && !this.disabled) {
@@ -92,9 +99,14 @@ export default {
   },
   mounted() {
     // this.menuList();
+    /* if (this.disabled) {
+      console.log(this.data);
+      this.filterTree(this.data);
+    }
+    this.setSelectAll();*/
   },
   methods: {
-    menuList() {
+    /* menuList() {
       // 角色列表
       this.$api.systemManageInterface
         .getMenu({})
@@ -102,15 +114,19 @@ export default {
           const { data } = res;
           const result = data.data || {};
           console.log(result);
-          console.log(JSON.parse(JSON.stringify(ACCESS)));
+          // console.log(JSON.parse(JSON.stringify(ACCESS)));
           this.permission = result.synthesisMenuList;
+          if (this.permission[0].menuCode === 'home') { // 设置默认选中
+            this.permission[0].disabled = true;
+          }
+          console.log(this.data);
           if (this.disabled) {
             console.log(this.data);
             this.filterTree(this.data); // 查看的情况下，筛选出选中的
           }
           this.setSelectAll();
         });
-    },
+    },*/
     filterTree(data) {
       this.permission = this.filterArray(
         this.permission,

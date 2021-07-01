@@ -519,7 +519,7 @@ export default {
     }
     .health_questionnaire_form{
       flex: 1;
-      padding-top: 20px;
+      // padding-top: 20px;
       .footer {
         margin-top: 10px;
         text-align: center;

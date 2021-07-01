@@ -9,7 +9,7 @@
         <div class="searchCondition">
           <div class="searchLeft">
             <div class="searchInputFormItem">
-              <el-input placeholder="输入手机号/姓名搜索" v-model="query">
+              <el-input placeholder="输入姓名搜索" v-model="query">
               </el-input>
               <span class="searchBtnImgSpan" @click="search">
                 <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>

@@ -10,7 +10,8 @@
               class="health_questionnaire_form"
               :rules="rules"
       >
-        <div class="container" :class="{'containerOtherCheckBox': $route.params.qusType !== 1}">
+        <div class="container" :class="{'containerOtherCheckBox':
+        $route.params.qusType !== 1 && $route.params.qusType !== 4}">
           <div>
             <el-row class="health_questionnaire_formQus">
               <el-col :span="24" :id="'questionitem-' + item.subjectId"
@@ -493,7 +494,7 @@ export default {
         min-width: 100px;
         height: 48px;
         line-height: 21px;
-        border-radius: 24px;
+        border-radius: 24px!important;
         box-shadow: none;
       }
       &.is-active .el-radio-button__inner{

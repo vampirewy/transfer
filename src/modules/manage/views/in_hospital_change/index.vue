@@ -152,7 +152,7 @@
       <el-table-column label="操作" width="130">
         <template slot-scope="scope">
           <el-button
-                  v-if="scope.row.state === 2"
+                  v-if="scope.row.state === 0 || scope.row.state === 2"
                   type="text"
                   size="small"
                   @click="cancelReservation(scope.row)"
