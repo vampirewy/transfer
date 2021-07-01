@@ -19,7 +19,7 @@
       <span v-if="queryInfo.sugarType === 2">餐后血糖</span>
       </div>
       <div><span class="lookPressureTitle">血糖值：</span><span>{{queryInfo.sugar}} mmol/L</span></div>
-      <div></div>
+      <div><span class="lookPressureTitle">检测时间：</span><span>{{queryInfo.testDate}}</span></div>
       <div></div>
     </div>
     <div class="lookPressure">

@@ -20,6 +20,10 @@
       <div><span class="lookPressureTitle">体脂率：</span><span>{{queryInfo.bdPercent}} %</span></div>
     </div>
     <div class="lookPressure">
+      <div><span class="lookPressureTitle">BMI：</span><span>{{queryInfo.bmi}}</span></div>
+      <div><span class="lookPressureTitle">检测时间：</span><span>{{queryInfo.testDate}}</span></div>
+    </div>
+    <div class="lookPressure">
       <div style="width:100%;display: flex;">
         <span class="lookPressureTitle" style="width:50px;white-space: nowrap;">备注：</span>
         <span>{{queryInfo.result}}</span>
@@ -96,6 +100,7 @@ export default {
           { label: '身高', prop: 'height' },
           { label: '体重', prop: 'weight' },
           { label: '腰围', prop: 'wc' },
+          { label: 'BMI', prop: 'bmi' },
           { label: '体脂率', prop: 'bdPercent' },
           { label: '备注', prop: 'result' },
         ],

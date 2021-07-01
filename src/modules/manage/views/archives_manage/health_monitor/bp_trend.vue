@@ -17,7 +17,7 @@
       <div><span class="lookPressureTitle">收缩压：</span><span>{{queryInfo.sbp}} mmHg</span></div>
       <div><span class="lookPressureTitle">舒张压：</span><span>{{queryInfo.dbp}} mmHg</span></div>
       <div><span class="lookPressureTitle">脉搏：</span><span>{{queryInfo.hd}} 次/分钟</span></div>
-      <div></div>
+      <div><span class="lookPressureTitle">检测时间：</span><span>{{queryInfo.testDate}}</span></div>
     </div>
     <div class="lookPressure">
       <div style="width:100%;display: flex;">

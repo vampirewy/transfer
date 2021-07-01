@@ -37,7 +37,7 @@
             <div class="searchInputFormItem">
               <el-input
                 placeholder="姓名/客户编号"
-                v-model="forms.clientName"
+                v-model="forms.keywords"
               >
               </el-input>
               <span class="searchBtnImgSpan" @click="search">
@@ -52,28 +52,347 @@
               <el-select
                 v-model="forms.gender"
                 placeholder="请选择"
-                style="width: 140px"
+                style="width: 130px"
               >
                 <el-option label="男" value="1" key="1"></el-option>
                 <el-option label="女" value="2" key="2"></el-option>
               </el-select>
             </div>
-            <!-- <div>
-              <span>人员类别：</span>
+            <div v-if="tabIndex === 'BP'">
+              <span>收缩压：</span>
               <el-select
-                v-model="form.gridId"
+                v-model="forms.sbpSelectType"
+                placeholder="请选择"
+                style="width: 100px"
+              >
+              <el-option
+                  v-for="item in selectTypeList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+              ></el-option>
+              </el-select>
+            </div>
+            <div  v-if="tabIndex === 'BP'">
+              <el-input
+                placeholder="值"
+                v-model="forms.minSbp"
+                style="width: 50px"
+                v-if="forms.sbpSelectType < 4 || forms.sbpSelectType === 5">
+              </el-input>
+              <el-input
+                placeholder="值"
+                v-model="forms.maxSbp"
+                style="width: 50px"
+                v-if="forms.sbpSelectType > 3">
+              </el-input>
+            </div>
+            <div v-if="tabIndex === 'BG'">
+              <span>血糖类型：</span>
+              <el-select
+                v-model="forms.sugarType"
                 placeholder="请选择"
                 style="width: 140px"
               >
                 <el-option
-                  :label="item.gridName"
-                  :value="item.id"
-                  v-for="(item, index) in gridList"
-                  :key="index"
+                    v-for="item in typeOptions"
+                    :key="item.paramValue"
+                    :label="item.name"
+                    :value="item.paramValue"
                 ></el-option>
               </el-select>
-            </div> -->
-            <div>
+            </div>
+            <div v-if="tabIndex === 'weight'">
+              <span>腰围：</span>
+              <el-select
+                v-model="forms.wcSelectType"
+                placeholder="请选择"
+                style="width: 100px"
+              >
+              <el-option
+                  v-for="item in selectTypeList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+              ></el-option>
+              </el-select>
+            </div>
+            <div  v-if="tabIndex === 'weight'">
+              <el-input
+                placeholder="值"
+                v-model="forms.minWc"
+                style="width: 50px"
+                v-if="forms.wcSelectType < 4 || forms.wcSelectType === 5">
+              </el-input>
+              <el-input
+                placeholder="值"
+                v-model="forms.maxWc"
+                style="width: 50px"
+                v-if="forms.wcSelectType > 3">
+              </el-input>
+            </div>
+            <div v-if="tabIndex === 'sport'">
+              <span>运动时长：</span>
+              <el-select
+                v-model="forms.sportTimeSelectType"
+                placeholder="请选择"
+                style="width: 100px"
+              >
+              <el-option
+                  v-for="item in selectTypeList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+              ></el-option>
+              </el-select>
+            </div>
+            <div  v-if="tabIndex === 'sport'">
+              <el-input
+                placeholder="值"
+                v-model="forms.minSportTime"
+                style="width: 50px"
+                v-if="forms.sportTimeSelectType < 4 || forms.sportTimeSelectType === 5">
+              </el-input>
+              <el-input
+                placeholder="值"
+                v-model="forms.maxSportTime"
+                style="width: 50px"
+                v-if="forms.sportTimeSelectType > 3">
+              </el-input>
+            </div>
+          </div>
+          <div class="searchRight">
+                <div class="buttones">
+                  <div class="searchFor" @click="search">
+                    <img src="@/assets/images/common/topsearchblue.png" alt="" />
+                  </div>
+                  <div class="resetAll" @click="reset">重置</div>
+                  <div class="more" v-if="isTrue" @click="upMore">
+                    <span>></span>
+                    展开更多
+                  </div>
+                  <div class="more noMore" v-if="!isTrue" @click="upMore">
+                    <span>></span>收起筛选
+                  </div>
+                </div>
+              </div>
+        </div>
+      </div>
+      <div v-if="!isTrue" class="searchCondition" style="width: 90%">
+        <div class="searchLeft" style="padding-left: 5px">
+          <div v-if="tabIndex === 'BP'">
+            <span>舒张压：</span>
+            <el-select
+              v-model="forms.dbpSelectType"
+              placeholder="请选择"
+              style="width: 100px"
+            >
+            <el-option
+                v-for="item in selectTypeList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+            ></el-option>
+            </el-select>
+          </div>
+          <div  v-if="tabIndex === 'BP'">
+            <el-input
+              placeholder="值"
+              v-model="forms.minDbp"
+              style="width: 50px"
+              v-if="forms.dbpSelectType < 4 || forms.dbpSelectType === 5">
+            </el-input>
+            <el-input
+              placeholder="值"
+              v-model="forms.maxDbp"
+              style="width: 50px"
+              v-if="forms.dbpSelectType > 3">
+            </el-input>
+          </div>
+          <div  v-if="tabIndex === 'BP'">
+              <span>心率值：</span>
+              <el-input
+                placeholder="心率值"
+                v-model="forms.minSugar"
+                style="width: 150px"
+              >
+              </el-input>
+            </div>
+            <div v-if="tabIndex === 'BG'">
+              <span>血糖值：</span>
+              <el-select
+                v-model="forms.selectType"
+                placeholder="请选择"
+                style="width: 100px"
+              >
+              <el-option
+                  v-for="item in selectTypeList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+              ></el-option>
+              </el-select>
+            </div>
+            <div  v-if="tabIndex === 'BG'">
+              <el-input
+                placeholder="值"
+                v-model="forms.minSugar"
+                style="width: 50px"
+                v-if="forms.selectType < 4 || forms.selectType === 5">
+              </el-input>
+              <el-input
+                placeholder="值"
+                v-model="forms.maxSugar"
+                style="width: 50px"
+                v-if="forms.selectType > 3">
+              </el-input>
+            </div>
+            <div v-if="tabIndex === 'weight'">
+              <span>体脂率：</span>
+              <el-select
+                v-model="forms.bdPercentSelectType"
+                placeholder="请选择"
+                style="width: 100px"
+              >
+              <el-option
+                  v-for="item in selectTypeList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+              ></el-option>
+              </el-select>
+            </div>
+            <div  v-if="tabIndex === 'weight'">
+              <el-input
+                placeholder="值"
+                v-model="forms.minBdPercent"
+                style="width: 50px"
+                v-if="forms.bdPercentSelectType < 4 || forms.bdPercentSelectType === 5">
+              </el-input>
+              <el-input
+                placeholder="值"
+                v-model="forms.maxBdPercent"
+                style="width: 50px"
+                v-if="forms.bdPercentSelectType > 3">
+              </el-input>
+            </div>
+            <div v-if="tabIndex === 'weight'">
+              <span>BMI</span>
+              <el-select
+                v-model="forms.bmiSelectType"
+                placeholder="请选择"
+                style="width: 100px"
+              >
+              <el-option
+                  v-for="item in selectTypeList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+              ></el-option>
+              </el-select>
+            </div>
+            <div  v-if="tabIndex === 'weight'">
+              <el-input
+                placeholder="值"
+                v-model="forms.minBmi"
+                style="width: 50px"
+                v-if="forms.bmiSelectType < 4 || forms.bmiSelectType === 5">
+              </el-input>
+              <el-input
+                placeholder="值"
+                v-model="forms.maxBmi"
+                style="width: 50px"
+                v-if="forms.bmiSelectType > 3">
+              </el-input>
+            </div>
+            <div v-if="tabIndex === 'sport'">
+              <span>运动路程：</span>
+              <el-select
+                v-model="forms.sportDistanceSelectType"
+                placeholder="请选择"
+                style="width: 100px"
+              >
+              <el-option
+                  v-for="item in selectTypeList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+              ></el-option>
+              </el-select>
+            </div>
+            <div  v-if="tabIndex === 'sport'">
+              <el-input
+                placeholder="值"
+                v-model="forms.minSportDistance"
+                style="width: 50px"
+                v-if="forms.sportDistanceSelectType < 4 || forms.sportDistanceSelectType === 5">
+              </el-input>
+              <el-input
+                placeholder="值"
+                v-model="forms.maxSportDistance"
+                style="width: 50px"
+                v-if="forms.sportDistanceSelectType > 3">
+              </el-input>
+            </div>
+            <div v-if="tabIndex === 'sport'">
+              <span>消耗卡路里：</span>
+              <el-select
+                v-model="forms.sportKcalSelectType"
+                placeholder="请选择"
+                style="width: 100px"
+              >
+              <el-option
+                  v-for="item in selectTypeList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+              ></el-option>
+              </el-select>
+            </div>
+            <div  v-if="tabIndex === 'sport'">
+              <el-input
+                placeholder="值"
+                v-model="forms.minSportKcal"
+                style="width: 50px"
+                v-if="forms.sportKcalSelectType < 4 || forms.sportKcalSelectType === 5">
+              </el-input>
+              <el-input
+                placeholder="值"
+                v-model="forms.maxSportKcal"
+                style="width: 50px"
+                v-if="forms.sportKcalSelectType > 3">
+              </el-input>
+            </div>
+            <div v-if="tabIndex === 'sport'">
+              <span>步数：</span>
+              <el-select
+                v-model="forms.sportStepsSelectType"
+                placeholder="请选择"
+                style="width: 100px"
+              >
+              <el-option
+                  v-for="item in selectTypeList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+              ></el-option>
+              </el-select>
+            </div>
+            <div  v-if="tabIndex === 'sport'">
+              <el-input
+                placeholder="值"
+                v-model="forms.minSportSteps"
+                style="width: 50px"
+                v-if="forms.sportStepsSelectType < 4 || forms.sportStepsSelectType === 5">
+              </el-input>
+              <el-input
+                placeholder="值"
+                v-model="forms.maxSportSteps"
+                style="width: 50px"
+                v-if="forms.sportStepsSelectType > 3">
+              </el-input>
+            </div>
+          <div>
             <span>检测日期：</span>
             <el-date-picker
               v-model="forms.startTime"
@@ -96,17 +415,8 @@
             >
             </el-date-picker>
           </div>
-          </div>
-            <div class="searchRight">
-            <div class="buttones">
-              <div class="searchFor" @click="search">
-                <img src="@/assets/images/common/topsearchblue.png" alt="" />
-              </div>
-              <div class="resetAll" @click="reset()">重置</div>
-            </div>
-          </div>
         </div>
-      </div>
+          </div>
       <template >
         <div class="topbottomborder"></div>
         <div class="operates" style="margin-top: 20px;">
@@ -133,6 +443,7 @@
           <span v-else>
             <operate-button
               type="editGray"
+              @click="Export"
               >
             </operate-button>
           </span>
@@ -304,7 +615,7 @@ const SEX = {
 };
 const COLUMNS = {
   BP: [
-    { label: '客户编号', prop: 'clientId' },
+    { label: '客户编号', prop: 'clientNo' },
     { label: '姓名', prop: 'clientName' },
     {
       label: '性别',
@@ -321,7 +632,7 @@ const COLUMNS = {
     { label: '备注', prop: 'result' },
   ],
   BG: [
-    { label: '客户编号', prop: 'clientId' },
+    { label: '客户编号', prop: 'clientNo' },
     { label: '姓名', prop: 'clientName' },
     {
       label: '性别',
@@ -337,7 +648,7 @@ const COLUMNS = {
     { label: '备注', prop: 'result' },
   ],
   weight: [
-    { label: '客户编号', prop: 'clientId' },
+    { label: '客户编号', prop: 'clientNo' },
     { label: '姓名', prop: 'clientName' },
     {
       label: '性别',
@@ -351,12 +662,12 @@ const COLUMNS = {
     { label: '身高(cm)', prop: 'height' },
     { label: '体重(kg)', prop: 'weight' },
     { label: '腰围(cm)', prop: 'wc' },
-    // { label: 'BMI', prop: 'weight' },
+    { label: 'BMI', prop: 'bmi' },
     { label: '体脂率(%)', prop: 'bdPercent' },
     { label: '备注', prop: 'result' },
   ],
   sport: [
-    { label: '客户编号', prop: 'clientId' },
+    { label: '客户编号', prop: 'clientNo' },
     { label: '姓名', prop: 'clientName' },
     {
       label: '性别',
@@ -374,7 +685,7 @@ const COLUMNS = {
     { label: '备注', prop: 'result' },
   ],
   other: [
-    { label: '客户编号', prop: 'clientId' },
+    { label: '客户编号', prop: 'clientNo' },
     { label: '姓名', prop: 'clientName' },
     {
       label: '性别',
@@ -411,15 +722,49 @@ export default {
   },
   data() {
     return {
+      isTrue: true,
+      upload_url: process.env.api.upload_url,
       trendStatus: false,
       isGetinfo: true,
       isAddInfo: true,
+      typeOptions: [],
       forms: {
-        clientName: '',
+        keywords: '',
         gender: '',
         workUnitName: '',
         startTime: '', // 开始时间
         endTime: '', // 结束时间
+        sugarType: '', // 血糖类型
+        selectType: '', // ＞，＝，≥，≤
+        minSugar: '', // 小值
+        maxSugar: '', // 大值
+        sbpSelectType: '', // 收缩压＞，＝，≥，≤
+        minSbp: '', // 小值、
+        maxSbp: '', // 大值
+        dbpSelectType: '', // 舒张压＞，＝，≥，≤
+        minDbp: '', // 小值
+        maxDbp: '', // 大值
+        wcSelectType: '', // 腰围＞，＝，≥，≤
+        minWc: '',
+        maxWc: '',
+        bdPercentSelectType: '', // 体脂率 ＞，＝，≥，≤
+        minBdPercent: '',
+        maxBdPercent: '',
+        bmiSelectType: '', // BMI ＞，＝，≥，≤
+        minBmi: '',
+        maxBmi: '',
+        sportTimeSelectType: '', // 运动时长 ＞，＝，≥，≤
+        minSportTime: '',
+        maxSportTime: '',
+        sportDistanceSelectType: '', // 运动路程＞，＝，≥，≤
+        minSportDistance: '',
+        maxSportDistance: '',
+        sportKcalSelectType: '', // 消耗卡路里＞，＝，≥，≤
+        minSportKcal: '',
+        maxSportKcal: '',
+        sportStepsSelectType: '', // 步数＞，＝，≥，≤
+        minSportSteps: '',
+        maxSportSteps: '',
       },
       form: {
         keywords: '', // 姓名
@@ -449,6 +794,14 @@ export default {
       tabborName: '血压',
       multipleSelection: [],
       ids: '',
+      selectTypeList: [
+        { name: '>', id: 1 },
+        { name: '=', id: 2 },
+        { name: '≥', id: 3 },
+        { name: '≤', id: 4 },
+        { name: '～', id: 5 },
+        { name: '<', id: 6 },
+      ],
       options: {
         startTime: {
           disabledDate: (cur) => {
@@ -486,9 +839,18 @@ export default {
         localStorage.removeItem('healthMonitorActive');
       }
       vm.queryPageList();
+      vm.getQuickListBloodSugar();
     });
   },
   methods: {
+    upMore() {
+      this.isTrue = !this.isTrue;
+      this.$forceUpdate();
+    },
+    async getQuickListBloodSugar() {
+      const { data } = await this.$api.healthMonitorInterface.getQuickListBloodSugar();
+      this.typeOptions = data.data;
+    },
     TabbarBtn(index, type) {
       this.Tabactive = index;
       this.tabIndex = type;
@@ -523,11 +885,43 @@ export default {
       this.isAddInfo = false;
     },
     reset() {
-      this.forms.clientName = '';
+      this.isTrue = true;
+      this.forms.keywords = '';
       this.forms.workUnitName = '';
       this.forms.gender = '';
       this.forms.startTime = '';
       this.forms.endTime = '';
+      this.forms.sugarType = '';
+      this.forms.selectType = '';
+      this.forms.minSugar = '';
+      this.forms.maxSugar = '';
+      this.sbpSelectType = '';
+      this.minSbp = '';
+      this.maxSbp = '';
+      this.dbpSelectType = '';
+      this.minDbp = '';
+      this.maxDbp = '';
+      this.wcSelectType = '';
+      this.minWc = '';
+      this.maxWc = '';
+      this.bdPercentSelectType = '';
+      this.minBdPercent = '';
+      this.maxBdPercent = '';
+      this.bmiSelectType = '';
+      this.minBmi = '';
+      this.maxBmi = '';
+      this.sportTimeSelectType = '';
+      this.minSportTime = '';
+      this.maxSportTime = '';
+      this.sportDistanceSelectType = '';
+      this.minSportDistance = '';
+      this.maxSportDistance = '';
+      this.sportKcalSelectType = '';
+      this.minSportKcal = '';
+      this.maxSportKcal = '';
+      this.sportStepsSelectType = '';
+      this.minSportSteps = '';
+      this.maxSportSteps = '';
       this.table.pageNo = 1;
       this.queryPageList();
     },
@@ -539,6 +933,11 @@ export default {
       this.table.columns = COLUMNS[this.tabIndex];
     },
     search() {
+      // if (this.tabIndex === 'BG') {
+      //   if (this.forms.selectType === 4) {
+      //     this.forms.maxSugar = this.forms.minSugar;
+      //   }
+      // }
       this.table.pageNo = 1;
       this.queryPageList();
     },
@@ -627,6 +1026,27 @@ export default {
       }).then(({ data }) => {
         this.table.total = data.data.total;
         this.table.list = data.data.data;
+      });
+    },
+    // 导出
+    Export() {
+      const apiNameMap = {
+        BP: 'exportBloodPressure',
+        BG: 'exportBloodSugar',
+        weight: 'exportWeight',
+        sport: 'exportSport',
+        other: 'exportOther',
+      };
+      const apiName = apiNameMap[this.tabIndex];
+      this.$api.healthMonitorInterface[apiName]({
+        ...this.forms,
+        pageNo: this.table.pageNo,
+        pageSize: this.table.pageSize,
+      }).then(({ data }) => {
+        window.open(this.upload_url + data.data);
+        // console.log(data.data);
+        // this.table.total = data.data.total;
+        // this.table.list = data.data.data;
       });
     },
     handleTabIndexChange() {

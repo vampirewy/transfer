@@ -12,7 +12,7 @@
     >
       <div class="form-title">
         <div class="line"></div>
-        <h3 class="name">新增-其他配置</h3>
+        <h3 class="name">新增-项目配置</h3>
       </div>
 
       <div class="medicate-record mt20">
@@ -73,7 +73,7 @@
                 <el-input
                 type="input"
                 :rows="5"
-                v-model="ModifyList.name"
+                v-model="scope.row.name"
                 placeholder="请输入"
                 :maxlength="150"
                 height="20"
@@ -95,7 +95,7 @@
                 <el-input
                 type="input"
                 :rows="5"
-                v-model="ModifyList.unit"
+                v-model="scope.row.unit"
                 placeholder="请输入"
                 :maxlength="150"
                 show-word-limit
@@ -114,7 +114,7 @@
         <template slot-scope="scope">
             <div v-if="scope.row.isshow">
                 <el-switch
-                v-model="ModifyList.state"
+                v-model="scope.row.state"
                 :active-value="1"
                 :inactive-value="2"
                 active-color="#13ce66">
@@ -135,7 +135,7 @@
                 <el-input
                 type="input"
                 :rows="5"
-                v-model="ModifyList.intro"
+                v-model="scope.row.intro"
                 placeholder="请输入"
                 :maxlength="150"
                 show-word-limit
@@ -154,7 +154,7 @@
                 src="@/assets/images/service/compile.png"
               />
             </el-button>
-<el-button type="text" v-if="scope.row.isshow" @click="ModifyListBtn(scope.$index, scope.row.id)">
+<el-button type="text" v-if="scope.row.isshow" @click="ModifyListBtn(scope.$index, scope.row)">
               <img
                 class="icon-delete"
                 src="@/assets/images/service/allergic.png"
@@ -177,17 +177,17 @@
               :current-page="formData.pageNo"
               @current-change="handleCurrentChange"
               @size-change="handleSizeChange"
-              :page-sizes="[15]"
+              :page-sizes="[5]"
               layout="prev, pager, next, jumper, total, sizes"
             ></el-pagination>
-      <div class="handle-btn mt30 mb30">
+      <!-- <div class="handle-btn mt30 mb30">
         <el-button class="reset-btn" size="small" @click="blackReturn"
           >返回</el-button
         >
         <el-button class="add-btn" type="primary" size="small" @click="submit"
           >保存</el-button
         >
-      </div>
+      </div> -->
     </el-form>
   </div>
 </template>
@@ -238,12 +238,6 @@ export default {
       formData: {
         pageNo: 1,
         pageSize: 5,
-      },
-      ModifyList: {
-        Name: '',
-        unit: '',
-        state: 1,
-        intro: '',
       },
     };
   },
@@ -309,19 +303,20 @@ export default {
       if (ismun) {
         this.$set(this.drugsList[index], 'isshow', true);
       }
+      console.log(this.drugsList);
     },
     async getResultList() {
       const res = await this.$api.medication.getResultList();
       const { data } = res;
       this.resultList = data.data.data;
     },
-    ModifyListBtn(index, ids) {
+    ModifyListBtn(index, row) {
       this.$api.healthMonitorInterface.updateHealthDataItem({
-        name: this.ModifyList.name,
-        unit: this.ModifyList.unit,
-        state: this.ModifyList.state,
-        intro: this.ModifyList.intro,
-        id: ids,
+        name: row.name,
+        unit: row.unit,
+        state: row.state,
+        intro: row.intro,
+        id: row.id,
       }).then(({ data }) => {
         if (data.success) {
           this.$set(this.drugsList[index], 'isshow', false);
@@ -422,10 +417,6 @@ export default {
         organId: '',
         paramList: this.drugsList,
       };
-
-      if (!this.infoSource.specification) {
-        return this.$message.warning('请填写姓名');
-      }
       this.$api.medication.add(reqBody).then(({ data }) => {
         if (data.code === 200) {
           this.$router.go(-1);

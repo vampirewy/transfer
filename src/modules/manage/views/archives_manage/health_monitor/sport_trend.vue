@@ -22,6 +22,9 @@
       <div><span class="lookPressureTitle">运动消耗：</span><span>{{queryInfo.kcal}} Kcai</span></div>
     </div>
     <div class="lookPressure">
+      <div><span class="lookPressureTitle">检测时间：</span><span>{{queryInfo.testDate}}</span></div>
+    </div>
+    <div class="lookPressure">
       <div style="width:100%;display: flex;">
         <span class="lookPressureTitle" style="width:50px;white-space: nowrap;">备注：</span>
         <span>{{queryInfo.result}}</span>

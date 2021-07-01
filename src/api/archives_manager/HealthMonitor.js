@@ -125,6 +125,26 @@ class HealthMonitorInterface extends BaseModule {
   DeletedHealthDataOther(params) {
     return this.post('/client_health_data/deleted_health_data_other', params);
   }
+  // 血压列表导出
+  exportBloodPressure(params) {
+    return this.post('/client_health_data/export_blood_pressure', params);
+  }
+  // 血糖列表导出
+  exportBloodSugar(params) {
+    return this.post('/client_health_data/export_blood_sugar', params);
+  }
+  // 体重列表导出
+  exportWeight(params) {
+    return this.post('/client_health_data/export_weight', params);
+  }
+  // 运动列表导出
+  exportSport(params) {
+    return this.post('/client_health_data/export_sport', params);
+  }
+  // 运动列表导出
+  exportOther(params) {
+    return this.post('/client_health_data/export_other', params);
+  }
 }
 
 export default new HealthMonitorInterface();
