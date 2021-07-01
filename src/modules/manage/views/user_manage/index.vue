@@ -19,7 +19,7 @@
            <el-select
                   v-model="formData.gender"
                   placeholder="请选择"
-                  style="width: 140px"
+                  style="width: 120px"
           >
             <el-option label="男" value="1" key="1"></el-option>
             <el-option label="女" value="2" key="2"></el-option>
@@ -30,7 +30,7 @@
             <el-select
                   v-model="formData.gridId"
                   placeholder="请选择"
-                  style="width: 140px"
+                  style="width: 120px"
           >
             <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
                        :key="index"></el-option>
@@ -40,8 +40,12 @@
             <span>管理医生：</span>
             <el-select
                   multiple
+                  v-model="formData.doctorIdList"
+                  clearable
+            collapse-tags
+            class="someChoose"
                   placeholder="请选择"
-                  style="width: 140px"
+                  style="width: 120px"
           >
             <el-option :label="item.realName" :value="item.id" v-for="(item, index) in doctorList"
                        :key="index"></el-option>
@@ -81,7 +85,7 @@
             <el-select
                   v-model="formData.hasLifeQuestion"
                   placeholder="请选择"
-                  style="width: 140px"
+                  style="width: 120px"
           >
             <el-option :label="item.name" :value="item.id" v-for="(item, index) in istrue"
                        :key="index"></el-option>
@@ -92,7 +96,7 @@
             <el-select
                   v-model="formData.hasAssessReport"
                   placeholder="请选择"
-                  style="width: 140px"
+                  style="width: 120px"
           >
             <el-option :label="item.name" :value="item.id" v-for="(item, index) in istrue"
                        :key="index"></el-option>
@@ -103,7 +107,7 @@
             <el-select
                   v-model="formData.hasAnnex"
                   placeholder="请选择"
-                  style="width: 140px"
+                  style="width: 120px"
           >
             <el-option :label="item.name" :value="item.id" v-for="(item, index) in istrue"
                        :key="index"></el-option>
@@ -172,12 +176,12 @@
                     class="btn-new btnDel"
                     v-if="getAccess('customer_pool_distribute')"
             ><img src="@/assets/images/common/deliverBtn.png" />分配</el-button> -->
-            <el-button
+            <!-- <el-button
             style="width:120px;"
                     size="small"
                     class="btn-new btnDel"
                     v-if="getAccess('customer_pool_distribute')"
-            ><img src="@/assets/images/common/createReport.png" />生成报告</el-button>
+            ><img src="@/assets/images/common/createReport.png" />生成报告</el-button> -->
           </div>
         </div>
         <div>
@@ -407,7 +411,7 @@ export default {
         tag: '',
         startTime: '',
         endTime: '',
-        // doctorIdList: null,
+        doctorIdList: null,
       },
       params: {
         pageNo: 1,
@@ -466,7 +470,7 @@ export default {
           clientIdList: this.chooseUserList.map(user => user.id),
         };
         this.$api.userManagerInterface.deleteClientInfo(params).then(({ data }) => {
-          if (data.code === 200) {
+          if (data.rc === 0) {
             this.$message.success('操作成功');
             this.search();
             this.chooseUserList = [];

@@ -26,7 +26,7 @@
                 <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
             </span>
           </div>
-          <div>
+          <!-- <div>
             <span>体检日期：</span>
             <el-date-picker
                   v-model="form.startTime"
@@ -47,7 +47,7 @@
                   style="width: 140px"
           >
           </el-date-picker>
-          </div>
+          </div> -->
             </div>
             <div class="searchRight">
             <div class="buttones">

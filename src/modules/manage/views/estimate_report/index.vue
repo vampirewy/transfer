@@ -408,6 +408,7 @@
                 width="90" show-overflow-tooltip>
                 <template slot-scope="scope">
                   <el-button
+                  style="color:#36BF2F;font-weight:600;"
                     type='text'
                     @click="expandsHandle(scope.row)">
                     {{scope.row.notMatchAbnromalTotal || 0}}

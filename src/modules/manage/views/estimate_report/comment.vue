@@ -3,7 +3,7 @@
     class="comment-dialog"
     :modal-append-to-body="false"
     title="点评"
-    top="5vh"
+    top="12vh"
     :visible="true"
     width="900px"
     :before-close="() => $emit('close')">
@@ -47,10 +47,18 @@
                   slot="reference"
                   v-model="templateStr"
                   placeholder="请选择">
-                  <i :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`" slot="suffix"></i>
+                  <i
+                      class="el-select__caret el-input__icon "
+                      :class="
+                        popoverStatus
+                          ? 'el-icon-arrow-up'
+                          : 'el-icon-arrow-down'
+                      "
+                      slot="suffix"
+                    ></i>
                 </el-input>
               </el-popover>
-              <el-button plain @click="addSportTemplate">添加</el-button>
+              <el-button plain @click="addSportTemplate" style="color:#3154AC;">添加</el-button>
             </div>
           </el-form-item>
           <el-table :data="form.sportLibraryDTOList" class="sport-table">
@@ -108,10 +116,12 @@
               show-word-limit>
             </el-input>
           </el-form-item>
-          <div class="sign">
+          <el-form-item label="签名" prop="commentContent" style="margin-top:10px;">
+            <el-input style="width:100%;" v-model="form.commentName" placeholder="请输入"></el-input>
+          </el-form-item>
+          <!-- <div class="sign">
             <span>签名：</span>
-            <el-input v-model="form.commentName" placeholder="请输入"></el-input>
-          </div>
+          </div> -->
         </el-tab-pane>
       </el-tabs>
     </el-form>
