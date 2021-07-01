@@ -15,7 +15,8 @@
           <p><span>{{item.trackingDate ? item.trackingDate.split(' ')[0] : '' }}</span></p>
         </div>
         <div class="keywords">
-          <p v-for="(itemChild, itemIndex) in item.keywords" :key="itemIndex">{{itemChild}}</p>
+          <p v-for="(itemChild, itemIndex) in item.keywords" :key="itemIndex">
+            {{itemChild || '无'}}</p>
         </div>
         <div class="medicalList">
           <div class="medicalListOne"

@@ -20,14 +20,14 @@
           <div class="searchCondition">
           <div class="searchLeft">
           <div class="searchInputFormItem">
-            <el-input placeholder="姓名/手机号/企业单位" v-model="form.keywords">
+            <el-input placeholder="输入企业名称" v-model="form.keywords">
             </el-input>
             <span class="searchBtnImgSpan" @click="onSearch">
                 <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
             </span>
           </div>
           <div>
-            <span>建档日期：</span>
+            <span>体检日期：</span>
             <el-date-picker
                   v-model="form.startTime"
                   type="date"
@@ -75,10 +75,9 @@
           <el-table
             style="width: 100%"
             :data="table.list"
-            ref="table"
             align="center"
           >
-            <el-table-column type="selection" width="55"> </el-table-column>
+            <!-- <el-table-column type="selection" width="55"> </el-table-column> -->
             <el-table-column
               label="企业名称"
               prop="workUnitName"
@@ -223,10 +222,6 @@ export default {
       });
       this.table.list = res.data.data.data;
       this.table.totalCount = res.data.data.total || 0;
-      // const { data } = res;
-      // const result = data || {};
-      // this.table.list = result.list || [];
-      // this.table.totalCount = result.total || 0;
     },
     handleEdit() {
       const selection = this.$refs.table.selection;

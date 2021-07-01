@@ -3,7 +3,7 @@
     class="comment-dialog"
     :modal-append-to-body="false"
     :title="title"
-    top="3vh"
+    top="2vh"
     :visible="true"
     :before-close="() => $emit('close')"
   >
@@ -46,7 +46,9 @@
             <el-form-item label="适宜年龄">
               <el-input
                 v-model="formData.minAge"
-                maxLength="30"
+                oninput="if(value>150)value=150;
+              if(value<0)value=0;
+              "
                 placeholder="输入最小年龄"
               >
               </el-input>
@@ -57,8 +59,10 @@
           </el-col>
           <el-col :span="10">
             <el-input
+              oninput="if(value>150)value=150;
+              if(value<0)value=0;
+              "
               v-model="formData.maxAge"
-              maxLength="30"
               placeholder="输入最大年龄"
             >
             </el-input>
@@ -171,7 +175,7 @@
                 >
                 <abconfig
                     v-if="popoverStatus"
-                    @change="handleSportSelectChangess"
+                    @change="handleSportSelectChanges"
                     @cancel="handlePopoverClose"
                   >
                   </abconfig>
@@ -273,6 +277,10 @@ export default {
           name: '女',
           id: 2,
         },
+        {
+          name: '不限',
+          id: 0,
+        },
       ],
       popoverStatus: false,
       newList: [],
@@ -283,7 +291,7 @@ export default {
       return this.selectTemplate.map(item => item.abnormalName).join(',');
     },
     templateStrs() {
-      return this.selectTemplates.map(item => item.itemName).join(',');
+      return this.selectTemplates.map(item => item.abnormalName).join(',');
     },
     templateStrss() {
       return this.selectTemplatess.map(item => item.systemItemName).join(',');
@@ -307,6 +315,7 @@ export default {
     addSportTemplates() {
       if (this.selectTemplates && this.selectTemplates.length > 0) {
         this.selectTemplates.forEach((element) => {
+          element.modelCode = this.id.code;
           this.formData.tagLists.push(element);
         });
         this.selectTemplates = [];
@@ -314,14 +323,18 @@ export default {
       }
     },
     addSportTemplatess() {
-      console.log(this.selectTemplatess, 111, this.formData.tagListss);
-      // if (this.selectTemplatess && this.selectTemplatess.length > 0) {
-      //   this.selectTemplatess.forEach((element) => {
-      //     this.formData.tagListss.push(element);
-      //   });
-      //   this.selectTemplatess = [];
-      //   this.$forceUpdate();
-      // }
+      if (this.selectTemplatess && this.selectTemplatess.length > 0) {
+        this.selectTemplatess.forEach((element) => {
+          const oabj = {
+            modelCode: this.id.code,
+            systemItemCode: element.code,
+            systemItemName: element.itemName,
+          };
+          this.formData.tagListss.push(oabj);
+        });
+        this.selectTemplatess = [];
+        this.$forceUpdate();
+      }
     },
     // 删除
     close(index) {
@@ -361,7 +374,7 @@ export default {
           this.formData.tagLists = data.data.abnormalScoreDtos;
           this.formData.tagListss = data.data.mustItemDtos;
         });
-      this.title = `评估设置${this.id.name}患病风险评估`;
+      this.title = `评估设置-${this.id.name}患病风险评估`;
     },
     // 点击编辑
     Addoperates(index) {
@@ -395,6 +408,7 @@ export default {
         .then((response) => {
           if (response.data.rc === 0) {
             this.$message.success('操作成功');
+            this.$emit('close');
           } else {
             this.$message.error('网络异常！');
           }

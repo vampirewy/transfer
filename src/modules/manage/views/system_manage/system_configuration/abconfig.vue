@@ -9,7 +9,7 @@
     <div class="scores">
       <div>异常分值：</div><el-input
       style="width:70%;" v-model="score" placeholder="输入分值"></el-input>
-      <el-button @click="addSportTemplate" class="addbutton">添加</el-button>
+      <el-button @click="addSportTemplatess" class="addbutton">添加</el-button>
     </div>
     <el-table :data="tableData">
       <el-table-column width="40">
@@ -50,7 +50,7 @@ export default {
       tableData: [],
       total: 0,
       currentPage: 1,
-      pageSize: 5,
+      pageSize: 15,
       selected: [],
       selectedData: [],
       score: '',
@@ -60,21 +60,21 @@ export default {
     sportTypeMap() {
       const map = {};
       sportTypeList.forEach((item) => {
-        map[item.value] = item.name;
+        map[item.value] = item.abnormalName;
       });
       return map;
     },
     sportSortMap() {
       const map = {};
       sportSortList.forEach((item) => {
-        map[item.value] = item.name;
+        map[item.value] = item.abnormalName;
       });
       return map;
     },
     strengthDegreeMap() {
       const map = {};
       strengthDegreeList1.forEach((item) => {
-        map[item.value] = item.name;
+        map[item.value] = item.abnormalName;
       });
       return map;
     },
@@ -84,7 +84,14 @@ export default {
   },
   methods: {
     submit() {
-      this.$emit('change', this.selectedData);
+      if (this.score) {
+        this.selectedData.forEach((item) => {
+          item.score = this.score;
+        });
+        this.$emit('change', this.selectedData);
+      } else {
+        this.$message.error('请输入异常分值！');
+      }
     },
     checkedChange(val, data) {
       if (val) {

@@ -49,6 +49,10 @@ class SunFollow extends BaseModule {
   getClientPositiveContent(data = {}) {
     return this.post('/positive_tracking/get_client_positive_content', data);
   }
+  // 首次跟踪列表 - 是否结案
+  getClientPositiveCloseCase(data = {}) {
+    return this.post('/positive_tracking/close_case', data);
+  }
   // 跟踪计划列表
   getPositiveTaskdListPage(data = {}) {
     return this.post('/positive_tracking/get_positive_return_task_list_page', data);

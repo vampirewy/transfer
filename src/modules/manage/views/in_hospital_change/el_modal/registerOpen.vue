@@ -116,10 +116,25 @@ export default {
       this.form = Object.assign(this.form, val);
       console.log(this.form);
       // TODO 对接预约接口
-      if (this.confirmfunc) {
-        this.confirmfunc.call(this, this.form);
-      }
-      this.cancel();
+      const sendData = {
+        clientId: this.form.clientId,
+        primaFacie: this.form.primaFacie,
+        referralIntro: this.form.referralIntro,
+        departmentName: this.form.departmentName,
+        departmentId: this.form.departmentId,
+        doctorName: this.form.doctorName,
+        doctorId: this.form.doctorId,
+        appointmentDate: this.form.activeDate,
+        appointmentHourStart: this.form.activeTime.split('~')[0],
+        appointmentHourEnd: this.form.activeTime.split('~')[1],
+      };
+      this.$api.InhospitalChange.saveRegistration(sendData).then(() => {
+        this.$message.success('操作成功');
+        if (this.confirmfunc) {
+          this.confirmfunc.call(this, this.form);
+        }
+        this.cancel();
+      });
     },
     onVisible(value) {
       if (!value) {

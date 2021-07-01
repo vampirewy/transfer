@@ -307,10 +307,11 @@ export default {
       });
     },
     handleCloseTag(res, type, route) {
+      console.log(route);
       if (type !== 'others') {
         if (type === 'all') {
           this.turnToPage('home');
-        } else if (routeEqual(this.$route, route)) {
+        } else if (routeEqual(this.$route, route)) { // 必须要判断关闭的是当前页面，否则会出现关闭其他页面，新增的页面会变成列表
           this.closeTag(route);
         }
       }

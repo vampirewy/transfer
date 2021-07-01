@@ -148,7 +148,7 @@
         ></el-table-column>
         <el-table-column prop="gender" label="性别" show-overflow-tooltip>
           <template slot-scope="scope">{{
-            scope.row.gender == 1 ? '男' : '女'
+            scope.row.gender == 1 ? '男' : scope.row.gender == 2 ? '女' : '不限'
           }}</template>
         </el-table-column>
         <el-table-column prop="minAge" label="年龄范围" show-overflow-tooltip>
@@ -290,6 +290,9 @@ export default {
     // 员工列表
     this.queryList();
   },
+  mounted() {
+    this.roledetail();
+  },
   methods: {
     handleComment(data) {
       this.viewIndex = 2;
@@ -403,6 +406,16 @@ export default {
           this.total = result.total || 0;
         });
     },
+    roledetail() {
+      // 评估模型列表
+      this.$api.systemManageInterface
+        .Roledetail()
+        .then((res) => {
+          const { data } = res;
+          const result = data.data || {};
+          this.form = result.data || [];
+        });
+    },
     add() {
       // 新增页面
       this.viewIndex = 2;
@@ -485,6 +498,7 @@ export default {
   background: #f6f8fc;
   position: absolute;
   top: 18px;
+  left: 20px;
   margin-top: -20px;
   z-index: 1;
   div {

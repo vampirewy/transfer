@@ -344,20 +344,6 @@ export default {
       },
     };
   },
-  activated() {
-    this.getGridList();
-    this.getQuestionFromList();
-    if (localStorage.getItem('homeSearchData')) {
-      const HomeSearchData = JSON.parse(localStorage.getItem('homeSearchData'));
-      this.formData.startTime = HomeSearchData.startDate;
-      this.formData.endTime = HomeSearchData.lastDate;
-      this.formData.searchRange = HomeSearchData.searchRange;
-    }
-  },
-  destroyed() {
-    // 清除时间 和 我的/平台
-    localStorage.removeItem('homeSearchData');
-  },
   methods: {
     async getGridList() {
       const res = await this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 10000 });
@@ -500,8 +486,9 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
-      // vm.getQuestionType();
       vm.fetch();
+      vm.getGridList();
+      vm.getQuestionFromList();
     });
   },
 };

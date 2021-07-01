@@ -345,7 +345,7 @@ export default {
       this.contentSaveRequestsList.forEach((val) => {
         sendData.contentSaveRequests.push({
           positiveTrackingId: val.id,
-          isCloseCase: val.isCloseCase,
+          // isCloseCase: val.isCloseCase,
           state: val.state || 1,
         });
       });
@@ -353,9 +353,15 @@ export default {
       sendData.nextTrackingDate = `${sendData.nextTrackingDate.split(' ')[0]} 00:00:00`;
       this.$api.sunFollow.savePositiveReturn(sendData).then(() => {
         this.$message.success('操作成功');
-        this.$router.push({
-          path: '/first_follow',
-        });
+        if (this.$route.params.sourceType === '1') {
+          this.$router.push({
+            path: '/first_follow',
+          });
+        } else if (this.$route.params.sourceType === '2') {
+          this.$router.push({
+            path: '/follow_task',
+          });
+        }
       });
     },
   },

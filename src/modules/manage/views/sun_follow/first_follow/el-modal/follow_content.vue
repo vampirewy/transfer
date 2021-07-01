@@ -9,13 +9,16 @@
       <el-button
               class="btn-new btnAdd"
               size="small"
+              @click="handleSomeCloseCase"
       ><img src="@/assets/images/common/over.png" />结案</el-button>
     </div>
-      <el-table :data="tableData" align="center" class="openTable">
+      <el-table :data="tableData" align="center" class="openTable"
+                @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="35"></el-table-column>
         <el-table-column
                 prop="itemName"
                 label="项目名称"
+                width="80px"
                 show-overflow-tooltip
         ></el-table-column>
         <el-table-column
@@ -36,7 +39,7 @@
         <el-table-column
                 prop="createTime"
                 label="跟踪结果"
-                width="120px"
+                min-width="120px"
         >
           <template slot-scope="scope">
             <el-select
@@ -55,14 +58,31 @@
                 prop="createTime"
                 label="跟踪结案"
                 show-overflow-tooltip
+                min-width="115"
         >
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.isCloseCase"
+            <!--<el-switch v-model="scope.row.isCloseCase"
                        @change="emitTable"
                        :active-value="1"
                        :inactive-value="2"
                        active-color="#13ce66">
-            </el-switch>
+            </el-switch>-->
+            <el-button
+                    type="text"
+                    size="small"
+            >挂号</el-button>
+            <el-button
+                    v-if="scope.row.isCloseCase === 1"
+                    type="text"
+                    size="small"
+                    @click="toCloseCase(scope.row)"
+            >取消结案</el-button> <!--已结案数据-->
+            <el-button
+                    v-if="scope.row.isCloseCase === 2"
+                    type="text"
+                    size="small"
+                    @click="toCloseCase(scope.row)"
+            >结案</el-button> <!--未结案数据-->
           </template>
         </el-table-column>
       </el-table>
@@ -99,6 +119,7 @@
 
 <script>
 import registerOpen from '../../../in_hospital_change/el_modal/registerOpen.vue';
+import deleteIcon from '~/src/assets/images/home/home33.png';
 export default {
   name: 'follow_content',
   components: {
@@ -115,6 +136,7 @@ export default {
       total: 0,
       currentPage: 1,
       pageSize: 15,
+      multipleSelection: [], // 当前页选中的数据
       userForm: {
         clientId: '',
         clientNo: '',
@@ -137,6 +159,10 @@ export default {
     this.getClientUserInfo(this.$route.params.clientId);
   },
   methods: {
+    handleSelectionChange(val) {
+      // table组件选中事件,
+      this.multipleSelection = val;
+    },
     async getSystemParamBySC002() {
       const res = await this.$api.userManagerInterface.getSystemParamByCode('SC002');
       const { data } = res.data;
@@ -165,9 +191,74 @@ export default {
       }).then((res) => {
         const { data } = res;
         const result = data.data || {};
+        this.total = data.data.length;
         this.tableData = result || [];
         this.emitTable();
       });
+    },
+
+    toCloseCase(row) {
+      const Row = row;
+      let sendDataVal;
+      let msg;
+      if (Row.isCloseCase === 1) {
+        msg = '确定取消结案？';
+        sendDataVal = 2;
+      } else if (Row.isCloseCase === 2) {
+        msg = '确定结案？';
+        sendDataVal = 1;
+      }
+      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>${msg}</span></div>`, '提示', {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        customClass: 'message-box-customize',
+        showClose: true,
+      }).then(
+        async () => {
+          const idsList = [{ positiveTrackingId: Row.id, isCloseCase: sendDataVal }];
+          const reqBody = {
+            clientId: this.$route.params.clientId,
+            contentSaveRequests: idsList,
+          };
+          await this.$api.sunFollow.getClientPositiveCloseCase(reqBody);
+          this.$message.success('操作成功');
+          return this.queryList();
+        },
+      );
+    },
+    /**
+     * 批量结案
+     */
+    handleSomeCloseCase() {
+      if (this.multipleSelection.length === 0) {
+        this.$message({
+          message: '请选择要结案的数据',
+          type: 'warning',
+        });
+        return;
+      }
+      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>是否确定结案？</span></div>`, '提示', {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        customClass: 'message-box-customize',
+        showClose: true,
+      }).then(
+        async () => {
+          const idsList = [];
+          this.multipleSelection.forEach((value) => {
+            idsList.push({ positiveTrackingId: value.id, isCloseCase: 1 });
+          });
+          const reqBody = {
+            clientId: this.$route.params.clientId,
+            contentSaveRequests: idsList,
+          };
+          await this.$api.sunFollow.getClientPositiveCloseCase(reqBody);
+          this.$message.success('操作成功');
+          return this.queryList();
+        },
+      );
     },
     emitTable() {
       this.$emit('getTable', this.tableData);

@@ -58,11 +58,13 @@
                           placeholder="请选择"
                           v-if="questionType === 1"
                           :max-date="new Date()"
+                          style="width: 100%"
                   >
                   </el-date-picker>
                   <el-input
                           v-else
                           disabled
+                          style="width: 100%"
                           v-model="form.planDate"
                           placeholder=""
                   ></el-input>
@@ -70,7 +72,8 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item label="随访形式：" :prop="questionType === 1 ? 'planWay' : ''">
-                  <el-select v-model="form.planWay" v-if="questionType === 1" placeholder="请选择">
+                  <el-select v-model="form.planWay" v-if="questionType === 1"
+                             style="width: 100%" placeholder="请选择">
                     <el-option :label="it.name" :value="it.id" :key="it.id"
                                v-for="it in planWayList">
                     </el-option>
@@ -129,7 +132,7 @@
               </el-col>-->
               <el-col :span="12">
                 <el-form-item label="依从度：" prop="assortLevel">
-                  <el-select v-model="form.assortLevel" placeholder="请选择">
+                  <el-select v-model="form.assortLevel" placeholder="请选择" style="width: 100%">
                     <el-option :label="it.name" :value="it.paramValue" :key="it.paramValue"
                                v-for="it in assortLevelList">
                     </el-option>

@@ -12,7 +12,7 @@
             <el-date-picker
               v-model="form.startTime"
               type="date"
-              value-format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd HH:mm:ss"
               :max-date="form.endTime"
               placeholder="选择开始日期"
               style="width: 140px"
@@ -22,7 +22,7 @@
             <el-date-picker
               v-model="form.endTime"
               type="date"
-              value-format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd HH:mm:ss"
               :min-date="form.startTime"
               placeholder="选择结束日期"
               style="width: 140px"

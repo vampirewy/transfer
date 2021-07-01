@@ -102,7 +102,7 @@ export default {
           },
         },
         grid: { // 折线图整体的位置
-          left: -22,
+          left: -25,
           right: 0,
           bottom: -23,
           top: 10,
@@ -163,6 +163,9 @@ export default {
                 color: this.lineColor, // 线段颜色
                 width: 2, // 线段宽度
               },
+            },
+            emphasis: {
+              color: this.lineColor, // hover拐点颜色定义
             },
           },
           smooth: true, // 线段是否平滑
