@@ -197,7 +197,7 @@ export default {
               },*/
             ]),
           },
-          symbolSize: 1, // 设定实心点的大小
+          symbolSize: 8, // 设定实心点的大小
           data: this.chartData[index],
           animationDuration: 2000, // 展示动画时间
           animationEasing: 'cubicInOut', // 折线展示的动画

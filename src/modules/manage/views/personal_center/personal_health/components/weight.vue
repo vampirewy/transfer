@@ -6,7 +6,12 @@
         <div class="chart-legend">
       <span>体重</span>
     </div>
+    <div class="noneText" v-if="elist.length === 0">
+        <img src="@/assets/images/noData.png"/>
+          <p>暂时为空</p>
+      </div>
     <line-chart
+          v-else
           :chart-data="yData"
           :sectionName="['体重']"
           :sectionXList="xData">
@@ -43,6 +48,7 @@ export default {
         pageNo: 1,
         pageSize: 15,
       },
+      elist: [],
       xData: [],
       yData: [],
       Name: '',
@@ -60,6 +66,7 @@ export default {
       this.$api.healthMonitorInterface.getWeightChart(this.id).then(({ data }) => {
         const xData = [];
         const yData = [];
+        this.elist = data.data;
         (data.data || []).forEach((item) => {
           let dateStr;
           if (new Date(item.testDate).getFullYear() === new Date().getFullYear()) {

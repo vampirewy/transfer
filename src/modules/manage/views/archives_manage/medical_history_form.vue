@@ -408,14 +408,25 @@ export default {
           if (this.ids) {
             params.id = this.ids;
           }
-          this.$api.medicalHistoryInterface.medicalInfo(params).then((res) => {
-            const { data } = res;
-            if (data.success) {
-              this.$message.success('操作成功');
-              this.$emit('afterSubmit');
-              this.$router.go(-1);
-            }
-          });
+          if (this.ids) {
+            this.$api.medicalHistoryInterface.medicalInfoUpdate(params).then((res) => {
+              const { data } = res;
+              if (data.success) {
+                this.$message.success('操作成功');
+                this.$emit('afterSubmit');
+                this.$router.go(-1);
+              }
+            });
+          } else {
+            this.$api.medicalHistoryInterface.medicalInfoSave(params).then((res) => {
+              const { data } = res;
+              if (data.success) {
+                this.$message.success('操作成功');
+                this.$emit('afterSubmit');
+                this.$router.go(-1);
+              }
+            });
+          }
         }
       });
     },

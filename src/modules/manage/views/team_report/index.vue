@@ -52,7 +52,7 @@
             <img src="@/assets/images/common/topsearchblue.png" alt="">
           </div>
           <div class="resetAll" @click="reset">重置</div>
-          <div class="more" v-if="isTrue"  @click="upMore">
+          <div class="more" v-if="isTrue" @click="upMore">
             <span>></span>
             展开更多</div>
           <div class="more noMore" v-else @click="upMore">

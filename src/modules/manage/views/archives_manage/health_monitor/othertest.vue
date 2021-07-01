@@ -80,6 +80,7 @@
           <el-date-picker
               v-model="infoSource.startDate"
               type="datetime"
+              :default-value="infoSource.startDate"
               value-format="yyyy-MM-dd HH:mm:ss"
               :max-date="new Date()"
               placeholder="选择日期时间">
@@ -222,60 +223,8 @@
             <span>{{ scope.row.startDate | getResult }}</span>
           </template> -->
         </el-table-column>
-        <!-- <el-table-column label="正常参考" prop="endDate" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{ scope.row.endDate | getResult }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="单位" prop="specification" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{ scope.row.specification | getResult }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="建议" prop="dose" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{ scope.row.dose | getResult }}</span>
-          </template>
-        </el-table-column> -->
-        <!-- <el-table-column label="每日次数" prop="countDay" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{ scope.row.countDay | getResult }}</span>
-          </template>
-        </el-table-column> -->
-        <!-- <el-table-column
-          label="针对情况"
-          prop="mainIndication"
-          show-overflow-tooltip
-        >
-          <template slot-scope="scope">
-            <span>{{ scope.row.mainIndication | getResult }}</span>
-          </template>
-        </el-table-column> -->
-        <!-- <el-table-column
-          label="用药情况"
-          prop="resoures"
-          show-overflow-tooltip
-        >
-          <template slot-scope="scope">
-            <span>{{ scope.row.resoures | getResult }}</span>
-          </template>
-        </el-table-column> -->
         <el-table-column label="操作" prop="index">
           <template slot-scope="scope">
-            <!-- <el-button type="text">
-              <img
-                class="icon-delete"
-                src="@/assets/images/service/compile.png"
-                @click="operates(scope.$index, scope.row.id)"
-              />
-            </el-button> -->
-            <!-- <el-button type="text">
-              <img
-                class="icon-delete"
-                src="@/assets/images/service/allergic.png"
-                @click="deleteField(idx)"
-              />
-            </el-button> -->
             <el-button type="text" @click="remove(scope.$index,)">
               <img
                 class="icon-delete"
@@ -329,7 +278,7 @@ export default {
         mainIndication: '',
         specification: '',
         countDay: '',
-        startDate: '',
+        startDate: new Date(),
         endDate: '',
         dose: '',
         ingrenient: '', // 检测描述
@@ -388,9 +337,11 @@ export default {
             }
           });
           if (same === false) { // 如果没有相同的则push
+            valQusOne.consequences = '';
             this.detectionInfos.push(valQusOne);
           }
         });
+        console.log(this.detectionInfos, 'qwqwqwqw');
         // for (let i = 0; i < this.detectionInfo.length; i++) {
         //   this.detectionInfos.push(this.detectionInfo[i]);
         // }
@@ -489,7 +440,7 @@ export default {
       this.queryList();
     },
     submit() {
-      console.log(this.infoSource.startDate, 'qweqweqweqwe');
+      console.log(this.detectionInfos, 'qweqweqweqwe');
       if (!this.infoSource.clientName) {
         return this.$message.warning('请选择客户');
       }
@@ -497,14 +448,27 @@ export default {
         return this.$message.warning('请填写时间');
       }
       const arrars = [];
-      for (let i = 0; i < this.detectionInfos.length; i++) {
-        const json = {};
-        json.clientId = this.infoSource.clientId;
-        json.result = this.detectionInfos[i].consequences;
-        json.healthDataItemId = this.detectionInfos[i].id;
-        json.detectDate = this.infoSource.startDate;
-        arrars.push(json);
-      }
+      this.detectionInfos.forEach((val) => {
+        if (val.consequences) {
+          const json = {};
+          json.clientId = this.infoSource.clientId;
+          json.result = val.consequences;
+          json.healthDataItemId = val.id;
+          json.detectDate = this.infoSource.startDate;
+          arrars.push(json);
+        } else {
+          return this.$message.warning('请填写检测项目');
+        }
+      });
+      // console.log(arrars);
+      // for (let i = 0; i < this.detectionInfos.length; i++) {
+      //   const json = {};
+      //   json.clientId = this.infoSource.clientId;
+      //   json.result = this.detectionInfos[i].consequences;
+      //   json.healthDataItemId = this.detectionInfos[i].id;
+      //   json.detectDate = this.infoSource.startDate;
+      //   arrars.push(json);
+      // }
       if (arrars.length === 0) {
         return this.$message.warning('请选择项目');
       }
@@ -515,11 +479,11 @@ export default {
           this.$emit('messageData', true, true);
         }
       });
-    //   this.$api.medication.add(reqBody).then(({ data }) => {
-    //     if (data.code === 200) {
-    //       this.$router.go(-1);
-    //     }
-    //   });
+      // this.$api.medication.add(reqBody).then(({ data }) => {
+      //   if (data.code === 200) {
+      //     this.$router.go(-1);
+      //   }
+      // });
     },
     blackReturn() {
       this.$emit('messageData', true, true);

@@ -7,7 +7,12 @@
       <span>空腹血糖</span>
       <span>餐后血糖</span>
     </div>
+    <div class="noneText" v-if="!elist">
+        <img src="@/assets/images/noData.png"/>
+          <p>暂时为空</p>
+      </div>
     <line-chart
+          v-else
           :chart-data="yData"
           :sectionName="['空腹血糖', '餐后血糖']"
           :sectionXList="xData">
@@ -42,6 +47,7 @@ export default {
         pageNo: 1,
         pageSize: 15,
       },
+      elist: [],
       xData: [],
       yData: [],
       Name: '',
@@ -57,7 +63,9 @@ export default {
   methods: {
     queryChartData() {
       this.$api.healthMonitorInterface.getBGChart(this.id).then(({ data }) => {
+        this.elist = data.data;
         const xData = [];
+        const xDataes = [];
         const FPG = []; // 空腹血糖
         const PBG = []; // 餐后血糖
         console.log(data.data['空腹血糖']);
@@ -72,11 +80,19 @@ export default {
           FPG.push(item.sugar);
         });
         (data.data['餐后血糖'] || []).forEach((item) => {
+          let dateStr;
+          if (new Date(item.testDate).getFullYear() === new Date().getFullYear()) {
+            dateStr = dayjs(item.testDate).format('MM/DD');
+          } else {
+            dateStr = dayjs(item.testDate).format('YY/MM/DD');
+          }
+          xDataes.push(dateStr);
           PBG.push(item.sugar);
         });
         this.xData = xData;
         this.yData = [FPG, PBG];
       });
+      console.log(this.xData, 111, this.yData);
     },
     queryPageList() {
       this.$api.healthMonitorInterface.getBGList({

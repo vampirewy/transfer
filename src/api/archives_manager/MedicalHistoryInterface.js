@@ -16,9 +16,13 @@ class MedicalHistoryInterface extends BaseModule {
   otherMedicalHistoryPageList(id, data) {
     return this.post(`/medical_info/client_other_list_page/${id}`, data);
   }
-  // 新增、编辑
-  medicalInfo(data) {
-    return this.post('/medical_info', data);
+  // 新增
+  medicalInfoSave(data) {
+    return this.post('/medical_info/save', data);
+  }
+  // 编辑
+  medicalInfoUpdate(data) {
+    return this.post('/medical_info/update', data);
   }
   // 详情
   medicalInfoDetail(id) {

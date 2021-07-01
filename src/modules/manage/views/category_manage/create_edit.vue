@@ -11,21 +11,21 @@
       <div class="form-title">
         <!-- <div class="line"></div> -->
         <h3 class="name" v-if="routeType === 1">新增-用户类别<div class="titleBiao"></div></h3>
-        <h3 class="name" v-if="routeType === 2">编辑-用户类别<div class="titleBiao"></div></h3>
+        <h3 class="name" v-if="routeType === 2">编辑-用户类别1<div class="titleBiao"></div></h3>
         <h3 class="name" v-if="routeType === 3">查看-用户类别
           <div class="titleBiao"></div>
         </h3>
       </div>
 
       <div class="mt20">
-        <div class="row">
+        <div class="row searchCondition">
           <el-form-item label="类别名称：" style="width:23%" label-width="82px" prop="gridName">
             <span  v-if="routeType == 3">{{form.gridName}}</span>
             <el-input
             v-model="form.gridName"
             maxlength="30"
             v-if="routeType != 3"
-            style="width: 200px"
+            style="width: 150px"
             placeholder="请输入">
             </el-input>
           </el-form-item>
@@ -452,4 +452,10 @@ export default {
     }
   }
 }
+/deep/ .el-input__suffix {
+    right: 0px;
+    border-left: 1px solid #DDE0E6;
+    border-radius: 0;
+    margin-top: 1px;
+    }
 </style>

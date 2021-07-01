@@ -169,10 +169,10 @@
                 <!-- <span>{{ scope.row.isMain || '-'}}</span> -->
               </template>
             </el-table-column>
-            <el-table-column label="是否对比" prop="isCompareText"
+            <el-table-column label="是否对比" prop="isCompare"
              min-width="80" show-overflow-tooltip >
              <template slot-scope="scope">
-                <span>{{ scope.row.isCompareText || '-'}}</span>
+              {{ scope.row.isCompare === 1?'是': '否' }}
               </template>
              </el-table-column>
             <el-table-column label="范围或参考" prop="refRange" min-width="100" show-overflow-tooltip >

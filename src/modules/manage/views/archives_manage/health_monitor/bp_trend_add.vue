@@ -289,7 +289,7 @@
         <div v-if="id === 3">
                 <el-row>
                 <el-col :span="6">
-                <el-form-item label="运动时间" prop="sportTime">
+                <el-form-item label="运动时间" >
                 <el-input
                     onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"
                     v-model="infoSource.sportTime"
@@ -301,7 +301,7 @@
                 </el-form-item>
                 </el-col>
                     <el-col :span="6">
-                <el-form-item label="运动路程" prop="sportDistance">
+                <el-form-item label="运动路程" >
                 <el-input
                     onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"
                     v-model="infoSource.sportDistance"
@@ -325,7 +325,7 @@
                 </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                <el-form-item label="运动消耗" prop="kcal">
+                <el-form-item label="运动消耗">
                 <el-input
                     v-model="infoSource.kcal"
                     placeholder="请输入"
@@ -412,7 +412,7 @@ export default {
         mainIndication: '',
         specification: '', // 体脂率
         countDay: '',
-        startDate: '',
+        startDate: new Date(),
         startDates: '',
         endDate: '',
         dose: '',
@@ -452,10 +452,10 @@ export default {
         Height: [{ required: true, message: '身高不能为空' }],
         Waist: [{ required: true, message: '腰围不能为空' }],
         specification: [{ required: true, message: '体脂率不能为空' }],
-        sportTime: [{ required: true, message: '运动时间不能为空' }],
-        sportDistance: [{ required: true, message: '运动路程不能为空' }],
+        // sportTime: [{ required: true, message: '运动时间不能为空' }],
+        // sportDistance: [{ required: true, message: '运动路程不能为空' }],
         steps: [{ required: true, message: '运动步数不能为空' }],
-        kcal: [{ required: true, message: '运动消耗不能为空' }],
+        // kcal: [{ required: true, message: '运动消耗不能为空' }],
       },
       formData: {
         pageNo: 1,

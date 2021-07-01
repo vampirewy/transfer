@@ -649,4 +649,31 @@ textarea:-ms-input-placeholder {
     display: none;
   }
 }
-
+.someChoose{
+  .el-tag{
+    &.el-tag--info:first-child{
+      overflow: hidden;
+      text-overflow:ellipsis;
+      white-space: nowrap;
+      width: 55px;
+    }
+  }
+}
+.noneText{
+  height: 100%;
+  display: flex;
+  margin-top: 150px;
+  align-items: center;
+  justify-content: center;
+  .con {
+    text-align: center;
+  }
+  img {
+    width: 60px;
+    height: 60px;
+  }
+  p {
+    color: #97A6BD;
+    font-size: 14px;
+  }
+}
