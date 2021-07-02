@@ -35,4 +35,7 @@ export default {
     margin-top: 20px;
   }
 }
+/deep/ .el-dialog{
+  width: 40% !important;
+}
 </style>

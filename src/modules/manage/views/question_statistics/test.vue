@@ -3,12 +3,12 @@
     <div class="divTop">
       <div class="divTitle">
         <span><img src="@/assets/images/common/titleLeft.png" alt="" /></span>
-        问卷统计
+        体检基础统计
       </div>
       <div class="searchCondition">
         <div class="searchLeft">
           <div>
-            <span>问卷日期：</span>
+            <span>体检日期：</span>
             <el-date-picker
               v-model="form.startTime"
               type="date"
@@ -171,36 +171,42 @@
       <div v-if="tabcheckidx === 0">
         <div class="echarts">
           <lBMI
+          :key="times"
           v-if="Tabactive === 0"
           :visible="modalVisible"
           :value="currentValue"
           @cancel="cancel"
         ></lBMI>
           <blood
+          :key="times"
           v-if="Tabactive === 1"
           :visible="modalVisible"
           :value="currentValue"
           @cancel="cancel"
         ></blood>
         <bloodfat
+        :key="times"
           v-if="Tabactive === 2"
           :visible="modalVisible"
           :value="currentValue"
           @cancel="cancel"
         ></bloodfat>
         <abnormal
+        :key="times"
           v-if="Tabactive === 3"
           :visible="modalVisible"
           :value="currentValue"
           @cancel="cancel"
         ></abnormal>
         <manabnor
+        :key="times"
           v-if="Tabactive === 4"
           :visible="modalVisible"
           :value="currentValue"
           @cancel="cancel"
         ></manabnor>
         <wonmenabnormal
+        :key="times"
           v-if="Tabactive === 5"
           :visible="modalVisible"
           :value="currentValue"
@@ -250,6 +256,7 @@ export default {
         currentPage: 1,
         pageSize: 15,
       },
+      times: '',
       currentValue: {},
       modalVisible: false,
       tabbor: [
@@ -277,6 +284,7 @@ export default {
   methods: {
     TabbarBtn(index) {
       this.Tabactive = index;
+      this.times = new Date().getTime();
       if (this.Tabactive === 0) {
         this.queryList(1);
       } else if (this.Tabactive === 1) {
@@ -311,6 +319,7 @@ export default {
     onSearch() {
       this.table.currentPage = 1;
       this.queryList();
+      this.TabbarBtn(this.Tabactive);
     },
     onReset() {
       this.form = [];
@@ -398,7 +407,7 @@ export default {
       border-color: transparent;
       color: #666666;
       position: relative;
-      padding: 14px 9px;
+      padding: 15px 9px;
       font-size: 12px;
       border-radius: 8px 8px 0 0;
       margin: 0 22px;
@@ -413,7 +422,7 @@ export default {
       content: '';
       display: block;
       width: 20px;
-      height: 44px;
+      height: 45px;
       position: absolute;
       -webkit-transform: skewX(23deg);
       transform: skewX(23deg);
@@ -428,7 +437,7 @@ export default {
       content: '';
       display: block;
       width: 20px;
-      height: 44px;
+      height: 45px;
       position: absolute;
       -webkit-transform: skewX(-23deg);
       transform: skewX(-23deg);
@@ -449,7 +458,7 @@ export default {
       border-color: transparent;
       color: #333333;
       position: relative;
-      margin: 0 20px;
+      margin: 0 24px;
       padding: 14px 9px;
       font-size: 14px;
       border-radius: 8px 8px 0 0;
@@ -459,7 +468,7 @@ export default {
       content: '';
       display: block;
       width: 20px;
-      height: 47px;
+      height: 46px;
       position: absolute;
       -webkit-transform: skewX(23deg);
       transform: skewX(23deg);
@@ -474,7 +483,7 @@ export default {
       content: '';
       display: block;
       width: 20px;
-      height: 47px;
+      height: 46px;
       position: absolute;
       -webkit-transform: skewX(-23deg);
       transform: skewX(-23deg);

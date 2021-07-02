@@ -6,7 +6,7 @@
         <el-input
                 readonly
                 v-model="formData.route"
-                placeholded="大小不超过15MB"
+                placeholder="大小不超过15MB"
                 autocomplete="off">
         </el-input>
         <upload
@@ -27,20 +27,21 @@
         <el-input
                 style="width:100%;"
                 v-model="formData.title"
-                placeholded="请输入"
+                placeholder="请输入"
                 autocomplete="off"
                 maxlength="30">
         </el-input>
       </el-form-item>
       <el-form-item label="上传时间：">
-        <el-input style="width:100%;" disabled="true" v-model="formData.uploadDate"></el-input>
+        <el-input style="width:100%;"
+        disabled="true" v-model="formData.uploadDate"></el-input>
       </el-form-item>
       </div>
       <el-form-item label="备注：">
         <el-input
           type="textarea"
           :rows="4"
-          placeholded="请输入"
+          placeholder="请输入"
           v-model="formData.remark"
           :maxlength="300"
           show-word-limit>

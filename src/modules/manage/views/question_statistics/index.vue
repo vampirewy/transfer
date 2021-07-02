@@ -467,7 +467,7 @@ export default {
 .TabBars {
   display: flex;
   align-items: center;
-  height: 49px;
+  height: 38px;
   border-bottom: 1px solid #dde0e6;
   z-index: 1;
   margin: 40px 0 20px 0;
@@ -478,7 +478,7 @@ export default {
       border-color: transparent;
       color: #666666;
       position: relative;
-      padding: 14px 9px;
+      padding: 10px 9px;
       font-size: 12px;
       border-radius: 8px 8px 0 0;
       margin: 0 22px;
@@ -493,7 +493,7 @@ export default {
       content: '';
       display: block;
       width: 20px;
-      height: 44px;
+      height: 35px;
       position: absolute;
       -webkit-transform: skewX(23deg);
       transform: skewX(23deg);
@@ -508,7 +508,7 @@ export default {
       content: '';
       display: block;
       width: 20px;
-      height: 44px;
+      height: 35px;
       position: absolute;
       -webkit-transform: skewX(-23deg);
       transform: skewX(-23deg);
@@ -530,7 +530,7 @@ export default {
       color: #333333;
       position: relative;
       margin: 0 20px;
-      padding: 14px 9px;
+      padding: 10px 9px;
       font-size: 14px;
       border-radius: 8px 8px 0 0;
       border: 1px solid #dde0e6;
@@ -539,7 +539,7 @@ export default {
       content: '';
       display: block;
       width: 20px;
-      height: 47px;
+      height: 38px;
       position: absolute;
       -webkit-transform: skewX(23deg);
       transform: skewX(23deg);
@@ -554,7 +554,7 @@ export default {
       content: '';
       display: block;
       width: 20px;
-      height: 47px;
+      height: 38px;
       position: absolute;
       -webkit-transform: skewX(-23deg);
       transform: skewX(-23deg);
