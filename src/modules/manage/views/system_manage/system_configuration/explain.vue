@@ -27,7 +27,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <div class="wltitle">
+      <div class="wltitle" style="margin-bottom:20px;height:20px;">
         <div class="quan"></div>
         <span>危害介绍</span>
       </div>
@@ -292,6 +292,7 @@ export default {
       background: rgba(49, 84, 172, 0.1);
       border-radius: 20px;
       border: 1px solid #3154ac;
+      color: #3154AC;
       &:hover {
         color: #3154ac;
         border-color: #3154ac;
@@ -311,9 +312,9 @@ export default {
 .TabBars {
   display: flex;
   align-items: center;
-  height: 46px;
+  height: 39px;
   width: 100%;
-  border-bottom: 2px solid #dde0e6;
+  border-bottom: 1px solid #dde0e6;
   margin-bottom: 20px;
   div {
     .TabBarsNames {
@@ -323,7 +324,7 @@ export default {
       color: #666666;
       position: relative;
       margin-right: 20px;
-      padding: 14px 16px;
+      padding: 10px 16px;
       font-size: 14px;
       border-radius: 8px 8px 0 0;
       margin: 0 20px;
@@ -336,7 +337,7 @@ export default {
       content: '';
       display: block;
       width: 25px;
-      height: 48px;
+      height: 38px;
       position: absolute;
       -webkit-transform: skewX(23deg);
       transform: skewX(23deg);
@@ -349,7 +350,7 @@ export default {
       content: '';
       display: block;
       width: 25px;
-      height: 48px;
+      height: 38px;
       position: absolute;
       -webkit-transform: skewX(-23deg);
       transform: skewX(-23deg);
@@ -370,7 +371,7 @@ export default {
       font-weight: 600;
       position: relative;
       margin: 0 27px;
-      padding: 14px 16px;
+      padding: 10px 16px;
       font-size: 14px;
       border-radius: 8px 8px 0 0;
       border: 1px solid #dde0e6;
@@ -379,7 +380,7 @@ export default {
       content: '';
       display: block;
       width: 25px;
-      height: 48px;
+      height: 38px;
       position: absolute;
       -webkit-transform: skewX(23deg);
       transform: skewX(23deg);
@@ -394,7 +395,7 @@ export default {
       content: '';
       display: block;
       width: 25px;
-      height: 48px;
+      height: 38px;
       position: absolute;
       -webkit-transform: skewX(-23deg);
       transform: skewX(-23deg);

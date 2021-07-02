@@ -3,8 +3,8 @@
     <el-table :data="tableData" style="width: 100%" align="center">
       <el-table-column prop="riskType" label="分类" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.riskType | getResult}}</span>
-        </template>
+            <span>{{ statusMap[scope.row.riskType] || '-'}}</span>
+          </template>
       </el-table-column>
       <el-table-column prop="gridName" label="因素" show-overflow-tooltip>
         <template slot-scope="scope">
@@ -57,6 +57,15 @@ export default {
   props: ['clientId'],
   data() {
     return {
+      statusMap: {
+        1: '饮食',
+        2: '运动',
+        3: '吸烟情况',
+        4: '饮酒情况',
+        5: '心理及睡眠',
+        6: '既往接触史',
+        7: '家族史',
+      },
       tableData: [],
       currentPage: 1,
       total: 0,

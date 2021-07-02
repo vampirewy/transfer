@@ -62,7 +62,7 @@ export default {
           title: '重度',
         },
         {
-          color: '#B4BBC9',
+          color: '#E2E5EA',
           title: '未曾匹配',
         },
       ],

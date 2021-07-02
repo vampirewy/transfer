@@ -34,7 +34,7 @@
       <div class="divTop">
           <div class="divTitle">
             <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
-            {{Tabactive == '0'?'生活方式评估':Tabactive == '1'?'心理评估':'中医体质评估'}}</div>
+            {{Tabactive == '0'?'个人健康报告':Tabactive == '1'?'心理评估':'中医体质评估'}}</div>
           <div class="searchCondition">
           <div class="searchLeft">
           <div class="searchInputFormItem">
@@ -604,7 +604,7 @@ export default {
     return {
       pdf_url: process.env.api.pdf_url,
       isTrue: true,
-      tabbor: ['生活方式评估', '心理评估', '中医体质评估'],
+      tabbor: ['个人健康报告', '心理评估', '中医体质评估'],
       Tabactive: 0,
       view: 1, // 1:列表页，2：异常解读，3：点评，4：匹配
       popoverStatus: false,
@@ -819,7 +819,7 @@ export default {
         // 心理问卷
         this.$api.health
           .fetch(Object.assign({
-            clientGrid: '',
+            clientGrid: this.form.gridId,
             gender: this.form.gender,
             keyWord: this.form.keywords,
             pageNo: 1,
@@ -835,7 +835,7 @@ export default {
         // 中医体质评估
         this.$api.health
           .fetch(Object.assign({
-            clientGrid: '',
+            clientGrid: this.form.gridId,
             gender: this.form.gender,
             keyWord: this.form.keywords,
             pageNo: 1,

@@ -12,7 +12,6 @@
             <el-button
                     class="btn-new btnAdd"
                     size="small"
-                    style="margin: 16px 0"
                     @click="handleAdd"
                     v-if="getAccess('inspection_index_add')"
             ><img src="@/assets/images/common/addBtn.png" />新增</el-button>

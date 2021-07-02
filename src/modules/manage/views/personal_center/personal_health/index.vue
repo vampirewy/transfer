@@ -562,15 +562,16 @@ export default {
 }
 .wlall {
   display: flex;
-  justify-content: space-between;
+  // justify-content: space-between;
 }
 .wrapper {
   width: 65%;
   height: 180px;
-  padding: 20px;
+  padding: 0 20px 20px 20px;
   background: #fff;
   box-shadow: 0px 6px 24px 0px rgba(14, 37, 87, 0.06);
   border-radius: 8px;
+  margin-right: 20px;
   position: relative;
   .wrapper-right {
     // width: 130px;
@@ -606,7 +607,7 @@ export default {
   .addUsers {
     display: flex;
     align-items: center;
-    height: 30px;
+    height: 50px;
     flex-wrap: wrap;
     p {
       font-size: 14px;
@@ -645,12 +646,12 @@ export default {
   }
 }
 .wlall-right {
-  width: 27%;
+  width: calc(28% - 20px);
   height: 180px;
   background: #ffffff;
   box-shadow: 0px 6px 24px 0px rgba(14, 37, 87, 0.06);
   border-radius: 8px;
-  padding: 20px;
+  padding:0 20px 20px 20px;
 }
 .content {
   display: flex;
@@ -658,7 +659,7 @@ export default {
   box-shadow: 0px 6px 24px 0px rgba(14, 37, 87, 0.06);
   border-radius: 8px;
   margin-top: 20px;
-  padding: 20px;
+  padding:0 20px 20px 20px;
   .content-left {
     width: 59%;
     border-right: 1px dotted #dde0e6;
@@ -666,7 +667,7 @@ export default {
   }
   .content-right {
     width: 40%;
-    padding: 20px;
+    padding:0 20px 20px 20px;
   }
 }
 /deep/ .el-table .el-table__body td {
@@ -677,4 +678,8 @@ export default {
   display: flex;
   justify-content: space-between;
 }
+// .formSearchTitle{
+//   height: 20px;
+//   margin-bottom: 20px;
+// }
 </style>
