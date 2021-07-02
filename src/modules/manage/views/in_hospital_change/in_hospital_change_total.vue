@@ -2,78 +2,76 @@
   <div class="dashboard-editor-container" style="background-color: #F6F8FC;padding: 20px">
     <search-group @searchData="getSearchData" />
     <panel-group/>
-    <el-row :gutter="40" style="margin-left: 0;margin-bottom: 20px;width: 100%;">
-      <el-col :span="24" class="echartBody" style="height:380px">
-
-            <div class="divTop">
-              <div class="divTitle" style="margin-top: 15px">
-                <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
-                检后就诊趋势
-              </div>
-            </div>
-            <div class="divRightTitleDiv">
-      <div class="rowTitleParent" style="padding-top: 8px;padding-bottom: 12px">
-           <div class="rowTitleParentRight">
+     <el-row :gutter="40" style="margin-left: 0;margin-bottom: 20px;margin-right: 0">
+      <!--<el-col :span="16" class="echartBody" style="height: 470px">
+        <sun></sun>
+      </el-col>-->
+       <el-col :span="16" class="echartBody" style="height:470px">
+         <div class="divTop">
+           <div class="divTitle" style="margin-top: 15px">
+             <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
+             检后就诊趋势
+           </div>
+         </div>
+         <div class="divRightTitleDiv">
+           <div class="rowTitleParent" style="padding-top: 8px;padding-bottom: 12px">
+             <div class="rowTitleParentRight">
             <span style="background: linear-gradient(180deg, #3154AC 0%, #4B86FF 100%);
             margin-left: 0;"></span>
-            <label>已就诊</label>
-            <span style="background: linear-gradient(180deg, #FA912B 0%, #EAAF75 100%);"></span>
-            <label>未就诊</label>
-            <span style="background-color: #36BF2F"></span>
-            <label>就诊费用</label>
-          </div>
-        <div>
-          <el-radio-group
-                  style="margin-top: 0;margin-right: 15px"
-                  v-model="checkAfterForm.type"
-                  @change="chooseCheckAfterFormRadio"
-          >
-            <el-radio-button :label="1">本周</el-radio-button>
-            <el-radio-button :label="2">本月</el-radio-button>
-            <el-radio-button :label="3">今年</el-radio-button>
-          </el-radio-group>
-          <!--<el-date-picker
-                  v-model="checkAfterForm.startTime"
-                  type="date"
-                  value-format="yyyy-MM-dd"
-                  :max-date="checkAfterForm.endTime"
-                  placeholder="选择日期范围"
-                  style="width: 160px"
-          >
-          </el-date-picker>-->
-          <el-date-picker
-                  v-model="checkAfterFormTime"
-                  @change="getCheckAfterFormTime"
-                  style="width: 280px;"
-                  value-format="yyyy-MM-dd"
-                  type="daterange"
-                  range-separator="至"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期">
-          </el-date-picker>
-        </div>
-      </div>
-    </div>
+               <label>已就诊</label>
+               <span style="background: linear-gradient(180deg, #FA912B 0%, #EAAF75 100%);"></span>
+               <label>未就诊</label>
+               <span style="background-color: #36BF2F"></span>
+               <label>就诊费用</label>
+             </div>
+             <div class="smallElRadio">
+               <el-radio-group
+                       style="margin-top: 0;margin-right: 15px"
+                       v-model="checkAfterForm.type"
+                       @change="chooseCheckAfterFormRadio"
+               >
+                 <el-radio-button :label="1">本周</el-radio-button>
+                 <el-radio-button :label="2">本月</el-radio-button>
+                 <el-radio-button :label="3">今年</el-radio-button>
+               </el-radio-group>
+               <!--<el-date-picker
+                       v-model="checkAfterForm.startTime"
+                       type="date"
+                       value-format="yyyy-MM-dd"
+                       :max-date="checkAfterForm.endTime"
+                       placeholder="选择日期范围"
+                       style="width: 160px"
+               >
+               </el-date-picker>-->
+               <el-date-picker
+                       v-model="checkAfterFormTime"
+                       @change="getCheckAfterFormTime"
+                       style="width: 280px;"
+                       value-format="yyyy-MM-dd"
+                       type="daterange"
+                       range-separator="至"
+                       start-placeholder="开始日期"
+                       end-placeholder="结束日期">
+               </el-date-picker>
+             </div>
+           </div>
+         </div>
 
-        <div class="noDataLine" v-if="intervenePlanXList.length === 0">
-          <img style="margin-top: 70px" src="@/assets/images/noDataLine.png"/>
-          <!--<span>暂无数据</span>-->
-        </div>
-        <!-- <bar-chart-line
-        :xList="intervenePlanName" :yList="intervenePlanYList" :height="'300px'"
-                   :colorListProp="['#4991FD', '#31C529']" key="1"
-                   v-else-if="intervenePlanXList.length === 1"/> -->
-        <line-pie-chart :chart-data1="intervenePlanYList1"
-                        :chart-data2="intervenePlanYList2"
-                        :chart-data3="intervenePlanYList3"
-                    :sectionName="intervenePlanName"
-                    :sectionXList="intervenePlanXList" v-else/>
-      </el-col>
-    </el-row>
-     <el-row :gutter="40" style="margin-left: 0;margin-bottom: 20px;margin-right: 0">
-      <el-col :span="16" class="echartBody" style="height: 470px">
-        <sun></sun>
-      </el-col>
+         <div class="noDataLine" v-if="intervenePlanXList.length === 0">
+           <img style="margin-top: 70px" src="@/assets/images/noDataLine.png"/>
+           <!--<span>暂无数据</span>-->
+         </div>
+         <!-- <bar-chart-line
+         :xList="intervenePlanName" :yList="intervenePlanYList" :height="'300px'"
+                    :colorListProp="['#4991FD', '#31C529']" key="1"
+                    v-else-if="intervenePlanXList.length === 1"/> -->
+         <line-pie-chart :height="'350px'"
+                         :chart-data1="intervenePlanYList1"
+                         :chart-data2="intervenePlanYList2"
+                         :chart-data3="intervenePlanYList3"
+                         :sectionName="intervenePlanName"
+                         :sectionXList="intervenePlanXList" v-else/>
+       </el-col>
     <el-col :span="8" style="padding-right: 0">
       <el-col class="echartBody" style="height: 470px">
         <div class="rowTitleParent">
@@ -394,7 +392,7 @@ export default {
         height: 12px;
         border-radius: 50px;
         display: inline-block;
-        margin: 0 8px 0 25px;
+        margin: 0 8px 0 12px;
       }
       label{
         font-size: 12px;
@@ -438,6 +436,12 @@ export default {
     box-shadow: 0px 6px 24px 0px rgba(14, 37, 87, 0.06);
     border-radius: 8px;
     background-color: white;
+    .smallElRadio{
+      /deep/ .el-radio-button__inner {
+        padding: 12.2px 11px;
+        min-width: 70px;
+      }
+    }
     /deep/ .el-radio-button__inner {
       padding: 12.2px 11px;
       min-width: 80px;

@@ -38,7 +38,7 @@ export default {
   props: ['reportAbnormalList', 'notTitle'], // notTitle是否展示标题 用于与个人管理中心区分
   data() {
     return {
-      form: [],
+      form: {},
       reportAbnormalListNew: [],
       topTitle: [
         {

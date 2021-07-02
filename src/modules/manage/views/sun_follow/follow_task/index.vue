@@ -186,12 +186,12 @@
             prop="planContent"
             min-width="80">
             <template slot-scope="scope">
-              <el-button v-if="excuteType === 1"
+              <el-button v-if="excuteType === 1 && getAccess('follow_task_follow')"
                       @click="handleTask(scope.row)"
                       type="text"
                       size="small"
               >跟踪</el-button>
-              <el-button v-else
+              <el-button v-if="excuteType === 2 && getAccess('follow_record_view')"
                       @click="handleView(scope.row)"
                       type="text"
                       size="small"
@@ -282,6 +282,7 @@
                   type="text"
                   size="small"
                   @click="handleTask(scope.row)"
+                  v-if="getAccess('follow_task_follow')"
           >跟踪</el-button>
         </template>
       </el-table-column>

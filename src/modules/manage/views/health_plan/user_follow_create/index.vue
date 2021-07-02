@@ -501,6 +501,8 @@ export default {
   },*/
   beforeRouteEnter(to, from, next) {
     next((vm) => {
+      vm.multipleSelection = [];
+      vm.multipleSelectionAll = [];
       vm.onLoad();
     });
   },
@@ -792,6 +794,7 @@ export default {
       this.multipleSelectionAll.forEach((val) => {
         val.clientId = val.id;
       });
+      console.log(this.multipleSelectionAll);
       this.$store.commit('intervention/SET_USERCHECK_LIST', this.multipleSelectionAll);
       this.$store.dispatch('intervention/setTplList', []);
       this.$router.push({ // 2 批量

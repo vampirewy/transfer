@@ -157,7 +157,7 @@ export default {
             type: 'value',
             name: '', // 就诊人数 柱形图用
             min: 0,
-            max: 250,
+            max: 350,
             interval: 50,
             axisLabel: { // 刻度值
               formatter: '{value}',
@@ -196,7 +196,7 @@ export default {
             type: 'value',
             name: '', // 就诊费用 折线图用
             min: 0,
-            max: 500,
+            max: 700,
             interval: 100,
             axisLabel: { // 刻度值
               formatter: '{value}',

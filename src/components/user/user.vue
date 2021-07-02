@@ -135,6 +135,11 @@ export default {
     /deep/ .el-dropdown{
       color: white;
     }
+      /deep/ .el-avatar-img{
+          img{
+              vertical-align: initial;
+          }
+      }
   }
   .avatarSpan{
     margin-right: 2px;

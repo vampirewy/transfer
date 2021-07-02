@@ -93,6 +93,9 @@ export default {
 
 <style lang="scss" scoped>
 .el-plan-setting-mdl {
+  /deep/ .el-dialog{
+    margin-top: 33vh!important;
+  }
   /deep/ .el-form-item{
     margin-bottom: 10px;
   }
