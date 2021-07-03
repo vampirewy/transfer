@@ -61,7 +61,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="6">
-                <el-form-item label="干预人：">
+                <el-form-item label="随访人：">
                   <span>{{form.planDoctorName | getResult}}</span>
                 </el-form-item>
               </el-col>
@@ -190,7 +190,7 @@ export default {
       rules: {
         planDate: [{ required: true, message: '请选择执行时间' }],
         planWay: [{ required: true, message: '请选择随访形式' }],
-        planDoctorName: [{ required: true, message: '请选择干预人' }],
+        planDoctorName: [{ required: true, message: '请选择随访人' }],
       },
     };
   },

@@ -90,7 +90,7 @@
         </el-row>
         <el-row class="row">
           <el-col :span="12">
-            <el-form-item label="干预人：" prop="executePlanUserName">
+            <el-form-item label="随访人：" prop="executePlanUserName">
               <!--<el-popover
                       v-if="modalType === 1"
                       placement="right"
@@ -102,7 +102,7 @@
                        :propsType="'doctor'" @change="data => selectCheck = data"></manager-list>
                 <el-input class="select-user-trigger" slot="reference" disabled
                           v-model="form.executePlanUserName"
-                          placeholder="选择干预人" style="width: 100%">
+                          placeholder="选择随访人" style="width: 100%">
                   <i :class="`el-icon-arrow-${openCheckVisible ? 'up' : 'down'}`"
                      slot="suffix"></i>
                 </el-input>
@@ -221,7 +221,7 @@ export default {
       rules: {
         executeTime: [{ required: true, message: '请选择执行时间' }],
         executePlanWay: [{ required: true, message: '请选择随访形式' }],
-        executePlanUserName: [{ required: true, message: '请选择干预人' }],
+        executePlanUserName: [{ required: true, message: '请选择随访人' }],
       },
     };
   },
@@ -310,7 +310,7 @@ export default {
             updateType: 'executeUpdate',
             executeTime: `${this.form.executeTime} 00:00:00`, // 执行时间
             executePlanWay: this.form.executePlanWay, // 执行干预方式
-            executePlanUserId: this.form.executePlanUserId, // 执行干预人
+            executePlanUserId: this.form.executePlanUserId, // 执行随访人
             executePlanTitle: this.form.executePlanTitle, // 执行标题
             executePlanContent: this.form.executePlanContent, // 执行内容
           };

@@ -1,10 +1,10 @@
 <template>
   <div class="create-edit">
     <el-row v-if="viewIndex === 1">
-      <el-col :span="14" style="margin-top: -35px;"
+      <el-col :span="13" style="margin-top: -35px;"
               v-if="$route.params.type === '1'"> <!--单个创建-->
         <el-tabs v-model="activeName" class="two-tab">
-          <el-tab-pane label="干预模板" name="first">
+          <el-tab-pane label="干预随访模板" name="first">
             <intervention-tab-mdl ref="InterventionTabMdl"></intervention-tab-mdl>
           </el-tab-pane>
           <el-tab-pane label="客户的主要健康状况" name="second">
@@ -16,7 +16,7 @@
       <el-col :span="11" v-if="$route.params.type === '2'">
         <intervention-somecreate-mdl></intervention-somecreate-mdl> <!--批量创建-->
       </el-col>
-      <el-col :span="$route.params.type === '1' ? 10 : 13"  style="padding-left: 20px;"> <!--9-->
+      <el-col :span="$route.params.type === '1' ? 11 : 13"  style="padding-left: 20px;"> <!--9-->
         <div class="tableTopDoDiv" style="display: block">
           <div class="divRightTitleDiv">
             <div class="divRightTitle" style="margin-top: 14px">
@@ -43,7 +43,7 @@
         </div>
         <el-form
                 :inline="false"
-                :label-position="labelPosition"
+                label-position="left"
                 :model="form"
                 class="form-inline"
         >
@@ -84,7 +84,7 @@
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column prop="planDoctorName" label="干预人" show-overflow-tooltip>
+            <el-table-column prop="planDoctorName" label="随访人" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>{{ scope.row.planDoctorName }}</span>
               </template>
@@ -111,7 +111,34 @@
               </template>
             </el-table-column>
           </el-table>
-
+          <el-row style="margin-top: 15px" v-if="$route.params.type === '1'">
+            <el-col :span="15">
+              <el-form-item label="批量编辑随访人：" prop="planDoctorName" label-width="115px">
+                <el-popover
+                        v-if="$route.params.type === '1'"
+                        ref="planDoctorPopover"
+                        placement="right"
+                        width="545"
+                        trigger="click"
+                        @show="openCheckVisible = true"
+                        @hide="openCheckVisible = false"
+                >
+                  <manager-list v-if="openCheckVisible" :clientIds="checkClintIds"
+                                :propsType="'doctor'" @change="handlePopoperPlanDoctoeClose">
+                  </manager-list>
+                  <el-input class="select-user-trigger" slot="reference" disabled
+                            style="width: 100%" v-model="form.planDoctorName" placeholder="选择随访人">
+                    <i :class="`el-icon-arrow-${openCheckVisible ? 'up' : 'down'}`"
+                       slot="suffix"></i>
+                  </el-input>
+                </el-popover>
+                <!--个人创建 可选随访人， 批量创建随访人只能是自己-->
+                <el-input class="select-user-trigger" disabled v-else
+                          style="width: 100%" v-model="form.planDoctorName" placeholder="">
+                </el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <div class="footer">
             <el-button size="small" class="cancelBtn" @click="cancel">返回</el-button>
             <el-button class="sureBtn" type="primary" size="small" @click="save">保存</el-button>
@@ -134,7 +161,7 @@ import InterventionAddMdl from './el_modal/intervention_add_mdl.vue';
 import InterventionSomecreateMdl from './el_modal/intervention_somecreate_mdl.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
 import InterventionDetail from './el_modal/intervention_detail.vue';
-
+import ManagerList from '@/components/user_health/manager_list.vue';
 export default {
   name: 'create_edit',
   components: {
@@ -144,6 +171,7 @@ export default {
     InterventionSomecreateMdl,
     InterventionDetail,
     OperateButton,
+    ManagerList,
   },
   data() {
     return {
@@ -151,7 +179,6 @@ export default {
       InterventionDetailRow: {}, // 随访子组建的数据
       activeName: 'first',
       routeType: 1, // 1新增 2编辑
-      labelPosition: 'top',
       form: {
         userList: [],
         planWayList: [],
@@ -161,6 +188,8 @@ export default {
       },
       checkPlanList: [],
       sportAdvice: [],
+      openCheckVisible: false, // 批量编辑随访人
+      checkClintIds: [],
     };
   },
   computed: {
@@ -172,6 +201,7 @@ export default {
     },
   },
   mounted() {
+    this.checkClintIds = this.$store.state.intervention.checkUserList.map(it => it.clientId);
     this.onLoad();
   },
   methods: {
@@ -244,6 +274,39 @@ export default {
     },
     chooseCheckBox(val) {
       this.checkPlanList = val;
+    },
+    // 关闭弹窗选择列表 push数组
+    handlePopoperPlanDoctoeClose(data) {
+      const getStateTplList = [...this.$store.state.intervention.tplList]; // 存在vuex的待增加随访数据
+      if (this.checkPlanList.length === 0) {
+        // 没勾选就全部
+        getStateTplList.forEach((valueOld) => {
+          valueOld.planDoctor = data.id;
+          valueOld.planDoctorName = data.realName;
+        });
+      } else {
+        // 勾选了
+        console.log(this.checkPlanList);
+        this.checkPlanList.forEach((value) => {
+          getStateTplList.forEach((it) => {
+            if ((value.id && value.id === it.id) || (value.planId && value.planId === it.planId)) {
+              it.planDoctor = data.id;
+              it.planDoctorName = data.realName;
+            }
+          });
+        });
+      }
+      this.$store.dispatch('intervention/setTplList', getStateTplList);
+      this.$refs.planDoctorPopover.doClose();
+      this.openCheckVisible = false;
+      this.form.planDoctor = data.id;
+      this.form.planDoctorName = data.realName;
+      // this.$refs.form.validateField('clientId');
+      // this.selectCheck = []; // push完一定要清空，防止点开再次push
+      /* if (this.selectAbnormal.length > 0) {
+        this.onAbnormalChange(this.selectAbnormal);
+        this.selectAbnormal = [];
+      } */
     },
     /**
      * 新增计划
@@ -470,7 +533,8 @@ export default {
       if (this.$store.state.intervention.tplList.length === 0) {
         return this.$message.warning('请新增至少一条计划');
       }
-      const clientIds = this.$store.state.intervention.checkUserList.map(it => it.clientId);
+      const clientIds = this.checkClintIds;
+      // this.$store.state.intervention.checkUserList.map(it => it.clientId);
       const intervenePlans = this.$store.state.intervention.tplList;
       intervenePlans.forEach((it) => {
         const setIt = it;
@@ -565,6 +629,26 @@ export default {
         font-weight: bold;
         font-size: 16px;
       }
+    }
+  }
+  // 下拉弹框
+  /deep/ .select-user-trigger {
+    line-height: 37px;
+    input{
+      border: 1px solid #DDE0E6 !important;
+    }
+    input, i {
+      color: #333333;
+      cursor: pointer;
+      background-color: white!important;
+    }
+    &.disabled {
+      input, i {
+        cursor: not-allowed;
+      }
+    }
+    .el-input__suffix{
+      width: 20px;
     }
   }
 }

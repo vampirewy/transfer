@@ -89,7 +89,7 @@
             </el-row>
             <el-row>
               <el-col :span="12">
-                <el-form-item label="干预人："  :prop="questionType === 1 ? 'planDoctorName' : ''">
+                <el-form-item label="随访人："  :prop="questionType === 1 ? 'planDoctorName' : ''">
                   <!--<el-popover
                           placement="right"
                           width="545"
@@ -99,7 +99,7 @@
                     <manager-list v-if="openCheckVisible" :clientIds="checkClintIds"
                          :propsType="'doctor'" @change="data => selectCheck = data"></manager-list>
                     <el-input class="select-user-trigger" slot="reference" disabled
-                              v-model="form.planDoctorName" placeholder="选择干预人">
+                              v-model="form.planDoctorName" placeholder="选择随访人">
                       <i :class="`el-icon-arrow-${openCheckVisible ? 'up' : 'down'}`"
                          slot="suffix"></i>
                     </el-input>
@@ -270,7 +270,7 @@ export default {
       rules: {
         planDate: [{ required: true, message: '请选择执行时间' }],
         planWay: [{ required: true, message: '请选择随访形式' }],
-        planDoctorName: [{ required: true, message: '请选择干预人' }],
+        planDoctorName: [{ required: true, message: '请选择随访人' }],
         manyi: [{ required: true, message: '请选择满意度' }],
         assortLevel: [{ required: true, message: '请选择依从度' }],
       },
@@ -373,7 +373,7 @@ export default {
             updateType: 'executeUpdate',
             executeTime: `${this.form.planDate} 00:00:00`, // 执行时间
             executePlanWay: this.form.planWay, // 执行干预方式
-            executePlanUserId: this.form.planDoctor, // 执行干预人
+            executePlanUserId: this.form.planDoctor, // 执行随访人
             executePlanTitle: this.form.planTitle, // 执行标题
             assortLevel: this.form.assortLevel, // 依从度
             executePlanContent: this.form.planContent, // 执行内容

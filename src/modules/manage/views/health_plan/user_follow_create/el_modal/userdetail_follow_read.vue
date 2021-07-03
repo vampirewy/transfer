@@ -31,7 +31,7 @@
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="干预人：">
+              <el-form-item label="随访人：">
                 <span>{{form.planDoctorName | getResult}}</span>
               </el-form-item>
             </el-col>
@@ -91,7 +91,7 @@
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="干预人：">
+              <el-form-item label="随访人：">
                 <el-input
                         v-model="form.executePlanUserName"
                         placeholder=""
@@ -166,7 +166,7 @@
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="干预人：">
+              <el-form-item label="随访人：">
                 <el-input
                         v-model="form.planDoctorName"
                         placeholder=""

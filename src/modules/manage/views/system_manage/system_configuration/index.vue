@@ -413,7 +413,8 @@ export default {
         .then((res) => {
           const { data } = res;
           const result = data.data || {};
-          this.form = result.data || [];
+          this.form = result || [];
+          this.checkedCities = result.holiday.split(',');
         });
     },
     add() {

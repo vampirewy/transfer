@@ -35,21 +35,18 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="性别" prop="gender">
-            <el-radio-group :disabled="true" v-model="staffForm.gender">
-              <el-radio :label="1">男</el-radio>
-              <el-radio :label="2">女</el-radio>
-            </el-radio-group>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
           <el-form-item label="客户编号" prop="clientNo">
             <el-input v-model="staffForm.clientNo" disabled></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="客户年龄" prop="cardNo">
-            <el-input v-model="staffForm.age" disabled></el-input>
+          <el-form-item label="手机号码" prop="mobile">
+            <el-input v-model="staffForm.mobile" disabled></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="身份证号" prop="cardNo">
+            <el-input v-model="staffForm.cardNo" disabled></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -155,7 +152,8 @@ export default {
       popoverStatus: false,
       staffForm: {
         clientNo: '',
-        gender: '',
+        mobile: '',
+        cardNo: '',
         clientId: '',
         clientName: '',
         itemName: '',
@@ -180,6 +178,7 @@ export default {
   },
   mounted() {
     this.getUserList();
+    this.getUserInfo();
   },
   methods: {
     handlePopoperClose(data) {
@@ -189,8 +188,8 @@ export default {
       this.staffForm.clientName = data.name;
       this.staffForm.clientId = data.id;
       this.staffForm.clientNo = data.clientNo;
-      this.staffForm.age = data.age;
-      this.staffForm.gender = data.gender;
+      this.staffForm.cardNo = data.cardNo;
+      this.staffForm.mobile = data.mobile;
     },
     async getUserList() {
       const res = await this.$api.systemManageInterface
@@ -200,6 +199,12 @@ export default {
       if (data) {
         this.userList = data.data || [];
       }
+    },
+    async getUserInfo() {
+      const res = await this.$api.userManagerInterface.getUserInfo();
+      const { data } = res.data;
+      this.form.reportUserId = data.userId;
+      this.form.reportUserName = data.realName;
     },
     getUserName() {
       this.staffForm.reportUserName =

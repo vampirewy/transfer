@@ -219,7 +219,6 @@
                   params: {
                     type: 'edit',
                     qusType: 4,
-                    templateQuestionId: '1386567482646433793',
                     id: scope.row.id,
                   },
                 })

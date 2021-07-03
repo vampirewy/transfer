@@ -322,7 +322,7 @@ export default {
       },
       abnormalModalVisible: false, // 异常列表弹窗
       selectPlanuser: [],
-      planuserModalVisible: false, // 干预人人列表弹窗
+      planuserModalVisible: false, // 随访人人列表弹窗
       selectAbnormal: [],
       gridList: [], // 人员类别下拉框
       expands: [],

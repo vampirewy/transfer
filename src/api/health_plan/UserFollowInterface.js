@@ -13,7 +13,7 @@ class UserFollowInterface extends BaseModule {
   listPage(data = {}) {
     return this.get('/intervene_plan/list_page', { params: data });
   }
-  // 干预人列表
+  // 随访人列表
   healthDoctorList(data) {
     return this.post('/intervene_plan/get/health_doctor', data);
   }

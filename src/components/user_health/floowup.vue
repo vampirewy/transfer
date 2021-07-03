@@ -1,7 +1,7 @@
 <template>
   <div class="follow-plan">
     <el-table :data="tableData" style="width: 100%" align="center">
-      <el-table-column prop="clientName" label="干预人" show-overflow-tooltip>
+      <el-table-column prop="clientName" label="随访人" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{ scope.row.executeUserName | getResult}}</span>
         </template>

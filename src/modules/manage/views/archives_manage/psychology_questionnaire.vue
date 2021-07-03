@@ -220,14 +220,7 @@
             <el-button style="color: #36BF2F"
                     type="text"
                     size="small"
-                    @click="
-                $router.push({
-                  name: 'health_questionnaire_detail',
-                  params: {
-                    qusType: scope.row.questionType,
-                    id: scope.row.id,
-                  },
-                })
+                    @click="openPdf(scope.row)
               " v-if="getAccess('psychology_questionnaire_view')
               "
             >查看</el-button>
@@ -306,6 +299,7 @@ export default {
   },
   data() {
     return {
+      pdf_url: process.env.api.pdf_url,
       isTrue: true,
       total: 0,
       dataSource: [],
@@ -376,6 +370,10 @@ export default {
     search(current = 1) {
       this.params.pageNo = current;
       this.fetch();
+    },
+    // 查看pdf
+    openPdf(data) {
+      window.open(this.pdf_url + data.assessReportName);
     },
     /**
      * 新增

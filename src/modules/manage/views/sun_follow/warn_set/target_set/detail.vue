@@ -45,38 +45,38 @@
         <div class="divRightTitle">模板条件
           <div class="titleBiao"></div></div>
       </div>
-      <el-row>
-        <el-col :span="6">
-          <el-form-item label="科室名称">
-            {{staffForm.sectionName}}
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="小项名称">
-            {{staffForm.itemName}}
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="小项条件">
-            {{staffForm.itemConditionName}}
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="条件的值">
-            {{staffForm.itemValue | getResult}}
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="低值">
-            {{staffForm.minItemValue | getResult}}
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="高值">
-            {{staffForm.maxItemValue | getResult}}
-          </el-form-item>
-        </el-col>
-      </el-row>
+      <el-table :data="staffForm.warnTemplateItemDtos" align="center">
+        <el-table-column label="科室名称" prop="sectionName">
+          <template slot-scope="scope">
+            {{scope.row.sectionName | getResult}}
+          </template>
+        </el-table-column>
+        <el-table-column label="小项名称" prop="itemName">
+          <template slot-scope="scope">
+            {{scope.row.itemName | getResult}}
+          </template>
+        </el-table-column>
+        <el-table-column label="小项条件" prop="itemName">
+          <template slot-scope="scope">
+            {{relationOptions.find(res => res.value === scope.row.itemCondition).name | getResult}}
+          </template>
+        </el-table-column>
+        <el-table-column label="条件的值" prop="itemValue">
+          <template slot-scope="scope">
+            {{scope.row.itemValue | getResult}}
+          </template>
+        </el-table-column>
+        <el-table-column label="低值" prop="minItemValue">
+          <template slot-scope="scope">
+            {{scope.row.minItemValue | getResult}}
+          </template>
+        </el-table-column>
+        <el-table-column label="高值" prop="maxItemValue">
+          <template slot-scope="scope">
+            {{scope.row.maxItemValue | getResult}}
+          </template>
+        </el-table-column>
+      </el-table>
       <div class="form-buttons">
         <el-button size="small" class="cancelBtn" @click="$emit('cancel')">返回</el-button>
       </div>
@@ -109,8 +109,6 @@ export default {
     this.$api.sunFollow.getWarnTemplateDetail({ id: this.id }).then(async (res) => {
       const { data } = res;
       this.staffForm = data.data;
-      this.staffForm.itemConditionName =
-        this.relationOptions.filter(val => val.value === this.staffForm.itemCondition)[0].name;
     });
   },
 };

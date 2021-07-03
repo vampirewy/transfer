@@ -5,9 +5,9 @@
 import echarts from 'echarts';
 export default {
   name: 'lifestyle',
-  // props: {
-  //   data: Array,
-  // },
+  props: {
+    data: Array,
+  },
   data() {
     return {
       bmilist: [],
@@ -129,7 +129,7 @@ export default {
     },
     async queryList() {
       const res = await this.$api.statics.reportList({
-        ...this.form,
+        ...this.data,
         type: 1,
       });
       this.bmilist = res.data.data;

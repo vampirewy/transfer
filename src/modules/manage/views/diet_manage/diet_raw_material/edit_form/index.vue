@@ -2,7 +2,9 @@
   <div>
     <div class="diet-form_center">
       <div class="diet-plan-box">
-        <div class="title"><span v-if="id">编辑</span><span v-else>新增</span>原料</div>
+        <div class="title" v-if="type === 'add' && id === ''">新增原料</div>
+        <div class="title" v-if="type === 'add' && id">编辑原料</div>
+        <div class="title" v-if="type === 'edit'">查看原料</div>
       </div>
     </div>
     <el-form
