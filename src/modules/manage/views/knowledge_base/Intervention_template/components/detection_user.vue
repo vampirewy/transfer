@@ -209,8 +209,8 @@ export default {
     async getGridList() {
       const res = await
       this.$api.userManagerInterface.getGridList({
-        pageNo: 1,
-        pageSize: 10000,
+        pageNo: this.currentPage,
+        pageSize: this.pageSize,
         gridName: this.formData.name,
       });
       const { data } = res.data;

@@ -26,6 +26,7 @@
             <el-popover
               ref="userPopover"
               placement="bottom-start"
+              :disabled="!!editId"
               width="650"
               trigger="click"
               @show="popoverStatus = true"
@@ -36,7 +37,7 @@
                 @change="onSelectUser"
               ></select-user>
               <el-input
-                :class="`select-user-trigger ${id ? 'disabled' : ''}`"
+                :class="`select-user-trigger ${editId ? 'disabled' : ''}`"
                 slot="reference"
                 disabled
                 v-model="infoSource.clientName"
@@ -80,7 +81,6 @@
           <el-date-picker
               v-model="infoSource.startDate"
               type="datetime"
-              :default-value="infoSource.startDate"
               value-format="yyyy-MM-dd HH:mm:ss"
               :max-date="new Date()"
               placeholder="选择日期时间">
@@ -114,35 +114,6 @@
       </div> -->
 
       <div class="medicate-info mt20" style="margin-top:0">
-        <!-- <div class="row">
-            <el-form-item label="检查编号" prop="drugsName" style="width:25%">
-              <el-input
-                v-model="infoSource.drugsName"
-                placeholder="请输入"
-                :maxlength="100"
-                style="width: 200px"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="医保卡号" prop="specification" style="width:25%">
-              <el-input
-                v-model="infoSource.specification"
-                placeholder="请输入"
-                :maxlength="30"
-                style="width: 200px"
-              ></el-input>
-            </el-form-item>
-             <el-form-item label="检查时间" prop="endDate" style="width:25%">
-              <el-date-picker
-                class="end-date"
-                v-model="infoSource.endDate"
-                type="date"
-                :min-date="infoSource.startDate"
-                value-format="yyyy-MM-dd"
-                placeholder="请选择"
-                style="width: 200px"
-              ></el-date-picker>
-            </el-form-item>
-        </div> -->
         <div class="row">
             <el-form-item label="检查描述" prop="ingrenient" style="width:100%">
               <el-input
@@ -204,7 +175,9 @@
           show-overflow-tooltip
         >
           <template slot-scope="scope">
-              <input type="text" class="elinputs" v-model="scope.row.consequences" name="" id="">
+              <input type="text" class="elinputs"
+              onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"
+              v-model="scope.row.consequences" name="" id="">
               <!-- <el-input
                 type="input"
                 v-model="scope.row.consequences"
@@ -260,9 +233,11 @@
 import detail from '../components/detail.vue';
 import detectionuser from '../components/detection_user.vue';
 import selectUser from '../components/select_user.vue';
+import deleteIcon from '~/src/assets/images/deleteicon.png';
 
 export default {
   name: 'medication_history_add',
+  props: ['id', 'editId'],
   components: {
     detail,
     selectUser,
@@ -278,7 +253,7 @@ export default {
         mainIndication: '',
         specification: '',
         countDay: '',
-        startDate: new Date(),
+        startDate: '',
         endDate: '',
         dose: '',
         ingrenient: '', // 检测描述
@@ -318,10 +293,58 @@ export default {
     };
   },
   mounted() {
+    console.log(this.id, this.editId);
+    if (this.editId) {
+      this.othertestInfo(this.id, this.editId);
+    }
     window.vm = this;
     this.getResultList();
   },
   methods: {
+    async othertestInfo(id, editId) {
+      // const reqBody = {
+      //   clientId: id,
+      //   healthDataOtherId: editId,
+      // };
+      const res = await this.$api.healthMonitorInterface.getDetailHealthOther(id, editId);
+      const { data } = res.data;
+      if (data) {
+        this.infoSource.age = data.age;
+        this.infoSource.clientId = data.clientId;
+        this.infoSource.clientName = data.clientName;
+        this.infoSource.gender = data.gender;
+        this.editId = data.healthDataOtherId;
+        this.infoSource.gridName = data.clientNo;
+        // projectName: "33311"
+        // result: "撒到我范围"
+        this.infoSource.startDate = data.testDate;
+        // unit: "11"
+        console.log(data);
+        const json = {
+          name: data.projectName,
+          consequences: data.result,
+          unit: data.unit,
+        };
+        this.detectionInfos.push(json);
+        // this.table.list = data.data || [];
+        // this.table.totalCount = data.total;
+      }
+    },
+    // othertestInfo(id, editId) {
+    //   this.$api.healthMonitorInterface.getDetailHealthOther(id, editId).then(({ data }) => {
+    //     this.infoSource.clientName = data.data.clientName;
+    //     this.infoSource.gender = data.data.gender;
+    //     this.infoSource.age = data.data.age;
+    //     this.infoSource.clientId = data.data.clientId;
+    //     this.infoSource.gridName = data.data.clientId;
+    //     this.infoSource.SBP = data.data.sbp;
+    //     this.infoSource.DBP = data.data.dbp;
+    //     this.infoSource.pulse = data.data.hd;
+    //     this.infoSource.conclusion = data.data.result;
+    //     this.infoSource.startDate = data.data.testDate;
+    //     console.log(data);
+    //   });
+    // },
     operates(index) {
       this.$set(this.detectionInfos[index], 'isshow', true);
       // console.log(this.detectionInfos);
@@ -341,12 +364,8 @@ export default {
             this.detectionInfos.push(valQusOne);
           }
         });
-        console.log(this.detectionInfos, 'qwqwqwqw');
-        // for (let i = 0; i < this.detectionInfo.length; i++) {
-        //   this.detectionInfos.push(this.detectionInfo[i]);
-        // }
+        this.total = this.detectionInfos.length;
         this.detectioninfoSource.clientName = '';
-        // console.log(this.detectionInfos, 'dfafdsfsdfds12312');
         this.detectionInfo = [];
       } else {
         return this.$message.warning('请先选择客户');
@@ -380,7 +399,7 @@ export default {
       if (data) {
         // console.log(this.detectionInfo, '000000');
         data.forEach((val) => {
-          this.detectioninfoSource.clientName += `${val.intro}、`;
+          this.detectioninfoSource.clientName += `${val.name}、`;
           this.detectionInfo.push(val);
         });
         // this.detectionInfo.push(data);
@@ -399,14 +418,26 @@ export default {
       });
     },
     remove(index) {
-      this.$confirm('确定要删除该数据吗?', '提示', {
+      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认删除！</span></div>`, '删除提示', {
+        dangerouslyUseHTMLString: true,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning',
+        customClass: 'message-box-customize',
+        // showClose: true,
       }).then(() => {
         this.detectionInfos.splice(index, 1);
-      });
+        this.total = this.detectionInfos.length;
+      }).catch(() => {});
     },
+    // remove(index) {
+    //   this.$confirm('确定要删除该数据吗?', '提示', {
+    //     confirmButtonText: '确定',
+    //     cancelButtonText: '取消',
+    //     type: 'warning',
+    //   }).then(() => {
+    //     this.detectionInfos.splice(index, 1);
+    //   });
+    // },
     clear() {
       const field = [
         'drugsName',
@@ -457,7 +488,7 @@ export default {
           json.detectDate = this.infoSource.startDate;
           arrars.push(json);
         } else {
-          return this.$message.warning('请填写检测项目');
+          return this.$message.warning('请填写检测结果');
         }
       });
       // console.log(arrars);
