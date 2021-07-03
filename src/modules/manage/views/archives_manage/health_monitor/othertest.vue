@@ -131,7 +131,7 @@
             <div class="divRightTitle">检查项目
                 <div class="titleBiao"></div></div>
         </div>
-        <div class="row">
+        <div class="row" v-if="!editId">
           <el-form-item label="检测项目" prop="clientName" style="width:40%;background:#ffffff">
             <el-popover
               ref="userPopovers"
@@ -482,6 +482,7 @@ export default {
       this.detectionInfos.forEach((val) => {
         if (val.consequences) {
           const json = {};
+          json.id = this.editId;
           json.clientId = this.infoSource.clientId;
           json.result = val.consequences;
           json.healthDataItemId = val.id;

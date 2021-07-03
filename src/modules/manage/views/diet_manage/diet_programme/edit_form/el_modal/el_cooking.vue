@@ -11,12 +11,12 @@
     <div class="cooking-box">
       <div class="cooking-item">
         <span class="cooking-lable">菜品名称：</span>
-        <span class="cooking-content">桂花酒酿圆子</span>
+        <span class="cooking-content">{{name}}</span>
       </div>
       <div class="cooking-item">
         <span class="cooking-lable">烹饪方法：</span>
         <span class="cooking-content"
-          >发口令好尬客户给了然后来客人上课发合力科技he日军哥我苦尽甘来科技感了就分开设计师了j</span
+          >{{method}}</span
         >
       </div>
     </div>
@@ -35,9 +35,17 @@ export default {
         return {};
       },
     },
+    id: String,
   },
   data() {
-    return {};
+    return {
+      name: '',
+      method: '',
+    };
+  },
+  mounted() {
+    console.log(this.id);
+    this.loadData();
   },
   computed: {
     visibles: {
@@ -49,7 +57,17 @@ export default {
       },
     },
   },
-  methods: {},
+  methods: {
+    loadData() {
+      this.$api.dietFinishedDishInterface
+        .getDietFinishedDishDetail(this.id)
+        .then((res) => {
+          this.name = res.data.data.name;
+          this.method = res.data.data.method;
+          console.log(res);
+        });
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

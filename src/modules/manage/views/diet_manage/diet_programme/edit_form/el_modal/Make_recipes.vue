@@ -71,7 +71,7 @@
                           {{ its.name }}
                           <i
                             v-show="its.configType === 1"
-                            @click="isShowCooking = true"
+                            @click="isShowCookingbtn(its)"
                             class="el-icon-warning"
                           ></i>
                         </p>
@@ -127,7 +127,9 @@
       @change="handleFoodSelect"
       :visible.sync="isShowFoodOp"
     ></el-food-op>
-    <el-cooking :visible.sync="isShowCooking"></el-cooking>
+    <el-cooking
+    v-if="isShowCooking"
+    :visible.sync="isShowCooking" :id="caiId"></el-cooking>
   </div>
 </template>
 
@@ -179,6 +181,7 @@ export default {
       editableTabs: [],
       TabsIndex: 0,
       FoodList: [],
+      caiId: '',
     };
   },
   created() {
@@ -198,6 +201,11 @@ export default {
     },
   },
   methods: {
+    isShowCookingbtn(its) {
+      console.log(its);
+      this.caiId = its.caiId;
+      this.isShowCooking = true;
+    },
     handleTabsEdit(e) {
       this.TabsIndex = e.index;
       this.$emit('makeIndex', e.index);

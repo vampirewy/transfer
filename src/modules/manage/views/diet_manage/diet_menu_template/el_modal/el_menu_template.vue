@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="新增菜谱模版"
+    title="新增菜谱模板"
     class="dialog-detail"
     :modal-append-to-body="false"
     width="580px"
@@ -18,7 +18,7 @@
       <el-form-item
         prop="dietTemplateSortId"
         style="position: relative"
-        label="模版类别："
+        label="模板类别："
       >
         <el-select
           placeholder="请选择"
@@ -29,7 +29,7 @@
         </el-select>
         <div class="mask" @click="selectType"></div>
       </el-form-item>
-      <el-form-item prop="name" label="模版名称：">
+      <el-form-item prop="name" label="模板名称：">
         <el-input
           v-model="ruleForm.name"
           style="width: 159px"
@@ -52,7 +52,7 @@
         ></el-input>
       </el-form-item>
       <div class="template-intro">
-        <el-form-item label="模版介绍：">
+        <el-form-item label="模板介绍：">
           <el-input
             type="textarea"
             :rows="4"
@@ -99,8 +99,8 @@ export default {
         maxKcal: '',
       },
       rules: {
-        dietTemplateSortId: [{ required: true, message: '请选择模版类别' }],
-        name: [{ required: true, message: '请输入模版名称' }],
+        dietTemplateSortId: [{ required: true, message: '请选择模板类别' }],
+        name: [{ required: true, message: '请输入模板名称' }],
         minKcal: [{ required: true, message: '请输入最小卡路里' }],
         maxKcal: [{ required: true, message: '请输入最大卡路里' }],
       },

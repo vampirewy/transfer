@@ -266,7 +266,7 @@
                 </el-table-column>
               <el-table-column
                 label="采集日期"
-                prop="createTime"
+                prop="createdTime"
                 align="center"
                 show-overflow-tooltip></el-table-column>
               <el-table-column

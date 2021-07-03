@@ -14,11 +14,12 @@
       <div><span class="lookPressureTitle">客户编号：</span><span>{{queryInfo.clientNo}}</span></div>
     </div>
     <div class="lookPressure">
-      <div><span class="lookPressureTitle">血糖类型：</span>
+      <!-- <div><span class="lookPressureTitle">血糖类型：</span>
       <span v-if="queryInfo.sugarType === 1">空腹血糖</span>
       <span v-if="queryInfo.sugarType === 2">餐后血糖</span>
-      </div>
-      <div><span class="lookPressureTitle">血糖值：</span><span>{{queryInfo.sugar}} mmol/L</span></div>
+      </div> -->
+      <!-- <div><span class="lookPressureTitle">血糖值：</span>
+      <span>{{queryInfo.sugar}} mmol/L</span></div> -->
       <div><span class="lookPressureTitle">检测时间：</span><span>{{queryInfo.testDate}}</span></div>
       <div></div>
     </div>
@@ -31,24 +32,24 @@
     <!-- <div class="lookPressure">
       <div><span class="lookPressureTitle">备注：</span><span>{{queryInfo.result}}</span></div>
     </div> -->
-    <div class="divRightTitleDiv">
+    <!-- <div class="divRightTitleDiv">
       <div class="divRightTitle">趋势
         <div class="titleBiao"></div></div>
     </div>
     <div class="chart-legend">
       <span>空腹血糖</span>
       <span>餐后血糖</span>
-    </div>
-    <div class="noDataLine" v-if="xData.length === 0">
+    </div> -->
+    <!-- <div class="noDataLine" v-if="xData.length === 0">
       <img src="@/assets/images/noDataLine.png"/>
       <span>暂无数据</span>
-    </div>
-    <line-chart
+    </div> -->
+    <!-- <line-chart
       v-else
       :chart-data="yData"
       :sectionName="['空腹血糖', '餐后血糖']"
       :sectionXList="xData">
-    </line-chart>
+    </line-chart> -->
     <div class="title">数据列表</div>
     <el-table :data="table.list"  class="openTable">
       <el-table-column
@@ -83,23 +84,23 @@
 </template>
 
 <script>
-import LineChart from '../components/line_chart.vue';
+// import LineChart from '../components/line_chart.vue';
 import * as dayjs from 'dayjs';
 export default {
   name: 'BGTrend',
-  props: ['id', 'ids'],
-  components: {
-    LineChart,
-  },
+  props: ['id', 'editId'],
+  // components: {
+  //   LineChart,
+  // },
   data() {
     return {
       table: {
         columns: [
-          { label: '姓名', prop: 'clientName' },
-          { label: '数据时间', prop: 'testDate' },
-          { label: '血糖类型', prop: 'sugarTypeName' },
-          { label: '血糖值', prop: 'sugar' },
-          { label: '备注', prop: 'result' },
+          { label: '检测项目', prop: 'name' },
+          { label: '检测结果', prop: 'consequences' },
+          { label: '计量单位', prop: 'unit' },
+          // { label: '血糖值', prop: 'sugar' },
+          // { label: '备注', prop: 'result' },
         ],
         list: [],
         total: 0,
@@ -112,12 +113,45 @@ export default {
     };
   },
   mounted() {
-    console.log(this.id, '血糖新增');
-    this.queryChartData();
-    this.queryPageList();
-    this.queryChartInfo();
+    // console.log(this.id, '血糖新增');
+    // this.queryChartData();
+    // this.queryPageList();
+    // this.queryChartInfo();
+    // this.othertestInfo();
+    this.othertestInfo(this.id, this.editId);
+    console.log(this.id, this.editId);
   },
   methods: {
+    async othertestInfo(id, editId) {
+      // const reqBody = {
+      //   clientId: id,
+      //   healthDataOtherId: editId,
+      // };
+      const res = await this.$api.healthMonitorInterface.getDetailHealthOther(id, editId);
+      const { data } = res.data;
+      if (data) {
+        this.queryInfo = data;
+        // this.infoSource.age = data.age;
+        // this.infoSource.clientId = data.clientId;
+        // this.infoSource.clientName = data.clientName;
+        // this.infoSource.gender = data.gender;
+        // this.editId = data.healthDataOtherId;
+        // this.infoSource.gridName = data.clientNo;
+        // projectName: "33311"
+        // result: "撒到我范围"
+        // this.infoSource.startDate = data.testDate;
+        // unit: "11"
+        // console.log(data);
+        const json = {
+          name: data.projectName,
+          consequences: data.result,
+          unit: data.unit,
+        };
+        this.table.list.push(json);
+        // this.table.list = data.data || [];
+        // this.table.totalCount = data.total;
+      }
+    },
     queryChartData() {
       this.$api.healthMonitorInterface.getBGChart(this.id).then(({ data }) => {
         const xData = [];

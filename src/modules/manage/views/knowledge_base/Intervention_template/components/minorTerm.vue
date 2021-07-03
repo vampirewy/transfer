@@ -11,6 +11,7 @@
                   v-model="formData.state"
                   placeholder="请选择"
                   style="width: 140px"
+                  @change="RelationListId"
           >
             <el-option label="全部" value="1" key="1"></el-option>
             <el-option label="任意" value="2" key="2"></el-option>
@@ -356,12 +357,12 @@ export default {
     this.dataSource.columns = COLUMNS[this.TabTitle];
     if (this.InterventionList.length !== 0) {
       this.dataSource.list = this.InterventionList;
-      if (this.InterventionList[0].conditionRelation === 1 &&
-      this.InterventionList[0].conditionRelation === 2) {
-        this.formData.state = String(this.InterventionList[0].conditionRelation);
-      } else {
-        this.formData.state = '1';
-      }
+      // if (this.InterventionList[0].conditionRelation === 1 &&
+      // this.InterventionList[0].conditionRelation === 2) {
+      //   this.formData.state = String(this.InterventionList[0].conditionRelation);
+      // } else {
+      //   this.formData.state = '1';
+      // }
     }
     // else {
     //   this.dataSource.list = [];
@@ -437,6 +438,14 @@ export default {
         this.detectionInfo = [];
         this.total = this.dataSource.list.length;
       }
+    },
+    RelationListId() {
+      this.dataSource.list = this.dataSource.list.map(
+        (val) => {
+          val.conditionRelation = this.formData.state;
+          return val;
+        },
+      );
     },
     ConstitutionAdd() {
       const json = {
