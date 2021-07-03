@@ -191,12 +191,12 @@
           <span>{{ scope.row.reportUserName | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="上报时间" prop="reportDate" min-width="90px" show-overflow-tooltip>
+      <el-table-column label="上报时间" prop="reportDate" min-width="115px" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{ scope.row.reportDate | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="recieveUserName" label="接收人" show-overflow-tooltip>
+      <!--<el-table-column prop="recieveUserName" label="接收人" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{ scope.row.recieveUserName | getResult}}</span>
         </template>
@@ -205,7 +205,7 @@
         <template slot-scope="scope">
           <span>{{ scope.row.recieveDate | getResult}}</span>
         </template>
-      </el-table-column>
+      </el-table-column>-->
       <el-table-column prop="reportState" label="是否总检" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{ scope.row.reportState | getResultReportState}}</span>

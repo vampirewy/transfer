@@ -277,7 +277,7 @@ export default {
     .intvTmpl_left_csx {
       width: 150px;
       max-height: 685px;
-      overflow-y: auto;
+      overflow-y: hidden;
       overflow-x: hidden;
       border-radius: 8px;
       text-align: center;
@@ -300,7 +300,8 @@ export default {
       .intv_menulist {
         width: 150px;
         margin-top: 48px;
-
+        height: calc(100vh - 282px);
+        overflow-y: auto;
         li {
           padding: 0 10px;
           font-size: 12px;
@@ -326,7 +327,7 @@ export default {
       }
     }
     .intvTmpl_left_csx{
-      min-width: 216px;
+      min-width: 150px;
       max-height: calc(100vh - 235px);
       min-height: calc(100vh - 235px);
   }
