@@ -170,14 +170,14 @@
       <el-table style="width: 100%" :data="dataSource" align="center"
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="40"></el-table-column>
-        <el-table-column label=" 系统大项" prop="itemName" min-width="200" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{ scope.row.itemName | getResult}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label=" 系统小项" prop="sectionName" min-width="150" show-overflow-tooltip>
+        <el-table-column label=" 系统项目科室" prop="sectionName" min-width="200" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.sectionName | getResult}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label=" 系统项目名称" prop="itemName" min-width="150" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{ scope.row.itemName | getResult}}</span>
           </template>
         </el-table-column>
         <!-- <el-table-column prop="gender" label="分类" min-width="80px">

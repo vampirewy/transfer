@@ -396,6 +396,7 @@ export default {
           jsons.interveneTemplateItemRequestList.push(prms);
         }
       }
+      console.log(jsons.interveneTemplateItemRequestList, '小项123123213');
       if (this.Category.length !== 0) {
         for (let i = 0; i < this.Category.length; i++) {
           const prms = {
@@ -467,38 +468,6 @@ export default {
           }
         });
       }
-    //   this.$refs.form.validate((valid) => {
-    //     if (valid) {
-    //       const params = {
-    //         clientInfoId: this.form.clientInfoId,
-    //         medicalType: this.form.medicalType,
-    //         hospital: this.form.hospital,
-    //         patientNo: this.form.patientNo,
-    //         inDate: this.form.inDate,
-    //         outDate: this.form.outDate,
-    //         doctorName: this.form.doctorName,
-    //         department: this.form.department,
-    //         result: this.form.result,
-    //         complaint: this.form.complaint,
-    //         examination: this.form.examination,
-    //         diagnosis: this.form.diagnosis,
-    //         therapy: this.form.therapy,
-    //         hpi: this.form.hpi,
-    //         orgCode: this.form.orgCode,
-    //         organId: this.form.organId,
-    //       };
-    //       if (this.id) {
-    //         params.id = this.id;
-    //       }
-    //       this.$api.medicalHistoryInterface.medicalInfo(params).then((res) => {
-    //         const { data } = res;
-    //         if (data.success) {
-    //           this.$message.success('操作成功');
-    //           this.$emit('afterSubmit');
-    //         }
-    //       });
-    //     }
-    //   });
     },
     goBack() {
       this.$router.go(-1);

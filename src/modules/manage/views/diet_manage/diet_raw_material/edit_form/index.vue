@@ -2,7 +2,7 @@
   <div>
     <div class="diet-form_center">
       <div class="diet-plan-box">
-        <div class="title">新增原料</div>
+        <div class="title"><span v-if="id">编辑</span><span v-else>新增</span>原料</div>
       </div>
     </div>
     <el-form
@@ -22,7 +22,7 @@
         ></el-input>
         <span v-else>{{ ruleForm.names }}</span>
       </el-form-item>
-      <el-form-item prop="otherName" label="别名：">
+      <el-form-item  label="别名：">
         <el-input
           v-if="type !== 'edit'"
           style="width: 189px"
@@ -78,7 +78,7 @@
                 clearable
                 v-model="item.value"
               ></el-input>
-              %
+              <span>{{item.Units}}</span>
             </div>
           </div>
         </el-form-item>
@@ -121,47 +121,47 @@ export default {
       },
       rules: {
         names: [{ required: true, message: '请输入名称', trigger: 'change' }],
-        otherName: [
-          { required: true, message: '请输入别名', trigger: 'change' },
-        ],
+        // otherName: [
+        //   { required: true, message: '请输入别名', trigger: 'change' },
+        // ],
       },
       cateData: [],
       list: [
-        { key: 'eatPercent', title: '可食部分', value: '' },
-        { key: 'water', title: '水分', value: '' },
-        { key: 'kcal', title: '能量KJ', value: '' },
-        { key: 'protein', title: '蛋白质', value: '' },
-        { key: 'fat', title: '脂肪', value: '' },
-        { key: 'cho', title: '碳水化合物', value: '' },
-        { key: 'brxxw', title: '不溶性纤维', value: '' },
-        { key: 'dgc', title: '胆固醇', value: '' },
-        { key: 'ash', title: '灰分', value: '' },
-        { key: 'vitaminsA', title: '维生素A', value: '' },
-        { key: 'thiamin', title: '硫胺素 B1', value: '' },
-        { key: 'riboflavin', title: '核黄素 B2', value: '' },
-        { key: 'niacin', title: '尼克酸 B3', value: '' },
-        { key: 'vitaminsC', title: '维生素C', value: '' },
-        { key: 'vitaminsE', title: '维生素E', value: '' },
-        { key: 'ca', title: '钙', value: '' },
-        { key: 'p', title: '磷', value: '' },
-        { key: 'k', title: '钾', value: '' },
-        { key: 'na', title: '钠', value: '' },
-        { key: 'mg', title: '镁', value: '' },
-        { key: 'fe', title: '铁', value: '' },
-        { key: 'zn', title: '锌', value: '' },
-        { key: 'se', title: '硒', value: '' },
-        { key: 'cu', title: '铜', value: '' },
-        { key: 'mn', title: '锰', value: '' },
-        { key: 'i', title: '碘', value: '' },
-        { key: 'f', title: '氟', value: '' },
-        { key: 'cr', title: '铬', value: '' },
-        { key: 'mu', title: '钼', value: '' },
-        { key: 'vitaminsD', title: '维生素D', value: '' },
-        { key: 'vitaminsB6', title: '维生素B6', value: '' },
-        { key: 'vitaminsB12', title: '维生素B12', value: '' },
-        { key: 'vitaminsB5', title: '泛酸 B5', value: '' },
-        { key: 'danjian', title: '胆碱', value: '' },
-        { key: 'vitaminsH', title: '维生素h', value: '' },
+        { key: 'eatPercent', title: '可食部分', value: '', Units: '%' },
+        { key: 'water', title: '水分', value: '', Units: 'g' },
+        { key: 'kcal', title: '能量KJ', value: '', Units: 'kcal' },
+        { key: 'protein', title: '蛋白质', value: '', Units: 'g' },
+        { key: 'fat', title: '脂肪', value: '', Units: 'g' },
+        { key: 'cho', title: '碳水化合物', value: '', Units: 'g' },
+        { key: 'brxxw', title: '不溶性纤维', value: '', Units: 'g' },
+        { key: 'dgc', title: '胆固醇', value: '', Units: 'mg' },
+        { key: 'ash', title: '灰分', value: '', Units: 'g' },
+        { key: 'vitaminsA', title: '维生素A', value: '', Units: 'μg' },
+        { key: 'thiamin', title: '硫胺素 B1', value: '', Units: 'mg' },
+        { key: 'riboflavin', title: '核黄素 B2', value: '', Units: 'mg' },
+        { key: 'niacin', title: '尼克酸 B3', value: '', Units: 'mg' },
+        { key: 'vitaminsC', title: '维生素C', value: '', Units: 'mg' },
+        { key: 'vitaminsE', title: '维生素E', value: '', Units: 'mg' },
+        { key: 'ca', title: '钙', value: '', Units: 'mg' },
+        { key: 'p', title: '磷', value: '', Units: 'mg' },
+        { key: 'k', title: '钾', value: '', Units: 'mg' },
+        { key: 'na', title: '钠', value: '', Units: 'mg' },
+        { key: 'mg', title: '镁', value: '', Units: 'mg' },
+        { key: 'fe', title: '铁', value: '', Units: 'mg' },
+        { key: 'zn', title: '锌', value: '', Units: 'mg' },
+        { key: 'se', title: '硒', value: '', Units: 'μg' },
+        { key: 'cu', title: '铜', value: '', Units: 'mg' },
+        { key: 'mn', title: '锰', value: '', Units: 'mg' },
+        { key: 'i', title: '碘', value: '', Units: 'μg' },
+        { key: 'f', title: '氟', value: '', Units: 'mg' },
+        { key: 'cr', title: '铬', value: '', Units: 'μg' },
+        { key: 'mu', title: '钼', value: '', Units: 'mg' },
+        { key: 'vitaminsD', title: '维生素D', value: '', Units: 'mg' },
+        { key: 'vitaminsB6', title: '维生素B6', value: '', Units: 'mg' },
+        { key: 'vitaminsB12', title: '维生素B12', value: '', Units: 'mg' },
+        { key: 'vitaminsB5', title: '泛酸 B5', value: '', Units: 'mg' },
+        { key: 'danjian', title: '胆碱', value: '', Units: 'mg' },
+        { key: 'vitaminsH', title: '维生素h', value: '', Units: 'mg' },
       ],
     };
   },

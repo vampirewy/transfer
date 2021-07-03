@@ -104,7 +104,7 @@
                 v-model="dataSource.useMethod"
                 placeholder="请输入"
                 :maxlength="30"
-
+                style="width: 200px"
               ></el-input>
             </el-form-item>
             </el-col>

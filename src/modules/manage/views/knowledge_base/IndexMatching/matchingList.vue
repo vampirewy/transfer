@@ -48,7 +48,7 @@
     <div class="searchCondition">
       <div class="searchLeft">
         <div class="searchInputFormItem">
-          <el-input placeholder="名称/项目" v-model="form.itemName">
+          <el-input placeholder="异常名称" v-model="form.itemName">
           </el-input>
           <span class="searchBtnImgSpan" @click="search(1)">
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
@@ -174,7 +174,7 @@
           <el-table :data="expandData.list" class="expand-table" align="center">
             <el-table-column
               label="体检编号"
-              prop="clientId"
+              prop="reportNo"
               min-width="20%"
               show-overflow-tooltip>
               <template slot-scope="scope">
@@ -188,7 +188,7 @@
             </el-table-column>
             <el-table-column label="性别" prop="gender" min-width="15%" show-overflow-tooltip>
               <template slot-scope="scope">
-                  {{scope.row.gender === 1 ? '男' : (scope.row.gender === 2 ? '女' : '')}}
+                  {{scope.row.gender === 1 ? '男' : (scope.row.gender === 2 ? '女' : '未知')}}
                 </template>
             </el-table-column>
             <el-table-column

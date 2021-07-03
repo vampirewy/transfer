@@ -258,6 +258,12 @@
                 prop="inspectionOrg"
                 show-overflow-tooltip>
               </el-table-column>
+              <el-table-column
+                label="人员类别"
+                align="center"
+                prop="gridName"
+                show-overflow-tooltip>
+              </el-table-column>
             <el-table-column
                 label="检查日期"
                 align="center"
