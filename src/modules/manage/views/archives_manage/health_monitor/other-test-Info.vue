@@ -1,7 +1,7 @@
 <template>
   <div class="health-monitor-trend">
     <div class="divRightTitleDiv">
-      <div class="divRightTitle">查看-运动
+      <div class="divRightTitle">查看-其他检测
         <div class="titleBiao"></div></div>
     </div>
     <div class="lookPressure">
@@ -14,16 +14,13 @@
       <div><span class="lookPressureTitle">客户编号：</span><span>{{queryInfo.clientNo}}</span></div>
     </div>
     <div class="lookPressure">
-      <div><span class="lookPressureTitle">运动时间：</span><span>{{queryInfo.sportTime}} min</span>
+      <div><span class="lookPressureTitle">血糖类型：</span>
+      <span v-if="queryInfo.sugarType === 1">空腹血糖</span>
+      <span v-if="queryInfo.sugarType === 2">餐后血糖</span>
       </div>
-      <div><span class="lookPressureTitle">运动路程：</span>
-      <span>{{queryInfo.sportDistance}} 公里</span></div>
-      <div><span class="lookPressureTitle">运动步数：</span>
-        <span>{{queryInfo.steps}} 步</span></div>
-      <div><span class="lookPressureTitle">运动消耗：</span><span>{{queryInfo.kcal}} Kcai</span></div>
-    </div>
-    <div class="lookPressure">
+      <div><span class="lookPressureTitle">血糖值：</span><span>{{queryInfo.sugar}} mmol/L</span></div>
       <div><span class="lookPressureTitle">检测时间：</span><span>{{queryInfo.testDate}}</span></div>
+      <div></div>
     </div>
     <div class="lookPressure">
       <div style="width:100%;display: flex;">
@@ -35,11 +32,12 @@
       <div><span class="lookPressureTitle">备注：</span><span>{{queryInfo.result}}</span></div>
     </div> -->
     <div class="divRightTitleDiv">
-      <div class="divRightTitle">运动-查看趋势
+      <div class="divRightTitle">趋势
         <div class="titleBiao"></div></div>
     </div>
     <div class="chart-legend">
-      <span>步数</span>
+      <span>空腹血糖</span>
+      <span>餐后血糖</span>
     </div>
     <div class="noDataLine" v-if="xData.length === 0">
       <img src="@/assets/images/noDataLine.png"/>
@@ -48,11 +46,11 @@
     <line-chart
       v-else
       :chart-data="yData"
-      :sectionName="['步数']"
+      :sectionName="['空腹血糖', '餐后血糖']"
       :sectionXList="xData">
     </line-chart>
     <div class="title">数据列表</div>
-    <el-table :data="table.list" class="openTable">
+    <el-table :data="table.list"  class="openTable">
       <el-table-column
         v-for="(item, index) in table.columns"
         :key="index"
@@ -88,7 +86,7 @@
 import LineChart from '../components/line_chart.vue';
 import * as dayjs from 'dayjs';
 export default {
-  name: 'SportTrend',
+  name: 'BGTrend',
   props: ['id', 'ids'],
   components: {
     LineChart,
@@ -99,10 +97,9 @@ export default {
         columns: [
           { label: '姓名', prop: 'clientName' },
           { label: '数据时间', prop: 'testDate' },
-          { label: '运动时间', prop: 'sportTime' },
-          { label: '运动路程', prop: 'sportDistance' },
-          { label: '消耗kcal', prop: 'kcal' },
-          { label: '运动步数', prop: 'steps' },
+          { label: '血糖类型', prop: 'sugarTypeName' },
+          { label: '血糖值', prop: 'sugar' },
+          { label: '备注', prop: 'result' },
         ],
         list: [],
         total: 0,
@@ -115,16 +112,19 @@ export default {
     };
   },
   mounted() {
+    console.log(this.id, '血糖新增');
     this.queryChartData();
     this.queryPageList();
     this.queryChartInfo();
   },
   methods: {
     queryChartData() {
-      this.$api.healthMonitorInterface.getSportChart(this.id).then(({ data }) => {
+      this.$api.healthMonitorInterface.getBGChart(this.id).then(({ data }) => {
         const xData = [];
-        const yData = [];
-        (data.data || []).forEach((item) => {
+        const FPG = []; // 空腹血糖
+        const PBG = []; // 餐后血糖
+        console.log(data.data['空腹血糖']);
+        (data.data['空腹血糖'] || []).forEach((item) => {
           let dateStr;
           if (new Date(item.testDate).getFullYear() === new Date().getFullYear()) {
             dateStr = dayjs(item.testDate).format('MM/DD');
@@ -132,14 +132,17 @@ export default {
             dateStr = dayjs(item.testDate).format('YY/MM/DD');
           }
           xData.push(dateStr);
-          yData.push(item.steps);
+          FPG.push(item.sugar);
+        });
+        (data.data['餐后血糖'] || []).forEach((item) => {
+          PBG.push(item.sugar);
         });
         this.xData = xData;
-        this.yData = [yData];
+        this.yData = [FPG, PBG];
       });
     },
     queryPageList() {
-      this.$api.healthMonitorInterface.getSportList({
+      this.$api.healthMonitorInterface.getBGList({
         clientId: this.id,
         pageNo: this.table.pageNo,
         pageSize: this.table.pageSize,
@@ -149,7 +152,7 @@ export default {
       });
     },
     queryChartInfo() {
-      this.$api.healthMonitorInterface.getDetailHealthSport(this.ids).then(({ data }) => {
+      this.$api.healthMonitorInterface.getDetailHealthBloodSugar(this.ids).then(({ data }) => {
         this.queryInfo = data.data;
         console.log(this.queryInfo, '12313123123');
       });
@@ -203,7 +206,7 @@ export default {
     margin-top: 17px;
     opacity: 0.5;
   }
-   .handle-btn {
+  .handle-btn {
     text-align: center;
   .reset-btn {
       width: 90px;

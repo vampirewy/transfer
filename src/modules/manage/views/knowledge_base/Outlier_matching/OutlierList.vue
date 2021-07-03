@@ -48,7 +48,7 @@
     <div class="searchCondition">
       <div class="searchLeft" style="display: flex">
         <div class="searchInputFormItem">
-          <el-input placeholder="名称/项目" v-model="formData.itemName">
+          <el-input placeholder="项目科室/项目名称" v-model="formData.itemName">
           </el-input>
           <span class="searchBtnImgSpan" @click="search(1)">
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>

@@ -1,5 +1,7 @@
 <template>
   <div class="staff-form">
+    <gender v-if="viewIndexes == 2" :id="currentData" @close="handleClose">
+    </gender>
     <el-form
       :model="staffForm"
       ref="staffForm"
@@ -53,8 +55,8 @@
         </el-col>
         <el-col :span="24" v-if="radio == 1">
           <div class="gender">
-            <div class="genderMan">男性</div>
-            <div class="genderGirl">女性</div>
+            <div class="genderMan" @click="showpop(1)">男性</div>
+            <div class="genderGirl" @click="showpop(2)">女性</div>
           </div>
         </el-col>
       </el-row>
@@ -263,11 +265,12 @@
 
 <script>
 import Permission from '../permission.vue';
-
+import gender from './gener.vue';
 export default {
   name: 'StaffForm',
   components: {
     Permission,
+    gender,
   },
   props: {
     detail: {
@@ -286,6 +289,7 @@ export default {
   },
   data() {
     return {
+      viewIndexes: 0,
       value: false,
       radio: '1',
       options: [
@@ -346,6 +350,10 @@ export default {
     // }
   },
   methods: {
+    showpop(data) {
+      this.viewIndexes = 2;
+      this.currentData = data;
+    },
     // async queryRoleDetail(id) {
     //   // 角色详情
     //   await this.$api.systemManageInterface.roleDetail(id).then((res) => {

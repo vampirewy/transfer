@@ -99,6 +99,16 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
+            <el-form-item label="使用方法" prop="dose" >
+              <el-input
+                v-model="dataSource.useMethod"
+                placeholder="请输入"
+                :maxlength="30"
+
+              ></el-input>
+            </el-form-item>
+            </el-col>
+          <!-- <el-col :span="6">
             <el-form-item label="当前状态" prop="result">
               <el-select
                 style="width: 205px"
@@ -113,7 +123,7 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-          </el-col>
+          </el-col> -->
         </el-row>
 
         <el-row class="compose">
@@ -177,6 +187,7 @@ export default {
         ingrenient: '',
         resoures: '',
         result: '',
+        useMethod: '',
       },
       rules: {
         drugsName: [{ required: true, message: '药品名称不能为空' }],

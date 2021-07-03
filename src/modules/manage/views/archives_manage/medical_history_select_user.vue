@@ -44,6 +44,8 @@
           <el-radio v-model="selectRadio" :label="scope.row.id">&nbsp;</el-radio>
         </template>
       </el-table-column>
+      <el-table-column prop="clientNo" label="客户编号"
+      show-overflow-tooltip min-width="150"></el-table-column>
       <el-table-column prop="name" label="姓名"></el-table-column>
       <el-table-column prop="age" label="年龄"></el-table-column>
       <el-table-column prop="gender" label="性别">

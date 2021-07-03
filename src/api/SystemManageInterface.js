@@ -73,7 +73,7 @@ class SystemManageInterface extends BaseModule {
   }
   // 机构信息获取
   Roledetail(data) {
-    return this.post('/organ_info/get_detail', data);
+    return this.get('/organ_info/get_detail', data);
   }
   // 保存机构信息
   saveOrganInfo(data) {

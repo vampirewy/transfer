@@ -219,6 +219,7 @@ export default {
     this.initSelectMonth(); // 加载月份
     if (this.id) {
       console.log(this.value, this.id, this.interveneTemplateId, '接收的数据');
+      this.dateChange(2);
       this.form.monthsModel = this.value.month;
       this.form.daysModel = this.value.day;
       this.results = this.value.planContent;

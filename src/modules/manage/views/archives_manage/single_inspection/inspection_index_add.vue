@@ -241,11 +241,11 @@
                 </el-select>
             </el-form-item>
             </div> -->
-          <el-form-item label="检查项目" prop="clientNameCheck">
+            <!-- prop="clientNameCheck" -->
+          <el-form-item label="检查项目">
             <el-popover
               ref="userPopoverCheck"
               placement="bottom-start"
-              width="650"
               trigger="click"
               @show="popoverStatusCheck = true"
               @hide="handlePopoperCloseCheck"
@@ -292,9 +292,9 @@
              <input class="Checkinput" type="text" placeholder="请输入" v-model="scope.row.itemValue">
           </template>
         </el-table-column>
-        <el-table-column label="正常参考" prop="itemRef" >
+        <el-table-column label="参考范围" prop="refRange" >
           <template slot-scope="scope">
-             <input class="Checkinput" type="text" placeholder="请输入" v-model="scope.row.itemRef">
+             <input class="Checkinput" type="text" placeholder="请输入" v-model="scope.row.refRange">
           </template>
         </el-table-column>
         <el-table-column label="单位" prop="unit">
@@ -482,12 +482,13 @@ export default {
           this.infoSource.drugsName = data.data.inspectionNo;
           this.infoSource.specification = data.data.inspectionOrg;
           this.infoSource.ingrenient = data.data.intro;
+          this.infoSource.gender = data.data.gender;
           for (let i = 0; i < data.data.inspectionRecordConfigDtos.length; i++) {
             const json = {};
             json.sectionName = data.data.inspectionRecordConfigDtos[i].sectionItem;
             json.itemName = data.data.inspectionRecordConfigDtos[i].itemName;
             json.itemValue = data.data.inspectionRecordConfigDtos[i].itemValue;
-            json.itemRef = data.data.inspectionRecordConfigDtos[i].itemRef;
+            json.refRange = data.data.inspectionRecordConfigDtos[i].itemRef;
             json.unit = data.data.inspectionRecordConfigDtos[i].unit;
             json.advice = data.data.inspectionRecordConfigDtos[i].advice;
             this.drugsList.push(json);
@@ -512,9 +513,9 @@ export default {
         // for (let i = 0; i < this.StatusCheck.length; i++) {
         //   this.drugsList.push(this.StatusCheck[i]);
         // }
-        this.$refs.modifyForm.resetFields();
-        this.StatusCheck = [];
         this.infoSource.clientNameCheck = '';
+        this.StatusCheck = [];
+        this.$refs.modifyForm.resetFields();
       } else {
         this.$message.warning('请选择检查项目');
       }
@@ -625,7 +626,7 @@ export default {
         json.sectionItem = this.drugsList[i].sectionName;
         json.itemName = this.drugsList[i].itemName;
         json.itemValue = this.drugsList[i].itemValue;
-        json.itemRef = this.drugsList[i].itemRef;
+        json.itemRef = this.drugsList[i].refRange;
         json.unit = this.drugsList[i].unit;
         json.advice = this.drugsList[i].advice;
         arrars.push(json);

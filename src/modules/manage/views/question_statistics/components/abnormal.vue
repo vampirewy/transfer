@@ -8,7 +8,7 @@ import echarts from 'echarts';
 export default {
   name: 'lifestyle',
   props: {
-    data: Object,
+    data: Array,
   },
   data() {
     return {
@@ -140,7 +140,7 @@ export default {
     // top10数据
     async queryList() {
       const res = await this.$api.statics.abnormalclientList({
-        ...this.form,
+        ...this.data,
       });
       this.toplist = res.data.data;
       this.draw();

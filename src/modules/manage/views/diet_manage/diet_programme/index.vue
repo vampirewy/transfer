@@ -168,7 +168,7 @@
       @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55"> </el-table-column>
         <el-table-column
-          prop="clientId"
+          prop="clientNo"
           label="客户编号"
           show-overflow-tooltip
         ></el-table-column>
