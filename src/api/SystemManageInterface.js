@@ -115,6 +115,14 @@ class SystemManageInterface extends BaseModule {
   savemodelset(data) {
     return this.post('/model_assess/save_model_set', data);
   }
+  // 获取报告配置详情
+  getconfigDetail(data) {
+    return this.get('/report_config/get_report_config', data);
+  }
+  // 修改报告配置
+  saveconfig(data) {
+    return this.post('/report_config/save_report_config', data);
+  }
 }
 
 export default new SystemManageInterface();

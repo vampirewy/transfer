@@ -2,29 +2,20 @@
   <el-dialog
     class="comment-dialog"
     :modal-append-to-body="false"
-    :title="`介绍及说明-${form.name}患病风险评估`"
+    :title="`设置默认推荐检查-${genger}`"
     top="3vh"
+    width="550px"
     :visible="true"
     :before-close="() => $emit('close')"
   >
-    <el-form
-      class="comment-form"
-      :model="form"
-      ref="form"
-      :data="tableData"
-      label-width="70px"
-      label-suffix="："
-    >
-      <div class="wltitle" style="margin-bottom:20px;height:20px;">
-        <div class="quan"></div>
-        <span>危害介绍</span>
-      </div>
+    <el-form class="comment-form" label-width="70px" label-suffix="：">
       <el-row>
+        <p class="tips">温馨提示：注意多个项目直接用英文逗号,分隔开</p>
         <el-col :span="24">
-          <el-form-item label="疾病介绍">
+          <el-form-item label="基本项目">
             <el-input
               type="textarea"
-              v-model="form.intro"
+              v-model="list.manPeItem"
               placeholder="请输入"
               maxlength="300"
               :rows="3"
@@ -34,58 +25,10 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="评估提示">
+          <el-form-item label="专项检查">
             <el-input
               type="textarea"
-              v-model="form.tips"
-              placeholder="请输入"
-              maxlength="300"
-              :rows="3"
-              show-word-limit
-            >
-            </el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="24">
-          <el-form-item label="疾病预防" v-if="Tabactive == 0">
-            <el-input
-              type="textarea"
-              v-model="form.lowRiskPoint"
-              placeholder="请输入"
-              maxlength="300"
-              :rows="3"
-              show-word-limit
-            >
-            </el-input>
-          </el-form-item>
-          <el-form-item label="疾病预防" v-if="Tabactive == 1">
-            <el-input
-              type="textarea"
-              v-model="form.midRiskPoint"
-              placeholder="请输入"
-              maxlength="300"
-              :rows="3"
-              show-word-limit
-            >
-            </el-input>
-          </el-form-item>
-          <el-form-item label="疾病预防" v-if="Tabactive == 2">
-            <el-input
-              type="textarea"
-              v-model="form.highRiskPoint"
-              placeholder="请输入"
-              maxlength="300"
-              :rows="3"
-              show-word-limit
-            >
-            </el-input>
-          </el-form-item>
-          <el-form-item label="疾病预防" v-if="Tabactive == 3">
-            <el-input
-              type="textarea"
-              v-model="form.veryHighRiskPoint"
+              v-model="list.manPeItemSpecial"
               placeholder="请输入"
               maxlength="300"
               :rows="3"
@@ -97,8 +40,10 @@
       </el-row>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button size="small" plain @click="$emit('close')">取消</el-button>
-      <el-button size="small" type="primary" @click="submit">确定</el-button>
+      <!-- <el-button size="small" plain @click="$emit('close')">取消</el-button> -->
+      <el-button size="small" type="primary" @click="emit"
+        >确定</el-button
+      >
     </span>
   </el-dialog>
 </template>
@@ -107,77 +52,39 @@
 // import SportTemplate from './sport_template.vue';
 export default {
   name: 'Comment',
-  props: ['id'],
+  props: {
+    data: Array,
+    id: Object,
+  },
   components: {
     // SportTemplate,
   },
   data() {
     return {
-      activeIndex: '1',
-      Tabactive: 0,
-      tabbor: ['低危', '中危', '高危', '很高危'],
-      form: {
-        id: '',
-        name: '',
-        intro: '',
-        tips: '',
-        modelExplain: '',
-        lowRiskPoint: '',
-        midRiskPoint: '',
-        highRiskPoint: '',
-        veryHighRiskPoint: '',
-        questioned: '',
-      },
-      popoverStatus: false,
-      selectTemplate: [],
+      genger: '',
+      list:
+        {
+          manPeItem: '',
+          manPeItemSpecial: '',
+        },
     };
   },
-  computed: {
-    templateStr() {
-      return this.selectTemplate.map(item => item.name).join(',');
-    },
-  },
+  computed: {},
   mounted() {
-    // this.getCommentDetail();
+    if (this.id === 1) {
+      this.genger = '男';
+      this.list.manPeItem = this.data.manPeItem;
+      this.list.manPeItemSpecial = this.data.manPeItemSpecial;
+    } else {
+      this.genger = '女';
+      this.list.manPeItem = this.data.womanPeItem;
+      this.list.manPeItemSpecial = this.data.womanPeItemSpecial;
+    }
   },
   methods: {
-    TabbarBtn(index) {
-      this.Tabactive = index;
-    },
-    // getCommentDetail() {
-    //   this.$api.systemManageInterface
-    //     .getListDetail(this.id.id)
-    //     .then(({ data }) => {
-    //       this.form = data.data;
-    //     });
-    // },
-    handlePopoverClose() {
-      this.popoverStatus = false;
-      this.$refs.sportPopover.doClose();
-    },
-    handleSportSelectChange(data) {
-      this.selectTemplate = data;
-      this.handlePopoverClose();
-    },
-    addSportTemplate() {
-      if (this.selectTemplate && this.selectTemplate.length > 0) {
-        this.form.sportLibraryDTOList = this.selectTemplate;
-        this.selectTemplate = [];
-      }
-    },
-    submit() {
-      this.$api.systemManageInterface
-        .saveModel({
-          ...this.form,
-        })
-        .then((response) => {
-          if (response.data.rc === 0) {
-            this.$emit('close');
-            this.$message.success('操作成功');
-          } else {
-            this.$message.error('网络异常！');
-          }
-        });
+    emit() {
+      this.$emit('chid-event', this.list);
+      this.$emit('close');
     },
   },
 };
@@ -263,7 +170,7 @@ export default {
       background: rgba(49, 84, 172, 0.1);
       border-radius: 20px;
       border: 1px solid #3154ac;
-      color: #3154AC;
+      color: #3154ac;
       &:hover {
         color: #3154ac;
         border-color: #3154ac;
@@ -278,6 +185,13 @@ export default {
   }
   .el-col {
     margin-right: 20px;
+  }
+  .tips {
+    font-size: 14px;
+    font-family: PingFangSC-Medium, PingFang SC;
+    font-weight: 500;
+    color: #fa912b;
+    line-height: 30px;
   }
 }
 </style>
