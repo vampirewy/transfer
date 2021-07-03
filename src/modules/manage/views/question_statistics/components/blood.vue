@@ -8,9 +8,9 @@
 import echarts from 'echarts';
 export default {
   name: 'lifestyle',
-  // props: {
-  //   data: Object,
-  // },
+  props: {
+    data: Array,
+  },
   data() {
     return {
       blood: [],
@@ -254,13 +254,13 @@ export default {
     // 血压图表数据
     async queryList() {
       const res = await this.$api.statics.reportList({
-        ...this.form,
+        ...this.data,
         type: 2,
       });
       this.blood = res.data.data;
       // 血脂
       const item = await this.$api.statics.reportList({
-        ...this.form,
+        ...this.data,
         type: 3,
       });
       this.bloodfat = item.data.data;

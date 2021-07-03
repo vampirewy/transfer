@@ -172,6 +172,7 @@
         <div class="echarts">
           <lBMI
           :key="times"
+          :data="form"
           v-if="Tabactive === 0"
           :visible="modalVisible"
           :value="currentValue"
@@ -179,6 +180,7 @@
         ></lBMI>
           <blood
           :key="times"
+          :data="form"
           v-if="Tabactive === 1"
           :visible="modalVisible"
           :value="currentValue"
@@ -186,6 +188,7 @@
         ></blood>
         <bloodfat
         :key="times"
+        :data="form"
           v-if="Tabactive === 2"
           :visible="modalVisible"
           :value="currentValue"
@@ -193,6 +196,7 @@
         ></bloodfat>
         <abnormal
         :key="times"
+        :data="form"
           v-if="Tabactive === 3"
           :visible="modalVisible"
           :value="currentValue"
@@ -200,6 +204,7 @@
         ></abnormal>
         <manabnor
         :key="times"
+        :data="form"
           v-if="Tabactive === 4"
           :visible="modalVisible"
           :value="currentValue"
@@ -207,6 +212,7 @@
         ></manabnor>
         <wonmenabnormal
         :key="times"
+        :data="form"
           v-if="Tabactive === 5"
           :visible="modalVisible"
           :value="currentValue"
@@ -325,6 +331,7 @@ export default {
       this.form = [];
       this.table.currentPage = 1;
       this.queryList();
+      this.TabbarBtn(this.Tabactive);
     },
     async queryList(types) {
       const res = await this.$api.statics.reportclientList({

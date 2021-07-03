@@ -55,7 +55,7 @@
                   <p>管理医生：<span
                   v-for="(item, index) in userlist.userList"
                   :key="index">{{item.realName}},</span></p>
-                  <p>家庭成员：<span>{{userlist.age}}</span></p>
+                  <!-- <p>家庭成员：<span>{{userlist.age}}</span></p> -->
                 </div>
                 <div class="addUsers">
                   <p>客户标签：</p>
@@ -535,18 +535,20 @@ export default {
     margin-top: 10px;
   }
   .usertype {
-    width: 70px;
+    // width: 70px;
     height: 24px;
     background: rgba(49, 84, 172, 0.1);
     border-radius: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
     margin: auto;
     color: #24499d;
     font-size: 12px;
     line-height: 25px;
     margin-top: 6px;
+    padding: 1px 10px;
+    display: inline-block;
   }
 }
 .intervention_tab_div {

@@ -61,7 +61,7 @@ export default {
               focus: 'series',
             },
             data: [],
-            barWidth: 25, // 柱图宽度
+            barWidth: 16, // 柱图宽度
             itemStyle: {
               color: 'red',
               normal: {
@@ -70,11 +70,11 @@ export default {
                 color: new echarts.graphic.LinearGradient(1, 1, 0, 0, [
                   {
                     offset: 0,
-                    color: '#3154AC',
+                    color: '#4B86FF',
                   },
                   {
                     offset: 1,
-                    color: '#4B86FF',
+                    color: '#3154AC',
                   },
                 ]),
                 label: {

@@ -26,13 +26,12 @@
         >
           <el-table-column type="selection" width="40"></el-table-column>
           <el-table-column
-            prop="questionType"
+            prop="questionTypeName"
             label="问卷名称"
             show-overflow-tooltip
           >
           <template slot-scope="scope">
-          <span>{{ scope.row.questionType ===
-             1 ? '常规问卷' :scope.row.questionType === 2 ? '中医问卷' : '心理问卷'}}</span>
+          <span>{{ scope.row.questionTypeName}}</span>
         </template>
           </el-table-column>
           <el-table-column
