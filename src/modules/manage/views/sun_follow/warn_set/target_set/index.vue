@@ -9,7 +9,7 @@
         <div class="searchCondition">
           <div class="searchLeft">
             <div class="searchInputFormItem">
-              <el-input placeholder="模板名称/条件" v-model="form.name">
+              <el-input placeholder="模板名称" v-model="form.name">
               </el-input>
               <span class="searchBtnImgSpan" @click="search">
                 <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
@@ -101,25 +101,14 @@
               </template>
             </el-table-column>
             <el-table-column
-              prop="tiaojian"
+              prop="conditionName"
               label="条件"
               width="200px"
               show-overflow-tooltip
             >
               <template slot-scope="scope">
                 <span>
-                  {{ scope.row.itemName | getResult }}
-                </span>
-                <span v-if="relationOptions.filter(res =>
-                res.value === scope.row.itemCondition)[0].value === 6">
-                  {{ scope.row.minItemValue }}
-                  -
-                  {{ scope.row.maxItemValue }}
-                </span>
-                <span v-if="relationOptions.filter(res =>
-                res.value === scope.row.itemCondition)[0].value !== 6">
-                  {{ relationOptions.filter(res => res.value === scope.row.itemCondition)[0].name }}
-                  {{ scope.row.itemValue }}
+                  {{ scope.row.conditionName | getResult }}
                 </span>
               </template>
             </el-table-column>
@@ -228,6 +217,20 @@ export default {
         const { data } = res;
         const result = data.data || {};
         this.tableData = result.data || [];
+        this.tableData.forEach((value) => {
+          const condition = [];
+          value.warnTemplateItemDtos.forEach((valueItem) => {
+            let name;
+            if (valueItem.itemCondition === 6) {
+              name = `${valueItem.itemName}：${valueItem.minItemValue}~${valueItem.maxItemValue}`;
+            } else {
+              name = `${valueItem.itemName}：${this.relationOptions.find(resOption => resOption.value === valueItem.itemCondition).name}${valueItem.itemValue}`;
+            }
+            condition.push(name);
+          });
+          value.conditionName = condition.join('，');
+          console.log(condition);
+        });
         this.total = result.total || 0;
       });
     },

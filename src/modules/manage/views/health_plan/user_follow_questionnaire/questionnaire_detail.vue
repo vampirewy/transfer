@@ -19,16 +19,16 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-row>
+            <!--<el-row>
               <el-col :span="24">
                 <el-form-item label="问卷类型：">
                   {{formData.questionTypeName}}
                 </el-form-item>
               </el-col>
-            </el-row>
+            </el-row>-->
             <el-row>
               <el-col :span="24">
-                <el-form-item label="问卷分类：">
+                <el-form-item label="问卷类型：">
                   {{formData.sortTypeName}}
                 </el-form-item>
               </el-col>

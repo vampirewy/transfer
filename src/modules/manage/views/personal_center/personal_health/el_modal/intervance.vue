@@ -64,7 +64,7 @@
           </el-table-column>
           <el-table-column
             prop="planUserName"
-            label="干预人"
+            label="随访人"
             show-overflow-tooltip
           >
             <template slot-scope="scope">

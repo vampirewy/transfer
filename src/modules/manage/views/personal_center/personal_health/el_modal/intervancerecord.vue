@@ -28,7 +28,7 @@
           <el-table-column type="selection" width="40"></el-table-column>
           <el-table-column
             prop="clientName"
-            label="干预人"
+            label="随访人"
             show-overflow-tooltip
           >
             <template slot-scope="scope">

@@ -1,32 +1,5 @@
 <template>
   <div class="userManage">
-    <!--<query-page @reset="reset" @search="search">
-      <template slot="left">
-        <search>
-          <div class="searchInputFormItem">
-            <el-input placeholder="输入问卷名称搜索" v-model="formData.name"></el-input>
-            <span class="searchBtnImgSpan" @click="search">
-                <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
-            </span>
-          </div>
-        </search>
-        <query-filter>
-          <el-select
-                  v-model="formData.questionType"
-                  placeholder="问卷类型"
-          >
-            <el-option label="随访问卷" value="4" key="4"></el-option>
-          </el-select>
-          <el-select
-                  v-model="formData.state"
-                  placeholder="是否启用"
-          >
-            <el-option label="是" value="1" key="1"></el-option>
-            <el-option label="否" value="0" key="0"></el-option>
-          </el-select>
-        </query-filter>
-      </template>
-      <template slot="right">-->
     <div class="divTop">
       <div class="divTitle">
         <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
@@ -249,11 +222,9 @@ export default {
           idsList.push(value.id);
         });
         const reqBody = idsList;
-        this.$api.userFollowInterface.deleteTemplateQuestion(reqBody).then(({ data }) => {
-          if (data.code === 200) {
-            this.$message.success('操作成功');
-            this.getTemplateQuestionList();
-          }
+        this.$api.userFollowInterface.deleteTemplateQuestion(reqBody).then(() => {
+          this.$message.success('操作成功');
+          this.getTemplateQuestionList();
         });
       });
     },

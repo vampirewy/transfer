@@ -243,16 +243,16 @@
                 class="btn-new btnAdd"
                 size="small"
                 style="margin: 16px 0;width: 110px"
-                @click="handleCreate"
+                @click="handleCreateTogether"
                 v-if="getAccess('create_plan_personal_create')"
-        ><img src="@/assets/images/common/addBtn.png" />自动创建</el-button>
-        <el-button
+        ><img src="@/assets/images/common/addBtn.png" />创建计划</el-button><!--handleCreate-->
+        <!--<el-button
                 size="small"
                 class="btn-new btnDel"
                 style="width: 140px"
                 @click="handleCreateTogether"
                 v-if="getAccess('create_plan_batch_create')"
-        ><img src="@/assets/images/healthPlan/togetherAdd.png" />智能匹配创建</el-button>
+        ><img src="@/assets/images/healthPlan/togetherAdd.png" />智能匹配创建</el-button>-->
       </div>
     </div>
   <div class="user-follow">
@@ -324,7 +324,7 @@
       </el-table-column>
 
       <el-table-column type="selection" width="40"></el-table-column>
-      <el-table-column prop="gender" label="客户编号" width="100px">
+      <el-table-column prop="gender" label="客户编号" width="100px" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{scope.row.clientNo | getResult}}</span>
         </template>
@@ -333,6 +333,7 @@
         prop="name"
         label="姓名"
         width="100"
+        show-overflow-tooltip
       >
         <template slot-scope="scope">
              <span class="clientName"
@@ -356,7 +357,7 @@
           <span>{{ scope.row.gridName | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="workUnitName" label="单位">
+      <el-table-column prop="workUnitName" label="单位" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{ scope.row.workUnitName | getResult }}</span>
         </template>
@@ -455,7 +456,7 @@ export default {
       },
       abnormalModalVisible: false, // 异常列表弹窗
       selectPlanuser: [],
-      planuserModalVisible: false, // 干预人人列表弹窗
+      planuserModalVisible: false, // 随访人人列表弹窗
       selectAbnormal: [],
       gridList: [], // 人员类别下拉框
       expands: [],
@@ -760,7 +761,7 @@ export default {
     /**
      * 新增
      */
-    handleCreate() {
+    /* handleCreate() {
       if (this.multipleSelection.length !== 1) {
         this.$message({
           message: '请选择一条记录创建',
@@ -778,15 +779,15 @@ export default {
       this.$router.push({ // 1 单个
         path: '/health_plan/user_follow_create/create/1',
       });
-    },
+    },*/
     /**
      * 批量新增
      */
     handleCreateTogether() {
       this.getAllSelectionData(); // 获取全部勾选的数据
-      if (this.multipleSelectionAll.length < 2) {
+      if (this.multipleSelectionAll.length === 0) {
         this.$message({
-          message: '请选择至少两条记录进行创建',
+          message: '请选择记录进行创建',
           type: 'warning',
         });
         return;
@@ -797,9 +798,15 @@ export default {
       console.log(this.multipleSelectionAll);
       this.$store.commit('intervention/SET_USERCHECK_LIST', this.multipleSelectionAll);
       this.$store.dispatch('intervention/setTplList', []);
-      this.$router.push({ // 2 批量
-        path: '/health_plan/user_follow_create/createBatch/2',
-      });
+      if (this.multipleSelectionAll.length === 1) {
+        this.$router.push({ // 1 单个
+          path: '/health_plan/user_follow_create/create/1',
+        });
+      } else {
+        this.$router.push({ // 2 批量
+          path: '/health_plan/user_follow_create/createBatch/2',
+        });
+      }
     },
     /**
      * 搜索

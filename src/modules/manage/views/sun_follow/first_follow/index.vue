@@ -292,7 +292,7 @@ export default {
       },
       abnormalModalVisible: false, // 异常列表弹窗
       selectPlanuser: [],
-      planuserModalVisible: false, // 干预人人列表弹窗
+      planuserModalVisible: false, // 随访人人列表弹窗
       selectAbnormal: [],
       gridList: [], // 人员类别下拉框
       sourceList: [{ value: 1, name: '采集系统' }, { value: 2, name: '手动上报' }, { value: 3, name: '后台预警' }], // 上报来源下拉框

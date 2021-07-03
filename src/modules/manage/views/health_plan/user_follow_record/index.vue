@@ -143,7 +143,7 @@
           <span>{{ scope.row.gridName | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="executeUserName" label="干预人" show-overflow-tooltip>
+            <el-table-column prop="executeUserName" label="随访人" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>{{ scope.row.executeUserName | getResult}}</span>
               </template>
@@ -233,7 +233,7 @@ export default {
         executeStateList,
       },
       selectPlanuser: [],
-      planuserModalVisible: false, // 干预人人列表弹窗
+      planuserModalVisible: false, // 随访人人列表弹窗
       gridList: [], // 人员类别下拉框
       planWayList: [], // 随访形式下拉框
       assortLevelList: [], // 依从度
@@ -283,7 +283,7 @@ export default {
       this.getSystemParamByYicong('HM012');
       this.getSystemParamByCodeManyi('HM013');
     },
-    // 关闭干预人列表
+    // 关闭随访人列表
     handlePlanuserClose(data) {
       this.$refs.userPopover.doClose();
       this.planuserModalVisible = false;

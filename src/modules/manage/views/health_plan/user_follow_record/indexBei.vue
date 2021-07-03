@@ -57,7 +57,7 @@
                           @change="handlePlanuserClose"></manager-list>
             <el-input class="select-user-trigger" slot="reference"
                       :disabled="form.planUserId !== '' ? false : true"
-                      v-model="form.planUserName" placeholder="干预人">
+                      v-model="form.planUserName" placeholder="随访人">
               <i :class="`el-icon-arrow-${planuserModalVisible ? 'up' : 'down'}`"
                  slot="suffix"></i>
             </el-input>
@@ -224,7 +224,7 @@
           <span>{{ scope.row.gridName | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="executePlanUserName" label="干预人" show-overflow-tooltip>
+            <el-table-column prop="executePlanUserName" label="随访人" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>{{ scope.row.executePlanUserName | getResult}}</span>
               </template>
@@ -321,7 +321,7 @@ export default {
         executeStateList,
       },
       selectPlanuser: [],
-      planuserModalVisible: false, // 干预人人列表弹窗
+      planuserModalVisible: false, // 随访人人列表弹窗
       gridList: [], // 人员类别下拉框
       planWayList: [], // 随访形式下拉框
       table: {
@@ -362,7 +362,7 @@ export default {
       this.getPlanWayList();
       this.getGridList(); // 获取人员列类别
     },
-    // 关闭干预人列表
+    // 关闭随访人列表
     handlePlanuserClose(data) {
       this.$refs.userPopover.doClose();
       this.planuserModalVisible = false;

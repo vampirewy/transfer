@@ -21,7 +21,7 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-row>
+            <!--<el-row>
               <el-col :span="24">
                 <el-form-item label="问卷类型：" prop="questionType">
                   <el-select v-model="formData.questionType" placeholder="请选择" style="width: 100%">
@@ -29,10 +29,10 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-            </el-row>
+            </el-row>-->
             <el-row>
               <el-col :span="24">
-                <el-form-item label="问卷分类：" prop="sortType">
+                <el-form-item label="问卷类型：" prop="sortType">
                   <el-select
                           v-model="formData.sortType"
                           placeholder="请选择"

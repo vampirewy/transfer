@@ -156,6 +156,7 @@ export default {
   },
   methods: {
     add() {
+      this.id = '';
       this.type = 'add';
       this.viewIndex = 2;
     },

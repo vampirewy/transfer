@@ -1,7 +1,7 @@
 <template>
   <div class="intervention_tab_div">
   <div class="intvTmpl_left_csx">
-    <div class="intvTmpl_left_title">干预模板菜单</div>
+    <div class="intvTmpl_left_title">模板菜单</div>
     <ul class="intv_menulist">
       <li :class="{'active':active === index}" @click="clickMenu(index, item.id)"
           v-for="(item, index) in form.templateList" :key="item.id"

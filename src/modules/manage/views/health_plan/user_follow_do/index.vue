@@ -58,7 +58,7 @@
                           @change="handlePlanuserClose"></manager-list>
             <el-input class="select-user-trigger" slot="reference"
                       :disabled="form.planUserId !== '' ? false : true"
-                      v-model="form.planUserName" placeholder="干预人">
+                      v-model="form.planUserName" placeholder="随访人">
               <i :class="`el-icon-arrow-${planuserModalVisible ? 'up' : 'down'}`"
                  slot="suffix"></i>
             </el-input>
@@ -357,7 +357,7 @@
             {{ scope.row.templateQuestionName | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="planUserName" label="干预人" show-overflow-tooltip>
+            <el-table-column prop="planUserName" label="随访人" show-overflow-tooltip>
               <template slot-scope="scope">
           <span :class="{'redToday': scope.row.sortIndex === 1,
                           'overToday': scope.row.sortIndex === 2}">
@@ -463,7 +463,7 @@ export default {
       },
       selectPlanuser: [],
       planUserName: '',
-      planuserModalVisible: false, // 干预人人列表弹窗
+      planuserModalVisible: false, // 随访人人列表弹窗
       createUserName: '',
       createUserModalVisible: false, // 创建人弹窗
       gridList: [], // 人员类别下拉框
@@ -529,7 +529,7 @@ export default {
       this.createUserModalVisible = false;
       this.$refs.createUserPopover.doClose();
     },
-    // 关闭干预人列表
+    // 关闭随访人列表
     handlePlanuserSelectChange(dataList) {
       this.$refs.userPopover.doClose();
       this.planuserModalVisible = false;
@@ -558,7 +558,7 @@ export default {
       });
       return selectedList;
     },
-    // 关闭干预人列表
+    // 关闭随访人列表
     /* handlePlanuserClose(data) {
       this.$refs.userPopover.doClose();
       this.planuserModalVisible = false;

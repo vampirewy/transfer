@@ -4,7 +4,7 @@
       <el-col :span="14" style="margin-top: -35px;"
               v-if="$route.params.type === '1'"> <!--单个创建-->
         <el-tabs v-model="activeName" class="two-tab">
-          <el-tab-pane label="干预模板" name="first">
+          <el-tab-pane label="干预随访模板" name="first">
             <intervention-tab-mdl ref="InterventionTabMdl"></intervention-tab-mdl>
           </el-tab-pane>
           <el-tab-pane label="客户的主要健康状况" name="second">
@@ -84,7 +84,7 @@
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column prop="planDoctorName" label="干预人" show-overflow-tooltip>
+            <el-table-column prop="planDoctorName" label="随访人" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>{{ scope.row.planDoctorName }}</span>
               </template>

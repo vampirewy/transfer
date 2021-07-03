@@ -34,7 +34,7 @@
           <span>{{ scope.row.executePlanWayName | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="planWayName" label="干预人" show-overflow-tooltip>
+      <el-table-column prop="planWayName" label="随访人" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{scope.row.executePlanUserName | getResult}}</span>
         </template>

@@ -52,7 +52,7 @@
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="干预人：" prop="planDoctorName">
+              <el-form-item label="随访人：" prop="planDoctorName">
                 <el-popover
                         v-if="addType === '1'"
                         ref="userPopover"
@@ -65,12 +65,12 @@
                   <manager-list v-if="openCheckVisible" :clientIds="checkClintIds"
                         :propsType="'doctor'" @change="handlePopoperClose"></manager-list>
                   <el-input class="select-user-trigger" slot="reference" disabled
-                            style="width: 100%" v-model="form.planDoctorName" placeholder="选择干预人">
+                            style="width: 100%" v-model="form.planDoctorName" placeholder="选择随访人">
                     <i :class="`el-icon-arrow-${openCheckVisible ? 'up' : 'down'}`"
                        slot="suffix"></i>
                   </el-input>
                 </el-popover>
-                  <!--个人创建 可选干预人， 批量创建干预人只能是自己-->
+                  <!--个人创建 可选随访人， 批量创建随访人只能是自己-->
                   <el-input class="select-user-trigger" disabled v-else
                             style="width: 100%" v-model="form.planDoctorName" placeholder="">
                   </el-input>
@@ -175,7 +175,7 @@ export default {
       rules: {
         planTime: [{ required: true, message: '请选择随访时间' }],
         planWay: [{ required: true, message: '请选择随访形式' }],
-        planDoctorName: [{ required: true, message: '请选择干预人' }],
+        planDoctorName: [{ required: true, message: '请选择随访人' }],
         planTitle: [{ required: true, message: '请输入随访标题' }],
         planContent: [{ required: true, message: '请输入随访内容' }],
       },
@@ -199,7 +199,7 @@ export default {
           // this.form.planDoctor = this.$store.state.user.userId;
           // this.form.planDoctorName = this.$store.state.user.userName;
         }
-        if (this.editType === 2) { // 待随访计划直接编辑，不让修改干预人;
+        if (this.editType === 2) { // 待随访计划直接编辑，不让修改随访人;
           this.form.planDoctor = this.propsData.planUserId;
           this.form.planDoctorName = this.propsData.planUserName;
           const reqBody = { id: this.propsData.id };

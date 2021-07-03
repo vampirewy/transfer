@@ -22,7 +22,7 @@
             <span>{{ scope.row.executePlanContent | getResult }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="executePlanContent" label="干预人" show-overflow-tooltip
+        <el-table-column prop="executePlanContent" label="随访人" show-overflow-tooltip
                          v-if="personal">
           <template slot-scope="scope">
             <span>{{ scope.row.executeUserName | getResult }}</span>
