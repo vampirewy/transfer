@@ -13,7 +13,7 @@
               <div class="searchLeft">
                 <div class="searchInputFormItem">
                   <el-input
-                    placeholder="姓名/客户编号"
+                    placeholder="姓名/客户编号/检查单号/检查机构/检查项目"
                     v-model="formData.keywords"
                     style="width: 144px"
                   >
@@ -52,7 +52,7 @@
                   </el-select>
                 </div>
                <div>
-                <span>体检日期：</span>
+                <span>检查日期：</span>
                 <el-date-picker
                   v-model="formData.startTime"
                   value-format="yyyy-MM-dd hh:mm:ss"

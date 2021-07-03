@@ -55,13 +55,13 @@
                   style="width:380px"
                 >
                   <i
-                    :class="`el-icon-caret-${detectionpopoverStatus ? 'top' : 'bottom'}`"
-                    slot="suffix"
-                  ></i>
+                  :class=" detectionpopoverStatus? 'el-icon-arrow-down':'el-icon-arrow-up'"
+                  slot="suffix"
+                ></i>
                 </el-input>
               </el-popover>
             </el-form-item>
-            <div class="othertest" style="margin-top:15px">
+            <div class="othertest" style="margin-top:14px">
                 <div @click="othertestAdd">添加</div>
             </div>
           </div>
@@ -123,11 +123,28 @@
                       </el-select>
                     </div>
                   </span>
-                  <span v-else>
-                    <el-input placeholder="" v-model="scope.row[item.prop]"
-                    onkeyup = "value=value.replace(/[^\d]/g,'')"
+                  <span v-else-if="item.label === '条件的值'">
+                    <el-input placeholder=""
+                    v-model="scope.row[item.prop]"
+                    :disabled="dataSource.list[scope.$index].judgeRelation > 4 ? true:false"
+                    onkeyup = "value=value.replace(/[^\d.]/g,'')"
                     >
-                    <!-- onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')" -->
+                    </el-input>
+                  </span>
+                  <span v-else-if="item.label === '低值'">
+                    <el-input placeholder=""
+                    v-model="scope.row[item.prop]"
+                    :disabled="dataSource.list[scope.$index].judgeRelation < 5 ? true:false"
+                    onkeyup = "value=value.replace(/[^\d.]/g,'')"
+                    >
+                    </el-input>
+                  </span>
+                  <span v-else>
+                    <el-input placeholder=""
+                    v-model="scope.row[item.prop]"
+                    :disabled="dataSource.list[scope.$index].judgeRelation < 5 ? true:false"
+                    onkeyup = "value=value.replace(/[^\d.]/g,'')"
+                    >
                     </el-input>
                   </span>
                   </span>
@@ -213,7 +230,7 @@
                     @current-change="onChangePage"
                     background
                     layout="prev, pager, next, jumper, total, sizes"
-                    :total="params.total"
+                    :total="total"
                     :pageSizes="[15]"
                     :page-size="15"
             ></el-pagination>
@@ -303,7 +320,7 @@ export default {
       dialogTableVisible: false,
       clientId: '',
       formData: {
-        state: '1',
+        state: '2',
         keywords: '',
         gender: '',
         resultOptionsId: '',
@@ -338,7 +355,6 @@ export default {
     this.NameType = this.TabTitle;
     this.dataSource.columns = COLUMNS[this.TabTitle];
     if (this.InterventionList.length !== 0) {
-      console.log(this.InterventionList, 'asdadadas');
       this.dataSource.list = this.InterventionList;
       if (this.InterventionList[0].conditionRelation === 1 &&
       this.InterventionList[0].conditionRelation === 2) {
@@ -370,6 +386,7 @@ export default {
       this.ConstitutionList();
     }
     this.getLibraryList();
+    this.total = this.dataSource.list.length;
     // this.timer = new Date().getTime();
   },
   methods: {
@@ -387,6 +404,12 @@ export default {
       this.$forceUpdate();
     },
     ChangeestatesJudg(index) {
+      if (this.dataSource.list[index].judgeRelation > 4) {
+        this.dataSource.list[index].itemValue = '';
+      } else {
+        this.dataSource.list[index].minValue = '';
+        this.dataSource.list[index].maxValue = '';
+      }
       this.$set(this.dataSource.list[index], `${new Date()}`, '');
     },
     ConstitutionList() {
@@ -398,16 +421,6 @@ export default {
     },
     othertestAdd() {
       if (this.detectionInfo.length !== 0) {
-        // if (this.dataSource.list.length !== 0) {
-        //   for (let i = 0; i < this.dataSource.list.length; i++) {
-        //     for (let j = 0; j < this.detectionInfo.length; j++) {
-        //       if (this.dataSource.list[i].id !== this.detectionInfo[j].id) {
-        //         this.dataSource.list.push(this.detectionInfo[j]);
-        //       }
-        //     }
-        //     break;
-        //   }
-        // } else {
         this.detectionInfo.forEach((valQusOne) => {
           let same = false;
           this.dataSource.list.forEach((valAnswer) => {
@@ -419,13 +432,10 @@ export default {
             this.dataSource.list.push(valQusOne);
           }
         });
-        // this.detectionInfo.forEach((val) => {
-        //   this.dataSource.list.push(val);
-        // });
-        // }
         this.$emit('change', this.dataSource.list, this.TabTitle);
         this.detectioninfoSource.clientName = '';
         this.detectionInfo = [];
+        this.total = this.dataSource.list.length;
       }
     },
     ConstitutionAdd() {
@@ -479,6 +489,7 @@ export default {
           }
           this.detectionInfo.push(val);
         });
+        console.log(this.detectionInfo, '12121212');
         for (let i = 0; i < this.detectionInfo.length; i++) {
           this.detectionInfo[i].conditionRelation = this.formData.state;
           if (NameType === 'Minterm') {
@@ -514,6 +525,7 @@ export default {
     },
     deleteField(index) {
       this.dataSource.list.splice(index, 1);
+      this.total = this.dataSource.list.length;
       this.$message.success('操作成功');
     },
     // 展开更多
@@ -667,6 +679,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  /deep/ .el-input__suffix-inner {
+    margin-left: 10px;
+  }
+
 .othertest{
   width: 70px;
   height: 40px;

@@ -113,10 +113,10 @@
         ></el-input>
       </el-form-item> -->
     </el-form>
-    <div slot="footer" class="dialog-footer" >
+    <!-- <div slot="footer" class="dialog-footer" >
       <el-button size="small" @click="cancel" class="cancelBtn">取消</el-button>
-      <!-- <el-button type="primary" size="small" @click="submit" class="sureBtn">确定</el-button> -->
-    </div>
+      <el-button type="primary" size="small" @click="submit" class="sureBtn">确定</el-button>
+    </div> -->
   </el-dialog>
 </template>
 <script>

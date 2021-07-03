@@ -49,6 +49,10 @@ class HealthMonitorInterface extends BaseModule {
   getDetailHealthBloodPressure(id) {
     return this.get(`/client_health_data/get_detail_health_blood_pressure/${id}`);
   }
+  // 其他检测详情
+  getDetailHealthOther(id, editId) {
+    return this.get(`/client_health_data/get_detail_health_other/${id}/${editId}`);
+  }
   // 血糖列表
   getBGList(params) {
     return this.post('/client_health_data/blood_sugar/list_page', params);

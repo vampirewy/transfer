@@ -160,6 +160,35 @@
                 v-if="forms.sportTimeSelectType > 3">
               </el-input>
             </div>
+            <div v-if="tabIndex === 'other'">
+              <span>检测结果：</span>
+              <el-select
+                v-model="forms.resultSelectType"
+                placeholder="请选择"
+                style="width: 100px"
+              >
+              <el-option
+                  v-for="item in selectTypeList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+              ></el-option>
+              </el-select>
+            </div>
+            <div  v-if="tabIndex === 'other'">
+              <el-input
+                placeholder="值"
+                v-model="forms.minResult"
+                style="width: 50px"
+                v-if="forms.resultSelectType < 4 || forms.resultSelectType === 5">
+              </el-input>
+              <el-input
+                placeholder="值"
+                v-model="forms.maxResult"
+                style="width: 50px"
+                v-if="forms.resultSelectType > 3">
+              </el-input>
+            </div>
           </div>
           <div class="searchRight">
                 <div class="buttones">
@@ -209,7 +238,36 @@
               v-if="forms.dbpSelectType > 3">
             </el-input>
           </div>
+          <div v-if="tabIndex === 'BP'">
+            <span>脉搏：</span>
+            <el-select
+              v-model="forms.hbSelectType"
+              placeholder="请选择"
+              style="width: 100px"
+            >
+            <el-option
+                v-for="item in selectTypeList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+            ></el-option>
+            </el-select>
+          </div>
           <div  v-if="tabIndex === 'BP'">
+            <el-input
+              placeholder="值"
+              v-model="forms.minHb"
+              style="width: 50px"
+              v-if="forms.hbSelectType < 4 || forms.hbSelectType === 5">
+            </el-input>
+            <el-input
+              placeholder="值"
+              v-model="forms.maxHb"
+              style="width: 50px"
+              v-if="forms.hbSelectType > 3">
+            </el-input>
+          </div>
+          <!-- <div v-if="tabIndex === 'BP'">
               <span>心率值：</span>
               <el-input
                 placeholder="心率值"
@@ -217,7 +275,7 @@
                 style="width: 150px"
               >
               </el-input>
-            </div>
+            </div> -->
             <div v-if="tabIndex === 'BG'">
               <span>血糖值：</span>
               <el-select
@@ -440,13 +498,13 @@
             <span style="margin-right:15px">项目配置</span>
             </el-button>
           </span>
-          <span v-else>
+          <!-- <span v-else>
             <operate-button
               type="editGray"
               @click="Export"
               >
             </operate-button>
-          </span>
+          </span> -->
         </div>
         <el-table
           :data="table.list"
@@ -472,7 +530,7 @@
                 scope.row[item.prop]}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center" min-width='120' v-if="tabIndex !== 'other'">
+          <el-table-column label="操作" align="center" min-width='120'>
             <!-- <template slot-scope="scope">
               <el-button
                 type="text"
@@ -482,11 +540,11 @@
                 趋势查看
               </el-button>
             </template> -->
-            <template slot-scope="scope">
+            <template slot-scope="scope" >
                   <el-button
                     type="text"
                     size="small"
-                    @click="handleEdit(scope.row.id)"
+                    @click="handleEdit(scope.row.id || scope.row)"
                     v-if="getAccess('physical_examination_report_edit')
                     "
                   >编辑</el-button>
@@ -494,7 +552,7 @@
                   <el-button
                     type="text"
                     size="small"
-                    @click="handleTrendClick(scope.row.clientId,scope.row.id)"
+                    @click="handleTrendClick(scope.row.clientId,scope.row.id, 'info')"
                     v-if="getAccess('physical_examination_report_view')"
                   >查看</el-button>
                 </template>
@@ -571,21 +629,27 @@
         </div>
       </div>
       <div v-if="tabIndex === 'other'">
-        <div v-if="isAddInfo">
-          <othertest-configuration
-            :id="currentId"
-            @close="handleTrendClose"
-            @messageData='blackrount'>
-          </othertest-configuration>
+        <div v-if="otherType !== 'info'">
+          <div v-if="isAddInfo">
+            <othertest-configuration
+              :id="currentId"
+              @close="handleTrendClose"
+              @messageData='blackrount'>
+            </othertest-configuration>
+          </div>
+          <div v-else>
+            <other-test
+              :id="currentId"
+              :editId="editId"
+              @close="handleTrendClose"
+              @messageData='blackrount'>
+            </other-test>
+          </div>
         </div>
         <div v-else>
-          <other-test
-            :id="currentId"
-            @close="handleTrendClose"
-            @messageData='blackrount'>
-          </other-test>
-          <!-- <bgtrend-add></bgtrend-add> -->
-        </div>
+          <other-test-info
+          ></other-test-info>
+      </div>
       </div>
     </template>
   </div>
@@ -604,6 +668,7 @@ import OperateButton from '~/src/components/query_page/operate_button.vue';
 import BptrendAdd from './bp_trend_add.vue';
 import BgtrendAdd from './bg_trend_add.vue';
 import OtherTest from './othertest.vue';
+import OtherTestInfo from './other-test-Info.vue';
 import OthertestConfiguration from './othertestConfiguration.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
 import * as dayjs from 'dayjs';
@@ -718,6 +783,7 @@ export default {
     BptrendAdd,
     BgtrendAdd,
     OtherTest,
+    OtherTestInfo,
     OthertestConfiguration,
   },
   data() {
@@ -728,6 +794,7 @@ export default {
       isGetinfo: true,
       isAddInfo: true,
       typeOptions: [],
+      otherType: '',
       forms: {
         keywords: '',
         gender: '',
@@ -744,6 +811,9 @@ export default {
         dbpSelectType: '', // 舒张压＞，＝，≥，≤
         minDbp: '', // 小值
         maxDbp: '', // 大值
+        hbSelectType: '', // 脉搏＞，＝，≥，≤
+        minHb: '',
+        maxHb: '',
         wcSelectType: '', // 腰围＞，＝，≥，≤
         minWc: '',
         maxWc: '',
@@ -765,6 +835,9 @@ export default {
         sportStepsSelectType: '', // 步数＞，＝，≥，≤
         minSportSteps: '',
         maxSportSteps: '',
+        resultSelectType: '', // 检测结果＞，＝，≥，≤
+        minResult: '',
+        maxResult: '',
       },
       form: {
         keywords: '', // 姓名
@@ -857,6 +930,7 @@ export default {
       this.tabborName = this.tabbor[index];
       this.isGetinfo = true;
       this.isAddInfo = true;
+      this.otherType = '';
       this.editId = '';
       this.reset();
       this.resetTable();
@@ -879,8 +953,10 @@ export default {
       this.isAddInfo = false;
       this.$forceUpdate();
     },
-    handleEdit(id) {
-      this.editId = id;
+    handleEdit(row) {
+      this.editId = row.healthDataOtherId;
+      this.currentId = row.clientId;
+      // console.log(row, '=====');
       this.isGetinfo = false;
       this.isAddInfo = false;
     },
@@ -922,6 +998,12 @@ export default {
       this.sportStepsSelectType = '';
       this.minSportSteps = '';
       this.maxSportSteps = '';
+      this.resultSelectType = '';
+      this.minResult = '';
+      this.maxResult = '';
+      this.hbSelectType = ''; // 脉搏＞，＝，≥，≤
+      this.minHb = '';
+      this.maxHb = '';
       this.table.pageNo = 1;
       this.queryPageList();
     },
@@ -1053,12 +1135,17 @@ export default {
       this.resetTable();
       this.search();
     },
-    handleTrendClick(clientId, id) {
+    handleTrendClick(clientId, id, type) {
+      if (this.tabIndex === 'other') {
+        this.otherType = type;
+      } else {
+        this.otherType = '';
+      }
       this.currentId = clientId;
       this.ids = id;
       this.trendStatus = true;
       this.isGetinfo = false;
-      this.isAddInfo = true;
+      this.isAddInfo = true; // 显示项目配置
     },
     handleTrendClose0() {
       this.currentId = '';

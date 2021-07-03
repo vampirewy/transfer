@@ -118,17 +118,22 @@
     <div class="divRightTitleDiv">
       <!-- <div class="divRightTitle"><span>|</span>客户池</div> -->
       <div style="display: flex;justify-content: space-between;align-items: center;">
+        <div>
         <el-button
                 class="btn-new btnAdd"
                 size="small"
                 style="margin: 16px 0;"
                 @click="exportList"
+                v-if="getAccess('follow_record_export')"
         ><img src="@/assets/images/common/export.png" />导出</el-button>
+        </div>
+        <div style="margin: 16px 0">
         <el-radio-group v-model="form.reportLv" @change="onSearch">
           <el-radio :label="''">全部</el-radio>
           <el-radio :label="1">红色预警</el-radio>
           <el-radio :label="2">橙色预警</el-radio>
         </el-radio-group>
+        </div>
       </div>
     </div>
   <div class="user-follow">
@@ -211,6 +216,7 @@
           <el-button
                   type="text"
                   size="small"
+                  v-if="getAccess('follow_record_view')"
                   @click="handleView(scope.row)"
           >查看</el-button>
         </template>

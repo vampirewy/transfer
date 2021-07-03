@@ -146,7 +146,7 @@
                 class="start-date"
                 v-model="infoSource.startDate"
                 type="date"
-                :max-date="infoSource.endDate || new Date()"
+                :max-date="infoSource.endDate"
                 value-format="yyyy-MM-dd"
                 placeholder="请选择开始用药时间"
                 style="width: 100%"
@@ -160,7 +160,6 @@
                 v-model="infoSource.endDate"
                 type="date"
                 :min-date="infoSource.startDate"
-                :max-date="new Date()"
                 value-format="yyyy-MM-dd"
                 placeholder="请选择结束用药时间"
                 style="width: 100%"
@@ -178,6 +177,16 @@
             </el-form-item>
             </el-col>
             <el-col :span="6">
+            <el-form-item label="使用方法" prop="dose" >
+              <el-input
+                v-model="infoSource.useMethod"
+                placeholder="请输入"
+                :maxlength="30"
+
+              ></el-input>
+            </el-form-item>
+            </el-col>
+            <!-- <el-col :span="6">
              <el-form-item label="当前状态" prop="result">
               <el-select
                 style="width: 100%"
@@ -192,7 +201,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            </el-col>
+            </el-col> -->
         </el-row>
         <div class="row">
             <el-form-item label="主要成分" prop="ingrenient" style="width:100%">
@@ -357,6 +366,7 @@ export default {
         age: '',
         gender: '',
         gridName: '',
+        useMethod: '',
       },
       drugsList: [],
       resultList: [],
@@ -365,7 +375,7 @@ export default {
         drugsName: [{ required: true, message: '药品名称不能为空' }],
         startDate: [{ required: true, message: '开始时间不能为空' }],
         endDate: [{ required: true, message: '结束时间不能为空' }],
-        result: [{ required: true, message: '当前状态不能为空' }],
+        // result: [{ required: true, message: '当前状态不能为空' }],
       },
       id: '',
       resultOptions: [

@@ -4,7 +4,11 @@
     <div class="titless">查看单项检查信息</div>
     <div class="lookPressure">
       <div><span>姓名：</span><span>{{data.clientName}}</span></div>
-      <div><span>性别：</span><span>{{data.gender}}</span></div>
+      <div><span>性别：</span>
+      <span v-if="data.gender === 0">未知</span>
+      <span v-if="data.gender === 1">男</span>
+      <span v-if="data.gender === 2">女</span>
+      </div>
       <div><span>年龄：</span><span>{{data.age}}</span></div>
       <div><span>客户编号：</span><span>{{data.clientId}}</span></div>
     </div>

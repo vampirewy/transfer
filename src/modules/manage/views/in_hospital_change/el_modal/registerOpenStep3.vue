@@ -46,9 +46,9 @@
         </div>
         <div class="form-buttons">
             <el-button size="small" class="cancelBtn" @click="next(1)">上一步</el-button>
-            <el-button size="small" class="sureBtn" type="primary" @click="nextWarn()"
+            <!--<el-button size="small" class="sureBtn" type="primary" @click="nextWarn()"
             >下一步
-            </el-button>
+            </el-button>-->
         </div>
     </div>
 </template>
@@ -163,9 +163,6 @@ export default {
     },
     next(val) {
       this.$emit('prevNext', val);
-    },
-    nextWarn() {
-      this.$message.warning('请选择医生预约');
     },
   },
 };

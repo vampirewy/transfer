@@ -18,13 +18,13 @@
       </div>
       <el-row>
         <el-col :span="6">
-          <el-form-item label="模版名称" >
+          <el-form-item label="模版名称" prop="name">
             <el-input v-model="form.name" placeholder="请输入" ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="适用性别" >
-            <el-select v-model="form.gender" placeholder="请选择当前状态">
+          <el-form-item label="适用性别" prop="gender">
+            <el-select v-model="form.gender" placeholder="请选择适用性别">
               <el-option label="不限" value="0" key="0"></el-option>
               <el-option label="男" value="1" key="1"></el-option>
               <el-option label="女" value="2" key="2"></el-option>
@@ -38,8 +38,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="条件关系" >
-            <el-select v-model="form.conditionRelation" placeholder="请选择当前状态" width="150">
+          <el-form-item label="条件关系" prop="conditionRelation">
+            <el-select v-model="form.conditionRelation" placeholder="请选择条件关系" width="150">
               <el-option label="全部" value="1" key="1"></el-option>
               <el-option label="任意" value="2" key="2"></el-option>
             </el-select>
@@ -71,7 +71,7 @@
       </el-row>
       <div class="form-title">
         <div class="line"></div>
-        <h3 class="name">详细内容</h3>
+        <h3 class="name">条件</h3>
       </div>
       <div>
         <div class="TabBars">
@@ -163,10 +163,10 @@ export default {
       form: {
         name: '',
         gender: '',
-        conditionRelation: '1',
+        conditionRelation: '2',
         groupCode: '',
         lvCode: '',
-        state: 0,
+        state: 1,
       },
       timer: '',
       tabbor: ['小项', '人员类别', '异常', '组合异常', '疾病评估', '体质辨识'],
@@ -210,9 +210,9 @@ export default {
         },
       },
       rules: {
-        clientInfoId: [{ required: true, message: '客户不能为空' }],
-        medicalType: [{ required: true, message: '就医类型不能为空' }],
-        hospital: [{ required: true, message: '医疗机构不能为空' }],
+        name: [{ required: true, message: '模版名称不能为空' }],
+        gender: [{ required: true, message: '请选择性别', trigger: 'blur' }],
+        conditionRelation: [{ required: true, message: '请选择条件关系' }],
         inDate: [{ required: true, message: '就医时间不能为空' }],
         result: [{ required: true, message: '当前状态不能为空' }],
         hpi: [{ required: true, message: '现病史不能为空' }],
@@ -249,7 +249,7 @@ export default {
         this.Category = data.data.interveneTemplateDetailGridDtoList;
         for (let i = 0; i < data.data.interveneTemplateDetailOrganAbnormalDtoList.length; i++) {
           const json = {
-            abnormalTypeName: data.data.interveneTemplateDetailOrganAbnormalDtoList[i]
+            abnormalName: data.data.interveneTemplateDetailOrganAbnormalDtoList[i]
               .organAbnormalName,
             gender: data.data.interveneTemplateDetailOrganAbnormalDtoList[i].genderTxt,
             abnormalCode: data.data.interveneTemplateDetailOrganAbnormalDtoList[i]
@@ -373,12 +373,6 @@ export default {
       }
       if (!this.form.conditionRelation) {
         return this.$message.warning('请填写条件关系');
-      }
-      if (!this.form.groupCode) {
-        return this.$message.warning('请填写组别');
-      }
-      if (!this.form.lvCode) {
-        return this.$message.warning('请填写级别');
       }
       const jsons = {
         interveneTemplateItemRequestList: [],

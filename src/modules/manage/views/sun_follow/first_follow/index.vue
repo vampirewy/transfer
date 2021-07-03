@@ -123,14 +123,17 @@
                 size="small"
                 style="margin: 16px 0"
                 @click="add"
+                v-if="getAccess('first_follow_add')"
         ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
         <el-button
                 class="btn-new btnAdd"
                 size="small"
                 @click="exportList"
+                style="margin: 16px 0"
+                v-if="getAccess('first_follow_export')"
         ><img src="@/assets/images/common/export.png" />导出</el-button>
         </div>
-        <el-radio-group v-model="form.reportLv" @change="onSearch">
+        <el-radio-group v-model="form.reportLv" @change="onSearch" style="margin: 16px 0">
           <el-radio :label="''">全部</el-radio>
           <el-radio :label="1">红色预警</el-radio>
           <el-radio :label="2">橙色预警</el-radio>
@@ -233,6 +236,7 @@
           <el-button
                   type="text"
                   size="small"
+                  v-if="getAccess('first_follow_do')"
                   @click="handleView(scope.row)"
           >处理</el-button>
         </template>

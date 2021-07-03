@@ -13,7 +13,7 @@
               <div class="searchLeft">
                 <div class="searchInputFormItem">
                   <el-input
-                    placeholder="姓名/客户编号"
+                    placeholder="姓名/客户编号/药品/问题"
                     v-model="form.keyWord"
                   >
                   </el-input>
@@ -41,7 +41,7 @@
                   v-model="form.startStartInputTime"
                   type="date"
                   value-format="yyyy-MM-dd"
-                  :max-date="form.endStartInputTime || new Date()"
+                  :max-date="form.endStartInputTime"
                   placeholder="选择开始日期"
                   style="width: 140px"
                 >
@@ -52,7 +52,6 @@
                   type="date"
                   value-format="yyyy-MM-dd"
                   :min-date="form.startStartInputTime"
-                  :max-date="new Date()"
                   placeholder="选择结束日期"
                   style="width: 140px"
                 >
@@ -99,7 +98,7 @@
                   v-model="form.endInputStartTime"
                   type="date"
                   value-format="yyyy-MM-dd"
-                  :max-date="form.endInputEndTim || new Date()"
+                  :max-date="form.endInputEndTim"
                   placeholder="选择开始日期"
                   style="width: 140px"
                 >
@@ -110,7 +109,6 @@
                   type="date"
                   value-format="yyyy-MM-dd"
                   :min-date="form.endInputStartTime"
-                  :max-date="new Date()"
                   placeholder="选择结束日期"
                   style="width: 140px"
                 >

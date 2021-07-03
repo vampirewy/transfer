@@ -28,16 +28,19 @@
             <el-form-item label="计量单位" prop="specification" style="width:25%">
               <el-input
                 v-model="infoSource.specification"
+                ref="specification"
                 placeholder="请输入"
                 :maxlength="30"
                 style="width: 200px"
               ></el-input>
             </el-form-item>
-            <el-form-item label="是否启用" prop="isstate" style="width:25%">
+            <el-form-item label="是否启用"  style="width:25%">
                 <!-- <div style="margin:5px 0 0 20px"> -->
                     <el-switch
                     v-model="isstate"
-                    active-color="#13ce66">
+                    ref="isstate"
+                    active-color="#13ce66"
+                    >
                     </el-switch>
                 <!-- </div> -->
             </el-form-item>
@@ -230,7 +233,7 @@ export default {
       resultList: [],
       rules: {
         specification: [{ required: true, message: '计量单位不能为空' }],
-        isstate: [{ required: true, message: '请选择是否启用' }],
+        // isstate: [{ required: true, message: '请选择是否启用' }],
         startDate: [{ required: true, message: '开始时间不能为空' }],
         endDate: [{ required: true, message: '结束时间不能为空' }],
         result: [{ required: true, message: '当前状态不能为空' }],
@@ -272,6 +275,8 @@ export default {
       });
       console.log(res.data);
       if (res.data.success) {
+        this.$refs.specification.resetFields();
+        this.$refs.isstate.resetFields();
         this.infoSource.drugsName = '';
         this.infoSource.specification = '';
         this.isstate = false;
