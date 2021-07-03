@@ -38,7 +38,7 @@ export default {
   props: ['reportAbnormalList', 'notTitle'], // notTitle是否展示标题 用于与个人管理中心区分
   data() {
     return {
-      form: [],
+      form: {},
       reportAbnormalListNew: [],
       topTitle: [
         {
@@ -62,7 +62,7 @@ export default {
           title: '重度',
         },
         {
-          color: '#B4BBC9',
+          color: '#E2E5EA',
           title: '未曾匹配',
         },
       ],

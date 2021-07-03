@@ -52,7 +52,7 @@
             <img src="@/assets/images/common/topsearchblue.png" alt="">
           </div>
           <div class="resetAll" @click="reset">重置</div>
-          <div class="more" v-if="isTrue"  @click="upMore">
+          <div class="more" v-if="isTrue" @click="upMore">
             <span>></span>
             展开更多</div>
           <div class="more noMore" v-else @click="upMore">
@@ -252,7 +252,7 @@ export default {
   data() {
     return {
       isTrue: true,
-      tabbor: ['生活方式评估', '心理评估', '中医体质评估'],
+      tabbor: ['个人健康报告', '心理评估', '中医体质评估'],
       Tabactive: 0,
       view: 1, // 1:列表页，2：异常解读，3：点评，4：匹配
       popoverStatus: false,

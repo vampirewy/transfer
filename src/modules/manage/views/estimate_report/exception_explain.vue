@@ -10,7 +10,16 @@
       :class="`exception-item ${exception.expand ? 'expand' : ''}`">
       <div class="exception-header" @click="triggerExpand(exception)">
         <span>{{index + 1}}.{{exception.abnormalName}}</span>
-        <i :class="exception.expand ? 'el-icon-caret-top' : 'el-icon-caret-bottom'"></i>
+        <!-- <i :class="exception.expand ? 'el-icon-caret-top' : 'el-icon-caret-bottom'"></i> -->
+        <i
+                      class="el-select__caret el-input__icon "
+                      :class="
+                        exception.expand
+                          ? 'el-icon-arrow-up'
+                          : 'el-icon-arrow-down'
+                      "
+                      slot="suffix"
+                    ></i>
       </div>
       <div class="detail" v-if="exception.expand">
         <el-form class="detail-form">
@@ -118,7 +127,7 @@ export default {
       background: #F6F8FC;
       border-radius: 5px;
       font-size: 16px;
-      font-weight: 600;
+      font-weight: 400;
       color: #666666;
       display: flex;
       align-items: center;

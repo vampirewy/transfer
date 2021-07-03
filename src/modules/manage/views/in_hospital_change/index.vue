@@ -70,11 +70,13 @@
                 size="small"
                 style="margin: 16px 0"
                 @click="add"
+                v-if="getAccess('hospital_referral_record_add')"
         ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
         <el-button
                 class="btn-new btnAdd"
                 size="small"
                 @click="exportList"
+                v-if="getAccess('hospital_referral_record_export')"
         ><img src="@/assets/images/common/export.png" />导出</el-button>
         </div>
       </div>
@@ -152,7 +154,8 @@
       <el-table-column label="操作" width="130">
         <template slot-scope="scope">
           <el-button
-                  v-if="scope.row.state === 2"
+                  v-if="(scope.row.state === 0 || scope.row.state === 2)
+                  && getAccess('hospital_referral_record_updatestate')"
                   type="text"
                   size="small"
                   @click="cancelReservation(scope.row)"
@@ -160,6 +163,7 @@
           <el-button
                   type="text"
                   size="small"
+                  v-if="getAccess('hospital_referral_record_view')"
                   @click="handleView(scope.row)"
           >查看</el-button>
         </template>

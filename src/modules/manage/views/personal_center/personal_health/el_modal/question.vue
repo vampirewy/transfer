@@ -30,10 +30,10 @@
             label="问卷名称"
             show-overflow-tooltip
           >
-          <!-- <template slot-scope="scope">
+          <template slot-scope="scope">
           <span>{{ scope.row.questionType ===
              1 ? '常规问卷' :scope.row.questionType === 2 ? '中医问卷' : '心理问卷'}}</span>
-        </template> -->
+        </template>
           </el-table-column>
           <el-table-column
             prop="questionDate"
@@ -59,21 +59,50 @@
             show-overflow-tooltip
           >
             <template slot-scope="scope">
-              <el-button
+              <!-- <el-button
                 type="text"
                 size="small"
                 @click="handleEdit(scope.row.id)"
                 v-if="getAccess('physical_examination_report_edit')"
                 >编辑</el-button
-              >
-              <el-button type="text" size="small">|</el-button>
+              > -->
               <el-button
+              type="text"
+              size="small"
+              @click="
+                $router.push({
+                  name: 'health_questionnaire_edit',
+                  params: {
+                    type: 'edit',
+                    qusType: scope.row.questionType,
+                    id: scope.row.id,
+                  },
+                })
+              "
+            >编辑</el-button>
+              <el-button type="text" size="small">|</el-button>
+              <!-- <el-button
                 type="text"
                 size="small"
                 @click="handleDetail(scope.row.id)"
                 v-if="getAccess('physical_examination_report_view')"
                 >查看</el-button
-              >
+              > -->
+              <el-button
+              type="text"
+              size="small"
+              @click="
+                $router.push({
+                  name: 'health_questionnaire_detail',
+                  params: {
+                    qusType: scope.row.questionType,
+                    id: scope.row.id,
+                  },
+                })
+              "
+              v-if="getAccess('life_style_questionnaire_view')
+              "
+            >查看</el-button>
             </template>
           </el-table-column>
         </el-table>

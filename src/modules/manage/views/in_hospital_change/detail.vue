@@ -19,22 +19,29 @@
       <div class="topStatus">
         <el-row>
           <div class="status" :class="'status' + form.state">{{form.state | stateFilter}}</div>
-          <el-col :span="12">
+          <el-col :span="10">
             <el-form-item label="就诊时间" >
               <span v-if="!form.appointmentDate"> - </span>
               <span v-else>{{ form.appointmentDate}} {{ form.appointmentHourStart}}
             ~ {{ form.appointmentHourEnd}}</span>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="10">
             <el-form-item label="就诊科室" >
               <span>{{form.departmentName | getResult}}</span>
             </el-form-item>
           </el-col>
+          <el-col :span="3">
+            <el-button v-if="form.state === 0 || form.state === 2"
+                       class="cancelReservationBtn" size="small" @click="cancelReservation"
+            >取消预约</el-button>
+          </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
-            <el-form-item label="就诊医生" >
-              <span>{{form.doctorName | getResult}}</span>
-            </el-form-item>
+          <el-form-item label="就诊医生" >
+            <span>{{form.doctorName | getResult}}</span>
+          </el-form-item>
           </el-col>
         </el-row>
       </div>
@@ -137,9 +144,6 @@
        <div class="handle-btn">
         <el-button class="cancelBtn" size="small" @click="goBack"
           >返回</el-button>
-         <el-button v-if="form.state === 2" class="cancelReservationBtn" size="small"
-                    @click="cancelReservation"
-         >取消预约</el-button>
       </div>
     </el-form>
   </div>
@@ -162,6 +166,7 @@ export default {
         cardNo: '',
         mobile: '',
         age: '',
+        state: '',
         primaFacie: '', // 初步印象
         referralIntro: '', // 转诊说明
         orderConfigDtoList: {
@@ -230,7 +235,6 @@ export default {
           this.form.orderConfigDtoList.diagnosis = '';
           this.form.orderConfigDtoList.scheme = '';
         }
-        console.log(this.form);
       });
     },
     /**
@@ -246,12 +250,12 @@ export default {
       }).then(
         async () => {
           const reqBody = {
-            id: this.$route.params.id,
+            id: this.propsData.id,
             state: 1,
           };
           await this.$api.InhospitalChange.upstateRegistrationState(reqBody);
           this.$message.success('操作成功');
-          return this.getDetail();
+          return this.getDetail(this.propsData);
         },
       );
     },
@@ -315,10 +319,14 @@ export default {
    margin: 20px 0;
  }
 .cancelReservationBtn{
-  color: #F33D21;
-  border: 1px solid #F33D21;
-  background: rgba(243, 61, 33, 0.1);
-  border-radius: 50px;
+  color: #333333;
+  width: 90px;
+  height: 40px;
+  border: none;
+  background: #B4BBC9;
+  border-radius: 5px;
+  margin-left: 20px;
+  padding: 0;
 }
 .wltitle span {
   font-size: 14px;

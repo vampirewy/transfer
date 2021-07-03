@@ -20,15 +20,6 @@
                       v-model="roleForm.name"></el-input>
           </el-form-item>
         </el-col>
-        <!--<el-col :span="8">
-          <el-form-item label="是否管理员">
-            <span v-if="detail">{{roleForm.adminFlag | getResultState}}</span>
-            <el-radio-group v-else v-model="roleForm.adminFlag">
-              <el-radio :label="1">是</el-radio>
-              <el-radio :label="0">否</el-radio>
-            </el-radio-group>
-          </el-form-item>
-        </el-col>-->
         <el-col :span="6">
           <el-form-item label="是否启用">
             <span v-if="detail">{{roleForm.state | getResultState}}</span>
@@ -57,6 +48,7 @@
       </el-form-item>
       <div class="title permission-title">权限管理</div>
       <permission
+        :permission="permission"
         :data="roleForm.menuIds"
         :disabled="detail"
         :isFilter="detail"
@@ -98,6 +90,7 @@ export default {
   },
   data() {
     return {
+      permission: [],
       roleForm: {
         id: this.id,
         name: '',
@@ -113,20 +106,78 @@ export default {
     };
   },
   mounted() {
+    this.menuList();
     console.log(this.roleForm);
-    this.roleForm.menuIds = []; // 为了解决首次data不更新
-    if (this.id) {
-      // 角色详情
-      this.$api.systemManageInterface.roleDetail(this.id).then((res) => {
-        const { data } = res;
-        this.roleForm = Object.assign(this.roleForm, data.data || {});
-        if (this.roleForm.adminFlag !== undefined) {
-          this.roleForm.adminFlag = this.roleForm.adminFlag ? 1 : 0;
-        }
-      });
-    }
   },
   methods: {
+    menuList() {
+      // 角色列表
+      this.$api.systemManageInterface
+        .getMenu({})
+        .then((res) => {
+          const { data } = res;
+          const result = data.data || {};
+          console.log(result);
+          // console.log(JSON.parse(JSON.stringify(ACCESS)));
+          if (!this.detail) { // 不是详情要全部展示出来
+            this.permission = result.synthesisMenuList;
+            if (this.permission[0].menuCode === 'home') { // 设置默认选中
+              this.permission[0].disabled = true;
+            }
+          }
+          this.getDetail(result);
+        /* console.log(this.data);
+          if (this.disabled) {
+            console.log(this.data);
+            this.filterTree(this.data); // 查看的情况下，筛选出选中的
+          }
+          this.setSelectAll();*/
+        });
+    },
+    getDetail(result) {
+      this.roleForm.menuIds = ['home']; // 为了解决首次data不更新
+      if (this.id) {
+        // 角色详情
+        this.$api.systemManageInterface.roleDetail(this.id).then((res) => {
+          const { data } = res;
+          this.roleForm = Object.assign(this.roleForm, data.data || {});
+          if (this.roleForm.adminFlag !== undefined) {
+            this.roleForm.adminFlag = this.roleForm.adminFlag ? 1 : 0;
+          }
+          if (this.detail) { // 为了详情时不一下子展示出来，增加体验感
+            this.permission = result.synthesisMenuList;
+            if (this.permission[0].menuCode === 'home') { // 设置默认选中
+              this.permission[0].disabled = true;
+            }
+            this.filterTree(data.data.menuIds);
+          }
+        });
+      }
+    },
+    filterTree(data) {
+      this.permission = this.filterArray(
+        this.permission,
+        data,
+      );
+      console.log(this.permission);
+      const nodes = this.$refs.tree.store.nodesMap;
+      console.log(nodes);
+      Object.keys(nodes).forEach((i) => {
+        nodes[i].expanded = false;
+      });
+    },
+    filterArray(arr, data) {
+      const res = [];
+      arr.forEach((item) => {
+        if (data.includes(item.menuCode)) {
+          res.push(item);
+          if (item.roleMenuList && item.roleMenuList.length > 0) {
+            this.$set(item, 'roleMenuList', this.filterArray(item.roleMenuList, data));
+          }
+        }
+      });
+      return res;
+    },
     submit() {
       this.$refs.roleForm.validate((valid) => {
         if (valid) {

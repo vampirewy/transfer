@@ -27,7 +27,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="6">
-                <el-form-item label="报告编号：" prop="name">
+                <el-form-item label="报告名称：" prop="name">
                   <el-input
                     v-model="formData.name"
                     maxLength="30"
@@ -314,7 +314,7 @@
                       type="date"
                       :max-date="form.endTime"
                       placeholder="选择开始日期"
-                      style="width: 140px"
+                      style="width: 130px"
                     >
                     </el-date-picker>
                     <span class="timing">-</span>
@@ -323,7 +323,7 @@
                       type="date"
                       :min-date="form.startTime"
                       placeholder="选择结束日期"
-                      style="width: 140px"
+                      style="width: 130px"
                     >
                     </el-date-picker>
                   </el-form-item>

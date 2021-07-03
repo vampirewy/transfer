@@ -508,7 +508,7 @@ export default {
       border-color: transparent;
       color: #666666;
       position: relative;
-      padding: 14px 16px;
+      padding: 12px 16px;
       font-size: 14px;
       border-radius: 8px 8px 0 0;
       margin: 0 24px;
@@ -521,7 +521,7 @@ export default {
       content: '';
       display: block;
       width: 25px;
-      height: 47px;
+      height: 43px;
       position: absolute;
       -webkit-transform: skewX(23deg);
       transform: skewX(23deg);
@@ -534,7 +534,7 @@ export default {
       content: '';
       display: block;
       width: 25px;
-      height: 47px;
+      height: 43px;
       position: absolute;
       -webkit-transform: skewX(-23deg);
       transform: skewX(-23deg);
@@ -555,7 +555,7 @@ export default {
       font-weight: 600;
       position: relative;
       margin: 0 24px;
-      padding: 14px 16px;
+      padding: 12px 16px;
       font-size: 14px;
       border-radius: 8px 8px 0 0;
     }
@@ -563,7 +563,7 @@ export default {
       content: '';
       display: block;
       width: 25px;
-      height: 47px;
+      height: 43px;
       position: absolute;
       -webkit-transform: skewX(23deg);
       transform: skewX(23deg);
@@ -576,7 +576,7 @@ export default {
       content: '';
       display: block;
       width: 25px;
-      height: 47px;
+      height: 43px;
       position: absolute;
       -webkit-transform: skewX(-23deg);
       transform: skewX(-23deg);

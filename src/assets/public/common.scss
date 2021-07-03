@@ -536,6 +536,9 @@ a {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    .el-select{
+      width: 120px !important;
+    }
     div {
       margin: 5px 5px 0 0;
       .timing {
@@ -553,7 +556,7 @@ a {
             border-left: 1px solid #DDE0E6;
             border-radius: 0;
             margin-top: 1px;
-            height: calc(100% - 2px);
+            // height: calc(100% - 2px);
           }
         }
       }

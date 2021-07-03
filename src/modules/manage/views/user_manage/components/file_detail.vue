@@ -3,7 +3,7 @@
     <ul class="file-detail">
       <li>附件标题: {{ current.title }}</li>
       <li>创建时间: {{ current.createTime }}</li>
-      <li>附件: <a :href="`${upload_url}${current.filePath}`"
+      <li>附件: <a :href="`${upload_url}/${current.filePath}`"
       target="blank">{{current.filePath}}</a></li>
       <li>备注: {{ current.remark }}</li>
     </ul>
@@ -18,7 +18,7 @@ export default {
   },
   data() {
     return {
-      upload_url: process.env.api.upload_url,
+      upload_url: process.env.api.pdf_url,
     };
   },
   methods: {
@@ -34,5 +34,8 @@ export default {
   li {
     margin-top: 20px;
   }
+}
+/deep/ .el-dialog{
+  width: 40% !important;
 }
 </style>

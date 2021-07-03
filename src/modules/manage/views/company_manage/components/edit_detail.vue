@@ -7,10 +7,10 @@
     :visible.sync="visible"
     @close="cancel"
   >
-    <div class="form-title">
+    <!-- <div class="form-title">
       <div class="point"></div>
       <h3 class="name">单位信息</h3>
-    </div>
+    </div> -->
 
     <el-form
       :label-position="right"
@@ -98,6 +98,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/deep/ .el-dialog__body{
+  padding: 0;
+}
+.el-form-item{
+  margin-bottom: 10px;
+}
 .dialog-detail /deep/ {
   .form-title {
     display: flex;
@@ -118,7 +124,7 @@ export default {
     }
   }
   .form-content {
-    margin-top: 20px;
+    margin-top: -20px;
     .el-input__inner {
       // background-color: #f4f4f6;
       border: 0;

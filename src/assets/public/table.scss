@@ -56,14 +56,15 @@
     padding: 0 !important;
     .expand-table {
       .el-table__header-wrapper th {
-        background: #EEF1F5;
+        background: #7CA7FF;
         padding: 13px 0;
         .cell {
-          color: #333;
+          color: #fff;
         }
       }
       td {
         padding: 4px 0;
+        background: #F6F8FC;
       }
       .el-table__body td {
         background-color: white;
