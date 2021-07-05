@@ -205,9 +205,9 @@
             <span>{{ scope.row.workUnitName | getResult}}</span>
           </template>
         </el-table-column> -->
-        <el-table-column label="匹配项目" prop="code" min-width="150" show-overflow-tooltip>
+        <el-table-column label="匹配项目" prop="matchItemName" min-width="150" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{ scope.row.code | getResultDate}}</span>
+            <span>{{ scope.row.matchItemName | getResultDate}}</span>
           </template>
         </el-table-column>
         <!-- <el-table-column label="问卷来源" prop="sourceName" show-overflow-tooltip>

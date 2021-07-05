@@ -59,7 +59,7 @@
                   type="date"
                   :max-date="formData.endTime || new Date()"
                   placeholder="选择开始日期"
-                  style="width: 120px"
+                  style="width: 140px"
                 >
                 </el-date-picker>
                 <span class="timing">-</span>
@@ -70,7 +70,7 @@
                   :min-date="formData.startTime"
                   :max-date="new Date()"
                   placeholder="选择结束日期"
-                  style="width: 120px"
+                  style="width: 140px"
                 >
                 </el-date-picker>
               </div>

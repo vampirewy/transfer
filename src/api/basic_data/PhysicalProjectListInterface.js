@@ -34,7 +34,7 @@ class PhysicalProjectListInterface extends BaseModule {
 
   // 体检库项目删除
   deleteOrganItem(data = {}) {
-    return this.delete(`/organ_item/${data.id}`);
+    return this.delete(`/organ_item/${data}`);
   }
 
   // 列表体检库

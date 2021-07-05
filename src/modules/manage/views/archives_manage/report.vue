@@ -93,7 +93,7 @@
                 <el-date-picker
                   v-model="formData.minReportDate"
                   type="date"
-                  value-format="yyyy-MM-dd HH:mm:ss"
+                  value-format="yyyy-MM-dd"
                   :max-date="formData.maxReportDate || new Date()"
                   placeholder="选择开始日期"
                   style="width: 140px"
@@ -103,7 +103,7 @@
                 <el-date-picker
                   v-model="formData.maxReportDate"
                   type="date"
-                  value-format="yyyy-MM-dd HH:mm:ss"
+                  value-format="yyyy-MM-dd"
                   :min-date="formData.minReportDate"
                   :max-date="new Date()"
                   placeholder="选择结束日期"
@@ -116,6 +116,7 @@
                 <el-date-picker
                   v-model="formData.minCreateDate"
                   type="date"
+                  value-format="yyyy-MM-dd"
                   :max-date="formData.maxCreateDate || new Date()"
                   placeholder="选择开始日期"
                   style="width: 140px"
@@ -125,6 +126,7 @@
                 <el-date-picker
                   v-model="formData.maxCreateDate"
                   type="date"
+                  value-format="yyyy-MM-dd"
                   :min-date="formData.minCreateDate"
                   :max-date="new Date()"
                   placeholder="选择结束日期"
