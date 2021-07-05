@@ -29,6 +29,10 @@ class UnusualListInterface extends BaseModule {
   updateOrganAbnormal(data = {}, List = {}) {
     return this.put(`/organ_abnormal/update/${data.id}`, List);
   }
+  // 异常别名数量
+  listByOrganAbnomalCode(data = {}) {
+    return this.get(`/organ_abnormal_alias/list_by_organ_abnomal_code/${data}`);
+  }
 
   // 删除异常
   deleteOrganAbnormal(data = {}) {

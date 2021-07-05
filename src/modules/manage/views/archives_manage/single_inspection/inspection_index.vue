@@ -59,7 +59,7 @@
                   type="date"
                   :max-date="formData.endTime || new Date()"
                   placeholder="选择开始日期"
-                  style="width: 120px"
+                  style="width: 140px"
                 >
                 </el-date-picker>
                 <span class="timing">-</span>
@@ -70,7 +70,7 @@
                   :min-date="formData.startTime"
                   :max-date="new Date()"
                   placeholder="选择结束日期"
-                  style="width: 120px"
+                  style="width: 140px"
                 >
                 </el-date-picker>
               </div>
@@ -256,6 +256,12 @@
                 label="检查机构"
                 align="center"
                 prop="inspectionOrg"
+                show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column
+                label="人员类别"
+                align="center"
+                prop="gridName"
                 show-overflow-tooltip>
               </el-table-column>
             <el-table-column

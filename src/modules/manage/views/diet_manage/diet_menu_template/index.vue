@@ -6,12 +6,12 @@
           <div class="diet-search">
             <div class="search-title">
               <img src="@/assets/images/common/titleLeft.png" alt="" />
-              菜谱模版
+              菜谱模板
             </div>
             <div class="searchCondition">
               <div class="searchLeft">
                 <div class="searchInputFormItem">
-                  <el-input placeholder="模版名称" v-model="query.name"> </el-input>
+                  <el-input placeholder="模板名称" v-model="query.name"> </el-input>
                   <span class="searchBtnImgSpan" @click="search" style="right: -3px;">
                     <img
                       class="searchBtnImg"
@@ -20,12 +20,27 @@
                   </span>
                 </div>
                 <div style="display: flex; align-items: center">
-                  <span class="label" style="width: 100px">模版周期：</span>
+                  <span class="label" style="width: 100px">模板周期：</span>
                   <el-input clearable placeholder="请填写" v-model="query.day">
                   </el-input>
                 </div>
-                <div style="position: relative">
-                  <span class="label">模版分类：</span>
+                <div>
+                  <span>模板分类：</span>
+                  <el-select
+                    v-model="query.dietTemplateSortId"
+                    placeholder="请选择"
+                    style="width: 160px"
+                  >
+                    <el-option
+                      :label="item.name"
+                      :value="item.id"
+                      v-for="(item, index) in menuTypeSelectList"
+                      :key="index"
+                    ></el-option>
+                  </el-select>
+                </div>
+                <!-- <div style="position: relative">
+                  <span class="label">模板分类：</span>
                   <el-select
                     placeholder="请选择"
                     :value="menuTypeSelectName"
@@ -40,7 +55,7 @@
                       isShowDietMenuTemplateType = true;
                     "
                   ></div>
-                </div>
+                </div> -->
               </div>
               <div class="searchRight">
                 <div class="buttones">
@@ -83,7 +98,7 @@
               @click="menuTemOp"
               ><img
                 src="@/assets/images/common/editBtn.png"
-              />模版分类</el-button
+              />模板分类</el-button
             >
           </div>
         </div>
@@ -91,7 +106,7 @@
           <el-table-column type="selection" width="55"> </el-table-column>
           <el-table-column
             prop="name"
-            label="模版名称"
+            label="模板名称"
             show-overflow-tooltip
           ></el-table-column>
           <el-table-column label="参考范围" show-overflow-tooltip>
@@ -104,7 +119,7 @@
             label="分类"
             show-overflow-tooltip
           ></el-table-column>
-          <el-table-column prop="day" label="模版周期 (天)"> </el-table-column>
+          <el-table-column prop="day" label="模板周期 (天)"> </el-table-column>
           <el-table-column prop="intro" label="介绍"> </el-table-column>
           <el-table-column label="操作" width="160px">
             <template slot-scope="scope">
@@ -174,10 +189,14 @@ export default {
         day: '',
         dietTemplateSortId: '',
       },
+      keywords: '',
+      menuTypeSelectList: [],
+      menuTypeSelectid: '',
     };
   },
   created() {
     this.loadData();
+    this.menuTypeSelect();
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
@@ -185,6 +204,19 @@ export default {
     });
   },
   methods: {
+    menuTypeSelect() {
+      this.$api.dietMenuTemplateInterface
+        .getDietMeneTemCate({
+          pageNo: this.currentPage,
+          pageSize: 1000,
+          keywords: this.keywords,
+        })
+        .then((res) => {
+          const { data } = res.data.data;
+          this.menuTypeSelectList = data;
+          // this.total = total;
+        });
+    },
     add() {
       this.dietMenuTemDetail = { id: '' };
       this.isShowDietMenuTemplate = true;

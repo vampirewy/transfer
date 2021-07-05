@@ -1,6 +1,12 @@
 <template>
   <div class="staff-form">
-    <gender v-if="viewIndexes == 2" :id="currentData" @close="handleClose">
+    <gender
+      v-if="viewIndexes == 2"
+      :id="currentData"
+      :data="staffForm"
+      @chid-event="getlist"
+      @close="handleClose"
+    >
     </gender>
     <el-form
       :model="staffForm"
@@ -13,7 +19,7 @@
           <el-form-item label="个报前言" style="width: 100%">
             <el-input
               type="textarea"
-              v-model="staffForm.mobileNo"
+              v-model="staffForm.personReportPreface"
               :rows="3"
               placeholder="请输入"
             ></el-input>
@@ -23,7 +29,7 @@
           <el-form-item label="个报结束语" style="width: 100%">
             <el-input
               type="textarea"
-              v-model="staffForm.mobileNo"
+              v-model="staffForm.personReportConcludingRemark"
               :rows="3"
               placeholder="请输入"
             ></el-input>
@@ -35,7 +41,7 @@
         <span>问卷、膳食方案取前后</span>
         <el-input
           type="text"
-          v-model="staffForm.mobileNo"
+          v-model="staffForm.nearestDay"
           style="50px;"
           placeholder="请输入"
         ></el-input>
@@ -44,16 +50,20 @@
       <el-row>
         <el-col :span="24">
           <el-form-item label="报告是否审核">
-            <el-switch v-model="value" active-color="#13ce66"> </el-switch>
+            <el-switch v-model="staffForm.isAudit" active-color="#13ce66"> </el-switch>
           </el-form-item>
         </el-col>
         <el-col :span="24">
           <el-form-item label="体检推荐">
-            <el-radio v-model="radio" label="1">分性别指定项目</el-radio>
-            <el-radio v-model="radio" label="2">根据异常推荐</el-radio>
+            <el-radio v-model="staffForm.peRecommendMode" label="1"
+              >分性别指定项目</el-radio
+            >
+            <el-radio v-model="staffForm.peRecommendMode" label="2"
+              >根据异常推荐</el-radio
+            >
           </el-form-item>
         </el-col>
-        <el-col :span="24" v-if="radio == 1">
+        <el-col :span="24" v-if="staffForm.peRecommendMode == 1">
           <div class="gender">
             <div class="genderMan" @click="showpop(1)">男性</div>
             <div class="genderGirl" @click="showpop(2)">女性</div>
@@ -67,12 +77,18 @@
       <el-row>
         <el-col :span="24">
           <div class="form_tags">
-            <div class="tags">
+            <div
+              class="tags"
+              @click="openpdf(staffForm.personCoverTemplateFile)"
+            >
               <img src="@/assets/images/common/export.png" alt="" /><span
                 >下载个报pdf封面模版</span
               >
             </div>
-            <div class="tags">
+            <div
+              class="tags"
+              @click="openpdf(staffForm.personBackCoverTemplateFile)"
+            >
               <img src="@/assets/images/common/export.png" alt="" /><span
                 >下载个报pdf封底模版</span
               >
@@ -84,13 +100,16 @@
         <el-col :span="6">
           <el-form-item label="封面底纹">
             <div class="form-item-upload">
-              <el-input placeholder="请上传"></el-input>
+              <el-input
+                v-model="staffForm.personCoverTemplateFile"
+                placeholder="请上传pdf格式的封面"
+              ></el-input>
               <upload
                 :on-success="
-                  (res) => handleUploadSuccess(res, 'personalFrontImage')
+                  (res) => handleUploadSuccess(res, 'personCoverTemplateFile')
                 "
-                :on-progress="() => handleUploadProgress('personalFrontImage')"
-                :on-error="() => handleUploadError('personalFrontImage')"
+                :on-progress="() => handleUploadProgress('personCoverTemplateFile')"
+                :on-error="() => handleUploadError('personCoverTemplateFile')"
                 :before-upload="beforeUpload"
                 :show-file-list="false"
                 :disabled="personalFrontImageLoading"
@@ -109,13 +128,16 @@
         <el-col :span="6" style="margin-left: 200px">
           <el-form-item label="封底底纹">
             <div class="form-item-upload">
-              <el-input placeholder="请上传"></el-input>
+              <el-input
+                v-model="staffForm.personBackCoverTemplateFile"
+                placeholder="请上传"
+              ></el-input>
               <upload
                 :on-success="
-                  (res) => handleUploadSuccess(res, 'personalFrontImage')
+                  (res) => handleUploadSuccess(res, 'personBackCoverTemplateFile')
                 "
-                :on-progress="() => handleUploadProgress('personalFrontImage')"
-                :on-error="() => handleUploadError('personalFrontImage')"
+                :on-progress="() => handleUploadProgress('personBackCoverTemplateFile')"
+                :on-error="() => handleUploadError('personBackCoverTemplateFile')"
                 :before-upload="beforeUpload"
                 :show-file-list="false"
                 :disabled="personalFrontImageLoading"
@@ -143,7 +165,7 @@
           <el-form-item label="团报前言" style="width: 100%">
             <el-input
               type="textarea"
-              v-model="staffForm.mobileNo"
+              v-model="staffForm.groupReportPreface"
               :rows="3"
               placeholder="请输入"
             ></el-input>
@@ -153,7 +175,7 @@
           <el-form-item label="团报结束语" style="width: 100%">
             <el-input
               type="textarea"
-              v-model="staffForm.mobileNo"
+              v-model="staffForm.groupReportConcludingRemark"
               :rows="3"
               placeholder="请输入"
             ></el-input>
@@ -163,7 +185,11 @@
       <div class="wltitle">
         <div class="quan"></div>
         <span>异常TOP推荐检查前</span>
-        <el-select style="width:100px;" v-model="value1" placeholder="请选择">
+        <el-select
+          style="width: 100px"
+          v-model="staffForm.groupAbnormalTop"
+          placeholder="请选择"
+        >
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -172,7 +198,7 @@
           >
           </el-option>
         </el-select>
-        <span style="margin-left:20px;">位</span>
+        <span style="margin-left: 20px">位</span>
       </div>
       <div class="wltitle">
         <div class="quan"></div>
@@ -181,14 +207,20 @@
       <el-row>
         <el-col :span="24">
           <div class="form_tags">
-            <div class="tags">
+            <div
+              class="tags"
+              @click="openpdf(staffForm.groupCoverTemplateFile)"
+            >
               <img src="@/assets/images/common/export.png" alt="" /><span
-                >下载个报pdf封面模版</span
+                >下载团报pdf封面模版</span
               >
             </div>
-            <div class="tags">
+            <div
+              class="tags"
+              @click="openpdf(staffForm.groupBackCoverTemplateFile)"
+            >
               <img src="@/assets/images/common/export.png" alt="" /><span
-                >下载个报pdf封底模版</span
+                >下载团报pdf封底模版</span
               >
             </div>
           </div>
@@ -198,13 +230,16 @@
         <el-col :span="6">
           <el-form-item label="封面底纹">
             <div class="form-item-upload">
-              <el-input placeholder="请上传"></el-input>
+              <el-input
+                v-model="staffForm.groupCoverTemplateFile"
+                placeholder="请上传"
+              ></el-input>
               <upload
                 :on-success="
-                  (res) => handleUploadSuccess(res, 'personalFrontImage')
+                  (res) => handleUploadSuccess(res, 'groupCoverTemplateFile')
                 "
-                :on-progress="() => handleUploadProgress('personalFrontImage')"
-                :on-error="() => handleUploadError('personalFrontImage')"
+                :on-progress="() => handleUploadProgress('groupCoverTemplateFile')"
+                :on-error="() => handleUploadError('groupCoverTemplateFile')"
                 :before-upload="beforeUpload"
                 :show-file-list="false"
                 :disabled="personalFrontImageLoading"
@@ -223,13 +258,16 @@
         <el-col :span="6" style="margin-left: 200px">
           <el-form-item label="封底底纹">
             <div class="form-item-upload">
-              <el-input placeholder="请上传"></el-input>
+              <el-input
+                v-model="staffForm.groupBackCoverTemplateFile"
+                placeholder="请上传"
+              ></el-input>
               <upload
                 :on-success="
-                  (res) => handleUploadSuccess(res, 'personalFrontImage')
+                  (res) => handleUploadSuccess(res, 'groupBackCoverTemplateFile')
                 "
-                :on-progress="() => handleUploadProgress('personalFrontImage')"
-                :on-error="() => handleUploadError('personalFrontImage')"
+                :on-progress="() => handleUploadProgress('groupBackCoverTemplateFile')"
+                :on-error="() => handleUploadError('groupBackCoverTemplateFile')"
                 :before-upload="beforeUpload"
                 :show-file-list="false"
                 :disabled="personalFrontImageLoading"
@@ -264,6 +302,7 @@
 </template>
 
 <script>
+import Upload from '~/src/components/upload/index.vue';
 import Permission from '../permission.vue';
 import gender from './gener.vue';
 export default {
@@ -271,6 +310,7 @@ export default {
   components: {
     Permission,
     gender,
+    Upload,
   },
   props: {
     detail: {
@@ -289,32 +329,51 @@ export default {
   },
   data() {
     return {
+      pdf_url: process.env.api.pdf_url,
       viewIndexes: 0,
       value: false,
       radio: '1',
       options: [
         {
-          value: '选项1',
-          label: '黄金糕',
+          value: 3,
+          label: 3,
         },
         {
-          value: '选项2',
-          label: '双皮奶',
+          value: 5,
+          label: 5,
         },
         {
-          value: '选项3',
-          label: '蚵仔煎',
+          value: 10,
+          label: 10,
+        },
+        {
+          value: 15,
+          label: 15,
+        },
+        {
+          value: 20,
+          label: 20,
         },
       ],
       value1: '',
       staffForm: {
-        id: this.id,
-        mobileNo: '',
-        realName: '',
-        sex: '',
-        roleId: '',
-        dataRange: '',
-        // menuIds: [],
+        id: '',
+        personReportPreface: '',
+        personReportConcludingRemark: '',
+        nearestDay: '',
+        isAudit: '',
+        peRecommendMode: '',
+        manPeItem: '',
+        womanPeItem: '',
+        manPeItemSpecial: '',
+        womanPeItemSpecial: '',
+        personCoverTemplateFile: '',
+        personBackCoverTemplateFile: '',
+        groupReportPreface: '',
+        groupReportConcludingRemark: '',
+        groupAbnormalTop: null,
+        groupCoverTemplateFile: '',
+        groupBackCoverTemplateFile: '',
       },
       staffRules: {
         mobileNo: [{ required: true, message: '账号不能为空' }],
@@ -329,49 +388,76 @@ export default {
     };
   },
   mounted() {
-    // if (this.id) {
-    //   // 用户详情
-    //   this.$api.systemManageInterface.userDetail(this.id).then(async (res) => {
-    //     const { data } = res;
-    //     this.staffForm = Object.assign(this.staffForm, data.data || {});
-    //     // type为0: 超级管理员，下拉选项添加超级管理员选项
-    //     if (this.staffForm.type) {
-    //       this.queryRoleDetail(this.staffForm.roleId);
-    //     } else {
-    //       this.newRoleOptions.push({
-    //         id: this.staffForm.roleId,
-    //         name: this.staffForm.roleName,
-    //       });
-    //     }
-    //   });
-    // } else if (this.roleOptions.length > 0) {
-    //   this.staffForm.roleId = this.roleOptions[0].id;
-    //   this.queryRoleDetail(this.staffForm.roleId);
-    // }
+    this.getCommentDetail();
   },
   methods: {
+    // 查看pdf
+    openpdf(data) {
+      window.open(this.pdf_url + data);
+    },
     showpop(data) {
       this.viewIndexes = 2;
       this.currentData = data;
     },
-    // async queryRoleDetail(id) {
-    //   // 角色详情
-    //   await this.$api.systemManageInterface.roleDetail(id).then((res) => {
-    //     const { data } = res;
-    //     const role = data.data || {};
-    //     this.roleMenuIds = role.menuIds;
-    //     this.roleMenuIdsMap[id] = this.roleMenuIds;
-    //   });
-    // },
+    handleClose() {
+      this.viewIndexes = 1;
+    },
+    getCommentDetail() {
+      this.$api.systemManageInterface.getconfigDetail().then(({ data }) => {
+        this.staffForm = data.data;
+        this.staffForm.peRecommendMode = (this.staffForm.peRecommendMode, '');
+      });
+    },
+    beforeUpload(file) {
+      const isPDF = file.type === 'application/pdf';
+      if (!isPDF) {
+        this.$message.warning('上传附件只能是 pdf 格式!');
+        return false;
+      }
+      const sizeValid = file.size / 1024 / 1024 < 15; // 这里做文件大小限制
+      if (!sizeValid) {
+        this.$message({
+          message: '上传文件大小不能超过 15MB!',
+          type: 'warning',
+        });
+        return false;
+      }
+      return true;
+    },
+    handleUploadSuccess(res, key) {
+      this[`${key}Loading`] = false;
+      const { data, message } = res;
+      console.log(this.staffForm[key], 123);
+      if (res.rc === 0) {
+        this.staffForm[key] = res.data;
+        this.staffForm[`${key}Name`] = data.substring(data.lastIndexOf('/') + 1);
+      } else {
+        this.$message.error(message || '网络异常！');
+      }
+    },
+    handleUploadError(key) {
+      this[`${key}Loading`] = false;
+      this.$message.error('上传失败！');
+    },
+    handleUploadProgress(key) {
+      this[`${key}Loading`] = true;
+    },
+    getlist(data) {
+      if (this.currentData === 1) {
+        this.staffForm.manPeItem = data.manPeItem;
+        this.staffForm.manPeItemSpecial = data.manPeItemSpecial;
+      } else {
+        this.staffForm.womanPeItem = data.manPeItem;
+        this.staffForm.womanPeItemSpecial = data.manPeItemSpecial;
+      }
+    },
     submit() {
       // this.$refs.staffForm.validate((valid) => {
-      //   if (valid) {
-      //     const fn = this.staffForm.id ? 'editUser' : 'addUser';
-      //     this.$api.systemManageInterface[fn](this.staffForm).then(() => {
-      //       this.$message.success('操作成功');
-      //       this.$emit('afterSubmit');
-      //     });
-      //   }
+      // if (valid) {
+      this.$api.systemManageInterface.saveconfig(this.staffForm).then(() => {
+        this.$message.success('操作成功');
+      });
+      // }
       // });
     },
   },

@@ -112,6 +112,7 @@
 </template>
 <script>
 import detectionuser from './detection_user.vue';
+import deleteIcon from '~/src/assets/images/deleteicon.png';
 
 export default {
   name: 'edit_or_detail',
@@ -166,11 +167,24 @@ export default {
       // this.detectionInfos = res.data.nameList;
       });
     },
+    // remove(index) {
+    //   this.$confirm('确定要删除该数据吗?', '提示', {
+    //     confirmButtonText: '确定',
+    //     cancelButtonText: '取消',
+    //     type: 'warning',
+    //     customClass: 'message-box-customize',
+    //   }).then(() => {
+    //     this.addProject.splice(index, 1);
+    //   });
+    // },
     remove(index) {
-      this.$confirm('确定要删除该数据吗?', '提示', {
+      this.$confirm(`<div class="delete-text-content"><img
+        class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认删除！</span></div>`, '删除提示', {
+        dangerouslyUseHTMLString: true,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning',
+        customClass: 'message-box-customize',
+        showClose: true,
       }).then(() => {
         this.addProject.splice(index, 1);
       });

@@ -98,8 +98,8 @@
         </div>
           <div v-if="!isTrue" class="searchCondition" style="width:80%;">
           <div class="searchLeft" style="padding-left:5px;">
-           <div>
-            <span>{{Tabactive === 0 ? '体检日期':'填写日期'}}：</span>
+           <div v-if="Tabactive === 0">
+            <span>体检日期：</span>
             <el-date-picker
             v-model="form.minReportDate"
             type="date"
@@ -112,6 +112,28 @@
             <span class="timing">-</span>
           <el-date-picker
             v-model="form.maxReportDate"
+            type="date"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            style="width: 140px"
+            :picker-options="pickerEndTime"
+            placeholder="选择结束时间">
+          </el-date-picker>
+          </div>
+          <div v-else>
+            <span>填写日期：</span>
+            <el-date-picker
+            v-model="form.startTime"
+            type="date"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            style="width: 140px;"
+            :picker-options="pickerStartTime"
+            placeholder="选择开始时间">
+            </el-date-picker>
+            <span class="timing">-</span>
+          <el-date-picker
+            v-model="form.endTime"
             type="date"
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
@@ -491,7 +513,7 @@
                 </el-table>
               </el-table-column>
               <el-table-column type="selection" width="40"></el-table-column>
-              <el-table-column label="体检编号" prop="clientNo" show-overflow-tooltip>
+              <el-table-column label="客户编号" prop="clientNo" show-overflow-tooltip>
               </el-table-column>
               <el-table-column label="姓名" prop="clientName" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
@@ -620,6 +642,8 @@ export default {
         maxReportDate: null,
         minAssessReportDate: null,
         maxAssessReportDate: null,
+        startTime: null,
+        endTime: null,
       },
       table: {
         list: [],
@@ -819,13 +843,10 @@ export default {
         // 心理问卷
         this.$api.health
           .fetch(Object.assign({
-            clientGrid: this.form.gridId,
-            gender: this.form.gender,
-            keyWord: this.form.keywords,
-            pageNo: 1,
-            pageSize: 15,
+            ...sendData,
+            pageNo: this.table.pageNo,
+            pageSize: this.table.pageSize,
             questionType: 3,
-            source: this.form.source,
           }))
           .then(({ data }) => {
             this.total = data.data.total;
@@ -835,13 +856,10 @@ export default {
         // 中医体质评估
         this.$api.health
           .fetch(Object.assign({
-            clientGrid: this.form.gridId,
-            gender: this.form.gender,
-            keyWord: this.form.keywords,
-            pageNo: 1,
-            pageSize: 15,
+            ...sendData,
+            pageNo: this.table.pageNo,
+            pageSize: this.table.pageSize,
             questionType: 2,
-            source: this.form.source,
           }))
           .then(({ data }) => {
             this.total = data.data.total;

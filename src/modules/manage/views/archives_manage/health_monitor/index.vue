@@ -544,7 +544,7 @@
                   <el-button
                     type="text"
                     size="small"
-                    @click="handleEdit(scope.row.id || scope.row)"
+                    @click="handleEdit(scope.row)"
                     v-if="getAccess('physical_examination_report_edit')
                     "
                   >编辑</el-button>
@@ -552,7 +552,7 @@
                   <el-button
                     type="text"
                     size="small"
-                    @click="handleTrendClick(scope.row.clientId,scope.row.id, 'info')"
+                    @click="handleTrendClick(scope.row, 'info')"
                     v-if="getAccess('physical_examination_report_view')"
                   >查看</el-button>
                 </template>
@@ -648,6 +648,10 @@
         </div>
         <div v-else>
           <other-test-info
+          :id="currentId"
+          :editId="editId"
+          @close="handleTrendClose"
+          @messageData='blackrount'
           ></other-test-info>
       </div>
       </div>
@@ -954,7 +958,12 @@ export default {
       this.$forceUpdate();
     },
     handleEdit(row) {
-      this.editId = row.healthDataOtherId;
+      console.log(row);
+      if (row.healthDataOtherId) {
+        this.editId = row.healthDataOtherId;
+      } else {
+        this.editId = row.id;
+      }
       this.currentId = row.clientId;
       // console.log(row, '=====');
       this.isGetinfo = false;
@@ -1135,14 +1144,16 @@ export default {
       this.resetTable();
       this.search();
     },
-    handleTrendClick(clientId, id, type) {
+    handleTrendClick(row, type) {
       if (this.tabIndex === 'other') {
         this.otherType = type;
+        this.editId = row.healthDataOtherId;
       } else {
         this.otherType = '';
       }
-      this.currentId = clientId;
-      this.ids = id;
+      console.log(row);
+      this.currentId = row.clientId;
+      this.ids = row.id;
       this.trendStatus = true;
       this.isGetinfo = false;
       this.isAddInfo = true; // 显示项目配置

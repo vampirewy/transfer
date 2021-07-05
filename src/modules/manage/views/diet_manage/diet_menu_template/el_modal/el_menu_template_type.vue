@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="菜谱模版类型"
+    title="菜谱模板类型"
     class="dialog-detail"
     :modal-append-to-body="false"
     width="580px"
@@ -14,7 +14,7 @@
           <div class="searchCondition">
             <div class="searchLeft">
               <div class="searchInputFormItem">
-                <el-input placeholder="输入条件搜索" v-model="query">
+                <el-input placeholder="输入名称搜索" v-model="query">
                 </el-input>
                 <span class="searchBtnImgSpan" style="right: -3px;"  @click="search">
                   <img
@@ -26,12 +26,12 @@
             </div>
             <div class="searchRight">
               <div class="buttones">
-                <div class="searchFor" @click="search">
+                <!-- <div class="searchFor" @click="search">
                   <img src="@/assets/images/common/topsearchblue.png" alt="" />
-                </div>
+                </div> -->
                 <div class="resetAll" @click="reset">重置</div>
                 <el-button class="btnNew" type="primary" @click="add"
-                  >添加新类型</el-button
+                  >添加新分类</el-button
                 >
               </div>
             </div>
@@ -46,7 +46,7 @@
       align="center"
     >
       <el-table-column type="selection" width="55"> </el-table-column>
-      <el-table-column prop="name" label="模版名称" show-overflow-tooltip>
+      <el-table-column prop="name" label="模板名称" show-overflow-tooltip>
         <template slot-scope="scope">
           <span v-show="editIndex !== scope.$index">{{ scope.row.name }}</span>
           <el-input

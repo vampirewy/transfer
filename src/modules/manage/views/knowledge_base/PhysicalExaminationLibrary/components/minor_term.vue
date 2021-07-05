@@ -15,7 +15,7 @@
       <div class="searchCondition">
         <div class="searchLeft">
           <div class="searchInputFormItem">
-            <el-input placeholder="项目/名称" v-model="form.itemName">
+            <el-input placeholder="小项名称" v-model="form.itemName">
             </el-input>
             <span class="searchBtnImgSpan" @click="search(1)">
                     <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
@@ -165,7 +165,7 @@
             </el-table-column>
             <el-table-column label="重要指标" prop="isMain" min-width="80" show-overflow-tooltip >
               <template slot-scope="scope">
-                {{ scope.row.isMain === 1 ? '是' :scope.row.isMain === 2?'否': '-' }}
+                {{ scope.row.isMain === 1 ? '是' :scope.row.isMain === 2?'否': '不限' }}
                 <!-- <span>{{ scope.row.isMain || '-'}}</span> -->
               </template>
             </el-table-column>
@@ -426,15 +426,15 @@ export default {
     },
     handleEditCheck() {},
     // 批量删除
-    handleSomeRemove() {
-      if (!this.chooseUserList.length) {
-        this.$message.error('请选择需要删除客户');
-        return;
+    handleSomeRemove() { // 批量删除
+      if (this.chooseUserList.length === 0) {
+        this.$message.error('请先选择数据');
+        return false;
       }
-      // let batch = false;
-      // if (this.multipleSelection.length >= 2) {
-      //   batch = true;
-      // }
+      this.remove(this.chooseUserList.map(item => item.id));
+    },
+    remove(list) {
+      console.log(list);
       const deleteDom = `<div class="delete-text-content">
         <img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认删除！</span></div>
         `;
@@ -448,8 +448,8 @@ export default {
         // const params = {
         //   clientIdList: this.chooseUserList.map(user => user.id),
         // };
-        const arrs = this.chooseUserList[0];
-        this.$api.physicalProjectListInterface.deleteOrganItem(arrs).then(({ data }) => {
+        // const arrs = this.chooseUserList[0];
+        this.$api.physicalProjectListInterface.deleteOrganItem(list).then(({ data }) => {
           if (data.success) {
             this.$message.success('操作成功');
             this.chooseUserList = [];

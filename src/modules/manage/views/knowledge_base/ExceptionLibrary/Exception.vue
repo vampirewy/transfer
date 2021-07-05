@@ -66,7 +66,7 @@
                        v-for="(item, index) in lifeStyleList" :key="index"></el-option>
           </el-select>
         </div>
-        <div>
+        <!-- <div>
           <span>是否启用：</span>
           <el-select
                   v-model="form.gender"
@@ -77,7 +77,7 @@
             <el-option label="是" value="1" key="1"></el-option>
             <el-option label="否" value="0" key="0"></el-option>
           </el-select>
-        </div>
+        </div> -->
         <!-- <div>
           <span>推荐检查：</span>
           <el-input placeholder="推荐检查" v-model="formData.lifeStyleLv"
@@ -178,15 +178,14 @@
       <el-table style="width: 100%" :data="table.list" align="center"
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="40"></el-table-column>
-        <el-table-column label="异常名称" prop="abnormalName" show-overflow-tooltip>
+        <el-table-column label="异常名称" prop="abnormalCode" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{ scope.row.abnormalName | getResult}}</span>
+            <span>{{ scope.row.abnormalCode | getResult}}</span>
           </template>
         </el-table-column>
         <el-table-column label="ICD10编码" prop="icdCode" show-overflow-tooltip>
           <template slot-scope="scope">
-                <span class="clientName"
-                      @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
+                <span >
                   {{ scope.row.icdCode | getResult}}
                 </span>
           </template>
@@ -199,6 +198,13 @@
         <el-table-column label="类型" prop="abnormalTypeName">
           <template slot-scope="scope">
             <span>{{ scope.row.abnormalTypeName | getResult}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="类型别名" prop="aliasNameTotal">
+          <template slot-scope="scope">
+            <el-button type="text"
+                     @click="expandsHandle(scope.row)" style="color:#36BF2F;width: 50px;">
+                     {{ scope.row.aliasNameTotal | getResult}}</el-button>
           </template>
         </el-table-column>
         <el-table-column prop="gender" label="性别" show-overflow-tooltip>
@@ -250,6 +256,11 @@
           </template>
         </el-table-column>
       </el-table>
+      <edit-detail-info
+      v-if="modalVisibleInfo"
+      :visible="modalVisibleInfo"
+      :id="editdetailinfo"
+      ></edit-detail-info>
       <div style="text-align: right">
         <el-pagination
           style="margin-top: 15px"
@@ -276,6 +287,7 @@ import OperateButton from '~/src/components/query_page/operate_button.vue';
 // import * as dayjs from 'dayjs';
 // import report from '../components/question_report.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
+import editDetailInfo from './edit_detail_info.vue';
 
 export default {
   name: 'Exception',
@@ -285,10 +297,12 @@ export default {
     Search,
     QueryFilter,
     OperateButton,
+    editDetailInfo,
   },
   data() {
     return {
       isTrue: true,
+      modalVisibleInfo: false,
       total: 0,
       dataSource: [],
       gridList: [],
@@ -308,6 +322,7 @@ export default {
       },
       visible: false,
       current: {},
+      editdetailinfo: '',
       params: {
         pageNo: 1,
         pageSize: 15,
@@ -360,6 +375,10 @@ export default {
     });
   },
   methods: {
+    expandsHandle(row) {
+      this.editdetailinfo = row.abnormalCode;
+      this.modalVisibleInfo = true;
+    },
     onLoad() {
       this.getOrganTypeList();
       this.getImportList();
