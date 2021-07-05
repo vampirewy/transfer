@@ -79,7 +79,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="推荐科室" prop="recommendDepartmentName">
+          <el-form-item label="推荐科室" >
             <el-input v-model="form.recommendDepartmentName" placeholder="请输入推荐科室" ></el-input>
           </el-form-item>
           <!-- <el-form-item label="推荐科室" >
@@ -264,7 +264,7 @@ export default {
         hospital: [{ required: true, message: '请选择异常类型' }],
         inDate: [{ required: true, message: '请选择重要性' }],
         outDate: [{ required: true, message: '请选择紧急性' }],
-        recommendDepartmentName: [{ required: true, message: '推荐科室不能为空' }],
+        // recommendDepartmentName: [{ required: true, message: '推荐科室不能为空' }],
       },
       resultOptions: [
         { value: 1, label: '未指定' },

@@ -9,11 +9,11 @@
 import BaseModule from '../BaseModule';
 
 class ProjectList extends BaseModule {
-  // 获取模版分类主题列表
+  // 获取模板分类主题列表
   getSortlist(data = {}) {
     return this.post('/message_template/get_sort_list', data);
   }
-  // 新增短信模版分类
+  // 新增短信模板分类
   saveMessageTemplate(data = {}) {
     return this.post('/message_template/save_message_template', data);
   }

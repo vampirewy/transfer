@@ -11,7 +11,7 @@ export default [
     path: '/basic_data/physical_project_template',
     name: 'physical_project_template',
     meta: {
-      title: '体检项目模版',
+      title: '体检项目模板',
       access: 'physical_project_template',
       keepAlive: true,
     },
@@ -22,7 +22,7 @@ export default [
     path: '/basic_data/physical_project_template/create',
     name: 'physical_project_template',
     meta: {
-      title: '体检项目模版新增',
+      title: '体检项目模板新增',
       access: 'physical_project_template_add',
       type: 'physical_project_template_create',
       hideInMenu: true,
@@ -35,7 +35,7 @@ export default [
     path: '/basic_data/physical_project_template/edit/:id',
     name: 'physical_project_template',
     meta: {
-      title: '体检项目模版编辑',
+      title: '体检项目模板编辑',
       access: 'physical_project_template_edit',
       type: 'physical_project_template_edit',
       hideInMenu: true,
@@ -48,7 +48,7 @@ export default [
     path: '/basic_data/physical_project_template/detail/:id',
     name: 'physical_project_template',
     meta: {
-      title: '体检项目模版明细',
+      title: '体检项目模板明细',
       access: 'physical_project_template_view',
       type: 'physical_project_template_detail',
       hideInMenu: true,

@@ -23,7 +23,7 @@
             <div class="searchInputFormItem">
               <el-input placeholder="输入条件搜索" v-model="query.name">
               </el-input>
-              <span class="searchBtnImgSpan" @click="search">
+              <span class="searchBtnImgSpan" @click="search" style="margin-right:-3px">
                 <img
                   class="searchBtnImg"
                   src="@/assets/images/common/topsearch.png"
@@ -95,7 +95,7 @@ export default {
       currentPage: 1,
       parentId: '',
       total: 0,
-      pageSize: 15,
+      pageSize: 5,
       status: '',
       query: {
         name: '',

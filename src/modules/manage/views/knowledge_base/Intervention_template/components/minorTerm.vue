@@ -56,7 +56,7 @@
                   style="width:380px"
                 >
                   <i
-                  :class=" detectionpopoverStatus? 'el-icon-arrow-down':'el-icon-arrow-up'"
+                  :class=" detectionpopoverStatus? 'el-icon-arrow-up':'el-icon-arrow-down'"
                   slot="suffix"
                 ></i>
                 </el-input>
@@ -479,7 +479,7 @@ export default {
         // data.conditionRelation = this.formData.state;
         data.forEach((val) => {
           if (NameType === 'Minterm') {
-            this.detectioninfoSource.clientName += `${val.sectionName}、`;
+            this.detectioninfoSource.clientName += `${val.itemName}、`;
           }
           if (NameType === 'Category') {
             this.detectioninfoSource.clientName += `${val.gridName}、`;

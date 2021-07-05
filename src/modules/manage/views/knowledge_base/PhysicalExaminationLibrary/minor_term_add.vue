@@ -234,7 +234,7 @@ export default {
         this.form = {
           gridListId: data.data.organItemLibraryId,
           checked1: data.data.isMain, // 默认重要指标
-          checked2: data.data.displayPosition, // 参与报告对比
+          checked2: data.data.isCompare, // 参与报告对比
           MinorItemsName: data.data.itemName, // 小项名称
           Gender: data.data.gender, // 性别
           minAge: data.data.minAge, // 年龄范围

@@ -260,6 +260,7 @@
       v-if="modalVisibleInfo"
       :visible="modalVisibleInfo"
       :id="editdetailinfo"
+      @cancel="cancel"
       ></edit-detail-info>
       <div style="text-align: right">
         <el-pagination
@@ -483,6 +484,9 @@ export default {
           id: this.multipleSelection[0].id,
         },
       });
+    },
+    cancel() {
+      this.modalVisibleInfo = false;
     },
     remove({ row }) {
       this.$confirm('改操作无法撤销, 是否删除?', '提示', {

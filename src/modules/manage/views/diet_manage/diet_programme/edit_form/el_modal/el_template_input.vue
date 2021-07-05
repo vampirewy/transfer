@@ -5,7 +5,7 @@
         <div class="searchCondition">
           <div class="searchLeft">
             <div >
-              <span>膳食模版</span>
+              <span>膳食模板</span>
               <el-select
                 v-model="status"
                 placeholder="选择"
@@ -40,11 +40,11 @@
     <el-table row-class-name="table-row" :data="tableData">
       <el-table-column type="selection" align="center" width="55">
       </el-table-column>
-      <el-table-column align="center" prop="title" label="模版名称">
+      <el-table-column align="center" prop="title" label="模板名称">
       </el-table-column>
       <el-table-column align="center" prop="title2" label="介绍">
       </el-table-column>
-      <el-table-column align="center" prop="title3" label="模版周期">
+      <el-table-column align="center" prop="title3" label="模板周期">
       </el-table-column>
     </el-table>
     <el-pagination

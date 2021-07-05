@@ -15,7 +15,7 @@
                   <el-input
                     placeholder="姓名/客户编号/检查单号/检查机构/检查项目"
                     v-model="formData.keywords"
-                    style="width: 144px"
+                    style="width: 160px"
                   >
                   </el-input>
                   <span class="searchBtnImgSpan" @click="search">
@@ -36,7 +36,7 @@
                     <el-option label="女" value="2" key="2"></el-option>
                   </el-select>
                 </div>
-                <div>
+                <!-- <div>
                   <span>人员类别：</span>
                   <el-select
                     v-model="formData.clientGrid"
@@ -50,7 +50,7 @@
                     :key="index"
                     ></el-option>
                   </el-select>
-                </div>
+                </div> -->
                <div>
                 <span>检查日期：</span>
                 <el-date-picker
@@ -360,7 +360,7 @@ export default {
         keywords: '',
         startTime: '',
         endTime: '',
-        clientGrid: '',
+        // clientGrid: '',
         gender: '',
         pageNo: 1,
         pageSize: 15,
@@ -506,7 +506,7 @@ export default {
     reset() {
       this.formData.keyWord = '';
       this.formData.workUnitName = '';
-      this.formData.clientGrid = '';
+      // this.formData.clientGrid = '';
       this.formData.department = '';
       this.formData.hospital = '';
       this.formData.startTime = '';
@@ -525,7 +525,7 @@ export default {
       this.formData.keywords = '';
       this.formData.startTime = '';
       this.formData.endTime = '';
-      this.formData.clientGrid = '';
+      // this.formData.clientGrid = '';
       this.formData.gender = '';
       this.formData.pageNo = 1;
       this.formData.pageSize = 15;

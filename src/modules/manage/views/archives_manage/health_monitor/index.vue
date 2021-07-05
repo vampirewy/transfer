@@ -77,13 +77,13 @@
               <el-input
                 placeholder="值"
                 v-model="forms.minSbp"
-                style="width: 50px"
+                style="width: 60px"
                 v-if="forms.sbpSelectType < 4 || forms.sbpSelectType === 5">
               </el-input>
               <el-input
                 placeholder="值"
                 v-model="forms.maxSbp"
-                style="width: 50px"
+                style="width: 60px"
                 v-if="forms.sbpSelectType > 3">
               </el-input>
             </div>
@@ -121,13 +121,13 @@
               <el-input
                 placeholder="值"
                 v-model="forms.minWc"
-                style="width: 50px"
+                style="width: 60px"
                 v-if="forms.wcSelectType < 4 || forms.wcSelectType === 5">
               </el-input>
               <el-input
                 placeholder="值"
                 v-model="forms.maxWc"
-                style="width: 50px"
+                style="width: 60px"
                 v-if="forms.wcSelectType > 3">
               </el-input>
             </div>
@@ -150,13 +150,13 @@
               <el-input
                 placeholder="值"
                 v-model="forms.minSportTime"
-                style="width: 50px"
+                style="width: 60px"
                 v-if="forms.sportTimeSelectType < 4 || forms.sportTimeSelectType === 5">
               </el-input>
               <el-input
                 placeholder="值"
                 v-model="forms.maxSportTime"
-                style="width: 50px"
+                style="width: 60px"
                 v-if="forms.sportTimeSelectType > 3">
               </el-input>
             </div>
@@ -179,13 +179,13 @@
               <el-input
                 placeholder="值"
                 v-model="forms.minResult"
-                style="width: 50px"
+                style="width: 60px"
                 v-if="forms.resultSelectType < 4 || forms.resultSelectType === 5">
               </el-input>
               <el-input
                 placeholder="值"
                 v-model="forms.maxResult"
-                style="width: 50px"
+                style="width: 60px"
                 v-if="forms.resultSelectType > 3">
               </el-input>
             </div>
@@ -228,13 +228,13 @@
             <el-input
               placeholder="值"
               v-model="forms.minDbp"
-              style="width: 50px"
+              style="width: 60px"
               v-if="forms.dbpSelectType < 4 || forms.dbpSelectType === 5">
             </el-input>
             <el-input
               placeholder="值"
               v-model="forms.maxDbp"
-              style="width: 50px"
+              style="width: 60px"
               v-if="forms.dbpSelectType > 3">
             </el-input>
           </div>
@@ -257,13 +257,13 @@
             <el-input
               placeholder="值"
               v-model="forms.minHb"
-              style="width: 50px"
+              style="width: 60px"
               v-if="forms.hbSelectType < 4 || forms.hbSelectType === 5">
             </el-input>
             <el-input
               placeholder="值"
               v-model="forms.maxHb"
-              style="width: 50px"
+              style="width: 60px"
               v-if="forms.hbSelectType > 3">
             </el-input>
           </div>
@@ -295,13 +295,13 @@
               <el-input
                 placeholder="值"
                 v-model="forms.minSugar"
-                style="width: 50px"
+                style="width: 60px"
                 v-if="forms.selectType < 4 || forms.selectType === 5">
               </el-input>
               <el-input
                 placeholder="值"
                 v-model="forms.maxSugar"
-                style="width: 50px"
+                style="width: 60px"
                 v-if="forms.selectType > 3">
               </el-input>
             </div>
@@ -324,13 +324,13 @@
               <el-input
                 placeholder="值"
                 v-model="forms.minBdPercent"
-                style="width: 50px"
+                style="width: 60px"
                 v-if="forms.bdPercentSelectType < 4 || forms.bdPercentSelectType === 5">
               </el-input>
               <el-input
                 placeholder="值"
                 v-model="forms.maxBdPercent"
-                style="width: 50px"
+                style="width: 60px"
                 v-if="forms.bdPercentSelectType > 3">
               </el-input>
             </div>
@@ -353,13 +353,13 @@
               <el-input
                 placeholder="值"
                 v-model="forms.minBmi"
-                style="width: 50px"
+                style="width: 60px"
                 v-if="forms.bmiSelectType < 4 || forms.bmiSelectType === 5">
               </el-input>
               <el-input
                 placeholder="值"
                 v-model="forms.maxBmi"
-                style="width: 50px"
+                style="width: 60px"
                 v-if="forms.bmiSelectType > 3">
               </el-input>
             </div>
@@ -382,13 +382,13 @@
               <el-input
                 placeholder="值"
                 v-model="forms.minSportDistance"
-                style="width: 50px"
+                style="width: 60px"
                 v-if="forms.sportDistanceSelectType < 4 || forms.sportDistanceSelectType === 5">
               </el-input>
               <el-input
                 placeholder="值"
                 v-model="forms.maxSportDistance"
-                style="width: 50px"
+                style="width: 60px"
                 v-if="forms.sportDistanceSelectType > 3">
               </el-input>
             </div>
@@ -411,13 +411,13 @@
               <el-input
                 placeholder="值"
                 v-model="forms.minSportKcal"
-                style="width: 50px"
+                style="width: 60px"
                 v-if="forms.sportKcalSelectType < 4 || forms.sportKcalSelectType === 5">
               </el-input>
               <el-input
                 placeholder="值"
                 v-model="forms.maxSportKcal"
-                style="width: 50px"
+                style="width: 60px"
                 v-if="forms.sportKcalSelectType > 3">
               </el-input>
             </div>
@@ -440,13 +440,13 @@
               <el-input
                 placeholder="值"
                 v-model="forms.minSportSteps"
-                style="width: 50px"
+                style="width: 60px"
                 v-if="forms.sportStepsSelectType < 4 || forms.sportStepsSelectType === 5">
               </el-input>
               <el-input
                 placeholder="值"
                 v-model="forms.maxSportSteps"
-                style="width: 50px"
+                style="width: 60px"
                 v-if="forms.sportStepsSelectType > 3">
               </el-input>
             </div>
@@ -526,8 +526,50 @@
                     @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
                 {{scope.row[item.prop]}}
               </span>
-              <span v-else>{{item.formatter ? item.formatter(scope.row[item.prop]) :
-                scope.row[item.prop]}}</span>
+              <span v-else>
+                <span v-if="item.prop === 'sbp'"
+                :class="table.list[scope.$index].sbpHighOrLow === 3 ? 'OrLowClassA' :
+                (table.list[scope.$index].sbpHighOrLow === 1 ? 'OrLowClassB' : 'OrLowClassC')">
+                  {{scope.row[item.prop]}}
+                </span>
+                <span v-else-if="item.prop === 'dbp'"
+                :class="table.list[scope.$index].dbpHighOrLow === 3 ? 'OrLowClassA' :
+                (table.list[scope.$index].dbpHighOrLow === 1 ? 'OrLowClassB' : 'OrLowClassC')">
+                  {{scope.row[item.prop]}}
+                </span>
+                <span v-else-if="item.prop === 'hd'"
+                :class="table.list[scope.$index].hdHighOrLow === 3 ? 'OrLowClassA' :
+                (table.list[scope.$index].hdHighOrLow === 1 ? 'OrLowClassB' : 'OrLowClassC')">
+                  {{scope.row[item.prop]}}
+                </span>
+                <span v-else-if="item.prop === 'sugar'"
+                :class="table.list[scope.$index].sugarTypeHighOrLow === 3 ? 'OrLowClassA' :
+                (table.list[scope.$index].sugarTypeHighOrLow === 1 ? 'OrLowClassB' :
+                'OrLowClassC')">
+                  {{scope.row[item.prop]}}
+                </span>
+                <span v-else-if="item.prop === 'bmi'"
+                :class="table.list[scope.$index].bmiHighOrLow === 3 ? 'OrLowClassA' :
+                (table.list[scope.$index].bmiHighOrLow === 1 ? 'OrLowClassB' :
+                'OrLowClassC')">
+                  {{scope.row[item.prop]}}
+                </span>
+                <span v-else-if="item.prop === 'wc'"
+                :class="table.list[scope.$index].wcHighOrLow === 3 ? 'OrLowClassA' :
+                (table.list[scope.$index].wcHighOrLow === 1 ? 'OrLowClassB' :
+                'OrLowClassC')">
+                  {{scope.row[item.prop]}}
+                </span>
+                <span v-else-if="item.prop === 'bdPercent'"
+                :class="table.list[scope.$index].bdPercentHighOrLow === 3 ? 'OrLowClassA' :
+                (table.list[scope.$index].bdPercentHighOrLow === 1 ? 'OrLowClassB' :
+                'OrLowClassC')">
+                  {{scope.row[item.prop]}}
+                </span>
+                <span v-else>
+                  {{item.formatter ? item.formatter(scope.row[item.prop]) : scope.row[item.prop]}}
+                </span>
+              </span>
             </template>
           </el-table-column>
           <el-table-column label="操作" align="center" min-width='120'>
@@ -1175,6 +1217,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .OrLowClassA{
+    color: #333333;
+  }
+  .OrLowClassB{
+    color: red;
+  }
+  .OrLowClassC{
+    color: blue;
+  }
 .operates{
   margin-top: 20px;
 }

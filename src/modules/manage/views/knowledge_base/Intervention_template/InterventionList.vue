@@ -53,12 +53,12 @@
         <div class="divTop">
           <div class="divTitle">
             <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
-            干预模版</div>
+            干预模板</div>
 
           <div class="searchCondition">
           <div class="searchLeft">
           <div class="searchInputFormItem">
-            <el-input placeholder="模版名称" v-model="formData.keywords">
+            <el-input placeholder="模板名称" v-model="formData.keywords">
             </el-input>
             <span class="searchBtnImgSpan" @click="search">
                 <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
@@ -163,7 +163,7 @@
                   show-overflow-tooltip
           >
             <el-table-column type="selection" min-width="40"></el-table-column>
-            <el-table-column label="模版名称" prop="name" min-width="80" show-overflow-tooltip>
+            <el-table-column label="模板名称" prop="name" min-width="80" show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>
                   {{ scope.row.name }}

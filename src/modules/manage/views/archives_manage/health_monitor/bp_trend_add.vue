@@ -332,7 +332,7 @@
                     :maxlength="30"
                     style="width:130px"
                 ></el-input>
-                <span style="color:333333;font-size:14px">Kcai</span>
+                <span style="color:333333;font-size:14px">Kcal</span>
                 </el-form-item>
                 </el-col>
                 </el-row>

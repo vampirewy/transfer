@@ -8,7 +8,7 @@
       label-width="90px"
       label-suffix="："
     >
-      <!-- <div class="basic-info-title">{{id ? '' : '新增'}}短信模版</div> -->
+      <!-- <div class="basic-info-title">{{id ? '' : '新增'}}短信模板</div> -->
       <!-- <el-row>
         <el-col :span="6">
           <el-form-item label="姓名" prop="clientInfoId">

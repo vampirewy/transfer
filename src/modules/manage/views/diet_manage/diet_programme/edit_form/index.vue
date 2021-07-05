@@ -208,11 +208,11 @@
               <div class="in_out-put" v-if="type !== 'info'">
                 <div @click="isShowTemplateInput = true">
                   <img src="@/assets/images/common/import.png" alt="" />
-                  从模版导入
+                  从模板导入
                 </div>
                 <div @click="addtemplate">
                   <img src="@/assets/images/common/export.png" alt="" />
-                  保存为模版
+                  保存为模板
                 </div>
               </div>
               <el-template-input
@@ -348,8 +348,8 @@ import dietProportionChart from '../../chart_data/diet_proportion.vue'; // 三�
 import dietProteinroportionChart from '../../chart_data/diet_protein_proportion.vue'; // 动物性及豆类蛋白质占总蛋白质比例
 import dietDistributionChart from '../../chart_data/diet_distribution.vue'; // 三餐能量分配比
 import elPeopleSelect from './el_modal/el_people_selecet.vue'; // 人员选择组件
-import elTemplateInput from './el_modal/el_template_input.vue'; // 食谱模版导入
-import elTemplateSave from './el_modal/el_template_save.vue'; // 食谱模版保存
+import elTemplateInput from './el_modal/el_template_input.vue'; // 食谱模板导入
+import elTemplateSave from './el_modal/el_template_save.vue'; // 食谱模板保存
 import elFoodOp from './el_modal/el_food_op.vue'; // 食物操作
 import elDietRule from './el_modal/el_diet_rule.vue'; // 食谱原则
 import elCooking from './el_modal/el_cooking.vue'; // 食谱烹饪方式

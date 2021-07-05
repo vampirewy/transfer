@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="保存为模版"
+    title="保存为模板"
     class="dialog-detail"
     :modal-append-to-body="false"
     width="570px"
@@ -11,13 +11,13 @@
     :model="ruleForm"
     label-width="90px"
      class="form-content">
-      <el-form-item required label="模版类别：" prop="Category">
+      <el-form-item required label="模板类别：" prop="Category">
         <el-select placeholder="请选择" v-model="ruleForm.Category" style="width: 148px">
           <el-option label="男" :value="1"></el-option>
           <el-option label="女" :value="0"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item required label="模版名称：" prop="name">
+      <el-form-item required label="模板名称：" prop="name">
         <el-input style="width: 148px" v-model="ruleForm.name" placeholder="请输入"></el-input>
       </el-form-item>
       <el-form-item prop="minKcal" label="参考范围：">
@@ -35,7 +35,7 @@
           placeholder="请输入"
         ></el-input>
       </el-form-item>
-      <el-form-item label="模版介绍：">
+      <el-form-item label="模板介绍：">
         <el-input
           v-model="ruleForm.Introduction"
           placeholder="请输入"
@@ -81,8 +81,8 @@ export default {
         Introduction: '',
       },
       rules: {
-        Category: [{ required: true, message: '请选择模版类别' }],
-        name: [{ required: true, message: '请输入模版名称' }],
+        Category: [{ required: true, message: '请选择模板类别' }],
+        name: [{ required: true, message: '请输入模板名称' }],
         minKcal: [{ required: true, message: '请输入最小卡路里' }],
         maxKcal: [{ required: true, message: '请输入最大卡路里' }],
       },

@@ -4,8 +4,9 @@
     class="dialog-detail"
     :modal-append-to-body="false"
     width="570px"
-    :visible.sync="visible"
+    :visible.sync="show"
     @close="cancel"
+    :close-on-click-modal="false"
   >
     <!-- <div class="form-title">
       <div class="point"></div>
@@ -115,7 +116,7 @@ import detectionuser from './detection_user.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
 
 export default {
-  name: 'edit_or_detail',
+  name: 'editDetail',
   components: {
     detectionuser,
   },
@@ -125,6 +126,8 @@ export default {
   },
   data() {
     return {
+      show: true,
+      urrentValue: '',
       detectionpopoverStatus: false,
       modalTitle: '编辑',
       result: '',
@@ -151,12 +154,14 @@ export default {
     };
   },
   mounted() {
-    this.getList();
+    this.$nextTick(async () => {
+      this.getList(this.urrentValue);
+    });
     // console.log(this.value, '接收的数据');
   },
   methods: {
-    async getList() {
-      this.$api.physicalProjectListInterface.Exceptionsystemitem(this.value).then((res) => {
+    async getList(id) {
+      this.$api.physicalProjectListInterface.Exceptionsystemitem(id).then((res) => {
         this.expandData = res.data.data;
         console.log(res.data.data.nameList);
         res.data.data.nameList.forEach((val) => {
@@ -192,8 +197,14 @@ export default {
     detectionhandlePopoperClose() {
       this.detectionpopoverStatus = false;
     },
-    cancel() {
-      this.$emit('cancel');
+    // cancel() {
+    //   this.$emit('cancel');
+    // },
+    cancel(value) {
+      this.show = false;
+      if (!value) {
+        this.$jDynamic.hide({ component: 'editDetail' });
+      }
     },
     othertestAdd() {
       const vm = this;
