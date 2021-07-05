@@ -35,8 +35,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="客户编号" prop="clientNo">
-            <el-input v-model="staffForm.clientNo" disabled></el-input>
+          <el-form-item label="体检编号" prop="clientNo">
+            <el-input v-model="staffForm.reportNo" disabled></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -52,14 +52,6 @@
       </el-row>
       <el-row>
         <el-col :span="6">
-          <el-form-item label="项目名称" prop="itemName">
-            <el-input
-              type="text"
-              placeholder="请输入"
-              v-model="staffForm.itemName"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
           <el-form-item label="上报等级" prop="reportLv">
             <el-select
                     v-model="staffForm.reportLv"
@@ -68,6 +60,14 @@
               <el-option label="红色预警" :value="1"></el-option>
               <el-option label="橙色预警" :value="2"></el-option>
             </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="项目名称" prop="itemName">
+            <el-input
+                    type="text"
+                    placeholder="请输入"
+                    v-model="staffForm.itemName"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -151,13 +151,12 @@ export default {
       userList: [],
       popoverStatus: false,
       staffForm: {
-        clientNo: '',
+        reportNo: '',
         mobile: '',
         cardNo: '',
-        clientId: '',
         clientName: '',
         itemName: '',
-        reportLv: '',
+        reportLv: 1,
         itemValue: '',
         reportDepartment: '',
         reportUserId: '',
@@ -203,8 +202,8 @@ export default {
     async getUserInfo() {
       const res = await this.$api.userManagerInterface.getUserInfo();
       const { data } = res.data;
-      this.form.reportUserId = data.userId;
-      this.form.reportUserName = data.realName;
+      this.staffForm.reportUserId = data.userId;
+      this.staffForm.reportUserName = data.realName;
     },
     getUserName() {
       this.staffForm.reportUserName =

@@ -100,6 +100,17 @@
           </el-form-item>
         </el-col>
       </el-row>
+      <el-row>
+        <el-col :span="6">
+          <el-form-item label="科室/部门" prop="department">
+            <el-input
+                    :disabled="detail"
+                    v-model="staffForm.department"
+                    :maxlength="30"
+                    placeholder="请输入"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
       <!--<template v-if="staffForm.type !== 0">
         <div class="title permission-title">权限管理</div>
         <permission
@@ -157,6 +168,7 @@ export default {
         state: 1,
         roleId: '',
         dataRange: '',
+        department: '',
         // menuIds: [],
       },
       staffRules: {
@@ -167,6 +179,7 @@ export default {
         password: [{ required: true, message: '登录不能为空' }],
         contact: [{ required: true, message: '手机号码不能为空' }],
         dataRange: [{ required: true, message: '数据范围不能为空' }],
+        department: [{ required: true, message: '科室/部门不能为空' }],
       },
       roleMenuIds: [],
       roleMenuIdsMap: {},

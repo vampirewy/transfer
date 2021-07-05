@@ -46,6 +46,11 @@
             {{staffForm.dataRange === 0 ? '全部' : '仅自己' }}
           </el-form-item>
         </el-col>
+        <el-col :span="6">
+          <el-form-item label="科室/部门">
+            {{staffForm.department}}
+          </el-form-item>
+        </el-col>
       </el-row>
       <div class="form-buttons">
         <el-button size="small" class="cancelBtn" @click="$emit('cancel')">返回</el-button>
