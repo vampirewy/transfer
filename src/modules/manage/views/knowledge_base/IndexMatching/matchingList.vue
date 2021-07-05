@@ -178,7 +178,7 @@
               min-width="20%"
               show-overflow-tooltip>
               <template slot-scope="scope">
-                <span>{{ scope.row.clientId | getResultDate }}</span>
+                <span>{{ scope.row.reportNo | getResultDate }}</span>
               </template>
             </el-table-column>
             <el-table-column label="姓名" prop="clientName" min-width="15%" show-overflow-tooltip>

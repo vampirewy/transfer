@@ -43,7 +43,7 @@ export default [
       path: '/diet_menu_template',
       name: 'diet_menu_template',
       meta: {
-        title: '菜谱模版',
+        title: '菜谱模板',
       },
       component: () => import('../../views/diet_manage/diet_menu_template/index'),
     }, {

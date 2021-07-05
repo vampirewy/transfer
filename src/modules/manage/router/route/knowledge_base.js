@@ -13,7 +13,7 @@ export default [
     path: '/knowledge_sms',
     name: 'knowledge_sms',
     meta: {
-      title: '短信模版',
+      title: '短信模板',
       keepAlive: true,
     },
     redirect: '/knowledge_sms',
@@ -23,7 +23,7 @@ export default [
         path: '/knowledge_sms',
         name: 'knowledge_sms',
         meta: {
-          title: '短信模版',
+          title: '短信模板',
           keepAlive: true,
         },
         component: () => import('../../views/knowledge_base/sms_template/sms.vue'),
@@ -32,7 +32,7 @@ export default [
         path: '/knowledge_smsAdd',
         name: 'knowledge_smsAdd',
         meta: {
-          title: '短信模版新增',
+          title: '短信模板新增',
           hideInMenu: true,
           hideInTag: true,
         },
@@ -42,7 +42,7 @@ export default [
         path: '/knowledge_smsLook',
         name: 'knowledge_smsLook',
         meta: {
-          title: '短信模版查看',
+          title: '短信模板查看',
           hideInMenu: true,
           hideInTag: true,
         },
@@ -165,7 +165,7 @@ export default [
         path: '/InterventionList',
         name: 'InterventionList',
         meta: {
-          title: '干预模版',
+          title: '干预模板',
           keepAlive: true,
         },
         component: () => import('../../views/knowledge_base/Intervention_template/InterventionList.vue'),
@@ -174,7 +174,7 @@ export default [
         path: '/InterventionAdd',
         name: 'InterventionAdd',
         meta: {
-          title: '新增干预模版',
+          title: '新增干预模板',
           hideInMenu: true,
           hideInTag: true,
         },

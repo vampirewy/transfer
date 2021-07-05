@@ -344,6 +344,7 @@ export default {
           if (data.success) {
             this.drugsList.splice(index, 1);
             this.$message.success('操作成功');
+            this.queryList();
           }
         });
       }).catch(() => {});

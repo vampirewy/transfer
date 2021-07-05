@@ -9,7 +9,7 @@
       <div><span>客户编号：</span><span>{{data.orgCode}}</span></div>
     </div> -->
     <div class="lines"></div>
-    <div class="titless">查看短信模版</div>
+    <div class="titless">查看短信模板</div>
     <!-- <div class="title">数据列表</div> -->
     <div class="lookPressure">
       <div><span>短信类别：</span><span>{{data.themName}}</span></div>

@@ -13,14 +13,14 @@
                 <div class="searchInputFormItem">
                   <el-input placeholder="菜品名称" v-model="query.name">
                   </el-input>
-                  <span class="searchBtnImgSpan" @click="search" style="right:-3px">
+                  <span class="searchBtnImgSpan" @click="search" style="right:-4px">
                     <img
                       class="searchBtnImg"
                       src="@/assets/images/common/topsearch.png"
                     />
                   </span>
                 </div>
-                <div>
+                <!-- <div>
                   <span class="label">菜品餐次：</span>
                   <el-select
                     v-model="query.meals"
@@ -28,14 +28,49 @@
                     collapse-tags
                     placeholder="选择"
                     clearable
-                    style="width: 179px"
+                    style="width: 250px"
                   >
                     <el-option label="早餐" value="isBreakfast"></el-option>
                     <el-option label="午餐" value="isLunch"></el-option>
                     <el-option label="晚餐" value="isDinner"></el-option>
                     <el-option label="加餐" value="isOther"></el-option>
                   </el-select>
+                </div> -->
+                <div>
+                  <span>菜品餐次：</span>
+                  <el-select
+                    v-model="query.meals"
+                    placeholder="请选择"
+                    style="width: 140px"
+                  >
+                    <el-option label="早餐" value="1" key="1"></el-option>
+                    <el-option label="午餐" value="2" key="2"></el-option>
+                    <el-option label="晚餐" value="2" key="2"></el-option>
+                    <el-option label="加餐" value="2" key="2"></el-option>
+                  </el-select>
                 </div>
+                <!-- <el-form-item
+                  prop="dietSortIds"
+                  style="position: relative"
+                  label="菜品分类："
+                >
+                  <el-select
+                    v-if="mode !== 'look'"
+                    placeholder="请选择 (可多选)"
+                    :value="names"
+                    clearable
+                    style="width: 189px"
+                  >
+                  </el-select>
+                  <span v-else>{{ names }}</span>
+                  <div class="mask" @click="isShowDishSelect = true"></div>
+                  <el-dish-select
+                    v-if="isShowDishSelect"
+                    :active.sync="isShowDishSelect"
+                    :value="ruleForms.dietSortIds"
+                    @change="handleDishSelect"
+                  ></el-dish-select>
+                </el-form-item> -->
               </div>
               <div class="searchRight">
                 <div class="buttones">
@@ -107,10 +142,11 @@
               show-overflow-tooltip
             ></el-table-column>
             <el-table-column
-              prop="name"
+              prop="caiSortDtosName"
               label="菜分类"
               show-overflow-tooltip
-            ></el-table-column>
+            >
+            </el-table-column>
             <el-table-column
               prop="mealTimes"
               label="餐次"
@@ -167,6 +203,11 @@ export default {
       total: 0,
       menuList: [],
       activeMenuId: '',
+      names: '',
+      ruleForms: {
+        name: '',
+        dietSortIds: [],
+      },
       query: {
         name: '',
         meals: [],
@@ -184,6 +225,10 @@ export default {
     });
   },
   methods: {
+    handleDishSelect(ids, names) {
+      this.names = names.join(',');
+      this.ruleForms.dietSortIds = ids;
+    },
     add() {
       this.id = '';
       this.mode = '';
@@ -294,6 +339,15 @@ export default {
             ]
               .filter(Boolean)
               .join('、');
+            // item.caiSortDtos.map(
+            //   val => val.dietSortName,
+            // );
+          });
+          data.forEach((item) => {
+            item.caiSortDtosName = '';
+            item.caiSortDtos.forEach((val) => {
+              item.caiSortDtosName += `${val.dietSortName}、`;
+            });
           });
           this.total = total;
           this.tableData = data;

@@ -7,7 +7,7 @@
     </div>
     <div class="bottom">
       <div class="action">
-        <span class="name">选择模版：</span>
+        <span class="name">选择模板：</span>
         <el-popover style="display: inline-block;flex: 1"
                 ref="abnormalPopover"
                 placement="bottom-start"
@@ -27,7 +27,7 @@
         </el-popover>
       </div>
       <div class="actionInput">
-        <span class="name">已选模版：</span>
+        <span class="name">已选模板：</span>
         <div class="sport-form sportTag">
           <el-tag
                   class="unusual-tag"

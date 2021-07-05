@@ -72,7 +72,7 @@
     </el-form>
     <div class="diet-form_center">
       <div class="diet-plan-box">
-        <div class="title">菜品原料</div>
+        <div class="title">{{ id ? '编辑' : '新增' }}菜品</div>
       </div>
     </div>
     <div class="divRightTitleDiv" v-if="mode !== 'look'">
@@ -212,6 +212,11 @@ export default {
           this.tableData = caiIngredientDtos;
           this.ruleForms = { name, dietSortIds: sortIds };
           this.method = method;
+          const ids = dietSortIds.map(item => item.dietSortId);
+          const names = dietSortIds.map(
+            item => item.dietSortName,
+          );
+          this.handleDishSelect(ids, names);
           this.type = Object.entries(others).reduce((obj, [key, value]) => {
             if (value === 1 || value === '1') {
               obj.push(key);
@@ -224,6 +229,7 @@ export default {
       this.tableData.splice(index, 1);
     },
     handleDishSelect(ids, names) {
+      console.log(ids, names);
       this.names = names.join(',');
       this.ruleForms.dietSortIds = ids;
     },
@@ -238,11 +244,17 @@ export default {
       this.$refs.dietFinishedDishForm.validate((e) => {
         if (!e) return;
         const types = this.type;
+        if (types.length === 0) {
+          return this.$message.warning('请选择餐次');
+        }
         const meals = ['isBreakfast', 'isLunch', 'isDinner', 'isOther'];
         const mealsObj = meals.reduce((obj, item) => {
           obj[item] = types.includes(item) ? 1 : 2;
           return obj;
         }, {});
+        if (this.tableData.length === 0) {
+          return this.$message.warning('请添加原料');
+        }
         this.$api.dietFinishedDishInterface
           .saveDietFinishedDish({
             id: this.id,

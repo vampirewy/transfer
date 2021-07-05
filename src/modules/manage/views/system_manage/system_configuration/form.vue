@@ -82,7 +82,7 @@
               @click="openpdf(staffForm.personCoverTemplateFile)"
             >
               <img src="@/assets/images/common/export.png" alt="" /><span
-                >下载个报pdf封面模版</span
+                >下载个报pdf封面模板</span
               >
             </div>
             <div
@@ -90,7 +90,7 @@
               @click="openpdf(staffForm.personBackCoverTemplateFile)"
             >
               <img src="@/assets/images/common/export.png" alt="" /><span
-                >下载个报pdf封底模版</span
+                >下载个报pdf封底模板</span
               >
             </div>
           </div>
@@ -212,7 +212,7 @@
               @click="openpdf(staffForm.groupCoverTemplateFile)"
             >
               <img src="@/assets/images/common/export.png" alt="" /><span
-                >下载团报pdf封面模版</span
+                >下载团报pdf封面模板</span
               >
             </div>
             <div
@@ -220,7 +220,7 @@
               @click="openpdf(staffForm.groupBackCoverTemplateFile)"
             >
               <img src="@/assets/images/common/export.png" alt="" /><span
-                >下载团报pdf封底模版</span
+                >下载团报pdf封底模板</span
               >
             </div>
           </div>

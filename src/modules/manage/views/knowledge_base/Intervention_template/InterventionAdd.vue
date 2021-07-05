@@ -8,17 +8,17 @@
       label-width="90px"
       label-suffix="："
     >
-      <!-- <div class="basic-info-title">{{id ? '' : '新增'}}短信模版</div> -->
+      <!-- <div class="basic-info-title">{{id ? '' : '新增'}}短信模板</div> -->
       <!-- <div class="line"></div>
       <div class="main-info-title">新增异常库</div> -->
       <div class="form-title">
         <div class="line"></div>
-        <h3 class="name" v-if="!ids">新增-干预模版</h3>
-        <h3 class="name" v-else>编辑-干预模版</h3>
+        <h3 class="name" v-if="!ids">新增-干预模板</h3>
+        <h3 class="name" v-else>编辑-干预模板</h3>
       </div>
       <el-row>
         <el-col :span="6">
-          <el-form-item label="模版名称" prop="name">
+          <el-form-item label="模板名称" prop="name">
             <el-input v-model="form.name" placeholder="请输入" ></el-input>
           </el-form-item>
         </el-col>
@@ -210,7 +210,7 @@ export default {
         },
       },
       rules: {
-        name: [{ required: true, message: '模版名称不能为空' }],
+        name: [{ required: true, message: '模板名称不能为空' }],
         gender: [{ required: true, message: '请选择性别', trigger: 'blur' }],
         conditionRelation: [{ required: true, message: '请选择条件关系' }],
         inDate: [{ required: true, message: '就医时间不能为空' }],
@@ -366,7 +366,7 @@ export default {
     },
     submit() {
       if (!this.form.name) {
-        return this.$message.warning('请填写模版名称');
+        return this.$message.warning('请填写模板名称');
       }
       if (!this.form.gender) {
         return this.$message.warning('请选择性别');

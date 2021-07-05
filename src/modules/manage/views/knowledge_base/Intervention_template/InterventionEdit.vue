@@ -11,7 +11,7 @@
         </div>
         <el-row>
           <el-col :span="6">
-              <div class="isEnabled"><span>模版名称：</span>{{templateName}}</div>
+              <div class="isEnabled"><span>模板名称：</span>{{templateName}}</div>
         </el-col>
         <el-col :span="6">
           <div class="isEnabled">
@@ -28,7 +28,7 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <div class="isEnabled"><span>模版条件：</span>{{qualification}}</div>
+            <div class="isEnabled"><span>模板条件：</span>{{qualification}}</div>
           </el-col>
         </el-row>
         <!-- <div class="divTop">
@@ -223,8 +223,8 @@ export default {
       modalVisibleInfo: false,
       currentValue: {},
       ids: this.$route.params.id,
-      templateName: '', // 模版名称
-      qualification: '', // 模版名称
+      templateName: '', // 模板名称
+      qualification: '', // 模板名称
       valueid: '', // 当前id
       valueidInfo: {}, // 查看详情
     };

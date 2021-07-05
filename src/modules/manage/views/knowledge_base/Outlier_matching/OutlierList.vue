@@ -263,12 +263,12 @@
       </div>
     <!--</template>
   </query-page>-->
-    <edit-detail
+    <!-- <edit-detail
       v-if="modalVisible"
       :visible="modalVisible"
       :value="currentValue"
       @cancel="cancel"
-    ></edit-detail>
+    ></edit-detail> -->
   </div>
 </template>
 
@@ -422,8 +422,17 @@ export default {
     },
     // 匹配
     edits(id) {
-      this.currentValue = id;
-      this.modalVisible = true;
+      this.$jDynamic.show({
+        component: 'editDetail',
+        data: {
+          urrentValue: id,
+          confirmfunc: async (value) => {
+            console.log(value);
+          },
+        },
+        render: h => h(editDetail),
+      });
+      // this.modalVisible = true;
     },
     cancel() {
       this.modalVisible = false;
