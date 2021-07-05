@@ -10,17 +10,17 @@
     >
       <div class="form-title">
         <div class="line"></div>
-        <h3 class="name"><span v-if="ids">编辑</span><span v-else>新增</span>异常库</h3>
+        <h3 class="name"><span v-if="ids">编辑</span><span v-else>新增</span>异常</h3>
       </div>
       <el-row>
         <el-col :span="6">
           <el-form-item label="异常名称" prop="clientInfoId">
-            <el-input v-model="form.clientInfoId" placeholder="请输入" ></el-input>
+            <el-input v-model="form.clientInfoId" placeholder="请输入异常名称" ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="异常类型" prop="hospital">
-            <el-select v-model="form.hospital" placeholder="请选择当前状态" width="150">
+            <el-select v-model="form.hospital" placeholder="请选择异常类型" width="150">
               <el-option
                 v-for="item in organTypeList"
                 :key="item.paramValue"
@@ -32,7 +32,7 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="性别限制" >
-            <el-select v-model="form.gender" placeholder="请选择当前状态">
+            <el-select v-model="form.gender" placeholder="请选择性别">
               <el-option label="不限" :value="0" key="0"></el-option>
               <el-option label="男" :value="1" key="1"></el-option>
               <el-option label="女" :value="2" key="2"></el-option>
@@ -41,7 +41,7 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="ICD10" >
-            <el-input v-model="form.medicalType" placeholder="请输入"></el-input>
+            <el-input v-model="form.medicalType" placeholder="请输入ICD10"></el-input>
           </el-form-item>
           <!-- <el-form-item label="ICD10：" >
             <el-select v-model="form.medicalType" placeholder="请选择当前状态">
@@ -56,7 +56,7 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="重要性"  prop="inDate">
-            <el-select v-model="form.inDate" placeholder="请选择当前状态">
+            <el-select v-model="form.inDate" placeholder="请选择重要性">
               <el-option
                 v-for="item in dangerLevelList"
                 :key="item.paramValue"
@@ -68,7 +68,7 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="紧急性" prop="outDate">
-            <el-select v-model="form.outDate" placeholder="请选择当前状态">
+            <el-select v-model="form.outDate" placeholder="请选择紧急性">
               <el-option
                 v-for="item in medicalLimitList"
                 :key="item.paramValue"
@@ -79,8 +79,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="推荐科室" prop="doctorNameId">
-            <el-input v-model="form.recommendDepartmentName" placeholder="请输入" ></el-input>
+          <el-form-item label="推荐科室" prop="recommendDepartmentName">
+            <el-input v-model="form.recommendDepartmentName" placeholder="请输入推荐科室" ></el-input>
           </el-form-item>
           <!-- <el-form-item label="推荐科室" >
             <el-select v-model="doctorNameId" placeholder="请选择当前状态">
@@ -111,7 +111,7 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="推荐检查" >
-            <el-input v-model="form.RecommendInspectsId" placeholder="请输入" ></el-input>
+            <el-input v-model="form.RecommendInspectsId" placeholder="请输入推荐检查" ></el-input>
           </el-form-item>
           <!-- <el-form-item label="推荐检查" >
             <el-select v-model="RecommendInspectsId" placeholder="请选择当前状态">
@@ -141,7 +141,7 @@
               v-model="form.interpret"
               :rows="5"
               placeholder="请输入"
-              :maxlength="1000"
+              :maxlength="300"
               show-word-limit
             ></el-input>
           </el-form-item>
@@ -153,7 +153,7 @@
               v-model="form.Reason"
               :rows="5"
               placeholder="请输入"
-              :maxlength="1000"
+              :maxlength="300"
               show-word-limit
             ></el-input>
           </el-form-item>
@@ -165,7 +165,7 @@
               v-model="form.Suggestion"
               :rows="5"
               placeholder="请输入"
-              :maxlength="1000"
+              :maxlength="300"
               show-word-limit
             ></el-input>
           </el-form-item>
@@ -226,6 +226,7 @@ export default {
         Suggestion: '', // 建议
         RecommendInspects: [], // 推荐检查
         RecommendInspectsId: '',
+        recommendDepartmentName: '', // 推荐科室
       },
       organTypeList: [],
       dangerLevelList: [],
@@ -263,7 +264,7 @@ export default {
         hospital: [{ required: true, message: '请选择异常类型' }],
         inDate: [{ required: true, message: '请选择重要性' }],
         outDate: [{ required: true, message: '请选择紧急性' }],
-        doctorNameId: [{ required: true, message: '推荐科室不能为空' }],
+        recommendDepartmentName: [{ required: true, message: '推荐科室不能为空' }],
       },
       resultOptions: [
         { value: 1, label: '未指定' },
@@ -395,7 +396,7 @@ export default {
             advice: this.form.Suggestion,
             abnormalAlias: [this.form.clientInfoId],
             recommendInspectName: this.form.RecommendInspectsId,
-            recommendDepartmentName: this.form.doctorNameId,
+            recommendDepartmentName: this.form.recommendDepartmentName,
             icdCode: this.form.medicalType,
           };
           if (this.ids) {
