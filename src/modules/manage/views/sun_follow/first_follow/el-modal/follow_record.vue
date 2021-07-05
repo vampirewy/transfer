@@ -68,52 +68,7 @@ export default {
   data() {
     return {
       now: dayjs(new Date()).format('YYYY-MM-DD'),
-      formList: [
-        { id: '1',
-          createTime: '2021-03-16',
-          keywords: ['王主任', '电话跟踪'],
-          followText: '配合良好，继续保持',
-          nextFollowText: '2021-04-26（10天后）（电话回访）',
-          medicalList: [
-            {
-              medicalTypeName: '正在就医',
-              medicalType: 1,
-              projectName: '肺部CT',
-              result: '疑似肺癌',
-              resultLevel: 1,
-            },
-            {
-              medicalTypeName: '已痊愈',
-              medicalType: 2,
-              projectName: '肺部CT',
-              result: '疑似肺癌',
-              resultLevel: 1,
-            },
-          ],
-        },
-        { id: '2',
-          createTime: '2021-03-06',
-          keywords: ['王主任', '短信跟踪'],
-          followText: '患者没回复',
-          nextFollowText: '2021-3-16（10天后）（电话回访）',
-          medicalList: [
-            {
-              medicalTypeName: '正在就医',
-              medicalType: 1,
-              projectName: '肺部CT',
-              result: '疑似肺癌',
-              resultLevel: 1,
-            },
-            {
-              medicalTypeName: '正在就医',
-              medicalType: 1,
-              projectName: '肺部CT',
-              result: '疑似肺癌',
-              resultLevel: 1,
-            },
-          ],
-        },
-      ],
+      formList: [],
       form: {
         clientId: this.$route.params.clientId,
       },
