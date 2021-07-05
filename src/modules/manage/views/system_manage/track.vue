@@ -34,13 +34,10 @@
           </div>
           <div class="track_top">
             <span>跟踪方式：</span>
-            <el-select
-              style="width: 70%"
-              v-model="staffForm.dataRange"
-              placeholder="请选择"
-            >
-              <el-option label="全部" :value="0"></el-option>
-              <el-option label="仅自己" :value="1"></el-option>
+            <el-select v-model="staffForm.nextTrackingWay" placeholder="请选择">
+              <el-option :label="it.name" :value="it.id" :key="it.id"
+                         v-for="it in planWayList">
+              </el-option>
             </el-select>
           </div>
           <div class="track_top">
@@ -253,14 +250,30 @@ export default {
         dataRange: '',
         // menuIds: [],
       },
+      planWayList: [],
       roleMenuIds: [],
       roleMenuIdsMap: {},
       tabbor: ['回访配置', '宣教配置'],
       Tabactive: 0,
     };
   },
-  mounted() {},
+  mounted() {
+    this.getPlanWayList();
+  },
   methods: {
+    /**
+     * 获取随访方式
+     * @return {Promise<void>}
+     */
+    async getPlanWayList() {
+      const res = await this.$api.userFollowInterface.getIntervenePlanWayList();
+      const { data } = res.data;
+      const list = data.map((it) => {
+        const { id, name } = it;
+        return { id, name };
+      });
+      this.planWayList = list;
+    },
     submit() {
       this.$refs.staffForm.validate((valid) => {
         if (valid) {
@@ -290,6 +303,7 @@ export default {
   top: 18px;
   margin-top: -20px;
   z-index: 1;
+  left: 20px;
   div {
     .TabBarsNames {
       cursor: pointer;
@@ -303,8 +317,9 @@ export default {
       margin: 0 28px;
     }
     .fristName:nth-child(1) {
-      border-radius: 0px 5px 0 0;
+      border-radius: 8px 5px 0 0;
       margin-left: 0;
+      padding-left: 25px;
     }
     .TabBarsNames:after {
       content: '';
@@ -405,10 +420,10 @@ export default {
   }
   .form-buttons {
     text-align: center;
-    position: fixed;
+    position: absolute;
     left: 0;
     right: 0;
-    bottom: 30px;
+    bottom: 70px;
     button + button {
       margin-left: 20px;
     }
@@ -429,6 +444,8 @@ export default {
     align-items: center;
     justify-content: space-between;
     margin-right: 70px;
+    font-size: 14px;
+    color: #333333;
   }
 }
 </style>

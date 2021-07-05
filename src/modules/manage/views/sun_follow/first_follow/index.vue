@@ -216,9 +216,11 @@
           <span>{{ scope.row.reportDate | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="recieveUserName" label="*上报来源" show-overflow-tooltip>
+      <el-table-column prop="recieveUserName" label="上报来源" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.recieveUserName | getResult}}</span>
+          <span>{{ scope.row.source === 1 ? '采集系统' :
+            scope.row.source === 2 ? '手动上报' :
+            scope.row.source === 3 ? '后台预警' : ''}}</span>
         </template>
       </el-table-column>
       <el-table-column prop="reportState" label="是否总检" show-overflow-tooltip>
