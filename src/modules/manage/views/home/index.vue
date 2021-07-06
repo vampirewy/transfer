@@ -224,12 +224,12 @@
         <template>
           <div slot="empty">
             <p>
-              <img src="@/assets/images/noDataLine.png"/>
+              <img style="300px" src="@/assets/images/noDataLine.png"/>
             </p>
           </div>
         </template>
       </el-table>
-      <div style="text-align: right">
+      <div style="text-align: right;padding-bottom: 20px;">
         <el-pagination
           style="margin-top: 15px"
           @current-change="search"
@@ -623,7 +623,7 @@ export default {
   }
   .chart-wrapper {
     background: #fff;
-    padding: 5px 20px 20px 20px;
+    padding: 1px 20px 20px 20px;
     border-radius: 15px;
     margin-top: 20px;
     /*margin-bottom: 32px;*/
@@ -824,7 +824,7 @@ export default {
   height: 380px;
   width: 96.5%;
   background: #ffffff;
-  box-shadow: 0px 6px 24px 0px rgba(14, 37, 87, 0.06);
+  // box-shadow: 0px 6px 24px 0px rgba(14, 37, 87, 0.06);
   border-radius: 0px 0px 8px 8px;
   padding: 20px;
   // margin-top: 10px;

@@ -178,9 +178,9 @@
       <el-table style="width: 100%" :data="table.list" align="center"
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="40"></el-table-column>
-        <el-table-column label="异常名称" prop="abnormalCode" show-overflow-tooltip>
+        <el-table-column label="异常名称" prop="abnormalName" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{ scope.row.abnormalCode | getResult}}</span>
+            <span>{{ scope.row.abnormalName | getResult}}</span>
           </template>
         </el-table-column>
         <el-table-column label="ICD10编码" prop="icdCode" show-overflow-tooltip>

@@ -236,7 +236,7 @@
                 </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                <el-form-item label="腰围" prop="Waist">
+                <el-form-item label="腰围">
                 <el-input
                     onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"
                     v-model="infoSource.Waist"
@@ -248,7 +248,7 @@
                 </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                <el-form-item label="体脂率" prop="specification">
+                <el-form-item label="体脂率">
                 <el-input
                     onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"
                     v-model="infoSource.specification"
@@ -450,8 +450,8 @@ export default {
         bloodsugar: [{ required: true, message: '血糖类型不能为空', trigger: 'blur' }],
         Weight: [{ required: true, message: '体重不能为空' }],
         Height: [{ required: true, message: '身高不能为空' }],
-        Waist: [{ required: true, message: '腰围不能为空' }],
-        specification: [{ required: true, message: '体脂率不能为空' }],
+        // Waist: [{ required: true, message: '腰围不能为空' }],
+        // specification: [{ required: true, message: '体脂率不能为空' }],
         // sportTime: [{ required: true, message: '运动时间不能为空' }],
         // sportDistance: [{ required: true, message: '运动路程不能为空' }],
         steps: [{ required: true, message: '运动步数不能为空' }],
@@ -688,12 +688,6 @@ export default {
         }
         if (!this.infoSource.Weight) {
           return this.$message.warning('请填写体重');
-        }
-        if (!this.infoSource.Waist) {
-          return this.$message.warning('请填写腰围');
-        }
-        if (!this.infoSource.specification) {
-          return this.$message.warning('请填写体脂率');
         }
         if (!this.infoSource.startDate) {
           return this.$message.warning('请填写时间');
