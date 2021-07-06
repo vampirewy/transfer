@@ -43,10 +43,10 @@
                     placeholder="请选择"
                     style="width: 140px"
                   >
-                    <el-option label="早餐" value="1" key="1"></el-option>
-                    <el-option label="午餐" value="2" key="2"></el-option>
-                    <el-option label="晚餐" value="2" key="2"></el-option>
-                    <el-option label="加餐" value="2" key="2"></el-option>
+                    <el-option label="早餐" value="isBreakfast" key="1"></el-option>
+                    <el-option label="午餐" value="isLunch" key="2"></el-option>
+                    <el-option label="晚餐" value="isDinner" key="2"></el-option>
+                    <el-option label="其他" value="isOther" key="2"></el-option>
                   </el-select>
                 </div>
                 <!-- <el-form-item
@@ -204,13 +204,17 @@ export default {
       menuList: [],
       activeMenuId: '',
       names: '',
+      isBreakfast: '',
+      isLunch: '',
+      isDinner: '',
+      isOther: '',
       ruleForms: {
         name: '',
         dietSortIds: [],
       },
       query: {
         name: '',
-        meals: [],
+        meals: '',
         dietSortId: '',
       },
     };
@@ -267,6 +271,30 @@ export default {
       }).catch(() => {});
     },
     search() {
+      if (this.query.meals === 'isBreakfast') {
+        this.isBreakfast = 1;
+        this.isLunch = 2;
+        this.isDinner = 2;
+        this.isOther = 2;
+      }
+      if (this.query.meals === 'isLunch') {
+        this.isBreakfast = 2;
+        this.isLunch = 1;
+        this.isDinner = 2;
+        this.isOther = 2;
+      }
+      if (this.query.meals === 'isDinner') {
+        this.isBreakfast = 2;
+        this.isLunch = 2;
+        this.isDinner = 1;
+        this.isOther = 2;
+      }
+      if (this.query.meals === 'isOther') {
+        this.isBreakfast = 2;
+        this.isLunch = 2;
+        this.isDinner = 2;
+        this.isOther = 1;
+      }
       this.currentPage = 1;
       this.loadData();
     },
@@ -311,21 +339,25 @@ export default {
         });
     },
     loadData() {
-      const { name, dietSortId, meals } = this.query;
-      const len = meals.length;
-      const m = ['isBreakfast', 'isLunch', 'isDinner', 'isOther'];
-      const mObj = m.reduce((obj, item) => {
-        if (len === 0) obj[item] = '';
-        else obj[item] = meals.includes(item) ? '1' : '';
-        return obj;
-      }, {});
+      const { name, dietSortId } = this.query;
+      // const len = meals.length;
+      // const m = ['isBreakfast', 'isLunch', 'isDinner', 'isOther'];
+      // const mObj = m.reduce((obj, item) => {
+      //   if (len === 0) obj[item] = '';
+      //   else obj[item] = meals.includes(item) ? '1' : '';
+      //   return obj;
+      // }, {});
       this.$api.dietFinishedDishInterface
         .getDietFinishedDishList({
           name,
           dietSortId,
           pageNo: this.currentPage,
           pageSize: this.pageSize,
-          ...mObj,
+          // ...mObj,
+          isBreakfast: this.isBreakfast,
+          isLunch: this.isLunch,
+          isDinner: this.isDinner,
+          isOther: this.isOther,
         })
         .then((res) => {
           if (!res.data.success) return;

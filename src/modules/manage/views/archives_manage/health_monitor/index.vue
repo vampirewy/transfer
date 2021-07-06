@@ -74,18 +74,18 @@
               </el-select>
             </div>
             <div  v-if="tabIndex === 'BP'">
-              <el-input
+              <input
+                class="inputBtn"
                 placeholder="值"
                 v-model="forms.minSbp"
                 style="width: 60px"
-                v-if="forms.sbpSelectType < 4 || forms.sbpSelectType === 5">
-              </el-input>
-              <el-input
+                v-if="forms.sbpSelectType < 4 || forms.sbpSelectType === 5" />
+              <input
+              class="inputBtn"
                 placeholder="值"
                 v-model="forms.maxSbp"
                 style="width: 60px"
-                v-if="forms.sbpSelectType > 3">
-              </el-input>
+                v-if="forms.sbpSelectType > 3" />
             </div>
             <div v-if="tabIndex === 'BG'">
               <span>血糖类型：</span>
@@ -1225,6 +1225,28 @@ export default {
   }
   .OrLowClassC{
     color: blue;
+  }
+  .inputBtn{
+    width: 50px;
+    height: 38px;
+    margin-top: 10px;
+    border-radius: 4px;
+    border: 1px solid #DDE0E6;
+    text-align: center;
+  }
+  ::-webkit-input-placeholder {
+      color: #707070 !important;
+  }
+  .inputBtn:hover{
+    transition: border .2s;
+    border: 1px solid #4991FD !important;
+    border-radius: 4px;
+    }
+  .inputBtn:focus{
+    outline: none;
+    transition: border .2s;
+    border: 1px solid #4991FD !important;
+    border-radius: 4px;
   }
 .operates{
   margin-top: 20px;
