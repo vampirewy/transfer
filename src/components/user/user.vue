@@ -6,7 +6,7 @@
       </span>
       <el-dropdown @command="handleClick" v-if="showAdminButton">
         <span>
-          <a href="javascript:;" class="name">{{ userName }}</a>
+          <a href="javascript:;" class="name">{{ doUserName }}</a>
           <i class="el-icon-caret-bottom"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
@@ -15,7 +15,7 @@
       </el-dropdown>
       <el-dropdown @command="handleClick" v-else-if="showBackButton">
           <span>
-            <a href="javascript:;" class="name">{{ userName }}</a>
+            <a href="javascript:;" class="name">{{ doUserName }}</a>
             <i class="el-icon-caret-bottom"></i>
           </span>
         <el-dropdown-menu slot="dropdown">
@@ -23,7 +23,7 @@
         </el-dropdown-menu>
       </el-dropdown>
       <span class="quitSpan" v-else>
-        <a href="javascript:;" class="name">{{ userName }}</a>
+        <a href="javascript:;" class="name">{{ doUserName }}</a>
       </span>
       <span class="ge">|</span>
       <span class="quitSpan" @click="updatePsd">修改密码</span>
@@ -36,6 +36,7 @@
 import HeaderImg from '~/src/assets/images/headerImg.png';
 import { localSave } from '~/src/libs/util';
 import avatarImg from '@/assets/images/body/avatar.png';
+import avatarImg2 from '@/assets/images/body/avatar2.png';
 import updatePsd from './el_modal/updatePsd.vue';
 export default {
   name: 'User',
@@ -58,13 +59,14 @@ export default {
   },
   data() {
     return {
+      doUserName: this.userName,
       doUserAvatar: avatarImg, // this.handleAvatar(this.userAvatar),
     };
   },
   watch: {
-    userAvatar(val) {
+    /* userAvatar(val) {
       this.doUserAvatar = this.handleAvatar(val);
-    },
+    },*/
   },
   computed: {
     showAdminButton() {
@@ -76,13 +78,26 @@ export default {
       );
     },
   },
+  mounted() {
+    this.getUserInfo();
+  },
   methods: {
-    handleAvatar(val) {
+    async getUserInfo() {
+      const res = await this.$api.userManagerInterface.getUserInfo();
+      const { data } = res.data;
+      this.doUserName = data.realName;
+      if (data.sex === '男') {
+        this.doUserAvatar = avatarImg;
+      } else if (data.sex === '女') {
+        this.doUserAvatar = avatarImg2;
+      }
+    },
+    /* handleAvatar(val) {
       if (!val) { // 没头像时显示默认头像，有头像加入路径
         return HeaderImg;
       }
       return `${process.env.api.upload_url + val}`;
-    },
+    },*/
     handleClick(name) {
       if (name === 'logout') {
         this.logout();
@@ -128,7 +143,7 @@ export default {
 
 <style lang="scss" scoped>
   .user-avatar-dropdown{
-    width: 260px;
+    width: auto;
     margin-top: 14px;
     text-align: right;
       margin-right: 15px;
@@ -142,7 +157,7 @@ export default {
       }
   }
   .avatarSpan{
-    margin-right: 2px;
+    margin-right: 5px;
     display: inline-block;
   }
   .userNameSpan{

@@ -100,7 +100,9 @@
       <el-col :span="6">
         <el-form-item label="问卷日期" prop="createTime">
           <el-date-picker v-model="formData.createTime" style="width: 100%"
-                          placeholder=""></el-date-picker>
+                          value-format="yyyy-MM-dd"
+                          :disabled="!$route.params.id"
+                          placeholder="" @change="chooseTime"></el-date-picker>
         </el-form-item>
       </el-col>
     </el-row>
@@ -109,7 +111,6 @@
 
 <script>
 import SelectUser from '../medical_history_select_user.vue';
-
 export default {
   name: 'ClientInfo',
   props: ['id', 'propsData'],
@@ -128,7 +129,9 @@ export default {
   mounted() {},
   watch: {
     propsData(val) {
+      console.log(val);
       this.formData = val;
+      this.formData.createTime = val.questionDate;
     },
   },
   methods: {
@@ -157,6 +160,10 @@ export default {
       this.formData.workUnitName = data.workUnitName;
       this.formData.address = data.address;
       this.formData.gender = data.gender;
+    },
+    chooseTime() {
+      console.log(this.formData.createTime);
+      this.$emit('changeDate', this.formData.createTime);
     },
   },
 };

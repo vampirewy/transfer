@@ -70,6 +70,11 @@
                   <span>{{form.planTitle | getResult}}</span>
                 </el-form-item>
               </el-col>
+              <el-col :span="6">
+                <el-form-item label="依从度：">
+                  <span>{{form.assortLevelName | getResult}}</span>
+                </el-form-item>
+              </el-col>
             </el-row>
             <el-row>
               <el-col :span="24">
@@ -186,7 +191,7 @@ export default {
         templateQuestionName: '', // 问卷名
         batchNo: '', // 问卷批次号
       },
-      planWayList: [],
+      assortLevelList: [],
       rules: {
         planDate: [{ required: true, message: '请选择执行时间' }],
         planWay: [{ required: true, message: '请选择随访形式' }],
@@ -200,7 +205,7 @@ export default {
   },
   methods: {
     onLoad() {
-      this.getPlanWayList(); // 随访方式
+      this.getSystemParamByYicong('HM012');
       this.getDetail();
     },
     /**
@@ -230,6 +235,10 @@ export default {
         this.form.planTitle = data.executePlanTitle;
         this.form.planDoctorName = data.executePlanUserName;
         this.form.planContent = data.executePlanContent;
+        if (data.assortLevel) {
+          this.form.assortLevelName =
+            this.assortLevelList.find(resLevel => resLevel.paramValue === data.assortLevel).name;
+        }
       }
       this.form.templateQuestionId = data.templateQuestionId;
       this.form.templateQuestionName = data.templateQuestionName;
@@ -241,19 +250,10 @@ export default {
         this.form.checkInput = 0; // 没填写  ，或者题目id为null 则没有题目
       }
     },
-    /**
-     * 获取随访方式
-     * @return {Promise<void>}
-     */
-    async getPlanWayList() {
-      const res = await this.$api.userFollowInterface.getIntervenePlanWayList();
+    async getSystemParamByYicong(code) {
+      const res = await this.$api.userManagerInterface.getSystemParamByCode(code);
       const { data } = res.data;
-      const list = data.map((it) => {
-        const { id, name } = it;
-        return { id, name };
-      });
-      // list.unshift({ name: '全部', value: '' });
-      this.planWayList = list;
+      this.assortLevelList = data;
     },
     // 关闭弹窗选择列表 push数组
     handlePopoperClose() {

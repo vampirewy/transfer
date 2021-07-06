@@ -7,7 +7,7 @@
           <el-tab-pane label="干预随访模板" name="first">
             <intervention-tab-mdl ref="InterventionTabMdl"></intervention-tab-mdl>
           </el-tab-pane>
-          <el-tab-pane label="客户的主要健康状况" name="second">
+          <el-tab-pane label="主要健康状况" name="second">
             <intervention-tab-userdetail-mdl @read="viewiInterventionDetail">
             </intervention-tab-userdetail-mdl>
           </el-tab-pane>

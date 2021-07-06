@@ -63,7 +63,7 @@ export default [
         path: '/role_strack',
         name: 'role_strack',
         meta: {
-          title: '跟踪回访配置',
+          title: '跟踪配置',
           access: 'role_strack',
           keepAlive: true,
         },

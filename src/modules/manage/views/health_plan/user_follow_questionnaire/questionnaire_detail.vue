@@ -72,27 +72,27 @@
                 item.subjectType === 3 ? '填空题' : ''}}
               </div>
               <el-row>
-                <el-col :span="17">
+                <el-col :span="24">
                   <el-form-item label="题目标题：">
                     <el-input v-model="item.name" disabled></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="7">
+                <!--<el-col :span="7">
                   <el-form-item label="标题编码：">
                     <el-input v-model="item.code" disabled></el-input>
                   </el-form-item>
-                </el-col>
+                </el-col>-->
               </el-row>
               <div class="questionsOneDiv"
                    v-for="(itemOne, indexOne) in item.optionParamList"
                    :key="indexOne">
                 <el-row v-if="item.subjectType !== 3" style="display: flex"><!--不是填空题-->
-                  <el-col :span="14">
+                  <el-col :span="24">
                     <el-form-item :label="`选项标题${indexOne + 1}：`">
                       <el-input v-model="itemOne.name" disabled></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="5">
+                  <!--<el-col :span="5">
                     <el-form-item label="编码：" label-width="55px">
                       <el-input v-model="itemOne.code" disabled></el-input>
                     </el-form-item>
@@ -101,7 +101,7 @@
                     <el-form-item label="分数：" label-width="55px">
                       <el-input v-model="itemOne.score" disabled></el-input>
                     </el-form-item>
-                  </el-col>
+                  </el-col>-->
                   <el-col :span="7" v-if="routeType !== 3" style="width: 234px">
                     <div class="questionOneImg">
                       <img @click="questionOneDelelte(item.optionParamList, indexOne)"
