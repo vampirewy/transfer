@@ -637,7 +637,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  /deep/ .el-table .el-table__header-wrapper {
+  /deep/ .el-table__expanded-cell .el-table .el-table__header-wrapper {
     border-radius: 5px 5px 0 0;
   }
   /deep/ .has-expand-table{

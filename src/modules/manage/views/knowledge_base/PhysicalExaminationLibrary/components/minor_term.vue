@@ -35,7 +35,7 @@
               v-for="(item, index) in examination" :key="index"></el-option>
             </el-select>
           </div> -->
-          <div>
+          <div style="padding-top: 5px;">
             <span>科室名称：</span>
             <el-input placeholder="科室名称" v-model="SectionListId"
             style="width:120px">
@@ -55,11 +55,11 @@
         </div>
         <div class="searchRight">
           <div class="buttones">
-            <div class="searchFor" @click="search(1)">
+            <div class="searchFor" @click="search(1)" style="padding-top:2px;">
               <img src="@/assets/images/common/topsearchblue.png" alt="">
             </div>
-            <div class="resetAll" @click="reset">重置</div>
-            <div class="more" v-if="isTrue"  @click="upMore">
+            <div class="resetAll" @click="reset" style="margin-top: 17px;">重置</div>
+            <div class="more" v-if="isTrue"  @click="upMore" style="margin-top: 17px;">
               <span>></span>
               展开更多</div>
             <div class="more noMore" v-else @click="upMore">

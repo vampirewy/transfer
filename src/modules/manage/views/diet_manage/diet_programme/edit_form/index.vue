@@ -335,7 +335,7 @@
     :visible.sync="isShowDietRule"
     @change="onSelectDietRule"
     :DietRule="mealList"></el-diet-rule>
-    <el-cooking :visible.sync="isShowCooking"></el-cooking>
+    <el-cooking v-if="isShowCooking" :visible.sync="isShowCooking"></el-cooking>
     <el-diet-pagoda :visible.sync="isShowDietPagoda"></el-diet-pagoda>
     <el-diet-pagoda-guide :visible.sync="isShowDietPagodaGuide"></el-diet-pagoda-guide>
     <el-diet-pagoda-exchange :visible.sync="isShowDietPagodaExchange"></el-diet-pagoda-exchange>
@@ -434,12 +434,12 @@ export default {
     };
   },
   mounted() {
-    if (this.type !== 'add') {
-      this.HealthInfo();
-    }
-    if (this.clientIds) {
-      this.getClientUserInfo(this.clientIds);
-    }
+    // if (this.type !== 'add') {
+    //   this.HealthInfo();
+    // }
+    // if (this.clientIds) {
+    //   this.getClientUserInfo(this.clientIds);
+    // }
   },
   methods: {
     getClientUserInfo(id) {

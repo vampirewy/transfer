@@ -93,7 +93,7 @@
         </el-col> -->
       </div>
       <div style="display: flex;">
-        <el-form-item label="干预形式：" >
+        <el-form-item label="随访形式：" >
           <el-select style="width:160px" v-model="interfereform" placeholder="请选择">
             <el-option
               v-for="item in formData.planWayList"
@@ -122,7 +122,7 @@
         </el-form-item> -->
       </div>
       <el-col :span="24">
-          <el-form-item label="干预提示：" prop="result">
+          <el-form-item label="随访提示：" prop="result">
             <el-input
               type="textarea"
               v-model="Prompt"

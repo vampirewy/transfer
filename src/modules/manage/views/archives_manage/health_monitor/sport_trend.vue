@@ -20,7 +20,7 @@
       <span>{{queryInfo.sportDistance}} 公里</span></div>
       <div><span class="lookPressureTitle">运动步数：</span>
         <span>{{queryInfo.steps}} 步</span></div>
-      <div><span class="lookPressureTitle">运动消耗：</span><span>{{queryInfo.kcal}} Kcai</span></div>
+      <div><span class="lookPressureTitle">运动消耗：</span><span>{{queryInfo.kcal}} Kcal</span></div>
     </div>
     <div class="lookPressure">
       <div><span class="lookPressureTitle">检测时间：</span><span>{{queryInfo.testDate}}</span></div>
@@ -51,7 +51,11 @@
       :sectionName="['步数']"
       :sectionXList="xData">
     </line-chart>
-    <div class="title">数据列表</div>
+    <!-- <div class="title">数据列表</div> -->
+    <div class="divRightTitleDiv">
+      <div class="divRightTitle">数据列表
+        <div class="titleBiao"></div></div>
+    </div>
     <el-table :data="table.list" class="openTable">
       <el-table-column
         v-for="(item, index) in table.columns"

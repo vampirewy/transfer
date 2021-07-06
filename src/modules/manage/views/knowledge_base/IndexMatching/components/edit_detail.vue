@@ -28,7 +28,7 @@
       <!--</div>-->
       <!-- <div><span></span><span style="color:#333333;font-size:16px">匹配</span></div> -->
       <div class="row" style="display: flex">
-          <el-form-item label="检测项目：" prop="clientName" style="background:#ffffff">
+          <el-form-item label="异常名称：" prop="clientName" style="background:#ffffff">
             <el-popover
               ref="userPopovers"
               placement="bottom-start"
@@ -50,7 +50,8 @@
                 style="width:380px"
               >
                 <i
-                  :class="`el-icon-caret-${detectionpopoverStatus ? 'top' : 'bottom'}`"
+                  :class="detectionpopoverStatus ?
+                  'el-icon-arrow-up':'el-icon-arrow-down'"
                   slot="suffix"
                 ></i>
               </el-input>
@@ -233,6 +234,9 @@ export default {
 
 <style lang="scss" scoped>
 .dialog-detail /deep/ {
+  .form-content .el-input__inner{
+    background-color: #ffffff !important;
+  }
   .form-title {
     display: flex;
     align-items: center;

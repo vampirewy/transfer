@@ -22,7 +22,7 @@
       <div class="medicate-record mt20">
       <el-row>
           <el-col :span="6">
-          <el-form-item label="姓名" prop="clientName">
+          <el-form-item label="姓名" prop="clientName" class="boxs">
             <el-popover
               ref="userPopover"
               placement="bottom-start"
@@ -44,10 +44,15 @@
                 placeholder="请选择客户"
                 style="width:190px"
               >
-                <i
-                  :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
+              <i
+                  :class="popoverStatus ?
+                  'el-icon-arrow-up':'el-icon-arrow-down'"
                   slot="suffix"
                 ></i>
+                <!-- <i
+                  :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
+                  slot="suffix"
+                ></i> -->
               </el-input>
             </el-popover>
           </el-form-item>
@@ -64,7 +69,6 @@
               v-model="infoSource.age"
               disabled
               class="age-input"
-              style="width:190px"
             ></el-input>
           </el-form-item>
           </el-col>
@@ -73,7 +77,6 @@
             <el-input
               v-model="infoSource.gridName"
               disabled
-              style="width:190px"
             ></el-input>
           </el-form-item>
           </el-col>
@@ -94,7 +97,6 @@
                 placeholder="请输入"
                 :maxlength="100"
                 onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"
-                style="width:190px"
               ></el-input>
             </el-form-item>
             </el-col>
@@ -104,7 +106,6 @@
                 v-model="infoSource.specification"
                 placeholder="请输入"
                 :maxlength="30"
-                style="width:190px"
               ></el-input>
             </el-form-item>
             </el-col>
@@ -117,92 +118,10 @@
                 :max-date="new Date()"
                 value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="请选择"
-                style="width:190px"
               ></el-date-picker>
             </el-form-item>
             </el-col>
-            <!-- <el-form-item label="就医机构" prop="countDay" style="width:25%">
-              <el-input
-                v-model="infoSource.countDay"
-                placeholder="请输入"
-                :maxlength="30"
-                number
-                style="width: 200px"
-              ></el-input>
-            </el-form-item> -->
         </el-row>
-
-        <!-- <div class="row">
-            <el-form-item label="就医科室" prop="dose" style="width:25%">
-              <el-input
-                v-model="infoSource.dose"
-                placeholder="请输入"
-                :maxlength="30"
-                style="width: 200px"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="主管医生" prop="result" style="width:25%">
-              <el-select
-                style="width: 200px"
-                placeholder="请选择"
-                v-model="infoSource.result"
-              >
-                <el-option
-                  v-for="item in resultList"
-                  :key="item.paramValue"
-                  :label="item.name"
-                  :value="item.paramValue">
-                </el-option>
-              </el-select>
-            </el-form-item>
-              <el-form-item label="就医时间" prop="startDate" style="width:25%">
-              <el-date-picker
-                class="start-date"
-                v-model="infoSource.startDate"
-                type="date"
-                :max-date="infoSource.endDate"
-                value-format="yyyy-MM-dd"
-                placeholder="请选择开始用药时间"
-                style="width: 200px"
-              ></el-date-picker>
-            </el-form-item>
-            <el-form-item label="出院时间" prop="endDate" style="width:25%">
-              <el-date-picker
-                class="end-date"
-                v-model="infoSource.endDate"
-                type="date"
-                :min-date="infoSource.startDate"
-                value-format="yyyy-MM-dd"
-                placeholder="请选择结束用药时间"
-                style="width: 200px"
-              ></el-date-picker>
-            </el-form-item>
-        </div> -->
-         <!-- <div class="row">
-            <el-form-item label="就医金额" prop="dose" style="width:25%">
-              <el-input
-                v-model="infoSource.dose"
-                placeholder="请输入"
-                :maxlength="30"
-                style="width: 200px"
-              ></el-input>
-            </el-form-item>
-             <el-form-item label="当前状态" prop="result" style="width:25%">
-              <el-select
-                style="width: 200px"
-                placeholder="请选择"
-                v-model="infoSource.result"
-              >
-                <el-option
-                  v-for="item in resultList"
-                  :key="item.paramValue"
-                  :label="item.name"
-                  :value="item.paramValue">
-                </el-option>
-              </el-select>
-            </el-form-item>
-         </div> -->
-
         <div class="row">
             <el-form-item label="检查描述" style="width:100%">
               <el-input
@@ -264,10 +183,15 @@
                 placeholder="请选择"
                 style="width: 232px;"
               >
-                <i
-                  :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
+              <i
+                  :class="popoverStatusCheck ?
+                  'el-icon-arrow-up':'el-icon-arrow-down'"
                   slot="suffix"
                 ></i>
+                <!-- <i
+                  :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
+                  slot="suffix"
+                ></i> -->
               </el-input>
             </el-popover>
           </el-form-item>
@@ -660,9 +584,21 @@ export default {
 
 <style lang="scss" scoped>
 .medication-history-add /deep/ {
+  .boxs{
+    .el-input__inner {
+      color: #333 !important;
+      background-color: #ffffff !important;
+      // background: #F4F4F6 !important;
+    }
+  }
   .row {
     display: flex;
     flex-direction: row;
+    .el-input__inner {
+      color: #333 !important;
+      background-color: #ffffff !important;
+      // background: #F4F4F6 !important;
+    }
   }
   .red {
     font-style: normal;
@@ -679,11 +615,6 @@ export default {
   }
   .mb30 {
     margin-bottom: 30px;
-  }
-  .el-input__inner,
-  .el-textarea__inner {
-    // background-color: #f4f4f6;
-    /*border: 0;*/
   }
   .select-user-input {
     .el-input__inner {
@@ -734,9 +665,9 @@ export default {
       text-align:center;
     }
   }
-  .el-input.is-disabled .el-input__inner{
-      background: #ffffff !important;
-  }
+  // .el-input.is-disabled .el-input__inner{
+  //     background: #ffffff !important;
+  // }
 }
 .inspectionAdd{
     width: 70px;
