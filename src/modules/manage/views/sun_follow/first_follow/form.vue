@@ -13,7 +13,7 @@
           <div class="titleBiao"></div></div>
       </div>
       <el-row>
-        <el-col :span="6">
+        <!--<el-col :span="6">
           <el-form-item label="客户姓名" prop="clientName">
             <el-popover
                     ref="userPopover"
@@ -33,20 +33,25 @@
               </el-input>
             </el-popover>
           </el-form-item>
+        </el-col>-->
+        <el-col :span="6">
+          <el-form-item label="客户姓名" prop="clientName">
+            <el-input v-model="staffForm.clientName"></el-input>
+          </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="体检编号" prop="clientNo">
-            <el-input v-model="staffForm.reportNo" disabled></el-input>
+          <el-form-item label="体检编号" prop="reportNo">
+            <el-input v-model="staffForm.reportNo"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="手机号码" prop="mobile">
-            <el-input v-model="staffForm.mobile" disabled></el-input>
+            <el-input v-model="staffForm.mobile" :maxlength="11"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="身份证号" prop="cardNo">
-            <el-input v-model="staffForm.cardNo" disabled></el-input>
+            <el-input v-model="staffForm.cardNo"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -163,9 +168,12 @@ export default {
         reportUserName: '',
         reportDate: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'),
         remark: '',
+        gender: 1,
+        source: 2,
       },
       staffRules: {
-        clientName: [{ required: true, message: '请选择客户' }],
+        clientName: [{ required: true, message: '请输入客户姓名' }],
+        reportNo: [{ required: true, message: '请输入体检编号' }],
         itemName: [{ required: true, message: '请输入项目名称' }],
         reportDepartment: [{ required: true, message: '请选择上报科室' }],
         itemValue: [{ required: true, message: '请输入结果' }],

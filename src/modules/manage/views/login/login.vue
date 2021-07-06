@@ -233,6 +233,14 @@ export default {
           line-height: 60px;
           padding-left: 20px;
           padding-right: 20px;
+          border: 1px solid #F4F4F6!important;
+          border-radius: 30px!important;
+          background: #F4F4F6;
+          font-size: 16px;
+          &::placeholder {
+            font-size: 16px;
+            color: #999999!important;
+          }
         }
         .forget-password {
           text-align: left;
@@ -247,8 +255,8 @@ export default {
           width: 160px;
           height: 60px;
           margin-top: 10px;
-          border-radius: 10px;
-          box-shadow: 0px 8px 15px 0px rgba(73, 145, 253, 0.3);
+          border-radius: 30px!important;
+          box-shadow: 0px 8px 15px 0px rgba(49, 84, 172, 0.15);
           font-size: 18px;
           font-weight: 400;
         }

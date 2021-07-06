@@ -18,7 +18,7 @@
         <el-table-column
                 prop="itemName"
                 label="项目名称"
-                width="80px"
+                width="85px"
                 show-overflow-tooltip
         ></el-table-column>
         <el-table-column
@@ -58,7 +58,7 @@
                 prop="createTime"
                 label="跟踪结案"
                 show-overflow-tooltip
-                min-width="115"
+                min-width="80"
         >
           <template slot-scope="scope">
             <!--<el-switch v-model="scope.row.isCloseCase"
@@ -67,10 +67,10 @@
                        :inactive-value="2"
                        active-color="#13ce66">
             </el-switch>-->
-            <el-button
+            <!--<el-button
                     type="text"
                     size="small"
-            >挂号</el-button>
+            >挂号</el-button>-->
             <el-button
                     v-if="scope.row.isCloseCase === 1"
                     type="text"
@@ -119,7 +119,7 @@
 
 <script>
 import registerOpen from '../../../in_hospital_change/el_modal/registerOpen.vue';
-import deleteIcon from '~/src/assets/images/home/home33.png';
+import deleteIcon from '~/src/assets/images/doctor/tips.png';
 export default {
   name: 'follow_content',
   components: {
