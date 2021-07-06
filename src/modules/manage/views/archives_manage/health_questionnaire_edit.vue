@@ -31,7 +31,8 @@
         <div class="divRightTitle">{{title}}问卷-基本信息<div class="titleBiao"></div></div>
       </div>
     <client-info :id="$route.params.id" :propsData="formData"
-                 @change="data => formData.clientId = data"></client-info>
+                 @change="data => formData.clientId = data"
+                 @changeDate="data => formData.questionDate = data"></client-info>
       <div class="editWarn" v-if="$route.params.qusType === 1">
         <img src="@/assets/images/common/editIcon.png"/>
         <span>答案选项中频率表示天数，“从不”表示0天，“偶尔”表示每周1-2天，“有时”表示每周3-4天，“经常”表示每周5-6天，“总是”表示每周7天。
@@ -111,7 +112,7 @@
 </template>
 <script>
 import ClientInfo from './health_monitor/client_info.vue';
-
+import * as dayjs from 'dayjs';
 export default {
   name: 'ClientEdit',
   components: {
@@ -386,6 +387,7 @@ export default {
       sendData.answerList = this.formData.answerList;
       sendData.clientId = this.formData.clientId;
       sendData.questionType = this.$route.params.qusType;
+      sendData.questionDate = `${this.formData.questionDate.split(' ')[0]} 00:00:00`;
       if (this.$route.params.id) {
         sendData.id = this.$route.params.id;
       }
@@ -450,6 +452,7 @@ export default {
       if (document.querySelectorAll('.content-wrapper').length > 0) {
         document.querySelectorAll('.content-wrapper')[0].addEventListener('scroll', vm.handleScroll);
       }
+      VM.formData.questionDate = dayjs(new Date()).format('YYYY-MM-DD'); // 先给问卷设置时间
       if (to.params.id) { // 如果有id就是编辑 先获取详情
         VM.fetch(to.params.id, to.params.qusType);
         if (to.params.type === 'edit') {

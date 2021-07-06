@@ -220,10 +220,11 @@
             <el-button style="color: #36BF2F"
                     type="text"
                     size="small"
-                    @click="openPdf(scope.row)
-              " v-if="getAccess('psychology_questionnaire_view')
-              "
+                    @click="openPdf(scope.row)"
+                    v-if="getAccess('psychology_questionnaire_view')
+                    && scope.row.assessReportName"
             >查看</el-button>
+            <span v-else> - </span>
           </template>
         </el-table-column>
         <el-table-column label="操作" prop="index" width="120">
