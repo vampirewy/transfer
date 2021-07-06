@@ -16,85 +16,101 @@
     </div>
     <div class="contentone">
       <div v-if="Tabactive === 0">
+        <el-form ref="form" :model="staffForm" label-position="right">
         <div class="wltitle">
           <div class="quan"></div>
           <span>红色预警设置</span>
         </div>
-        <div class="track">
-          <div class="track_top">
-            <span>回访频率：每</span>
-            <el-input
-              style="width: 30%"
-              v-model="staffForm.mobileNo"
-              @input="handleMobileChange"
-              :maxlength="11"
-              placeholder="请输入"
-            ></el-input>
-            <span>天回访一次</span>
-          </div>
-          <div class="track_top">
-            <span>跟踪方式：</span>
-            <el-select v-model="staffForm.nextTrackingWay" placeholder="请选择">
-              <el-option :label="it.name" :value="it.id" :key="it.id"
-                         v-for="it in planWayList">
-              </el-option>
-            </el-select>
-          </div>
-          <div class="track_top">
-            <span>跟踪人员：</span>
-            <el-select
-              style="width: 70%"
-              v-model="staffForm.dataRange"
-              placeholder="请选择"
-            >
-              <el-option label="全部" :value="0"></el-option>
-              <el-option label="仅自己" :value="1"></el-option>
-            </el-select>
-          </div>
-        </div>
+          <el-row>
+            <el-col :span="6">
+              <el-form-item label="回访频率：每" label-width="90px">
+                <el-input
+                        style="width: calc(100% - 85px);margin-left: 10px;min-width: 50px"
+                        v-model="staffForm.redLvDay"
+                        placeholder="请输入"
+                ></el-input>
+                <span>天回访一次</span>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6" style="margin: 0 3%">
+              <el-form-item label="跟踪方式：" label-width="90px">
+                <el-select v-model="staffForm.redLvWay" placeholder="请选择">
+                  <el-option :label="it.name" :value="it.id" :key="it.id"
+                             v-for="it in planWayList">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="跟踪人员：" label-width="90px">
+                <el-select
+                        v-model="staffForm.redLvUserList"
+                        placeholder="请选择"
+                        multiple
+                        collapse-tags
+                >
+                  <el-option :label="item.realName" :value="item.id"
+                             v-for="(item, index) in userList"
+                             :key="index"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
         <div class="wltitle">
           <div class="quan"></div>
           <span>橙色预警设置</span>
         </div>
-        <div class="track">
-          <div class="track_top">
-            <span>回访频率：每</span>
-            <el-input
-              style="width: 30%"
-              v-model="staffForm.mobileNo"
-              @input="handleMobileChange"
-              :maxlength="11"
-              placeholder="请输入"
-            ></el-input>
-            <span>天回访一次</span>
-          </div>
-          <div class="track_top">
-            <span>跟踪方式：</span>
-            <el-select
-              style="width: 70%"
-              v-model="staffForm.dataRange"
-              placeholder="请选择"
-            >
-              <el-option label="全部" :value="0"></el-option>
-              <el-option label="仅自己" :value="1"></el-option>
-            </el-select>
-          </div>
-          <div class="track_top">
-            <span>跟踪人员：</span>
-            <el-select
-              style="width: 70%"
-              v-model="staffForm.dataRange"
-              placeholder="请选择"
-            >
-              <el-option label="全部" :value="0"></el-option>
-              <el-option label="仅自己" :value="1"></el-option>
-            </el-select>
-          </div>
+          <el-row>
+            <el-col :span="6">
+              <el-form-item label="回访频率：每" label-width="90px">
+                <el-input
+                        style="width: calc(100% - 85px);margin-left: 10px;min-width: 50px"
+                        v-model="staffForm.orangeLvDay"
+                        placeholder="请输入"
+                ></el-input>
+                <span>天回访一次</span>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6" style="margin: 0 3%">
+              <el-form-item label="跟踪方式：" label-width="90px">
+                <el-select v-model="staffForm.orangeLvWay" placeholder="请选择">
+                  <el-option :label="it.name" :value="it.id" :key="it.id"
+                             v-for="it in planWayList">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="跟踪人员：" label-width="90px">
+                <el-select
+                        v-model="staffForm.orangeLvUserList"
+                        placeholder="请选择"
+                        multiple
+                        collapse-tags
+                >
+                  <el-option :label="item.realName" :value="item.id"
+                             v-for="(item, index) in userList"
+                             :key="index"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        <div class="wltitle">
+          <div class="quan"></div>
+          <span>跟踪时间配置</span>
         </div>
+          <el-row>
+            <el-col :span="7">
+              <el-form-item label="跟踪时间：仅跟踪" label-width="120px">
+                <el-input v-model="staffForm.positiveTrackingDay"
+                          style="width: calc(100% - 115px);margin-left: 10px;min-width: 50px">
+                </el-input>
+                <span>天内产生的阳性</span>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
         <div class="form-buttons">
-          <el-button size="small" class="cancelBtn" @click="$emit('cancel')"
-            >取消</el-button
-          >
           <el-button size="small" class="sureBtn" type="primary" @click="submit"
             >保存</el-button
           >
@@ -208,9 +224,9 @@
           </div>
         </div>
         <div class="form-buttons">
-          <el-button size="small" class="cancelBtn" @click="$emit('cancel')"
+          <!--<el-button size="small" class="cancelBtn" @click="$emit('cancel')"
             >取消</el-button
-          >
+          >-->
           <el-button size="small" class="sureBtn" type="primary" @click="submit"
             >保存</el-button
           >
@@ -242,23 +258,26 @@ export default {
   data() {
     return {
       staffForm: {
-        id: this.id,
-        mobileNo: '',
-        realName: '',
-        sex: '',
-        roleId: '',
-        dataRange: '',
-        // menuIds: [],
+        trackingReturnVistConfigId: 1,
+        redLvDay: '',
+        redLvWay: '',
+        orangeLvDay: '',
+        orangeLvWay: '',
+        redLvUserList: [],
+        orangeLvUserList: [],
+        positiveTrackingDay: 30,
+        configUserSaveRequests: [],
       },
       planWayList: [],
-      roleMenuIds: [],
-      roleMenuIdsMap: {},
-      tabbor: ['回访配置', '宣教配置'],
+      userList: [],
+      tabbor: ['回访配置'], //  '宣教配置'
       Tabactive: 0,
     };
   },
   mounted() {
     this.getPlanWayList();
+    this.getUserList();
+    this.getDetail();
   },
   methods: {
     /**
@@ -274,15 +293,45 @@ export default {
       });
       this.planWayList = list;
     },
+    async getUserList() {
+      const res = await this.$api.systemManageInterface
+        .userList({ pageNo: 1, pageSize: 999999 });
+      const { data } = res.data;
+      if (data) {
+        this.userList = data.data || [];
+      }
+    },
+    async getDetail() {
+      const res = await this.$api.userManagerInterface
+        .getTrackingConfigDetail(1);
+      const { data } = res.data;
+      if (data) {
+        this.staffForm.redLvDay = data.redLvDay;
+        this.staffForm.redLvWay = data.redLvWay;
+        this.staffForm.orangeLvDay = data.orangeLvDay;
+        this.staffForm.orangeLvWay = data.orangeLvWay;
+        this.staffForm.positiveTrackingDay = data.positiveTrackingDay;
+        data.configUserDtos.forEach((val) => {
+          if (val.userType === 1) {
+            this.staffForm.redLvUserList.push(val.userId);
+          } else if (val.userType === 2) {
+            this.staffForm.orangeLvUserList.push(val.userId);
+          }
+        });
+      }
+    },
     submit() {
-      this.$refs.staffForm.validate((valid) => {
-        if (valid) {
-          const fn = this.staffForm.id ? 'editUser' : 'addUser';
-          this.$api.systemManageInterface[fn](this.staffForm).then(() => {
-            this.$message.success('操作成功');
-            this.$emit('afterSubmit');
-          });
-        }
+      console.log(this.staffForm);
+      const sendData = Object.assign({}, this.staffForm);
+      sendData.configUserSaveRequests = [];
+      sendData.redLvUserList.forEach((res) => {
+        sendData.configUserSaveRequests.push({ userType: 1, userId: res });
+      });
+      sendData.orangeLvUserList.forEach((res) => {
+        sendData.configUserSaveRequests.push({ userType: 2, userId: res });
+      });
+      this.$api.userManagerInterface.saveTrackingReturnConfig(sendData).then(() => {
+        this.$message.success('操作成功');
       });
     },
     TabbarBtn(index) {
@@ -293,6 +342,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  /deep/ .el-tag{
+    border-radius: 4px;
+  }
 .TabBars {
   display: flex;
   align-items: center;

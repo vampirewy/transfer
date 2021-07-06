@@ -162,9 +162,9 @@
               @selection-change="handleSelectionChange"
               :row-key="getRowKeys"
               @expand-change="handleExpandChange">
-      <el-table-column prop="clientNo" label="客户编号" min-width="100px" show-overflow-tooltip>
+      <el-table-column prop="reportNo" label="体检编号" min-width="100px" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{scope.row.clientNo | getResult}}</span>
+          <span>{{scope.row.reportNo | getResult}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -448,7 +448,14 @@ export default {
      * @return {Promise<void>}
      */
     async getList() {
-      const res = await this.$api.sunFollow.getPositiveFirstListPage(this.form);
+      const sendData = Object.assign({}, this.form);
+      if (this.form.startTime) {
+        sendData.startTime = `${this.form.startTime} 00:00:00`;
+      }
+      if (this.form.endTime) {
+        sendData.endTime = `${this.form.endTime} 23:59:59`;
+      }
+      const res = await this.$api.sunFollow.getPositiveFirstListPage(sendData);
       const { data } = res.data;
       console.log(data);
       if (data) {

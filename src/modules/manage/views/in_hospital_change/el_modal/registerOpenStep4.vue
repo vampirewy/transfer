@@ -36,7 +36,7 @@
             </div>
             <div class="timeDivOne" v-for="item in dateList" :key="item.date">
                 <div class="timeDivOneDate">
-                    <p class="timeDivOneDate1">{{item.date}}</p>
+                    <p class="timeDivOneDate1">{{item.date.substr(5)}}</p>
                     <p class="timeDivOneDate2">{{item.day}}</p>
                 </div>
                 <div class="timeDivOneDateAMPM">
@@ -71,43 +71,43 @@ export default {
       propsForm: this.form,
       dateList: [
         {
-          date: '05-06',
+          date: '2021-05-06',
           day: '周四',
           amCount: 4,
           pmCount: 0,
         },
         {
-          date: '05-07',
+          date: '2021-05-07',
           day: '周五',
           amCount: 0,
           pmCount: 4,
         },
         {
-          date: '05-08',
+          date: '2021-05-08',
           day: '周六',
           amCount: 4,
           pmCount: 1,
         },
         {
-          date: '05-09',
+          date: '2021-05-09',
           day: '周日',
           amCount: 4,
           pmCount: 4,
         },
         {
-          date: '05-10',
+          date: '2021-05-10',
           day: '周一',
           amCount: 14,
           pmCount: 0,
         },
         {
-          date: '05-11',
+          date: '2021-05-11',
           day: '周二',
           amCount: 0,
           pmCount: 0,
         },
         {
-          date: '05-12',
+          date: '2021-05-12',
           day: '周三',
           amCount: 0,
           pmCount: 2,

@@ -452,7 +452,6 @@ export default {
       if (document.querySelectorAll('.content-wrapper').length > 0) {
         document.querySelectorAll('.content-wrapper')[0].addEventListener('scroll', vm.handleScroll);
       }
-      VM.formData.questionDate = dayjs(new Date()).format('YYYY-MM-DD'); // 先给问卷设置时间
       if (to.params.id) { // 如果有id就是编辑 先获取详情
         VM.fetch(to.params.id, to.params.qusType);
         if (to.params.type === 'edit') {
@@ -466,6 +465,7 @@ export default {
         VM.onTypeChange(to.params.qusType);
         VM.title = '新增';
         document.title = '新增健康问卷';
+        VM.formData.questionDate = dayjs(new Date()).format('YYYY-MM-DD'); // 先给问卷设置时间
       }
       window.onresize = () => { // 60 120  180  240 头部导航栏固定高度
         VM.setContentPaddingTop();

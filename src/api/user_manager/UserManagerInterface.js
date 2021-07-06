@@ -100,6 +100,14 @@ class UserManagerInterface extends BaseModule {
   deleteMsgRecord(params = {}) {
     return this.post('/message_record/batch_delete', params);
   }
+  // 保存回访配置
+  saveTrackingReturnConfig(params = {}) {
+    return this.post('/tracking_return/save_tracking_return_config', params);
+  }
+  // 保存回访配置
+  getTrackingConfigDetail(id) {
+    return this.get(`/tracking_return/get_tracking_config_detail/${id}`);
+  }
 }
 
 export default new UserManagerInterface();

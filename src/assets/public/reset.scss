@@ -277,8 +277,9 @@ body .el-table th.gutter{
     }
   }
   &.is-disabled .el-input__inner {
-    color: #B4BBC9;
-    // background-color: #EEF1F5 !important;
+    color: #333333;
+    background-color: #EEF1F5;
+    border: none!important;
   }
 }
 .is-error{

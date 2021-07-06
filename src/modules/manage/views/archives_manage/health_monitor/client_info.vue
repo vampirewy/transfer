@@ -101,6 +101,7 @@
         <el-form-item label="问卷日期" prop="createTime">
           <el-date-picker v-model="formData.createTime" style="width: 100%"
                           value-format="yyyy-MM-dd"
+                          :disabled="!$route.params.id"
                           placeholder="" @change="chooseTime"></el-date-picker>
         </el-form-item>
       </el-col>
@@ -128,7 +129,9 @@ export default {
   mounted() {},
   watch: {
     propsData(val) {
+      console.log(val);
       this.formData = val;
+      this.formData.createTime = val.questionDate;
     },
   },
   methods: {

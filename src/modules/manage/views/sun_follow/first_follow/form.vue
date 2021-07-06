@@ -212,6 +212,7 @@ export default {
       const { data } = res.data;
       this.staffForm.reportUserId = data.userId;
       this.staffForm.reportUserName = data.realName;
+      this.staffForm.reportDepartment = data.department;
     },
     getUserName() {
       this.staffForm.reportUserName =
