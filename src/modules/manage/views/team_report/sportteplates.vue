@@ -99,7 +99,6 @@ export default {
       this.$emit('change', this.selectedData);
     },
     checkedChange(val, data) {
-      console.log(val, data, 1111);
       if (val) {
         this.selectedData.push(data);
       } else {

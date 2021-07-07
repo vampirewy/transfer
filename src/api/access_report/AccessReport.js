@@ -77,6 +77,10 @@ class AccessReport extends BaseModule {
   departmenttotal(params = {}) {
     return this.post('/report_info/get_client_department_name_total', params);
   }
+  // 保存团报生成
+  savedepartmenttotal(params = {}) {
+    return this.post('/group_report/save', params);
+  }
 }
 
 export default new AccessReport();

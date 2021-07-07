@@ -54,7 +54,7 @@
                   <p>所在单位：<span>{{userlist.workUnitName}}</span></p>
                   <p>管理医生：<span
                   v-for="(item, index) in userlist.userList"
-                  :key="index">{{item.realName}},</span></p>
+                  :key="index">{{item.realName}} </span></p>
                   <!-- <p>家庭成员：<span>{{userlist.age}}</span></p> -->
                 </div>
                 <div class="addUsers">
@@ -68,9 +68,6 @@
                   <div v-for="(item, index) in userlist.tagList"
                   :key="index">
                     {{item.tag}}
-                  </div>
-                  <div>
-                    脾气不好
                   </div>
                   <!-- <div class="addtags">+</div> -->
                 </div>
