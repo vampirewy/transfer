@@ -304,6 +304,10 @@ export default {
         meals: [],
         dietSortId: '',
       };
+      this.isBreakfast = '';
+      this.isLunch = '';
+      this.isDinner = '';
+      this.isOther = '';
       this.activeMenuId = '';
       this.currentPage = 1;
       this.loadData();

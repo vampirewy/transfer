@@ -94,8 +94,10 @@
               v-model="staffForm.dataRange"
               placeholder="请选择"
             >
-              <el-option label="全部" :value="0"></el-option>
-              <el-option label="仅自己" :value="1"></el-option>
+              <el-option label="管理员" :value="2"></el-option>
+              <el-option label="单位管理" :value="3"></el-option>
+              <el-option label="健康医生" :value="4"></el-option>
+              <el-option label="类别管理" :value="5"></el-option>
             </el-select>
           </el-form-item>
         </el-col>

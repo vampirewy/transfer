@@ -37,8 +37,9 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="性别限制：">
-            <span>{{form.gender}}</span>
-
+            <span v-if="form.gender === 0">不限</span>
+            <span v-if="form.gender === 1">男</span>
+            <span v-if="form.gender === 2">女</span>
             <!-- <el-input
               v-model="form.gender"
               show-word-limit
@@ -213,11 +214,12 @@ export default {
       );
       const { data } = res.data;
       this.form.abnormalName = data.abnormalName;
-      if (data.gender === 1) {
-        this.form.gender = '男';
-      } else {
-        this.form.gender = '女';
-      }
+      // if (data.gender === 1) {
+      //   this.form.gender = '男';
+      // } else {
+      //   this.form.gender = '女';
+      // }
+      this.form.gender = data.gender;
       this.form.dangerLevel = data.dangerLevel;
       this.form.medicalLimit = data.medicalLimit;
       this.form.state = data.state;

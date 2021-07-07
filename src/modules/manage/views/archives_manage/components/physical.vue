@@ -25,7 +25,7 @@
           </el-form-item> -->
         </el-col>
            <el-col :span="6">
-            <el-form-item label="检查机构" >
+            <el-form-item label="体检机构" >
               <el-input
                 v-model="formData.examinationOrgan"
                 placeholder="请输入"
@@ -84,6 +84,68 @@
       <div class="divRightTitleDiv">
         <div class="divRightTitle" style="margin-top: 0">体检信息<div class="titleBiao"></div></div>
       </div>
+      <div class="wltitle">
+        <div class="quan"></div>
+        <span>体检项目</span>
+      </div>
+      <!-- <el-col :span="6"> -->
+        <!-- <el-form-item label="新增体检项目："
+        prop="reportState"
+        style="width:120px"> -->
+        <!-- <div style="margin-left:14px">
+        <span style="font-size:14px;color:#666">新增体检项目：</span>
+          <el-select
+            v-model="formData.reportState"
+            placeholder="请选择"
+            style="width: 200px"
+          >
+          <el-option label="未知" :value="0" key="0"></el-option>
+          <el-option label="已总检" :value="1" key="1"></el-option>
+          <el-option label="未总检" :value="2" key="2"></el-option>
+          </el-select>
+        </div> -->
+        <div style="display:flex">
+        <el-form-item label="体检项目" style="width: 100px;">
+          <!-- <span style="font-size:14px;color:#666;margin:10px">新增体检项目：</span> -->
+            <el-popover
+              ref="userPopoverCheck"
+              placement="bottom-start"
+              trigger="click"
+              @show="popoverStatusCheck = true"
+              @hide="handlePopoperCloseCheck"
+            >
+              <physical-examination
+                v-if="popoverStatusCheck"
+                @change="onSelectUserCheck"
+                :examination="infoSource.gridId"
+              ></physical-examination>
+              <el-input
+                :class="`select-user-trigger ${id ? 'disabled' : ''}`"
+                ref="modifyForm"
+                slot="reference"
+                disabled
+                v-model="infoSource.clientNameCheck"
+                placeholder="请选择"
+                style="width: 232px;"
+              >
+              <i
+                  :class="popoverStatusCheck ?
+                  'el-icon-arrow-up':'el-icon-arrow-down'"
+                  slot="suffix"
+                ></i>
+                <!-- <i
+                  :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
+                  slot="suffix"
+                ></i> -->
+              </el-input>
+            </el-popover>
+          </el-form-item>
+          <div class="inspectionAdd">
+              <div @click="inspectionAdd()">添加</div>
+          </div>
+        </div>
+        <!-- </el-form-item> -->
+      <!-- </el-col> -->
       <div class="wltitle">
         <div class="quan"></div>
         <span>体检科室</span>
@@ -307,17 +369,20 @@
 <script>
 import abnormal from './abnormal.vue';
 import { MAX_PAGESIZE } from '~/src/libs/util/index';
+import physicalExamination from './physicalExamination.vue';
 
 export default {
   name: 'Physical',
   components: {
     abnormal,
+    physicalExamination,
   },
   props: {
     value: Object,
   },
   data() {
     return {
+      popoverStatusCheck: false,
       templateList: [],
       libraryList: [],
       formData: {
@@ -365,6 +430,11 @@ export default {
           { required: true, message: '请选择填写参检团队', trigger: 'blur' },
         ],
       },
+      infoSource: {
+        clientNameCheck: '',
+      },
+      StatusCheck: [],
+      drugsList: [],
     };
   },
   watch: {
@@ -388,6 +458,7 @@ export default {
             });
           }
         });
+        // console.log(this.value, 'zxcxczc');
       },
       deep: true,
     },
@@ -397,6 +468,70 @@ export default {
     this.queryLibrary();
   },
   methods: {
+    handlePopoperCloseCheck() {
+      this.popoverStatusCheck = false;
+    },
+    onSelectUserCheck(data) {
+      if (data) {
+        // data.outcome = '';
+        // data.reference = '';
+        // data.Suggestion = '';
+        // this.popoverStatusCheck = false;
+        // console.log(data);
+        data.forEach((val) => {
+          this.infoSource.clientNameCheck += `${val.itemName}、`;
+          this.StatusCheck.push(val);
+        });
+        this.$refs.userPopoverCheck.doClose();
+      //   this.infoSource.clientName = data.name;
+      //   this.infoSource.clientId = data.id;
+      //   this.infoSource.age = data.age;
+      //   this.infoSource.gender = data.gender;
+      //   this.infoSource.gridName = data.gridName;
+      } else {
+        this.$refs.userPopoverCheck.doClose();
+      }
+    },
+    inspectionAdd() {
+      if (this.StatusCheck) {
+        if (!this.formData.sectionConclusionList) {
+          this.formData = {
+            sectionConclusionList: [],
+          };
+        }
+        this.StatusCheck.forEach((val) => {
+          // let same = false;
+          // this.drugsList.forEach((valAnswer) => {
+          //   if (valQusOne.id === valAnswer.id) { // 如果有一样 就回答过了
+          //     same = true;
+          //   }
+          // });
+          // if (same === false) { // 如果没有相同的则push
+          //   this.drugsList.push(valQusOne);
+          // }
+          // this.drugsList.push(valQusOne);
+          const json = {
+            conclusion: '',
+            sectionName: val.sectionName,
+            itemList: [],
+          };
+          json.addData = {
+            attention: '0',
+            itemName: val.itemName,
+            itemValue: '',
+            refRange: val.refRange,
+            itemUnit: val.unit,
+          };
+          this.formData.sectionConclusionList.push(json);
+        });
+        // console.log(this.value.sectionConclusionList);
+        this.infoSource.clientNameCheck = '';
+        this.StatusCheck = [];
+        // this.$refs.modifyForm.resetFields();
+      } else {
+        this.$message.warning('请选择检查项目');
+      }
+    },
     handleAbnormalClose() {
       this.abnormalModalVisible = false;
       this.$refs.abnormalPopover.doClose();
@@ -489,8 +624,13 @@ export default {
         conclusion: '',
         addData: {
           attention: '0',
+          itemName: '1',
+          itemValue: '2',
+          refRange: '3',
+          itemUnit: '4',
         },
       });
+      // console.log(this.formData.sectionConclusionList);
     },
     queryTemplate() {
       this.$api.reportInterface.getTemplate({
@@ -597,7 +737,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .physical {
+  .inspectionAdd{
+    width: 70px;
+    height: 40px;
+    background: #36BF2F;
+    border-radius: 5px;
+    margin-left: 20px;
+    text-align: center;
+    line-height: 40px;
+    color: #ffffff;
+    font-size: 14px;
+    margin-left: 240px;
+}
   /deep/ .el-select {
     width: 100%;
   }

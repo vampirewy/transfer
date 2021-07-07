@@ -69,6 +69,24 @@
     <div v-if="!isTrue" class="searchCondition" style="width:80%;">
       <div class="searchLeft" style="padding-left:5px;">
         <div>
+          <span>问卷名称：</span>
+          <el-input placeholder="请输入" style="width: 140px"
+                    v-model="formData.templateQuestionName "></el-input>
+        </div>
+        <div>
+          <span>问卷类型：</span>
+          <el-select
+                  v-model="formData.sortType"
+                  placeholder="请选择"
+                  style="width: 140px"
+                  clearable
+          >
+            <el-option :label="item.name" :value="item.paramValue"
+                       v-for="item in sortTypeList"
+                       :key="item.paramValue"></el-option>
+          </el-select>
+        </div>
+        <div>
           <span>填写日期：</span>
           <el-date-picker
                   v-model="formData.startTime"
@@ -292,10 +310,13 @@ export default {
         gender: '',
         clientGrid: '',
         source: '',
+        templateQuestionName: '',
+        sortType: '',
         startTime: undefined,
         endTime: undefined,
         questionType: 4,
       },
+      sortTypeList: [],
       questionFromList: [], // 问卷来源
       popoverStatus: false,
       visible: false,
@@ -336,6 +357,11 @@ export default {
       const { data } = res.data;
       this.questionFromList = data;
     },
+    async getSystemParamByCode(code) {
+      const res = await this.$api.userManagerInterface.getSystemParamByCode(code);
+      const { data } = res.data;
+      this.sortTypeList = data;
+    },
     handleSelectionChange(val) {
       // table组件选中事件,
       this.multipleSelection = val;
@@ -355,12 +381,7 @@ export default {
     },
     reset() {
       this.params.pageNo = 1;
-      this.formData.keyWord = '';
-      this.formData.gender = '';
-      this.formData.clientGrid = '';
-      this.formData.source = '';
-      this.formData.startTime = undefined;
-      this.formData.endTime = undefined;
+      Object.assign(this.$data, this.$options.data());
       // this.getQuestionType();
       this.fetch();
     },
@@ -483,6 +504,7 @@ export default {
       vm.fetch();
       vm.getGridList();
       vm.getQuestionFromList();
+      vm.getSystemParamByCode('ZY007');
     });
   },
 };

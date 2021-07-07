@@ -43,7 +43,7 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="管理范围">
-            {{staffForm.dataRange === 0 ? '全部' : '仅自己' }}
+            {{staffForm.dataRange | getResultDataRange }}
           </el-form-item>
         </el-col>
         <el-col :span="6">

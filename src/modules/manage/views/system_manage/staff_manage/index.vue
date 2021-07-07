@@ -93,7 +93,7 @@
               label="管理范围"
               show-overflow-tooltip>
               <template slot-scope="scope">{{
-                scope.row.dataRange === 0 ? '全部' : '仅自己'
+                scope.row.dataRange | getResultDataRange
               }}</template>
             </el-table-column>
             <el-table-column

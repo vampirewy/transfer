@@ -84,6 +84,16 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
+          <el-form-item label="是否总检">
+            <el-radio-group v-model="staffForm.reportState">
+              <el-radio :label="1">是</el-radio>
+              <el-radio :label="2">否</el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="6">
           <el-form-item label="上报科室" class="form-item-sex" prop="reportDepartment">
             <el-input
                     type="text"
@@ -91,8 +101,6 @@
                     v-model="staffForm.reportDepartment"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
         <el-col :span="6">
           <el-form-item label="上报医生" prop="reportUserId">
             <el-select
@@ -163,6 +171,7 @@ export default {
         itemName: '',
         reportLv: 1,
         itemValue: '',
+        reportState: 2,
         reportDepartment: '',
         reportUserId: '',
         reportUserName: '',

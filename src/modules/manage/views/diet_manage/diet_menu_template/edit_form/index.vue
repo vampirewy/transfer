@@ -99,7 +99,7 @@
                           />
                           {{ its.name }}
                           <i
-                            @click="isShowCooking = true"
+                            @click="isShowCookingbtn(its)"
                             class="el-icon-warning"
                           ></i>
                         </p>
@@ -212,7 +212,10 @@
       @change="handleFoodSelect"
       :visible.sync="isShowFoodOp"
     ></el-food-op>
-    <el-cooking :visible.sync="isShowCooking"></el-cooking>
+    <el-cooking v-if="isShowCooking"
+    :visible.sync="isShowCooking"
+    :id="caiId"
+    ></el-cooking>
     <el-diet-pagoda :visible.sync="isShowDietPagoda"></el-diet-pagoda>
     <el-diet-pagoda-guide :visible.sync="isShowDietPagodaGuide"></el-diet-pagoda-guide>
     <el-diet-pagoda-exchange :visible.sync="isShowDietPagodaExchange"></el-diet-pagoda-exchange>
@@ -269,6 +272,7 @@ export default {
       arrList: [],
       dietTemplateMaterial: {},
       TabsIndex: 0,
+      caiId: '',
     };
   },
   created() {
@@ -289,6 +293,11 @@ export default {
     },
   },
   methods: {
+    isShowCookingbtn(its) {
+      console.log(its);
+      this.caiId = its.caiId;
+      this.isShowCooking = true;
+    },
     deleteDietTempPlateConfigDtos(index, inx, inxs) {
       this.editableTabs[index].mealTypeDtos[inx].dietTemplateConfigDtos.splice(
         inxs,

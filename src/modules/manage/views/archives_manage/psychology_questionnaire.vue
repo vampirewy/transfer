@@ -154,6 +154,7 @@
                 class="btn-new btnAdd"
                 size="small"
                 style="width: 120px"
+                @click="generateReporte"
                 v-if="getAccess('china_constitution_questionnaire_report')"
         ><img src="@/assets/images/common/getReportBtn.png" />生成报告</el-button>
       </div>
@@ -374,7 +375,9 @@ export default {
     },
     // 查看pdf
     openPdf(data) {
-      window.open(this.pdf_url + data.assessReportName);
+      if (data.assessReportName) {
+        window.open(this.pdf_url + data.assessReportName);
+      }
     },
     /**
      * 新增
@@ -454,6 +457,20 @@ export default {
           return this.fetch();
         },
       );
+    },
+    // 生成心理报告
+    generateReporte() {
+      if (this.multipleSelection.length === 0) {
+        return this.$message.warning('请选择要生成的记录');
+      }
+      const params = [];
+      this.multipleSelection.forEach((value) => {
+        params.push(value.id);
+      });
+      this.$api.accessReport.generatepsyReport(params).then(() => {
+        this.$message.success('操作成功');
+        this.fetch();
+      });
     },
     fetch() {
       if (this.formData.startTime) {

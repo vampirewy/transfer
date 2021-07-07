@@ -349,6 +349,7 @@ export default {
     .el-input__inner {
       color: #333 !important;
       background-color: #ffffff !important;
+      border: 1px solid #e0e0e0 !important;
     }
 
   }
