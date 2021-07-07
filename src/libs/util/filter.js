@@ -63,3 +63,21 @@ export const getResultReportState = (val) => { // 0否 1是 是否总检
   }
   return val;
 };
+export const getResultDataRange = (val) => {
+  if (val === null) {
+    return '-';
+  } else if (val === 0) {
+    return '全部';
+  } else if (val === 1) {
+    return '仅自己';
+  } else if (val === 2) {
+    return '管理员';
+  } else if (val === 3) {
+    return '单位管理';
+  } else if (val === 4) {
+    return '健康医生';
+  } else if (val === 5) {
+    return '类别管理';
+  }
+  return val;
+};

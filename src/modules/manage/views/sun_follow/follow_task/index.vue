@@ -412,7 +412,8 @@ export default {
      * @return {Promise<void>}
      */
     async getList() {
-      const sendData = Object.assign({}, this.form);
+      const sendData = Object.assign({}, this.form, { pageNo: this.table.pageNo,
+        pageSize: this.table.pageSize });
       if (this.form.startReportDate) {
         sendData.startReportDate = `${this.form.startReportDate} 00:00:00`;
       }
