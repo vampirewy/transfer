@@ -170,6 +170,7 @@
                               v-model="scope.row[item.prop]"
                               placeholder="请选择"
                               style="width: 140px"
+                              @change="constitution(scope.$index,$event)"
                       >
                         <el-option label="是" value="1" key="1"></el-option>
                         <el-option label="基本是" value="2" key="2"></el-option>
@@ -412,6 +413,9 @@ export default {
         this.dataSource.list[index].maxValue = '';
       }
       this.$set(this.dataSource.list[index], `${new Date()}`, '');
+    },
+    constitution(index, event) {
+      console.log(index, event);
     },
     ConstitutionList() {
       this.$api.reportInterface
