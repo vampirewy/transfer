@@ -15,7 +15,7 @@
 
     <el-form
       :label-position="right"
-      label-width="100px"
+      label-width="90px"
       :model="value"
       class="form-content"
     >
@@ -62,8 +62,13 @@
                 placeholder="请选择"
                 style="width:300px"
               >
-                <i
+                <!-- <i
                   :class="`el-icon-caret-${detectionpopoverStatus ? 'top' : 'bottom'}`"
+                  slot="suffix"
+                ></i> -->
+                <i
+                  :class="detectionpopoverStatus ?
+                  'el-icon-arrow-up':'el-icon-arrow-down'"
                   slot="suffix"
                 ></i>
               </el-input>
@@ -280,6 +285,7 @@ export default {
    color:#333333;
    font-size:16px;
    position: relative;
+   margin-left: 18px;
    &::after{
     content: '';
     display: block;
@@ -297,6 +303,7 @@ export default {
    color:#333333;
    font-size:16px;
    position: relative;
+   margin-left: 18px;
    &::after{
     content: '';
     display: block;
@@ -367,6 +374,12 @@ export default {
       padding-left: 20px;
       font-size: 14px;
       color: #333333;
+      span:first-child{
+        color: #666666;
+      }
+      span:nth-child(2){
+        white-space: nowrap;
+      }
     }
   }
   .othertest{

@@ -72,9 +72,9 @@
                 </span>
               </template>
             </el-table-column>
-            <el-table-column label="干预形式" prop="planWayTxt" min-width="80" show-overflow-tooltip />
+            <el-table-column label="随访形式" prop="planWayTxt" min-width="80" show-overflow-tooltip />
             <el-table-column label="主要内容" prop="planContent" min-width="80" show-overflow-tooltip />
-            <el-table-column label="干预提示" prop="day" min-width="80" show-overflow-tooltip />
+            <el-table-column label="随访提示" prop="day" min-width="80" show-overflow-tooltip />
             <!-- <el-table-column label="附件" prop="attachment">
               <template slot-scope="scope">
                 <div
@@ -268,6 +268,9 @@ export default {
         .then(({ data }) => {
           if (data.success) {
             this.total = data.total;
+            data.data.forEach((val) => {
+              val.month = `第${val.month}月 第${val.day}日`;
+            });
             this.dataSource = data.data;
             console.log(this.dataSource);
           }

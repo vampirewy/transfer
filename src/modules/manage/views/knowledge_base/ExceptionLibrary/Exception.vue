@@ -108,6 +108,18 @@
             ></el-option>
           </el-select>
         </div>
+        <div>
+          <span>重要性：</span>
+          <el-select
+                  v-model="form.source"
+                  placeholder="请选择"
+                  style="width: 140px"
+                  clearable
+          >
+            <el-option :label="item.name" :value="item.paramValue"
+                       v-for="(item, index) in questionFromList" :key="index"></el-option>
+          </el-select>
+        </div>
       </div>
       <div class="searchRight">
         <div class="buttones">
@@ -126,17 +138,28 @@
   </div>
     <div v-if="!isTrue" class="searchCondition" style="width:80%;">
       <div class="searchLeft" style="padding-left:5px;">
-        <div>
-          <span>重要性：</span>
-          <el-select
-                  v-model="form.source"
-                  placeholder="请选择"
-                  style="width: 140px"
-                  clearable
-          >
-            <el-option :label="item.name" :value="item.paramValue"
-                       v-for="(item, index) in questionFromList" :key="index"></el-option>
-          </el-select>
+        <div class="searchLeft">
+          <div class="searchInputFormItem">
+            <el-input placeholder="ICD10编码" v-model="form.icdCode">
+            </el-input>
+            <span class="searchBtnImgSpans" @click="search(1)">
+                    <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
+                </span>
+          </div>
+          <div class="searchInputFormItem">
+            <el-input placeholder="推荐科室" v-model="form.recommendDepartmentName">
+            </el-input>
+            <span class="searchBtnImgSpans" @click="search(1)">
+                    <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
+                </span>
+          </div>
+          <div class="searchInputFormItem">
+            <el-input placeholder="推荐检查" v-model="form.recommendInspectName">
+            </el-input>
+            <span class="searchBtnImgSpans" @click="search(1)">
+                    <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
+                </span>
+          </div>
         </div>
       </div>
     </div>
@@ -200,7 +223,7 @@
             <span>{{ scope.row.abnormalTypeName | getResult}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="类型别名" prop="aliasNameTotal">
+        <el-table-column label="异常别名" prop="aliasNameTotal">
           <template slot-scope="scope">
             <el-button type="text"
                      @click="expandsHandle(scope.row)" style="color:#36BF2F;width: 50px;">
@@ -339,6 +362,9 @@ export default {
         gender: '',
         source: '',
         medicalLimitListId: '', // 紧急性
+        icdCode: '',
+        recommendDepartmentName: '',
+        recommendInspectName: '',
       },
       table: {
         list: [],
@@ -402,6 +428,9 @@ export default {
         level: this.form.source, // 重要性 ，传下拉列表接口的值，如1，2，3
         state: this.form.gender, // 状态，0不启用 1启用
         type: this.form.abnormalType, // 异常类型，传下拉列表接口的值，如1，2，3
+        icdCode: this.form.icdCode,
+        recommendDepartmentName: this.form.recommendDepartmentName,
+        recommendInspectName: this.form.recommendInspectName,
         medicalLimit: this.form.medicalLimitListId,
         pageNo: this.params.pageNo,
         pageSize: this.params.pageSize,
@@ -433,6 +462,9 @@ export default {
       this.form.source = '';
       this.form.gender = '';
       this.form.abnormalType = '';
+      this.form.icdCode = '';
+      this.form.recommendDepartmentName = '';
+      this.form.recommendInspectName = '';
       this.form.medicalLimitListId = '';
       this.table.currentPage = 1;
       this.form.medicalLimitListId = '';
@@ -579,6 +611,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .searchBtnImgSpans{
+    position: absolute;
+    right: 0px;
+    top: 5px;
+    width: 36px;
+    height: 38px;
+    line-height: 38px;
+    border-radius: 0 5px 5px 0;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid #DDE0E6;
+    img{
+      width: 100%;
+    }
+  }
  .qusDrop {
     .el-dropdown-menu__item{
       padding: 0 40px;

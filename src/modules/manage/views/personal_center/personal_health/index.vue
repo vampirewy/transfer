@@ -54,7 +54,7 @@
                   <p>所在单位：<span>{{userlist.workUnitName}}</span></p>
                   <p>管理医生：<span
                   v-for="(item, index) in userlist.userList"
-                  :key="index">{{item.realName}},</span></p>
+                  :key="index">{{item.realName}} </span></p>
                   <!-- <p>家庭成员：<span>{{userlist.age}}</span></p> -->
                 </div>
                 <div class="addUsers">
@@ -68,9 +68,6 @@
                   <div v-for="(item, index) in userlist.tagList"
                   :key="index">
                     {{item.tag}}
-                  </div>
-                  <div>
-                    脾气不好
                   </div>
                   <!-- <div class="addtags">+</div> -->
                 </div>
@@ -124,7 +121,7 @@
                     ><img
                       src="@/assets/images/common/titleLeft.png"
                       alt="" /></span
-                  >干预工作台
+                  >干预随访操作台
                 </div>
                 <el-form
                   ref="form"
@@ -135,18 +132,18 @@
                 >
                   <el-row>
                     <el-col :span="12">
-                      <el-form-item label="干预日期：" prop="birth">
+                      <el-form-item label="随访日期：" prop="birth">
                         <el-date-picker
                           v-model="formData.birth"
                           type="date"
-                          placeholder="选择出生日期"
+                          placeholder="选择随访日期"
                           style="width: 100%"
                         >
                         </el-date-picker>
                       </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                      <el-form-item label="主要内容：" prop="gridId">
+                      <el-form-item label="随访类型：" prop="gridId">
                         <el-select
                           v-model="formData.gridId"
                           placeholder="请选择"
@@ -164,7 +161,7 @@
                   </el-row>
                   <el-row>
                     <el-col :span="12">
-                      <el-form-item label="干预形式：" prop="gridId">
+                      <el-form-item label="随访形式：" prop="gridId">
                         <el-select
                           v-model="formData.gridId"
                           placeholder="请选择"
@@ -180,7 +177,7 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                      <el-form-item label="干预医生：">
+                      <el-form-item label="随访人：">
                         <el-select
                           v-model="formData.ethnicGroup"
                           placeholder="请选择"
@@ -214,7 +211,7 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                      <el-form-item label="下次干预：" prop="gender">
+                      <el-form-item label="下次随访：" prop="gender">
                         <el-radio-group v-model="formData.gender">
                           <el-radio :label="1" value="1">是</el-radio>
                           <el-radio :label="2" value="2">否</el-radio>
@@ -224,11 +221,11 @@
                   </el-row>
                   <el-row>
                     <el-col :span="24">
-                      <el-form-item label="干预提示：" prop="remark">
+                      <el-form-item label="随访内容：" prop="remark">
                         <el-input
                           rows="4"
                           type="textarea"
-                          placeholder="输入干预提示内容"
+                          placeholder="输入随访内容"
                           :maxlength="300"
                           show-word-limit
                           v-model="formData.remark"
@@ -237,7 +234,7 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                      <el-form-item label="干预内容：" prop="remark">
+                      <el-form-item label="本次记录：" prop="remark">
                         <el-input
                           rows="4"
                           type="textarea"
@@ -342,7 +339,7 @@ export default {
       titless: '整体评分',
       titles: '依从度',
       formData: {
-        birth: '', // 1992-01-04
+        birth: new Date(), // 1992-01-04
         gridId: '',
         userRealName: '',
         profession: '',
@@ -351,7 +348,7 @@ export default {
         mobile: '',
         name: '',
         age: '',
-        gender: '',
+        gender: '2',
         cardNo: '',
         marriage: '',
         ethnicGroup: '',

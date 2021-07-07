@@ -102,11 +102,11 @@
             <img src="@/assets/images/common/topsearchblue.png" alt="">
           </div>
           <div class="resetAll" @click="reset">重置</div>
-          <!-- <div class="more" v-if="isTrue"  @click="upMore">
+          <div class="more" v-if="isTrue"  @click="upMore">
             <span>></span>
             展开更多</div>
           <div class="more noMore" v-else @click="upMore">
-            <span>></span>收起筛选</div> -->
+            <span>></span>收起筛选</div>
         </div>
       </div>
     </div>
@@ -114,40 +114,36 @@
     <div v-if="!isTrue" class="searchCondition" style="width:80%;">
       <div class="searchLeft" style="padding-left:5px;">
         <div>
-          <span>问卷来源：</span>
+          <span>短信主题：</span>
           <el-select
-                  v-model="formData.source"
+                  v-model="formData.categoryId"
                   placeholder="请选择"
                   style="width: 140px"
                   clearable
           >
-            <el-option :label="item.name" :value="item.paramValue"
-                       v-for="(item, index) in questionFromList" :key="index"></el-option>
+          <el-option
+            v-for="item in smsTypes"
+            :key="item.name"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
           </el-select>
         </div>
         <div>
-          <span>填写日期：</span>
-          <el-date-picker
-                  v-model="formData.startTime"
-                  type="date"
-                  value-format="yyyy-MM-dd"
-                  :max-date="formData.endTime"
-                  placeholder="选择开始日期"
+          <span>短信类别：</span>
+          <el-select
+                  v-model="formData.themId"
+                  placeholder="请选择"
                   style="width: 140px"
                   clearable
           >
-          </el-date-picker>
-          <span class="timing">-</span>
-          <el-date-picker
-                  v-model="formData.endTime"
-                  type="date"
-                  value-format="yyyy-MM-dd"
-                  :min-date="formData.startTime"
-                  placeholder="选择结束日期"
-                  style="width: 140px"
-                  clearable
-          >
-          </el-date-picker>
+          <el-option
+            v-for="item in ThemeList"
+            :key="item.name"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+          </el-select>
         </div>
       </div>
     </div>
@@ -327,7 +323,11 @@ export default {
       gridList: [],
       lifeStyleList: [], // 生活方式
       questionFromList: [], // 问卷来源
+      ThemeList: [],
+      smsTypes: [],
       formData: {
+        categoryId: '', // 短信类别
+        themId: '', // 主题类别
         content: '',
         suitGender: '', // 适宜性别
         suitCrowd: '', // 适宜类别
@@ -379,6 +379,8 @@ export default {
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       vm.getList();
+      vm.getGridList();
+      vm.getGridType();
     });
   },
   destroyed() {
@@ -386,6 +388,18 @@ export default {
     localStorage.removeItem('homeSearchData');
   },
   methods: {
+    async getGridList() {
+      const res = await this.$api.projectList.getSortlist({ lv: 2, parentId: 1 });
+      const { data } = res.data;
+      this.ThemeList = data;
+      console.log(this.ThemeList);
+    },
+    async getGridType() {
+      const res = await this.$api.projectList.getSortlist({ lv: 1, parentId: 0 });
+      const { data } = res.data;
+      this.smsTypes = data;
+      // console.log(this.smsTypes);
+    },
     async getList() {
       const res = await this.$api.projectList.smsList(this.formData);
       const { data } = res.data;
@@ -404,6 +418,8 @@ export default {
       this.formData.suitCrowd = '';
       this.formData.suitSeason = '';
       this.formData.source = '';
+      this.formData.categoryId = '';
+      this.formData.themId = '';
       this.formData.startTime = undefined;
       this.formData.endTime = undefined;
       // this.getQuestionType();

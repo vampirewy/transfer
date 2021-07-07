@@ -15,6 +15,7 @@
       label-width="90px"
       class="form-content"
     >
+    <div>
       <el-form-item prop="names" label="原料名称：">
         <el-input
           v-if="type !== 'edit'"
@@ -33,42 +34,46 @@
         ></el-input>
         <span v-else>{{ ruleForm.otherName }}</span>
       </el-form-item>
-      <div>
+      <el-form-item style="position: relative" label="原料分类：">
+        <el-select
+          v-if="type !== 'edit'"
+          placeholder="请选择"
+          v-model="ruleForm.foodSort"
+          clearable
+          style="width: 189px"
+        >
+          <el-option
+            v-for="item in cateData"
+            :key="item.paramValue"
+            :label="item.name"
+            :value="item.paramValue"
+          ></el-option>
+        </el-select>
+        <span v-else>{{ foodSortName }}</span>
+        <span class="tip">营养成分：以100g可食部计算</span>
+      </el-form-item>
+    </div>
+    <div style="width:100%">
+      <el-col :span="24">
         <el-form-item label="备注：">
           <el-input
             v-if="type !== 'edit'"
-            style="width: 200px"
             v-model="ruleForm.remarks"
             type="textarea"
             :rows="4"
+            style="width:500%"
             placeholder="请输入"
           ></el-input>
           <span v-else>{{ ruleForm.otherName }}</span>
         </el-form-item>
-        <el-form-item style="position: relative" label="原料分类：">
-          <el-select
-            v-if="type !== 'edit'"
-            placeholder="请选择"
-            v-model="ruleForm.foodSort"
-            clearable
-            style="width: 189px"
-          >
-            <el-option
-              v-for="item in cateData"
-              :key="item.paramValue"
-              :label="item.name"
-              :value="item.paramValue"
-            ></el-option>
-          </el-select>
-          <span v-else>{{ foodSortName }}</span>
-          <span class="tip">营养成分：以100g可食部计算</span>
-        </el-form-item>
-      </div>
-      <div class="diet-form_center">
+      </el-col>
+    </div>
+      <!-- <div class="diet-form_center"> -->
         <div class="diet-plan-box">
-          <div class="title">原料成分</div>
+          <div class="titles">原料成分</div>
+          <div class="boxchengfen"></div>
         </div>
-      </div>
+      <!-- </div> -->
       <div class="cooking-me">
         <el-form-item>
           <div class="component-box">

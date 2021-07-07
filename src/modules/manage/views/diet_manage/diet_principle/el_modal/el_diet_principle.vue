@@ -16,7 +16,7 @@
       </el-form-item>
       <div class="template-intro">
         <el-form-item  label="原则内容：">
-          <div v-if="EditList.Look">{{EditList.content}}</div>
+          <div v-if="EditList.Look" style="line-height: 20px;">{{EditList.content}}</div>
           <el-input
             type="textarea"
             :rows="4"

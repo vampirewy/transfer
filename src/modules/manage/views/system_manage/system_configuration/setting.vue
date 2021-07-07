@@ -32,14 +32,14 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="11">
+          <!-- <el-col :span="11">
             <el-form-item label="问卷是否必填" prop="gender">
               <el-radio-group v-model="formData.questioned">
                 <el-radio :label="1" value="1">是</el-radio>
                 <el-radio :label="2" value="2">否</el-radio>
               </el-radio-group>
             </el-form-item>
-          </el-col>
+          </el-col> -->
         </el-row>
         <el-row>
           <el-col :span="11" style="margin-right: 1px">
@@ -74,7 +74,7 @@
               <div class="template-add-wrapper">
                 <el-popover
                   ref="sportPopover"
-                  width="640"
+                  width="720"
                   trigger="click"
                   @show="popoverStatus = true"
                   @hide="handlePopoverClose"
@@ -120,18 +120,18 @@
             <el-form-item label="必查项目" prop="sportLibraryDTOList">
               <div class="template-add-wrapper">
                 <el-popover
-                  ref="sportPopover"
-                  width="640"
+                  ref="sportPopoveres"
+                  width="720"
                   trigger="click"
-                  @show="popoverStatus = true"
-                  @hide="handlePopoverClose"
+                  @show="popoverStatuses = true"
+                  @hide="handlePopoverCloses"
                 >
-                  <abscore
-                    v-if="popoverStatus"
+                  <abscores
+                    v-if="popoverStatuses"
                     @change="handleSportSelectChangess"
-                    @cancel="handlePopoverClose"
+                    @cancel="handlePopoverCloses"
                   >
-                  </abscore>
+                  </abscores>
                   <el-input
                     class="select-template-trigger"
                     slot="reference"
@@ -142,7 +142,7 @@
                     <i
                       class="el-select__caret el-input__icon "
                       :class="
-                        popoverStatus
+                        popoverStatuses
                           ? 'el-icon-arrow-up'
                           : 'el-icon-arrow-down'
                       "
@@ -167,16 +167,16 @@
             <el-form-item label="异常得分" prop="sportLibraryDTOList">
               <div class="template-add-wrapper">
                 <el-popover
-                  ref="sportPopover"
-                  width="640"
+                  ref="sportPopoveress"
+                  width="720"
                   trigger="click"
-                  @show="popoverStatus = true"
-                  @hide="handlePopoverCloses"
+                  @show="popoverStatusess = true"
+                  @hide="handlePopoverClosess"
                 >
                 <abconfig
-                    v-if="popoverStatus"
+                    v-if="popoverStatusess"
                     @change="handleSportSelectChanges"
-                    @cancel="handlePopoverClose"
+                    @cancel="handlePopoverClosess"
                   >
                   </abconfig>
                   <el-input
@@ -225,6 +225,7 @@
 <script>
 import abnormal from './abnormal.vue';
 import abscore from './abscore.vue';
+import abscores from './abscores.vue';
 import abconfig from './abconfig.vue';
 export default {
   name: 'Comment',
@@ -233,6 +234,7 @@ export default {
     abnormal,
     abscore,
     abconfig,
+    abscores,
   },
   data() {
     return {
@@ -283,6 +285,8 @@ export default {
         },
       ],
       popoverStatus: false,
+      popoverStatuses: false,
+      popoverStatusess: false,
       newList: [],
     };
   },
@@ -294,7 +298,7 @@ export default {
       return this.selectTemplates.map(item => item.abnormalName).join(',');
     },
     templateStrss() {
-      return this.selectTemplatess.map(item => item.systemItemName).join(',');
+      return this.selectTemplatess.map(item => item.itemName).join(',');
     },
   },
   mounted() {
@@ -353,17 +357,28 @@ export default {
       this.popoverStatus = false;
       this.$refs.sportPopover.doClose();
     },
+    handlePopoverCloses() {
+      this.popoverStatuses = false;
+      this.$refs.sportPopoveres.doClose();
+    },
+    handlePopoverClosess() {
+      this.popoverStatusess = false;
+      this.$refs.sportPopoveress.doClose();
+    },
     handleSportSelectChange(data) {
       this.selectTemplate = data;
       this.handlePopoverClose();
+      this.$refs.sportPopovere.doClose();
     },
     handleSportSelectChanges(data) {
       this.selectTemplates = data;
-      this.handlePopoverClose();
+      this.handlePopoverCloses();
+      this.$refs.sportPopoveres.doClose();
     },
     handleSportSelectChangess(data) {
       this.selectTemplatess = data;
-      this.handlePopoverClose();
+      this.handlePopoverClosess();
+      this.$refs.sportPopoveress.doClose();
     },
     getCommentDetail() {
       this.$api.systemManageInterface

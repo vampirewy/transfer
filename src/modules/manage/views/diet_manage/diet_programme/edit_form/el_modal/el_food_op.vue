@@ -423,7 +423,10 @@ export default {
     width: 25%;
     min-height: 600px;
     border-radius: 8px 8px 0px 8px;
-    border: 1px solid #e5e7ef;
+    // border: 1px solid #e5e7ef;
+    border-left: solid 1px #e5e7ef;
+    border-bottom: solid 1px #e5e7ef;
+    border-top: solid 1px #e5e7ef;
   }
   .right {
     border-radius: 0px 8px 8px 0px;

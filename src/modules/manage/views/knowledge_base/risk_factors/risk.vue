@@ -31,7 +31,7 @@
     </div>
   </div>
     <div class="topbottomborder"></div>
-    <!-- <div class="divRightTitleDiv">
+    <div class="divRightTitleDiv">
       <div>
         <el-button
                 class="btn-new btnAdd"
@@ -47,7 +47,7 @@
                 v-if="getAccess('life_style_questionnaire_deleted')"
         ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
       </div>
-    </div> -->
+    </div>
       <div class="user-follow">
         <!--<div class="tableTopDoDiv">
           <div class="table-operate-buttons">

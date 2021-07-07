@@ -1,5 +1,6 @@
 <template>
-<div style="margin:-20px -15px;background: #F5F8FC46;">
+   <!-- style="margin:-20px -15px;background: #F5F8FC46;" -->
+<div>
 <div style="display: flex;">
   <div class="dashboard-editor-container">
     <search-group @searchData="getSearchData" />
@@ -229,7 +230,7 @@
           </div>
         </template>
       </el-table>
-      <div style="text-align: right;padding-bottom: 20px;">
+      <div style="text-align: right;padding-bottom: 10px;">
         <el-pagination
           style="margin-top: 15px"
           @current-change="search"
@@ -301,8 +302,19 @@ export default {
     };
   },
   mounted() {
+    document.querySelector('.main-content-con').style = 'top: 97px';
+    document.querySelector('.content-wrapper').style = 'height: calc(100% - 30px);margin: 0;background: #F6F8FC;padding:10px 20px 20px 19px';
     this.PositiveClient();
     this.InterveneClient();
+  },
+  activated() {
+    document.querySelector('.main-content-con').style = 'top: 97px';
+    document.querySelector('.content-wrapper').style = 'height: calc(100% - 30px);margin: 0;background: #F6F8FC;padding:0 20px 20px 20px';
+  },
+  beforeRouteLeave(to, form, next) {
+    document.querySelector('.main-content-con').style = 'top: 116px';
+    document.querySelector('.content-wrapper').style = 'height: calc(100% - 80px);margin: 0 20px 20px 20px;background: #ffffff';
+    next();
   },
   methods: {
     PositiveClient() {
@@ -516,6 +528,14 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+  .main .main-content-con /deep/ .content-wrapper {
+    margin: 0;
+    padding: 20px;
+    background-color: #F6F8FC;
+    border-radius: 8px;
+    height: calc(100% - 80px);
+    overflow-x: hidden;
+}
 .totals{
   position: absolute;
   margin-top: -95px;
@@ -821,8 +841,8 @@ export default {
   }
 }
 .TabListcss{
-  height: 380px;
-  width: 96.5%;
+  // height: 380px;
+  width: 96.7%;
   background: #ffffff;
   // box-shadow: 0px 6px 24px 0px rgba(14, 37, 87, 0.06);
   border-radius: 0px 0px 8px 8px;

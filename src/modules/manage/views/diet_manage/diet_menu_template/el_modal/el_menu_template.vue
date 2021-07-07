@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="新增菜谱模板"
+    :title="ruleForm.id ? '编辑菜谱模板':'新增菜谱模板'"
     class="dialog-detail"
     :modal-append-to-body="false"
     width="580px"
@@ -32,7 +32,7 @@
       <el-form-item prop="name" label="模板名称：">
         <el-input
           v-model="ruleForm.name"
-          style="width: 159px"
+          style="width: 160px"
           placeholder="请输入"
         ></el-input>
       </el-form-item>
@@ -47,7 +47,7 @@
       <el-form-item prop="maxKcal">
         <el-input
           v-model="ruleForm.maxKcal"
-          style="width: 189px"
+          style="width: 200px"
           placeholder="请输入"
         ></el-input>
       </el-form-item>
@@ -156,7 +156,7 @@ export default {
 .template-intro {
   /deep/ .el-form-item {
     display: inline-flex;
-    width: 100%;
+    width: 98%;
     .el-form-item__content {
       flex: 1 !important;
     }

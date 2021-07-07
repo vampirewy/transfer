@@ -198,6 +198,7 @@ export default {
   line-height: 20px;
   position: relative;
   padding-left: 15px;
+  margin-bottom: 20px;
   &::before {
     content: '';
     display: inline-block;

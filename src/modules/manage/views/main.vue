@@ -466,7 +466,8 @@ export default {
       background-color: #fff;
       border-radius: 8px;
       height: calc(100% - 80px);
-      overflow-y: auto;
+      // overflow-y: auto;
+      overflow-x: hidden;
     }
   }
 }

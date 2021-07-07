@@ -21,7 +21,7 @@
       <div class="medicate-record mt20">
       <el-row>
       <el-col :span="6">
-          <el-form-item label="姓名" prop="clientName">
+          <el-form-item label="姓名" prop="clientName" class="boxs">
             <el-popover
               ref="userPopover"
               placement="bottom-start"
@@ -43,10 +43,15 @@
                 placeholder="请选择客户"
 
               >
-                <i
-                  :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
+              <i
+                  :class="popoverStatus ?
+                  'el-icon-arrow-up':'el-icon-arrow-down'"
                   slot="suffix"
                 ></i>
+                <!-- <i
+                  :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
+                  slot="suffix"
+                ></i> -->
               </el-input>
             </el-popover>
           </el-form-item>
@@ -509,6 +514,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .medication-history-add /deep/ {
+    .boxs{
+    .el-input__inner {
+      color: #333 !important;
+      background-color: #ffffff !important;
+      border: 1px solid #e0e0e0 !important;
+      // background: #F4F4F6 !important;
+      }
+    }
+  }
   /deep/ .el-message-box__btns-left {
     text-align: center !important;
   }

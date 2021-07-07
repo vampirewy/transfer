@@ -35,9 +35,9 @@
               v-for="(item, index) in examination" :key="index"></el-option>
             </el-select>
           </div> -->
-          <div>
+          <div style="padding-top: 5px;">
             <span>科室名称：</span>
-            <el-input placeholder="科室名称" v-model="SectionListId"
+            <el-input placeholder="科室名称" v-model="form.SectionListId"
             style="width:120px">
             </el-input>
           </div>
@@ -55,11 +55,11 @@
         </div>
         <div class="searchRight">
           <div class="buttones">
-            <div class="searchFor" @click="search(1)">
+            <div class="searchFor" @click="search(1)" style="padding-top:2px;">
               <img src="@/assets/images/common/topsearchblue.png" alt="">
             </div>
-            <div class="resetAll" @click="reset">重置</div>
-            <div class="more" v-if="isTrue"  @click="upMore">
+            <div class="resetAll" @click="reset" style="margin-top: 17px;">重置</div>
+            <div class="more" v-if="isTrue"  @click="upMore" style="margin-top: 17px;">
               <span>></span>
               展开更多</div>
             <div class="more noMore" v-else @click="upMore">
@@ -249,7 +249,6 @@ export default {
     return {
       examination: [],
       SectionList: '',
-      SectionListId: '',
       isTrue: true,
       value: true,
       total: 0,
@@ -274,6 +273,7 @@ export default {
         type: 0,
       },
       form: {
+        SectionListId: '',
         examinationId: '', // 项目库
         gender: '', // 性别
         state: '', // 状态
@@ -372,6 +372,7 @@ export default {
         isCompare: this.form.source,
         pageNo: this.table.pageNo,
         pageSize: this.table.pageSize,
+        sectionName: this.form.SectionListId,
       };
       const res = await this.$api.physicalProjectListInterface.listPage(
         reqBody,
@@ -460,6 +461,7 @@ export default {
     },
     reset() {
       this.form.examinationId = '';
+      this.form.SectionListId = '';
       this.form.gender = '';
       this.form.isMain = '';
       this.form.state = '';

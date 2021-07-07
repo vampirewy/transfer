@@ -12,13 +12,13 @@
           <el-checkbox-group v-model="selected">
             <el-checkbox
               name="selected"
-              :label="scope.row.departmentName"
+              :label="scope.row.workUnitName"
               @change="val => checkedChange(val, scope.row)">&nbsp;
             </el-checkbox>
           </el-checkbox-group>
         </template>
       </el-table-column>
-      <el-table-column prop="departmentName" label="名称" align="center"></el-table-column>
+      <el-table-column prop="workUnitName" label="名称" align="center"></el-table-column>
       <el-table-column prop="total" label="人数" align="center">
       </el-table-column>
     </el-table>
@@ -72,7 +72,7 @@ export default {
     sportTypeMap() {
       const map = {};
       sportTypeList.forEach((item) => {
-        map[item.value] = item.departmentName;
+        map[item.value] = item.workUnitName;
       });
       return map;
     },
@@ -119,8 +119,8 @@ export default {
       this.queryList();
     },
     async queryList() {
-      const res = await this.$api.accessReport.departmentlist({
-        workUnitName: this.departmentName,
+      const res = await this.$api.accessReport.groupReportinfo({
+        keywords: this.name,
         pageNo: this.currentPage,
         pageSize: this.pageSize,
       });
@@ -129,17 +129,6 @@ export default {
         this.tableData = data.data || [];
         this.total = data.total;
       }
-      // const res = await this.$api.accessReport.departmenttotal({
-      //   workUnitName: this.name,
-      //   departmentName: this.departmentName,
-      //   startReportDate: this.form.startTime,
-      //   endReportDate: this.form.endTime,
-      // });
-      // const { data } = res.data;
-      // if (data) {
-      //   this.tableData = data.data || [];
-      //   this.total = data.total;
-      // }
     },
   },
 };

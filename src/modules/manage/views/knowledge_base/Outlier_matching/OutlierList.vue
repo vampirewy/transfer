@@ -54,20 +54,25 @@
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
               </span>
         </div>
-        <!-- <div>
-          <span>项目库：</span>
+        <div>
+          <span>评估相关：</span>
           <el-select
                   v-model="formData.isAssess"
                   placeholder="请选择"
                   style="width: 140px"
                   clearable
           >
-            <el-option
-              :label="item.name"
-              :value="item.id"
-              v-for="(item, index) in examination" :key="index"></el-option>
+          <el-option label="是" value="1" key="1"></el-option>
+          <el-option label="否" value="2" key="2"></el-option>
           </el-select>
-        </div> -->
+        </div>
+        <div class="searchInputFormItem">
+          <el-input placeholder="匹配项目" v-model="formData.matchItemName">
+          </el-input>
+          <span class="searchBtnImgSpan" @click="search(1)">
+                  <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
+              </span>
+        </div>
       </div>
       <div class="searchRight">
         <div class="buttones">
@@ -304,6 +309,7 @@ export default {
       questionFromList: [], // 问卷来源
       examination: '', // 项目库
       formData: {
+        matchItemName: '',
         itemName: '',
         isAssess: '',
         keyWord: '',
@@ -378,6 +384,7 @@ export default {
     },
     async getList() {
       const reqBody = {
+        matchItemName: this.formData.matchItemName,
         itemName: this.formData.itemName,
         isAssess: this.formData.isAssess,
         pageNo: this.params.pageNo,
@@ -407,6 +414,7 @@ export default {
       this.multipleSelection = val;
     },
     reset() {
+      this.formData.matchItemName = '';
       this.formData.itemName = '';
       this.params.pageNo = 1;
       this.formData.isAssess = '';

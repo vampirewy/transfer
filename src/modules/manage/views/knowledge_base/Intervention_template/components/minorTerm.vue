@@ -170,11 +170,18 @@
                               v-model="scope.row[item.prop]"
                               placeholder="请选择"
                               style="width: 140px"
+                              @visible-change="changeValue1(scope.$index,$event)"
                       >
-                        <el-option label="是" value="1" key="1"></el-option>
+                        <el-option
+                          v-for="item in constitutionList"
+                          :key="item.id"
+                          :label="item.name"
+                          :value="item.id"
+                        ></el-option>
+                        <!-- <el-option label="是" value="1" key="1"></el-option>
                         <el-option label="基本是" value="2" key="2"></el-option>
                         <el-option label="倾向是" value="3" key="3"></el-option>
-                        <el-option label="否" value="4" key="4"></el-option>
+                        <el-option label="否" value="4" key="4"></el-option> -->
                       </el-select>
                     </div>
                   </span>
@@ -312,6 +319,7 @@ export default {
   },
   data() {
     return {
+      constitutionList: [],
       detectionpopoverStatus: false,
       total: 0,
       dataSource: {
@@ -412,6 +420,34 @@ export default {
         this.dataSource.list[index].maxValue = '';
       }
       this.$set(this.dataSource.list[index], `${new Date()}`, '');
+    },
+    changeValue1(index, event) {
+      if (event) {
+        const jsonArr = [
+          {
+            id: 1,
+            name: '是',
+          },
+          {
+            id: 2,
+            name: '基本是',
+          },
+          {
+            id: 3,
+            name: '倾向是',
+          },
+          {
+            id: 4,
+            name: '否',
+          },
+        ];
+        if (this.dataSource.list[index].tizhiCode !== 1) {
+          jsonArr.splice(1, 1);
+        } else {
+          jsonArr.splice(2, 1);
+        }
+        this.constitutionList = jsonArr;
+      }
     },
     ConstitutionList() {
       this.$api.reportInterface

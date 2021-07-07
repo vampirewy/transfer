@@ -54,6 +54,11 @@
             </el-select>
           </el-form-item>
         </el-col>
+        <el-col :span="6">
+          <el-form-item label="小项单位">
+            <el-input v-model="form.Units" placeholder="请输入" :maxlength="300"></el-input>
+          </el-form-item>
+        </el-col>
         <el-col :span="9">
           <el-form-item label="年龄范围">
             <div style="display: flex;">
@@ -70,11 +75,6 @@
             <span style="margin:0 10px 0 10px;color:#333333">—</span>
             <el-input v-model="form.maxnormal" placeholder="请输入"></el-input>
             </div>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="小项单位">
-            <el-input v-model="form.Units" placeholder="请输入" :maxlength="300"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">

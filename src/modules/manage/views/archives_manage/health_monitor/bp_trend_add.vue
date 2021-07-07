@@ -21,7 +21,7 @@
       <div class="medicate-record mt20">
       <el-row>
           <el-col :span="6">
-          <el-form-item label="姓名" prop="clientName">
+          <el-form-item label="姓名" prop="clientName" class="boxs">
             <el-popover
               ref="userPopover"
               placement="bottom-start"
@@ -42,9 +42,14 @@
                 placeholder="请选择客户"
               >
                 <i
-                  :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
+                  :class="popoverStatus ?
+                  'el-icon-arrow-up':'el-icon-arrow-down'"
                   slot="suffix"
                 ></i>
+                <!-- <i
+                  :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
+                  slot="suffix"
+                ></i> -->
               </el-input>
             </el-popover>
           </el-form-item>
@@ -82,6 +87,18 @@
 
       <div class="medicate-info mt20" style="margin-top:0">
         <el-row v-if="id === 0">
+          <el-col :span="6">
+            <el-form-item label="日期时间" prop="startDate">
+              <el-date-picker
+                v-model="infoSource.startDate"
+                type="datetime"
+                style="width: 100%"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                :max-date="new Date()"
+                placeholder="选择日期时间">
+              </el-date-picker>
+            </el-form-item>
+            </el-col>
             <el-col :span="6">
             <el-form-item label="收缩压" prop="SBP">
               <el-input
@@ -118,39 +135,6 @@
               <span style="color:333333;font-size:14px">次/分钟</span>
             </el-form-item>
             </el-col>
-            <el-col :span="6">
-            <el-form-item label="日期时间" prop="startDate">
-              <el-date-picker
-                v-model="infoSource.startDate"
-                type="datetime"
-                style="width: 100%"
-                value-format="yyyy-MM-dd HH:mm:ss"
-                :max-date="new Date()"
-                placeholder="选择日期时间">
-              </el-date-picker>
-              <!-- <el-date-picker
-                class="start-date"
-                v-model="infoSource.startDate"
-                type="date"
-                value-format="yyyy-MM-dd"
-                placeholder="请选择日期"
-                style="width: 100%"
-                :max-date="new Date()"
-              ></el-date-picker> -->
-            </el-form-item>
-            </el-col>
-            <!-- <el-col :span="6">
-              <el-form-item label="时间" prop="Timevalue">
-                <el-time-picker
-                v-model="infoSource.Timevalue"
-                :picker-options="{
-                  selectableRange: '00:00:00 - 23:00:00'
-                }"
-                value-format="HH:mm:ss"
-                placeholder="请选择时间">
-              </el-time-picker>
-              </el-form-item>
-            </el-col> -->
         </el-row>
         <el-row v-if="id === 1">
             <!-- <el-form-item label="血糖类型" prop="drugsName" style="width:25%">
@@ -389,7 +373,7 @@
 <script>
 import detail from '../components/detail.vue';
 import selectUser from '../components/select_user.vue';
-
+import * as dayjs from 'dayjs';
 export default {
   name: 'medication_history_add',
   props: ['id', 'editId'],
@@ -412,7 +396,7 @@ export default {
         mainIndication: '',
         specification: '', // 体脂率
         countDay: '',
-        startDate: new Date(),
+        startDate: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'),
         startDates: '',
         endDate: '',
         dose: '',
@@ -752,6 +736,12 @@ export default {
   -moz-appearance: textfield !important;
 }
 .medication-history-add /deep/ {
+  .boxs{
+     .el-input__inner{
+      background: #ffffff !important;
+      border: 1px solid #e0e0e0 !important;
+    }
+  }
   .row {
     display: flex;
     flex-direction: row;
@@ -837,9 +827,6 @@ export default {
       border: 1px solid #3154AC;
       text-align:center;
     }
-  }
-  .el-input.is-disabled .el-input__inner{
-      background: #ffffff !important;
   }
 }
 </style>

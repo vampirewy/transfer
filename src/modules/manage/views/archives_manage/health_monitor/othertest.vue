@@ -22,7 +22,7 @@
       <div class="medicate-record mt20">
           <el-row>
               <el-col :span="6">
-          <el-form-item label="姓名" prop="clientName">
+          <el-form-item label="姓名" prop="clientName" class="boxs">
             <el-popover
               ref="userPopover"
               placement="bottom-start"
@@ -44,9 +44,14 @@
                 placeholder="请选择客户"
               >
                 <i
-                  :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
+                  :class="popoverStatus ?
+                  'el-icon-arrow-up':'el-icon-arrow-down'"
                   slot="suffix"
                 ></i>
+                <!-- <i
+                  :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
+                  slot="suffix"
+                ></i> -->
               </el-input>
             </el-popover>
           </el-form-item>
@@ -153,9 +158,14 @@
                 placeholder="请选择(可多选)"
               >
                 <i
-                  :class="`el-icon-caret-${detectionpopoverStatus ? 'top' : 'bottom'}`"
+                  :class="detectionpopoverStatus ?
+                  'el-icon-arrow-up':'el-icon-arrow-down'"
                   slot="suffix"
                 ></i>
+                <!-- <i
+                  :class="`el-icon-caret-${detectionpopoverStatus ? 'top' : 'bottom'}`"
+                  slot="suffix"
+                ></i> -->
               </el-input>
             </el-popover>
           </el-form-item>
@@ -234,6 +244,7 @@ import detail from '../components/detail.vue';
 import detectionuser from '../components/detection_user.vue';
 import selectUser from '../components/select_user.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
+import * as dayjs from 'dayjs';
 
 export default {
   name: 'medication_history_add',
@@ -253,7 +264,7 @@ export default {
         mainIndication: '',
         specification: '',
         countDay: '',
-        startDate: '',
+        startDate: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'),
         endDate: '',
         dose: '',
         ingrenient: '', // 检测描述
@@ -471,14 +482,18 @@ export default {
       this.queryList();
     },
     submit() {
-      console.log(this.detectionInfos, 'qweqweqweqwe');
+      // console.log(this.detectionInfos, 'qweqweqweqwe');
       if (!this.infoSource.clientName) {
         return this.$message.warning('请选择客户');
       }
       if (!this.infoSource.startDate) {
         return this.$message.warning('请填写时间');
       }
+      if (this.detectionInfos.length === 0) {
+        return this.$message.warning('请选择项目');
+      }
       const arrars = [];
+      let iscss = true;
       this.detectionInfos.forEach((val) => {
         if (val.consequences) {
           const json = {};
@@ -489,7 +504,8 @@ export default {
           json.detectDate = this.infoSource.startDate;
           arrars.push(json);
         } else {
-          return this.$message.warning('请填写检测结果');
+          iscss = false;
+          return false;
         }
       });
       // console.log(arrars);
@@ -501,10 +517,9 @@ export default {
       //   json.detectDate = this.infoSource.startDate;
       //   arrars.push(json);
       // }
-      if (arrars.length === 0) {
-        return this.$message.warning('请选择项目');
+      if (!iscss) {
+        return this.$message.warning('请填写检测结果');
       }
-      // console.log(arrars, '结果');
       this.$api.healthMonitorInterface.saveHealthDataOther(arrars).then(({ data }) => {
         if (data.success) {
           this.$message.success('操作成功');
@@ -526,9 +541,19 @@ export default {
 
 <style lang="scss" scoped>
 .medication-history-add /deep/ {
+  .boxs{
+     .el-input__inner{
+      background: #ffffff !important;
+      border: 1px solid #e0e0e0 !important;
+    }
+  }
   .row {
     display: flex;
     flex-direction: row;
+    .el-input__inner{
+      background: #ffffff !important;
+      border: 1px solid #e0e0e0 !important;
+    }
   }
   .red {
     font-style: normal;

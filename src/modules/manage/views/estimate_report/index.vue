@@ -23,14 +23,14 @@
     >
     </examine>
     <div v-else>
-    <div class="TabBars">
+    <!-- <div class="TabBars">
     <div>
       <span class="fristName" v-for="(item,index) in tabbor" :key="index"
       :class="Tabactive === index?'TabBarsName':'TabBarsNames'" @click="TabbarBtn(index)">
         {{item}}
       </span>
     </div>
-  </div>
+  </div> -->
       <div class="divTop">
           <div class="divTitle">
             <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
@@ -159,7 +159,6 @@
                     size="small"
                     @click="handleExamine"
                     class="btn-new btnDel"
-                    v-if="getAccess('customer_pool_distribute')"
             ><img src="@/assets/images/common/createReport.png" />生成报告</el-button>
           </div>
           <el-button v-if="Tabactive == 1" style="width:120px;margin: 16px 0;"
@@ -342,7 +341,7 @@
                 </el-table>
               </el-table-column>
               <el-table-column type="selection" width="40"></el-table-column>
-              <el-table-column label="体检编号" prop="id" width="90" show-overflow-tooltip>
+              <el-table-column label="体检编号" prop="reportNo" width="90" show-overflow-tooltip>
               </el-table-column>
               <el-table-column label="姓名" prop="clientName" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
@@ -626,7 +625,7 @@ export default {
     return {
       pdf_url: process.env.api.pdf_url,
       isTrue: true,
-      tabbor: ['个人健康报告', '心理评估', '中医体质评估'],
+      tabbor: ['个人健康报告'],
       Tabactive: 0,
       view: 1, // 1:列表页，2：异常解读，3：点评，4：匹配
       popoverStatus: false,
@@ -999,7 +998,7 @@ export default {
   }
 }*/
 .divTop{
-  padding-top: 30px;
+  // padding-top: 30px;
 }
 .TabBars {
   display: flex;

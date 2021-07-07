@@ -25,6 +25,18 @@
           }
      }
 }
+.titles{
+  font-weight: 600;
+}
+.boxchengfen{
+  width: 32px;
+  height: 4px;
+  background: #3154AC;
+  border-radius: 3px;
+  opacity: 0.5;
+  margin-top: -7px;
+  margin-bottom: 20px;
+}
 .cooking-me{
   /deep/ {
     .el-form-item{
