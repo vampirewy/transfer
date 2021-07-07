@@ -236,6 +236,7 @@ export default {
 .dialog-detail /deep/ {
   .form-content .el-input__inner{
     background-color: #ffffff !important;
+    border: 1px solid #e0e0e0 !important;
   }
   .form-title {
     display: flex;

@@ -12,7 +12,7 @@
       <template slot="left">
         <search>
           <div class="searchInputFormItem">
-            <el-input placeholder="姓名/手机号/企业单位" v-model="form.keywords"></el-input>
+            <input class="inputBtn" placeholder="姓名/手机号/企业单位" v-model="form.keywords"></el-input>
             <span class="searchBtnImgSpan" @click="search">
               <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
             </span>
@@ -118,18 +118,16 @@
               </el-select>
             </div>
             <div  v-if="tabIndex === 'weight'">
-              <el-input
+              <input class="inputBtn"
                 placeholder="值"
                 v-model="forms.minWc"
                 style="width: 60px"
-                v-if="forms.wcSelectType < 4 || forms.wcSelectType === 5">
-              </el-input>
-              <el-input
+                v-if="forms.wcSelectType < 4 || forms.wcSelectType === 5" />
+              <input class="inputBtn"
                 placeholder="值"
                 v-model="forms.maxWc"
                 style="width: 60px"
-                v-if="forms.wcSelectType > 3">
-              </el-input>
+                v-if="forms.wcSelectType > 3" />
             </div>
             <div v-if="tabIndex === 'sport'">
               <span>运动时长：</span>
@@ -147,18 +145,16 @@
               </el-select>
             </div>
             <div  v-if="tabIndex === 'sport'">
-              <el-input
+              <input class="inputBtn"
                 placeholder="值"
                 v-model="forms.minSportTime"
                 style="width: 60px"
-                v-if="forms.sportTimeSelectType < 4 || forms.sportTimeSelectType === 5">
-              </el-input>
-              <el-input
+                v-if="forms.sportTimeSelectType < 4 || forms.sportTimeSelectType === 5" />
+              <input class="inputBtn"
                 placeholder="值"
                 v-model="forms.maxSportTime"
                 style="width: 60px"
-                v-if="forms.sportTimeSelectType > 3">
-              </el-input>
+                v-if="forms.sportTimeSelectType > 3" />
             </div>
             <div v-if="tabIndex === 'other'">
               <span>检测结果：</span>
@@ -176,18 +172,16 @@
               </el-select>
             </div>
             <div  v-if="tabIndex === 'other'">
-              <el-input
+              <input class="inputBtn"
                 placeholder="值"
                 v-model="forms.minResult"
                 style="width: 60px"
-                v-if="forms.resultSelectType < 4 || forms.resultSelectType === 5">
-              </el-input>
-              <el-input
+                v-if="forms.resultSelectType < 4 || forms.resultSelectType === 5" />
+              <input class="inputBtn"
                 placeholder="值"
                 v-model="forms.maxResult"
                 style="width: 60px"
-                v-if="forms.resultSelectType > 3">
-              </el-input>
+                v-if="forms.resultSelectType > 3" />
             </div>
           </div>
           <div class="searchRight">
@@ -225,18 +219,16 @@
             </el-select>
           </div>
           <div  v-if="tabIndex === 'BP'">
-            <el-input
+            <input class="inputBtn"
               placeholder="值"
               v-model="forms.minDbp"
               style="width: 60px"
-              v-if="forms.dbpSelectType < 4 || forms.dbpSelectType === 5">
-            </el-input>
-            <el-input
+              v-if="forms.dbpSelectType < 4 || forms.dbpSelectType === 5" />
+            <input class="inputBtn"
               placeholder="值"
               v-model="forms.maxDbp"
               style="width: 60px"
-              v-if="forms.dbpSelectType > 3">
-            </el-input>
+              v-if="forms.dbpSelectType > 3" />
           </div>
           <div v-if="tabIndex === 'BP'">
             <span>脉搏：</span>
@@ -254,27 +246,24 @@
             </el-select>
           </div>
           <div  v-if="tabIndex === 'BP'">
-            <el-input
+            <input class="inputBtn"
               placeholder="值"
               v-model="forms.minHb"
               style="width: 60px"
-              v-if="forms.hbSelectType < 4 || forms.hbSelectType === 5">
-            </el-input>
-            <el-input
+              v-if="forms.hbSelectType < 4 || forms.hbSelectType === 5" />
+            <input class="inputBtn"
               placeholder="值"
               v-model="forms.maxHb"
               style="width: 60px"
-              v-if="forms.hbSelectType > 3">
-            </el-input>
+              v-if="forms.hbSelectType > 3" />
           </div>
           <!-- <div v-if="tabIndex === 'BP'">
               <span>心率值：</span>
-              <el-input
+              <input class="inputBtn"
                 placeholder="心率值"
                 v-model="forms.minSugar"
                 style="width: 150px"
               >
-              </el-input>
             </div> -->
             <div v-if="tabIndex === 'BG'">
               <span>血糖值：</span>
@@ -292,18 +281,16 @@
               </el-select>
             </div>
             <div  v-if="tabIndex === 'BG'">
-              <el-input
+              <input class="inputBtn"
                 placeholder="值"
                 v-model="forms.minSugar"
                 style="width: 60px"
-                v-if="forms.selectType < 4 || forms.selectType === 5">
-              </el-input>
-              <el-input
+                v-if="forms.selectType < 4 || forms.selectType === 5" />
+              <input class="inputBtn"
                 placeholder="值"
                 v-model="forms.maxSugar"
                 style="width: 60px"
-                v-if="forms.selectType > 3">
-              </el-input>
+                v-if="forms.selectType > 3" />
             </div>
             <div v-if="tabIndex === 'weight'">
               <span>体脂率：</span>
@@ -321,18 +308,16 @@
               </el-select>
             </div>
             <div  v-if="tabIndex === 'weight'">
-              <el-input
+              <input class="inputBtn"
                 placeholder="值"
                 v-model="forms.minBdPercent"
                 style="width: 60px"
-                v-if="forms.bdPercentSelectType < 4 || forms.bdPercentSelectType === 5">
-              </el-input>
-              <el-input
+                v-if="forms.bdPercentSelectType < 4 || forms.bdPercentSelectType === 5" />
+              <input class="inputBtn"
                 placeholder="值"
                 v-model="forms.maxBdPercent"
                 style="width: 60px"
-                v-if="forms.bdPercentSelectType > 3">
-              </el-input>
+                v-if="forms.bdPercentSelectType > 3" />
             </div>
             <div v-if="tabIndex === 'weight'">
               <span>BMI</span>
@@ -350,18 +335,16 @@
               </el-select>
             </div>
             <div  v-if="tabIndex === 'weight'">
-              <el-input
+              <input class="inputBtn"
                 placeholder="值"
                 v-model="forms.minBmi"
                 style="width: 60px"
-                v-if="forms.bmiSelectType < 4 || forms.bmiSelectType === 5">
-              </el-input>
-              <el-input
+                v-if="forms.bmiSelectType < 4 || forms.bmiSelectType === 5" />
+              <input class="inputBtn"
                 placeholder="值"
                 v-model="forms.maxBmi"
                 style="width: 60px"
-                v-if="forms.bmiSelectType > 3">
-              </el-input>
+                v-if="forms.bmiSelectType > 3" />
             </div>
             <div v-if="tabIndex === 'sport'">
               <span>运动路程：</span>
@@ -379,18 +362,16 @@
               </el-select>
             </div>
             <div  v-if="tabIndex === 'sport'">
-              <el-input
+              <input class="inputBtn"
                 placeholder="值"
                 v-model="forms.minSportDistance"
                 style="width: 60px"
-                v-if="forms.sportDistanceSelectType < 4 || forms.sportDistanceSelectType === 5">
-              </el-input>
-              <el-input
+                v-if="forms.sportDistanceSelectType < 4 || forms.sportDistanceSelectType === 5" />
+              <input class="inputBtn"
                 placeholder="值"
                 v-model="forms.maxSportDistance"
                 style="width: 60px"
-                v-if="forms.sportDistanceSelectType > 3">
-              </el-input>
+                v-if="forms.sportDistanceSelectType > 3" />
             </div>
             <div v-if="tabIndex === 'sport'">
               <span>消耗卡路里：</span>
@@ -408,18 +389,16 @@
               </el-select>
             </div>
             <div  v-if="tabIndex === 'sport'">
-              <el-input
+              <input class="inputBtn"
                 placeholder="值"
                 v-model="forms.minSportKcal"
                 style="width: 60px"
-                v-if="forms.sportKcalSelectType < 4 || forms.sportKcalSelectType === 5">
-              </el-input>
-              <el-input
+                v-if="forms.sportKcalSelectType < 4 || forms.sportKcalSelectType === 5" />
+              <input class="inputBtn"
                 placeholder="值"
                 v-model="forms.maxSportKcal"
                 style="width: 60px"
-                v-if="forms.sportKcalSelectType > 3">
-              </el-input>
+                v-if="forms.sportKcalSelectType > 3" />
             </div>
             <div v-if="tabIndex === 'sport'">
               <span>步数：</span>
@@ -437,18 +416,44 @@
               </el-select>
             </div>
             <div  v-if="tabIndex === 'sport'">
-              <el-input
+              <input class="inputBtn"
                 placeholder="值"
                 v-model="forms.minSportSteps"
                 style="width: 60px"
-                v-if="forms.sportStepsSelectType < 4 || forms.sportStepsSelectType === 5">
-              </el-input>
-              <el-input
+                v-if="forms.sportStepsSelectType < 4 || forms.sportStepsSelectType === 5" />
+              <input class="inputBtn"
                 placeholder="值"
                 v-model="forms.maxSportSteps"
                 style="width: 60px"
-                v-if="forms.sportStepsSelectType > 3">
+                v-if="forms.sportStepsSelectType > 3" />
+            </div>
+            <!-- <div v-if="tabIndex === 'other'">
+              <span>检测项目：</span>
+              <el-select
+                v-model="forms.resultSelectType"
+                placeholder="请选择"
+                style="width: 100px"
+              >
+              <el-option
+                  v-for="item in selectTypeList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+              ></el-option>
+              </el-select>
+            </div> -->
+            <div class="searchInputFormItem"  v-if="tabIndex === 'other'">
+              <el-input
+                placeholder="检测项目"
+                v-model="forms.healthDataItemName"
+              >
               </el-input>
+              <span class="searchBtnImgSpans" @click="search">
+                <img
+                  class="searchBtnImg"
+                  src="@/assets/images/common/topsearch.png"
+                />
+              </span>
             </div>
           <div>
             <span>检测日期：</span>
@@ -884,6 +889,7 @@ export default {
         resultSelectType: '', // 检测结果＞，＝，≥，≤
         minResult: '',
         maxResult: '',
+        healthDataItemName: '',
       },
       form: {
         keywords: '', // 姓名
@@ -1055,6 +1061,7 @@ export default {
       this.hbSelectType = ''; // 脉搏＞，＝，≥，≤
       this.minHb = '';
       this.maxHb = '';
+      this.healthDataItemName = '';
       this.table.pageNo = 1;
       this.queryPageList();
     },
@@ -1217,6 +1224,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .searchBtnImgSpans{
+    position: absolute;
+    right: 0px;
+    top: 5px;
+    width: 36px;
+    height: 38px;
+    line-height: 38px;
+    border-radius: 0 5px 5px 0;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid #DDE0E6;
+    img{
+      width: 100%;
+    }
+  }
   .OrLowClassA{
     color: #333333;
   }

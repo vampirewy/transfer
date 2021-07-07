@@ -448,6 +448,7 @@ export default {
   /deep/.select-user-trigger .el-input__inner {
     color: #333 !important;
     background: #ffffff !important;
+    border: 1px solid #e0e0e0 !important;
   }
   .basic-info-title, .main-info-title {
     font-size: 18px;

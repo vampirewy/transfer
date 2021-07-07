@@ -15,7 +15,7 @@
       <el-row>
         <el-col :span="6">
           <el-form-item label="短信类别" prop="smsTypeName" >
-            <el-select v-model="form.smsTypeName" placeholder="请选择当前状态" width="150">
+            <el-select v-model="form.smsTypeName" placeholder="请选择短信类别" width="150">
               <el-option
                 v-for="item in smsTypes"
                 :key="item.name"
@@ -27,7 +27,7 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="短信主题" prop="ThemeListName">
-            <el-select v-model="form.ThemeListName" placeholder="请选择当前状态">
+            <el-select v-model="form.ThemeListName" placeholder="请选择短信主题">
               <el-option
                 v-for="item in ThemeList"
                 :key="item.name"
@@ -39,7 +39,7 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="适宜性别" prop="gender">
-            <el-select v-model="form.gender" placeholder="请选择当前状态">
+            <el-select v-model="form.gender" placeholder="请选择适宜性别">
               <el-option label="不限" :value="0" key="0"></el-option>
               <el-option label="男" :value="1" key="1"></el-option>
               <el-option label="女" :value="2" key="2"></el-option>
@@ -48,7 +48,7 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="适宜人群" prop="Crowd">
-            <el-select v-model="form.Crowd" placeholder="请选择当前状态">
+            <el-select v-model="form.Crowd" placeholder="请选择适宜人群">
               <el-option label="不限" :value="0" key="0"></el-option>
               <el-option label="成人" :value="1" key="1"></el-option>
               <el-option label="老人" :value="2" key="2"></el-option>
@@ -58,7 +58,7 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="适宜季节" prop="Season">
-            <el-select v-model="form.Season" placeholder="请选择当前状态">
+            <el-select v-model="form.Season" placeholder="请选择适宜季节">
               <el-option label="不限" :value="0">不限</el-option>
               <el-option label="春" :value="1">春</el-option>
               <el-option label="夏" :value="2">夏</el-option>
