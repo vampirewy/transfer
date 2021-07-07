@@ -159,7 +159,6 @@
                     size="small"
                     @click="handleExamine"
                     class="btn-new btnDel"
-                    v-if="getAccess('customer_pool_distribute')"
             ><img src="@/assets/images/common/createReport.png" />生成报告</el-button>
           </div>
           <el-button v-if="Tabactive == 1" style="width:120px;margin: 16px 0;"

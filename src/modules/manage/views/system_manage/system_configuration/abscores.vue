@@ -1,7 +1,7 @@
 <template>
   <div class="sport-template">
     <div class="searchInputFormItem">
-      <el-input v-model="name" placeholder="输入名称搜索"></el-input>
+      <el-input v-model="name" placeholder="输入条件搜索"></el-input>
       <span class="searchBtnImgSpan" @click="search">
         <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
       </span>
@@ -12,23 +12,18 @@
           <el-checkbox-group v-model="selected">
             <el-checkbox
               name="selected"
-              :label="scope.row.departmentName"
+              :label="scope.row.id"
               @change="val => checkedChange(val, scope.row)">&nbsp;
             </el-checkbox>
           </el-checkbox-group>
         </template>
       </el-table-column>
-      <el-table-column prop="departmentName" label="名称" align="center"></el-table-column>
-      <el-table-column prop="total" label="人数" align="center">
-      </el-table-column>
+      <el-table-column prop="itemName" label="异常名称" align="center"></el-table-column>
     </el-table>
     <el-pagination
-      background
       layout="prev,pager,next,jumper,total,sizes"
-      :page-sizes="[5]"
       :pager-count="5"
       :total="total"
-      :page-size="pageSize"
       :current-page="currentPage"
       @current-change="handleCurrentChange"
       @size-change="handleSizeChange"
@@ -44,49 +39,43 @@
 import { sportTypeList, sportSortList, strengthDegreeList1 } from '~/src/constant/plan_center';
 export default {
   name: 'SportTemplate',
-  props: {
-    // route object
-    departmentName: {
-      type: Object,
-      required: true,
-    },
-    form: {
-      type: Array,
-      default() {
-        return [];
-      },
-    },
-  },
   data() {
     return {
       name: '',
       tableData: [],
       total: 0,
       currentPage: 1,
-      pageSize: 5,
+      pageSize: 10,
       selected: [],
       selectedData: [],
+      formData: {
+      },
+      params: {
+        pageNo: 1,
+        pageSize: 10,
+        total: 0,
+      },
     };
   },
   computed: {
     sportTypeMap() {
       const map = {};
       sportTypeList.forEach((item) => {
-        map[item.value] = item.departmentName;
+        map[item.value] = item.itemName;
       });
       return map;
     },
     sportSortMap() {
       const map = {};
       sportSortList.forEach((item) => {
-        map[item.value] = item.name;
+        map[item.value] = item.itemName;
       });
       return map;
     },
     strengthDegreeMap() {
       const map = {};
       strengthDegreeList1.forEach((item) => {
-        map[item.value] = item.name;
+        map[item.value] = item.itemName;
       });
       return map;
     },
@@ -106,40 +95,33 @@ export default {
       }
     },
     handleCurrentChange(page) {
-      this.currentPage = page;
+      this.params.pageNo = page;
       this.queryList();
     },
     handleSizeChange(size) {
-      this.pageSize = size;
+      this.params.pageSize = size;
       this.currentPage = 1;
       this.queryList();
     },
     search() {
-      this.currentPage = 1;
+      this.params.pageNo = 1;
       this.queryList();
     },
     async queryList() {
-      const res = await this.$api.accessReport.departmentlist({
-        workUnitName: this.departmentName,
-        pageNo: this.currentPage,
-        pageSize: this.pageSize,
-      });
+      const reqBody = {
+        itemName: '',
+        isAssess: '',
+        pageNo: this.params.pageNo,
+        pageSize: this.params.pageSize,
+      };
+      const res = await this.$api.physicalProjectListInterface.systemlistpage(
+        reqBody,
+      );
       const { data } = res.data;
       if (data) {
         this.tableData = data.data || [];
         this.total = data.total;
       }
-      // const res = await this.$api.accessReport.departmenttotal({
-      //   workUnitName: this.name,
-      //   departmentName: this.departmentName,
-      //   startReportDate: this.form.startTime,
-      //   endReportDate: this.form.endTime,
-      // });
-      // const { data } = res.data;
-      // if (data) {
-      //   this.tableData = data.data || [];
-      //   this.total = data.total;
-      // }
     },
   },
 };
@@ -149,6 +131,8 @@ export default {
 .sport-template {
   padding: 13px 18px 21px 18px;
   /deep/ .el-table {
+    height: 300px;
+    overflow: auto;
     td, th {
       padding: 10px 0 !important;
     }

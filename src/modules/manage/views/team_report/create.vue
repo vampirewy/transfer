@@ -1,163 +1,161 @@
 <template>
   <div class="user-edit">
-      <el-row>
-        <el-col :span="24">
-          <div class="divRight">
-            <div class="divRightTitleDiv">
-              <div class="divRightTitle" style="margin: 0">
-                生成
-                <div class="titleBiao"></div>
-              </div>
+    <el-row>
+      <el-col :span="24">
+        <div class="divRight">
+          <div class="divRightTitleDiv">
+            <div class="divRightTitle" style="margin: 0">
+              生成
+              <div class="titleBiao"></div>
             </div>
           </div>
-          <el-form
-            ref="form"
-            class="user-edit-form"
-            :model="formData"
-            label-width="90px"
-            :rules="rules"
-          >
-            <el-row>
-              <el-col :span="6">
-                <el-form-item label="报告编号：" prop="name">
-                  <el-input
-                    v-model="formData.name"
-                    maxLength="30"
-                  ></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="报告名称：" prop="name">
-                  <el-input
-                    v-model="formData.name"
-                    maxLength="30"
-                  ></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="体检日期：" prop="name">
-                  <el-date-picker
-                    v-model="formData.startTime"
-                    type="date"
-                    format="yyyy-MM-dd"
-                    value-format="yyyy-MM-dd"
-                    :max-date="formData.endTime"
-                    placeholder="选择开始日期"
-                    style="width: 140px"
-                  >
-                  </el-date-picker>
-                  <span class="timing">-</span>
-                  <el-date-picker
-                    v-model="formData.endTime"
-                    type="date"
-                    format="yyyy-MM-dd"
-                    value-format="yyyy-MM-dd"
-                    :min-date="formData.startTime"
-                    placeholder="选择结束日期"
-                    style="width: 140px"
-                  >
-                  </el-date-picker>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label="人员范围：">
-                  <el-radio-group v-model="formData.worker">
-                    <el-radio :label="1" value="1">按参检团队</el-radio>
-                    <el-radio :label="2" value="2">按工作单位</el-radio>
-                    <el-radio :label="3" value="3">按部门</el-radio>
-                  </el-radio-group>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <div class="divRight">
-                <div class="divRightTitleDiv">
-                  <div class="divRightTitle">
-                    团队信息
-                    <div class="titleBiao"></div>
-                  </div>
+        </div>
+        <el-form
+          ref="form"
+          class="user-edit-form"
+          :model="formData"
+          label-width="90px"
+          :rules="rules"
+        >
+          <el-row>
+            <el-col :span="6">
+              <el-form-item label="报告编号：" prop="name">
+                <el-input v-model="formData.name" maxLength="30"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="报告名称：" prop="name">
+                <el-input v-model="formData.name" maxLength="30"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="体检日期：" prop="name">
+                <el-date-picker
+                  v-model="formData.startTime"
+                  type="date"
+                  format="yyyy-MM-dd"
+                  value-format="yyyy-MM-dd"
+                  :max-date="formData.endTime"
+                  placeholder="选择开始日期"
+                  style="width: 140px"
+                >
+                </el-date-picker>
+                <span class="timing">-</span>
+                <el-date-picker
+                  v-model="formData.endTime"
+                  type="date"
+                  format="yyyy-MM-dd"
+                  value-format="yyyy-MM-dd"
+                  :min-date="formData.startTime"
+                  placeholder="选择结束日期"
+                  style="width: 140px"
+                >
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="人员范围：">
+                <el-radio-group v-model="formData.worker">
+                  <el-radio :label="1" value="1">按参检团队</el-radio>
+                  <el-radio :label="2" value="2">按工作单位</el-radio>
+                  <el-radio :label="3" value="3">按部门</el-radio>
+                </el-radio-group>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <div class="divRight">
+              <div class="divRightTitleDiv">
+                <div class="divRightTitle">
+                  团队信息
+                  <div class="titleBiao"></div>
                 </div>
               </div>
-              <el-col :span="24" v-if="formData.worker == 1">
-                <el-form-item label="参检团队">
-                  <div class="template-add-wrapper" style="display: flex;">
-                    <el-popover
-                      style="display: block;width: 100%;"
-                      ref="sportPopover"
-                      placement="bottom-end"
-                      width="650"
-                      trigger="click"
-                      @show="popoverStatus = true"
-                      @hide="handlePopoverClose"
+            </div>
+            <el-col :span="24" v-if="formData.worker == 1">
+              <el-form-item label="参检团队">
+                <div class="template-add-wrapper" style="display: flex">
+                  <el-popover
+                    style="display: block; width: 100%"
+                    ref="sportPopover"
+                    placement="bottom-end"
+                    width="650"
+                    trigger="click"
+                    @show="popoverStatus = true"
+                    @hide="handlePopoverClosework"
+                  >
+                    <sport-template
+                      v-if="popoverStatus"
+                      @change="handleSportSelectChange"
+                      @cancel="handlePopoverClose1"
                     >
-                      <sport-template
-                        v-if="popoverStatus"
-                        @change="handleSportSelectChange"
-                        @cancel="handlePopoverClose"
-                      >
-                      </sport-template>
-                      <el-input
-                        class="select-user-trigger"
-                        slot="reference"
-                        disabled
-                        v-model="templateStr"
-                        placeholder="请选择"
-                      >
-                        <i :class="`el-icon-arrow-${popoverStatus ? 'up' : 'down'}`"
-                           slot="suffix"></i>
-                      </el-input>
-                    </el-popover>
-                    <el-button class="addLv" @click="addSportTemplate">添加</el-button>
-                  </div>
-                </el-form-item>
-                <el-table :data="form.sportLibraryDTOList" class="sport-table">
-                  <el-table-column
-                    label="参检团队"
-                    prop="workUnitName"
-                    align="center"
-                  ></el-table-column>
-                  <el-table-column
-                    label="参检人数"
-                    prop="total"
-                    align="center"
-                  ></el-table-column>
-                  <el-table-column label="操作" align="center">
-                    <template slot-scope="scope">
-                      <el-button
-                        type="text"
-                        @click="
-                          form.sportLibraryDTOList.splice(scope.$index, 1)
-                        "
-                      >
-                        <img
-                          style="width: 30px"
-                          src="../../../../assets/images/common/del.png"
-                          alt=""
-                        />
-                      </el-button>
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </el-col>
-              <el-col :span="24">
-                <div v-if="formData.worker == 2">
-                  <el-form-item label="工作单位">
-                  <div class="template-add-wrapper" style="display: flex;">
+                    </sport-template>
+                    <el-input
+                      class="select-user-trigger"
+                      slot="reference"
+                      disabled
+                      v-model="templateStr"
+                      placeholder="请选择"
+                    >
+                      <i
+                        :class="`el-icon-arrow-${
+                          popoverStatus ? 'up' : 'down'
+                        }`"
+                        slot="suffix"
+                      ></i>
+                    </el-input>
+                  </el-popover>
+                  <el-button class="addLv" @click="addSportTemplate"
+                    >添加</el-button
+                  >
+                </div>
+              </el-form-item>
+              <el-table :data="form.sportLibraryDTOList" class="sport-table">
+                <el-table-column
+                  label="参检团队"
+                  prop="workUnitName"
+                  align="center"
+                ></el-table-column>
+                <el-table-column
+                  label="参检人数"
+                  prop="total"
+                  align="center"
+                ></el-table-column>
+                <el-table-column label="操作" align="center">
+                  <template slot-scope="scope">
+                    <el-button
+                      type="text"
+                      @click="form.sportLibraryDTOList.splice(scope.$index, 1)"
+                    >
+                      <img
+                        style="width: 30px"
+                        src="../../../../assets/images/common/del.png"
+                        alt=""
+                      />
+                    </el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-col>
+            <el-col :span="24">
+              <div v-if="formData.worker == 2">
+                <el-form-item label="工作单位">
+                  <div class="template-add-wrapper" style="display: flex">
                     <el-popover
-                      style="display: block;width: 100%;"
-                      ref="sportPopover"
+                      style="display: block; width: 100%"
+                      ref="sportPopover2"
                       placement="bottom-end"
                       width="650"
                       trigger="click"
                       @show="popoverStatuswork = true"
-                      @hide="handlePopoverClosework"
+                      @hide="handlePopoverClosework2"
                     >
                       <jointeam
                         v-if="popoverStatuswork"
                         @change="handleSportSelectChangework"
-                        @cancel="handlePopoverClose"
+                        @cancel="handlePopoverClose2"
                       >
                       </jointeam>
                       <el-input
@@ -167,11 +165,17 @@
                         v-model="templateStrwork"
                         placeholder="请选择"
                       >
-                        <i :class="`el-icon-arrow-${popoverStatuswork ? 'up' : 'down'}`"
-                           slot="suffix"></i>
+                        <i
+                          :class="`el-icon-arrow-${
+                            popoverStatuswork ? 'up' : 'down'
+                          }`"
+                          slot="suffix"
+                        ></i>
                       </el-input>
                     </el-popover>
-                    <el-button class="addLv" @click="addSportTemplatework">添加</el-button>
+                    <el-button class="addLv" @click="addSportTemplatework"
+                      >添加</el-button
+                    >
                   </div>
                 </el-form-item>
                 <el-table :data="form.teamListwork" class="sport-table">
@@ -189,12 +193,10 @@
                     <template slot-scope="scope">
                       <el-button
                         type="text"
-                        @click="
-                          form.teamListwork.splice(scope.$index, 1)
-                        "
+                        @click="form.teamListwork.splice(scope.$index, 1)"
                       >
                         <img
-                          style="width: 30px;"
+                          style="width: 30px"
                           src="../../../../assets/images/common/del.png"
                           alt=""
                         />
@@ -202,68 +204,80 @@
                     </template>
                   </el-table-column>
                 </el-table>
-                </div>
-                <div v-if="formData.worker == 3">
-                  <el-form-item label="工作单位">
-                  <div class="template-add-wrapper" style="display: flex;">
+              </div>
+              <div v-if="formData.worker == 3">
+                <el-form-item label="工作单位3">
+                  <div class="template-add-wrapper" style="display: flex">
                     <el-popover
-                      style="display: block;width: 100%;"
-                      ref="sportPopover"
+                      style="display: block; width: 100%;"
+                      ref="sportPopover3"
                       placement="bottom-end"
                       width="650"
                       trigger="click"
-                      @show="popoverStatuswork = true"
-                      @hide="handlePopoverClosework"
+                      @show="popoverStatuswork3 = true"
+                      @hide="handlePopoverClosework3"
                     >
-                      <sport-template
-                        v-if="popoverStatus"
-                        @change="handleSportSelectChangeworkes"
-                        @cancel="handlePopoverClose"
+                      <sport-template3
+                        v-if="popoverStatuswork3"
+                        @change="handleSportSelectChangework3"
+                        @cancel="handlePopoverClose3"
                       >
-                      </sport-template>
+                      </sport-template3>
                       <el-input
                         class="select-user-trigger"
                         slot="reference"
                         disabled
-                        v-model="templateStrwork"
+                        v-model="templateStrwork3"
                         placeholder="请选择"
                       >
-                        <i :class="`el-icon-arrow-${popoverStatus ? 'up' : 'down'}`"
-                           slot="suffix"></i>
+                        <i
+                          :class="`el-icon-arrow-${
+                            popoverStatuswork3 ? 'up' : 'down'
+                          }`"
+                          slot="suffix"
+                        ></i>
                       </el-input>
                     </el-popover>
                     <!-- <el-button class="sureBtn" @click="addSportTemplate">添加</el-button> -->
                   </div>
                 </el-form-item>
-                <el-form-item label="所在部门">
-                  <div class="template-add-wrapper" style="display: flex;">
+                <el-form-item label="所在部门3">
+                  <div class="template-add-wrapper" style="display: flex">
                     <el-popover
-                      style="display: block;width: 100%;"
-                      ref="sportPopover"
+                      style="display: block; width: 100%"
+                      ref="sportPopover3"
                       placement="bottom-end"
                       width="650"
                       trigger="click"
-                      @show="popoverStatus = true"
-                      @hide="handlePopover"
+                      @show="popoverStatuses3 = true"
+                      @hide="handlePopoverClosework4"
                     >
                       <department
-                        v-if="popoverStatus"
-                        @change="handleSportSelectChangeworkes"
-                        @cancel="handlePopoverClose"
+                        v-if="popoverStatuses3"
+                        :departmentName = templateStrwork3
+                        :form = formData
+                        @change="handleSportSelectChangeworkes3"
+                        @cancel="handlePopoverClose4"
                       >
                       </department>
                       <el-input
                         class="select-user-trigger"
                         slot="reference"
                         disabled
-                        v-model="template"
+                        v-model="templatees3"
                         placeholder="请选择"
                       >
-                        <i :class="`el-icon-arrow-${popoverStatus ? 'up' : 'down'}`"
-                           slot="suffix"></i>
+                        <i
+                          :class="`el-icon-arrow-${
+                            popoverStatuses3 ? 'up' : 'down'
+                          }`"
+                          slot="suffix"
+                        ></i>
                       </el-input>
                     </el-popover>
-                    <el-button class="addLv" @click="addTemplate">添加</el-button>
+                    <el-button class="addLv" @click="addTemplatees3"
+                      >添加3</el-button
+                    >
                   </div>
                 </el-form-item>
                 <el-table :data="form.teamListworkes" class="sport-table">
@@ -281,12 +295,10 @@
                     <template slot-scope="scope">
                       <el-button
                         type="text"
-                        @click="
-                          form.teamListworkes.splice(scope.$index, 1)
-                        "
+                        @click="form.teamListworkes.splice(scope.$index, 1)"
                       >
                         <img
-                          style="width: 30px;"
+                          style="width: 30px"
                           src="../../../../assets/images/common/del.png"
                           alt=""
                         />
@@ -294,128 +306,243 @@
                     </template>
                   </el-table-column>
                 </el-table>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="是否对比：">
+                <el-switch v-model="value" active-color="#13ce66"> </el-switch>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <div v-if="value">
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="体检日期：">
+                  <el-date-picker
+                    v-model="form.startReportDate"
+                    type="date"
+                    :max-date="form.endReportDate"
+                    placeholder="选择开始日期"
+                    style="width: 130px"
+                  >
+                  </el-date-picker>
+                  <span class="timing">-</span>
+                  <el-date-picker
+                    v-model="form.endReportDate"
+                    type="date"
+                    :min-date="form.startReportDate"
+                    placeholder="选择结束日期"
+                    style="width: 130px"
+                  >
+                  </el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col :span="16" v-if="formData.worker == 1">
+                <el-form-item label="参检团队6">
+                  <div class="template-add-wrapper" style="display: flex">
+                    <el-popover
+                      style="display: block; width: 100%"
+                      ref="sportPopover5"
+                      placement="bottom-end"
+                      width="650"
+                      trigger="click"
+                      @show="popoverStatus5 = true"
+                      @hide="handlePopoverClose5"
+                    >
+                      <sport-templates
+                        v-if="popoverStatus5"
+                        @change="handleSportSelectChange6"
+                        @cancel="handlePopoverClose5"
+                      >
+                      </sport-templates>
+                      <el-input
+                        class="select-user-trigger"
+                        slot="reference"
+                        disabled
+                        v-model="templateStr5"
+                        placeholder="请选择"
+                      >
+                        <i
+                          :class="`el-icon-arrow-${
+                            popoverStatus6 ? 'up' : 'down'
+                          }`"
+                          slot="suffix"
+                        ></i>
+                      </el-input>
+                    </el-popover>
+                    <el-button class="addLv" @click="addSportTemplatesta6"
+                      >添加</el-button
+                    >
+                  </div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="16">
+                <div v-if="formData.worker == 2">
+                  <el-form-item label="工作单位6">
+                    <div class="template-add-wrapper" style="display: flex">
+                      <el-popover
+                        style="display: block; width: 100%"
+                        ref="sportPopover"
+                        placement="bottom-end"
+                        width="650"
+                        trigger="click"
+                        @show="popoverStatuswork = true"
+                        @hide="handlePopoverClosework"
+                      >
+                        <jointeam
+                          v-if="popoverStatuswork"
+                          @change="handleSportSelectChangework"
+                          @cancel="handlePopoverClose"
+                        >
+                        </jointeam>
+                        <el-input
+                          class="select-user-trigger"
+                          slot="reference"
+                          disabled
+                          v-model="templateStrwork"
+                          placeholder="请选择"
+                        >
+                          <i
+                            :class="`el-icon-arrow-${
+                              popoverStatuswork ? 'up' : 'down'
+                            }`"
+                            slot="suffix"
+                          ></i>
+                        </el-input>
+                      </el-popover>
+                      <el-button class="addLv" @click="addSportTemplatework"
+                        >添加</el-button
+                      >
+                    </div>
+                  </el-form-item>
+                </div>
+                <div v-if="formData.worker == 3">
+                  <el-form-item label="工作单位7">
+                    <div class="template-add-wrapper" style="display: flex">
+                      <el-popover
+                        style="display: block; width: 100%"
+                        ref="addsportPopover"
+                        placement="bottom-end"
+                        width="650"
+                        trigger="click"
+                        @show="addpopoverStatuswork = true"
+                        @hide="addhandlePopoverClosework"
+                      >
+                        <sport-templates
+                          v-if="addpopoverStatuswork"
+                          @change="addhandleSportSelectChangeworkes"
+                          @cancel="addhandlePopoverClose"
+                        >
+                        </sport-templates>
+                        <el-input
+                          class="select-user-trigger"
+                          slot="reference"
+                          disabled
+                          v-model="addtemplateStrwork"
+                          placeholder="请选择"
+                        >
+                          <i
+                            :class="`el-icon-arrow-${
+                              addpopoverStatuswork ? 'up' : 'down'
+                            }`"
+                            slot="suffix"
+                          ></i>
+                        </el-input>
+                      </el-popover>
+                      <!-- <el-button class="sureBtn" @click="addSportTemplate">添加</el-button> -->
+                    </div>
+                  </el-form-item>
+                  <el-form-item label="所在部门">
+                    <div class="template-add-wrapper" style="display: flex">
+                      <el-popover
+                        style="display: block; width: 100%"
+                        ref="sportPopover"
+                        placement="bottom-end"
+                        width="650"
+                        trigger="click"
+                        @show="popoverStatus = true"
+                        @hide="handlePopover"
+                      >
+                        <department
+                          v-if="popoverStatus"
+                          @change="handleSportSelectChangeworkes"
+                          @cancel="handlePopoverClose"
+                        >
+                        </department>
+                        <el-input
+                          class="select-user-trigger"
+                          slot="reference"
+                          disabled
+                          v-model="template"
+                          placeholder="请选择"
+                        >
+                          <i
+                            :class="`el-icon-arrow-${
+                              popoverStatus ? 'up' : 'down'
+                            }`"
+                            slot="suffix"
+                          ></i>
+                        </el-input>
+                      </el-popover>
+                      <el-button class="addLv" @click="addTemplate"
+                        >添加</el-button
+                      >
+                    </div>
+                  </el-form-item>
                 </div>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="24">
-                <el-form-item label="是否对比：">
-                  <el-switch v-model="value" active-color="#13ce66">
-                  </el-switch>
-                </el-form-item>
+                <el-table :data="form.stateamlist" class="sport-table">
+                  <el-table-column
+                    label="对比参见名称"
+                    prop="workUnitName"
+                    align="center"
+                  ></el-table-column>
+                  <el-table-column
+                    label="对比参检人数"
+                    prop="total"
+                    align="center"
+                  ></el-table-column>
+                  <el-table-column label="操作" align="center">
+                    <template slot-scope="scope">
+                      <el-button
+                        type="text"
+                        @click="form.stateamlist.splice(scope.$index, 1)"
+                      >
+                        <img
+                          style="width: 30px"
+                          src="../../../../assets/images/common/del.png"
+                          alt=""
+                        />
+                      </el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
               </el-col>
             </el-row>
-            <div v-if="value">
-              <el-row>
-                <el-col :span="8">
-                  <el-form-item label="体检日期：">
-                    <el-date-picker
-                      v-model="form.startTime"
-                      type="date"
-                      :max-date="form.endTime"
-                      placeholder="选择开始日期"
-                      style="width: 130px"
-                    >
-                    </el-date-picker>
-                    <span class="timing">-</span>
-                    <el-date-picker
-                      v-model="form.endTime"
-                      type="date"
-                      :min-date="form.startTime"
-                      placeholder="选择结束日期"
-                      style="width: 130px"
-                    >
-                    </el-date-picker>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="16">
-                  <el-form-item label="参检团队">
-                  <div class="template-add-wrapper" style="display: flex;">
-                    <el-popover
-                      style="display: block;width: 100%;"
-                      ref="sportPopover"
-                      placement="bottom-end"
-                      width="650"
-                      trigger="click"
-                      @show="popoverStatus = true"
-                      @hide="handlePopoverClose"
-                    >
-                      <sport-template
-                        v-if="popoverStatus"
-                        @change="handleSportSelectChange"
-                        @cancel="handlePopoverClose"
-                      >
-                      </sport-template>
-                      <el-input
-                        class="select-user-trigger"
-                        slot="reference"
-                        disabled
-                        v-model="templateStr"
-                        placeholder="请选择"
-                      >
-                        <i :class="`el-icon-arrow-${popoverStatus ? 'up' : 'down'}`"
-                           slot="suffix"></i>
-                      </el-input>
-                    </el-popover>
-                    <el-button class="addLv" @click="addSportTemplatesta">添加</el-button>
-                  </div>
-                </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="24">
-                  <el-table
-                    :data="form.stateamlist"
-                    class="sport-table"
-                  >
-                    <el-table-column
-                      label="对比参见名称"
-                      prop="workUnitName"
-                      align="center"
-                    ></el-table-column>
-                    <el-table-column
-                      label="对比参检人数"
-                      prop="total"
-                      align="center"
-                    ></el-table-column>
-                    <el-table-column label="操作" align="center">
-                      <template slot-scope="scope">
-                        <el-button
-                          type="text"
-                          @click="
-                            form.stateamlist.splice(scope.$index, 1)
-                          "
-                        >
-                          <img
-                            style="width: 30px;"
-                            src="../../../../assets/images/common/del.png"
-                            alt=""
-                          />
-                        </el-button>
-                      </template>
-                    </el-table-column>
-                  </el-table>
-                </el-col>
-              </el-row>
-            </div>
-          </el-form>
-        </el-col>
-      </el-row>
+          </div>
+        </el-form>
+      </el-col>
+    </el-row>
 
-      <div style="text-align: center; margin-top: 20px">
-        <el-button class="cancelBtn" @click="$router.go(-1)">返回</el-button>
-        <el-button class="sureBtn" type="primary" @click="onSubmit"
-          >保存</el-button
-        >
-      </div>
+    <div style="text-align: center; margin-top: 20px">
+      <el-button class="cancelBtn" @click="$router.go(-1)">返回</el-button>
+      <el-button class="sureBtn" type="primary" @click="onSubmit"
+        >保存</el-button
+      >
+    </div>
 
-      <!-- <file-dialog
+    <!-- <file-dialog
               :visible="dialogFormVisible"
               @cancel="dialogFormVisible = false"
               @upload-success="uploadSuccess"
               @refresh="search()"
       ></file-dialog> -->
-      <!-- <file-detail
+    <!-- <file-detail
               :visible="fileDetailModalVisible"
               :current="currentRow"
               @cancel="fileDetailModalVisible = false"
@@ -424,6 +551,8 @@
 </template>
 <script>
 import SportTemplate from './sport_template.vue';
+import SportTemplates from './sportteplates.vue';
+import SportTemplate3 from './sporttemplate3.vue';
 import jointeam from './jointeam.vue';
 import department from './department.vue';
 // import File from './components/file_dialog.vue';
@@ -438,6 +567,8 @@ export default {
     SportTemplate,
     jointeam,
     department,
+    SportTemplates,
+    SportTemplate3,
     // 'file-dialog': File,
     // 'file-detail': FileDetail,
     'doctor-select': doctorSelect,
@@ -461,12 +592,18 @@ export default {
       },
       templateStr: '',
       templateStrwork: '',
+      templateStrwork3: '',
+      templatees3: '',
       template: '',
+      templateStr5: '',
+      templateStr6: '',
       selectTemplate: [],
       value: false,
       formData: {
         startTime: '',
         endTime: '',
+        startReportDate: '',
+        endReportDate: '',
         worker: 1,
         birth: '', // 1992-01-04
         gridId: '',
@@ -495,9 +632,15 @@ export default {
         ],
       },
       popoverStatus: false,
+      popoverStatuses3: false,
       popoverStatuswork: false,
+      addpopoverStatus: false,
+      addpopoverStatuswork: false,
+      popoverStatuswork3: false,
       dialogFormVisible: false,
       popovercontrast: false,
+      popoverStatus5: false,
+      popoverStatus6: false,
       fileDetailModalVisible: false,
       selectedDoctorIds: [], // 选择的医生id
       dataSource: [],
@@ -518,13 +661,62 @@ export default {
   methods: {
     handlePopoverClose() {
       this.popoverStatus = false;
-      this.templateStr = this.selectTemplate[0].workUnitName;
+      this.popoverStatuswork = false;
+      this.popoverStatuswork3 = false;
+      this.popoverStatuses3 = false;
+      this.popoverStatus6 = false;
+      this.$refs.sportPopover.doClose();
+      this.$refs.sportPopover2.doClose();
+      this.$refs.sportPopoveres3.doClose();
+      this.$refs.sportPopoveres3.doClose();
+      this.$refs.sportPopover6.doClose();
+    },
+    handlePopoverClose1() {
+      this.popoverStatus = false;
       this.$refs.sportPopover.doClose();
     },
-    handlePopoverClosework() {
+    handlePopoverClose2() {
       this.popoverStatuswork = false;
+      this.$refs.sportPopover2.doClose();
+    },
+    handlePopoverClose3() {
+      this.popoverStatuswork3 = false;
+      this.$refs.sportPopover3.doClose();
+    },
+    handlePopoverClose4() {
+      this.popoverStatuses3 = false;
+      this.$refs.sportPopover4.doClose();
+    },
+    handlePopoverClosework() {
+      this.popoverStatus = false;
       this.templateStrwork = this.selectTemplatework[0].workUnitName;
       this.$refs.sportPopover.doClose();
+    },
+    handlePopoverClosework2() {
+      this.popoverStatus = false;
+      this.templateStrwork = this.selectTemplatework[0].workUnitName;
+      this.$refs.sportPopover.doClose();
+    },
+    handlePopoverClosework3() {
+      this.popoverStatuswork3 = false;
+      this.templateStrwork3 = this.selectTemplatework3[0].workUnitName;
+      this.$refs.sportPopover3.doClose();
+    },
+    handlePopoverClosework4() {
+      this.popoverStatuses3 = false;
+      this.templateStrwork3 = this.selectTemplatework3[0].workUnitName;
+      this.$refs.sportPopover4.doClose();
+    },
+    handlePopoveres3() {
+      this.popoverStatuses3 = false;
+      this.templatees3 = this.selectTemplateworkes3[0].departmentName;
+      this.$refs.sportPopoveres3.doClose();
+    },
+    addhandlePopoverClosework() {
+      this.addpopoverStatuswork = false;
+      console.log(this.selectTemplatework, 123456789);
+      // this.templateStrwork = this.selectTemplatework[0].workUnitName;
+      this.$refs.addsportPopover.doClose();
     },
     handlePopoverCloseworkes() {
       this.popoverStatus = false;
@@ -535,15 +727,36 @@ export default {
       this.selectTemplate = data;
       this.handlePopoverClose();
     },
+    // 对比参检团队
+    handleSportSelectChange6(data) {
+      this.selectTemplate6 = data;
+      this.handlePopoverClose();
+    },
     handleSportSelectChangework(data) {
       this.selectTemplatework = data;
       this.handlePopoverClosework();
+    },
+    handleSportSelectChangework3(data) {
+      this.selectTemplatework3 = data;
+      this.handlePopoverClosework3();
+    },
+    // 选择单位后部门数据
+    handleSportSelectChangeworkes3(data) {
+      this.selectTemplateworkes3 = data;
+      this.handlePopoveres3();
     },
     handleSportSelectChangeworkes(data) {
       this.selectTemplateworkes = data;
       this.handlePopoverCloseworkes();
     },
+    addhandleSportSelectChangeworkes(data) {
+      console.log(data);
+      this.selectTemplateworkes = data;
+      this.handlePopoverCloseworkes();
+    },
     // 添加团队
+    // startReportDate: '',
+    //     endReportDate: '',
     addSportTemplate() {
       if (this.selectTemplate && this.selectTemplate.length > 0) {
         this.form.sportLibraryDTOList = this.selectTemplate;
@@ -551,20 +764,30 @@ export default {
       }
     },
     // 对比团队
-    addSportTemplatesta() {
-      if (this.selectTemplate && this.form.startTime && this.form.endTime) {
-        this.form.stateamlist = this.selectTemplate;
-        this.selectTemplate.forEach((item, index) => {
-          this.gettimeteam(item.workUnitName, index);
+    addSportTemplatesta6() {
+      if (this.selectTemplate6 && this.formData.startTime && this.formData.endTime) {
+        this.form.stateamlist = this.selectTemplate6;
+        this.selectTemplate6.forEach((item, index) => {
+          this.gettimeteam(
+            item.workUnitName,
+            index,
+            this.formData.startTime,
+            this.formData.endTime,
+          );
         });
-        this.selectTemplate = [];
+        this.selectTemplate6 = [];
       }
     },
     // 添加
     addSportTemplatework() {
       if (this.selectTemplatework && this.selectTemplatework.length > 0) {
         this.selectTemplatework.forEach((item, index) => {
-          this.gettimeteamwork(item.workUnitName, index);
+          this.gettimeteamwork(
+            item.workUnitName,
+            index,
+            this.formData.startTime,
+            this.formData.endTime,
+          );
         });
         this.form.teamListwork = this.selectTemplatework;
         this.selectTemplatework = [];
@@ -573,41 +796,53 @@ export default {
     // 添加
     addTemplate() {
       if (this.selectTemplateworkes && this.selectTemplateworkes.length > 0) {
-        // this.selectTemplateworkes.forEach((item, index) => {
-        //   this.gettime(this.templateStrwork, index, item.departmentName);
-        // });
+        this.selectTemplateworkes.forEach((item, index) => {
+          this.gettime(
+            this.templateStrwork,
+            index,
+            item.name,
+            this.formData.startTime,
+            this.form.endTime,
+          );
+        });
         this.form.teamListworkes = this.selectTemplateworkes;
         this.selectTemplateworkes = [];
       }
     },
+    addTemplatees3() {
+      if (this.selectTemplateworkes3 && this.selectTemplateworkes3.length > 0) {
+        this.form.teamListworkes = this.selectTemplateworkes3;
+        this.selectTemplateworkes3 = [];
+      }
+    },
     // 限定期限内参检团队人数
-    async gettimeteam(name, num) {
+    async gettimeteam(name, num, starttimes, endtime) {
       const res = await this.$api.accessReport.groupnametotal({
         workUnitName: name,
-        startReportDate: this.formData.startTime,
-        endReportDate: this.formData.endTime,
+        startReportDate: starttimes,
+        endReportDate: endtime,
       });
       const { data } = res.data;
       this.selectTemplate[num].total = data;
     },
     // 限定期限内参检单位人数
-    async gettimeteamwork(name, num) {
+    async gettimeteamwork(name, num, starttimes, endtime) {
       const res = await this.$api.accessReport.groupworktotal({
         workUnitName: name,
-        startReportDate: this.formData.startTime,
-        endReportDate: this.formData.endTime,
+        startReportDate: starttimes,
+        endReportDate: endtime,
       });
       const { data } = res.data;
       console.log(this.selectTemplatework, data, num);
       // this.selectTemplatework[num].total = data.total;
     },
     // 限定期限内参检部门人数
-    async gettime(name, num, dename) {
+    async gettime(name, num, dename, starttimes, endtime) {
       const res = await this.$api.accessReport.departmenttotal({
         workUnitName: name,
         departmentName: dename,
-        startReportDate: this.formData.startTime,
-        endReportDate: this.formData.endTime,
+        startReportDate: starttimes,
+        endReportDate: endtime,
       });
       const { data } = res.data;
       console.log(data, this.selectTemplatework[num].total);
@@ -860,11 +1095,11 @@ export default {
   .select-user-trigger {
     cursor: pointer;
   }
-  .addLv{
+  .addLv {
     width: 80px;
     height: 40px;
     font-size: 14px;
-    background: #36BF2F;
+    background: #36bf2f;
     border-radius: 5px;
     text-align: center;
     color: #ffffff;
@@ -884,22 +1119,24 @@ export default {
     padding-right: 8px !important;
   }
   /deep/ .select-user-trigger {
-    .el-input__suffix{
+    .el-input__suffix {
       right: 15px;
     }
-    input{
-      border: 1px solid #DDE0E6!important;
+    input {
+      border: 1px solid #dde0e6 !important;
     }
-    input, i {
-      background-color: white!important;
+    input,
+    i {
+      background-color: white !important;
       cursor: pointer;
       color: #333333;
-      &::placeholder{
-        color: #999999!important;
+      &::placeholder {
+        color: #999999 !important;
       }
     }
     &.disabled {
-      input, i {
+      input,
+      i {
         cursor: not-allowed;
       }
     }

@@ -74,7 +74,7 @@
               <div class="template-add-wrapper">
                 <el-popover
                   ref="sportPopover"
-                  width="640"
+                  width="720"
                   trigger="click"
                   @show="popoverStatus = true"
                   @hide="handlePopoverClose"
@@ -121,17 +121,17 @@
               <div class="template-add-wrapper">
                 <el-popover
                   ref="sportPopover"
-                  width="640"
+                  width="720"
                   trigger="click"
                   @show="popoverStatus = true"
                   @hide="handlePopoverClose"
                 >
-                  <abscore
+                  <abscores
                     v-if="popoverStatus"
                     @change="handleSportSelectChangess"
                     @cancel="handlePopoverClose"
                   >
-                  </abscore>
+                  </abscores>
                   <el-input
                     class="select-template-trigger"
                     slot="reference"
@@ -168,7 +168,7 @@
               <div class="template-add-wrapper">
                 <el-popover
                   ref="sportPopover"
-                  width="640"
+                  width="720"
                   trigger="click"
                   @show="popoverStatus = true"
                   @hide="handlePopoverCloses"
@@ -225,6 +225,7 @@
 <script>
 import abnormal from './abnormal.vue';
 import abscore from './abscore.vue';
+import abscores from './abscores.vue';
 import abconfig from './abconfig.vue';
 export default {
   name: 'Comment',
@@ -233,6 +234,7 @@ export default {
     abnormal,
     abscore,
     abconfig,
+    abscores,
   },
   data() {
     return {
@@ -294,7 +296,7 @@ export default {
       return this.selectTemplates.map(item => item.abnormalName).join(',');
     },
     templateStrss() {
-      return this.selectTemplatess.map(item => item.systemItemName).join(',');
+      return this.selectTemplatess.map(item => item.itemName).join(',');
     },
   },
   mounted() {

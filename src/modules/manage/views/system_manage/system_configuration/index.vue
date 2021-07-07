@@ -113,7 +113,7 @@
               ></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="24">
+          <!-- <el-col :span="24">
             <el-form-item label="休息日" prop="ingrenient" style="width: 100%">
               <el-checkbox-group
                 v-model="checkedCities"
@@ -124,7 +124,7 @@
                 }}</el-checkbox>
               </el-checkbox-group>
             </el-form-item>
-          </el-col>
+          </el-col> -->
         </el-row>
       </el-form>
       <div class="form-buttons">
