@@ -32,14 +32,14 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="11">
+          <!-- <el-col :span="11">
             <el-form-item label="问卷是否必填" prop="gender">
               <el-radio-group v-model="formData.questioned">
                 <el-radio :label="1" value="1">是</el-radio>
                 <el-radio :label="2" value="2">否</el-radio>
               </el-radio-group>
             </el-form-item>
-          </el-col>
+          </el-col> -->
         </el-row>
         <el-row>
           <el-col :span="11" style="margin-right: 1px">
@@ -120,16 +120,16 @@
             <el-form-item label="必查项目" prop="sportLibraryDTOList">
               <div class="template-add-wrapper">
                 <el-popover
-                  ref="sportPopover"
+                  ref="sportPopoveres"
                   width="720"
                   trigger="click"
-                  @show="popoverStatus = true"
-                  @hide="handlePopoverClose"
+                  @show="popoverStatuses = true"
+                  @hide="handlePopoverCloses"
                 >
                   <abscores
-                    v-if="popoverStatus"
+                    v-if="popoverStatuses"
                     @change="handleSportSelectChangess"
-                    @cancel="handlePopoverClose"
+                    @cancel="handlePopoverCloses"
                   >
                   </abscores>
                   <el-input
@@ -142,7 +142,7 @@
                     <i
                       class="el-select__caret el-input__icon "
                       :class="
-                        popoverStatus
+                        popoverStatuses
                           ? 'el-icon-arrow-up'
                           : 'el-icon-arrow-down'
                       "
@@ -167,16 +167,16 @@
             <el-form-item label="异常得分" prop="sportLibraryDTOList">
               <div class="template-add-wrapper">
                 <el-popover
-                  ref="sportPopover"
+                  ref="sportPopoveress"
                   width="720"
                   trigger="click"
-                  @show="popoverStatus = true"
-                  @hide="handlePopoverCloses"
+                  @show="popoverStatusess = true"
+                  @hide="handlePopoverClosess"
                 >
                 <abconfig
-                    v-if="popoverStatus"
+                    v-if="popoverStatusess"
                     @change="handleSportSelectChanges"
-                    @cancel="handlePopoverClose"
+                    @cancel="handlePopoverClosess"
                   >
                   </abconfig>
                   <el-input
@@ -285,6 +285,8 @@ export default {
         },
       ],
       popoverStatus: false,
+      popoverStatuses: false,
+      popoverStatusess: false,
       newList: [],
     };
   },
@@ -355,17 +357,28 @@ export default {
       this.popoverStatus = false;
       this.$refs.sportPopover.doClose();
     },
+    handlePopoverCloses() {
+      this.popoverStatuses = false;
+      this.$refs.sportPopoveres.doClose();
+    },
+    handlePopoverClosess() {
+      this.popoverStatusess = false;
+      this.$refs.sportPopoveress.doClose();
+    },
     handleSportSelectChange(data) {
       this.selectTemplate = data;
       this.handlePopoverClose();
+      this.$refs.sportPopovere.doClose();
     },
     handleSportSelectChanges(data) {
       this.selectTemplates = data;
-      this.handlePopoverClose();
+      this.handlePopoverCloses();
+      this.$refs.sportPopoveres.doClose();
     },
     handleSportSelectChangess(data) {
       this.selectTemplatess = data;
-      this.handlePopoverClose();
+      this.handlePopoverClosess();
+      this.$refs.sportPopoveress.doClose();
     },
     getCommentDetail() {
       this.$api.systemManageInterface

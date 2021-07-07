@@ -20,7 +20,7 @@
           <el-row>
             <el-col :span="6">
               <el-form-item label="报告编号：" prop="name">
-                <el-input v-model="formData.name" maxLength="30"></el-input>
+                <el-input v-model="formData.no" maxLength="30"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -154,7 +154,7 @@
                     >
                       <jointeam
                         v-if="popoverStatuswork"
-                        @change="handleSportSelectChangework"
+                        @change="handleSportSelectChange2"
                         @cancel="handlePopoverClose2"
                       >
                       </jointeam>
@@ -173,7 +173,7 @@
                         ></i>
                       </el-input>
                     </el-popover>
-                    <el-button class="addLv" @click="addSportTemplatework"
+                    <el-button class="addLv" @click="addSportTemplatework2"
                       >添加</el-button
                     >
                   </div>
@@ -219,7 +219,7 @@
                     >
                       <sport-template3
                         v-if="popoverStatuswork3"
-                        @change="handleSportSelectChangework3"
+                        @change="handleSportSelectChange3"
                         @cancel="handlePopoverClose3"
                       >
                       </sport-template3>
@@ -238,25 +238,24 @@
                         ></i>
                       </el-input>
                     </el-popover>
-                    <!-- <el-button class="sureBtn" @click="addSportTemplate">添加</el-button> -->
                   </div>
                 </el-form-item>
                 <el-form-item label="所在部门3">
                   <div class="template-add-wrapper" style="display: flex">
                     <el-popover
                       style="display: block; width: 100%"
-                      ref="sportPopover3"
+                      ref="sportPopover4"
                       placement="bottom-end"
                       width="650"
                       trigger="click"
-                      @show="popoverStatuses3 = true"
+                      @show="popoverStatuses4 = true"
                       @hide="handlePopoverClosework4"
                     >
                       <department
-                        v-if="popoverStatuses3"
+                        v-if="popoverStatuses4"
                         :departmentName = templateStrwork3
                         :form = formData
-                        @change="handleSportSelectChangeworkes3"
+                        @change="handleSportSelectChange4"
                         @cancel="handlePopoverClose4"
                       >
                       </department>
@@ -264,12 +263,12 @@
                         class="select-user-trigger"
                         slot="reference"
                         disabled
-                        v-model="templatees3"
+                        v-model="templatees4"
                         placeholder="请选择"
                       >
                         <i
                           :class="`el-icon-arrow-${
-                            popoverStatuses3 ? 'up' : 'down'
+                            popoverStatuses4 ? 'up' : 'down'
                           }`"
                           slot="suffix"
                         ></i>
@@ -349,11 +348,11 @@
                       width="650"
                       trigger="click"
                       @show="popoverStatus5 = true"
-                      @hide="handlePopoverClose5"
+                      @hide="handlePopoverClosework5"
                     >
                       <sport-templates
                         v-if="popoverStatus5"
-                        @change="handleSportSelectChange6"
+                        @change="handleSportSelectChange5"
                         @cancel="handlePopoverClose5"
                       >
                       </sport-templates>
@@ -366,13 +365,13 @@
                       >
                         <i
                           :class="`el-icon-arrow-${
-                            popoverStatus6 ? 'up' : 'down'
+                            popoverStatus5 ? 'up' : 'down'
                           }`"
                           slot="suffix"
                         ></i>
                       </el-input>
                     </el-popover>
-                    <el-button class="addLv" @click="addSportTemplatesta6"
+                    <el-button class="addLv" @click="addSportTemplatesta5"
                       >添加</el-button
                     >
                   </div>
@@ -384,35 +383,35 @@
                     <div class="template-add-wrapper" style="display: flex">
                       <el-popover
                         style="display: block; width: 100%"
-                        ref="sportPopover"
+                        ref="sportPopover6"
                         placement="bottom-end"
                         width="650"
                         trigger="click"
-                        @show="popoverStatuswork = true"
-                        @hide="handlePopoverClosework"
+                        @show="popoverStatus6 = true"
+                        @hide="handlePopoverClosework6"
                       >
                         <jointeam
-                          v-if="popoverStatuswork"
-                          @change="handleSportSelectChangework"
-                          @cancel="handlePopoverClose"
+                          v-if="popoverStatus6"
+                          @change="handleSportSelectChange6"
+                          @cancel="handlePopoverClose6"
                         >
                         </jointeam>
                         <el-input
                           class="select-user-trigger"
                           slot="reference"
                           disabled
-                          v-model="templateStrwork"
+                          v-model="templateStr6"
                           placeholder="请选择"
                         >
                           <i
                             :class="`el-icon-arrow-${
-                              popoverStatuswork ? 'up' : 'down'
+                              popoverStatus6 ? 'up' : 'down'
                             }`"
                             slot="suffix"
                           ></i>
                         </el-input>
                       </el-popover>
-                      <el-button class="addLv" @click="addSportTemplatework"
+                      <el-button class="addLv" @click="addSportTemplatework6"
                         >添加</el-button
                       >
                     </div>
@@ -423,29 +422,29 @@
                     <div class="template-add-wrapper" style="display: flex">
                       <el-popover
                         style="display: block; width: 100%"
-                        ref="addsportPopover"
+                        ref="sportPopover7"
                         placement="bottom-end"
                         width="650"
                         trigger="click"
-                        @show="addpopoverStatuswork = true"
-                        @hide="addhandlePopoverClosework"
+                        @show="popoverStatus7 = true"
+                        @hide="handlePopoverClosework7"
                       >
                         <sport-templates
-                          v-if="addpopoverStatuswork"
-                          @change="addhandleSportSelectChangeworkes"
-                          @cancel="addhandlePopoverClose"
+                          v-if="popoverStatus7"
+                          @change="handleSportSelectChange7"
+                          @cancel="handlePopoverClose7"
                         >
                         </sport-templates>
                         <el-input
                           class="select-user-trigger"
                           slot="reference"
                           disabled
-                          v-model="addtemplateStrwork"
+                          v-model="templateStrwork7"
                           placeholder="请选择"
                         >
                           <i
                             :class="`el-icon-arrow-${
-                              addpopoverStatuswork ? 'up' : 'down'
+                              popoverStatus7 ? 'up' : 'down'
                             }`"
                             slot="suffix"
                           ></i>
@@ -458,35 +457,37 @@
                     <div class="template-add-wrapper" style="display: flex">
                       <el-popover
                         style="display: block; width: 100%"
-                        ref="sportPopover"
+                        ref="sportPopover8"
                         placement="bottom-end"
                         width="650"
                         trigger="click"
-                        @show="popoverStatus = true"
-                        @hide="handlePopover"
+                        @show="popoverStatus8 = true"
+                        @hide="handlePopoverClosework8"
                       >
                         <department
-                          v-if="popoverStatus"
-                          @change="handleSportSelectChangeworkes"
-                          @cancel="handlePopoverClose"
+                          v-if="popoverStatus8"
+                          :departmentName = templateStrwork7
+                          :form = formData
+                          @change="handleSportSelectChange8"
+                          @cancel="handlePopoverClose8"
                         >
                         </department>
                         <el-input
                           class="select-user-trigger"
                           slot="reference"
                           disabled
-                          v-model="template"
+                          v-model="templateStrwork8"
                           placeholder="请选择"
                         >
                           <i
                             :class="`el-icon-arrow-${
-                              popoverStatus ? 'up' : 'down'
+                              popoverStatus8 ? 'up' : 'down'
                             }`"
                             slot="suffix"
                           ></i>
                         </el-input>
                       </el-popover>
-                      <el-button class="addLv" @click="addTemplate"
+                      <el-button class="addLv" @click="addTemplate8"
                         >添加</el-button
                       >
                     </div>
@@ -495,10 +496,10 @@
               </el-col>
             </el-row>
             <el-row>
-              <el-col :span="24">
+              <el-col :span="24" v-if="formData.worker == 1">
                 <el-table :data="form.stateamlist" class="sport-table">
                   <el-table-column
-                    label="对比参见名称"
+                    label="对比参检名称"
                     prop="workUnitName"
                     align="center"
                   ></el-table-column>
@@ -512,6 +513,62 @@
                       <el-button
                         type="text"
                         @click="form.stateamlist.splice(scope.$index, 1)"
+                      >
+                        <img
+                          style="width: 30px"
+                          src="../../../../assets/images/common/del.png"
+                          alt=""
+                        />
+                      </el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </el-col>
+              <el-col :span="24" v-if="formData.worker == 2">
+                <el-table :data="form.stateamlist2" class="sport-table">
+                  <el-table-column
+                    label="对比参检名称"
+                    prop="workUnitName"
+                    align="center"
+                  ></el-table-column>
+                  <el-table-column
+                    label="对比参检人数"
+                    prop="total"
+                    align="center"
+                  ></el-table-column>
+                  <el-table-column label="操作" align="center">
+                    <template slot-scope="scope">
+                      <el-button
+                        type="text"
+                        @click="form.stateamlist2.splice(scope.$index, 1)"
+                      >
+                        <img
+                          style="width: 30px"
+                          src="../../../../assets/images/common/del.png"
+                          alt=""
+                        />
+                      </el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </el-col>
+              <el-col :span="24" v-if="formData.worker == 3">
+                <el-table :data="form.stateamlist3" class="sport-table">
+                  <el-table-column
+                    label="对比参检部门"
+                    prop="departmentName"
+                    align="center"
+                  ></el-table-column>
+                  <el-table-column
+                    label="对比参检人数"
+                    prop="total"
+                    align="center"
+                  ></el-table-column>
+                  <el-table-column label="操作" align="center">
+                    <template slot-scope="scope">
+                      <el-button
+                        type="text"
+                        @click="form.stateamlist3.splice(scope.$index, 1)"
                       >
                         <img
                           style="width: 30px"
@@ -559,7 +616,7 @@ import department from './department.vue';
 // import FileDetail from './components/file_detail.vue';
 import doctorSelect from '@/components/doctor_select/index.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
-import * as dayjs from 'dayjs';
+// import * as dayjs from 'dayjs';
 
 export default {
   name: 'ClientEdit',
@@ -589,17 +646,29 @@ export default {
         teamListwork: [],
         teamListworkes: [],
         stateamlist: [],
+        stateamlist2: [],
+        stateamlist3: [],
       },
       templateStr: '',
       templateStrwork: '',
       templateStrwork3: '',
+      templateStrwork7: '',
+      templateStrwork8: '',
       templatees3: '',
       template: '',
       templateStr5: '',
       templateStr6: '',
       selectTemplate: [],
+      selectTemplate2: [],
+      selectTemplate3: [],
+      selectTemplate4: [],
+      selectTemplate5: [],
+      selectTemplate6: [],
+      selectTemplate7: [],
+      selectTemplate8: [],
       value: false,
       formData: {
+        no: '',
         startTime: '',
         endTime: '',
         startReportDate: '',
@@ -641,6 +710,9 @@ export default {
       popovercontrast: false,
       popoverStatus5: false,
       popoverStatus6: false,
+      popoverStatus7: false,
+      popoverStatuses4: false,
+      popoverStatus8: false,
       fileDetailModalVisible: false,
       selectedDoctorIds: [], // 选择的医生id
       dataSource: [],
@@ -659,18 +731,6 @@ export default {
     };
   },
   methods: {
-    handlePopoverClose() {
-      this.popoverStatus = false;
-      this.popoverStatuswork = false;
-      this.popoverStatuswork3 = false;
-      this.popoverStatuses3 = false;
-      this.popoverStatus6 = false;
-      this.$refs.sportPopover.doClose();
-      this.$refs.sportPopover2.doClose();
-      this.$refs.sportPopoveres3.doClose();
-      this.$refs.sportPopoveres3.doClose();
-      this.$refs.sportPopover6.doClose();
-    },
     handlePopoverClose1() {
       this.popoverStatus = false;
       this.$refs.sportPopover.doClose();
@@ -684,79 +744,98 @@ export default {
       this.$refs.sportPopover3.doClose();
     },
     handlePopoverClose4() {
-      this.popoverStatuses3 = false;
+      this.popoverStatuses4 = false;
       this.$refs.sportPopover4.doClose();
+    },
+    handlePopoverClose5() {
+      this.popoverStatuses5 = false;
+      this.$refs.sportPopover5.doClose();
+    },
+    handlePopoverClose6() {
+      this.popoverStatuses6 = false;
+      this.$refs.sportPopover6.doClose();
+    },
+    handlePopoverClose7() {
+      this.popoverStatuses7 = false;
+      this.$refs.sportPopover7.doClose();
+    },
+    handlePopoverClose8() {
+      this.popoverStatuses8 = false;
+      this.$refs.sportPopover8.doClose();
     },
     handlePopoverClosework() {
       this.popoverStatus = false;
-      this.templateStrwork = this.selectTemplatework[0].workUnitName;
       this.$refs.sportPopover.doClose();
+      this.templateStr = this.selectTemplate[0].workUnitName;
     },
     handlePopoverClosework2() {
-      this.popoverStatus = false;
-      this.templateStrwork = this.selectTemplatework[0].workUnitName;
-      this.$refs.sportPopover.doClose();
+      this.popoverStatus2 = false;
+      this.$refs.sportPopover2.doClose();
+      this.templateStrwork = this.selectTemplate2[0].workUnitName;
     },
     handlePopoverClosework3() {
       this.popoverStatuswork3 = false;
-      this.templateStrwork3 = this.selectTemplatework3[0].workUnitName;
       this.$refs.sportPopover3.doClose();
+      this.templateStrwork3 = this.selectTemplate3[0].workUnitName;
     },
     handlePopoverClosework4() {
-      this.popoverStatuses3 = false;
-      this.templateStrwork3 = this.selectTemplatework3[0].workUnitName;
+      this.popoverStatuses4 = false;
       this.$refs.sportPopover4.doClose();
+      // this.templateStrwork4 = this.selectTemplatework3[0].workUnitName;
     },
-    handlePopoveres3() {
-      this.popoverStatuses3 = false;
-      this.templatees3 = this.selectTemplateworkes3[0].departmentName;
-      this.$refs.sportPopoveres3.doClose();
+    handlePopoverClosework5() {
+      this.popoverStatuses5 = false;
+      this.$refs.sportPopover5.doClose();
+      this.templateStr5 = this.selectTemplate5[0].workUnitName;
     },
-    addhandlePopoverClosework() {
-      this.addpopoverStatuswork = false;
-      console.log(this.selectTemplatework, 123456789);
-      // this.templateStrwork = this.selectTemplatework[0].workUnitName;
-      this.$refs.addsportPopover.doClose();
+    handlePopoverClosework6() {
+      this.popoverStatuses6 = false;
+      this.$refs.sportPopover6.doClose();
+      this.templateStr6 = this.selectTemplate6[0].workUnitName;
     },
-    handlePopoverCloseworkes() {
-      this.popoverStatus = false;
-      this.template = this.selectTemplateworkes[0].departmentName;
-      this.$refs.sportPopover.doClose();
+    handlePopoverClosework7() {
+      this.popoverStatuses7 = false;
+      this.$refs.sportPopover7.doClose();
+      this.templateStrwork7 = this.selectTemplate7[0].workUnitName;
+    },
+    handlePopoverClosework8() {
+      console.log(this.selectTemplate8, 111);
+      this.popoverStatuses8 = false;
+      this.$refs.sportPopover8.doClose();
+      this.templateStrwork8 = this.selectTemplate8[0].departmentName;
     },
     handleSportSelectChange(data) {
       this.selectTemplate = data;
-      this.handlePopoverClose();
+      this.handlePopoverClose1();
     },
-    // 对比参检团队
+    handleSportSelectChange2(data) {
+      this.selectTemplate2 = data;
+      this.handlePopoverClose2();
+    },
+    handleSportSelectChange3(data) {
+      this.selectTemplate3 = data;
+      this.handlePopoverClose3();
+    },
+    handleSportSelectChange4(data) {
+      this.selectTemplate4 = data;
+      this.handlePopoverClose4();
+    },
+    handleSportSelectChange5(data) {
+      this.selectTemplate5 = data;
+      this.handlePopoverClose5();
+    },
     handleSportSelectChange6(data) {
       this.selectTemplate6 = data;
-      this.handlePopoverClose();
+      this.handlePopoverClose6();
     },
-    handleSportSelectChangework(data) {
-      this.selectTemplatework = data;
-      this.handlePopoverClosework();
+    handleSportSelectChange7(data) {
+      this.selectTemplate7 = data;
+      this.handlePopoverClose7();
     },
-    handleSportSelectChangework3(data) {
-      this.selectTemplatework3 = data;
-      this.handlePopoverClosework3();
+    handleSportSelectChange8(data) {
+      this.selectTemplate8 = data;
+      this.handlePopoverClose8();
     },
-    // 选择单位后部门数据
-    handleSportSelectChangeworkes3(data) {
-      this.selectTemplateworkes3 = data;
-      this.handlePopoveres3();
-    },
-    handleSportSelectChangeworkes(data) {
-      this.selectTemplateworkes = data;
-      this.handlePopoverCloseworkes();
-    },
-    addhandleSportSelectChangeworkes(data) {
-      console.log(data);
-      this.selectTemplateworkes = data;
-      this.handlePopoverCloseworkes();
-    },
-    // 添加团队
-    // startReportDate: '',
-    //     endReportDate: '',
     addSportTemplate() {
       if (this.selectTemplate && this.selectTemplate.length > 0) {
         this.form.sportLibraryDTOList = this.selectTemplate;
@@ -764,11 +843,30 @@ export default {
       }
     },
     // 对比团队
-    addSportTemplatesta6() {
-      if (this.selectTemplate6 && this.formData.startTime && this.formData.endTime) {
-        this.form.stateamlist = this.selectTemplate6;
-        this.selectTemplate6.forEach((item, index) => {
+    addSportTemplatesta5() {
+      if (this.selectTemplate5) {
+        this.form.stateamlist = this.selectTemplate5;
+        this.selectTemplate5.forEach((item, index) => {
           this.gettimeteam(
+            item.workUnitName,
+            index,
+            this.formData.startTime,
+            this.formData.endTime,
+          );
+        });
+        this.selectTemplate5 = [];
+      }
+    },
+    addSportTemplatework6() {
+      if (this.selectTemplate6) {
+        this.form.stateamlist2 = this.selectTemplate6;
+        this.selectTemplate6.forEach((item, index) => {
+          // const obj = {
+          //   total: '',
+          // };
+
+          // this.form.stateamlist2.push(obj);
+          this.gettimeteamwork(
             item.workUnitName,
             index,
             this.formData.startTime,
@@ -778,41 +876,32 @@ export default {
         this.selectTemplate6 = [];
       }
     },
-    // 添加
-    addSportTemplatework() {
-      if (this.selectTemplatework && this.selectTemplatework.length > 0) {
-        this.selectTemplatework.forEach((item, index) => {
-          this.gettimeteamwork(
-            item.workUnitName,
+    addTemplate8() {
+      if (this.selectTemplate8) {
+        this.form.stateamlist3 = this.selectTemplate8;
+        this.selectTemplate8.forEach((item, index) => {
+          this.gettime(
+            item.departmentName,
             index,
             this.formData.startTime,
             this.formData.endTime,
           );
         });
-        this.form.teamListwork = this.selectTemplatework;
-        this.selectTemplatework = [];
+        this.selectTemplate8 = [];
       }
     },
     // 添加
-    addTemplate() {
-      if (this.selectTemplateworkes && this.selectTemplateworkes.length > 0) {
-        this.selectTemplateworkes.forEach((item, index) => {
-          this.gettime(
-            this.templateStrwork,
-            index,
-            item.name,
-            this.formData.startTime,
-            this.form.endTime,
-          );
-        });
-        this.form.teamListworkes = this.selectTemplateworkes;
-        this.selectTemplateworkes = [];
+    addSportTemplatework2() {
+      if (this.selectTemplate2 && this.selectTemplate2.length > 0) {
+        this.form.teamListwork = this.selectTemplate2;
+        this.selectTemplate2 = [];
       }
     },
+    // 没有对比之前的添加的部门
     addTemplatees3() {
-      if (this.selectTemplateworkes3 && this.selectTemplateworkes3.length > 0) {
-        this.form.teamListworkes = this.selectTemplateworkes3;
-        this.selectTemplateworkes3 = [];
+      if (this.selectTemplate3 && this.selectTemplate3.length > 0) {
+        this.form.teamListworkes = this.selectTemplate3;
+        this.selectTemplate3 = [];
       }
     },
     // 限定期限内参检团队人数
@@ -823,7 +912,7 @@ export default {
         endReportDate: endtime,
       });
       const { data } = res.data;
-      this.selectTemplate[num].total = data;
+      this.form.stateamlist[num].total = data;
     },
     // 限定期限内参检单位人数
     async gettimeteamwork(name, num, starttimes, endtime) {
@@ -834,7 +923,7 @@ export default {
       });
       const { data } = res.data;
       console.log(this.selectTemplatework, data, num);
-      // this.selectTemplatework[num].total = data.total;
+      this.form.stateamlist2[num].total = data;
     },
     // 限定期限内参检部门人数
     async gettime(name, num, dename, starttimes, endtime) {
@@ -845,28 +934,27 @@ export default {
         endReportDate: endtime,
       });
       const { data } = res.data;
-      console.log(data, this.selectTemplatework[num].total);
-      // this.selectTemplatework[num].total = data.total;
+      this.form.stateamlist3[num].total = data;
     },
-    async searchDoctor(selectedUserIds) {
-      const selectedUserIdsStr = selectedUserIds.join(',');
-      const res = await this.$api.userManagerInterface.searchDoctor({
-        selectedUserIds: selectedUserIdsStr,
-      });
-      const { data } = res.data;
-      this.formData.userRealName = (data.list || [])
-        .filter(item => item.selected)
-        .map(item => item.realName)
-        .join(',');
-    },
-    async getGridList() {
-      const res = await this.$api.userManagerInterface.getGridList({
-        pageNo: 1,
-        pageSize: 10000,
-      });
-      const { data } = res.data;
-      this.gridList = data.data.filter(t => t.state === '1');
-    },
+    // async searchDoctor(selectedUserIds) {
+    //   const selectedUserIdsStr = selectedUserIds.join(',');
+    //   const res = await this.$api.userManagerInterface.searchDoctor({
+    //     selectedUserIds: selectedUserIdsStr,
+    //   });
+    //   const { data } = res.data;
+    //   this.formData.userRealName = (data.list || [])
+    //     .filter(item => item.selected)
+    //     .map(item => item.realName)
+    //     .join(',');
+    // },
+    // async getGridList() {
+    //   const res = await this.$api.userManagerInterface.getGridList({
+    //     pageNo: 1,
+    //     pageSize: 10000,
+    //   });
+    //   const { data } = res.data;
+    //   this.gridList = data.data.filter(t => t.state === '1');
+    // },
     async getSystemParamByCode(code, fieldName) {
       const res = await this.$api.userManagerInterface.getSystemParamByCode(
         code,
@@ -875,32 +963,27 @@ export default {
       this[`${fieldName}List`] = data;
     },
     onSubmit() {
+      let isshow = '';
+      if (this.value) {
+        isshow = 1;
+      } else {
+        isshow = 2;
+      }
       this.$refs.form.validate((valid) => {
         if (valid) {
-          if (this.$route.query.owner && !this.$route.params.userId) {
-            this.formData.userIdList.push(this.$store.state.user.userId);
-            // this.formData.userIdList = [this.$route.query.owner];
-          }
-          // this.formData.birthday = dayjs(this.formData.birthday).format('YYYY-MM-DD');
-          this.formData = {
-            ...this.formData,
-            birth: dayjs(this.formData.birth).format('YYYY-MM-DD'),
-          };
-          this.formData.annexParams = this.dataSource
-            .filter(t => t.time && t.deleted === 0)
-            .map(t => ({
-              title: t.title,
-              remark: t.remark,
-              createTime: t.createTime,
-              filePath: t.filePath,
-            }));
-
-          this.formData.annexIdList = this.dataSource
-            .filter(t => t.id && t.deleted === 1)
-            .map(t => t.id);
-
-          this.$api.userManagerInterface
-            .saveOrEditUser(this.formData)
+          this.$api.accessReport
+            .departmenttotal({
+              reportName: this.formData.name,
+              startDate: this.formData.startTime,
+              endDate: this.formData.endTime,
+              startDateCompare: this.formData.startReportDate,
+              endDateCompare: this.formData.endReportDate,
+              no: this.formData.no,
+              scope: this.formData.worker,
+              isContrast: isshow,
+              currentTeam: [],
+              compareTeam: [],
+            })
             .then(({ data }) => {
               if (data) {
                 this.$message.success('操作成功');

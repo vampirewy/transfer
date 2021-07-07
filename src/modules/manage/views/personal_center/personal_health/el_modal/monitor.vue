@@ -5,7 +5,7 @@
         <div class="formSearchTitle">
           <span class="dianLves"
             ><img src="@/assets/images/common/titleLeft.png" alt="" /></span
-          >个人健康报告
+          >健康自测
         </div>
       </div>
       <tab-bars @messageData="TabbarBtn"></tab-bars>
@@ -52,11 +52,11 @@
         style="margin-top: 10px"
         :class="tabIndex === 'other' ? 'openTable' : ''"
       >
-        <el-table-column
+        <!-- <el-table-column
           type="selection"
           width="40"
           align="center"
-        ></el-table-column>
+        ></el-table-column> -->
         <el-table-column
           v-for="(item, index) in table.columns"
           :key="index"
