@@ -248,7 +248,7 @@
                       placement="bottom-end"
                       width="650"
                       trigger="click"
-                      @show="popoverStatuses4 = true"
+                      @show="fristcheckwork1"
                       @hide="handlePopoverClosework4"
                     >
                       <department
@@ -461,7 +461,7 @@
                         placement="bottom-end"
                         width="650"
                         trigger="click"
-                        @show="popoverStatus8 = true"
+                        @show="fristcheckwork2"
                         @hide="handlePopoverClosework8"
                       >
                         <department
@@ -638,6 +638,8 @@ export default {
   data() {
     return {
       keywords: '',
+      savelist1: [],
+      savelist2: [],
       form: {
         startTime: '',
         endTime: '',
@@ -836,6 +838,22 @@ export default {
       this.selectTemplate8 = data;
       this.handlePopoverClose8();
     },
+    fristcheckwork1() {
+      if (this.templateStrwork3) {
+        this.popoverStatuses4 = true;
+      } else {
+        this.handlePopoverClose4();
+        this.$message.error('请先选择工作单位！');
+      }
+    },
+    fristcheckwork2() {
+      if (this.templateStrwork7) {
+        this.popoverStatus8 = true;
+      } else {
+        this.handlePopoverClose8();
+        this.$message.error('请先选择工作单位！');
+      }
+    },
     addSportTemplate() {
       if (this.selectTemplate && this.selectTemplate.length > 0) {
         this.form.sportLibraryDTOList = this.selectTemplate;
@@ -968,6 +986,15 @@ export default {
         isshow = 1;
       } else {
         isshow = 2;
+      }
+      if (this.formData.worker === 1) {
+        this.form.sportLibraryDTOList.forEach((item, index) => {
+          this.savelist1[index].unitName = item.workUnitName;
+        });
+      } else if (this.formData.worker === 2) {
+
+      } else {
+
       }
       this.$refs.form.validate((valid) => {
         if (valid) {
