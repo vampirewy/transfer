@@ -991,10 +991,26 @@ export default {
         this.form.sportLibraryDTOList.forEach((item, index) => {
           this.savelist1[index].unitName = item.workUnitName;
         });
+        this.form.stateamlist.forEach((item, index) => {
+          this.savelist2[index].unitName = item.workUnitName;
+        });
       } else if (this.formData.worker === 2) {
-
+        this.form.teamListwork.forEach((item, index) => {
+          this.savelist1[index].unitName = item.workUnitName;
+          this.savelist1[index].departmentName = '';
+        });
+        this.form.stateamlist2.forEach((item, index) => {
+          this.savelist2[index].unitName = item.workUnitName;
+          this.savelist2[index].departmentName = '';
+        });
       } else {
-
+        this.form.sportLibraryDTOList.forEach((item, index) => {
+          this.savelist1[index].unitName = item.workUnitName;
+          this.savelist1[index].departmentName = item.departmentName;
+        });
+        this.form.stateamlist3.forEach((item, index) => {
+          this.savelist2[index].departmentName = item.departmentName;
+        });
       }
       this.$refs.form.validate((valid) => {
         if (valid) {
@@ -1008,8 +1024,8 @@ export default {
               no: this.formData.no,
               scope: this.formData.worker,
               isContrast: isshow,
-              currentTeam: [],
-              compareTeam: [],
+              currentTeam: this.savelist1,
+              compareTeam: this.savelist2,
             })
             .then(({ data }) => {
               if (data) {
