@@ -209,6 +209,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  /deep/ .el-textarea__inner{
+    border: 1px solid #DDE0E6!important;
+  }
 .role-form {
   .title {
     font-size: 16px;

@@ -24,7 +24,13 @@
                 disabled
                 v-model="formData.clientName"
                 placeholder="请选择客户">
-                <i :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`" slot="suffix"></i>
+                <i
+                  :class="popoverStatus ?
+                  'el-icon-arrow-up':'el-icon-arrow-down'"
+                  slot="suffix"
+                ></i>
+                <!-- <i :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
+                slot="suffix"></i> -->
               </el-input>
             </el-popover>
           </el-form-item>
@@ -197,6 +203,9 @@ export default {
           formData.reportDate = dayjs(formData.reportDate).format(
             'YYYY-MM-DD HH:mm:ss',
           );
+          formData.zjDate = dayjs(formData.zjDate).format(
+            'YYYY-MM-DD HH:mm:ss',
+          );
           const arr = [];
           formData.sectionConclusionList.forEach((item) => {
             if (item.itemList.length > 0) {
@@ -268,6 +277,11 @@ export default {
 
 <style lang="scss" scoped>
 .report-edit {
+  textarea {
+    border: none;
+    background: #ffffff;
+    border-radius: 5px;
+}
   .form-title {
     display: flex;
     align-items: center;
@@ -328,23 +342,19 @@ export default {
       input, i {
         cursor: not-allowed;
       }
-      .el-input__inner {
-        color: #999999 !important;
-        background-color: #E7E7ED !important;
-      }
     }
     input::placeholder {
       color: #666;
     }
     .el-input__inner {
       color: #333 !important;
-      background: #F4F4F6 !important;
+      background-color: #ffffff !important;
     }
 
   }
   /deep/ input, /deep/ textarea {
     border: none;
-    background: #F4F4F6;
+    background: #ffffff;
     border-radius: 5px;
   }
 }

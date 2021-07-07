@@ -8,7 +8,7 @@
             <div class="timeDivOne" v-for="item in dateList" :key="item.date">
                 <div class="timeDivOneDate" :class="{'active': item.date === activeDate}">
                     <p class="timeDivOneDate1" :class="{'active': item.date === activeDate}">
-                        {{item.date}}</p>
+                        {{item.date.substr(5)}}</p>
                     <p class="timeDivOneDate2" :class="{'active': item.date === activeDate}">
                         {{item.day}}</p>
                 </div>
@@ -62,31 +62,31 @@ export default {
     return {
       dateList: [
         {
-          date: '05-06',
+          date: '2021-05-06',
           day: '周四',
         },
         {
-          date: '05-07',
+          date: '2021-05-07',
           day: '周五',
         },
         {
-          date: '05-08',
+          date: '2021-05-08',
           day: '周六',
         },
         {
-          date: '05-09',
+          date: '2021-05-09',
           day: '周日',
         },
         {
-          date: '05-10',
+          date: '2021-05-10',
           day: '周一',
         },
         {
-          date: '05-11',
+          date: '2021-05-11',
           day: '周二',
         },
         {
-          date: '05-12',
+          date: '2021-05-12',
           day: '周三',
         },
       ],

@@ -268,6 +268,9 @@ export default {
         .then(({ data }) => {
           if (data.success) {
             this.total = data.total;
+            data.data.forEach((val) => {
+              val.month = `${val.month}月${val.day}日`;
+            });
             this.dataSource = data.data;
             console.log(this.dataSource);
           }

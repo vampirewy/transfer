@@ -208,7 +208,7 @@
                 </el-table> -->
               </el-table-column>
               <el-table-column type="selection" width="40"></el-table-column>
-              <el-table-column label="客户编号" prop="id" width="90" show-overflow-tooltip>
+              <el-table-column label="客户编号" prop="clientNo" width="90" show-overflow-tooltip>
               </el-table-column>
               <el-table-column label="姓名" prop="clientName" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">
@@ -341,7 +341,7 @@
                 </el-table>
               </el-table-column>
               <el-table-column type="selection" width="40"></el-table-column>
-              <el-table-column label="体检编号" prop="reportNo" width="90" show-overflow-tooltip>
+              <el-table-column label="体检编号" prop="id" width="90" show-overflow-tooltip>
               </el-table-column>
               <el-table-column label="姓名" prop="clientName" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">

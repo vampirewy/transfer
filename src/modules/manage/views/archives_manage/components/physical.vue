@@ -708,6 +708,7 @@ export default {
         display: flex;
         align-items: center;
         padding: 10px;
+        width: 98%;
         > div {
           height: 40px;
           background: #FFFFFF;
@@ -895,7 +896,7 @@ export default {
       border-radius: 50px;
       display: flex;
       align-items: center;
-      padding: 14px 15px 14px 18px;
+      padding: 8px 10px 10px 15px;
       margin-right: 20px;
       margin-bottom: 20px;
       .abnormal-number {

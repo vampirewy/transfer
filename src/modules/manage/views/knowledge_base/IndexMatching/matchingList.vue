@@ -122,8 +122,8 @@
         </div>
       </div>
     </div> -->
-    <div class="topbottomborder"></div>
-    <div class="divRightTitleDiv">
+    <!-- <div class="topbottomborder"></div> -->
+    <div class="divRightTitleDiv" style="margin-top:20px">
       <!-- <div class="divRightTitle"><span>|</span>客户池</div> -->
       <div>
         <!-- <el-button
@@ -637,6 +637,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  /deep/ .el-table__expanded-cell .el-table .el-table__header-wrapper {
+    border-radius: 5px 5px 0 0;
+  }
   /deep/ .has-expand-table{
     .el-icon-arrow-right:before {
       content: '\E6E0';

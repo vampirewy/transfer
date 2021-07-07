@@ -18,6 +18,10 @@ class InterventionTemplateInterface extends BaseModule {
   getInterveneTemplateListPage(data = {}) {
     return this.post('/intervene_template/get_intervene_template_list_page', data);
   }
+  // 干预模板是否开启
+  updateTemplateState(data = {}) {
+    return this.post('/intervene_template/update_template_state', data);
+  }
   // 新增干预模板
   saveInterveneTemplate(data = {}) {
     return this.post('/intervene_template/save_intervene_template', data);

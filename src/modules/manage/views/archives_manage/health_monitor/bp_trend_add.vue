@@ -21,7 +21,7 @@
       <div class="medicate-record mt20">
       <el-row>
           <el-col :span="6">
-          <el-form-item label="姓名" prop="clientName">
+          <el-form-item label="姓名" prop="clientName" class="boxs">
             <el-popover
               ref="userPopover"
               placement="bottom-start"
@@ -42,9 +42,14 @@
                 placeholder="请选择客户"
               >
                 <i
-                  :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
+                  :class="popoverStatus ?
+                  'el-icon-arrow-up':'el-icon-arrow-down'"
                   slot="suffix"
                 ></i>
+                <!-- <i
+                  :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
+                  slot="suffix"
+                ></i> -->
               </el-input>
             </el-popover>
           </el-form-item>
@@ -82,6 +87,18 @@
 
       <div class="medicate-info mt20" style="margin-top:0">
         <el-row v-if="id === 0">
+          <el-col :span="6">
+            <el-form-item label="日期时间" prop="startDate">
+              <el-date-picker
+                v-model="infoSource.startDate"
+                type="datetime"
+                style="width: 100%"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                :max-date="new Date()"
+                placeholder="选择日期时间">
+              </el-date-picker>
+            </el-form-item>
+            </el-col>
             <el-col :span="6">
             <el-form-item label="收缩压" prop="SBP">
               <el-input
@@ -118,39 +135,6 @@
               <span style="color:333333;font-size:14px">次/分钟</span>
             </el-form-item>
             </el-col>
-            <el-col :span="6">
-            <el-form-item label="日期时间" prop="startDate">
-              <el-date-picker
-                v-model="infoSource.startDate"
-                type="datetime"
-                style="width: 100%"
-                value-format="yyyy-MM-dd HH:mm:ss"
-                :max-date="new Date()"
-                placeholder="选择日期时间">
-              </el-date-picker>
-              <!-- <el-date-picker
-                class="start-date"
-                v-model="infoSource.startDate"
-                type="date"
-                value-format="yyyy-MM-dd"
-                placeholder="请选择日期"
-                style="width: 100%"
-                :max-date="new Date()"
-              ></el-date-picker> -->
-            </el-form-item>
-            </el-col>
-            <!-- <el-col :span="6">
-              <el-form-item label="时间" prop="Timevalue">
-                <el-time-picker
-                v-model="infoSource.Timevalue"
-                :picker-options="{
-                  selectableRange: '00:00:00 - 23:00:00'
-                }"
-                value-format="HH:mm:ss"
-                placeholder="请选择时间">
-              </el-time-picker>
-              </el-form-item>
-            </el-col> -->
         </el-row>
         <el-row v-if="id === 1">
             <!-- <el-form-item label="血糖类型" prop="drugsName" style="width:25%">
@@ -236,7 +220,7 @@
                 </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                <el-form-item label="腰围" prop="Waist">
+                <el-form-item label="腰围">
                 <el-input
                     onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"
                     v-model="infoSource.Waist"
@@ -248,7 +232,7 @@
                 </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                <el-form-item label="体脂率" prop="specification">
+                <el-form-item label="体脂率">
                 <el-input
                     onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')"
                     v-model="infoSource.specification"
@@ -389,7 +373,7 @@
 <script>
 import detail from '../components/detail.vue';
 import selectUser from '../components/select_user.vue';
-
+import * as dayjs from 'dayjs';
 export default {
   name: 'medication_history_add',
   props: ['id', 'editId'],
@@ -412,7 +396,7 @@ export default {
         mainIndication: '',
         specification: '', // 体脂率
         countDay: '',
-        startDate: new Date(),
+        startDate: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'),
         startDates: '',
         endDate: '',
         dose: '',
@@ -450,8 +434,8 @@ export default {
         bloodsugar: [{ required: true, message: '血糖类型不能为空', trigger: 'blur' }],
         Weight: [{ required: true, message: '体重不能为空' }],
         Height: [{ required: true, message: '身高不能为空' }],
-        Waist: [{ required: true, message: '腰围不能为空' }],
-        specification: [{ required: true, message: '体脂率不能为空' }],
+        // Waist: [{ required: true, message: '腰围不能为空' }],
+        // specification: [{ required: true, message: '体脂率不能为空' }],
         // sportTime: [{ required: true, message: '运动时间不能为空' }],
         // sportDistance: [{ required: true, message: '运动路程不能为空' }],
         steps: [{ required: true, message: '运动步数不能为空' }],
@@ -689,12 +673,6 @@ export default {
         if (!this.infoSource.Weight) {
           return this.$message.warning('请填写体重');
         }
-        if (!this.infoSource.Waist) {
-          return this.$message.warning('请填写腰围');
-        }
-        if (!this.infoSource.specification) {
-          return this.$message.warning('请填写体脂率');
-        }
         if (!this.infoSource.startDate) {
           return this.$message.warning('请填写时间');
         }
@@ -758,6 +736,11 @@ export default {
   -moz-appearance: textfield !important;
 }
 .medication-history-add /deep/ {
+  .boxs{
+     .el-input__inner{
+      background: #ffffff !important;
+    }
+  }
   .row {
     display: flex;
     flex-direction: row;
@@ -843,9 +826,6 @@ export default {
       border: 1px solid #3154AC;
       text-align:center;
     }
-  }
-  .el-input.is-disabled .el-input__inner{
-      background: #ffffff !important;
   }
 }
 </style>

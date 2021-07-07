@@ -18,34 +18,41 @@
       <el-row>
         <el-col :span="6">
           <el-form-item label="异常名称：">
-            <el-input
+            <span>{{form.abnormalName}}</span>
+            <!-- <el-input
               v-model="form.abnormalName"
-              show-word-limit
-            ></el-input>
+              disabled
+            ></el-input> -->
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="异常类型：">
-            <el-input
+            <span>{{form.abnormalTypeName}}</span>
+
+            <!-- <el-input
               v-model="form.abnormalTypeName"
               show-word-limit
-            ></el-input>
+            ></el-input> -->
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="性别限制：">
-            <el-input
+            <span>{{form.gender}}</span>
+
+            <!-- <el-input
               v-model="form.gender"
               show-word-limit
-            ></el-input>
+            ></el-input> -->
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="ICD10：">
-            <el-input
+            <span>{{form.icdCode}}</span>
+
+            <!-- <el-input
               v-model="form.icdCode"
               show-word-limit
-            ></el-input>
+            ></el-input> -->
           </el-form-item>
         </el-col>
       </el-row>
@@ -60,17 +67,20 @@
       <el-row>
         <el-col :span="6">
           <el-form-item label="重要性：">
-            <el-input v-model="form.dangerLevelName"></el-input>
+            <span>{{form.dangerLevelName}}</span>
+            <!-- <el-input v-model="form.dangerLevelName"></el-input> -->
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="紧急性：">
-            <el-input v-model="form.medicalLimitName"></el-input>
+            <span>{{form.medicalLimitName}}</span>
+            <!-- <el-input v-model="form.medicalLimitName"></el-input> -->
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="推荐科室：">
-            <el-input v-model="form.recommendDepartmentName"></el-input>
+            <span>{{form.recommendDepartmentName}}</span>
+            <!-- <el-input v-model="form.recommendDepartmentName"></el-input> -->
           </el-form-item>
         </el-col>
         <!-- <el-col :span="6">
@@ -84,35 +94,39 @@
         </el-col> -->
         <el-col :span="6">
           <el-form-item label="推荐检查：">
-            <el-input v-model="form.recommendInspectName"></el-input>
+            <span>{{form.recommendInspectName}}</span>
+            <!-- <el-input v-model="form.recommendInspectName"></el-input> -->
           </el-form-item>
         </el-col>
       </el-row>
       <el-form-item label="医学解释">
-        <el-input
+        <span>{{form.medicalExplain}}</span>
+        <!-- <el-input
           type="textarea"
           :rows="4"
           v-model="form.medicalExplain"
         >
-        </el-input>
+        </el-input> -->
       </el-form-item>
 
       <el-form-item label="常见原因">
-        <el-input
+        <span>{{form.commonCause}}</span>
+        <!-- <el-input
           type="textarea"
           :rows="4"
           v-model="form.commonCause"
         >
-        </el-input>
+        </el-input> -->
       </el-form-item>
 
       <el-form-item label="建议">
-        <el-input
+        <span>{{form.advice}}</span>
+        <!-- <el-input
           type="textarea"
           :rows="4"
           v-model="form.advice"
         >
-        </el-input>
+        </el-input> -->
       </el-form-item>
     </el-form>
     <!-- <div class="footer">

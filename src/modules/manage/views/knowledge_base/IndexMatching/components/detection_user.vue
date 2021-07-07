@@ -8,7 +8,7 @@
       <div class="searchCondition">
       <div class="searchLeft">
         <div class="searchInputFormItem">
-          <el-input placeholder="名称/项目" v-model="formData.name">
+          <el-input placeholder="名称" v-model="formData.name">
           </el-input>
           <span class="searchBtnImgSpan" style="background:#ffffff;margin:1px" @click="search(1)">
                   <img class="searchBtnImg" style="width:35px"

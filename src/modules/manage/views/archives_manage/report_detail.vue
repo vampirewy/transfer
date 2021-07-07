@@ -1,29 +1,37 @@
 <template>
   <div class="detail-content">
-    <div class="title">查看体检报告-基本信息</div>
+    <!-- <div class="title">查看体检报告-基本信息</div> -->
+    <div class="divRightTitleDiv">
+      <div class="divRightTitle">查看体检报告-基本信息
+        <div class="titleBiao"></div></div>
+    </div>
     <el-form ref="form" :model="formData" label-width="90px" label-suffix="：" disabled>
       <el-row>
         <el-col :span="6">
           <el-form-item label="姓名" prop="clientId">
-            <el-input v-model="formData.clientName"></el-input>
+            <span>{{formData.clientName}}</span>
+            <!-- <el-input v-model="formData.clientName"></el-input> -->
             <!-- <div class="form-item-value">{{formData.clientName}}</div> -->
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="体检编号" prop="reportNo">
-            <el-input v-model="formData.reportNo"></el-input>
+            <span>{{formData.reportNo}}</span>
+            <!-- <el-input v-model="formData.reportNo"></el-input> -->
             <!-- <div class="form-item-value">{{formData.reportNo}}</div> -->
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="体检日期" prop="reportDate">
-            <el-input v-model="formData.reportDate"></el-input>
+            <span>{{formData.reportDate}}</span>
+            <!-- <el-input v-model="formData.reportDate"></el-input> -->
             <!-- <div class="form-item-value">{{formData.reportDate}}</div> -->
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="体检机构" prop="examinationOrgan">
-            <el-input v-model="formData.examinationOrgan"></el-input>
+            <span>{{formData.examinationOrgan}}</span>
+            <!-- <el-input v-model="formData.examinationOrgan"></el-input> -->
             <!-- <div class="form-item-value">{{formData.examinationOrgan}}</div> -->
           </el-form-item>
         </el-col>
@@ -40,7 +48,11 @@
       </el-row>
     </el-form>
     <template v-if="formData.sectionConclusionList.length > 0">
-      <div class="title physical-examination-info">体检信息</div>
+      <!-- <div class="title physical-examination-info">体检信息</div> -->
+      <div class="divRightTitleDiv">
+        <div class="divRightTitle">查看体检信息
+          <div class="titleBiao"></div></div>
+      </div>
       <div
         v-for="(item, index) in formData.sectionConclusionList"
         :key="index"
@@ -119,7 +131,7 @@
       </div>
       <div class="suggest-item" v-if="!!formData.advice">
         <div class="label">建议</div>
-        <div>{{formData.advice}}</div>
+        <div class="conter">{{formData.advice}}</div>
       </div>
     </template>
     <div class="buttons">
@@ -239,7 +251,7 @@ export default {
     .top {
       height: 60px;
       padding-left: 20px;
-      background: #4991FD;
+      background: #3154AC;
       border-radius: 5px;
       display: flex;
       align-items: center;
@@ -257,7 +269,7 @@ export default {
           display: none;
         }
         .el-table__header-wrapper th {
-          background: rgba(73, 145, 253, 0.1);
+          background: #F6F8FC;
         }
         &.el-table--enable-row-hover .el-table__body tr:hover > td {
           background: #fff;
@@ -341,7 +353,7 @@ export default {
       border-radius: 8px;
       display: flex;
       align-items: center;
-      padding: 14px 28px;
+      padding: 7px 10px;
       margin-right: 20px;
       margin-bottom: 20px;
       .abnormal-number {
@@ -402,17 +414,23 @@ export default {
       margin-bottom: 17px;
       font-size: 16px;
       font-weight: 600;
-      color: #333333;
+      color: #3154AC;
       line-height: 22px;
+    }
+    .conter{
+      font-size: 14px;
+      line-height: 20px;
     }
   }
   .buttons {
     text-align: center;
     margin-top: 30px;
+    color: #3154AC;
     .el-button {
       width: 90px;
       height: 40px;
       border-radius: 20px;
+      color: #3154AC;
       &:not(.el-button--primary) {
         background: rgba(49, 84, 172, 0.1);
           border-radius: 20px;

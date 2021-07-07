@@ -211,6 +211,7 @@
         border: none!important;
         overflow: hidden;
         font-size: 12px;
+        margin-right: 2px;
         &.is-active{
             color:#ffffff!important;
              background-color: #3154AC!important;
@@ -315,6 +316,9 @@
     }
     /deep/ .el-collapse-item__header .el-collapse-item__arrow{
         display: none;
+    }
+    /deep/ .el-collapse-item__header{
+        margin-bottom: 10px;
     }
 }
 

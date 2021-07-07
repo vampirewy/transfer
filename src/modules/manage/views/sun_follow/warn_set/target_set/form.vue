@@ -119,7 +119,7 @@
         <el-table-column label="小项条件" prop="itemName">
           <template slot-scope="scope">
             <el-select v-model="scope.row.itemCondition" placeholder="请选择"
-                       @change="changeItemCondition(scope.$index, $event)">
+                       @change="changeItemCondition(scope.row)">
               <el-option
                       v-for="(item, index) in relationOptions"
                       :label="item.name"
@@ -259,15 +259,14 @@ export default {
       this.planuserModalVisible = false;
       this.$refs.userPopover.doClose();
     },
-    changeItemCondition(index, val) {
-      console.log(index);
-      console.log(val);
-      if (val === 6) {
-        this.addProject[index].itemValue = '';
+    changeItemCondition(row) {
+      if (row.itemCondition === 6) {
+        this.$set(row, 'itemValue', '');
         // this.$refs.itemValue.clearValidate();
       } else {
-        this.addProject[index].minItemValue = '';
-        this.addProject[index].maxItemValue = '';
+        console.log(row);
+        this.$set(row, 'minItemValue', '');
+        this.$set(row, 'maxItemValue', '');
         // this.$refs.minItemValue.clearValidate();
         // this.$refs.maxItemValue.clearValidate();
       }

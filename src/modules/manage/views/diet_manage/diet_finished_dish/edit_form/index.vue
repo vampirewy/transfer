@@ -2,7 +2,10 @@
   <div>
     <div class="diet-form_center">
       <div class="diet-plan-box">
-        <div class="title">{{ id ? '编辑' : '新增' }}菜名</div>
+        <div class="title">
+          <span v-if="mode === 'look'">查看</span>
+          <span v-else>{{ id ? '编辑' : '新增' }}</span>菜名
+        </div>
       </div>
     </div>
     <el-form
@@ -61,18 +64,24 @@
       <div class="cooking-me">
         <el-form-item label="烹饪方法：">
           <el-input
+            v-if="mode !== 'look'"
             type="textarea"
             v-model="method"
             :rows="4"
             maxlength="300"
             show-word-limit
           />
+          <span v-else>{{method}}</span>
         </el-form-item>
       </div>
     </el-form>
     <div class="diet-form_center">
       <div class="diet-plan-box">
-        <div class="title">{{ id ? '编辑' : '新增' }}菜品</div>
+        <div class="title">
+          <span v-if="mode === 'look'">查看</span>
+          <span v-else>{{ id ? '编辑' : '新增' }}</span>菜品
+          <!-- {{ id ? '编辑' : '新增' }}菜品 -->
+        </div>
       </div>
     </div>
     <div class="divRightTitleDiv" v-if="mode !== 'look'">

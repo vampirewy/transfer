@@ -186,7 +186,7 @@
                   :active-value="1"
                   :inactive-value="0"
                   active-color="#13ce66"
-                  @change=changeStatus(scope,scope.row.state)
+                  @change=changeStatus(scope.row)
                   >
                 </el-switch>
               </template>
@@ -529,16 +529,14 @@ export default {
         }
       });
     },
-
-    changeStatus({ row = {} }, status) {
-      const setRow = row;
-      this.$api.userManagerInterface.editUserStatus({
-        id: setRow.id,
-        state: status,
+    changeStatus(row) {
+      console.log(row);
+      this.$api.interventionTemplateInterface.updateTemplateState({
+        id: row.id,
+        state: row.state,
       }).then(({ data }) => {
         if (data.code === 200) {
           this.$message.success('操作成功');
-          setRow.state = status;
         }
       });
       // this.$confirm(

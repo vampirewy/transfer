@@ -43,7 +43,11 @@
       :sectionName="['收缩压', '舒张压']"
       :sectionXList="xData">
     </line-chart>
-    <div class="title">数据列表</div>
+    <!-- <div class="title">数据列表</div> -->
+    <div class="divRightTitleDiv">
+      <div class="divRightTitle">数据列表
+        <div class="titleBiao"></div></div>
+    </div>
     <el-table :data="table.list" class="openTable">
       <el-table-column
         v-for="(item, index) in table.columns"

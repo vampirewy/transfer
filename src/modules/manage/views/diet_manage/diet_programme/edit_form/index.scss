@@ -211,6 +211,7 @@
         border: none!important;
         overflow: hidden;
         font-size: 12px;
+        margin-right: 2px !important;
         &.is-active{
             color:#ffffff!important;
              background-color: #3154AC!important;
@@ -337,8 +338,8 @@
 }
 .diet-rule{
     .diet-rule_textarea{
-        height: 90px;
-        max-height: 130px;
+        // height: 90px;
+        // max-height: 130px;
         padding: 21px 19px;
         box-sizing: border-box;
         border-radius: 8px;

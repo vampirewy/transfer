@@ -31,7 +31,13 @@
                 disabled
                 v-model="currentUser.name"
                 placeholder="请选择客户">
-                <i :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`" slot="suffix"></i>
+                <i
+                  :class="popoverStatus ?
+                  'el-icon-arrow-up':'el-icon-arrow-down'"
+                  slot="suffix"
+                ></i>
+                <!-- <i :class="`el-icon-caret-${popoverStatus ? 'top' : 'bottom'}`"
+                slot="suffix"></i> -->
               </el-input>
             </el-popover>
           </el-form-item>
@@ -439,6 +445,10 @@ export default {
 
 <style lang="scss" scoped>
 .medical-history-form {
+  /deep/.select-user-trigger .el-input__inner {
+    color: #333 !important;
+    background: #ffffff !important;
+  }
   .basic-info-title, .main-info-title {
     font-size: 18px;
     font-weight: 600;

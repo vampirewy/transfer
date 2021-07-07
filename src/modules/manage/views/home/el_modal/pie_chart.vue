@@ -22,7 +22,7 @@ export default {
     },
     height: {
       type: String,
-      default: '170px',
+      default: '190px',
     },
     xList: {
       type: Array,
@@ -145,8 +145,8 @@ export default {
             emphasis: {
               label: {
                 show: true,
-                fontSize: '16',
-                color: '#333333',
+                fontSize: '12',
+                color: '#ffffff',
                 fontWeight: 'bold',
               },
             },
