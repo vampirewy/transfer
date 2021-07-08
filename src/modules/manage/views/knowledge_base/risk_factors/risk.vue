@@ -8,11 +8,27 @@
     <div class="searchCondition">
       <div class="searchLeft">
         <div class="searchInputFormItem">
-          <el-input placeholder="危险因素搜索" v-model="formData.keywords">
+          <el-input placeholder="危险因素名称" v-model="formData.keywords">
           </el-input>
           <span class="searchBtnImgSpan" @click="search(1)">
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
               </span>
+        </div>
+        <div>
+          <span>分类查询：</span>
+          <el-select
+                  v-model="formData.riskType"
+                  placeholder="请选择"
+                  style="width: 140px"
+                  clearable
+          >
+          <el-option
+            v-for="item in DangerTypeList"
+            :key="item.paramValue"
+            :label="item.name"
+            :value="item.paramValue"
+          ></el-option>
+          </el-select>
         </div>
       </div>
       <div class="searchRight">
@@ -202,7 +218,7 @@ export default {
       questionFromList: [], // 问卷来源
       formData: {
         keywords: '', // 危险因素
-        // riskType: '', // 危险分类
+        riskType: '', // 危险分类
         // clientGrid: '', // 题目类型
         pageNo: 1,
         pageSize: 15,
@@ -287,6 +303,7 @@ export default {
     reset() {
       this.formData.pageNo = 1;
       this.formData.keywords = '';
+      this.formData.riskType = '';
       // this.getQuestionType();
       this.fetch();
     },
@@ -426,6 +443,7 @@ export default {
     next((vm) => {
       // vm.getQuestionType();
       vm.fetch();
+      vm.getDangerTypeList();
     });
   },
 };

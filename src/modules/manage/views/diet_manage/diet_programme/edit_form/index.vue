@@ -206,10 +206,10 @@
             >
               <div class="item-title">制定食谱</div>
               <div class="in_out-put" v-if="type !== 'info'">
-                <div @click="isShowTemplateInput = true">
+                <!-- <div @click="isShowTemplateInput = true">
                   <img src="@/assets/images/common/import.png" alt="" />
                   从模板导入
-                </div>
+                </div> -->
                 <div @click="addtemplate">
                   <img src="@/assets/images/common/export.png" alt="" />
                   保存为模板
