@@ -14,7 +14,9 @@
       </el-table-column>
       <el-table-column prop="name" label="问卷类型" min-width="25%" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>生活方式问卷</span>
+          <span>{{scope.row.questionType == 1?
+            '生活方式':cope.row.questionType == 2?
+            '心理评估': '中医评估'}}问卷</span>
         </template>
       </el-table-column>
       <el-table-column prop="questionDate" label="填写日期" min-width="50%" show-overflow-tooltip>
@@ -41,17 +43,29 @@
 <script>
 export default {
   name: 'ServiceOpen',
-  props: ['clientId'],
+  // props: ['clientId', 'id'],
+  props: {
+    clientId: {
+      // 内容
+      type: String,
+      default: '',
+    },
+    id: {
+      type: String,
+      default: '',
+    },
+  },
   data() {
     return {
       tableData: [],
       total: 0,
       currentPage: 1,
       pageSize: 5,
-      selectRadio: '',
+      selectRadio: this.id,
     };
   },
   mounted() {
+    console.log(this.id, 111);
     this.queryList();
   },
   methods: {
@@ -79,10 +93,10 @@ export default {
         pageSize: this.pageSize,
       });
       const { data } = res.data;
-      console.log(data.data, 1111);
       if (data) {
         this.tableData = data.data || [];
         this.total = data.total;
+        console.log(this.tableData, '默认');
       }
     },
   },

@@ -7,10 +7,15 @@
       <span>步数</span>
     </div>
     <line-chart
+          v-if="elist.length > 0"
           :chart-data="yData"
           :sectionName="['步数']"
           :sectionXList="xData">
         </line-chart>
+        <div class="noneText" v-else>
+        <img src="@/assets/images/noData.png"/>
+          <p>暂时为空</p>
+      </div>
         <div class="formSearchTitle" style="font-size: 14px">
           <span class="dianLv"></span>列表
         </div>
@@ -42,6 +47,7 @@ export default {
         pageNo: 1,
         pageSize: 15,
       },
+      elist: [],
       xData: [],
       yData: [],
       Name: '',
@@ -49,9 +55,7 @@ export default {
     };
   },
   mounted() {
-    console.log(this.id, this.ids, '血压新增');
     this.queryChartData();
-    this.queryPageList();
     // this.queryChartInfo();
   },
   methods: {
@@ -59,6 +63,7 @@ export default {
       this.$api.healthMonitorInterface.getSportChart(this.id).then(({ data }) => {
         const xData = [];
         const yData = [];
+        this.elist = data.data;
         (data.data || []).forEach((item) => {
           let dateStr;
           if (new Date(item.testDate).getFullYear() === new Date().getFullYear()) {
@@ -73,30 +78,16 @@ export default {
         this.yData = [yData];
       });
     },
-    queryPageList() {
-      this.$api.healthMonitorInterface.getSportList({
-        clientId: this.id,
-        pageNo: this.table.pageNo,
-        pageSize: this.table.pageSize,
-      }).then(({ data }) => {
-        this.table.total = data.data.total;
-        this.table.list = data.data.data;
-      });
-    },
-    // queryChartInfo() {
-    //   this.$api.healthMonitorInterface.getDetailHealthBloodSugar(this.ids).then(({ data }) => {
-    //     this.queryInfo = data.data;
-    //     console.log(this.queryInfo, '12313123123');
+    // queryPageList() {
+    //   this.$api.healthMonitorInterface.getSportList({
+    //     clientId: this.id,
+    //     pageNo: this.table.pageNo,
+    //     pageSize: this.table.pageSize,
+    //   }).then(({ data }) => {
+    //     this.table.total = data.data.total;
+    //     this.table.list = data.data.data;
     //   });
     // },
-    handlePageChange(page) {
-      this.table.pageNo = page;
-      this.queryPageList();
-    },
-    handleSizeChange(size) {
-      this.table.pageSize = size;
-      this.queryPageList();
-    },
   },
 };
 </script>
