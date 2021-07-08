@@ -1,6 +1,7 @@
 <template>
   <div class="follow-plan">
-    <el-table :data="tableData" style="width: 100%" align="center">
+    <el-table :data="tableData" :span-method="objectSpanMethod"
+    border style="width: 100%" align="center">
       <el-table-column prop="riskType" label="分类" show-overflow-tooltip>
         <template slot-scope="scope">
             <span>{{ scope.row.typeName || '-'}}</span>
@@ -8,8 +9,7 @@
       </el-table-column>
       <el-table-column prop="gridName" label="因素" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span v-for="(item,index) in
-          scope.row.riskFactorInfoDTOList" :key="index">{{ item.factor || '-'}}</span>
+          <span >{{ scope.row.factor || '-'}}</span>
         </template>
       </el-table-column>
       <!-- <el-table-column prop="executeTime" label="发生日期" show-overflow-tooltip>
@@ -19,8 +19,7 @@
       </el-table-column> -->
       <el-table-column prop="advice" label="建议" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span v-for="(item,index) in
-          scope.row.riskFactorInfoDTOList" :key="index">{{ item.advice || '-'}}</span>
+          <span>{{ scope.row.advice || '-'}}</span>
         </template>
       </el-table-column>
       <!-- <el-table-column prop="executePlanWayName" label="操作" show-overflow-tooltip>
@@ -81,17 +80,58 @@ export default {
     };
   },
   mounted() {
-    console.log(this.clientId, 123);
     this.fetch();
   },
   methods: {
+    getcliid(id) {
+      this.clientId = id;
+      this.fetch();
+    },
     fetch() {
       this.$api.reportInterface.getriskList(this.clientId)
         .then(({ data }) => {
           if (data) {
-            this.tableData = data.data;
+            data.data.forEach((item) => {
+              item.riskFactorInfoDTOList.forEach((it) => {
+                const json = {
+                  typeName: item.typeName,
+                  advice: it.advice,
+                  factor: it.factor,
+                };
+                this.tableData.push(json);
+              });
+            });
+            console.log(this.tableData, '数据');
           }
         });
+    },
+    objectSpanMethod({ row, rowIndex, columnIndex }) {
+      let num = 0;
+      if (columnIndex === 0) {
+        for (let i = 0; i < this.tableData.length; i++) {
+          if (row.typeName === this.tableData[i].typeName) {
+            num++;
+          }
+        }
+        if (num === 1) {
+          return {
+            rowspan: num,
+            colspan: 1,
+          };
+        } else if (num > 1) {
+          if (this.tableData[rowIndex - 1]
+          && this.tableData[rowIndex].typeName === this.tableData[rowIndex - 1].typeName) {
+            return {
+              rowspan: 0,
+              colspan: 0,
+            };
+          }
+          return {
+            rowspan: num,
+            colspan: 1,
+          };
+        }
+      }
     },
   },
 };
