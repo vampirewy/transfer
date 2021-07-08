@@ -108,10 +108,10 @@
                 width="90" show-overflow-tooltip>
                 <template slot-scope="scope">
                   <el-button
+                  style="color:#36BF2F;font-weight:600;"
                     type='text'
-                    v-if="scope.row.notMatchAbnromalTotal > 0"
                     @click="expandsHandle(scope.row)">
-                    {{scope.row.notMatchAbnromalTotal}}
+                    {{scope.row.notMatchAbnromalTotal || 0}}
                   </el-button>
                 </template>
               </el-table-column>
@@ -169,6 +169,7 @@ export default {
         list: [],
       },
       expands: [],
+      getRowKeys: row => row.reportId,
       loading: false,
       popoverStatus: false,
       popoverRefIndex: '',
