@@ -389,7 +389,7 @@
                 >
                 <el-button type="text" size="small"
                            v-if="getAccess('wait_visit_plan_exec')"
-                           @click="viewiFollowPlanDetail(scope.row)">执行</el-button>
+                           @click="doiFollowPlanDetail(scope.row)">执行</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -720,10 +720,20 @@ export default {
         },
       );
     },
-    viewiFollowPlanDetail(row) {
+    doiFollowPlanDetail(row) {
+      if (row.templateQuestionId) { // 有问卷跳原来
+        this.viewFollowPlanDetail(row);
+      } else {
+        this.clientCenterFollowPlanDetail(row); // 没问卷去个人管理中心执行
+      }
+    },
+    viewFollowPlanDetail(row) {
       this.$router.push({
         path: `/health_plan/user_follow_do/do/${row.id}`,
       });
+    },
+    clientCenterFollowPlanDetail(row) {
+      this.commonHref.toPersonalHealth(row.clientId, this.$router);
     },
     /**
      * 搜索

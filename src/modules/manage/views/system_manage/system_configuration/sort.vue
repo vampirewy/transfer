@@ -30,7 +30,7 @@
       </el-table>
     </div>
     <div style="text-align: center;margin-top: 20px;">
-        <el-button class="cancelBtn" @click="$router.go(-1)">返回</el-button>
+        <el-button class="cancelBtn" @click="returngo">返回</el-button>
         <el-button class="sureBtn" type="primary" @click="onSubmit">保存</el-button>
       </div>
   </div>
@@ -67,6 +67,14 @@ export default {
             this.$message.error('网络异常！');
           }
         });
+    },
+    returngo() {
+      this.$router.push({
+        path: '/role_configuration',
+        query: {
+          id: '1',
+        },
+      });
     },
   },
 };

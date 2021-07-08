@@ -3,12 +3,13 @@
     <el-table :data="tableData" style="width: 100%" align="center">
       <el-table-column prop="riskType" label="分类" show-overflow-tooltip>
         <template slot-scope="scope">
-            <span>{{ statusMap[scope.row.riskType] || '-'}}</span>
+            <span>{{ scope.row.typeName || '-'}}</span>
           </template>
       </el-table-column>
       <el-table-column prop="gridName" label="因素" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.riskFactor | getResult}}</span>
+          <span v-for="(item,index) in
+          scope.row.riskFactorInfoDTOList" :key="index">{{ item.factor || '-'}}</span>
         </template>
       </el-table-column>
       <!-- <el-table-column prop="executeTime" label="发生日期" show-overflow-tooltip>
@@ -18,10 +19,11 @@
       </el-table-column> -->
       <el-table-column prop="advice" label="建议" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.advice | getResult }}</span>
+          <span v-for="(item,index) in
+          scope.row.riskFactorInfoDTOList" :key="index">{{ item.advice || '-'}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="executePlanWayName" label="操作" show-overflow-tooltip>
+      <!-- <el-table-column prop="executePlanWayName" label="操作" show-overflow-tooltip>
         <template slot-scope="scope">
           <el-button
               type="text"
@@ -38,9 +40,9 @@
               "
             >查看</el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
-    <el-pagination
+    <!-- <el-pagination
       style="margin-top: 15px"
       layout="prev, pager, next, jumper, total, sizes"
       :total="total"
@@ -48,7 +50,7 @@
           :current-page="formData.pageNo"
           @current-change="handleCurrentChange"
           @size-change="handleSizeChange"
-    ></el-pagination>
+    ></el-pagination> -->
   </div>
 </template>
 <script>
@@ -75,28 +77,21 @@ export default {
         // clientGrid: '', // 题目类型
         pageNo: 1,
         pageSize: 10,
-        clientId: this.$route.params.id,
       },
     };
   },
   mounted() {
+    console.log(this.clientId, 123);
     this.fetch();
   },
   methods: {
-    async fetch() {
-      const res = await this.$api.projectList.riskList(this.formData);
-      const { data } = res.data;
-      this.tableData = data.data;
-      this.total = data.total;
-    },
-    handleCurrentChange(page) {
-      this.formData.pageNo = page;
-      this.fetch();
-    },
-    handleSizeChange(size) {
-      this.pageSize = size;
-      this.formData.pageNo = 1;
-      this.fetch();
+    fetch() {
+      this.$api.reportInterface.getriskList(this.clientId)
+        .then(({ data }) => {
+          if (data) {
+            this.tableData = data.data;
+          }
+        });
     },
   },
 };

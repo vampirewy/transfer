@@ -43,8 +43,8 @@
       >
       </el-table-column>
       <el-table-column
-        prop="createTime"
-        label="创建日期"
+        prop="zjDate"
+        label="采集日期"
         show-overflow-tooltip
       >
       </el-table-column>
