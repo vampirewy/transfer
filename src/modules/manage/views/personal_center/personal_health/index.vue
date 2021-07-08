@@ -128,7 +128,6 @@
                   class="user-edit-form"
                   :model="formData"
                   label-width="90px"
-                  :rules="rules"
                 >
                   <el-row>
                     <el-col :span="12">
