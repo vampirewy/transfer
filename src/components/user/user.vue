@@ -23,7 +23,7 @@
         </el-dropdown-menu>
       </el-dropdown>
       <span class="quitSpan" v-else>
-        <a href="javascript:;" class="name">{{ doUserName }}</a>
+        {{ doUserName }}
       </span>
       <span class="ge">|</span>
       <span class="quitSpan" @click="updatePsd">修改密码</span>
