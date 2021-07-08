@@ -187,7 +187,9 @@ export default {
     }
   }
   .noneText{
+    display: block;
     text-align: center;
+    margin-top: 0;
     img{
       position: relative;
       width: 40px;

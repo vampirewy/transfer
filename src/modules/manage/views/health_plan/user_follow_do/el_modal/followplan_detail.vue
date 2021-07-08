@@ -121,15 +121,6 @@
               </el-col>
             </el-row>
             <el-row>
-              <!--<el-col :span="12">
-                <el-form-item label="满意度：" prop="manyi">
-                  <el-select v-model="form.manyi" placeholder="请选择">
-                    <el-option :label="it.name" :value="it.paramValue" :key="it.paramValue"
-                               v-for="it in manyiList">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>-->
               <el-col :span="12">
                 <el-form-item label="依从度：" prop="assortLevel">
                   <el-select v-model="form.assortLevel" placeholder="请选择" style="width: 100%">
@@ -256,7 +247,6 @@ export default {
         planDoctorName: '',
         planTitle: '',
         planContent: '',
-        manyi: '',
         assortLevel: '',
         startTime: '', // 开始时间
         checkInput: 1,
@@ -266,12 +256,10 @@ export default {
       },
       planWayList: [],
       assortLevelList: [],
-      manyiList: [],
       rules: {
         planDate: [{ required: true, message: '请选择执行时间' }],
         planWay: [{ required: true, message: '请选择随访形式' }],
         planDoctorName: [{ required: true, message: '请选择随访人' }],
-        manyi: [{ required: true, message: '请选择满意度' }],
         assortLevel: [{ required: true, message: '请选择依从度' }],
       },
     };
@@ -284,7 +272,6 @@ export default {
     onLoad() {
       this.getPlanWayList(); // 随访方式
       this.getSystemParamByassortLevel('HM012');
-      this.getSystemParamByCodeManyi('HM013');
       this.getDetail();
     },
     /**
@@ -346,11 +333,6 @@ export default {
       const res = await this.$api.userManagerInterface.getSystemParamByCode(code);
       const { data } = res.data;
       this.assortLevelList = data;
-    },
-    async getSystemParamByCodeManyi(code) {
-      const res = await this.$api.userManagerInterface.getSystemParamByCode(code);
-      const { data } = res.data;
-      this.manyiList = data;
     },
     // 关闭弹窗选择列表 push数组
     handlePopoperClose() {
