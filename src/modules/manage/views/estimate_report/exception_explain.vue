@@ -45,7 +45,7 @@
               disabled
             ></el-input>
           </el-form-item>
-          <el-form-item label="体检建议">
+          <el-form-item label="相关建议">
             <el-input
               type="textarea"
               v-model="exception.advice"

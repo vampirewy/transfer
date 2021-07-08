@@ -43,8 +43,8 @@ class ProjectList extends BaseModule {
   }
   // ------------------危险因素 ---------------
   // 个人中心危险因素列表
-  riskList(questionId) {
-    return this.get(`/home/get_question_risk_factor/${questionId}`);
+  riskList(data = {}) {
+    return this.post('/system_risk/get_list_page', data);
   }
   // 危险因素列表详情
   riskListInfo(data) {
