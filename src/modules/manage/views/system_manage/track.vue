@@ -41,13 +41,12 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="7">
               <el-form-item label="跟踪人员：" label-width="90px">
                 <el-select
                         v-model="staffForm.redLvUserList"
                         placeholder="请选择"
                         multiple
-                        collapse-tags
                 >
                   <el-option :label="item.realName" :value="item.id"
                              v-for="(item, index) in userList"
@@ -80,13 +79,12 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="7">
               <el-form-item label="跟踪人员：" label-width="90px">
                 <el-select
                         v-model="staffForm.orangeLvUserList"
                         placeholder="请选择"
                         multiple
-                        collapse-tags
                 >
                   <el-option :label="item.realName" :value="item.id"
                              v-for="(item, index) in userList"
