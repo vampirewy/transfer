@@ -446,6 +446,7 @@ export default {
         } else {
           jsonArr.splice(2, 1);
         }
+        console.log(jsonArr);
         this.constitutionList = jsonArr;
       }
     },

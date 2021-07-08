@@ -3,12 +3,13 @@
     <el-table :data="tableData" style="width: 100%" align="center">
       <el-table-column prop="riskType" label="分类" show-overflow-tooltip>
         <template slot-scope="scope">
-            <span>{{ statusMap[scope.row.riskType] || '-'}}</span>
+            <span>{{ scope.row.typeName || '-'}}</span>
           </template>
       </el-table-column>
       <el-table-column prop="gridName" label="因素" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.riskFactor | getResult}}</span>
+          <span v-for="(item,index) in
+          scope.row.riskFactorInfoDTOList" :key="index">{{ item.factor || '-'}}</span>
         </template>
       </el-table-column>
       <!-- <el-table-column prop="executeTime" label="发生日期" show-overflow-tooltip>
@@ -18,10 +19,11 @@
       </el-table-column> -->
       <el-table-column prop="advice" label="建议" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.advice | getResult }}</span>
+          <span v-for="(item,index) in
+          scope.row.riskFactorInfoDTOList" :key="index">{{ item.advice || '-'}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="executePlanWayName" label="操作" show-overflow-tooltip>
+      <!-- <el-table-column prop="executePlanWayName" label="操作" show-overflow-tooltip>
         <template slot-scope="scope">
           <el-button
               type="text"
@@ -38,7 +40,7 @@
               "
             >查看</el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
     <!-- <el-pagination
       style="margin-top: 15px"

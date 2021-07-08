@@ -25,18 +25,25 @@
     <div class="resetAll" @click="resetAll">重置</div>
     </div>
      <!-- @row-click="rowClick" -->
+     <!-- @selection-change="handleSelectionChange" -->
     <el-table :data="tableData"
      class="openTable"
-     @selection-change="handleSelectionChange">
-      <!-- <el-table-column width="80">
+     @row-click="rowClick"
+     >
+      <el-table-column width="80">
         <template slot-scope="scope">
           <el-radio v-model="selectRadio" :label="scope.row.id">&nbsp;</el-radio>
         </template>
-      </el-table-column> -->
-      <el-table-column type="selection" width="40" align="center"></el-table-column>
+      </el-table-column>
+      <!-- <el-table-column type="selection" width="40" align="center"></el-table-column> -->
       <el-table-column prop="sectionName" label="科室名称"></el-table-column>
       <el-table-column prop="itemName" label="小项名称"></el-table-column>
-      <el-table-column prop="refRange" label="性别">
+      <el-table-column label="性别" prop="gender" min-width="80" show-overflow-tooltip>
+        <template slot-scope="scope">
+          {{ scope.row.gender === 1 ? '男' :scope.row.gender === 2?'女': '不限' }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="refRange" label="范围或参考">
         <template slot-scope="scope">
           <span>{{ statusrefRange(scope.row.refRange) || '-'}}</span>
         </template>
@@ -54,14 +61,14 @@
       @current-change="handleCurrentChange"
       @size-change="handleSizeChange"
     ></el-pagination>
-    <div class="handle-btn mt30 mb30">
+    <!-- <div class="handle-btn mt30 mb30">
       <el-button class="reset-btn" size="small" @click="goBack"
         >返回</el-button
       >
       <el-button class="add-btn" type="primary" size="small" @click="submit"
         >保存</el-button
       >
-    </div>
+    </div> -->
   </div>
 </template>
 

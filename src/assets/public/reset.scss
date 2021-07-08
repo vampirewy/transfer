@@ -444,10 +444,10 @@ border: 1px solid #3154AC;
       color: #999999!important;
     }
   }
-  /deep/ .el-textarea.is-disabled .el-textarea__inner{
-    color: #999999!important;
-    background-color: #E7E7ED !important;
-  }
+  // /deep/ .el-textarea.is-disabled .el-textarea__inner{
+  //   color: #999999!important;
+  //   background-color: #E7E7ED !important;
+  // }
 }
 .el-textarea .el-input__count {
   background: none !important;

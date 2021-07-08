@@ -374,7 +374,7 @@
                 prop="lifeQuestionDate"
                 min-width="120"
                 align="center">
-                 <!-- <template slot-scope="scope">
+                 <template slot-scope="scope">
                   <el-select
                     v-model="scope.row.lifeQuestionDate"
                     placeholder="请选择"
@@ -385,7 +385,7 @@
                       :key="scope.row.lifeQuestionDate">
                     </el-option>
                   </el-select>
-                </template> -->
+                </template>
                 <template slot-scope="scope">
                   <el-popover
                           v-if="scope.row.lifeQuestionDate"

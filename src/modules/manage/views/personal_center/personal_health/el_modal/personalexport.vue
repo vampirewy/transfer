@@ -62,7 +62,7 @@
                 prop="lifeQuestionDate"
                 min-width="120"
                 align="center">
-                 <!-- <template slot-scope="scope">
+                 <template slot-scope="scope">
                   <el-select
                     v-model="scope.row.lifeQuestionDate"
                     placeholder="请选择"
@@ -73,7 +73,7 @@
                       :key="scope.row.lifeQuestionDate">
                     </el-option>
                   </el-select>
-                </template> -->
+                </template>
                 <template slot-scope="scope">
                   <el-popover
                           v-if="scope.row.lifeQuestionDate"
@@ -88,7 +88,6 @@
                       v-if="popoverStatus && popoverRefIndex === scope.row.reportId"
                       :clientId="scope.row.clientId"
                       @change="handlePopoperClose"></questions-open>
-                    <!--v-if="popoverStatus"-->
                     <el-input
                             class="select-user-trigger disabled"
                             slot="reference"
@@ -109,10 +108,10 @@
                 width="90" show-overflow-tooltip>
                 <template slot-scope="scope">
                   <el-button
+                  style="color:#36BF2F;font-weight:600;"
                     type='text'
-                    v-if="scope.row.notMatchAbnromalTotal > 0"
                     @click="expandsHandle(scope.row)">
-                    {{scope.row.notMatchAbnromalTotal}}
+                    {{scope.row.notMatchAbnromalTotal || 0}}
                   </el-button>
                 </template>
               </el-table-column>
@@ -170,6 +169,7 @@ export default {
         list: [],
       },
       expands: [],
+      getRowKeys: row => row.reportId,
       loading: false,
       popoverStatus: false,
       popoverRefIndex: '',

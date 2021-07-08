@@ -292,6 +292,10 @@ export default {
   },
   mounted() {
     this.roledetail();
+    if (this.$route.query.id) {
+      this.Tabactive = 1;
+      this.queryList();
+    }
   },
   methods: {
     handleComment(data) {
