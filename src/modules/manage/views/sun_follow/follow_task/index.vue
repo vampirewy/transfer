@@ -139,7 +139,7 @@
               @expand-change="handleExpandChange">
       <el-table-column type="expand" width="1" class-name="hide-expand-column">
         <el-table :data="expandData.list" class="expand-table" align="center">
-          <el-table-column label="项目名称" prop="itemName" min-width="90px" show-overflow-tooltip>
+          <el-table-column label="跟踪项目" prop="itemName" min-width="90px" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{ scope.row.itemName | getResult}}</span>
             </template>
@@ -154,7 +154,7 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column label="上报科室" prop="reportDepartment" show-overflow-tooltip>
+          <!--<el-table-column label="上报科室" prop="reportDepartment" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{ scope.row.reportDepartment | getResult}}</span>
             </template>
@@ -163,22 +163,38 @@
             <template slot-scope="scope">
               <span>{{ scope.row.reportUserName | getResult}}</span>
             </template>
-          </el-table-column>
+          </el-table-column>-->
           <el-table-column label="上报时间" prop="reportDate" min-width="90px" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{ scope.row.reportDate | getResult}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="最新跟踪" prop="nearestTrackingDate"
+          <el-table-column label="最近跟踪" prop="nearestTrackingDate"
                            min-width="90px" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{ scope.row.nearestTrackingDate | getResult}}</span>
+            </template>
+          </el-table-column>
+           <el-table-column
+            label="最近结果"
+            prop="result"
+            min-width="80px">
+            <template slot-scope="scope">
+              <span>
+                {{ scope.row.stateName | getResult }}
+              </span>
             </template>
           </el-table-column>
           <el-table-column label="下次跟踪" prop="nextTrackingDate"
                            min-width="90px" show-overflow-tooltip>
             <template slot-scope="scope">
               <span>{{ scope.row.nextTrackingDate | getResult}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="跟踪方式" prop="nextTrackingDate"
+                           width="90px" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span>{{ scope.row.trackingWayName | getResult}}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -242,19 +258,21 @@
           <span>{{ scope.row.age | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="isTrackingNum" label="待跟踪项目" show-overflow-tooltip>
+      <el-table-column prop="isTrackingNum" label="待跟踪项目" width="90px" show-overflow-tooltip>
         <template slot-scope="scope">
           <el-button type="text"
                      @click="expandsHandle(scope.row, 1)" style="color: #F33D21;font-size: 14px">
             {{scope.row.isTrackingNum | getResult}}</el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="earliestReportDate" label="最早上报" show-overflow-tooltip>
+      <el-table-column prop="earliestReportDate" label="最早上报"
+      min-width="105px" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{ scope.row.earliestReportDate | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="nearestReportDate" label="最新上报" show-overflow-tooltip>
+      <el-table-column prop="nearestReportDate" label="最新上报"
+      min-width="105px" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{ scope.row.nearestReportDate | getResult}}</span>
         </template>
@@ -269,7 +287,17 @@
           <span>{{ scope.row.nextTrackingDate | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="trackingRecordNum" label="跟踪记录" show-overflow-tooltip>
+      <!--<el-table-column prop="nextTrackingDate" label="*跟踪方式" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{ scope.row.nextTrackingDate | getResult}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="nextTrackingDate" label="*跟踪提示" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{ scope.row.nextTrackingDate | getResult}}</span>
+        </template>
+      </el-table-column>-->
+      <el-table-column prop="trackingRecordNum" label="跟踪记录" width="90px" show-overflow-tooltip>
         <template slot-scope="scope">
           <el-button type="text"
                      @click="expandsHandle(scope.row, 2)" style="color: #36BF2F;font-size: 14px">

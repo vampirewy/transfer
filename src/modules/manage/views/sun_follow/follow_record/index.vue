@@ -119,13 +119,13 @@
       <!-- <div class="divRightTitle"><span>|</span>客户池</div> -->
       <div style="display: flex;justify-content: space-between;align-items: center;">
         <div>
-        <el-button
+        <!--<el-button  产品说先隐藏 功能已对接好
                 class="btn-new btnAdd"
                 size="small"
                 style="margin: 16px 0;"
                 @click="exportList"
                 v-if="getAccess('follow_record_export')"
-        ><img src="@/assets/images/common/export.png" />导出</el-button>
+        ><img src="@/assets/images/common/export.png" />导出</el-button>-->
         </div>
         <div style="margin: 16px 0">
         <el-radio-group v-model="form.reportLv" @change="onSearch">
@@ -181,7 +181,7 @@
               </span>
         </template>
       </el-table-column>
-      <el-table-column label="上报科室" prop="reportDepartment" show-overflow-tooltip>
+      <!-- <el-table-column label="上报科室" prop="reportDepartment" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{ scope.row.reportDepartment | getResult}}</span>
         </template>
@@ -190,10 +190,26 @@
         <template slot-scope="scope">
           <span>{{ scope.row.reportUserName | getResult}}</span>
         </template>
-      </el-table-column>
+      </el-table-column>-->
       <el-table-column label="上报时间" prop="reportDate" min-width="115px" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{ scope.row.reportDate | getResult}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="最近跟踪" prop="nearestTrackingDate"
+      min-width="115px" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{ scope.row.nearestTrackingDate | getResult}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="最近结果" prop="stateName" min-width="115px" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{ scope.row.stateName | getResult}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="isCloseCase" label="是否结案" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{ scope.row.isCloseCase | getResultReportState}}</span>
         </template>
       </el-table-column>
       <!--<el-table-column prop="recieveUserName" label="接收人" show-overflow-tooltip>

@@ -14,17 +14,6 @@
       </span>
       </div>
     </div>
-    <!--<div class="intvTmpl_left" id="intvTmpl_left" v-if="$route.params.qusType === 1"
-         :class="{ 'isFixed': searchBarFixed === true }"
-         style="max-height: 30000px;height: auto;margin-right: 30px;display: none">
-      <div class="intvTmpl_left_title">生活方式问卷</div>
-      <ul class="intv_menulist">
-        <li :class="{'active':active === index}" @click="clickMenu(index, '#questions-' + index)"
-            v-for="(item, index) in templateList" :key="item.name">
-          {{item.name}}
-        </li>
-      </ul>
-    </div>-->
     <div class="health_questionnaire_form" :class="{ 'isFixedForm': searchBarFixed === true }"
          :style="{'padding-top': contentPaddingTop + 'px'}">
       <div class="divRightTitleDiv">
@@ -172,8 +161,10 @@ export default {
       console.log(answer);
       const SMOKE = 'e01';
       const DRINK = 'f01';
+      const SPORT = 'd10';
       const QUESTIONWITHSMOKE = ['e02', 'e03', 'e04', 'e05', 'e06'];
       const QUESTIONWITHDRINK = ['f02', 'f03', 'f04', 'f05', 'f06'];
+      const QUESTIONWITHSPORT = ['d05', 'd06'];
       let questions = [];
       if (row.code === SMOKE) {
         const chooseList = this.questions.find(list => list.name === '吸烟情况');
@@ -185,9 +176,15 @@ export default {
         questions = chooseList.questionSubjectDTOList.filter(val =>
           QUESTIONWITHDRINK.find(key => val.code === key),
         );
+      } else if (row.code === SPORT) {
+        const chooseList = this.questions.find(list => list.name === '运动锻炼');
+        questions = chooseList.questionSubjectDTOList.filter(val =>
+          QUESTIONWITHSPORT.find(key => val.code === key),
+        );
       }
-      // 得到吸烟、饮酒的题目
-      if (questions.length && (answer === '293' || answer === '322')) {
+      console.log(questions);
+      // 得到吸烟、饮酒、运动的题目
+      if (questions.length && (answer === '293' || answer === '322' || answer === '276')) {
         questions.forEach((val) => {
           if (val.code !== 'e05') { // 除了被动吸烟选项
             this.answerMap[val.id][0].optionId = ''; // 选了从不的 把其他两道题目取消选择状态
@@ -241,7 +238,8 @@ export default {
       list.forEach((val) => {
         if (val.optionCode === 'n' ||
           (val.subjectCode === 'e01' && val.optionCode === '1') ||
-          (val.subjectCode === 'f01' && val.optionCode === '1')) { // 如果是n或者吸烟饮酒选了1，push进一个数组， 回显时diaabled
+          (val.subjectCode === 'f01' && val.optionCode === '1') ||
+          (val.subjectCode === 'd10' && val.optionCode === '1')) { // 如果是n或者吸烟饮酒选了1，push进一个数组， 回显时diaabled
           this.chooseNoSubject.push(val.subjectCode);
         }
         if (val.subjectId && !map[val.subjectId]) {
@@ -267,6 +265,8 @@ export default {
               this.onAnswerChange(valOptions, '293');
             } if (valOptions.code === 'f01') {
               this.onAnswerChange(valOptions, '322');
+            } if (valOptions.code === 'd10') {
+              this.onAnswerChange(valOptions, '276');
             } else {
               valOptions.optionList
                 .filter(valItem => valItem.code !== 'n')
@@ -359,7 +359,7 @@ export default {
           noAnswerList.push(valQusOne.code); // 把未完成的题目push进一个数组
         }
       });
-      this.formData.answerList.forEach((valAnswer) => {
+      this.formData.answerList.forEach((valAnswer) => { // 选了从不的，就要把其他几项选项给去掉，防止后面验证到没填
         if (valAnswer.subjectCode === 'e01' && valAnswer.optionId === '293') {
           this.removeSplice(noAnswerList, 'e03');
           this.removeSplice(noAnswerList, 'e04');
@@ -367,6 +367,9 @@ export default {
           this.removeSplice(noAnswerList, 'f03');
           this.removeSplice(noAnswerList, 'f04');
           this.removeSplice(noAnswerList, 'f05');
+        } else if (valAnswer.subjectCode === 'd10' && valAnswer.optionId === '276') {
+          this.removeSplice(noAnswerList, 'd05');
+          this.removeSplice(noAnswerList, 'd06');
         }
       });
       console.log(noAnswerList);
