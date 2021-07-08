@@ -162,7 +162,7 @@ export default {
     this.$nextTick(async () => {
       this.getList(this.urrentValue);
     });
-    // console.log(this.value, '接收的数据');
+    console.log(this.value, '接收的数据');
   },
   methods: {
     async getList(id) {
@@ -252,10 +252,11 @@ export default {
       this.addProject.forEach((val) => {
         arr.push(val.itemName);
       });
-      const reqBody = { id: this.value, nameList: arr };
+      const reqBody = { id: this.urrentValue, nameList: arr };
       await this.$api.projectList.systemIteMatch(reqBody);
       this.$message.success('操作成功');
-      this.$emit('cancel');
+      this.cancel();
+      // this.$emit('cancel');
       // this.cancel('refreash');
       // await this.$api.companyManageInterface.updateWorkUnit({
       //   id: this.value.id,

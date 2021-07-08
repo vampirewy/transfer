@@ -146,14 +146,14 @@
         </div>
         <!-- </el-form-item> -->
       <!-- </el-col> -->
-      <div class="wltitle">
+      <!-- <div class="wltitle">
         <div class="quan"></div>
         <span>体检科室</span>
-      </div>
-      <div class="add-department" @click="addDepartment">
+      </div> -->
+      <!-- <div class="add-department" @click="addDepartment">
         <i class="el-icon-circle-plus"></i>
         <span>点击新增体检科室</span>
-      </div>
+      </div> -->
       <div
         v-for="(item, index) in formData.sectionConclusionList"
         :key="index"
@@ -167,10 +167,10 @@
             <span class="section-name" v-else>{{item.sectionName}}</span>
           </div>
           <div>
-            <el-button
+            <!-- <el-button
               v-if="!item.sectionNameEdit"
               @click="$set(item, 'sectionNameEdit', true)"
-            >修改</el-button>
+            >修改</el-button> -->
             <el-button @click="formData.sectionConclusionList.splice(index, 1)">删除</el-button>
           </div>
         </div>
@@ -433,7 +433,7 @@ export default {
       infoSource: {
         clientNameCheck: '',
       },
-      StatusCheck: [],
+      StatusCheck: {},
       drugsList: [],
     };
   },
@@ -458,7 +458,6 @@ export default {
             });
           }
         });
-        // console.log(this.value, 'zxcxczc');
       },
       deep: true,
     },
@@ -477,11 +476,10 @@ export default {
         // data.reference = '';
         // data.Suggestion = '';
         // this.popoverStatusCheck = false;
-        // console.log(data);
-        data.forEach((val) => {
-          this.infoSource.clientNameCheck += `${val.itemName}、`;
-          this.StatusCheck.push(val);
-        });
+        // data.forEach((val) => {
+        this.infoSource.clientNameCheck += `${data.itemName}、`;
+        this.StatusCheck = data;
+        // });
         this.$refs.userPopoverCheck.doClose();
       //   this.infoSource.clientName = data.name;
       //   this.infoSource.clientId = data.id;
@@ -493,38 +491,53 @@ export default {
       }
     },
     inspectionAdd() {
-      if (this.StatusCheck) {
-        if (!this.formData.sectionConclusionList) {
-          this.formData = {
-            sectionConclusionList: [],
-          };
-        }
-        this.StatusCheck.forEach((val) => {
-          // let same = false;
-          // this.drugsList.forEach((valAnswer) => {
-          //   if (valQusOne.id === valAnswer.id) { // 如果有一样 就回答过了
-          //     same = true;
-          //   }
-          // });
-          // if (same === false) { // 如果没有相同的则push
-          //   this.drugsList.push(valQusOne);
-          // }
-          // this.drugsList.push(valQusOne);
+      if (this.StatusCheck.length !== 0) {
+        let same = false;
+        let minsame = false;
+        this.formData.sectionConclusionList.forEach((valAnswer) => {
+          if (this.StatusCheck.sectionName === valAnswer.sectionName) {
+            same = true;
+            valAnswer.itemList.forEach((list) => {
+              if (this.StatusCheck.itemName === list.itemName) {
+                this.$message.warning('该项目已存在');
+                minsame = true;
+                return false;
+              }
+            });
+            if (minsame === false) {
+              valAnswer.addData = {
+                attention: '0',
+                itemName: this.StatusCheck.itemName,
+                itemValue: '',
+                refRange: this.StatusCheck.refRange,
+                itemUnit: this.StatusCheck.unit,
+              };
+            }
+          }
+        });
+        if (same === false) {
           const json = {
             conclusion: '',
-            sectionName: val.sectionName,
+            sectionName: this.StatusCheck.sectionName,
             itemList: [],
           };
           json.addData = {
             attention: '0',
-            itemName: val.itemName,
+            itemName: this.StatusCheck.itemName,
             itemValue: '',
-            refRange: val.refRange,
-            itemUnit: val.unit,
+            refRange: this.StatusCheck.refRange,
+            itemUnit: this.StatusCheck.unit,
           };
           this.formData.sectionConclusionList.push(json);
-        });
-        // console.log(this.value.sectionConclusionList);
+        }
+        // }
+        //   if (valQusOne.id === valAnswer.id) { // 如果有一样 就回答过了
+        //     same = true;
+        // if (same === false) { // 如果没有相同的则push
+        //   this.drugsList.push(valQusOne);
+        // }
+        // this.drugsList.push(valQusOne);
+        // });
         this.infoSource.clientNameCheck = '';
         this.StatusCheck = [];
         // this.$refs.modifyForm.resetFields();
@@ -562,6 +575,12 @@ export default {
     },
     addProject(data) {
       const { itemName, itemValue, refRange, itemUnit, attention } = data.addData;
+      if (itemName === '') {
+        return this.$message.warning('名称不能为空');
+      }
+      if (itemValue === '') {
+        return this.$message.warning('结果不能为空');
+      }
       if (this.checkProjectData(data.addData)) {
         data.itemList.push({
           itemName,
@@ -630,7 +649,6 @@ export default {
           itemUnit: '4',
         },
       });
-      // console.log(this.formData.sectionConclusionList);
     },
     queryTemplate() {
       this.$api.reportInterface.getTemplate({
