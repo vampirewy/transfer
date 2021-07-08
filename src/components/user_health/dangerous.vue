@@ -79,26 +79,18 @@ export default {
     };
   },
   mounted() {
+    console.log(this.clientId, 123);
     this.fetch();
   },
   methods: {
     fetch() {
-      this.$api.ProjectList.riskList(this.clientId)
+      this.$api.reportInterface.getriskList(this.clientId)
         .then(({ data }) => {
           if (data) {
             this.tableData = data.data;
           }
         });
     },
-    // handleCurrentChange(page) {
-    //   this.formData.pageNo = page;
-    //   this.fetch();
-    // },
-    // handleSizeChange(size) {
-    //   this.pageSize = size;
-    //   this.formData.pageNo = 1;
-    //   this.fetch();
-    // },
   },
 };
 </script>
