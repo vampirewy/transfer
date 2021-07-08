@@ -42,9 +42,9 @@ class ProjectList extends BaseModule {
     return this.post('/message_template/deleted', data);
   }
   // ------------------危险因素 ---------------
-  // 危险因素列表
-  riskList(data = {}) {
-    return this.post('/system_risk/get_list_page', data);
+  // 个人中心危险因素列表
+  riskList(questionId) {
+    return this.get(`/home/get_question_risk_factor/${questionId}`);
   }
   // 危险因素列表详情
   riskListInfo(data) {

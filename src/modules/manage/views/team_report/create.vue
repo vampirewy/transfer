@@ -206,7 +206,7 @@
                 </el-table>
               </div>
               <div v-if="formData.worker == 3">
-                <el-form-item label="工作单位3">
+                <el-form-item label="工作单位">
                   <div class="template-add-wrapper" style="display: flex">
                     <el-popover
                       style="display: block; width: 100%;"
@@ -240,7 +240,7 @@
                     </el-popover>
                   </div>
                 </el-form-item>
-                <el-form-item label="所在部门3">
+                <el-form-item label="所在部门">
                   <div class="template-add-wrapper" style="display: flex">
                     <el-popover
                       style="display: block; width: 100%"
@@ -275,7 +275,7 @@
                       </el-input>
                     </el-popover>
                     <el-button class="addLv" @click="addTemplatees3"
-                      >添加3</el-button
+                      >添加</el-button
                     >
                   </div>
                 </el-form-item>
@@ -379,7 +379,7 @@
               </el-col>
               <el-col :span="16">
                 <div v-if="formData.worker == 2">
-                  <el-form-item label="工作单位6">
+                  <el-form-item label="工作单位">
                     <div class="template-add-wrapper" style="display: flex">
                       <el-popover
                         style="display: block; width: 100%"
@@ -418,7 +418,7 @@
                   </el-form-item>
                 </div>
                 <div v-if="formData.worker == 3">
-                  <el-form-item label="工作单位7">
+                  <el-form-item label="工作单位">
                     <div class="template-add-wrapper" style="display: flex">
                       <el-popover
                         style="display: block; width: 100%"
@@ -638,6 +638,7 @@ export default {
   data() {
     return {
       keywords: '',
+      obj: {},
       savelist1: [],
       savelist2: [],
       form: {
@@ -954,25 +955,6 @@ export default {
       const { data } = res.data;
       this.form.stateamlist3[num].total = data;
     },
-    // async searchDoctor(selectedUserIds) {
-    //   const selectedUserIdsStr = selectedUserIds.join(',');
-    //   const res = await this.$api.userManagerInterface.searchDoctor({
-    //     selectedUserIds: selectedUserIdsStr,
-    //   });
-    //   const { data } = res.data;
-    //   this.formData.userRealName = (data.list || [])
-    //     .filter(item => item.selected)
-    //     .map(item => item.realName)
-    //     .join(',');
-    // },
-    // async getGridList() {
-    //   const res = await this.$api.userManagerInterface.getGridList({
-    //     pageNo: 1,
-    //     pageSize: 10000,
-    //   });
-    //   const { data } = res.data;
-    //   this.gridList = data.data.filter(t => t.state === '1');
-    // },
     async getSystemParamByCode(code, fieldName) {
       const res = await this.$api.userManagerInterface.getSystemParamByCode(
         code,
@@ -988,55 +970,95 @@ export default {
         isshow = 2;
       }
       if (this.formData.worker === 1) {
-        this.form.sportLibraryDTOList.forEach((item, index) => {
-          this.savelist1[index].unitName = item.workUnitName;
+        this.savelist1 = [];
+        this.savelist2 = [];
+        this.form.sportLibraryDTOList.forEach((item) => {
+          this.obj.unitName = item.workUnitName;
+          this.obj.departmentName = '';
+          this.savelist1.push(this.obj);
+          this.obj = {};
         });
-        this.form.stateamlist.forEach((item, index) => {
-          this.savelist2[index].unitName = item.workUnitName;
+        this.form.stateamlist.forEach((item) => {
+          this.obj.unitName = item.workUnitName;
+          this.obj.departmentName = '';
+          this.savelist2.push(this.obj);
+          this.obj = {};
         });
       } else if (this.formData.worker === 2) {
-        this.form.teamListwork.forEach((item, index) => {
-          this.savelist1[index].unitName = item.workUnitName;
-          this.savelist1[index].departmentName = '';
+        this.savelist1 = [];
+        this.savelist2 = [];
+        this.form.teamListwork.forEach((item) => {
+          this.obj.unitName = item.workUnitName;
+          this.obj.departmentName = '';
+          this.savelist1.push(this.obj);
+          this.obj = {};
         });
-        this.form.stateamlist2.forEach((item, index) => {
-          this.savelist2[index].unitName = item.workUnitName;
-          this.savelist2[index].departmentName = '';
+        this.form.stateamlist2.forEach((item) => {
+          this.obj.unitName = item.workUnitName;
+          this.obj.departmentName = '';
+          this.savelist2.push(this.obj);
+          this.obj = {};
         });
       } else {
-        this.form.sportLibraryDTOList.forEach((item, index) => {
-          this.savelist1[index].unitName = item.workUnitName;
-          this.savelist1[index].departmentName = item.departmentName;
+        this.savelist1 = [];
+        this.savelist2 = [];
+        this.form.teamListworkes.forEach((item) => {
+          this.obj.unitName = this.templateStrwork3;
+          this.obj.departmentName = item.departmentName;
+          this.savelist1.push(this.obj);
+          this.obj = {};
         });
-        this.form.stateamlist3.forEach((item, index) => {
-          this.savelist2[index].departmentName = item.departmentName;
+        this.form.stateamlist3.forEach((item) => {
+          this.obj.unitName = this.templateStrwork7;
+          this.obj.departmentName = item.departmentName;
+          this.savelist2.push(this.obj);
+          this.obj = {};
         });
       }
-      this.$refs.form.validate((valid) => {
-        if (valid) {
-          this.$api.accessReport
-            .departmenttotal({
-              reportName: this.formData.name,
-              startDate: this.formData.startTime,
-              endDate: this.formData.endTime,
-              startDateCompare: this.formData.startReportDate,
-              endDateCompare: this.formData.endReportDate,
-              no: this.formData.no,
-              scope: this.formData.worker,
-              isContrast: isshow,
-              currentTeam: this.savelist1,
-              compareTeam: this.savelist2,
-            })
-            .then(({ data }) => {
-              if (data) {
-                this.$message.success('操作成功');
-                this.$router.go(-1);
-              }
-            });
-        } else {
-          return false;
-        }
-      });
+      this.$api.accessReport
+        .departmenttotal({
+          reportName: this.formData.name,
+          startDate: this.formData.startTime,
+          endDate: this.formData.endTime,
+          startDateCompare: this.formData.startReportDate,
+          endDateCompare: this.formData.endReportDate,
+          no: this.formData.no,
+          scope: this.formData.worker,
+          isContrast: isshow,
+          currentTeam: this.savelist1,
+          compareTeam: this.savelist2,
+        })
+        .then(({ data }) => {
+          if (data) {
+            this.$message.success('操作成功');
+            this.$router.go(-1);
+          }
+        });
+      // this.$refs.form.validate((valid) => {
+      //   if (valid) {
+      //     this.$api.accessReport
+      //       .departmenttotal({
+      //         reportName: this.formData.name,
+      //         startDate: this.formData.startTime,
+      //         endDate: this.formData.endTime,
+      //         startDateCompare: this.formData.startReportDate,
+      //         endDateCompare: this.formData.endReportDate,
+      //         no: this.formData.no,
+      //         scope: this.formData.worker,
+      //         isContrast: isshow,
+      //         currentTeam: this.savelist1,
+      //         compareTeam: this.savelist2,
+      //       })
+      //       .then(({ data }) => {
+      //         if (data) {
+      //           this.$message.success('操作成功');
+      //           this.$router.go(-1);
+      //         }
+      //       });
+      //   } else {
+      //     return false;
+      //   }
+      // });
     },
 
     addNewTag() {
@@ -1205,9 +1227,9 @@ export default {
         vm.fetch(to.params.userId);
       }
       if (to.params.userId) {
-        document.title = '编辑客户';
+        document.title = '生成报告';
       } else {
-        document.title = '新增客户';
+        document.title = '生成报告';
       }
     });
   },

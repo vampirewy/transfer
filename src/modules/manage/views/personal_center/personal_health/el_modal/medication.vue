@@ -36,6 +36,15 @@
                 <span>{{ scope.row.drugName | getResult }}</span>
               </template>
             </el-table-column>
+            <el-table-column
+            prop="mainIndication"
+            label="针对问题"
+            show-overflow-tooltip
+          >
+            <template slot-scope="scope">
+          <span>{{ scope.row.mainIndication }}</span>
+        </template>
+          </el-table-column>
           <el-table-column
             prop="startDate"
             label="用药开始时间"
@@ -58,6 +67,7 @@
             prop="executePlanWayName"
             label="操作"
             show-overflow-tooltip
+            width='140'
           >
             <template slot-scope="scope">
               <el-button
