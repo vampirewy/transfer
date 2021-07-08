@@ -28,7 +28,9 @@ class MedicalHistoryInterface extends BaseModule {
   medicalInfoDetail(id) {
     return this.get(`/medical_info/detail/${id}`);
   }
-
+  getTimeDetail(id) {
+    return this.get(`/home/get_client_life_question/${id}`);
+  }
   updateInterveneTemplate(data) {
     return this.get(`/intervene_template/get_intervene_template/${data}`);
   }

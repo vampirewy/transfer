@@ -38,7 +38,7 @@
             show-overflow-tooltip
           >
             <template slot-scope="scope">
-          <span>{{ scope.row.medicalType}}</span>
+          <span>{{ scope.row.medicalType === 1? '门诊' : '住院'}}</span>
         </template>
           </el-table-column>
           <el-table-column
@@ -79,6 +79,14 @@
                 align="center"
                 prop="result"
                 show-overflow-tooltip>
+                <template slot-scope="scope">
+          <span>{{ scope.row.medicalType === 1? '未指定'
+            : scope.row.medicalType === 2? '治疗中'
+            : scope.row.medicalType === 3? '转诊'
+            :scope.row.medicalType === 4? '转为慢病'
+            :scope.row.medicalType === 5? '痊愈'
+            :'其他' }}</span>
+        </template>
               </el-table-column>
           <el-table-column
             prop="executePlanWayName"
@@ -186,7 +194,7 @@ export default {
       this.remove(this.multipleSelection.map(item => item.id), true);
     },
     remove(params, batch = false) {
-      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认${batch ? '批量' : ''}删除！</span></div>`, '删除提示', {
+      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认${batch ? '' : ''}删除！</span></div>`, '删除提示', {
         dangerouslyUseHTMLString: true,
         confirmButtonText: '确定',
         cancelButtonText: '取消',

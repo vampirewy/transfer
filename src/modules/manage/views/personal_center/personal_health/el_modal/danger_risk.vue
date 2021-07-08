@@ -2,153 +2,62 @@
   <div>
     <div class="content">
       <div class="content-left">
-        <div class="formSearchTitle">
+        <div class="formSearchTitle" style="display:flex;align-items:center;">
           <span class="dianLves"
             ><img src="@/assets/images/common/titleLeft.png" alt="" /></span
           >危险因素
+          <div class="content-right"
+          style="margin-left:20px;"
+          >问卷时间：
+                        <el-select
+                        @change="getlist"
+                          v-model="questionId"
+                          placeholder="请选择"
+                          style="width: 60%"
+                        >
+                          <el-option
+                            :label="item.questionDate"
+                            :value="item.id"
+                            v-for="(item, index) in timelList"
+                            :key="index"
+                          ></el-option>
+                        </el-select>
         </div>
-        <dangerous :clientId="$route.params.id"></dangerous>
+        </div>
+        <dangerous :key="nowtime" :clientId="questionId"></dangerous>
       </div>
     </div>
   </div>
 </template>
 <script>
-// import { formatDate } from '~/src/libs/util';
-import Disease from '@/components/user_health/disease.vue';
-import RiskAssess from '@/components/user_health/risk_assess.vue';
-import ImportantIndex from '@/components/user_health/important_index.vue';
 import dangerous from '@/components/user_health/dangerous.vue';
-import Progress from '@/components/user_health/progress.vue';
 export default {
   name: 'Intervention_tab_userdetail_mdl',
   components: {
-    Disease,
-    RiskAssess,
-    ImportantIndex,
     dangerous,
-    Progress,
   },
   data() {
     return {
-      protent: '30',
-      colors: '#24499D',
-      protentes: '70',
-      colorses: '#7CA7FF',
-      title: '整体评分',
-      titles: '依从度',
-      menuNum: 0,
-      active: 0,
-      checkTplPlanList: [],
-      tableData: [],
-      assessList: {
-        assess2: [],
-        assess3: [],
-        assess4: [],
-        assess5: [],
-      }, // 慢性病风险评估
-      form: {
-        templateId: '',
-        templateList: [],
-        reportAbnormalList: [], // 用户疾病
-        questionLifestyle: {
-          questionLifestyle1: { paramValue: '' },
-          questionLifestyle2: { paramValue: '' },
-          questionLifestyle3: { paramValue: '' },
-          questionLifestyle4: { paramValue: '' },
-          questionLifestyle5: { paramValue: '' },
-        },
-      },
-      formData: {
-        birth: '', // 1992-01-04
-        gridId: '',
-        userRealName: '',
-        profession: '',
-        address: '',
-        tagList: [],
-        mobile: '',
-        name: '',
-        age: '',
-        gender: '',
-        cardNo: '',
-        marriage: '',
-        ethnicGroup: '',
-        educationLevel: '',
-        remark: '',
-        tag: '',
-        workUnitName: '',
-        workUnitAddress: '',
-        userIdList: [],
-        workIdList: [],
-        selectedDoctors: [],
-        workUnitDepartment: '',
-      },
-      total: 0,
-      pageNo: 1,
+      questionId: '',
+      nowtime: '',
+      timelList: [],
     };
   },
   mounted() {
-    this.getUserHealthDetail(); // 获取健康信息
-    this.getAssessReportDetail(); // 获取慢性病风险评估
+    this.getUserHealthDetail(); // 获取危险因素时间
   },
   methods: {
-    clickMenu(index, id) {
-      this.total = 0;
-      this.active = index;
-      this.form.templateId = id;
-      this.pageNo = 1;
-      this.getList();
-    },
-    async getUserHealthDetail() {
-      const reqBody = {
-        clientId: this.$route.params.id, // '1304360297670119426'
-        sugarType: 2,
-        type: 2, // 监管数据类型：1血压 2血糖 3体重 4运动
-      };
-      const res = await this.$api.interventionPlanInterface.getInterveneSchemeCharts(
-        reqBody,
-      );
-      const { data } = res.data;
-      this.form.reportAbnormalList = data.reportAbnormalList || null;
-      this.form.questionLifestyleFamilyHistory =
-        data.questionLifestyleFamilyHistory || null;
-      this.form.questionLifestyleParamValueList =
-        data.questionLifestyleParamValueList || [];
-      if (this.form.questionLifestyleParamValueList.length > 0) {
-        this.form.questionLifestyleParamValueList.forEach((value) => {
-          if (value.paramNo === 'j01') {
-            this.form.questionLifestyle.questionLifestyle1.paramValue =
-              value.valueInfo;
-          } else if (value.paramNo === 'j05') {
-            this.form.questionLifestyle.questionLifestyle2.paramValue =
-              value.valueInfo;
-          } else if (value.paramNo === 'f01') {
-            this.form.questionLifestyle.questionLifestyle3.paramValue =
-              value.valueInfo;
-          } else if (value.paramNo === 'g04') {
-            this.form.questionLifestyle.questionLifestyle4.paramValue =
-              value.valueInfo;
-          } else if (value.paramNo === 'j20') {
-            this.form.questionLifestyle.questionLifestyle5.paramValue =
-              value.valueInfo;
+    getUserHealthDetail() {
+      this.$api.medicalHistoryInterface.getTimeDetail(this.$route.params.id)
+        .then(({ data }) => {
+          if (data) {
+            this.timelList = data.data;
+            this.questionId = this.timelList[0].id;
           }
         });
-      }
     },
-    async getAssessReportDetail() {
-      const reqBody = this.$route.params.id;
-      const res = await this.$api.health.getAssessReportDetail(reqBody);
-      const { data } = res.data;
-      data.forEach((value) => {
-        if (value.lv === 2) {
-          this.assessList.assess2.push(value.modelName);
-        } else if (value.lv === 3) {
-          this.assessList.assess3.push(value.modelName);
-        } else if (value.lv === 4) {
-          this.assessList.assess4.push(value.modelName);
-        } else if (value.lv === 5) {
-          this.assessList.assess5.push(value.modelName);
-        }
-      });
+    getlist() {
+      this.nowtime = new Date();
     },
   },
 };
