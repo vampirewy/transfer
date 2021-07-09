@@ -237,7 +237,7 @@ export default {
       //   return false;
       // }
       this.$api.medicalHistoryInterface
-        .medicalHistoryPageList({ ...this.formData })
+        .medicalHistoryPageList({ ...this.formData, clientId: this.$route.params.id })
         .then((res) => {
           // const { data } = res;
           // if (data.code === 200) {
