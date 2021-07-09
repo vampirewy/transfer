@@ -466,6 +466,7 @@ export default {
       }
       if (this.waitVisitId) {
         this.clearForm();
+        this.waitVisitId = ''; // 执行完后清空左边点击的执行
       } else {
         setTimeout(() => {
           this.$router.push({
