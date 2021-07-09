@@ -24,7 +24,13 @@
         <el-table-column prop="id" label="操作">
           <template slot-scope="scope">
             <input type="text"
-            style="width:40%;border-radius:3px;border-width:1px;" v-model="scope.row.sortIndex" />
+            style="width:30px;height:30px;
+            border-radius:3px;
+            border-width:1px;
+            border-color:#DDE0E6;
+            line-height: 30px;
+            text-align: center;
+            " v-model="scope.row.sortIndex" />
           </template>
         </el-table-column>
       </el-table>

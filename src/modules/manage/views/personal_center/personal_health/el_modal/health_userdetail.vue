@@ -27,10 +27,10 @@
           <span class="dianLv"></span>重要指标
         </div>
         <important-index :clientId="$route.params.id"></important-index>
-        <div class="formSearchTitle" style="font-size: 14px">
+        <!-- <div class="formSearchTitle" style="font-size: 14px">
           <span class="dianLv"></span>随访记录
         </div>
-        <floowup :clientId="$route.params.id"></floowup>
+        <floowup :clientId="$route.params.id"></floowup> -->
       </div>
     </div>
   </div>

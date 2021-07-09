@@ -54,10 +54,12 @@
               >
               <el-button type="text" size="small">|</el-button>
               <el-button
-                          type="text"
-                          @click="handleDetail(scope.row)"
-                          v-if="getAccess('physical_examination_report_view')"
-                  >查看</el-button>
+                type="text"
+                size="small"
+                @click="handleDetail(scope.row)"
+                v-if="getAccess('wait_visit_plan_edit')"
+                >查看</el-button
+              >
             </template>
           </el-table-column>
             </el-table>
@@ -82,6 +84,9 @@
 import report from '@/components/user_health/report.vue';
 export default {
   name: 'Intervention_tab_userdetail_mdl',
+  props: {
+    name: { type: Object, required: true },
+  },
   components: {
     report,
   },
@@ -135,24 +140,27 @@ export default {
         query: {
           type: 'add',
           clientId: this.$route.params.id,
+          name: this.name,
         },
       });
     },
-    handleDetail() {
+    handleDetail(data) {
       this.$router.push({
         path: '/diet_manage/',
         query: {
           type: 'info',
-          clientId: this.$route.params.id,
+          clientId: data.id,
+          name: data.createdByUserName,
         },
       });
     },
-    handleEdit() {
+    handleEdit(data) {
       this.$router.push({
         path: '/diet_manage/',
         query: {
           type: 'edit',
-          clientId: this.$route.params.id,
+          clientId: data.id,
+          name: data.createdByUserName,
         },
       });
     },

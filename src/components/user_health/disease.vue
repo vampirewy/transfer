@@ -123,12 +123,12 @@ export default {
   .unusual-list {
     .unusual-tag {
       margin-right: 15px;
-      height: 48px;
-      line-height: 45px;
+      height: 40px;
+      line-height: 40px;
       background-color: white;
       border-radius: 80px;
       border-width: 1px;
-      padding: 0 20px 0 13px;
+      padding: 0 17px 0 10px;
       margin-bottom: 20px;
       &.unusual-tag1{
         border-color: #36BF2F;

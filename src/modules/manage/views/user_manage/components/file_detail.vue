@@ -37,5 +37,6 @@ export default {
 }
 /deep/ .el-dialog{
   width: 40% !important;
+  margin-top: 15% !important;
 }
 </style>

@@ -123,7 +123,7 @@ export default {
   .exception-item {
     margin-bottom: 10px;
     .exception-header {
-      padding: 19px;
+      padding: 5px 20px;
       background: #F6F8FC;
       border-radius: 5px;
       font-size: 16px;

@@ -512,6 +512,7 @@ export default {
       background: rgba(49, 84, 172, 0.1);
       border-radius: 20px;
       border: 1px solid #3154ac;
+      color: #3154ac;
       &:hover {
         color: #3154ac;
         border-color: #3154ac;

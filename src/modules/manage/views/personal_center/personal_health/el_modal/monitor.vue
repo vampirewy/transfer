@@ -66,19 +66,55 @@
           align="center"
         >
           <template slot-scope="scope">
-            <span
-              class="clientName"
-              v-if="item.prop === 'clientName'"
-              @click="commonHref.toPersonalHealth(scope.row.clientId, $router)"
-            >
-              {{ scope.row[item.prop] }}
-            </span>
-            <span v-else>{{
-              item.formatter
-                ? item.formatter(scope.row[item.prop])
-                : scope.row[item.prop]
-            }}</span>
-          </template>
+              <span class="clientName" v-if="item.prop === 'clientName'"
+                    @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
+                {{scope.row[item.prop]}}
+              </span>
+              <span v-else>
+                <span v-if="item.prop === 'sbp'"
+                :class="table.list[scope.$index].sbpHighOrLow === 3 ? 'OrLowClassA' :
+                (table.list[scope.$index].sbpHighOrLow === 1 ? 'OrLowClassB' : 'OrLowClassC')">
+                  {{scope.row[item.prop]}}
+                </span>
+                <span v-else-if="item.prop === 'dbp'"
+                :class="table.list[scope.$index].dbpHighOrLow === 3 ? 'OrLowClassA' :
+                (table.list[scope.$index].dbpHighOrLow === 1 ? 'OrLowClassB' : 'OrLowClassC')">
+                  {{scope.row[item.prop]}}
+                </span>
+                <span v-else-if="item.prop === 'hd'"
+                :class="table.list[scope.$index].hdHighOrLow === 3 ? 'OrLowClassA' :
+                (table.list[scope.$index].hdHighOrLow === 1 ? 'OrLowClassB' : 'OrLowClassC')">
+                  {{scope.row[item.prop]}}
+                </span>
+                <span v-else-if="item.prop === 'sugar'"
+                :class="table.list[scope.$index].sugarTypeHighOrLow === 3 ? 'OrLowClassA' :
+                (table.list[scope.$index].sugarTypeHighOrLow === 1 ? 'OrLowClassB' :
+                'OrLowClassC')">
+                  {{scope.row[item.prop]}}
+                </span>
+                <span v-else-if="item.prop === 'bmi'"
+                :class="table.list[scope.$index].bmiHighOrLow === 3 ? 'OrLowClassA' :
+                (table.list[scope.$index].bmiHighOrLow === 1 ? 'OrLowClassB' :
+                'OrLowClassC')">
+                  {{scope.row[item.prop]}}
+                </span>
+                <span v-else-if="item.prop === 'wc'"
+                :class="table.list[scope.$index].wcHighOrLow === 3 ? 'OrLowClassA' :
+                (table.list[scope.$index].wcHighOrLow === 1 ? 'OrLowClassB' :
+                'OrLowClassC')">
+                  {{scope.row[item.prop]}}
+                </span>
+                <span v-else-if="item.prop === 'bdPercent'"
+                :class="table.list[scope.$index].bdPercentHighOrLow === 3 ? 'OrLowClassA' :
+                (table.list[scope.$index].bdPercentHighOrLow === 1 ? 'OrLowClassB' :
+                'OrLowClassC')">
+                  {{scope.row[item.prop]}}
+                </span>
+                <span v-else>
+                  {{item.formatter ? item.formatter(scope.row[item.prop]) : scope.row[item.prop]}}
+                </span>
+              </span>
+            </template>
         </el-table-column>
         <!-- <el-table-column
           label="操作"
@@ -194,6 +230,7 @@ export default {
         workUnitName: '',
         physicalstartTime: '', // 开始时间
         physicalendTime: '', // 结束时间
+        clientId: this.$route.params.id,
       },
     };
   },
@@ -235,3 +272,14 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.OrLowClassA{
+    color: #333333;
+  }
+  .OrLowClassB{
+    color: red;
+  }
+  .OrLowClassC{
+    color: blue;
+  }
+</style>

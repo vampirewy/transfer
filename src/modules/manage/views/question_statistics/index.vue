@@ -478,11 +478,11 @@ export default {
       border-color: transparent;
       color: #666666;
       position: relative;
-      padding: 10px 9px;
+      padding: 9.5px 9px;
       font-size: 12px;
       border-radius: 8px 8px 0 0;
       margin: 0 22px;
-      border: 1px solid #dde0e6;
+      // border: 1px solid #dde0e6;
     }
     .fristName:nth-child(1) {
       border-radius: 0px 5px 0 0;
@@ -493,7 +493,7 @@ export default {
       content: '';
       display: block;
       width: 20px;
-      height: 35px;
+      height: 34.8px;
       position: absolute;
       -webkit-transform: skewX(23deg);
       transform: skewX(23deg);
@@ -501,14 +501,14 @@ export default {
       border-top-right-radius: 8px;
       top: 0px;
       right: -13px;
-      border-right: 1px solid #dde0e6;
-      border-bottom: 1px solid #dde0e6;
+      // border-right: 1px solid #dde0e6;
+      // border-bottom: 1px solid #dde0e6;
     }
     .TabBarsNames:before {
       content: '';
       display: block;
       width: 20px;
-      height: 35px;
+      height: 34.8px;
       position: absolute;
       -webkit-transform: skewX(-23deg);
       transform: skewX(-23deg);
@@ -516,8 +516,8 @@ export default {
       border-top-left-radius: 8px;
       top: 0px;
       left: -13px;
-      border-left: 1px solid #dde0e6;
-      border-bottom: 1px solid #dde0e6;
+      // border-left: 1px solid #dde0e6;
+      // border-bottom: 1px solid #dde0e6;
     }
     .fristName:nth-child(1)::before {
       width: 0;
@@ -530,10 +530,11 @@ export default {
       color: #333333;
       position: relative;
       margin: 0 20px;
-      padding: 10px 9px;
+      padding: 9.5px 9px;
       font-size: 14px;
       border-radius: 8px 8px 0 0;
       border: 1px solid #dde0e6;
+      bottom: 1px;
     }
     .TabBarsName:after {
       content: '';

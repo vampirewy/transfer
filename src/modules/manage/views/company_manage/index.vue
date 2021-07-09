@@ -59,7 +59,7 @@
             </div>
           </div>
         </div>
-        <div class="topbottomborder"></div>
+        <div class="topbottomborder" style="height:0;"></div>
         <!-- <div class="divRightTitleDiv">
           <div>
             <el-button
