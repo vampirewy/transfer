@@ -88,11 +88,22 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
+          <el-form-item label="科室/部门" prop="department">
+            <el-input
+                    :disabled="detail"
+                    v-model="staffForm.department"
+                    :maxlength="30"
+                    placeholder="请输入"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="6">
           <el-form-item label="管理范围" prop="dataRange">
             <el-select
-              :disabled="detail"
-              v-model="staffForm.dataRange"
-              placeholder="请选择"
+                    :disabled="detail"
+                    v-model="staffForm.dataRange"
+                    placeholder="请选择"
             >
               <el-option label="管理员" :value="2"></el-option>
               <el-option label="单位管理" :value="3"></el-option>
@@ -101,15 +112,30 @@
             </el-select>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="6">
-          <el-form-item label="科室/部门" prop="department">
-            <el-input
-                    :disabled="detail"
-                    v-model="staffForm.department"
-                    :maxlength="30"
-                    placeholder="请输入"></el-input>
+        <el-col :span="6" v-if="staffForm.dataRange === 3">
+          <el-form-item label="单位" prop="workUnitId">
+            <el-select
+                    v-model="staffForm.workUnitId"
+                    placeholder="请选择"
+            >
+              <el-option
+                      v-for="item in workUnitList"
+                      :key="item.id"
+                      :label="item.workUnitName"
+                      :value="item.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6" v-if="staffForm.dataRange === 5">
+          <el-form-item label="类别" prop="gridId">
+            <el-select
+                    v-model="staffForm.gridId"
+                    placeholder="请选择"
+            >
+              <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
+                         :key="index"></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
       </el-row>
@@ -171,6 +197,8 @@ export default {
         roleId: '',
         dataRange: '',
         department: '',
+        workUnitId: '',
+        gridId: '',
         // menuIds: [],
       },
       staffRules: {
@@ -182,13 +210,19 @@ export default {
         contact: [{ required: true, message: '手机号码不能为空' }],
         dataRange: [{ required: true, message: '数据范围不能为空' }],
         department: [{ required: true, message: '科室/部门不能为空' }],
+        workUnitId: [{ required: true, message: '单位不能为空' }],
+        gridId: [{ required: true, message: '类别不能为空' }],
       },
       roleMenuIds: [],
       roleMenuIdsMap: {},
       newRoleOptions: [...this.roleOptions],
+      workUnitList: [],
+      gridList: [],
     };
   },
   mounted() {
+    this.getWorkUnitList();
+    this.getGridList();
     if (this.id) {
       // 用户详情
       this.$api.systemManageInterface.userDetail(this.id).then(async (res) => {
@@ -222,6 +256,17 @@ export default {
         this.roleMenuIdsMap[id] = this.roleMenuIds;
       });
     },
+    async getWorkUnitList() {
+      const res = await this.$api.companyManageInterface.getWorkUnitPage(
+        { pageNo: 1, pageSize: 100000 });
+      const { data } = res.data;
+      this.workUnitList = data.data;
+    },
+    async getGridList() {
+      const res = await this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 100000 });
+      const { data } = res.data;
+      this.gridList = data.data;
+    },
     roleChange(id) {
       // 切换角色，读取缓存数据，没有缓存则查询角色详情
       this.roleMenuIds = [];
@@ -232,10 +277,20 @@ export default {
       }
     },
     submit() {
+      const sendData = Object.assign({}, this.staffForm);
+      if (sendData.dataRange === 3) {
+        sendData.gridId = '';
+      } else if (sendData.dataRange === 5) {
+        sendData.workUnitId = '';
+      } else {
+        sendData.gridId = '';
+        sendData.workUnitId = '';
+      }
+      console.log(sendData);
       this.$refs.staffForm.validate((valid) => {
         if (valid) {
-          const fn = this.staffForm.id ? 'editUser' : 'addUser';
-          this.$api.systemManageInterface[fn](this.staffForm).then(() => {
+          const fn = sendData.id ? 'editUser' : 'addUser';
+          this.$api.systemManageInterface[fn](sendData).then(() => {
             this.$message.success('操作成功');
             this.$emit('afterSubmit');
           });

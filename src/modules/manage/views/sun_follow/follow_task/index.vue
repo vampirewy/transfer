@@ -261,11 +261,11 @@
       <el-table-column prop="isTrackingNum" label="待跟踪项目" width="90px" show-overflow-tooltip>
         <template slot-scope="scope">
           <el-button type="text"
-                     @click="expandsHandle(scope.row, 1)" style="color: #F33D21;font-size: 14px">
+                     @click="expandsHandle(scope.row, 1)" style="color: #3154AC;font-size: 14px">
             {{scope.row.isTrackingNum | getResult}}</el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="earliestReportDate" label="最早上报"
+      <!--<el-table-column prop="earliestReportDate" label="最早上报"
       min-width="105px" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{ scope.row.earliestReportDate | getResult}}</span>
@@ -281,8 +281,18 @@
         <template slot-scope="scope">
           <span>{{ scope.row.nearestTrackingDate | getResult}}</span>
         </template>
-      </el-table-column>
+      </el-table-column>-->
       <el-table-column prop="nextTrackingDate" label="下次跟踪" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{ scope.row.nextTrackingDate | getResult}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="nextTrackingDate" label="*下次跟踪方式" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{ scope.row.nextTrackingDate | getResult}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="nextTrackingDate" label="*下次跟踪提示" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{ scope.row.nextTrackingDate | getResult}}</span>
         </template>
@@ -297,13 +307,13 @@
           <span>{{ scope.row.nextTrackingDate | getResult}}</span>
         </template>
       </el-table-column>-->
-      <el-table-column prop="trackingRecordNum" label="跟踪记录" width="90px" show-overflow-tooltip>
+      <!--<el-table-column prop="trackingRecordNum" label="跟踪记录" width="90px" show-overflow-tooltip>
         <template slot-scope="scope">
           <el-button type="text"
                      @click="expandsHandle(scope.row, 2)" style="color: #36BF2F;font-size: 14px">
             {{scope.row.trackingRecordNum | getResult}}</el-button>
         </template>
-      </el-table-column>
+      </el-table-column>-->
       <el-table-column label="操作" width="80">
         <template slot-scope="scope">
           <el-button

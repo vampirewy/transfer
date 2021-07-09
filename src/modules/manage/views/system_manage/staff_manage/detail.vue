@@ -42,13 +42,13 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="管理范围">
-            {{staffForm.dataRange | getResultDataRange }}
+          <el-form-item label="科室/部门">
+            {{staffForm.department}}
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="科室/部门">
-            {{staffForm.department}}
+          <el-form-item label="管理范围">
+            {{staffForm.dataRange | getResultDataRange }}
           </el-form-item>
         </el-col>
       </el-row>

@@ -123,127 +123,76 @@
                       alt="" /></span
                   >干预随访操作台
                 </div>
-                <el-form
-                  ref="form"
-                  class="user-edit-form"
-                  :model="formData"
-                  label-width="90px"
-                  :rules="rules"
-                >
+                <el-form :inline="false" :model="form"
+                         label-width="85px"
+                         :rules="rules"
+                         ref="form"
+                         class="form-inline inputCommon baseInfo" >
                   <el-row>
                     <el-col :span="12">
-                      <el-form-item label="随访日期：" prop="birth">
+                      <el-form-item label="执行时间：" prop="planDate">
                         <el-date-picker
-                          v-model="formData.birth"
-                          type="date"
-                          placeholder="选择随访日期"
-                          style="width: 100%"
+                                v-model="form.planDate"
+                                type="date"
+                                value-format="yyyy-MM-dd"
+                                placeholder="请选择"
+                                :max-date="new Date()"
+                                style="width: 100%"
                         >
                         </el-date-picker>
                       </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                      <el-form-item label="随访类型：" prop="gridId">
-                        <el-select
-                          v-model="formData.gridId"
-                          placeholder="请选择"
-                          style="width: 100%"
-                        >
-                          <el-option
-                            :label="item.gridName"
-                            :value="item.id"
-                            v-for="(item, index) in gridList"
-                            :key="index"
-                          ></el-option>
+                      <el-form-item label="随访形式：" prop="planWay">
+                        <el-select v-model="form.planWay"
+                                   style="width: 100%" placeholder="请选择">
+                          <el-option :label="it.name" :value="it.id" :key="it.id"
+                                     v-for="it in planWayList">
+                          </el-option>
                         </el-select>
                       </el-form-item>
                     </el-col>
                   </el-row>
                   <el-row>
                     <el-col :span="12">
-                      <el-form-item label="随访形式：" prop="gridId">
-                        <el-select
-                          v-model="formData.gridId"
-                          placeholder="请选择"
-                          style="width: 100%"
-                        >
-                          <el-option
-                            :label="item.gridName"
-                            :value="item.id"
-                            v-for="(item, index) in gridList"
-                            :key="index"
-                          ></el-option>
-                        </el-select>
+                      <el-form-item label="随访人："  prop="planDoctorName">
+                        <el-input disabled
+                                  v-model="form.planDoctorName" placeholder="">
+                        </el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                      <el-form-item label="随访人：">
-                        <el-select
-                          v-model="formData.ethnicGroup"
-                          placeholder="请选择"
-                          style="width: 100%"
-                        >
-                          <el-option
-                            :label="item.name"
-                            :value="item.paramValue"
-                            v-for="(item, index) in ethnicGroupList"
-                            :key="index"
-                          ></el-option>
-                        </el-select>
+                      <el-form-item label="随访标题：">
+                        <el-input
+                                v-model="form.planTitle"
+                                :maxlength="30"
+                                placeholder="请输入"
+                        ></el-input>
                       </el-form-item>
                     </el-col>
                   </el-row>
                   <el-row>
                     <el-col :span="12">
-                      <el-form-item label="依从度：">
-                        <el-select
-                          v-model="formData.educationLevel"
-                          placeholder="请选择"
-                          style="width: 100%"
-                        >
-                          <el-option
-                            :label="item.name"
-                            :value="item.paramValue"
-                            v-for="(item, index) in educationLevelList"
-                            :key="index"
-                          ></el-option>
+                      <el-form-item label="依从度：" prop="assortLevel">
+                        <el-select v-model="form.assortLevel" placeholder="请选择" style="width: 100%">
+                          <el-option :label="it.name" :value="it.paramValue" :key="it.paramValue"
+                                     v-for="it in assortLevelList">
+                          </el-option>
                         </el-select>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                      <el-form-item label="下次随访：" prop="gender">
-                        <el-radio-group v-model="formData.gender">
-                          <el-radio :label="1" value="1">是</el-radio>
-                          <el-radio :label="2" value="2">否</el-radio>
-                        </el-radio-group>
                       </el-form-item>
                     </el-col>
                   </el-row>
                   <el-row>
                     <el-col :span="24">
-                      <el-form-item label="随访内容：" prop="remark">
+                      <el-form-item label="随访结果：">
                         <el-input
-                          rows="4"
-                          type="textarea"
-                          placeholder="输入随访内容"
-                          :maxlength="300"
-                          show-word-limit
-                          v-model="formData.remark"
-                        >
-                        </el-input>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="24">
-                      <el-form-item label="本次记录：" prop="remark">
-                        <el-input
-                          rows="4"
-                          type="textarea"
-                          placeholder="输入干预内容"
-                          :maxlength="300"
-                          show-word-limit
-                          v-model="formData.remark"
-                        >
-                        </el-input>
+                                type="textarea"
+                                v-model="form.planContent"
+                                :rows="4"
+                                placeholder="请输入"
+                                :maxlength="400"
+                                show-word-limit
+                        ></el-input>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -265,6 +214,7 @@
   </div>
 </template>
 <script>
+import * as dayjs from 'dayjs';
 import ClientInfo from './el_modal/client_info.vue';
 import HealthUserdetail from './el_modal/health_userdetail.vue';
 import DangerRisk from './el_modal/danger_risk.vue';
@@ -318,6 +268,8 @@ export default {
       title: '',
       showTopLeft: true,
       clientId: this.$route.params.id,
+      planWayList: [],
+      assortLevelList: [],
       templateList: [
         { name: '健康问题', active: 0 },
         { name: '危险因素', active: 1 },
@@ -363,6 +315,22 @@ export default {
         workUnitDepartment: '',
       },
       searchBarFixed: false,
+      form: {
+        clientId: '',
+        planDate: '',
+        planWay: '',
+        planDoctor: '',
+        planDoctorName: '',
+        planTitle: '',
+        planContent: '',
+        assortLevel: '',
+      },
+      rules: {
+        planDate: [{ required: true, message: '请选择执行时间' }],
+        planWay: [{ required: true, message: '请选择随访形式' }],
+        planDoctorName: [{ required: true, message: '请选择随访人' }],
+        assortLevel: [{ required: true, message: '请选择依从度' }],
+      },
     };
   },
   watch: {},
@@ -371,6 +339,73 @@ export default {
       this.$api.userManagerInterface.getDetail(id).then(({ data }) => {
         if (data.rc === 0) {
           this.userlist = data.data;
+        }
+      });
+    },
+    /**
+     * 获取随访方式
+     * @return {Promise<void>}
+     */
+    async getPlanWayList() {
+      const res = await this.$api.userFollowInterface.getIntervenePlanWayList();
+      const { data } = res.data;
+      const list = data.map((it) => {
+        const { id, name } = it;
+        return { id, name };
+      });
+      this.planWayList = list;
+    },
+    async getSystemParamByassortLevel(code) {
+      const res = await this.$api.userManagerInterface.getSystemParamByCode(code);
+      const { data } = res.data;
+      this.assortLevelList = data;
+    },
+    async getUserInfo() {
+      const res = await this.$api.userManagerInterface.getUserInfo();
+      const { data } = res.data;
+      this.form.planDoctor = data.userId;
+      this.form.planDoctorName = data.realName;
+    },
+    /**
+     * 获取随访计划明细
+     */
+    async getDetail() {
+      const reqBody = { id: this.$route.params.waitVisitId };
+      const res = await this.$api.userFollowInterface.getIntervenePlan(
+        reqBody,
+      );
+      const { data } = res.data;
+      this.form.clientId = data.clientId;
+      this.form.planDate = dayjs(new Date()).format('YYYY-MM-DD'); // data.planDate ? data.planDate.split(' ')[0] : '';
+      this.form.planWay = data.planWay;
+      this.form.planTitle = data.planTitle;
+      this.form.planDoctor = data.currentOperateUserId; // this.$store.state.user.userId;
+      this.form.planDoctorName = data.currentOperateUserName; // this.$store.state.user.userName;
+    },
+    /**
+     * 新增随访
+     * @return {Promise<ElMessageComponent>}
+     */
+    async onSubmit() {
+      this.$refs.form.validate(async (valid) => {
+        if (valid) {
+          const reqBody = {
+            id: this.$route.params.waitVisitId,
+            clientId: this.form.clientId,
+            executeState: '1', // 执行状态值为1已执行，2待执行
+            updateType: 'executeUpdate',
+            executeTime: `${this.form.planDate} 00:00:00`, // 执行时间
+            executePlanWay: this.form.planWay, // 执行干预方式
+            executePlanUserId: this.form.planDoctor, // 执行随访人
+            executePlanTitle: this.form.planTitle, // 执行标题
+            assortLevel: this.form.assortLevel, // 依从度
+            executePlanContent: this.form.planContent, // 执行内容
+          };
+          await this.$api.userFollowInterface.intervenePlanUpdate(reqBody);
+          this.$message.success('操作成功');
+          this.form.planContent = '';
+          this.form.assortLevel = '';
+          this.$refs.form.resetFields();
         }
       });
     },
@@ -405,6 +440,12 @@ export default {
   },
   mounted() {
     this.getClientUserInfo(this.$route.params.id);
+    this.getPlanWayList(); // 随访方式
+    this.getSystemParamByassortLevel('HM012');
+    this.getUserInfo();
+    if (this.$route.params.waitVisitId) { // 有执行计划过来的才获取详情
+      this.getDetail();
+    }
   },
   destroyed() {
     window.removeEventListener('scroll', this.handleScroll);
