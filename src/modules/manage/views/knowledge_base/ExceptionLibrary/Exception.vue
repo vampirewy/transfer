@@ -1,45 +1,5 @@
 <template>
   <div>
-  <!--<query-page @reset="reset" @search="search">-->
-    <!--<template v-slot:left>
-      <search>
-        <div class="searchInputFormItem">
-          <el-input placeholder="姓名/手机号搜索"
-          v-model="formData.keyWord">
-            &lt;!&ndash; <el-button slot="append" icon="el-icon-search"
-            @click="onSearch"></el-button>&ndash;&gt;
-          </el-input>
-          <span class="searchBtnImgSpan"  @click="search(1)">
-            <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
-          </span>
-        </div>
-      </search>
-      <query-filter>
-        <el-select placeholder="问卷类型" v-model="formData.questionType">
-          <el-option v-for="item in types" :label="item.name" :value="item.paramValue"
-                     :key="item.paramValue"></el-option>
-        </el-select>
-        <el-date-picker
-                v-model="formData.startTime"
-                type="date"
-                value-format="yyyy-MM-dd"
-                :picker-options="pickerStartTime"
-                placeholder="选择开始日期"
-                style="width: 180px"
-        >
-        </el-date-picker>
-        <el-date-picker
-                v-model="formData.endTime"
-                type="date"
-                value-format="yyyy-MM-dd"
-                :picker-options="pickerEndTime"
-                placeholder="选择结束日期"
-                style="width: 180px"
-        >
-        </el-date-picker>
-      </query-filter>
-    </template>-->
-    <!--<template v-slot:right>-->
   <div class="divTop">
     <div class="divTitle">
       <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
@@ -66,32 +26,6 @@
                        v-for="(item, index) in lifeStyleList" :key="index"></el-option>
           </el-select>
         </div>
-        <!-- <div>
-          <span>是否启用：</span>
-          <el-select
-                  v-model="form.gender"
-                  placeholder="请选择"
-                  style="width: 140px"
-                  clearable
-          >
-            <el-option label="是" value="1" key="1"></el-option>
-            <el-option label="否" value="0" key="0"></el-option>
-          </el-select>
-        </div> -->
-        <!-- <div>
-          <span>推荐检查：</span>
-          <el-input placeholder="推荐检查" v-model="formData.lifeStyleLv"
-          style="width:140px">
-          </el-input>
-          <el-select
-                  v-model="formData.lifeStyleLv"
-                  placeholder="请选择"
-                  style="width: 140px"
-          >
-            <el-option :label="item.name" :value="item.paramValue"
-                       v-for="(item, index) in lifeStyleList" :key="index"></el-option>
-          </el-select>
-        </div> -->
         <div>
           <span>紧急性：</span>
           <el-select
@@ -172,13 +106,13 @@
                 size="small"
                 style="margin: 16px 0"
                 @click="handleAddCheck(1)"
-                v-if="getAccess('life_style_questionnaire_add')"
+                v-if="getAccess('exception_list_add')"
         ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
         <el-button
                 size="small"
                 class="btn-new btnDel"
                 @click="handleSomeRemove"
-                v-if="getAccess('life_style_questionnaire_deleted')"
+                v-if="getAccess('exception_list_batch_delete')"
         ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
       </div>
     </div>
@@ -267,13 +201,13 @@
               type="text"
               size="small"
               @click="editException(scope.row)"
-              v-if="getAccess('life_style_questionnaire_edit')"
+              v-if="getAccess('exception_list_edit')"
             >编辑</el-button>
             <el-button
               type="text"
               size="small"
               @click="exceptionBtn(scope.row)"
-              v-if="getAccess('life_style_questionnaire_view')
+              v-if="getAccess('exception_list_view')
               "
             >查看</el-button>
           </template>

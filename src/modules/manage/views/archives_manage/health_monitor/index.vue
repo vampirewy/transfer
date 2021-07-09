@@ -600,7 +600,7 @@
                     type="text"
                     size="small"
                     @click="handleTrendClick(scope.row, 'info')"
-                    v-if="getAccess('physical_examination_report_view')"
+                    v-if="getAccess('health_monitor_trend_view')"
                   >查看</el-button>
                 </template>
           </el-table-column>

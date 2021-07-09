@@ -126,7 +126,7 @@ export default {
     &:hover{
       box-shadow: 0px 7px 18px 0px rgba(49, 84, 172, 0.35);
       transform: scale(1.1,1.1);
-      background: url(../../../../../assets/images/homeHover.png);
+      background: url(../../../../../assets/images/homeHover.png) #FFFFFF;
       background-repeat: no-repeat;
       background-position: right center;
       // transition: all 1s ease-out;

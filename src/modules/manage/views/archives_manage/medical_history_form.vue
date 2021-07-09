@@ -307,7 +307,7 @@ export default {
       rules: {
         medicalType: [{ required: true, message: '就医类型不能为空' }],
         department: [{ required: true, message: '就医科室不能为空' }],
-        hospital: [{ required: true, message: '就机构室不能为空' }],
+        hospital: [{ required: true, message: '就医机构不能为空' }],
         hpi: [{ required: true, message: '现病史不能为空' }],
         complaint: [{ required: true, message: '主诉不能为空' }],
         diagnosis: [{ required: true, message: '诊断不能为空' }],

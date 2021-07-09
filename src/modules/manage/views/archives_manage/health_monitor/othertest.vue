@@ -88,6 +88,7 @@
               type="datetime"
               value-format="yyyy-MM-dd HH:mm:ss"
               :max-date="new Date()"
+              style="width: 100%"
               placeholder="选择日期时间">
             </el-date-picker>
         <!-- <el-date-picker

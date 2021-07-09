@@ -1,6 +1,15 @@
 .diet-form{
     display: flex;
 }
+.OrLowClassA{
+    color: #333333;
+  }
+  .OrLowClassB{
+    color: red;
+  }
+  .OrLowClassC{
+    color: #36BF2F;
+  }
 .item-title{
     font-size: 15px;
     font-weight: 600;
@@ -410,9 +419,9 @@
     /deep/ .table-row{
         height: 50px;
     }
-    .analysis-high{
-        color:#F33D21;
-    }
+    // .analysis-high{
+    //     color:#F33D21;
+    // }
     .analysis-low{
         color:#36BF2F;
     }

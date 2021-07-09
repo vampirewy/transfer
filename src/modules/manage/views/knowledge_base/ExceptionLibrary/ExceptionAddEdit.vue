@@ -10,7 +10,8 @@
     >
       <div class="form-title">
         <div class="line"></div>
-        <h3 class="name"><span v-if="ids">编辑</span><span v-else>新增</span>异常</h3>
+        <h3 class="name"><span v-if="ids" style="font-weight:600">编辑</span>
+        <span v-else style="font-weight:600">新增</span>异常</h3>
       </div>
       <el-row>
         <el-col :span="6">
@@ -211,7 +212,7 @@ export default {
     return {
       popoverStatus: false,
       form: {
-        clientInfoId: '', // 异常名称
+        clientInfoId: this.$route.params.name || '', // 异常名称
         hospital: '', // 异常类型
         gender: '', // 性别限制
         medicalType: '', // ICD10：
@@ -449,6 +450,7 @@ export default {
       position: absolute;
       margin-top: 12px;
       opacity: 0.5;
+      font-weight: 600 !important;
     }
     .name {
       font-size: 18px;

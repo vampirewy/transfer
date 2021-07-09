@@ -36,6 +36,16 @@
       <el-table-column prop="mainAbnormalName" label="主异常名称"></el-table-column>
       <el-table-column prop="createdTime" label="创建时间"></el-table-column>
       <el-table-column prop="abnormalName" label="异常别名"></el-table-column>
+      <el-table-column label="操作" prop="index" width="120">
+          <template slot-scope="scope">
+            <el-button
+              type="text"
+              size="small"
+              @click="editException(scope.row)"
+              v-if="getAccess('life_style_questionnaire_edit')"
+            >删除</el-button>
+          </template>
+        </el-table-column>
     </el-table>
     </el-form>
     <!-- <div slot="footer" class="dialog-footer" >

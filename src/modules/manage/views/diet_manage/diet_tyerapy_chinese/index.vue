@@ -103,10 +103,13 @@
             size="small"
             style="margin: 16px 0"
             @click="add"
+            v-if="getAccess('diet_tyerapy_chinese_add')"
             ><img src="@/assets/images/common/addBtn.png" />新增</el-button
           >
           <el-button class="btn-new btnAdd" size="small" style="margin: 16px 0"
-          @click="handleSomeRemove"><img src="@/assets/images/common/delBtn.png" />删除</el-button
+          @click="handleSomeRemove"
+          v-if="getAccess('diet_tyerapy_chinese_del')"
+          ><img src="@/assets/images/common/delBtn.png" />删除</el-button
           >
         </div>
       </div>
@@ -147,14 +150,14 @@
               type="text"
               size="small"
               @click="editAdd(scope.row.id)"
-              v-if="getAccess('staff_list_edit')"
+              v-if="getAccess('diet_tyerapy_chinese_edit')"
               >编辑</el-button
             >
             <el-button
               type="text"
               size="small"
               @click="LookInfo(scope.row)"
-              v-if="getAccess('staff_list_view')"
+              v-if="getAccess('diet_tyerapy_chinese_view')"
               >查看</el-button
             >
           </template>

@@ -54,32 +54,17 @@
                 size="small"
                 style="margin: 16px 0"
                 @click="handleAddCheck(1)"
-                v-if="getAccess('life_style_questionnaire_add')"
+                v-if="getAccess('risk_factors_index_add')"
         ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
         <el-button
                 size="small"
                 class="btn-new btnDel"
                 @click="handleSomeRemove"
-                v-if="getAccess('life_style_questionnaire_deleted')"
+                v-if="getAccess('risk_factors_index_del')"
         ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
       </div>
     </div>
       <div class="user-follow">
-        <!--<div class="tableTopDoDiv">
-          <div class="table-operate-buttons">
-            <el-dropdown @command="handleAddCheck">
-              <operate-button
-                      type="add"
-                      v-if="getAccess('life_style_questionnaire_add')
-              "></operate-button>
-              <el-dropdown-menu slot="dropdown" class="qusDrop">
-                <el-dropdown-item command="1">生活方式问卷</el-dropdown-item>
-                <el-dropdown-item command="2">中医问卷</el-dropdown-item>
-                <el-dropdown-item command="3">心理问卷</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </div>
-        </div>-->
       <el-table style="width: 100%" :data="dataSource" align="center"
                 @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="40"></el-table-column>
@@ -101,41 +86,11 @@
             <span>{{ statusMap[scope.row.riskType] || '-'}}</span>
           </template>
         </el-table-column>
-        <!-- <el-table-column label="适宜人群" prop="age">
-          <template slot-scope="scope">
-            <span>{{ scope.row.age | getResult}}</span>
-          </template>
-        </el-table-column> -->
-        <!-- <el-table-column prop="clientGridName" label="人员类别" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{ scope.row.clientGridName | getResult}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="lifeStyleLvName" label="生活方式" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{ scope.row.lifeStyleLvName | getResult}}</span>
-          </template>
-        </el-table-column> -->
-        <!-- <el-table-column prop="workUnitName" label="适宜季节" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span>{{ scope.row.workUnitName | getResult}}</span>
-          </template>
-        </el-table-column> -->
         <el-table-column label="建议" prop="advice" min-width="150" show-overflow-tooltip>
           <template slot-scope="scope">
             <span>{{ scope.row.advice | getResultDate}}</span>
           </template>
         </el-table-column>
-        <!-- <el-table-column label="问卷来源" prop="sourceName" show-overflow-tooltip>
-          <template slot-scope="scope">
-            {{ scope.row.sourceName | getResult}}
-          </template>
-        </el-table-column>
-        <el-table-column prop="gender" label="份数" width="60px">
-          <template slot-scope="scope">
-            <span>{{scope.row.questionCount | getResult}}</span>
-          </template>
-        </el-table-column> -->
         <el-table-column label="操作" prop="index" width="120">
           <template slot-scope="scope">
             <el-button
@@ -149,8 +104,9 @@
                   },
                 })
               "
-              v-if="getAccess('life_style_questionnaire_edit') && scope.row.questionType !== 4"
+              v-if="getAccess('risk_factors_index_edit')"
             >编辑</el-button>
+            <!-- && scope.row.questionType !== 4 -->
             <span style="color:#DDE0E6">|</span>
             <el-button
               type="text"
@@ -163,8 +119,7 @@
                   },
                 })
               "
-              v-if="getAccess('life_style_questionnaire_view')
-              "
+              v-if="getAccess('risk_factors_index_view')"
             >查看</el-button>
           </template>
         </el-table-column>

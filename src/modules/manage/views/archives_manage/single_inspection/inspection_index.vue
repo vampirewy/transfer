@@ -299,7 +299,7 @@
                     type="text"
                     size="small"
                     @click="detail(scope.row)"
-                    v-if="getAccess('medical_history_view')"
+                    v-if="getAccess('inspection_index_view')"
                    style="color:#3154AC">查看</el-button>
                   <!-- <el-button type="text" size="small" @click="remove(scope.row.id)" v-if="
                   getAccess('medical_history_delete')

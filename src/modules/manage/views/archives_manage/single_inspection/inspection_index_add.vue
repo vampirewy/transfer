@@ -42,7 +42,7 @@
                 disabled
                 v-model="infoSource.clientName"
                 placeholder="请选择客户"
-                style="width:190px"
+                style="width:100%"
               >
               <i
                   :class="popoverStatus ?
@@ -118,6 +118,7 @@
                 :max-date="new Date()"
                 value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="请选择"
+                style="width:100%"
               ></el-date-picker>
             </el-form-item>
             </el-col>

@@ -370,7 +370,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
     .abnormal-item {
-      border-radius: 8px;
+      border-radius: 30px;
       display: flex;
       align-items: center;
       padding: 7px 10px;

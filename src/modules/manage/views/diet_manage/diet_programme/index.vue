@@ -160,10 +160,13 @@
             size="small"
             style="margin: 16px 0"
             @click="add"
+            v-if="getAccess('diet_programme_add')"
             ><img src="@/assets/images/common/addBtn.png" />新增</el-button
           >
           <el-button class="btn-new btnAdd" size="small" style="margin: 16px 0"
-          @click="handleSomeRemove"><img src="@/assets/images/common/delBtn.png" />删除</el-button
+          @click="handleSomeRemove"
+          v-if="getAccess('diet_programme_del')"
+          ><img src="@/assets/images/common/delBtn.png" />删除</el-button
           >
         </div>
       </div>
@@ -179,7 +182,13 @@
           prop="clientName"
           label="姓名"
           show-overflow-tooltip
-        ></el-table-column>
+        >
+        <template slot-scope="scope">
+          <span class="clientName"
+                @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
+          {{ scope.row.clientName }}</span>
+        </template>
+        </el-table-column>
         <el-table-column
           prop="gender"
           label="性别"
@@ -208,14 +217,14 @@
               type="text"
               size="small"
               @click="deitList(scope.row.id)"
-              v-if="getAccess('staff_list_edit')"
+              v-if="getAccess('diet_programme_edit')"
               >编辑</el-button
             >
             <el-button
               type="text"
               size="small"
               @click="infoList(scope.row.id)"
-              v-if="getAccess('staff_list_view')"
+              v-if="getAccess('diet_programme_view')"
               >查看</el-button
             >
           </template>
@@ -233,7 +242,7 @@
       ></el-pagination>
     </template>
     <template v-else>
-      <diet-form :id="id" :type="Type" :InfoType="InfoType"></diet-form>
+      <diet-form :id="id" :type="Type" :InfoType="InfoType" :personclientId="clientId"></diet-form>
     </template>
   </div>
 </template>
@@ -275,6 +284,7 @@ export default {
       id: '',
       Type: '', // 是否是 查看 编辑 新增
       InfoType: '', // 个人中心新增
+      clientId: '',
       // pickerStartTime: {
       //   disabledDate: (time) => {
       //     if (this.form.endTime) {
@@ -307,6 +317,7 @@ export default {
       if (vm.$route.query.type === 'add') {
         vm.InfoType = 'InfoType';
         vm.add();
+        console.log('个人中心新增', vm.$route.query.type, vm.$route.query.clientId);
       } else if (vm.$route.query.type === 'edit') {
         vm.deitList(vm.$route.query.clientId);
       } else if (vm.$route.query.type === 'info') {
@@ -358,6 +369,7 @@ export default {
     add() {
       this.Type = 'add';
       this.id = '';
+      this.clientId = this.$route.query.clientId;
       this.viewIndex = 2;
     },
     deitList(id) {
