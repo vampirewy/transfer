@@ -72,104 +72,108 @@ export default {
     color: #333333;
   }
 }
-  .TabBars{
-    display: flex;
-   .TabBarsNames{
-    cursor: pointer;
-    background: #EEF1F5;
-    border-color: transparent;
-    color: #666666;
-    position: relative;
-    margin-right: 30px;
-    // padding: 10px 14px 10px 16px;
-    font-size: 14px;
-    border-radius: 8px 5px 0 0;
-    display: block;
-    width: 100px;
-    height: 36px;
-    line-height: 36px;
-    text-align: center;
-    border-bottom: 1px solid #EEF1F5;
-    border-top: 1px solid #EEF1F5;
+  .TabBars {
+  display: flex;
+  align-items: center;
+  height: 38px;
+  border-bottom: 1px solid #dde0e6;
+  z-index: 1;
+  margin: 40px 0 20px 0;
+  div {
+    .TabBarsNames {
+      cursor: pointer;
+      background: #eef1f5;
+      border-color: transparent;
+      color: #666666;
+      position: relative;
+      padding: 9.6px 10px;
+      font-size: 12px;
+      border-radius: 8px 8px 0 0;
+      margin: 0 22px;
+      // border: 1px solid #dde0e6;
+    }
+    .fristName:nth-child(1) {
+      border-radius: 0px 5px 0 0;
+      margin-left: 0;
+      // border: 1px solid #DDE0E6;
+    }
+    .TabBarsNames:after {
+      content: '';
+      display: block;
+      width: 20px;
+      height: 34.8px;
+      position: absolute;
+      -webkit-transform: skewX(23deg);
+      transform: skewX(23deg);
+      background: #eef1f5;
+      border-top-right-radius: 8px;
+      top: 0px;
+      right: -13px;
+      // border-right: 1px solid #dde0e6;
+      // border-bottom: 1px solid #dde0e6;
+    }
+    .TabBarsNames:before {
+      content: '';
+      display: block;
+      width: 20px;
+      height: 34.8px;
+      position: absolute;
+      -webkit-transform: skewX(-23deg);
+      transform: skewX(-23deg);
+      background: #eef1f5;
+      border-top-left-radius: 8px;
+      top: 0px;
+      left: -13px;
+      // border-left: 1px solid #dde0e6;
+      // border-bottom: 1px solid #dde0e6;
+    }
+    .fristName:nth-child(1)::before {
+      width: 0;
+      height: 0;
+    }
+    .TabBarsName {
+      cursor: pointer;
+      background: #ffffff;
+      border-color: transparent;
+      color: #333333;
+      position: relative;
+      margin: 0 20px;
+      padding: 9.5px 9px;
+      font-size: 14px;
+      border-radius: 8px 8px 0 0;
+      border: 1px solid #dde0e6;
+      bottom: 1px;
+    }
+    .TabBarsName:after {
+      content: '';
+      display: block;
+      width: 20px;
+      height: 38px;
+      position: absolute;
+      -webkit-transform: skewX(23deg);
+      transform: skewX(23deg);
+      background: white;
+      border-top-right-radius: 8px;
+      top: 0px;
+      right: -13px;
+      border-right: 1px solid #dde0e6;
+      border-bottom: 1px solid #dde0e6;
+    }
+    .TabBarsName::before {
+      content: '';
+      display: block;
+      width: 20px;
+      height: 38px;
+      position: absolute;
+      -webkit-transform: skewX(-23deg);
+      transform: skewX(-23deg);
+      background: white;
+      border-top-left-radius: 8px;
+      top: 0px;
+      left: -13px;
+      border-left: 1px solid #dde0e6;
+      border-bottom: 1px solid #dde0e6;
+    }
   }
-  .TabBarsNames:after{
-    content: '';
-    display: block;
-    width: 25px;
-    height: 36px;
-    position: absolute;
-    -webkit-transform: skewX(23deg);
-    transform: skewX(23deg);
-    background: #EEF1F5;
-    border-top-right-radius: 8px;
-    top: 0px;
-    right: -13px;
-    border-bottom: 1px solid #EEF1F5;
-    border-right: 1px solid #EEF1F5;
-  }
-  .TabBarsNames:before {
-    content: '';
-    display: block;
-    width: 10px;
-    height: 36px;
-    position: absolute;
-    -webkit-transform: skewX(165deg);
-    transform: skewX(163deg);
-    background: #EEF1F5;
-    border-top-left-radius: 8px;
-    top: 0px;
-    left: -4px;
-    border-bottom: 1px solid #EEF1F5;
-    border-left: 1px solid #EEF1F5;
 }
-  .TabBarsName{
-    cursor: pointer;
-    background: #ffffff;
-    border-color: transparent;
-    color: #333333;
-    font-weight: 500;
-    position: relative;
-    margin-right: 30px;
-    // padding: 10px 14px 10px 16px;
-    font-size: 14px;
-    border-radius: 8px 5px 0 0;
-    display: block;
-    width: 100px;
-    height: 36px;
-    line-height: 36px;
-    text-align: center;
-    border-bottom: 1px solid #EEF1F5;
-    border-top: 1px solid #EEF1F5;
-  }
-  .TabBarsName:after{
-    content: '';
-    display: block;
-    width: 25px;
-    height: 36px;
-    position: absolute;
-    -webkit-transform: skewX(23deg);
-    transform: skewX(23deg);
-    background: white;
-    border-top-right-radius: 8px;
-    top: 0px;
-    right: -13px;
-    border-bottom: 1px solid #EEF1F5;
-    border-right: 1px solid #EEF1F5;
-  }
-  .TabBarsName:before {
-    content: '';
-    display: block;
-    width: 10px;
-    height: 36px;
-    position: absolute;
-    -webkit-transform: skewX(165deg);
-    transform: skewX(163deg);
-    background: white;
-    border-top-left-radius: 8px;
-    top: 0px;
-    left: -4px;
-    border-bottom: 1px solid #EEF1F5;
-    border-left: 1px solid #EEF1F5;
-  }
-  }
 </style>

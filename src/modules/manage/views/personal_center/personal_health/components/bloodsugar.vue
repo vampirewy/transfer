@@ -3,11 +3,22 @@
     <div class="formSearchTitle" style="font-size: 14px">
       <span class="dianLv"></span>血糖监测
     </div>
-    <div class="chart-legend">
-      <span @click="fastblood">空腹血糖</span>
-      <span @click="afterfastblood">餐后血糖</span>
-    </div>
-    <div v-if="active == 1">
+    <!-- <div class="chart-legend">
+      <div @click="fastblood">空腹血糖</div>
+      <div @click="afterfastblood">餐后血糖</div>
+    </div> -->
+    <div class="tabcheck">
+        <div
+          class="tabcheck-conment"
+          v-for="(item, index) in tabcheck"
+          :key="index"
+          :class="tabcheckidx === index ? 'active' : ''"
+          @click="check(index)"
+        >
+          {{ item }}
+        </div>
+      </div>
+    <div v-if="tabcheckidx == 0">
       <div v-if="elist.length > 0">
         <line-chart
           :chart-data="yData"
@@ -21,7 +32,7 @@
         <p>暂时为空</p>
       </div>
     </div>
-    <div v-if="active == 2">
+    <div v-if="tabcheckidx == 1">
       <div v-if="elist2.length > 0">
         <line-charts
           :chart-data="afteryData"
@@ -54,6 +65,8 @@ export default {
   },
   data() {
     return {
+      tabcheck: ['空腹血糖', '餐后血糖'],
+      tabcheckidx: 0,
       table: {
         columns: [
           { label: '姓名', prop: 'clientName' },
@@ -82,11 +95,8 @@ export default {
     this.queryChartData();
   },
   methods: {
-    fastblood() {
-      this.active = 1;
-    },
-    afterfastblood() {
-      this.active = 2;
+    check(idx) {
+      this.tabcheckidx = idx;
     },
     queryChartData() {
       this.$api.healthMonitorInterface.getBGChart(this.id).then(({ data }) => {
@@ -143,14 +153,18 @@ export default {
 .chart-legend {
   text-align: right;
   margin-top: -20px;
-  > span {
+  display: flex;
+  height: 50px;
+  align-items: center;
+  justify-content: flex-end;
+  > div {
     font-size: 12px;
     font-weight: 400;
     color: #97a6bd;
     line-height: 17px;
     padding-left: 18px;
     position: relative;
-    + span {
+    + div {
       margin-left: 40px;
     }
     &:after {
@@ -197,6 +211,34 @@ export default {
     padding-left: 20px;
     font-size: 14px;
     color: #333333;
+  }
+}
+.tabcheck {
+  display: flex;
+  justify-content: flex-end;
+  .tabcheck-conment {
+    width: 80px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 400;
+    color: #333333;
+    &:nth-child(1) {
+      border-radius: 20px 0px 0px 20px;
+      background: #f6f8fc;
+    }
+    &:nth-child(2) {
+      border-radius: 0px 20px 20px 0px;
+      background: #f6f8fc;
+    }
+    &:hover {
+      cursor: pointer;
+    }
+    &.active {
+      color: #ffffff;
+      background: #7ca7ff;
+    }
   }
 }
 </style>

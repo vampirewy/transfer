@@ -325,7 +325,7 @@ export default {
         { name: '就医记录', active: 4 },
         { name: '单项检查', active: 5 },
         { name: '用药记录', active: 6 },
-        { name: '健康自测', active: 7 },
+        { name: '健康监测', active: 7 },
         { name: '个人健康报告', active: 8 },
         { name: '膳食方案', active: 9 },
         { name: '待随访计划', active: 10 },

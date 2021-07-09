@@ -328,10 +328,16 @@
                   </el-table-column>
                   <el-table-column label="操作" prop="index" align="center">
                     <template slot-scope="scope">
-                      <el-button
+                      <!-- <el-button
                         type="text"
                         @click="$router.push(
                         `/basic_data/unusual_list/create?name=${scope.row.abnormalName}`)">
+                        新增
+                      </el-button> -->
+                      <el-button
+                        type="text"
+                        @click="$router.push(
+                        `/ExceptionAddEdit`)">
                         新增
                       </el-button>
                       <span>|</span>
