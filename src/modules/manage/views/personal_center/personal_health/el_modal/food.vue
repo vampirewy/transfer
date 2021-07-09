@@ -140,6 +140,7 @@ export default {
         query: {
           type: 'add',
           clientId: this.$route.params.id,
+          name: this.name,
         },
       });
     },
