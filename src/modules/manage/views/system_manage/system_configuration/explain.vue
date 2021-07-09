@@ -309,13 +309,13 @@ export default {
     margin-right: 20px;
   }
 }
-.TabBars {
+  .TabBars {
   display: flex;
   align-items: center;
-  height: 39px;
-  width: 100%;
+  height: 38px;
   border-bottom: 1px solid #dde0e6;
-  margin-bottom: 20px;
+  z-index: 1;
+  margin: 40px 0 20px 0;
   div {
     .TabBarsNames {
       cursor: pointer;
@@ -323,21 +323,23 @@ export default {
       border-color: transparent;
       color: #666666;
       position: relative;
-      margin-right: 20px;
-      padding: 10px 16px;
-      font-size: 14px;
+      padding: 9.6px 10px;
+      font-size: 12px;
       border-radius: 8px 8px 0 0;
-      margin: 0 20px;
+      margin: 0 22px;
+      bottom: -2px;
+      // border: 1px solid #dde0e6;
     }
     .fristName:nth-child(1) {
       border-radius: 0px 5px 0 0;
       margin-left: 0;
+      // border: 1px solid #DDE0E6;
     }
     .TabBarsNames:after {
       content: '';
       display: block;
-      width: 25px;
-      height: 38px;
+      width: 20px;
+      height: 34.8px;
       position: absolute;
       -webkit-transform: skewX(23deg);
       transform: skewX(23deg);
@@ -345,12 +347,14 @@ export default {
       border-top-right-radius: 8px;
       top: 0px;
       right: -13px;
+      // border-right: 1px solid #dde0e6;
+      // border-bottom: 1px solid #dde0e6;
     }
     .TabBarsNames:before {
       content: '';
       display: block;
-      width: 25px;
-      height: 38px;
+      width: 20px;
+      height: 34.8px;
       position: absolute;
       -webkit-transform: skewX(-23deg);
       transform: skewX(-23deg);
@@ -358,6 +362,8 @@ export default {
       border-top-left-radius: 8px;
       top: 0px;
       left: -13px;
+      // border-left: 1px solid #dde0e6;
+      // border-bottom: 1px solid #dde0e6;
     }
     .fristName:nth-child(1)::before {
       width: 0;
@@ -368,10 +374,9 @@ export default {
       background: #ffffff;
       border-color: transparent;
       color: #333333;
-      font-weight: 600;
       position: relative;
-      margin: 0 27px;
-      padding: 10px 16px;
+      margin: 0 20px;
+      padding: 9.5px 9px;
       font-size: 14px;
       border-radius: 8px 8px 0 0;
       border: 1px solid #dde0e6;
@@ -379,8 +384,8 @@ export default {
     .TabBarsName:after {
       content: '';
       display: block;
-      width: 25px;
-      height: 38px;
+      width: 20px;
+      height: 38.5px;
       position: absolute;
       -webkit-transform: skewX(23deg);
       transform: skewX(23deg);
@@ -394,8 +399,8 @@ export default {
     .TabBarsName::before {
       content: '';
       display: block;
-      width: 25px;
-      height: 38px;
+      width: 20px;
+      height: 38.5px;
       position: absolute;
       -webkit-transform: skewX(-23deg);
       transform: skewX(-23deg);

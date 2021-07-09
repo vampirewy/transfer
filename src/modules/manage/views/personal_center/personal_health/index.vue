@@ -111,7 +111,7 @@
                 <medication v-if="active === 6"></medication>
                 <monitor v-if="active === 7"></monitor>
                 <personalexport v-if="active === 8"></personalexport>
-                <food v-if="active === 9"></food>
+                <food :name="userlist.name" v-if="active === 9"></food>
                 <intervance v-if="active === 10"></intervance>
                 <intervancerecord v-if="active === 11"></intervancerecord>
               </div>

@@ -124,7 +124,6 @@ export default {
     }
   }
   .form-content {
-    margin-top: -20px;
     .el-input__inner {
       // background-color: #f4f4f6;
       border: 0;
