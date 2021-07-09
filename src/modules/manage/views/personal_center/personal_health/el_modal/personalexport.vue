@@ -21,7 +21,6 @@
                     size="small"
                     @click="generateReport"
                     class="btn-new btnDel"
-                    v-if="getAccess('customer_pool_distribute')"
             ><img src="@/assets/images/common/createReport.png" />生成报告</el-button>
         </div>
         <el-table
@@ -156,6 +155,7 @@ export default {
   },
   data() {
     return {
+      pdf_url: process.env.api.pdf_url,
       table: {
         list: [],
         pageSize: 15,
@@ -258,7 +258,7 @@ export default {
     },
     // 查看pdf
     openPdf(data) {
-      window.open(data.assessReportName);
+      window.open(this.pdf_url + data.assessReportName);
     },
     // 审核
     handleExamine() {
