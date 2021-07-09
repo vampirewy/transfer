@@ -8,17 +8,18 @@
       <span>舒张压</span>
     </div>
     <div>
-      <div class="noneText" v-if="!elist">
-        <img src="@/assets/images/noData.png"/>
-          <p>暂时为空</p>
-      </div>
-      <line-chart
-        v-else
+      <div v-if="elist.length > 0">
+        <line-chart
         :chart-data="yData"
         :sectionName="['收缩压', '舒张压']"
         :sectionXList="xData"
       >
       </line-chart>
+      </div>
+      <div class="noneText" v-else>
+        <img src="@/assets/images/noData.png"/>
+          <p>暂时为空</p>
+      </div>
     </div>
     <div class="formSearchTitle" style="font-size: 14px">
       <span class="dianLv"></span>列表
@@ -47,21 +48,21 @@ export default {
           { label: '备注', prop: 'hd' },
         ],
         list: [],
-        elist: [],
         total: 0,
         pageNo: 1,
         pageSize: 15,
       },
+      elist: [],
       xData: [],
       yData: [],
       Name: '',
+      ishow: false,
       queryInfo: {},
     };
   },
   mounted() {
-    console.log(this.id, this.ids, '血压新增');
     this.queryChartData();
-    this.queryPageList();
+    // this.queryPageList();
     // this.queryChartInfo();
   },
   methods: {
@@ -71,6 +72,7 @@ export default {
         const sbp = [];
         const dbp = [];
         this.elist = data.data;
+        console.log(data, 147);
         (data.data || []).forEach((item) => {
           let dateStr;
           if (

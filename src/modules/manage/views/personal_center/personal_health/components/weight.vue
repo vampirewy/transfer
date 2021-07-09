@@ -56,10 +56,7 @@ export default {
     };
   },
   mounted() {
-    console.log(this.id, this.ids, '血压新增');
     this.queryChartData();
-    this.queryPageList();
-    // this.queryChartInfo();
   },
   methods: {
     queryChartData() {
@@ -81,30 +78,16 @@ export default {
         this.yData = [yData];
       });
     },
-    queryPageList() {
-      this.$api.healthMonitorInterface.getWeightList({
-        clientId: this.id,
-        pageNo: this.table.pageNo,
-        pageSize: this.table.pageSize,
-      }).then(({ data }) => {
-        this.table.total = data.data.total;
-        this.table.list = data.data.data;
-      });
-    },
-    // queryChartInfo() {
-    //   this.$api.healthMonitorInterface.getDetailHealthBloodSugar(this.ids).then(({ data }) => {
-    //     this.queryInfo = data.data;
-    //     console.log(this.queryInfo, '12313123123');
+    // queryPageList() {
+    //   this.$api.healthMonitorInterface.getWeightList({
+    //     clientId: this.id,
+    //     pageNo: this.table.pageNo,
+    //     pageSize: this.table.pageSize,
+    //   }).then(({ data }) => {
+    //     this.table.total = data.data.total;
+    //     this.table.list = data.data.data;
     //   });
     // },
-    handlePageChange(page) {
-      this.table.pageNo = page;
-      this.queryPageList();
-    },
-    handleSizeChange(size) {
-      this.table.pageSize = size;
-      this.queryPageList();
-    },
   },
 };
 </script>

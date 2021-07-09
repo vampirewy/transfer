@@ -180,7 +180,7 @@
                 </el-form-item>
                 <el-table :data="form.teamListwork" class="sport-table">
                   <el-table-column
-                    label="参检团队"
+                    label="参检名称"
                     prop="workUnitName"
                     align="center"
                   ></el-table-column>
@@ -217,12 +217,18 @@
                       @show="popoverStatuswork3 = true"
                       @hide="handlePopoverClosework3"
                     >
-                      <sport-template3
+                    <jointeam
                         v-if="popoverStatuswork3"
                         @change="handleSportSelectChange3"
                         @cancel="handlePopoverClose3"
                       >
-                      </sport-template3>
+                      </jointeam>
+                      <!-- <sport-template3
+                        v-if="popoverStatuswork3"
+                        @change="handleSportSelectChange3"
+                        @cancel="handlePopoverClose3"
+                      >
+                      </sport-template3> -->
                       <el-input
                         class="select-user-trigger"
                         slot="reference"
@@ -281,7 +287,7 @@
                 </el-form-item>
                 <el-table :data="form.teamListworkes" class="sport-table">
                   <el-table-column
-                    label="参检团队"
+                    label="参检名称"
                     prop="departmentName"
                     align="center"
                   ></el-table-column>
@@ -339,7 +345,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="16" v-if="formData.worker == 1">
-                <el-form-item label="参检团队6">
+                <el-form-item label="参检团队">
                   <div class="template-add-wrapper" style="display: flex">
                     <el-popover
                       style="display: block; width: 100%"
@@ -429,12 +435,18 @@
                         @show="popoverStatus7 = true"
                         @hide="handlePopoverClosework7"
                       >
-                        <sport-templates
+                      <jointeam
+                        v-if="popoverStatus7"
+                          @change="handleSportSelectChange7"
+                          @cancel="handlePopoverClose7"
+                      >
+                      </jointeam>
+                        <!-- <sport-templates
                           v-if="popoverStatus7"
                           @change="handleSportSelectChange7"
                           @cancel="handlePopoverClose7"
                         >
-                        </sport-templates>
+                        </sport-templates> -->
                         <el-input
                           class="select-user-trigger"
                           slot="reference"

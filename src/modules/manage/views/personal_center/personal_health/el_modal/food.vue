@@ -31,12 +31,12 @@
               class="has-expand-table"
               :data="dataSource"
             >
-              <el-table-column label="饮食相关异常" prop="state" align="center"></el-table-column>
-              <el-table-column label="不良饮食习惯" prop="state" align="center"></el-table-column>
+              <!-- <el-table-column label="饮食相关异常" prop="state" align="center"></el-table-column>
+              <el-table-column label="不良饮食习惯" prop="state" align="center"></el-table-column> -->
               <el-table-column label="周期" prop="day" align="center">
               </el-table-column>
               <el-table-column label="创建日期" prop="createdTime" align="center"></el-table-column>
-              <el-table-column label="创建人" prop="examinationOrgan" align="center">
+              <el-table-column label="创建人" prop="createdByUserName" align="center">
               </el-table-column>
               <el-table-column
             prop="executePlanWayName"
@@ -125,7 +125,7 @@ export default {
         .then((res) => {
           if (!res.data.success) return;
           const { data, total } = res.data.data;
-          this.tableData = data;
+          this.dataSource = data;
           this.total = total;
         });
     },

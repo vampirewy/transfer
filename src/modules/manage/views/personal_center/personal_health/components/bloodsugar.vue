@@ -1,36 +1,56 @@
 <template>
   <div class="health-monitor-trend">
     <div class="formSearchTitle" style="font-size: 14px">
-          <span class="dianLv"></span>血糖监测
-        </div>
-        <div class="chart-legend">
-      <span>空腹血糖</span>
-      <span>餐后血糖</span>
+      <span class="dianLv"></span>血糖监测
     </div>
-    <div class="noneText" v-if="!elist">
-        <img src="@/assets/images/noData.png"/>
-          <p>暂时为空</p>
-      </div>
-    <line-chart
-          v-else
+    <div class="chart-legend">
+      <span @click="fastblood">空腹血糖</span>
+      <span @click="afterfastblood">餐后血糖</span>
+    </div>
+    <div v-if="active == 1">
+      <div v-if="elist.length > 0">
+        <line-chart
           :chart-data="yData"
-          :sectionName="['空腹血糖', '餐后血糖']"
-          :sectionXList="xData">
+          :sectionName="['空腹血糖']"
+          :sectionXList="xData"
+        >
         </line-chart>
-        <div class="formSearchTitle" style="font-size: 14px">
-          <span class="dianLv"></span>列表
-        </div>
+      </div>
+      <div class="noneText" v-else>
+        <img src="@/assets/images/noData.png" />
+        <p>暂时为空</p>
+      </div>
+    </div>
+    <div v-if="active == 2">
+      <div v-if="elist2.length > 0">
+        <line-charts
+          :chart-data="afteryData"
+          :sectionName="['餐后血糖']"
+          :sectionXList="afterxData"
+        >
+        </line-charts>
+      </div>
+      <div class="noneText" v-else>
+        <img src="@/assets/images/noData.png" />
+        <p>暂时为空</p>
+      </div>
+    </div>
+    <div class="formSearchTitle" style="font-size: 14px">
+      <span class="dianLv"></span>列表
+    </div>
   </div>
 </template>
 
 <script>
 import * as dayjs from 'dayjs';
 import LineChart from '../components/line_chart.vue';
+import LineCharts from '../components/linecharts.vue';
 export default {
   name: 'BPTrend',
   props: ['id', 'ids'],
   components: {
     LineChart,
+    LineCharts,
   },
   data() {
     return {
@@ -47,31 +67,45 @@ export default {
         pageNo: 1,
         pageSize: 15,
       },
+      active: 1,
       elist: [],
+      elist2: [],
       xData: [],
       yData: [],
+      afterxData: [],
+      afteryData: [],
       Name: '',
       queryInfo: {},
     };
   },
   mounted() {
-    console.log(this.id, this.ids, '血压新增');
     this.queryChartData();
-    this.queryPageList();
-    // this.queryChartInfo();
   },
   methods: {
+    fastblood() {
+      this.active = 1;
+    },
+    afterfastblood() {
+      this.active = 2;
+    },
     queryChartData() {
       this.$api.healthMonitorInterface.getBGChart(this.id).then(({ data }) => {
-        this.elist = data.data;
+        if (data.data['空腹血糖']) {
+          this.elist = data.data['空腹血糖'];
+        }
+        if (data.data['餐后血糖']) {
+          this.elist2 = data.data['餐后血糖'];
+        }
         const xData = [];
         const xDataes = [];
         const FPG = []; // 空腹血糖
         const PBG = []; // 餐后血糖
-        console.log(data.data['空腹血糖']);
+        // console.log(data.data['空腹血糖']);
         (data.data['空腹血糖'] || []).forEach((item) => {
           let dateStr;
-          if (new Date(item.testDate).getFullYear() === new Date().getFullYear()) {
+          if (
+            new Date(item.testDate).getFullYear() === new Date().getFullYear()
+          ) {
             dateStr = dayjs(item.testDate).format('MM/DD');
           } else {
             dateStr = dayjs(item.testDate).format('YY/MM/DD');
@@ -80,106 +114,85 @@ export default {
           FPG.push(item.sugar);
         });
         (data.data['餐后血糖'] || []).forEach((item) => {
-          let dateStr;
-          if (new Date(item.testDate).getFullYear() === new Date().getFullYear()) {
-            dateStr = dayjs(item.testDate).format('MM/DD');
+          let dateStres;
+          if (
+            new Date(item.testDate).getFullYear() === new Date().getFullYear()
+          ) {
+            dateStres = dayjs(item.testDate).format('MM/DD');
           } else {
-            dateStr = dayjs(item.testDate).format('YY/MM/DD');
+            dateStres = dayjs(item.testDate).format('YY/MM/DD');
           }
-          xDataes.push(dateStr);
+          xDataes.push(dateStres);
           PBG.push(item.sugar);
         });
         this.xData = xData;
-        this.yData = [FPG, PBG];
+        this.afterxData = xDataes;
+        this.yData = [FPG];
+        this.afteryData = [PBG];
       });
-      console.log(this.xData, 111, this.yData);
-    },
-    queryPageList() {
-      this.$api.healthMonitorInterface.getBGList({
-        clientId: this.id,
-        pageNo: this.table.pageNo,
-        pageSize: this.table.pageSize,
-      }).then(({ data }) => {
-        this.table.total = data.data.total;
-        this.table.list = data.data.data;
-      });
-    },
-    // queryChartInfo() {
-    //   this.$api.healthMonitorInterface.getDetailHealthBloodSugar(this.ids).then(({ data }) => {
-    //     this.queryInfo = data.data;
-    //     console.log(this.queryInfo, '12313123123');
-    //   });
-    // },
-    handlePageChange(page) {
-      this.table.pageNo = page;
-      this.queryPageList();
-    },
-    handleSizeChange(size) {
-      this.table.pageSize = size;
-      this.queryPageList();
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.health-monitor-trend{
+.health-monitor-trend {
   position: relative;
   margin-top: 20px;
 }
 .chart-legend {
-      text-align: right;
-      margin-top: -20px;
-      > span {
-        font-size: 12px;
-        font-weight: 400;
-        color: #97A6BD;
-        line-height: 17px;
-        padding-left: 18px;
-        position: relative;
-        + span {
-          margin-left: 40px;
-        }
-        &:after {
-          content: '';
-          position: absolute;
-          left: 0;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 10px;
-          height: 3px;
-        }
-        &:first-child:after {
-          background: #4991FD;
-        }
-        &:nth-of-type(2):after {
-          background: #31C529;
-        }
-      }
-    }
-.titless {
+  text-align: right;
+  margin-top: -20px;
+  > span {
+    font-size: 12px;
+    font-weight: 400;
+    color: #97a6bd;
+    line-height: 17px;
+    padding-left: 18px;
     position: relative;
-    padding-left: 10px;
-    font-size: 18px;
-    font-weight: 600;
-    color: #333333;
-    line-height: 25px;
-    margin-bottom: 20px;
-}
- .lines {
-    width: 36px;
-    height: 4px;
-    background: #3154AC;
-    margin-left: 10px;
-    border-radius: 1px;
-    position: absolute;
-    margin-top: 17px;
-    opacity: 0.5;
+    + span {
+      margin-left: 40px;
+    }
+    &:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 10px;
+      height: 3px;
+    }
+    &:first-child:after {
+      background: #4991fd;
+    }
+    &:nth-of-type(2):after {
+      background: #31c529;
+    }
   }
-.lookPressure{
+}
+.titless {
+  position: relative;
+  padding-left: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333333;
+  line-height: 25px;
+  margin-bottom: 20px;
+}
+.lines {
+  width: 36px;
+  height: 4px;
+  background: #3154ac;
+  margin-left: 10px;
+  border-radius: 1px;
+  position: absolute;
+  margin-top: 17px;
+  opacity: 0.5;
+}
+.lookPressure {
   display: flex;
-  margin:20px 0 20px 0;
-  div{
+  margin: 20px 0 20px 0;
+  div {
     width: 25%;
     padding-left: 20px;
     font-size: 14px;

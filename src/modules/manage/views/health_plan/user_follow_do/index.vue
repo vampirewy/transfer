@@ -733,7 +733,14 @@ export default {
       });
     },
     clientCenterFollowPlanDetail(row) {
-      this.commonHref.toPersonalHealth(row.clientId, this.$router);
+      const routeData = this.$router.resolve({
+        name: 'personal_health',
+        params: {
+          id: row.clientId,
+          waitVisitId: row.id,
+        },
+      });
+      window.open(routeData.href, '_blank');
     },
     /**
      * 搜索

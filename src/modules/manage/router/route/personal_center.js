@@ -31,7 +31,7 @@ export default [
         component: () => import('../../views/personal_center'),
       },
       {
-        path: '/personal_health/:id',
+        path: '/personal_health/:id/:waitVisitId?', // waitVisitId待随访计划id
         name: 'personal_health', // intervention_plan
         meta: {
           title: '个人管理中心',

@@ -661,11 +661,9 @@ textarea:-ms-input-placeholder {
   }
 }
 .noneText{
-  height: 100%;
-  display: flex;
-  margin-top: 150px;
-  align-items: center;
-  justify-content: center;
+  display: block;
+  text-align: center;
+  margin-top: 50px;
   .con {
     text-align: center;
   }
