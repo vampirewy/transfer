@@ -12,7 +12,8 @@
               </div>
             </div>
             <div class="interventionCon">
-              <follow-record v-if="Tabactive === 0"></follow-record>
+              <follow-record v-if="Tabactive === 0"
+                             @getNextTrackingTip="getNextTrackingTip"></follow-record>
               <physical-info v-if="Tabactive === 1"></physical-info>
               <sun-record v-if="Tabactive === 2"></sun-record>
               <medical-record v-if="Tabactive === 3"></medical-record>
@@ -66,6 +67,13 @@
                              v-for="it in planWayList">
                   </el-option>
                 </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row v-if="$route.params.sourceType === '2'">
+            <el-col :span="24">
+              <el-form-item label="跟踪提示">
+                {{nextTrackingTip | getResult}}
               </el-form-item>
             </el-col>
           </el-row>
@@ -230,6 +238,7 @@ export default {
         nextTrackingTip: '',
         contentSaveRequests: [],
       },
+      nextTrackingTip: '', // 下次回访的提示 取记录里面最后一条的提示
       allIsCloseCaseShow: false, // 是否全部都结案，全部结案的不下次回访
       contentSaveRequestsList: [],
       planWayList: [],
@@ -330,6 +339,9 @@ export default {
       });
       // list.unshift({ name: '全部', value: '' });
       this.planWayList = list;
+    },
+    getNextTrackingTip(val) {
+      this.nextTrackingTip = val;
     },
     getFollowContent(list) {
       console.log(list);

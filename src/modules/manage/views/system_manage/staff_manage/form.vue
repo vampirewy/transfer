@@ -113,10 +113,11 @@
           </el-form-item>
         </el-col>
         <el-col :span="6" v-if="staffForm.dataRange === 3">
-          <el-form-item label="单位" prop="workUnitId">
+          <el-form-item label="单位" prop="workUnitIdList">
             <el-select
-                    v-model="staffForm.workUnitId"
+                    v-model="staffForm.workUnitIdList"
                     placeholder="请选择"
+                    multiple
             >
               <el-option
                       v-for="item in workUnitList"
@@ -128,10 +129,11 @@
           </el-form-item>
         </el-col>
         <el-col :span="6" v-if="staffForm.dataRange === 5">
-          <el-form-item label="类别" prop="gridId">
+          <el-form-item label="类别" prop="gridIdList">
             <el-select
-                    v-model="staffForm.gridId"
+                    v-model="staffForm.gridIdList"
                     placeholder="请选择"
+                    multiple
             >
               <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
                          :key="index"></el-option>
@@ -197,8 +199,8 @@ export default {
         roleId: '',
         dataRange: '',
         department: '',
-        workUnitId: '',
-        gridId: '',
+        workUnitIdList: [],
+        gridIdList: [],
         // menuIds: [],
       },
       staffRules: {
@@ -210,8 +212,8 @@ export default {
         contact: [{ required: true, message: '手机号码不能为空' }],
         dataRange: [{ required: true, message: '数据范围不能为空' }],
         department: [{ required: true, message: '科室/部门不能为空' }],
-        workUnitId: [{ required: true, message: '单位不能为空' }],
-        gridId: [{ required: true, message: '类别不能为空' }],
+        workUnitIdList: [{ required: true, message: '单位不能为空' }],
+        gridIdList: [{ required: true, message: '类别不能为空' }],
       },
       roleMenuIds: [],
       roleMenuIdsMap: {},
@@ -221,27 +223,8 @@ export default {
     };
   },
   mounted() {
-    this.getWorkUnitList();
     this.getGridList();
-    if (this.id) {
-      // 用户详情
-      this.$api.systemManageInterface.userDetail(this.id).then(async (res) => {
-        const { data } = res;
-        this.staffForm = Object.assign(this.staffForm, data.data || {});
-        // type为0: 超级管理员，下拉选项添加超级管理员选项
-        if (this.staffForm.type) {
-          this.queryRoleDetail(this.staffForm.roleId);
-        } else {
-          this.newRoleOptions.push({
-            id: this.staffForm.roleId,
-            name: this.staffForm.roleName,
-          });
-        }
-      });
-    } else if (this.roleOptions.length > 0) {
-      this.staffForm.roleId = this.roleOptions[0].id;
-      this.queryRoleDetail(this.staffForm.roleId);
-    }
+    this.getWorkUnitList();
   },
   methods: {
     handleMobileChange() {
@@ -261,11 +244,46 @@ export default {
         { pageNo: 1, pageSize: 100000 });
       const { data } = res.data;
       this.workUnitList = data.data;
+      this.getDetail();
     },
     async getGridList() {
       const res = await this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 100000 });
       const { data } = res.data;
       this.gridList = data.data;
+    },
+    getDetail() {
+      if (this.id) {
+        // 用户详情
+        this.$api.systemManageInterface.userDetail(this.id).then(async (res) => {
+          const { data } = res;
+          this.staffForm = Object.assign(this.staffForm, data.data || {});
+          if (data.data.dataRange === 3) { // 单位管理
+            const sameWork = [];
+            data.data.rangeNames.forEach((item) => {
+              this.workUnitList.forEach((itemList) => {
+                // 比较a1和a2，如果a1里面的数据a2中已经存在了，就拿出
+                if (item === itemList.workUnitName) {
+                  sameWork.push(itemList.id);
+                }
+              });
+            });
+            this.staffForm.workUnitIdList = sameWork;
+          } else if (data.data.dataRange === 5) { // 类别管理
+            this.staffForm.gridIdList = data.data.rangeNames;
+          }
+          if (this.staffForm.type) {
+            this.queryRoleDetail(this.staffForm.roleId);
+          } else {
+            this.newRoleOptions.push({
+              id: this.staffForm.roleId,
+              name: this.staffForm.roleName,
+            });
+          }
+        });
+      } else if (this.roleOptions.length > 0) {
+        this.staffForm.roleId = this.roleOptions[0].id;
+        this.queryRoleDetail(this.staffForm.roleId);
+      }
     },
     roleChange(id) {
       // 切换角色，读取缓存数据，没有缓存则查询角色详情
@@ -279,12 +297,18 @@ export default {
     submit() {
       const sendData = Object.assign({}, this.staffForm);
       if (sendData.dataRange === 3) {
-        sendData.gridId = '';
+        const sameWork = [];
+        sendData.workUnitIdList.forEach((item) => {
+          this.workUnitList.forEach((itemList) => {
+            // 比较a1和a2，如果a1里面的数据a2中已经存在了，就拿出
+            if (item === itemList.id) {
+              sameWork.push(itemList.workUnitName);
+            }
+          });
+        });
+        sendData.rangeNames = sameWork;
       } else if (sendData.dataRange === 5) {
-        sendData.workUnitId = '';
-      } else {
-        sendData.gridId = '';
-        sendData.workUnitId = '';
+        sendData.rangeNames = sendData.gridIdList;
       }
       console.log(sendData);
       this.$refs.staffForm.validate((valid) => {

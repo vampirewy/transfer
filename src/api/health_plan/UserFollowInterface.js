@@ -30,6 +30,10 @@ class UserFollowInterface extends BaseModule {
   intervenePlanUpdate(data = {}) {
     return this.post('/intervene_plan/update', data);
   }
+  // 添加干预记录 - 个人管理中心
+  interveneSaveExcute(data = {}) {
+    return this.post('/intervene_plan/save_excute', data);
+  }
   // 计划批量删除
   deleteSomeFollowplanDel(data = {}) {
     return this.post('/intervene_plan/batch/delete', data);

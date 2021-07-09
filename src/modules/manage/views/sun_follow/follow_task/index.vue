@@ -231,7 +231,7 @@
       </el-table-column>
 
       <!--<el-table-column type="selection" width="40"></el-table-column>-->
-      <el-table-column prop="clientNo" label="客户编号" min-width="100px" show-overflow-tooltip>
+      <el-table-column prop="clientNo" label="客户编号" min-width="110px" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{scope.row.clientNo | getResult}}</span>
         </template>
@@ -239,7 +239,7 @@
       <el-table-column
         prop="name"
         label="姓名"
-        width="90"
+        min-width="90"
       >
         <template slot-scope="scope">
              <span class="clientName"
@@ -248,17 +248,17 @@
              </span>
         </template>
       </el-table-column>
-      <el-table-column prop="gender" label="性别" width="60px">
+      <el-table-column prop="gender" label="性别" width="70px">
         <template slot-scope="scope">
           <span>{{scope.row.gender | getResultGender}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="age" label="年龄" width="60px">
+      <el-table-column prop="age" label="年龄" width="70px">
         <template slot-scope="scope">
           <span>{{ scope.row.age | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="isTrackingNum" label="待跟踪项目" width="90px" show-overflow-tooltip>
+      <el-table-column prop="isTrackingNum" label="待跟踪项目" show-overflow-tooltip>
         <template slot-scope="scope">
           <el-button type="text"
                      @click="expandsHandle(scope.row, 1)" style="color: #3154AC;font-size: 14px">
@@ -287,14 +287,14 @@
           <span>{{ scope.row.nextTrackingDate | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="nextTrackingDate" label="*下次跟踪方式" show-overflow-tooltip>
+      <el-table-column prop="nextTrackingWayName" label="下次跟踪方式" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.nextTrackingDate | getResult}}</span>
+          <span>{{ scope.row.nextTrackingWayName | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="nextTrackingDate" label="*下次跟踪提示" show-overflow-tooltip>
+      <el-table-column prop="nextTrackingTip" label="下次跟踪提示" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.nextTrackingDate | getResult}}</span>
+          <span>{{ scope.row.nextTrackingTip | getResult}}</span>
         </template>
       </el-table-column>
       <!--<el-table-column prop="nextTrackingDate" label="*跟踪方式" show-overflow-tooltip>

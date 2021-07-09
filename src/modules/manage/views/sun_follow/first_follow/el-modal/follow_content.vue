@@ -46,7 +46,7 @@
                     v-model="scope.row.state"
                     placeholder="请选择"
                     style="width: 110px"
-                    @change="emitTable"
+                    @change="changeState(scope.row)"
             >
               <el-option :label="item.name" :value="item.paramValue"  :key="index"
                          v-for="(item, index) in stateList"
@@ -241,6 +241,14 @@ export default {
       this.multipleSelection.forEach((value) => {
         value.isCloseCase = 1;
       });
+      this.emitTable();
+    },
+    changeState(row) {
+      if (row.state === 3) {
+        row.isCloseCase = 1;
+      } else {
+        row.isCloseCase = 2;
+      }
       this.emitTable();
     },
     emitTable() {

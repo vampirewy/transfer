@@ -202,7 +202,7 @@
           <span>{{ scope.row.nearestTrackingDate | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="最近结果" prop="stateName" min-width="115px" show-overflow-tooltip>
+      <el-table-column label="最近结果" prop="stateName" min-width="110px" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{ scope.row.stateName | getResult}}</span>
         </template>
@@ -221,12 +221,12 @@
         <template slot-scope="scope">
           <span>{{ scope.row.recieveDate | getResult}}</span>
         </template>
-      </el-table-column>-->
+      </el-table-column>
       <el-table-column prop="reportState" label="是否总检" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{ scope.row.reportState | getResultReportState}}</span>
         </template>
-      </el-table-column>
+      </el-table-column>-->
       <el-table-column label="操作" width="80">
         <template slot-scope="scope">
           <el-button
