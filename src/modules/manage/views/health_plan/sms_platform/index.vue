@@ -143,6 +143,7 @@
                 class="btn-new btnAdd"
                 size="small"
                 style="margin: 16px 0;width: 110px"
+                v-if="getAccess('smsPlatform_create')"
                 @click="handleEditPlan"
         ><img src="@/assets/images/common/addBtn.png" />创建短信</el-button>
       </div>

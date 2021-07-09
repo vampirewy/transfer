@@ -92,6 +92,7 @@
                 size="small"
                 style="margin: 16px 0"
                 @click="handleSomeRemove"
+                v-if="getAccess('smsPlatform_deleted')"
         ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
       </div>
     </div>
@@ -152,6 +153,7 @@
                 <el-button
                         type="text"
                         size="small"
+                        v-if="getAccess('smsPlatform_view')"
                         @click="handleView(scope.row)"
                 >查看</el-button>
               </template>

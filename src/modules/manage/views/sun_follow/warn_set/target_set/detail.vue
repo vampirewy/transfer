@@ -31,13 +31,19 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="18">
+        <el-col :span="6">
           <el-form-item label="适宜年龄">
             <span>
                   {{staffForm.minAge}}
                   -
                   {{staffForm.maxAge }}
                 </span>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="条件关系" class="form-item-sex">
+            <span>{{staffForm.conditionRelation === 1 ? '全部' :
+              staffForm.conditionRelation === 2 ? '任意' : ''}}</span>
           </el-form-item>
         </el-col>
       </el-row>

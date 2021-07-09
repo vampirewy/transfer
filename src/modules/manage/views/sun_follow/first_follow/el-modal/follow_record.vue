@@ -105,6 +105,9 @@ export default {
         it.keywords = [it.trackingUserName, `${it.trackingWayName}跟踪`];
       });
       this.formList = data || [];
+      if (data.length > 0) {
+        this.$emit('getNextTrackingTip', data[data.length - 1].nextTrackingTip);
+      }
     },
     /**
      * 获取随访方式

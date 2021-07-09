@@ -226,8 +226,7 @@
             >取消</el-button
           >-->
           <el-button size="small" class="sureBtn" type="primary" @click="submit"
-            >保存</el-button
-          >
+                     v-if="getAccess('role_strack_save')">保存</el-button>
         </div>
       </div>
     </div>

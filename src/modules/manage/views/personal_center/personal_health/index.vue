@@ -112,8 +112,10 @@
                 <monitor v-if="active === 7"></monitor>
                 <personalexport v-if="active === 8"></personalexport>
                 <food v-if="active === 9"></food>
-                <intervance v-if="active === 10"></intervance>
-                <intervancerecord v-if="active === 11"></intervancerecord>
+                <intervance v-if="active === 10" ref="intervance"
+                            @doIntervene="getInterveneId"></intervance>
+                <intervancerecord v-if="active === 11" ref="intervancerecord">
+                </intervancerecord>
               </div>
               <div class="content-right">
                 <div class="formSearchTitle">
@@ -130,7 +132,8 @@
                          class="form-inline inputCommon baseInfo" >
                   <el-row>
                     <el-col :span="12">
-                      <el-form-item label="执行时间：" prop="planDate">
+                      <el-form-item label="随访日期："
+                                    prop="planDate">
                         <el-date-picker
                                 v-model="form.planDate"
                                 type="date"
@@ -143,7 +146,7 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                      <el-form-item label="随访形式：" prop="planWay">
+                      <el-form-item label="随访形式：" prop="planWay" ref="planWay">
                         <el-select v-model="form.planWay"
                                    style="width: 100%" placeholder="请选择">
                           <el-option :label="it.name" :value="it.id" :key="it.id"
@@ -182,6 +185,13 @@
                       </el-form-item>
                     </el-col>
                   </el-row>
+                  <el-row v-if="$route.params.waitVisitId">
+                    <el-col :span="24">
+                      <el-form-item label="随访提示：">
+                        <span>{{planContent | getResult}}</span>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
                   <el-row>
                     <el-col :span="24">
                       <el-form-item label="随访结果：">
@@ -198,10 +208,11 @@
                   </el-row>
                 </el-form>
                 <div style="text-align: center; margin-top: 20px">
-                  <el-button class="cancelBtn" @click="$router.go(-1)"
+                  <!--<el-button class="cancelBtn" @click="$router.go(-1)"
                     >取消</el-button
-                  >
+                  >-->
                   <el-button class="sureBtn" type="primary" @click="onSubmit"
+                             style="margin-left: 20px"
                     >确定</el-button
                   >
                 </div>
@@ -325,6 +336,8 @@ export default {
         planContent: '',
         assortLevel: '',
       },
+      planContent: '',
+      waitVisitId: '', // 左边执行计划id
       rules: {
         planDate: [{ required: true, message: '请选择执行时间' }],
         planWay: [{ required: true, message: '请选择随访形式' }],
@@ -333,8 +346,23 @@ export default {
       },
     };
   },
-  watch: {},
+  watch: {
+    $route(newRoute) {
+      console.log(newRoute);
+      this.clearForm();
+    },
+  },
   methods: {
+    clearForm() {
+      this.form.planWay = '';
+      this.form.assortLevel = '';
+      this.form.planTitle = '';
+      this.form.planContent = '';
+      this.$refs.form.resetFields();
+      this.getUserInfo();
+      this.form.planDate = dayjs(new Date()).format('YYYY-MM-DD');
+      console.log(this.form);
+    },
     getClientUserInfo(id) {
       this.$api.userManagerInterface.getDetail(id).then(({ data }) => {
         if (data.rc === 0) {
@@ -366,11 +394,22 @@ export default {
       this.form.planDoctor = data.userId;
       this.form.planDoctorName = data.realName;
     },
+    getInterveneId(val) {
+      console.log(val);
+      this.waitVisitId = val;
+      this.getDetail(val);
+    },
     /**
      * 获取随访计划明细
      */
-    async getDetail() {
-      const reqBody = { id: this.$route.params.waitVisitId };
+    async getDetail(waitVisitId) {
+      let Id;
+      if (waitVisitId) { // 有传进来的waitVisitId是左边执行的
+        Id = waitVisitId;
+      } else {
+        Id = this.$route.params.waitVisitId;
+      }
+      const reqBody = { id: Id };
       const res = await this.$api.userFollowInterface.getIntervenePlan(
         reqBody,
       );
@@ -381,33 +420,76 @@ export default {
       this.form.planTitle = data.planTitle;
       this.form.planDoctor = data.currentOperateUserId; // this.$store.state.user.userId;
       this.form.planDoctorName = data.currentOperateUserName; // this.$store.state.user.userName;
+      this.planContent = data.planContent;
     },
     /**
      * 新增随访
      * @return {Promise<ElMessageComponent>}
      */
-    async onSubmit() {
+    onSubmit() {
       this.$refs.form.validate(async (valid) => {
         if (valid) {
-          const reqBody = {
-            id: this.$route.params.waitVisitId,
-            clientId: this.form.clientId,
-            executeState: '1', // 执行状态值为1已执行，2待执行
-            updateType: 'executeUpdate',
-            executeTime: `${this.form.planDate} 00:00:00`, // 执行时间
-            executePlanWay: this.form.planWay, // 执行干预方式
-            executePlanUserId: this.form.planDoctor, // 执行随访人
-            executePlanTitle: this.form.planTitle, // 执行标题
-            assortLevel: this.form.assortLevel, // 依从度
-            executePlanContent: this.form.planContent, // 执行内容
-          };
-          await this.$api.userFollowInterface.intervenePlanUpdate(reqBody);
-          this.$message.success('操作成功');
-          this.form.planContent = '';
-          this.form.assortLevel = '';
-          this.$refs.form.resetFields();
+          if (this.waitVisitId || this.$route.params.waitVisitId) {
+            let Id;
+            if (this.waitVisitId) { // 有传进来的waitVisitId是左边执行的
+              Id = this.waitVisitId;
+            } else {
+              Id = this.$route.params.waitVisitId;
+            }
+            this.doBlankIntervene(Id);
+          } else {
+            this.doClientIntervene(); // 生成干预记录
+          }
         }
       });
+    },
+    async doBlankIntervene(waitVisitId) { // 执行跳转过来的随访
+      const reqBody = {
+        id: waitVisitId,
+        clientId: this.form.clientId,
+        executeState: '1', // 执行状态值为1已执行，2待执行
+        updateType: 'executeUpdate',
+        executeTime: `${this.form.planDate} 00:00:00`, // 执行时间
+        executePlanWay: this.form.planWay, // 执行干预方式
+        executePlanUserId: this.form.planDoctor, // 执行随访人
+        executePlanTitle: this.form.planTitle, // 执行标题
+        assortLevel: this.form.assortLevel, // 依从度
+        executePlanContent: this.form.planContent, // 执行内容
+      };
+      await this.$api.userFollowInterface.intervenePlanUpdate(reqBody);
+      this.$message.success('操作成功');
+      if (this.$refs.intervance) {
+        this.$refs.intervance.getList(); // 再获取一遍随访计划
+      }
+      if (this.$refs.intervancerecord) {
+        this.$refs.intervancerecord.getList(); // 再获取一遍随访记录
+      }
+      if (this.waitVisitId) {
+        this.clearForm();
+      } else {
+        setTimeout(() => {
+          this.$router.push({
+            path: `/personal_health/${this.$route.params.id}`,
+          });
+        }, 1000);
+      }
+    },
+    async doClientIntervene() { // 添加干预记录
+      const reqBody = {
+        clientId: this.$route.params.id,
+        executeTime: `${this.form.planDate} 00:00:00`, // 执行时间
+        executePlanWay: this.form.planWay, // 执行干预方式
+        executePlanUserId: this.form.planDoctor, // 执行随访人
+        executePlanTitle: this.form.planTitle, // 执行标题
+        assortLevel: this.form.assortLevel, // 依从度
+        executePlanContent: this.form.planContent, // 执行内容
+      };
+      await this.$api.userFollowInterface.interveneSaveExcute(reqBody);
+      this.$message.success('操作成功');
+      this.clearForm();
+      if (this.$refs.intervancerecord) {
+        this.$refs.intervancerecord.getList(); // 再获取一遍随访记录
+      }
     },
     clickMenu(index, selector) {
       this.active = index;
@@ -443,8 +525,11 @@ export default {
     this.getPlanWayList(); // 随访方式
     this.getSystemParamByassortLevel('HM012');
     this.getUserInfo();
+    console.log(66666666);
     if (this.$route.params.waitVisitId) { // 有执行计划过来的才获取详情
       this.getDetail();
+    } else {
+      this.form.planDate = dayjs(new Date()).format('YYYY-MM-DD');
     }
   },
   destroyed() {

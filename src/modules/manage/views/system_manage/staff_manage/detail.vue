@@ -51,6 +51,16 @@
             {{staffForm.dataRange | getResultDataRange }}
           </el-form-item>
         </el-col>
+        <el-col :span="24" v-if="staffForm.dataRange === 3">
+          <el-form-item label="单位">
+            {{staffForm.rangeNames | getResult }}
+          </el-form-item>
+        </el-col>
+        <el-col :span="24" v-if="staffForm.dataRange === 5">
+          <el-form-item label="类别">
+            {{staffForm.rangeNames | getResult }}
+          </el-form-item>
+        </el-col>
       </el-row>
       <div class="form-buttons">
         <el-button size="small" class="cancelBtn" @click="$emit('cancel')">返回</el-button>
@@ -89,30 +99,56 @@ export default {
         state: 1,
         roleId: '',
         dataRange: '',
+        rangeNames: '',
         // menuIds: [],
       },
       roleMenuIds: [],
       roleMenuIdsMap: {},
       newRoleOptions: [...this.roleOptions],
+      gridList: [],
     };
   },
   mounted() {
-    // 用户详情
-    this.$api.systemManageInterface.userDetail(this.id).then(async (res) => {
-      const { data } = res;
-      this.staffForm = Object.assign(this.staffForm, data.data || {});
-      // type为0: 超级管理员，下拉选项添加超级管理员选项
-      if (this.staffForm.type) {
-        // this.queryRoleDetail(this.staffForm.roleId);
-      } else {
-        this.newRoleOptions.push({
-          id: this.staffForm.roleId,
-          name: this.staffForm.roleName,
-        });
-      }
-    });
+    this.getGridList();
   },
-  methods: {},
+  methods: {
+    async getGridList() {
+      const res = await this.$api.userManagerInterface.getGridList({ pageNo: 1, pageSize: 100000 });
+      const { data } = res.data;
+      this.gridList = data.data;
+      this.getDetail();
+    },
+    getDetail() {
+      // 用户详情
+      this.$api.systemManageInterface.userDetail(this.id).then(async (res) => {
+        const { data } = res;
+        this.staffForm = Object.assign(this.staffForm, data.data || {});
+        if (data.data.dataRange === 3) { // 单位管理
+          this.staffForm.rangeNames = data.data.rangeNames.join('、');
+        } else if (data.data.dataRange === 5) { // 类别管理
+          const sameWork = [];
+          data.data.rangeNames.forEach((item) => {
+            this.gridList.forEach((itemList) => {
+              // 比较a1和a2，如果a1里面的数据a2中已经存在了，就拿出
+              if (item === itemList.id) {
+                sameWork.push(itemList.gridName);
+              }
+            });
+          });
+          this.staffForm.rangeNames = sameWork.join('、');
+        }
+        // type为0: 超级管理员，下拉选项添加超级管理员选项
+        if (this.staffForm.type) {
+          // this.queryRoleDetail(this.staffForm.roleId);
+        } else {
+          this.newRoleOptions.push({
+            id: this.staffForm.roleId,
+            name: this.staffForm.roleName,
+          });
+        }
+      });
+    },
+  },
 };
 </script>
 

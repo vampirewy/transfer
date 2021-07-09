@@ -63,6 +63,15 @@
         </template>
           </el-table-column>
           <el-table-column
+                  prop="planContent"
+                  label="随访问卷"
+                  show-overflow-tooltip
+          >
+            <template slot-scope="scope">
+              <span>{{ scope.row.templateQuestionName | getResult }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
             prop="planUserName"
             label="随访人"
             show-overflow-tooltip
@@ -229,9 +238,14 @@ export default {
       });
     },
     handleDetail(row) {
-      this.$router.push({
-        path: `/health_plan/user_follow_do/do/${row.id}`,
-      });
+      console.log(row);
+      if (row.templateQuestionId) {
+        this.$router.push({
+          path: `/health_plan/user_follow_do/do/${row.id}`,
+        });
+      } else {
+        this.$emit('doIntervene', row.id);
+      }
     },
     async getList() {
       const reqBody = {

@@ -71,39 +71,54 @@
         <div class="divRightTitle" style="margin-top: 10px">模板条件
           <div class="titleBiao"></div></div>
       </div>
-      <div class="row" style="display: flex;margin-top:30px;">
-        <el-form-item label="指标名称" style="background:#ffffff">
-          <el-popover
-                  ref="userPopovers"
-                  placement="bottom-start"
-                  width="650"
-                  trigger="click"
-                  popover-class="popoverCss"
-                  @show="detectionpopoverStatus = true"
-                  @hide="detectionhandlePopoperClose"
-          >
-            <project-open
-                    v-if="detectionpopoverStatus"
-                    @change="detectiononSelectUser"
-                    @cancel="detectionhandlePopoperClose"
-            ></project-open>
-            <el-input class="select-user-trigger"
-                    slot="reference"
-                    :disabled="detectioninfoSource.name !== '' ? false : true"
-                    v-model="detectioninfoSource.name"
-                    placeholder="请选择"
-                    style="width:300px"
-            >
-              <i
-                      :class="`el-icon-arrow-${detectionpopoverStatus ? 'up' : 'down'}`"
-                      slot="suffix"
-              ></i>
-            </el-input>
-          </el-popover>
-        </el-form-item>
-        <div class="othertest">
-          <div @click="othertestAdd">添加</div>
-        </div>
+      <div class="row" style="margin-top:30px;">
+        <el-row style="display: flex;">
+          <el-col :span="6">
+            <el-form-item label="条件关系" prop="conditionRelation">
+              <el-select
+                      v-model="staffForm.conditionRelation"
+                      placeholder="请选择"
+              >
+                <el-option label="全部" :value="1"></el-option>
+                <el-option label="任意" :value="2"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="指标名称" style="background:#ffffff">
+              <el-popover
+                      ref="userPopovers"
+                      placement="bottom-start"
+                      width="650"
+                      trigger="click"
+                      popover-class="popoverCss"
+                      @show="detectionpopoverStatus = true"
+                      @hide="detectionhandlePopoperClose"
+              >
+                <project-open
+                        v-if="detectionpopoverStatus"
+                        @change="detectiononSelectUser"
+                        @cancel="detectionhandlePopoperClose"
+                ></project-open>
+                <el-input class="select-user-trigger"
+                          slot="reference"
+                          :disabled="detectioninfoSource.name !== '' ? false : true"
+                          v-model="detectioninfoSource.name"
+                          placeholder="请选择"
+                          style="width:100%"
+                >
+                  <i
+                          :class="`el-icon-arrow-${detectionpopoverStatus ? 'up' : 'down'}`"
+                          slot="suffix"
+                  ></i>
+                </el-input>
+              </el-popover>
+            </el-form-item>
+          </el-col>
+          <div class="othertest">
+            <div @click="othertestAdd">添加</div>
+          </div>
+        </el-row>
       </div>
       <el-table :data="addProject" align="center">
         <el-table-column label="科室名称" prop="sectionName">
@@ -217,6 +232,7 @@ export default {
         templateType: 1,
         name: '',
         trackingLv: '',
+        conditionRelation: '',
         gender: '',
         minAge: '',
         maxAge: '',
@@ -224,6 +240,7 @@ export default {
       staffRules: {
         name: [{ required: true, message: '请输入模板名称' }],
         trackingLv: [{ required: true, message: '请选择预警分类' }],
+        conditionRelation: [{ required: true, message: '请选择条件关系' }],
         sectionName: [{ required: true, message: '请输入科室名称' }],
         itemName: [{ required: true, message: '请输入小项名称' }],
         itemCondition: [{ required: true, message: '请选择小项条件' }],
@@ -242,6 +259,7 @@ export default {
         this.staffForm.gender = data.data.gender;
         this.staffForm.minAge = data.data.minAge;
         this.staffForm.maxAge = data.data.maxAge;
+        this.staffForm.conditionRelation = data.data.conditionRelation;
         this.addProject = data.data.warnTemplateItemDtos;
       });
     }

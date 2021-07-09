@@ -50,11 +50,13 @@
                   size="small"
                   style="margin: 16px 0"
                   @click="add"
+                  v-if="getAccess('warn_set_zb_add')"
           ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
           <el-button
                   class="btn-new btnDel"
                   size="small"
                   @click="handleSomeRemove"
+                  v-if="getAccess('warn_set_zb_deleted')"
           ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
         </div>
       </div>
@@ -122,12 +124,14 @@
                         type="text"
                         size="small"
                         @click="edit(scope.row)"
+                        v-if="getAccess('warn_set_zb_edit')"
                 >编辑</el-button
                 >
                 <el-button
                   type="text"
                   size="small"
                   @click="detail(scope.row)"
+                  v-if="getAccess('warn_set_zb_view')"
                   >查看</el-button>
               </template>
             </el-table-column>

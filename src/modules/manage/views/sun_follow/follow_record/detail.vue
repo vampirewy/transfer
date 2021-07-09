@@ -43,10 +43,30 @@
             <span>{{form.itemName | getResult}}</span>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="12">
           <el-form-item label="项目结果" >
             <span :class="form.reportLv === 1 ? 'warnRed' : 'warnYellow'">
               {{form.itemValue | getResult}}</span>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="上报时间" >
+            <span>{{reportForm.reportDate | getResult}}</span>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="上报科室" >
+            <span>{{reportForm.reportDepartment | getResult}}</span>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="上报医生" >
+            <span>{{reportForm.reportUserName | getResult}}</span>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="上报备注" >
+            <span>{{reportForm.remark | getResult}}</span>
           </el-form-item>
         </el-col>
       </el-row>
@@ -63,57 +83,35 @@
           </div>
         </div>
         <div class="interventionCon">
-          <el-row v-if="Tabactive === 0">
-            <el-col :span="6">
-              <el-form-item label="上报时间" >
-                <span>{{reportForm.reportDate}}</span>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="上报科室" >
-                <span>{{reportForm.reportDepartment}}</span>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="上报医生" >
-                <span>{{reportForm.reportUserName}}</span>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label="上报备注" >
-                <span>{{reportForm.remark}}</span>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row v-else>
+          <el-row>
             <el-col :span="6">
               <el-form-item label="跟踪时间" >
-                <span>{{trackingList[Tabactive - 1].trackingDate.split(' ')[0]}}</span>
+                <span>{{trackingList[Tabactive].trackingDate.split(' ')[0]}}</span>
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item label="跟踪方式" >
-                <span>{{trackingList[Tabactive - 1].trackingWayName}}</span>
+                <span>{{trackingList[Tabactive].trackingWayName}}</span>
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item label="跟踪人员" >
-                <span>{{trackingList[Tabactive - 1].trackingUserName}}</span>
+                <span>{{trackingList[Tabactive].trackingUserName}}</span>
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item label="短信通知" >
-                <span>{{trackingList[Tabactive - 1].isSendMsg === 1 ? '是' : '否'}}</span>
+                <span>{{trackingList[Tabactive].isSendMsg === 1 ? '是' : '否'}}</span>
               </el-form-item>
             </el-col>
             <el-col :span="24">
               <el-form-item label="跟踪记录" >
-                <span>{{trackingList[Tabactive - 1].trackingRemark}}</span>
+                <span>{{trackingList[Tabactive].trackingRemark}}</span>
               </el-form-item>
             </el-col>
             <el-col :span="24">
               <el-form-item label="短信小结" >
-                <span>{{trackingList[Tabactive - 1].messageRecordContent}}</span>
+                <span>{{trackingList[Tabactive].messageRecordContent}}</span>
               </el-form-item>
             </el-col>
           </el-row>
@@ -168,7 +166,15 @@ export default {
         reportLv: JSON.parse(localStorage.getItem('positiveTrackingDetail')).reportLv,
       },
       reportForm: {},
-      trackingList: [],
+      trackingList: [
+        { trackingDate: '',
+          trackingWayName: '',
+          trackingUserName: '',
+          isSendMsg: '',
+          trackingRemark: '',
+          messageRecordContent: '',
+        },
+      ],
       planWayList: [],
       tabbor: [],
       Tabactive: 0,
@@ -222,14 +228,12 @@ export default {
       const { data } = res;
       console.log(data);
       this.tabbor = [];
+      this.trackingList = [];
       data.data.forEach((val) => {
         val.trackingWayName = this.planWayList.find(t => t.id === val.trackingWay).name;
         this.tabbor.push(val.trackingDate.split(' ')[0]);
         this.trackingList.push(val);
       });
-      if (this.tabbor.length > 0) {
-        this.tabbor.unshift('首次上报');
-      }
       this.reportForm = {
         reportDate: data.data[0].reportDate,
         reportDepartment: data.data[0].reportDepartment,
@@ -494,7 +498,7 @@ export default {
   .TabBarsNames:after{
     content: '';
     display: block;
-    width: 21px;
+    width: 18px;
     height: 37px;
     position: absolute;
     -webkit-transform: skewX(23deg);
@@ -502,7 +506,7 @@ export default {
     background: #EEF1F5;
     border-top-right-radius: 8px;
     top: 0px;
-    right: -13px;
+    right: -9px;
     border-bottom: solid 1px #EEF1F5;
   }
   .TabBarsNames:before {
@@ -526,7 +530,7 @@ export default {
     color: #333333;
     font-weight: 500;
     position: relative;
-    margin-right: 26px;
+    margin-right: 30px;
     // padding: 10px 14px 10px 16px;
     font-size: 14px;
     border-radius: 8px 5px 0 0;
@@ -540,7 +544,7 @@ export default {
   .TabBarsName:after{
     content: '';
     display: block;
-    width: 21px;
+    width: 18px;
     height: 37px;
     position: absolute;
     -webkit-transform: skewX(23deg);
@@ -548,7 +552,7 @@ export default {
     background: white;
     border-top-right-radius: 8px;
     top: 0px;
-    right: -10px;
+    right: -9px;
     border-right: solid 1px #DDE0E6;
   }
   .TabBarsName:before {
