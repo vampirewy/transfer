@@ -109,6 +109,7 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <div v-if="allIsCloseCaseShow">
           <div class="divRightTitleDiv">
             <div class="divRightTitle" style="margin-top: 15px">下次跟踪回访计划
               <div class="titleBiao"></div></div>
@@ -166,6 +167,7 @@
               </el-form-item>
             </el-col>
           </el-row>
+        </div>
         </el-form>
         <div class="handle-btn">
           <el-button class="reset-btn" size="small" @click="goBack">返回</el-button>
@@ -228,6 +230,7 @@ export default {
         nextTrackingTip: '',
         contentSaveRequests: [],
       },
+      allIsCloseCaseShow: false, // 是否全部都结案，全部结案的不下次回访
       contentSaveRequestsList: [],
       planWayList: [],
       tabbor: ['跟踪记录', '体检信息', '历史阳性'], // , '就诊记录'
@@ -331,6 +334,13 @@ export default {
     getFollowContent(list) {
       console.log(list);
       this.contentSaveRequestsList = list;
+      let allIsCloseCase = false;
+      list.forEach((val) => {
+        if (val.isCloseCase === 2) { // 1 已结案 2 未结案。  如果有未结案的就展示
+          allIsCloseCase = true;
+        }
+      });
+      this.allIsCloseCaseShow = allIsCloseCase;
     },
     TabbarBtn(index) {
       this.Tabactive = index;
@@ -345,12 +355,16 @@ export default {
       this.contentSaveRequestsList.forEach((val) => {
         sendData.contentSaveRequests.push({
           positiveTrackingId: val.id,
-          // isCloseCase: val.isCloseCase,
+          isCloseCase: val.isCloseCase,
           state: val.state || 1,
         });
       });
       sendData.trackingDate = `${sendData.trackingDate.split(' ')[0]} 00:00:00`;
       sendData.nextTrackingDate = `${sendData.nextTrackingDate.split(' ')[0]} 00:00:00`;
+      if (this.allIsCloseCaseShow === false) { // 如果都结案
+        sendData.nextTrackingDay = '';
+        sendData.nextTrackingDate = '';
+      }
       this.$api.sunFollow.savePositiveReturn(sendData).then(() => {
         this.$message.success('操作成功');
         if (this.$route.params.sourceType === '1') {

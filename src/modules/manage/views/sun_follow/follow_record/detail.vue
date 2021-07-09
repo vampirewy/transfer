@@ -55,7 +55,7 @@
           <div class="titleBiao"></div></div>
       </div>
       <div>
-        <div class="TabBars">
+        <div class="TabBars" style="overflow-x: auto;">
           <div v-for="(item,index) in tabbor" :key="index">
           <span :class="Tabactive === index?'TabBarsName':'TabBarsNames'" @click="TabbarBtn(index)">
               {{item}}

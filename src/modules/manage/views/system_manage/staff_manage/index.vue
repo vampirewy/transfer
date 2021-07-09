@@ -108,7 +108,19 @@
                     show-overflow-tooltip>
               <template slot-scope="scope">
                 <el-switch
-                        v-model="scope.row.state "
+                        v-if="scope.row.state === 0"
+                        :disabled="!getAccess('staff_list_on')"
+                        v-model="scope.row.state"
+                        :active-value="1"
+                        :inactive-value="0"
+                        active-color="#13ce66"
+                        @change=changeStatus(scope.row)
+                >
+                </el-switch>
+                <el-switch
+                        v-else-if="scope.row.state === 1"
+                        :disabled="!getAccess('staff_list_off')"
+                        v-model="scope.row.state"
                         :active-value="1"
                         :inactive-value="0"
                         active-color="#13ce66"

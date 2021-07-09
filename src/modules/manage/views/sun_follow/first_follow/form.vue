@@ -46,12 +46,13 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="手机号码" prop="mobile">
-            <el-input v-model="staffForm.mobile" :maxlength="11"></el-input>
+            <el-input v-model="staffForm.mobile" :maxlength="11"
+            @input="handleContactChange"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="身份证号" prop="cardNo">
-            <el-input v-model="staffForm.cardNo"></el-input>
+            <el-input v-model="staffForm.cardNo" :maxlength="18"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -160,6 +161,26 @@ export default {
     SelectUser,
   },
   data() {
+    const validateMobile = (rule, value, callback) => {
+      if (value !== '') {
+        const MOBILE_REG = /^1[3|4|5|6|7|8|9][0-9]{9}$/;
+        if (!MOBILE_REG.test(value)) {
+          callback(new Error());
+          return;
+        }
+      }
+      callback();
+    };
+    const validateIDCard = (rule, value, callback) => {
+      if (value !== '') {
+        const IDCARD_REG = /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}$)/;
+        if (!IDCARD_REG.test(value)) {
+          callback(new Error('请输入正确的身份证号'));
+          return;
+        }
+      }
+      callback();
+    };
     return {
       userList: [],
       popoverStatus: false,
@@ -189,6 +210,20 @@ export default {
         reportLv: [{ required: true, message: '请选择上报等级' }],
         reportUserId: [{ required: true, message: '请输入上报医生' }],
         reportDate: [{ required: true, message: '请选择上报时间' }],
+        mobile: [
+          { required: false,
+            message: '请输入正确的手机号',
+            trigger: 'blur',
+            validator: validateMobile,
+          },
+        ],
+        cardNo: [
+          { required: false,
+            message: '请输入正确的身份证号',
+            trigger: 'blur',
+            validator: validateIDCard,
+          },
+        ],
       },
     };
   },
@@ -197,6 +232,9 @@ export default {
     this.getUserInfo();
   },
   methods: {
+    handleContactChange() {
+      this.staffForm.mobile = this.staffForm.mobile.replace(/[^0-9]/g, '');
+    },
     handlePopoperClose(data) {
       console.log(data);
       this.$refs.userPopover.doClose();

@@ -33,8 +33,8 @@
               </div>
               <div class="medicalDetailRight">
                 <p class="overZi" v-if="itemChild.isCloseCase === 1">本次结束</p>
-                <img @click="updateWarnLevel(itemChild)"
-                     src="@/assets/images/sunFollow/followRight.png"/>
+                <!-- 更改预警等级弹窗<img @click="updateWarnLevel(itemChild)"
+                     src="@/assets/images/sunFollow/followRight.png"/>-->
               </div>
             </div>
           </div>

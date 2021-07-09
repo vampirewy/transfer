@@ -61,28 +61,28 @@
                 min-width="80"
         >
           <template slot-scope="scope">
-            <!--<el-switch v-model="scope.row.isCloseCase"
+            <el-switch v-model="scope.row.isCloseCase"
                        @change="emitTable"
                        :active-value="1"
                        :inactive-value="2"
                        active-color="#13ce66">
-            </el-switch>-->
+            </el-switch>
             <!--<el-button
                     type="text"
                     size="small"
             >挂号</el-button>-->
-            <el-button
+            <!--<el-button
                     v-if="scope.row.isCloseCase === 1"
                     type="text"
                     size="small"
                     @click="toCloseCase(scope.row)"
-            >取消结案</el-button> <!--已结案数据-->
+            >取消结案</el-button> &lt;!&ndash;已结案数据&ndash;&gt;
             <el-button
                     v-if="scope.row.isCloseCase === 2"
                     type="text"
                     size="small"
                     @click="toCloseCase(scope.row)"
-            >结案</el-button> <!--未结案数据-->
+            >结案</el-button> &lt;!&ndash;未结案数据&ndash;&gt;-->
           </template>
         </el-table-column>
       </el-table>
@@ -119,7 +119,7 @@
 
 <script>
 import registerOpen from '../../../in_hospital_change/el_modal/registerOpen.vue';
-import deleteIcon from '~/src/assets/images/doctor/tips.png';
+// import deleteIcon from '~/src/assets/images/doctor/tips.png';
 export default {
   name: 'follow_content',
   components: {
@@ -196,8 +196,7 @@ export default {
         this.emitTable();
       });
     },
-
-    toCloseCase(row) {
+    /* toCloseCase(row) {
       const Row = row;
       let sendDataVal;
       let msg;
@@ -208,7 +207,8 @@ export default {
         msg = '确定结案？';
         sendDataVal = 1;
       }
-      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>${msg}</span></div>`, '提示', {
+      this.$confirm(`<div class="delete-text-content">
+      <img class="delete-icon" src="${deleteIcon}"/><span>${msg}</span></div>`, '提示', {
         dangerouslyUseHTMLString: true,
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -226,7 +226,7 @@ export default {
           return this.queryList();
         },
       );
-    },
+    },*/
     /**
      * 批量结案
      */
@@ -238,27 +238,10 @@ export default {
         });
         return;
       }
-      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>是否确定结案？</span></div>`, '提示', {
-        dangerouslyUseHTMLString: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        customClass: 'message-box-customize',
-        showClose: true,
-      }).then(
-        async () => {
-          const idsList = [];
-          this.multipleSelection.forEach((value) => {
-            idsList.push({ positiveTrackingId: value.id, isCloseCase: 1 });
-          });
-          const reqBody = {
-            clientId: this.$route.params.clientId,
-            contentSaveRequests: idsList,
-          };
-          await this.$api.sunFollow.getClientPositiveCloseCase(reqBody);
-          this.$message.success('操作成功');
-          return this.queryList();
-        },
-      );
+      this.multipleSelection.forEach((value) => {
+        value.isCloseCase = 1;
+      });
+      this.emitTable();
     },
     emitTable() {
       this.$emit('getTable', this.tableData);
