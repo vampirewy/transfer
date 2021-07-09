@@ -117,12 +117,14 @@
                     size="small"
                     @click="createReport"
                     class="btn-new btnDel"
+                    v-if="getAccess('team_report_create')"
             ><img src="@/assets/images/common/addBtn.png" />生成</el-button>
             <el-button
             style="margin: 16px 0;"
                     size="small"
                     @click="generateReport"
                     class="btn-new btnDel"
+                    v-if="getAccess('team_report_receive')"
             ><img src="@/assets/images/common/deliverBtn.png" />配置</el-button>
           </div>
         </div>
@@ -193,7 +195,7 @@
                   <img
                     @click="handleComment(scope.row)"
                     class="comment-img"
-                    v-if="getAccess('assessment_report_comment')"
+                    v-if="getAccess('team_report_said')"
                     src="../../../../assets/images/comment.png"/>
                 </template>
               </el-table-column>
@@ -204,6 +206,7 @@
                   <el-button
                     type='text'
                     size="small"
+                    v-if="getAccess('team_report_view')"
                     @click="openPdf(scope.row)">查看</el-button>
                 </template>
               </el-table-column>

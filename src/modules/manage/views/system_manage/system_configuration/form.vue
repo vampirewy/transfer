@@ -290,7 +290,7 @@
         }}</el-button> -->
         <el-button
           size="small"
-          v-if="!detail"
+          v-if="getAccess('system_manage_config_report_save')"
           class="sureBtn"
           type="primary"
           @click="submit"
