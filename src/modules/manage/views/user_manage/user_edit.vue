@@ -278,7 +278,7 @@
               <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column prop="title" label="标题"></el-table-column>
             <el-table-column prop="remark" label="附件说明"></el-table-column>
-            <el-table-column prop="createTime" label="上传时间"></el-table-column>
+            <el-table-column prop="createdTime" label="上传时间"></el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <el-button type="text" @click="open(scope)">查看</el-button>

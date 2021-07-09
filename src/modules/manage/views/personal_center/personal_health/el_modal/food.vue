@@ -150,7 +150,7 @@ export default {
         query: {
           type: 'info',
           clientId: data.id,
-          name: data.createdByUserName,
+          name: this.name,
         },
       });
     },
@@ -160,7 +160,7 @@ export default {
         query: {
           type: 'edit',
           clientId: data.id,
-          name: data.createdByUserName,
+          name: this.name,
         },
       });
     },
