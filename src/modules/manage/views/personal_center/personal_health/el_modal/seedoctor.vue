@@ -80,11 +80,11 @@
                 prop="result"
                 show-overflow-tooltip>
                 <template slot-scope="scope">
-          <span>{{ scope.row.medicalType === 1? '未指定'
-            : scope.row.medicalType === 2? '治疗中'
-            : scope.row.medicalType === 3? '转诊'
-            :scope.row.medicalType === 4? '转为慢病'
-            :scope.row.medicalType === 5? '痊愈'
+          <span>{{ scope.row.result === 1? '未指定'
+            : scope.row.result === 2? '治疗中'
+            : scope.row.result === 3? '转诊'
+            :scope.row.result === 4? '转为慢病'
+            :scope.row.result === 5? '痊愈'
             :'其他' }}</span>
         </template>
               </el-table-column>
@@ -243,7 +243,7 @@ export default {
           // if (data.code === 200) {
           const result = res.data || {};
           this.tableData = result.data.data || [];
-          this.total = result.total || 0;
+          this.total = result.data.total || 0;
           // }
         });
     },

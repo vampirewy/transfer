@@ -147,7 +147,7 @@
             v-if="type !== 'info'"
           >
             <div @click="isShowPeopleSelect = true"
-            class="select-mask" v-if="type === 'add' && !clientIds">
+            class="select-mask" v-if="type === 'add' && !personclientId">
               <el-select
                 value=""
                 style="width: 100%"
@@ -175,7 +175,7 @@
             label="已选人员: "
             label-width="80px"
           >
-            <div class="selected-box" v-if="type === 'add'  && !clientIds">
+            <div class="selected-box" v-if="type === 'add'  && !personclientId">
               <div class="selected-item" v-for="(item, index) in selectedData" :key="index">
                 <span>{{item.name}}</span>
                 <i class="el-icon-error" @click="selectedDataDelect(index)"></i>
@@ -276,7 +276,9 @@
             <el-table-column align="center" prop="provideQuantity" label="提供量"
             show-overflow-tooltip>
               <template slot-scope="scope">
-                <span class="analysis-low">{{ scope.row.provideQuantity }}</span>
+                <span :class="scope.row.trend === 3 ? 'OrLowClassA' :
+                (scope.row.trend === 1 ? 'OrLowClassB' : 'OrLowClassC')">
+                {{ scope.row.provideQuantity }}</span>
               </template>
             </el-table-column>
           </el-table>
@@ -379,6 +381,10 @@ export default {
       type: String,
       default: '',
     },
+    personclientId: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -397,7 +403,7 @@ export default {
       stateDate: '',
       endDate: '',
       clientId: '', // 编辑适用人员Id
-      clientName: '', // 编辑适用人员
+      clientName: this.$route.query.name || '', // 编辑适用人员
       analysisData: [
         { title: '能量', title2: '2205.23 kcal', title3: '2203.23 kcal' },
       ],
@@ -418,15 +424,27 @@ export default {
       arrList: [], // 处理后提交的数据
       arrListInfo: [], // 第几天的数据
       dietTemplateMaterial: {}, // 图表数据
-      clientIds: this.$route.query.clientId || '',
+      // clientIds: this.$route.query.clientId || '',
     };
   },
   mounted() {
+    console.log(this.type, this.personclientId);
+    if (this.type === 'add' && this.personclientId) {
+      const json = {
+        id: this.personclientId,
+        name: this.clientName,
+      };
+      this.selectedData.push(json);
+      this.pageList.push(this.personclientId);
+      this.HealthInfo();
+    }
+    if (this.id) {
+      this.pageList.push(this.id);
+      this.HealthInfo();
+    }
+    console.log(this.$route.query.name);
     // if (this.type !== 'add') {
     //   this.HealthInfo();
-    // }
-    // if (this.clientIds) {
-    //   this.getClientUserInfo(this.clientIds);
     // }
   },
   methods: {
@@ -525,8 +543,11 @@ export default {
       this.isShowDietMenuTemplate = true;
     },
     back() {
-      this.id = '';
       this.$parent.viewIndex = 1;
+      this.$router.push({
+        path: '/diet_manage/',
+      });
+      // this.id = '';
     },
     handleDietMenuTypeChange(id = '', name = '') {
       // if (this.menuType === 1) {
@@ -632,7 +653,7 @@ export default {
         }
         arr.push(json);
       }
-      if (this.$refs.makeRecipes.id === '') {
+      if (this.$refs.makeRecipes.id === '') { // 新增
         this.$api.dietRawMaterial
           .clientDietPlanPageSave({
             clientIdList: clientId,
@@ -648,7 +669,7 @@ export default {
               this.$parent.viewIndex = 1;
             }
           });
-      } else {
+      } else { // 编辑
         this.$api.dietRawMaterial
           .clientDietPlanPageUpdate({
             id: this.$refs.makeRecipes.id,

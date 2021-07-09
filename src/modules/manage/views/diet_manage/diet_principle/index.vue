@@ -44,12 +44,14 @@
           size="small"
           style="margin: 16px 0"
           @click="add"
+          v-if="getAccess('diet_principle_add')"
           ><img src="@/assets/images/common/addBtn.png" />新增</el-button
         >
         <el-button class="btn-new btnAdd"
         size="small"
         style="margin: 16px 0"
         @click="handleSomeRemove"
+        v-if="getAccess('diet_principle_del')"
           ><img src="@/assets/images/common/delBtn.png" />删除</el-button
         >
       </div>
@@ -72,14 +74,14 @@
             type="text"
             size="small"
             @click="editForm(scope.row)"
-            v-if="getAccess('staff_list_edit')"
+            v-if="getAccess('diet_principle_edit')"
             >编辑</el-button
           >
           <el-button
             type="text"
             size="small"
             @click="LookForm(scope.row)"
-            v-if="getAccess('staff_list_view')"
+            v-if="getAccess('diet_principle_view')"
             >查看</el-button
           >
         </template>

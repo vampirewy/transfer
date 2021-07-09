@@ -123,6 +123,7 @@
                 size="small"
                 style="margin: 16px 0"
                 @click="add"
+                v-if="getAccess('diet_finished_dish_add')"
                 ><img src="@/assets/images/common/addBtn.png" />新增</el-button
               >
               <el-button
@@ -130,6 +131,7 @@
                 size="small"
                 style="margin: 16px 0"
                 @click="deletes"
+                v-if="getAccess('diet_finished_dish_del')"
                 ><img src="@/assets/images/common/delBtn.png" />删除</el-button
               >
             </div>
@@ -157,10 +159,10 @@
             <el-table-column prop="id" label="操作" width="160px">
               <template slot-scope="scope">
                 <el-button type="text" size="small" @click="edit(scope.row.id)"
-                  >编辑</el-button
+                v-if="getAccess('diet_finished_dish_edit')">编辑</el-button
                 >
                 <el-button type="text" size="small" @click="look(scope.row.id)"
-                  >查看</el-button
+                v-if="getAccess('diet_finished_dish_view')">查看</el-button
                 >
               </template>
             </el-table-column>

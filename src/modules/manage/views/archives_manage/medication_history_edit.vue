@@ -254,12 +254,12 @@ export default {
 
 <style lang="scss" scoped>
 .medication-history-edit /deep/ {
+
   .red {
     font-style: normal;
     color: #f00;
   }
   .mt10 {
-    margin-top: 10px;
   }
   .mt20 {
     margin-top: 20px;
@@ -272,8 +272,7 @@ export default {
   }
   .el-input__inner,
   .el-textarea__inner {
-    background-color: #f4f4f6;
-    border: 0;
+    background-color: #ffffff;
   }
   .form-inline {
     .form-title {

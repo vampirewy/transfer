@@ -13,7 +13,7 @@
                 style="width: 139px"
               >
                 <el-option label="男" :value="1"></el-option>
-                <el-option label="女" :value="0"></el-option>
+                <el-option label="女" :value="2"></el-option>
               </el-select>
             </div>
             <div class="searchInputFormItem" style="width:108px">
@@ -49,6 +49,9 @@
       <el-table-column align="center" prop="age" label="年龄">
       </el-table-column>
       <el-table-column align="center" prop="gender" label="性别">
+        <template slot-scope="scope">
+          {{scope.row.gender === 1 ? '男' : (scope.row.gender === 2 ? '女' : '')}}
+        </template>
       </el-table-column>
     </el-table>
     <!-- <el-pagination

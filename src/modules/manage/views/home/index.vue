@@ -138,7 +138,7 @@
               <span>暂无数据</span>
             </div>
             <div class="chart-wrapper" v-else>
-              <div class="pieDiv" style="margin:0 3% 0 5%;">
+              <div class="pieDiv" style="margin:0 3% 0 9%;">
                 <pie-chart :xList="intervenePlanPieXList"
                 :yList="intervenePlanPieYList"
                 :centerText="checkAfterFeeTotal"/>
@@ -198,7 +198,7 @@
         <template>
           <div slot="empty">
             <p>
-              <img src="@/assets/images/noDataLine.png"/>
+              <img style="width:200px" src="@/assets/images/noDataLine.png"/>
             </p>
           </div>
         </template>
@@ -225,7 +225,7 @@
         <template>
           <div slot="empty">
             <p>
-              <img style="300px" src="@/assets/images/noDataLine.png"/>
+              <img style="width:200px" src="@/assets/images/noDataLine.png"/>
             </p>
           </div>
         </template>

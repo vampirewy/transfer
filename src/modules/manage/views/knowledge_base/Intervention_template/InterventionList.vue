@@ -1,54 +1,6 @@
 <template>
   <div class="userManage">
     <div>
-    <!-- <query-page @reset="reset" @search="search"> -->
-      <!-- <template slot="left">
-        <search>
-          <div class="searchInputFormItem">
-            <el-input placeholder="姓名/手机号/企业单位" v-model="formData.keywords">
-            </el-input>
-            <span class="searchBtnImgSpan" @click="search">
-                <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
-            </span>
-          </div>
-        </search>
-        <query-filter>
-          <el-select
-                  v-model="formData.gender"
-                  placeholder="请选择性别"
-                  style="width: 180px"
-          >
-            <el-option label="男" value="1" key="1"></el-option>
-            <el-option label="女" value="2" key="2"></el-option>
-          </el-select>
-          <el-select
-                  v-model="formData.gridId"
-                  placeholder="人员类别"
-                  style="width: 180px"
-          >
-            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
-                       :key="index"></el-option>
-          </el-select>
-          <div class="formSearchTitle setTimeText filter-item-title">建档时间</div>
-          <el-date-picker
-                  v-model="formData.startTime"
-                  type="date"
-                  :max-date="formData.endTime"
-                  placeholder="选择开始日期"
-                  style="width: 180px"
-          >
-          </el-date-picker>
-          <el-date-picker
-                  v-model="formData.endTime"
-                  type="date"
-                  :min-date="formData.startTime"
-                  placeholder="选择结束日期"
-                  style="width: 180px"
-          >
-          </el-date-picker>
-        </query-filter>
-      </template> -->
-      <!-- <template slot="right"> -->
         </div>
         <div class="divTop">
           <div class="divTitle">
@@ -87,28 +39,6 @@
             <el-option label="女" value="2" key="2"></el-option>
           </el-select>
           </div>
-          <!-- <div>
-            <span>人员类别：</span>
-            <el-select
-                  v-model="formData.gridId"
-                  placeholder="请选择"
-                  style="width: 140px"
-          >
-            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
-                       :key="index"></el-option>
-          </el-select>
-          </div> -->
-            <!-- <div>
-            <span>管理医生：</span>
-            <el-select
-                  v-model="formData.doctorId"
-                  placeholder="请选择"
-                  style="width: 140px"
-          >
-            <el-option :label="item.realName" :value="item.id" v-for="(item, index) in doctorList"
-                       :key="index"></el-option>
-          </el-select>
-          </div> -->
             </div>
             <div class="searchRight">
             <div class="buttones">
@@ -133,12 +63,13 @@
                     size="small"
                     style="margin: 16px 0"
                     @click="InterventionAdd()"
+                    v-if="getAccess('interventionList_add')"
             ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
             <el-button
                     size="small"
                     class="btn-new btnDel"
                     @click="handleSomeRemove"
-                    v-if="getAccess('customer_pool_batch_delete')"
+                    v-if="getAccess('interventionList_del')"
             ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
             <!-- <el-button
                     @click="assign({})"
@@ -213,7 +144,7 @@
                         type="text"
                         size="small"
                         @click="editplan(scope.row)"
-                        v-if="getAccess('customer_pool_edit')"
+                        v-if="getAccess('interventionList_plan')"
                 >计划</el-button>
                 <el-button type="text"
                         size="small"
@@ -223,6 +154,7 @@
                         type="text"
                         size="small"
                         @click="edits(scope.row)"
+                        v-if="getAccess('interventionList_edit')"
                 >编辑</el-button
                 >
                 <!-- <el-button

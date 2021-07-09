@@ -1,45 +1,5 @@
 <template>
   <div>
-  <!--<query-page @reset="reset" @search="search">-->
-    <!--<template v-slot:left>
-      <search>
-        <div class="searchInputFormItem">
-          <el-input placeholder="姓名/手机号搜索"
-          v-model="formData.keyWord">
-            &lt;!&ndash; <el-button slot="append" icon="el-icon-search"
-            @click="onSearch"></el-button>&ndash;&gt;
-          </el-input>
-          <span class="searchBtnImgSpan"  @click="search(1)">
-            <img class="searchBtnImg" src="@/assets/images/common/search.png"/>
-          </span>
-        </div>
-      </search>
-      <query-filter>
-        <el-select placeholder="问卷类型" v-model="formData.questionType">
-          <el-option v-for="item in types" :label="item.name" :value="item.paramValue"
-                     :key="item.paramValue"></el-option>
-        </el-select>
-        <el-date-picker
-                v-model="formData.startTime"
-                type="date"
-                value-format="yyyy-MM-dd"
-                :picker-options="pickerStartTime"
-                placeholder="选择开始日期"
-                style="width: 180px"
-        >
-        </el-date-picker>
-        <el-date-picker
-                v-model="formData.endTime"
-                type="date"
-                value-format="yyyy-MM-dd"
-                :picker-options="pickerEndTime"
-                placeholder="选择结束日期"
-                style="width: 180px"
-        >
-        </el-date-picker>
-      </query-filter>
-    </template>-->
-    <!--<template v-slot:right>-->
   <div class="divTop">
     <div class="divTitle">
       <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
@@ -54,18 +14,6 @@
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
               </span>
         </div>
-        <!-- <div>
-          <span>显示列表：</span>
-          <el-select
-                  v-model="form.isAssess"
-                  placeholder="请选择"
-                  style="width: 140px"
-                  clearable
-          >
-            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
-                       :key="index"></el-option>
-          </el-select>
-        </div> -->
       </div>
       <div class="searchRight">
         <div class="buttones">
@@ -82,47 +30,6 @@
       </div>
     </div>
   </div>
-    <!-- <div v-if="!isTrue" class="searchCondition" style="width:80%;">
-      <div class="searchLeft" style="padding-left:5px;">
-        <div>
-          <span>问卷来源：</span>
-          <el-select
-                  v-model="formData.source"
-                  placeholder="请选择"
-                  style="width: 140px"
-                  clearable
-          >
-            <el-option :label="item.name" :value="item.paramValue"
-                       v-for="(item, index) in questionFromList" :key="index"></el-option>
-          </el-select>
-        </div>
-        <div>
-          <span>填写日期：</span>
-          <el-date-picker
-                  v-model="formData.startTime"
-                  type="date"
-                  value-format="yyyy-MM-dd"
-                  :max-date="formData.endTime"
-                  placeholder="选择开始日期"
-                  style="width: 140px"
-                  clearable
-          >
-          </el-date-picker>
-          <span class="timing">-</span>
-          <el-date-picker
-                  v-model="formData.endTime"
-                  type="date"
-                  value-format="yyyy-MM-dd"
-                  :min-date="formData.startTime"
-                  placeholder="选择结束日期"
-                  style="width: 140px"
-                  clearable
-          >
-          </el-date-picker>
-        </div>
-      </div>
-    </div> -->
-    <!-- <div class="topbottomborder"></div> -->
     <div class="divRightTitleDiv" style="margin-top:20px">
       <!-- <div class="divRightTitle"><span>|</span>客户池</div> -->
       <div>
@@ -150,21 +57,6 @@
       </div>
     </div>
       <div class="user-follow">
-        <!--<div class="tableTopDoDiv">
-          <div class="table-operate-buttons">
-            <el-dropdown @command="handleAddCheck">
-              <operate-button
-                      type="add"
-                      v-if="getAccess('life_style_questionnaire_add')
-              "></operate-button>
-              <el-dropdown-menu slot="dropdown" class="qusDrop">
-                <el-dropdown-item command="1">生活方式问卷</el-dropdown-item>
-                <el-dropdown-item command="2">中医问卷</el-dropdown-item>
-                <el-dropdown-item command="3">心理问卷</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </div>
-        </div>-->
       <el-table style="width: 100%" ref="table" :data="dataSource" align="center"
                 class="has-expand-table"
                 @selection-change="handleSelectionChange"
@@ -266,14 +158,15 @@
             <el-button
               type="text"
               size="small"
-              v-if="getAccess('life_style_questionnaire_edit') && scope.row.questionType !== 4"
+              v-if="getAccess('matchingList_ignore')"
             >忽略</el-button>
+            <!-- && scope.row.questionType !== 4 -->
             <span style="color:#DDE0E6">|</span>
             <el-button
               type="text"
               size="small"
               @click="edits(scope.row)"
-              v-if="getAccess('life_style_questionnaire_view')
+              v-if="getAccess('matchingList_match')
               "
             >匹配</el-button>
           </template>
@@ -510,7 +403,7 @@ export default {
       this.$router.push({
         name: 'ExceptionAddEdit',
         params: {
-          id: row.id,
+          name: row.abnormalName,
         },
       });
     },

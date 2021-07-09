@@ -82,6 +82,7 @@
               size="small"
               style="margin: 16px 0"
               @click="add"
+              v-if="getAccess('diet_menu_template_add')"
               ><img src="@/assets/images/common/addBtn.png" />新增</el-button
             >
             <el-button
@@ -89,6 +90,7 @@
               size="small"
               style="margin: 16px 0"
               @click="deletes"
+              v-if="getAccess('diet_menu_template_del')"
               ><img src="@/assets/images/common/delBtn.png" />删除</el-button
             >
             <el-button
@@ -96,6 +98,7 @@
               size="small"
               style="margin: 16px 0"
               @click="menuTemOp"
+              v-if="getAccess('diet_menu_template_type')"
               ><img
                 src="@/assets/images/common/editBtn.png"
               />模板分类</el-button
@@ -124,10 +127,10 @@
           <el-table-column label="操作" width="160px">
             <template slot-scope="scope">
               <el-button type="text" @click="edit(scope.row.id)" size="small"
-                >编辑</el-button
+              v-if="getAccess('diet_menu_template_edit')">编辑</el-button
               >
               <el-button type="text" size="small" @click="config(scope.row.id)"
-                >配置</el-button
+              v-if="getAccess('diet_menu_template_audit')">配置</el-button
               >
             </template>
           </el-table-column>

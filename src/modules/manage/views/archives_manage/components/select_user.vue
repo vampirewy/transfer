@@ -1,7 +1,7 @@
 <template>
   <div class="medical-history-select-user">
     <div class="query">
-      <el-input v-model="keyword" placeholder="输入条件搜索"></el-input>
+      <el-input v-model="keyword" placeholder="输入姓名搜索"></el-input>
       <el-button class="search-button" @click="search">
         <i class="el-icon-search"></i>
       </el-button>
