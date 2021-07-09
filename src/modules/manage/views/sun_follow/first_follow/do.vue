@@ -362,15 +362,26 @@ export default {
       this.$router.go(-1);
     },
     submit() {
+      console.log(dayjs(new Date()).format('YYYY-MM-DD'));
       const sendData = Object.assign({}, this.form);
       sendData.contentSaveRequests = [];
+      let valid = true;
       this.contentSaveRequestsList.forEach((val) => {
+        if (val.nextTrackingDate === dayjs(new Date()).format('YYYY-MM-DD') && val.state === '') {
+          this.$message.warning('请选择今日跟踪计划的跟踪结果');
+          valid = false;
+          return;
+        }
         sendData.contentSaveRequests.push({
           positiveTrackingId: val.id,
           isCloseCase: val.isCloseCase,
           state: val.state || 1,
         });
       });
+      if (!valid) { // 如果验证未通过
+        return;
+      }
+      console.log(this.contentSaveRequestsList);
       sendData.trackingDate = `${sendData.trackingDate.split(' ')[0]} 00:00:00`;
       sendData.nextTrackingDate = `${sendData.nextTrackingDate.split(' ')[0]} 00:00:00`;
       if (this.allIsCloseCaseShow === false) { // 如果都结案
