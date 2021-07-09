@@ -144,13 +144,13 @@ export default {
         },
       });
     },
-    handleDetail() {
+    handleDetail(data) {
       this.$router.push({
         path: '/diet_manage/',
         query: {
           type: 'info',
-          clientId: this.$route.params.id,
-          name: this.name,
+          clientId: data.id,
+          name: data.createdByUserName,
         },
       });
     },
