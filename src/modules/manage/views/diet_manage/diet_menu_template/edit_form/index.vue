@@ -294,7 +294,6 @@ export default {
   },
   methods: {
     isShowCookingbtn(its) {
-      console.log(its);
       this.caiId = its.caiId;
       this.isShowCooking = true;
     },
@@ -330,7 +329,6 @@ export default {
     },
     // 数据处理
     DataProcessing(lists, index) {
-      console.log(lists, 'asdasdsad');
       const arr = [];
       for (let i = 0; i < lists.length; i++) {
         const json = {};
@@ -363,7 +361,6 @@ export default {
         arr.push(json);
       }
       this.arrList = arr;
-      console.log(this.arrList, 'qweqwewe');
       this.makeIndex(index);
     },
     makeIndex(index) {

@@ -434,9 +434,10 @@ export default {
         component: 'editDetail',
         data: {
           urrentValue: id,
-          // confirmfunc: async (value) => {
-          //   console.log(value);
-          // },
+          confirmfunc: async (value) => {
+            console.log(value);
+            this.getList();
+          },
         },
         render: h => h(editDetail),
       });

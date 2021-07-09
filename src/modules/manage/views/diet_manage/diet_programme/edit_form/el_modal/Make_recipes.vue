@@ -175,7 +175,7 @@ export default {
         { title: '能量', title2: '2205.23 kcal', title3: '2203.23 kcal' },
       ],
       mealTypeText: ['早餐', '午餐', '晚餐', '加餐'],
-      dietCollapseActiveNames: '1',
+      dietCollapseActiveNames: '1, 2',
       activeCaiDtoIndex: '',
       editableTabsValue: '1',
       editableTabs: [],

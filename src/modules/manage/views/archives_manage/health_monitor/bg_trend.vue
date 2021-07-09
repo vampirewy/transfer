@@ -61,6 +61,17 @@
         :label="item.label"
         :prop="item.prop"
         align="center">
+        <template slot-scope="scope">
+          <span v-if="item.prop === 'sugar'"
+          :class="table.list[scope.$index].sugarTypeHighOrLow === 3 ? 'OrLowClassA' :
+          (table.list[scope.$index].sugarTypeHighOrLow === 1 ? 'OrLowClassB' :
+          'OrLowClassC')">
+            {{scope.row[item.prop]}}
+          </span>
+          <span v-else>
+            {{scope.row[item.prop]}}
+          </span>
+        </template>
       </el-table-column>
     </el-table>
     <div style="text-align: right">
@@ -177,6 +188,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .OrLowClassA{
+    color: #333333;
+  }
+  .OrLowClassB{
+    color: red;
+  }
+  .OrLowClassC{
+    color: blue;
+  }
 .health-monitor-trend{
   position: relative;
   margin-top: 20px;

@@ -47,7 +47,8 @@
           @change="handleDishSelect"
         ></el-dish-select>
       </el-form-item>
-      <div>
+      <div style="position: relative;">
+        <span class="notnull">*</span>
         <el-form-item label="餐次：">
           <el-checkbox-group
             :disabled="mode === 'look'"
@@ -286,5 +287,11 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+  .notnull{
+    position: absolute;
+    margin-left: 36px;
+    margin-top: 8px;
+    color: #f94242;
+  }
 @import './index.scss';
 </style>

@@ -165,23 +165,29 @@
                     </div>
                   </span>
                   <span v-else-if="item.label === '判定结果'">
-                    <div>
+                    <div v-if="dataSource.list[scope.$index].tizhiCode === '1'">
                       <el-select
                               v-model="scope.row[item.prop]"
                               placeholder="请选择"
                               style="width: 140px"
-                              @visible-change="changeValue1(scope.$index,$event)"
                       >
-                        <el-option
-                          v-for="item in constitutionList"
-                          :key="item.id"
-                          :label="item.name"
-                          :value="item.id"
-                        ></el-option>
-                        <!-- <el-option label="是" value="1" key="1"></el-option>
+                      <!-- @visible-change="changeValue1(scope.$index,$event)" -->
+                        <el-option label="是" value="1" key="1"></el-option>
                         <el-option label="基本是" value="2" key="2"></el-option>
+                        <!-- <el-option label="倾向是" value="3" key="3"></el-option> -->
+                        <el-option label="否" value="4" key="4"></el-option>
+                      </el-select>
+                    </div>
+                    <div v-else>
+                      <el-select
+                              v-model="scope.row[item.prop]"
+                              placeholder="请选择"
+                              style="width: 140px"
+                      >
+                        <el-option label="是" value="1" key="1"></el-option>
+                        <!-- <el-option label="基本是" value="2" key="2"></el-option> -->
                         <el-option label="倾向是" value="3" key="3"></el-option>
-                        <el-option label="否" value="4" key="4"></el-option> -->
+                        <el-option label="否" value="4" key="4"></el-option>
                       </el-select>
                     </div>
                   </span>
@@ -319,7 +325,7 @@ export default {
   },
   data() {
     return {
-      constitutionList: [],
+      constitutionLists: [],
       detectionpopoverStatus: false,
       total: 0,
       dataSource: {
@@ -392,7 +398,7 @@ export default {
     }
     if (this.TabTitle === 'Constitution') {
       this.labelName = '体质名称';
-      this.ConstitutionList();
+      this.constitutionList();
     }
     this.getLibraryList();
     this.total = this.dataSource.list.length;
@@ -421,36 +427,43 @@ export default {
       }
       this.$set(this.dataSource.list[index], `${new Date()}`, '');
     },
-    changeValue1(index, event) {
-      if (event) {
-        const jsonArr = [
-          {
-            id: 1,
-            name: '是',
-          },
-          {
-            id: 2,
-            name: '基本是',
-          },
-          {
-            id: 3,
-            name: '倾向是',
-          },
-          {
-            id: 4,
-            name: '否',
-          },
-        ];
-        if (this.dataSource.list[index].tizhiCode !== 1) {
-          jsonArr.splice(1, 1);
-        } else {
-          jsonArr.splice(2, 1);
-        }
-        console.log(jsonArr);
-        this.constitutionList = jsonArr;
-      }
-    },
-    ConstitutionList() {
+    // changeValue1(index, event) {
+    //   if (event) {
+    //     if (this.dataSource.list[index].tizhiCode !== '1') {
+    //       this.constitutionLists = [
+    //         {
+    //           id: '1',
+    //           name: '是',
+    //         },
+    //         {
+    //           id: '3',
+    //           name: '倾向是',
+    //         },
+    //         {
+    //           id: '4',
+    //           name: '否',
+    //         },
+    //       ];
+    //     } else {
+    //       this.constitutionLists = [
+    //         {
+    //           id: '1',
+    //           name: '是',
+    //         },
+    //         {
+    //           id: '2',
+    //           name: '基本是',
+    //         },
+    //         {
+    //           id: '4',
+    //           name: '否',
+    //         },
+    //       ];
+    //     }
+    //     console.log(this.dataSource.list, '平和');
+    //   }
+    // },
+    constitutionList() {
       this.$api.reportInterface
         .getTcmList()
         .then(({ data }) => {
@@ -836,7 +849,7 @@ export default {
 }
 .ConstitutionAdd{
   background: #31c529;
-  padding: 10px 15px;
-  border-radius: 10px;
+  padding: 10px 20px;
+  border-radius: 5px;
 }
 </style>

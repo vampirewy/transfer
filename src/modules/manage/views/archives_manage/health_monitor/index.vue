@@ -156,32 +156,18 @@
                 style="width: 60px"
                 v-if="forms.sportTimeSelectType > 3" />
             </div>
-            <div v-if="tabIndex === 'other'">
-              <span>检测结果：</span>
-              <el-select
-                v-model="forms.resultSelectType"
-                placeholder="请选择"
-                style="width: 100px"
+            <div class="searchInputFormItem"  v-if="tabIndex === 'other'">
+              <el-input
+                placeholder="检测项目"
+                v-model="forms.healthDataItemName"
               >
-              <el-option
-                  v-for="item in selectTypeList"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id"
-              ></el-option>
-              </el-select>
-            </div>
-            <div  v-if="tabIndex === 'other'">
-              <input class="inputBtn"
-                placeholder="值"
-                v-model="forms.minResult"
-                style="width: 60px"
-                v-if="forms.resultSelectType < 4 || forms.resultSelectType === 5" />
-              <input class="inputBtn"
-                placeholder="值"
-                v-model="forms.maxResult"
-                style="width: 60px"
-                v-if="forms.resultSelectType > 3" />
+              </el-input>
+              <span class="searchBtnImgSpans" @click="search">
+                <img
+                  class="searchBtnImg"
+                  src="@/assets/images/common/topsearch.png"
+                />
+              </span>
             </div>
           </div>
           <div class="searchRight">
@@ -442,18 +428,32 @@
               ></el-option>
               </el-select>
             </div> -->
-            <div class="searchInputFormItem"  v-if="tabIndex === 'other'">
-              <el-input
-                placeholder="检测项目"
-                v-model="forms.healthDataItemName"
+            <div v-if="tabIndex === 'other'">
+              <span>检测结果：</span>
+              <el-select
+                v-model="forms.resultSelectType"
+                placeholder="请选择"
+                style="width: 100px"
               >
-              </el-input>
-              <span class="searchBtnImgSpans" @click="search">
-                <img
-                  class="searchBtnImg"
-                  src="@/assets/images/common/topsearch.png"
-                />
-              </span>
+              <el-option
+                  v-for="item in selectTypeList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+              ></el-option>
+              </el-select>
+            </div>
+            <div  v-if="tabIndex === 'other'">
+              <input class="inputBtn"
+                placeholder="值"
+                v-model="forms.minResult"
+                style="width: 60px"
+                v-if="forms.resultSelectType < 4 || forms.resultSelectType === 5" />
+              <input class="inputBtn"
+                placeholder="值"
+                v-model="forms.maxResult"
+                style="width: 60px"
+                v-if="forms.resultSelectType > 3" />
             </div>
           <div>
             <span>检测日期：</span>

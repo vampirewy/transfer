@@ -161,7 +161,7 @@
             </el-form-item>
             </div> -->
             <!-- prop="clientNameCheck" -->
-          <el-form-item label="检查项目">
+          <el-form-item label="检查项目" class="boxs">
             <el-popover
               ref="userPopoverCheck"
               placement="bottom-start"
@@ -393,6 +393,7 @@ export default {
     },
     deleteField(index) {
       this.drugsList.splice(index, 1);
+      this.total = this.drugsList.length;
     },
     saveInspectRecord(id) {
       this.$api.healthMonitorInterface.SinglegetDetail(id).then(({ data }) => {
@@ -434,6 +435,7 @@ export default {
             this.drugsList.push(valQusOne);
           }
         });
+        this.total = this.drugsList.length;
         // for (let i = 0; i < this.StatusCheck.length; i++) {
         //   this.drugsList.push(this.StatusCheck[i]);
         // }
@@ -588,6 +590,7 @@ export default {
     .el-input__inner {
       color: #333 !important;
       background-color: #ffffff !important;
+      border: 1px solid #e0e0e0 !important;
       // background: #F4F4F6 !important;
     }
   }

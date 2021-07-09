@@ -55,6 +55,26 @@
         :label="item.label"
         :prop="item.prop"
         align="center">
+        <template slot-scope="scope">
+          <span v-if="item.prop === 'sbp'"
+          :class="table.list[scope.$index].sbpHighOrLow === 3 ? 'OrLowClassA' :
+          (table.list[scope.$index].sbpHighOrLow === 1 ? 'OrLowClassB' : 'OrLowClassC')">
+            {{scope.row[item.prop]}}
+          </span>
+          <span v-else-if="item.prop === 'dbp'"
+          :class="table.list[scope.$index].dbpHighOrLow === 3 ? 'OrLowClassA' :
+          (table.list[scope.$index].dbpHighOrLow === 1 ? 'OrLowClassB' : 'OrLowClassC')">
+            {{scope.row[item.prop]}}
+          </span>
+          <span v-else-if="item.prop === 'hd'"
+          :class="table.list[scope.$index].hdHighOrLow === 3 ? 'OrLowClassA' :
+          (table.list[scope.$index].hdHighOrLow === 1 ? 'OrLowClassB' : 'OrLowClassC')">
+            {{scope.row[item.prop]}}
+          </span>
+          <span v-else>
+            {{scope.row[item.prop]}}
+          </span>
+        </template>
       </el-table-column>
     </el-table>
     <div style="text-align: right">
@@ -170,6 +190,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+   .OrLowClassA{
+    color: #333333;
+  }
+  .OrLowClassB{
+    color: red;
+  }
+  .OrLowClassC{
+    color: blue;
+  }
 // .title{
 
 // }

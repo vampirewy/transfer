@@ -51,13 +51,22 @@
       <el-table-column align="center" prop="gender" label="性别">
       </el-table-column>
     </el-table>
-    <el-pagination
+    <!-- <el-pagination
       background
       layout="prev, pager, next, jumper, total"
       :total="total"
       :current-page="currentPage"
       :page-size="pageSize"
       @current-change="handleCurrentChange"
+    ></el-pagination> -->
+    <el-pagination
+      background
+      layout="prev,pager,next,jumper,total"
+      :total="total"
+      :page-size="pageSize"
+      :current-page="currentPage"
+      @current-change="handleCurrentChange"
+      @size-change="handleSizeChange"
     ></el-pagination>
     <div class="form-buttons">
       <el-button size="small" class="cancelBtn" @click="actives = false">
@@ -132,7 +141,15 @@ export default {
       this.currentPage = 1;
       this.queryList();
     },
-    handleCurrentChange() {},
+    handleCurrentChange(page) {
+      this.currentPage = page;
+      this.queryList();
+    },
+    handleSizeChange(size) {
+      this.pageSize = size;
+      this.currentPage = 1;
+      this.queryList();
+    },
     addBtn() {
       this.$emit('change', this.multipleSelection);
       console.log(this.multipleSelection);
@@ -148,7 +165,7 @@ export default {
   padding: 10px 19px;
   box-shadow: 0px 0px 30px 0px rgba(151, 166, 189, 0.3);
   border-radius: 5px;
-  height: 450px;
+  height: 370px;
   overflow-y: scroll;
   width: 95%;
 }

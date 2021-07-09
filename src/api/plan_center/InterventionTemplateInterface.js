@@ -57,7 +57,10 @@ class InterventionTemplateInterface extends BaseModule {
   saveInterveneTemplatePlan(data = {}) {
     return this.post('/intervene_template_plan/save_intervene_template_plan', data);
   }
-
+  // 新增别名
+  organAbnormalAliasSave(data = {}) {
+    return this.post('/organ_abnormal_alias/save', data);
+  }
   // 删除干预模板计划设置
   removeInterveneTemplatePlan(data = {}) {
     return this.post('/intervene_template_plan/remove_intervene_template_plan', data);

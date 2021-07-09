@@ -110,18 +110,21 @@
             </div>
             <div class="searchCondition" v-show="!isTrue">
               <div class="searchLeft">
-                <!-- <div>
-                  <span class="label">不良习惯</span>
+                <div>
+                  <span>创建人：</span>
                   <el-select
-                    v-model="status"
-                    placeholder="选择"
-                    clearable
-                    style="width: 154px; margin-right: 15px"
+                    v-model="formData.createdBy"
+                    placeholder="请选择"
+                    style="width: 140px"
                   >
-                    <el-option label="男" :value="1"></el-option>
-                    <el-option label="女" :value="0"></el-option>
+                    <el-option
+                      :label="item.realName"
+                      :value="item.id"
+                      v-for="(item, index) in StaffList"
+                      :key="index"
+                    ></el-option>
                   </el-select>
-                </div> -->
+                </div>
                 <div>
                 <span>创建日期：</span>
                 <el-date-picker
@@ -257,6 +260,7 @@ export default {
       maxCreateDate: '',
       gridList: [],
       multipleSelection: [], // 当前页选中的数据
+      StaffList: [], // 员工列表
       formData: {
         pageNo: 1,
         pageSize: 15,
@@ -266,6 +270,7 @@ export default {
         day: '',
         startCreatedTime: '',
         endCreatedTime: '',
+        createdBy: '',
       },
       id: '',
       Type: '', // 是否是 查看 编辑 新增
@@ -310,12 +315,26 @@ export default {
         vm.viewIndex = 1;
       }
       vm.loadData();
+      vm.queryList();
     });
   },
   created() {
     this.getGridList();
   },
   methods: {
+    queryList() {
+      // 员工列表
+      this.$api.systemManageInterface
+        .userList({
+          pageNo: 1,
+          pageSize: 1000,
+        })
+        .then((res) => {
+          const { data } = res;
+          const result = data.data || {};
+          this.StaffList = result.data || [];
+        });
+    },
     loadData() {
       this.$api.dietRawMaterial
         .clientDietPlanPageList({
@@ -365,6 +384,7 @@ export default {
         day: '',
         startCreatedTime: '',
         endCreatedTime: '',
+        createdBy: '',
       };
       this.loadData();
     },
