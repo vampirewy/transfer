@@ -23,10 +23,10 @@
         <span v-if="data.riskType === 7">家族史</span>
       </div>
       <div><span>危险因素：</span><span>{{data.riskFactor}}</span></div>
-      <div><span>排序编号：</span><span>{{data.isSystem}}</span></div>
+      <div><span>排序编号：</span><span>{{data.sortIndex}}</span></div>
       <!-- <div><span>来源：</span><span>{{data.riskFactor}}</span></div>
       <div><span>标题：</span><span>{{data.riskTypeName}}</span></div>
-      <div><span>选项：</span><span>{{data.isSystem}}</span></div> -->
+      <div><span>选项：</span><span>{{data.sortIndex}}</span></div> -->
     </div>
     <!-- <div class="lookPressure">
       <div><span>就医科室：</span><span>{{data.department}}</span></div>
@@ -36,7 +36,7 @@
     </div> -->
     <!-- <div class="lookPressure">
       <div><span>危险因素：</span><span>{{data.riskFactor}}</span></div>
-      <div><span>排序编号：</span><span>{{data.isSystem}}</span></div>
+      <div><span>排序编号：</span><span>{{data.sortIndex}}</span></div>
       <div></div>
       <div></div>
     </div> -->

@@ -464,6 +464,7 @@ export default {
       });
     },
     clear() {
+      this.infoSource.useMethod = '';
       const field = [
         'drugsName',
         'mainIndication',

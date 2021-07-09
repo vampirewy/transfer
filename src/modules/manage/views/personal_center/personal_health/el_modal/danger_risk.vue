@@ -10,7 +10,7 @@
           style="margin-left:20px;"
           >问卷时间：
                         <el-select
-                        @change="getlist"
+                          @change="getlist"
                           v-model="questionId"
                           placeholder="请选择"
                           style="width: 60%"
@@ -24,7 +24,7 @@
                         </el-select>
         </div>
         </div>
-        <dangerous :key="nowtime" :clientId="questionId"></dangerous>
+        <dangerous :key="nowtime" :clientId="questionId" ref="dangerous"></dangerous>
       </div>
     </div>
   </div>
@@ -53,6 +53,7 @@ export default {
           if (data) {
             this.timelList = data.data;
             this.questionId = this.timelList[0].id;
+            this.$refs.dangerous.getcliid(this.timelList[0].id);
           }
         });
     },

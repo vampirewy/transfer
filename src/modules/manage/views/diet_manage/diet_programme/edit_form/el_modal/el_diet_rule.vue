@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="添加膳食规则"
+    title="添加膳食原则"
     class="dialog-detail el_diet_rule"
     :modal-append-to-body="false"
     width="850px"
@@ -8,7 +8,7 @@
     :visible.sync="visibles"
     @close="visibles = false"
   >
-    <p class="item-title">选择规则</p>
+    <p class="item-title">选择原则</p>
     <div class="divTop diet_rule">
       <div class="divTitle">
         <div class="searchCondition">
@@ -44,7 +44,7 @@
       </el-table-column>
       <!-- <el-table-column align="center" type="selection" width="55">
       </el-table-column> -->
-      <el-table-column align="center" prop="name" label="规则名称">
+      <el-table-column align="center" prop="name" label="原则名称">
       </el-table-column>
     </el-table>
     <el-pagination
@@ -63,7 +63,7 @@
       </el-radio-group>
       <el-button type="primary" class="add-btn" @click="DetermineAdd">确定添加</el-button>
     </div>
-    <p class="item-title">已添加规则</p>
+    <p class="item-title">已添加原则</p>
     <div class="row">
       <el-input
         type="textarea"
@@ -83,7 +83,7 @@
         >取消</el-button
       >
       <el-button type="primary" size="small" @click="submit" class="sureBtn"
-        >保存规则</el-button
+        >保存原则</el-button
       >
     </div>
   </el-dialog>
@@ -119,6 +119,7 @@ export default {
       ruleList: '',
       ingrenient: '',
       keywords: '',
+      rules: '',
     };
   },
   computed: {
@@ -139,8 +140,12 @@ export default {
     DetermineAdd() {
       if (this.multipleSelection.length !== 0) {
         if (this.type === 1) {
-          this.$emit('change', this.multipleSelection);
-          this.visibles = false;
+          // this.$emit('change', this.multipleSelection);
+          // this.visibles = false;
+          this.multipleSelection.forEach((val) => {
+            this.rules += val.content;
+          });
+          this.ingrenient = this.ruleList += this.rules;
         } else {
           this.ruleList = '';
           // console.log(this.multipleSelection, '123123');
@@ -182,7 +187,8 @@ export default {
       }
     },
     submit() {
-      this.$emit('change', this.multipleSelection);
+      // this.$emit('change', this.multipleSelection);
+      this.$emit('change', this.ingrenient);
       this.multipleSelection = [];
       this.visibles = false;
     },

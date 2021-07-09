@@ -7,7 +7,7 @@
           <div class="divTop">
             <div class="divTitle">
               <span><img src="@/assets/images/common/titleLeft.png" alt="" /></span>
-              就医记录
+              就医记录1
             </div>
             <div class="searchCondition">
               <div class="searchLeft">

@@ -62,7 +62,7 @@
                 prop="lifeQuestionDate"
                 min-width="120"
                 align="center">
-                 <template slot-scope="scope">
+                 <!-- <template slot-scope="scope">
                   <el-select
                     v-model="scope.row.lifeQuestionDate"
                     placeholder="请选择"
@@ -73,7 +73,7 @@
                       :key="scope.row.lifeQuestionDate">
                     </el-option>
                   </el-select>
-                </template>
+                </template> -->
                 <template slot-scope="scope">
                   <el-popover
                           v-if="scope.row.lifeQuestionDate"
@@ -87,6 +87,7 @@
                     <questions-open
                       v-if="popoverStatus && popoverRefIndex === scope.row.reportId"
                       :clientId="scope.row.clientId"
+                      :id="scope.row.lifeQuestionId"
                       @change="handlePopoperClose"></questions-open>
                     <el-input
                             class="select-user-trigger disabled"
@@ -116,7 +117,7 @@
                 </template>
               </el-table-column>
               <el-table-column
-                label="审核状态"
+                label="生成状态"
                 prop="assessReportStateTxt"
                 align="center"
                 show-overflow-tooltip>
@@ -181,6 +182,10 @@ export default {
     this.queryPageList();
   },
   methods: {
+    handlePageChange(page) {
+      this.table.pageNo = page;
+      this.queryPageList();
+    },
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
@@ -202,6 +207,7 @@ export default {
         ...sendData,
         pageNo: this.table.pageNo,
         pageSize: this.table.pageSize,
+        clientId: this.$route.params.id,
       }).then(({ data }) => {
         this.table.total = data.data.total;
         this.table.list = data.data.data;
@@ -247,7 +253,7 @@ export default {
       const Index = `popover-${this.popoverRefIndex}`;
       this.$refs[Index].doClose();
       this.popoverStatus = false;
-      this.popoverRow.lifeQuestionDate = data.createTime ? data.createTime.split(' ')[0] : '';
+      this.popoverRow.lifeQuestionDate = data.questionDate ? data.questionDate.split(' ')[0] : '';
       this.popoverRow.lifeQuestionId = data.id;
     },
     // 查看pdf

@@ -20,6 +20,16 @@
       ref="form"
       class="form-content"
     >
+    <div style="display: flex;margin-bottom: 20px;">
+      <el-input placeholder="异常名称"
+      v-model="AddabnormalName"
+      style="width:200px"
+      >
+      </el-input>
+      <div class="inspectionAdd">
+        <div @click="inspectionAdd()">添加</div>
+      </div>
+    </div>
     <el-table :data="tableData"
     class="openTable"
     @selection-change="handleSelectionChange">
@@ -49,6 +59,7 @@ export default {
       interfereform: '', // 干预形式
       results: '', // 内容
       Prompt: '', // 提示
+      AddabnormalName: '',
       // resultOptions: [
       //   { value: 1, label: '未指定' },
       //   { value: 2, label: '治疗中' },
@@ -68,6 +79,22 @@ export default {
     this.getDetail();
   },
   methods: {
+    inspectionAdd() {
+      if (this.AddabnormalName === '') {
+        return this.$message.warning('请填写异常名称');
+      }
+      this.$api.interventionTemplateInterface
+        .organAbnormalAliasSave({
+          abnormalCode: this.id,
+          abnormalName: this.AddabnormalName,
+        })
+        .then(({ data }) => {
+          if (data.success) {
+            this.$message.success('操作成功');
+            this.getDetail();
+          }
+        });
+    },
     async getDetail() {
       // const reqBody = { id: this.id };
       const res = await this.$api.unusualListInterface.listByOrganAbnomalCode(
@@ -124,6 +151,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+   .inspectionAdd{
+    width: 70px;
+    height: 40px;
+    background: #36BF2F;
+    border-radius: 5px;
+    margin-left: 20px;
+    text-align: center;
+    line-height: 40px;
+    color: #ffffff;
+    font-size: 14px;
+    cursor: pointer;
+    // margin-left: 240px;
+}
 .dialog-detail /deep/ {
   .form-title {
     display: flex;

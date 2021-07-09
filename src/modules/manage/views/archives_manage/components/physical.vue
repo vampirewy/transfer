@@ -73,6 +73,7 @@
               <el-date-picker
                 class="end-date"
                 v-model="formData.zjDate"
+                :max-date="new Date()"
                 type="date"
                 value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="请选择"

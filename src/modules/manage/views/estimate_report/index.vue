@@ -69,7 +69,7 @@
                        :key="index"></el-option>
           </el-select>
           </div>
-            <div>
+            <!-- <div>
             <span>问卷来源：</span>
             <el-select
                   v-model="form.source"
@@ -79,7 +79,7 @@
             <el-option :label="item.name" :value="item.paramValue"
                        v-for="(item, index) in questionFromList" :key="index"></el-option>
           </el-select>
-          </div>
+          </div> -->
             </div>
             <div class="searchRight">
             <div class="buttones">
@@ -374,7 +374,7 @@
                 prop="lifeQuestionDate"
                 min-width="120"
                 align="center">
-                 <template slot-scope="scope">
+                 <!-- <template slot-scope="scope">
                   <el-select
                     v-model="scope.row.lifeQuestionDate"
                     placeholder="请选择"
@@ -385,8 +385,9 @@
                       :key="scope.row.lifeQuestionDate">
                     </el-option>
                   </el-select>
-                </template>
+                </template> -->
                 <template slot-scope="scope">
+                  <!-- <span>{{scope.row}}</span> -->
                   <el-popover
                           v-if="scope.row.lifeQuestionDate"
                           :ref="`popover-${scope.row.reportId}`"
@@ -399,6 +400,7 @@
                     <questions-open
                       v-if="popoverStatus && popoverRefIndex === scope.row.reportId"
                       :clientId="scope.row.clientId"
+                      :id="scope.row.lifeQuestionId"
                       @change="handlePopoperClose"></questions-open>
                     <el-input
                             class="select-user-trigger disabled"
@@ -437,7 +439,7 @@
                 </template>
               </el-table-column>
               <el-table-column
-                label="报告状态"
+                label="生成状态"
                 prop="assessReportStateTxt"
                 align="center"
                 min-width="90"

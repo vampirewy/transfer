@@ -256,6 +256,7 @@ export default {
       await this.$api.projectList.systemIteMatch(reqBody);
       this.$message.success('操作成功');
       this.cancel();
+      this.confirmfunc.call(this, '123');
       // this.$emit('cancel');
       // this.cancel('refreash');
       // await this.$api.companyManageInterface.updateWorkUnit({

@@ -95,6 +95,7 @@ export default {
         projectName: this.keyword,
         pageNo: this.currentPage,
         pageSize: this.pageSize,
+        state: 1,
       });
       console.log(res.data);
       const { data } = res.data;

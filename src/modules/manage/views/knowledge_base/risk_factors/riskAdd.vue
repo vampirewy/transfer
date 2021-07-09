@@ -180,8 +180,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="排序编号" prop="doctorName">
-            <el-input v-model="form.isSystem" placeholder="请输入"></el-input>
+          <el-form-item label="排序编号" prop="sortIndex">
+            <el-input v-model="form.sortIndex" placeholder="请输入"></el-input>
           </el-form-item>
         </el-col>
         <!-- <el-col :span="6">
@@ -248,7 +248,7 @@ export default {
       popoverStatus: false,
       form: {
         riskFactor: '', // 危险因素
-        isSystem: '', // 排序编号
+        sortIndex: '', // 排序编号
         advice: '', // 建议
         riskType: '',
         orgCode: '',
@@ -283,7 +283,7 @@ export default {
         },
       },
       rules: {
-        clientInfoId: [{ required: true, message: '客户不能为空' }],
+        sortIndex: [{ required: true, message: '排序不能为空' }],
         medicalType: [{ required: true, message: '就医类型不能为空' }],
         hospital: [{ required: true, message: '医疗机构不能为空' }],
         inDate: [{ required: true, message: '就医时间不能为空' }],
@@ -353,7 +353,7 @@ export default {
           const params = {
             riskFactor: this.form.riskFactor,
             riskType: this.form.riskType,
-            isSystem: this.form.isSystem,
+            sortIndex: this.form.sortIndex,
             advice: this.form.advice,
             state: 1,
           };

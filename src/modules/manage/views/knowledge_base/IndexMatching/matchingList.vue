@@ -260,6 +260,12 @@
             <el-button
               type="text"
               size="small"
+              @click="addList(scope.row)"
+            >添加</el-button>
+            <span style="color:#DDE0E6">|</span>
+            <el-button
+              type="text"
+              size="small"
               v-if="getAccess('life_style_questionnaire_edit') && scope.row.questionType !== 4"
             >忽略</el-button>
             <span style="color:#DDE0E6">|</span>
@@ -497,6 +503,16 @@ export default {
       this.names = row.abnormalName;
       this.currentValue = row.id;
       this.modalVisible = true;
+    },
+    // 添加
+    addList(row) {
+      console.log(row);
+      this.$router.push({
+        name: 'ExceptionAddEdit',
+        params: {
+          id: row.id,
+        },
+      });
     },
     cancel() {
       this.modalVisible = false;

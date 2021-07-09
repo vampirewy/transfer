@@ -292,7 +292,7 @@ export default {
       resultList: [],
       rules: {
         Timevalue: [{ required: true, message: '时间不能为空' }],
-        clientName: [{ required: true, message: '客户不能为空' }],
+        clientName: [{ required: true, message: '项目不能为空' }],
         drugsName: [{ required: true, message: '药品名称不能为空' }],
         startDate: [{ required: true, message: '开始时间不能为空' }],
         endDate: [{ required: true, message: '结束时间不能为空' }],

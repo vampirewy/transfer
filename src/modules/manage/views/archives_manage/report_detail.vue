@@ -10,41 +10,61 @@
         <el-col :span="6">
           <el-form-item label="姓名" prop="clientId">
             <span>{{formData.clientName}}</span>
-            <!-- <el-input v-model="formData.clientName"></el-input> -->
-            <!-- <div class="form-item-value">{{formData.clientName}}</div> -->
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="体检编号" prop="reportNo">
+          <el-form-item label="性别" prop="reportNo">
+            <span v-if="formData.gender === 1">男</span>
+            <span v-if="formData.gender === 2">女</span>
+            <span v-if="formData.gender === 0">未知</span>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="年龄" prop="reportDate">
+            <span>{{formData.age}}</span>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="客户编号" prop="examinationOrgan">
+            <span>{{formData.clientNo}}</span>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="6">
+          <el-form-item label="检查编号" prop="clientId">
             <span>{{formData.reportNo}}</span>
-            <!-- <el-input v-model="formData.reportNo"></el-input> -->
-            <!-- <div class="form-item-value">{{formData.reportNo}}</div> -->
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="体检日期" prop="reportDate">
-            <span>{{formData.reportDate}}</span>
-            <!-- <el-input v-model="formData.reportDate"></el-input> -->
-            <!-- <div class="form-item-value">{{formData.reportDate}}</div> -->
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="体检机构" prop="examinationOrgan">
             <span>{{formData.examinationOrgan}}</span>
-            <!-- <el-input v-model="formData.examinationOrgan"></el-input> -->
-            <!-- <div class="form-item-value">{{formData.examinationOrgan}}</div> -->
           </el-form-item>
         </el-col>
-        <!-- <el-col :span="6">
-          <el-form-item label="录入模板" prop="reportTemplateId">
-            <el-input v-model="templateName"></el-input>
+        <el-col :span="6">
+          <el-form-item label="体检日期" prop="reportDate">
+            <span>{{formData.reportDate}}</span>
           </el-form-item>
-        </el-col> -->
-        <!-- <el-col :span="6">
-          <el-form-item label="体检库" prop="libraryId">
-            <div class="form-item-value">{{libraryName}}</div>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="是否总检" prop="reportNo">
+            <span v-if="formData.reportState === 0">未知</span>
+            <span v-if="formData.reportState === 1">已总检</span>
+            <span v-if="formData.reportState === 2">未总检</span>
           </el-form-item>
-        </el-col> -->
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="6">
+          <el-form-item label="参检团队" prop="clientId">
+            <span>{{formData.workUnitName}}</span>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="总检日期" prop="examinationOrgan">
+            <span>{{formData.zjDate}}</span>
+          </el-form-item>
+        </el-col>
       </el-row>
     </el-form>
     <template v-if="formData.sectionConclusionList.length > 0">

@@ -56,7 +56,7 @@
             </div> -->
           </div>
         </div>
-        <div class="diet-form_left-item">
+        <!-- <div class="diet-form_left-item">
           <p class="item-title">MNA营养评定</p>
           <div class="table">
             <div class="table-column"
@@ -64,20 +64,8 @@
               <div>{{item.name}}</div>
               <div>{{item.total}}人</div>
             </div>
-            <!-- <div class="table-column">
-              <div>存在营养风险</div>
-              <div>0人</div>
-            </div>
-            <div class="table-column">
-              <div>营养不良</div>
-              <div>0人</div>
-            </div>
-            <div class="table-column">
-              <div>未评</div>
-              <div>0人</div>
-            </div> -->
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="diet-form_center">
@@ -236,10 +224,10 @@
                   <img src="@/assets/images/common/addBtn.png" alt="" />
                   添加
                 </div>
-                <div @click="editDietRule">
+                <!-- <div @click="editDietRule">
                   <img src="@/assets/images/common/editBtn.png" alt="" />
                   编辑
-                </div>
+                </div> -->
                 <div @click="delectDietRule">
                   <img src="@/assets/images/common/delBtn.png" alt="" />
                   删除
@@ -485,7 +473,9 @@ export default {
         this.clientId = data.clientId;
         this.clientName = data.clientName;
       }
-      this.DataProcessing(data.templateConfigDayDtoList, index);
+      if (data.templateConfigDayDtoList.length !== 0) {
+        this.DataProcessing(data.templateConfigDayDtoList, index);
+      }
     },
     // 数据处理
     DataProcessing(lists, index) {
@@ -527,7 +517,7 @@ export default {
       // if (this.type !== 'add') {
       this.arrListInfo = this.arrList[index].clientDietPlanConfigList;
       this.Analysis();
-      console.log(index, 'tab选项卡切换');
+      // console.log(index, 'tab选项卡切换');
       // }
     },
     addtemplate() {
@@ -555,10 +545,10 @@ export default {
       this.HealthInfo();
     },
     onSelectDietRule(data) {
-      data.forEach((val) => {
-        this.mealList += val.content;
-      });
-      console.log(this.mealList);
+      // data.forEach((val) => {
+      this.mealList = data;
+      // });
+      // console.log(this.mealList);
       // this.mealList = data;
     },
     selectedDataDelect(index) {

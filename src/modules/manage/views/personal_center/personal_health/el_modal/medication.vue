@@ -211,6 +211,7 @@ export default {
         ...this.form,
         pageNo: this.table.currentPage,
         pageSize: this.table.pageSize,
+        clientId: this.$route.params.id,
       });
       const { data } = res;
       const result = data.data || {};

@@ -273,15 +273,15 @@ export default {
         state: states,
         intro: this.infoSource.ingrenient,
       });
-      console.log(res.data);
+      console.log(res.data.success);
       if (res.data.success) {
-        this.$refs.specification.resetFields();
-        this.$refs.isstate.resetFields();
         this.infoSource.drugsName = '';
         this.infoSource.specification = '';
         this.isstate = false;
         this.infoSource.ingrenient = '';
         this.queryList();
+        this.$refs.isstate.resetFields();
+        this.$refs.specification.resetFields();
       }
     },
     async queryList() {
