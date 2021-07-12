@@ -18,7 +18,7 @@
         <el-table-column
                 prop="itemName"
                 label="项目名称"
-                width="85px"
+                width="80px"
                 show-overflow-tooltip
         ></el-table-column>
         <el-table-column
@@ -36,6 +36,19 @@
                 label="上报时间"
                 show-overflow-tooltip
         ></el-table-column>
+        <el-table-column
+                 v-if="$route.params.sourceType === '2'"
+                prop="nextTrackingDate"
+                label="计划跟踪时间"
+                show-overflow-tooltip
+        >
+          <template slot-scope="scope">
+                <span :style="{'color': nowDate === scope.row.nextTrackingDate ?
+                '#F33D21' : '#333333'}">
+                  {{scope.row.nextTrackingDate}}
+                </span>
+          </template>
+        </el-table-column>
         <el-table-column
                 prop="createTime"
                 label="跟踪结果"
@@ -58,7 +71,7 @@
                 prop="createTime"
                 label="跟踪结案"
                 show-overflow-tooltip
-                min-width="80"
+                min-width="75"
         >
           <template slot-scope="scope">
             <el-switch v-model="scope.row.isCloseCase"
@@ -120,6 +133,7 @@
 <script>
 import registerOpen from '../../../in_hospital_change/el_modal/registerOpen.vue';
 // import deleteIcon from '~/src/assets/images/doctor/tips.png';
+import * as dayjs from 'dayjs';
 export default {
   name: 'follow_content',
   components: {
@@ -148,6 +162,7 @@ export default {
         primaFacie: '',
         referralIntro: '',
       },
+      nowDate: dayjs(new Date()).format('YYYY-MM-DD'),
       reservationForm: {},
       reservationSuccessShow: false, // 挂号成功
     };
@@ -192,6 +207,9 @@ export default {
         const { data } = res;
         const result = data.data || {};
         this.total = data.data.length;
+        result.forEach((val) => {
+          val.state = '';
+        });
         this.tableData = result || [];
         this.emitTable();
       });

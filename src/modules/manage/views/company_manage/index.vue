@@ -130,6 +130,10 @@
                   v-if="getAccess('company_manage_edit')"
                   >编辑
                 </el-button>
+                <el-button type="text"
+                        size="small"
+                        style="color:#DDE0E6"
+                        >|</el-button>
                 <el-button
                   type="text"
                   size="small"

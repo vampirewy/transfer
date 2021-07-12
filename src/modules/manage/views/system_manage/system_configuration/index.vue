@@ -129,6 +129,7 @@
       </el-form>
       <div class="form-buttons">
         <el-button class="sureBtn" type="primary" @click="submitOrgan"
+        v-if="getAccess('system_manage_config_base_save')"
           >保存</el-button
         >
       </div>
@@ -166,6 +167,7 @@
             <span
               style="color: #3154ac; cursor: pointer"
               @click="handleComment(scope.row)"
+              v-if="getAccess('system_manage_config_pingu_edit')"
               >编辑</span
             >
           </template>
@@ -176,17 +178,22 @@
               type="text"
               size="small"
               @click="handleAverage(scope.row)"
+              v-if="getAccess('system_manage_config_pingu_set')"
               >设置</el-button
             >
           </template>
         </el-table-column>
         <el-table-column prop="id" label="操作" width='180'>
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="detail(scope.row)"
+            <el-button type="text" size="small"
+             @click="detail(scope.row)"
+             v-if="getAccess('system_manage_config_pingu_set_set')"
               >评估设置</el-button
             >
             <el-button type="text" size="small">|</el-button>
-            <el-button type="text" size="small" @click="sort(scope.row)"
+            <el-button type="text" size="small"
+            @click="sort(scope.row)"
+            v-if="getAccess('system_manage_config_sort')"
               >参数排序</el-button
             >
             <el-button

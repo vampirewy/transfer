@@ -158,6 +158,7 @@
             style="width:120px;margin: 16px 0;"
                     size="small"
                     @click="handleExamine"
+                    v-if="getAccess('assessment_report_generate')"
                     class="btn-new btnDel"
             ><img src="@/assets/images/common/createReport.png" />生成报告</el-button>
           </div>
@@ -268,7 +269,7 @@
               <el-table-column label="查看报告" align="center" width="60">
                 <template slot-scope="scope">
                   <el-button
-                  v-if="scope.row.assessReportName"
+                    v-if="scope.row.assessReportName"
                     type='text'
                     size="small"
                     @click="openPdf(scope.row)">
@@ -463,7 +464,7 @@
               <el-table-column label="操作" align="center" width="60">
                 <template slot-scope="scope">
                   <el-button
-                  v-if="scope.row.assessReportName"
+                    v-if="scope.row.assessReportName"
                     type='text'
                     size="small"
                     @click="openPdf(scope.row)">

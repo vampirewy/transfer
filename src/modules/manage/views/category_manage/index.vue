@@ -59,13 +59,13 @@
                     size="small"
                     style="margin: 16px 0"
                     @click="handleCreate"
-                    v-if="getAccess('customer_pool_add')"
+                    v-if="getAccess('type_manage_add')"
             ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
             <el-button
                     size="small"
                     class="btn-new btnDel"
                     @click="handleSomeRemove"
-                    v-if="getAccess('customer_pool_batch_delete')"
+                    v-if="getAccess('type_manage_batch_delete')"
             ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
           </div>
         </div>
