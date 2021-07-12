@@ -5,10 +5,10 @@
         <div class="searchCondition">
           <div class="searchLeft">
             <div>
-              <span>客户性别：</span>
+              <!-- <span>客户性别：</span> -->
               <el-select
                 v-model="gender"
-                placeholder="选择"
+                placeholder="性别"
                 clearable
                 style="width: 139px"
               >
@@ -17,7 +17,7 @@
               </el-select>
             </div>
             <div class="searchInputFormItem" style="width:108px">
-              <el-input placeholder="输入条件搜索"
+              <el-input placeholder="姓名搜索"
               v-model="keyword"> </el-input>
               <span class="searchBtnImgSpan" style="right:-3px" @click="search" >
                 <img

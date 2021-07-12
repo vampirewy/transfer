@@ -92,7 +92,7 @@
         @click="isShowDishRawMaterial = true"
         ><img src="@/assets/images/common/addBtn.png" />添加原料</el-button
       >
-      <el-button type="primary" class="btn">主要营养成分</el-button>
+      <!-- <el-button type="primary" class="btn">主要营养成分</el-button> -->
     </div>
     <el-table
       :data="tableData"

@@ -194,23 +194,46 @@
             >
               <div class="item-title">制定食谱</div>
               <div class="in_out-put" v-if="type !== 'info'">
-                <!-- <div @click="isShowTemplateInput = true">
+                <el-col :span="6">
+          <el-form-item label="" >
+            <el-popover
+              ref="userPopover"
+              placement="bottom-start"
+              width="650"
+              trigger="click"
+              @show="popoverStatus = true"
+              @hide="handlePopoperClose"
+            >
+              <el-template-input
+                v-if="popoverStatus"
+                @change="PopoperCloseUser"
+              ></el-template-input>
+              <div @click="popoverStatus = true"
+              :class="`select-user-trigger ${id || clientId? 'disabled' : ''}`"
+                slot="reference">
                   <img src="@/assets/images/common/import.png" alt="" />
                   从模板导入
-                </div> -->
-                <div @click="addtemplate">
+                </div>
+            </el-popover>
+          </el-form-item>
+          </el-col>
+                <div @click="addtemplate" class="preserve">
                   <img src="@/assets/images/common/export.png" alt="" />
                   保存为模板
                 </div>
               </div>
-              <el-template-input
+              <!-- <el-template-input
                 class="el-template-input"
+                v-if="isShowTemplateInput"
                 :active.sync="isShowTemplateInput"
-              ></el-template-input>
+              ></el-template-input> -->
             </div>
             <make-recipes
             ref="makeRecipes"
             :id="id"
+            :AddtemplateId="AddtemplateId"
+            :AddtemplateType="AddtemplateType"
+            :key="maketime"
             :type="type"
             @change="handleFoodSelect"
             @makeIndex="makeIndex"
@@ -220,7 +243,7 @@
             <div class="diet-formulate-head" style="margin-bottom: 20px">
               <div class="item-title">膳食原则</div>
               <div class="in_out-put" v-if="type !== 'info'">
-                <div @click="isShowDiet">
+                <div @click="isShowDiet" style="padding: 10px 20px;">
                   <img src="@/assets/images/common/addBtn.png" alt="" />
                   添加
                 </div>
@@ -228,7 +251,7 @@
                   <img src="@/assets/images/common/editBtn.png" alt="" />
                   编辑
                 </div> -->
-                <div @click="delectDietRule">
+                <div @click="delectDietRule" style="padding: 10px 20px;">
                   <img src="@/assets/images/common/delBtn.png" alt="" />
                   删除
                 </div>
@@ -310,9 +333,12 @@
     </div>
     <!-- <el-template-save :visible.sync="isShowTmplateSave"></el-template-save> -->
     <el-menu-template
+      v-if="fathersList.length > 0"
       :value="dietMenuTemDetail"
+      :fathersList="fathersList"
       ref="elMenuTemplate"
       :visible.sync="isShowDietMenuTemplate"
+      @fatherMethod="fatherMethod"
     ></el-menu-template>
     <el-menu-template-type
       :visible.sync="isShowDietMenuTemplateType"
@@ -329,7 +355,6 @@
     <el-diet-pagoda :visible.sync="isShowDietPagoda"></el-diet-pagoda>
     <el-diet-pagoda-guide :visible.sync="isShowDietPagodaGuide"></el-diet-pagoda-guide>
     <el-diet-pagoda-exchange :visible.sync="isShowDietPagodaExchange"></el-diet-pagoda-exchange>
-
   </div>
 </template>
 
@@ -347,7 +372,7 @@ import elDietPagoda from './el_modal/el_diet_pagoda.vue'; // 膳食宝塔
 import elDietPagodaGuide from './el_modal/el_diet_pagoda_guide.vue'; // 膳食宝塔
 import elDietPagodaExchange from './el_modal/el_diet_pagoda_exchange.vue'; // 膳食宝塔
 import makeRecipes from './el_modal/Make_recipes.vue';
-import elMenuTemplate from '../../diet_menu_template/el_modal/el_menu_template.vue';
+import elMenuTemplate from './el_modal/el_menu_template.vue';
 import elMenuTemplateType from '../../diet_menu_template/el_modal/el_menu_template_type.vue';
 export default {
   name: 'diet_form',
@@ -388,6 +413,7 @@ export default {
   },
   data() {
     return {
+      popoverStatus: false,
       isShowDietMenuTemplate: false,
       isShowDietMenuTemplateType: false,
       isShowDietPagoda: false,
@@ -425,6 +451,10 @@ export default {
       arrListInfo: [], // 第几天的数据
       dietTemplateMaterial: {}, // 图表数据
       // clientIds: this.$route.query.clientId || '',
+      fathersList: [],
+      maketime: '',
+      Addtemplate: [],
+      AddtemplateId: '',
     };
   },
   mounted() {
@@ -448,6 +478,22 @@ export default {
     // }
   },
   methods: {
+    handlePopoperClose() {
+      this.popoverStatus = false;
+    },
+    PopoperCloseUser(data) {
+      console.log(data);
+      this.AddtemplateId = data.id;
+      this.AddtemplateType = 'Addtemplate';
+      this.maketime = new Date().getTime();
+      // this.loadData(data.id);
+      this.$refs.userPopover.doClose();
+    },
+    fatherMethod() {
+      const fathers = this.$refs.makeRecipes.editableTabs;
+      this.fathersList = fathers;
+      console.log(this.fathersList, '变了');
+    },
     getClientUserInfo(id) {
       this.$api.userManagerInterface.getDetail(id).then(({ data }) => {
         if (data.success) {
@@ -539,6 +585,10 @@ export default {
       // }
     },
     addtemplate() {
+      this.fatherMethod();
+      if (this.fathersList.length === 0) {
+        return this.$message.warning('请添加食谱');
+      }
       this.dietMenuTemDetail = { id: '' };
       this.isShowDietMenuTemplate = true;
     },

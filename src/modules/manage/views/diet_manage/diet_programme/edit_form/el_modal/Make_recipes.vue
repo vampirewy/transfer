@@ -18,11 +18,11 @@
                 :label="`第${item.day}天`"
                 :name="item.day.toString()"
               >
-                <el-collapse v-model="dietCollapseActiveNames">
+                <el-collapse v-model="dietCollapseActiveNames" @change="handleChange">
                   <el-collapse-item
                     v-for="(it, inx) in item.clientDietPlanConfigList"
                     :key="it.mealType"
-                    :name="it.mealType"
+                    :name="inx"
                   >
                     <template slot="title">
                       <div class="header">
@@ -158,6 +158,14 @@ export default {
       type: String,
       default: '',
     },
+    AddtemplateId: {
+      type: String,
+      default: '',
+    },
+    AddtemplateType: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -175,7 +183,7 @@ export default {
         { title: '能量', title2: '2205.23 kcal', title3: '2203.23 kcal' },
       ],
       mealTypeText: ['早餐', '午餐', '晚餐', '加餐'],
-      dietCollapseActiveNames: '1, 2',
+      dietCollapseActiveNames: [],
       activeCaiDtoIndex: '',
       editableTabsValue: '1',
       editableTabs: [],
@@ -185,8 +193,13 @@ export default {
     };
   },
   created() {
-    if (this.id) {
-      this.getDetailList();
+    if (this.AddtemplateType !== 'Addtemplate') {
+      if (this.id) {
+        this.getDetailList();
+      }
+    } else {
+      this.editableTabs = [];
+      this.AddtemplateData(this.AddtemplateId);
     }
   },
   watch: {
@@ -196,11 +209,28 @@ export default {
           templateConfigDayDtoList: newValue,
         };
         this.$emit('change', json, this.TabsIndex);
+        this.Expand();
       },
       deep: true,
     },
   },
   methods: {
+    AddtemplateData(id) {
+      this.$api.dietMenuTemplateInterface
+        .getDietMenuTemConfigDetail(id)
+        .then((res) => {
+          const json = {
+            templateConfigDayDtoList: [],
+          };
+          res.data.data.forEach((val) => {
+            json.templateConfigDayDtoList.push(val);
+          });
+          this.deitsLists(json);
+          // console.log(res);
+          // this.editableTabs = res.data.data;
+          // this.DataProcessing(res.data.data, 0);
+        });
+    },
     isShowCookingbtn(its) {
       console.log(its);
       this.caiId = its.caiId;
@@ -209,6 +239,15 @@ export default {
     handleTabsEdit(e) {
       this.TabsIndex = e.index;
       this.$emit('makeIndex', e.index);
+      this.Expand();
+    },
+    Expand() {
+      this.dietCollapseActiveNames = [];
+      this.editableTabs[this.TabsIndex].clientDietPlanConfigList.forEach((val, index) => {
+        if (val.dietTemplateConfigDtos.length !== 0) {
+          this.dietCollapseActiveNames.push(index);
+        }
+      });
     },
     getDetailList() {
       this.$api.dietRawMaterial
@@ -223,7 +262,6 @@ export default {
         });
     },
     deitsLists(data) {
-      // this.editableTabs = list;
       const list = data.templateConfigDayDtoList;
       list.forEach((item1) => {
         const json = {};

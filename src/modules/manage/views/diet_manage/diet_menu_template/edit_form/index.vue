@@ -51,7 +51,7 @@
                   <el-collapse-item
                     v-for="(it, inx) in item.mealTypeDtos"
                     :key="it.mealType"
-                    :name="it.mealType"
+                    :name="inx"
                   >
                     <template slot="title">
                       <div class="header">
@@ -288,6 +288,7 @@ export default {
         // };
         // this.$emit('change', json, this.TabsIndex);
         this.DataProcessing(newValue, this.TabsIndex);
+        this.Expand();
       },
       deep: true,
     },
@@ -361,6 +362,7 @@ export default {
         arr.push(json);
       }
       this.arrList = arr;
+      console.log(this.arrList, 'klkkkllkllklkkl');
       this.makeIndex(index);
     },
     makeIndex(index) {
@@ -372,6 +374,15 @@ export default {
     handleTabsEdit(e) {
       this.TabsIndex = e.index;
       this.makeIndex(e.index);
+      this.Expand();
+    },
+    Expand() {
+      this.dietCollapseActiveNames = [];
+      this.editableTabs[this.TabsIndex].mealTypeDtos.forEach((val, index) => {
+        if (val.dietTemplateConfigDtos.length !== 0) {
+          this.dietCollapseActiveNames.push(index);
+        }
+      });
     },
     back() {
       this.$parent.viewIndex = 1;
@@ -465,30 +476,23 @@ export default {
     },
     submit() {
       const obj = [];
+      console.log(this.editableTabs);
       this.editableTabs.forEach((item) => {
         item.mealTypeDtos.forEach((item2) => {
           item2.dietTemplateConfigDtos.forEach((item3) => {
+            const objs = {};
             if (item3.templateDietIngredientDtoList) {
-              item3.templateDietIngredientDtoList.forEach((item4) => {
-                obj.push({
-                  dietTemplateId: this.id,
-                  configType: item3.configType,
-                  day: item.day,
-                  mealType: item2.mealType,
-                  dietIngredientId: item3.dietIngredientId,
-                  weight: item4.weight,
-                });
-              });
+              // objs.dietIngredientId = item3.dietTemplateId;
+              objs.caiId = item3.caiId;
+            } else {
+              objs.dietIngredientId = item3.dietIngredientId;
             }
-            obj.push({
-              dietTemplateId: this.id,
-              configType: item3.configType,
-              day: item.day,
-              mealType: item2.mealType,
-              caiId: item3.caiId,
-              dietIngredientId: item3.dietIngredientId,
-              weight: item3.weight,
-            });
+            objs.dietTemplateId = this.id;
+            objs.configType = item3.configType;
+            objs.day = item.day;
+            objs.mealType = item2.mealType;
+            objs.weight = item3.weight;
+            obj.push(objs);
           });
         });
       });
