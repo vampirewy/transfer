@@ -34,7 +34,7 @@
             </el-row>
             <el-row>
               <el-col :span="24">
-                <el-form-item label="随访内容：">
+                <el-form-item label="随访提示：">
                   <span>{{formGet.planContent | getResult}}</span>
                 </el-form-item>
               </el-col>

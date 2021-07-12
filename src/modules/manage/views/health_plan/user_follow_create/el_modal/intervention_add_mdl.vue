@@ -89,7 +89,7 @@
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="随访内容：" prop="planContent">
+              <el-form-item label="随访提示：" prop="planContent">
                   <el-input
                     type="textarea"
                     v-model="form.planContent"
@@ -177,7 +177,7 @@ export default {
         planWay: [{ required: true, message: '请选择随访形式' }],
         planDoctorName: [{ required: true, message: '请选择随访人' }],
         planTitle: [{ required: true, message: '请输入随访标题' }],
-        planContent: [{ required: true, message: '请输入随访内容' }],
+        planContent: [{ required: true, message: '请输入随访提示' }],
       },
     };
   },
