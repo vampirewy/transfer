@@ -174,7 +174,7 @@
             :page-sizes="[15]"
             :current-page.sync="currentPage"
             :page-size="pageSize"
-            @current-change="loadData"
+            @current-change="searchPage"
           ></el-pagination>
         </div>
       </div>
@@ -343,6 +343,10 @@ export default {
             console.log(this.menuList[index]);
           }
         });
+    },
+    searchPage(page) {
+      this.currentPage = page;
+      this.loadData();
     },
     loadData() {
       const { name, dietSortId } = this.query;

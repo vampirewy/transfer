@@ -177,8 +177,13 @@
             </el-table-column>
             <el-table-column align="center" prop="provideQuantity" label="提供量">
               <template slot-scope="scope">
-                <span class="analysis-low">{{ scope.row.provideQuantity }}</span>
+                <span :class="scope.row.trend === 3 ? 'OrLowClassA' :
+                (scope.row.trend === 1 ? 'OrLowClassB' : 'OrLowClassC')">
+                {{ scope.row.provideQuantity }}</span>
               </template>
+              <!-- <template slot-scope="scope">
+                <span class="analysis-low">{{ scope.row.provideQuantity }}</span>
+              </template> -->
             </el-table-column>
           </el-table>
         </el-tab-pane>

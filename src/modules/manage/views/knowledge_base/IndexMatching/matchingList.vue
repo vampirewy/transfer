@@ -179,7 +179,7 @@
           background
           layout="prev, pager, next, jumper, total, sizes"
           :total="total"
-          :page-size="params.pageSize"
+          :page-size="table.pageSize"
           :pageSizes="[15]"
         ></el-pagination>
       </div>
@@ -242,7 +242,7 @@ export default {
       current: {},
       params: {
         pageNo: 1,
-        pageSize: 15,
+        pageSize: 1,
       },
       form: {
         itemName: '',

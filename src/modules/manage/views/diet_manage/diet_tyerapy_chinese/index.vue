@@ -259,7 +259,7 @@ export default {
       return Range;
     },
     handleCurrentChange(current = 1) {
-      this.pageNo = current;
+      this.currentPage = current;
       this.getList();
     },
     handleSelectionChange(val) {
