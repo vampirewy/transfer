@@ -39,7 +39,8 @@
         <el-table-column
                  v-if="$route.params.sourceType === '2'"
                 prop="nextTrackingDate"
-                label="计划跟踪时间"
+                label="计划跟踪"
+                 width="98px"
                 show-overflow-tooltip
         >
           <template slot-scope="scope">

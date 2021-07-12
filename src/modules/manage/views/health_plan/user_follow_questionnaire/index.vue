@@ -8,7 +8,7 @@
       <div class="searchCondition">
         <div class="searchLeft">
           <div class="searchInputFormItem">
-            <el-input placeholder="输入问卷名称搜索" v-model="formData.name">
+            <el-input placeholder="问卷名称" v-model="formData.name">
             </el-input>
             <span class="searchBtnImgSpan" @click="search(1)">
                   <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
@@ -19,11 +19,22 @@
             <el-select
                     v-model="formData.sortType"
                     placeholder="请选择"
-                    style="width: 140px"
+                    style="width: 140px;margin-top: 0;"
             >
               <el-option :label="item.name" :value="item.paramValue"
                          v-for="item in sortTypeList"
                          :key="item.paramValue"></el-option>
+            </el-select>
+          </div>
+          <div style="margin-top: 10px;">
+            <span>是否启用：</span>
+            <el-select
+                    v-model="formData.state"
+                    placeholder="请选择"
+                    style="width: 140px;margin-top: 0"
+            >
+              <el-option label="启用" :value="1" key="1"></el-option>
+              <el-option label="未启用" :value="0" key="0"></el-option>
             </el-select>
           </div>
           <div>
@@ -34,7 +45,7 @@
                     value-format="yyyy-MM-dd"
                     :max-date="formData.endTime"
                     placeholder="选择开始日期"
-                    style="width: 140px"
+                    style="width: 140px;margin-top: 10px;"
                     clearable
             >
             </el-date-picker>
@@ -176,8 +187,8 @@ export default {
       dataSource: [],
       formData: {
         name: '',
-        state: '',
         sortType: '',
+        state: '',
         startTime: '',
         endTime: '',
       },
@@ -248,7 +259,13 @@ export default {
       this.sortTypeList = data;
     },
     reset() {
-      Object.assign(this.$data, this.$options.data());
+      this.formData = {
+        name: '',
+        sortType: '',
+        state: '',
+        startTime: '',
+        endTime: '',
+      };
       this.getTemplateQuestionList();
     },
     onChangePage(current = 1) {

@@ -162,6 +162,7 @@
               @selection-change="handleSelectionChange"
               :row-key="getRowKeys"
               @expand-change="handleExpandChange">
+      <el-table-column type="selection" width="40"></el-table-column>
       <el-table-column prop="reportNo" label="体检编号" min-width="100px" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{scope.row.reportNo | getResult}}</span>
@@ -472,7 +473,13 @@ export default {
      * @return {Promise<void>}
      */
     async exportList() {
-      const res = await this.$api.sunFollow.exportPositiveFirst(this.form);
+      const sendData = Object.assign({}, this.form);
+      const ids = [];
+      this.multipleSelection.forEach((val) => {
+        ids.push(val.positiveTrackingId);
+      });
+      sendData.positiveTrackingIds = ids;
+      const res = await this.$api.sunFollow.exportPositiveFirst(sendData);
       const { data } = res.data;
       window.open(this.upload_url + data);
     },

@@ -86,17 +86,17 @@
           <el-row>
             <el-col :span="6">
               <el-form-item label="跟踪时间" >
-                <span>{{trackingList[Tabactive].trackingDate.split(' ')[0]}}</span>
+                <span>{{trackingList[Tabactive].trackingDate.split(' ')[0] | getResult}}</span>
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item label="跟踪方式" >
-                <span>{{trackingList[Tabactive].trackingWayName}}</span>
+                <span>{{trackingList[Tabactive].trackingWayName | getResult}}</span>
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item label="跟踪人员" >
-                <span>{{trackingList[Tabactive].trackingUserName}}</span>
+                <span>{{trackingList[Tabactive].trackingUserName | getResult}}</span>
               </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -104,14 +104,19 @@
                 <span>{{trackingList[Tabactive].isSendMsg === 1 ? '是' : '否'}}</span>
               </el-form-item>
             </el-col>
+            <el-col :span="6">
+              <el-form-item label="跟踪结果" >
+                <span>{{trackingList[Tabactive].trackingStateName | getResult}}</span>
+              </el-form-item>
+            </el-col>
             <el-col :span="24">
               <el-form-item label="跟踪记录" >
-                <span>{{trackingList[Tabactive].trackingRemark}}</span>
+                <span>{{trackingList[Tabactive].trackingRemark | getResult}}</span>
               </el-form-item>
             </el-col>
             <el-col :span="24">
               <el-form-item label="短信小结" >
-                <span>{{trackingList[Tabactive].messageRecordContent}}</span>
+                <span>{{trackingList[Tabactive].messageRecordContent | getResult}}</span>
               </el-form-item>
             </el-col>
           </el-row>

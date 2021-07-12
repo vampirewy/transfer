@@ -93,6 +93,7 @@
           <el-date-picker
                   v-model="form.birthdayMD"
                   type="date"
+                  class="bornDate"
                   value-format="MM-dd"
                   format="MM-dd"
                   placeholder="请选择"
@@ -183,6 +184,11 @@
             <el-table-column prop="birthday" label="出生日期" min-width="130px">
               <template slot-scope="scope">
                 <span>{{ scope.row.birthday | getResult }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="workUnitName" label="单位" min-width="110px" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{ scope.row.workUnitName | getResult}}</span>
               </template>
             </el-table-column>
             <el-table-column prop="gridName" label="人员类别" show-overflow-tooltip>
@@ -410,5 +416,6 @@ export default {
   /deep/ .el-input.is-disabled .el-input__inner{
     cursor: pointer;
     background-color: white!important;
+    border: 1px solid #DDE0E6 !important;
   }
 </style>
