@@ -343,7 +343,7 @@
             {{ scope.row.planWayName | getResult}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="planUserName" label="随访内容" show-overflow-tooltip>
+            <el-table-column prop="planUserName" label="随访提示" show-overflow-tooltip>
               <template slot-scope="scope">
           <span :class="{'redToday': scope.row.sortIndex === 1,
                           'overToday': scope.row.sortIndex === 2}">
@@ -823,12 +823,14 @@ export default {
       }
     }
     .el-input__suffix{
+      right: 5px;
       width: 25px;
     }
   }
   /deep/ .el-input.is-disabled .el-input__inner{
     cursor: pointer;
     background-color: white!important;
+    border: 1px solid #DDE0E6 !important
   }
   .user-follow {
     /*padding: 20px 32px 15px 32px;*/
