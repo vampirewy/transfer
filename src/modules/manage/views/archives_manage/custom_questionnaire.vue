@@ -382,7 +382,9 @@ export default {
     reset() {
       this.params.pageNo = 1;
       Object.assign(this.$data, this.$options.data());
-      // this.getQuestionType();
+      this.getGridList();
+      this.getQuestionFromList();
+      this.getSystemParamByCode('ZY007');
       this.fetch();
     },
     search(current = 1) {
