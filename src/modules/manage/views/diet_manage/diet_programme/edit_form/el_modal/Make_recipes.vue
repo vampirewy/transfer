@@ -158,6 +158,14 @@ export default {
       type: String,
       default: '',
     },
+    AddtemplateId: {
+      type: String,
+      default: '',
+    },
+    AddtemplateType: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -185,8 +193,14 @@ export default {
     };
   },
   created() {
-    if (this.id) {
-      this.getDetailList();
+    if (this.AddtemplateType !== 'Addtemplate') {
+      if (this.id) {
+        this.getDetailList();
+      }
+    } else {
+      this.editableTabs = [];
+      console.log(this.AddtemplateId, this.AddtemplateType, '123132123');
+      this.AddtemplateData(this.AddtemplateId);
     }
   },
   watch: {
@@ -201,6 +215,22 @@ export default {
     },
   },
   methods: {
+    AddtemplateData(id) {
+      this.$api.dietMenuTemplateInterface
+        .getDietMenuTemConfigDetail(id)
+        .then((res) => {
+          const json = {
+            templateConfigDayDtoList: [],
+          };
+          res.data.data.forEach((val) => {
+            json.templateConfigDayDtoList.push(val);
+          });
+          this.deitsLists(json);
+          // console.log(res);
+          // this.editableTabs = res.data.data;
+          // this.DataProcessing(res.data.data, 0);
+        });
+    },
     isShowCookingbtn(its) {
       console.log(its);
       this.caiId = its.caiId;
@@ -223,6 +253,7 @@ export default {
         });
     },
     deitsLists(data) {
+      console.log(data, '123qweqew');
       // this.editableTabs = list;
       const list = data.templateConfigDayDtoList;
       list.forEach((item1) => {

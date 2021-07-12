@@ -1,141 +1,168 @@
 <template>
-  <div v-show="actives" class="el-people-select_content">
-    <div class="divTop">
-      <div class="divTitle">
-        <div class="searchCondition">
-          <div class="searchLeft">
-            <div >
-              <span>膳食模板</span>
-              <el-select
-                v-model="status"
-                placeholder="选择"
-                clearable
-                style="width: 110px"
-              >
-                <el-option label="男" :value="1"></el-option>
-                <el-option label="女" :value="0"></el-option>
-              </el-select>
-            </div>
-            <div class="searchInputFormItem" style="width:100px">
-              <el-input placeholder="输入条件搜索" v-model="query"> </el-input>
-              <span class="searchBtnImgSpan" @click="search" style="right:-3px">
-                <img
-                  class="searchBtnImg"
-                  src="@/assets/images/common/topsearch.png"
-                />
+  <div class="medical-history-select-user">
+    <!-- <div class="query">
+      <el-input v-model="keyword" placeholder="输入姓名搜索"></el-input>
+      <el-button class="search-button" @click="search">
+        <i class="el-icon-search"></i>
+      </el-button>
+    </div> -->
+    <div class="query" style="background:#FFFFFF">
+      <div class="searchCondition">
+      <div class="searchLeft">
+        <div class="searchInputFormItem">
+          <el-input placeholder="模版名称" v-model="query.name">
+          </el-input>
+          <span class="searchBtnImgSpan" style="background:#ffffff;margin:1px"
+          @click="search(1)">
+                  <img class="searchBtnImg" style="width:35px"
+                  src="@/assets/images/common/topsearch.png"/>
               </span>
-            </div>
+        </div>
+        <div class="searchInputFormItem">
+          <el-input placeholder="模版周期" v-model="query.name">
+          </el-input>
+          <span class="searchBtnImgSpan" style="background:#ffffff;margin:1px"
+          @click="search(1)">
+                  <img class="searchBtnImg" style="width:35px"
+                  src="@/assets/images/common/topsearch.png"/>
+              </span>
+        </div>
+      </div>
+      <div class="searchRight">
+        <div class="buttones" style="margin: 5px 10px 0 0;">
+          <div class="searchFor" @click="search(1)" style="margin:11px 10px 0 0;">
+            <img src="@/assets/images/common/topsearchblue.png" alt="">
           </div>
-          <div class="searchRight">
-            <div class="buttones">
-              <div class="searchFor" @click="search">
-                <img src="@/assets/images/common/topsearchblue.png" alt="" />
-              </div>
-              <div class="resetAll" @click="reset">重置</div>
-            </div>
-          </div>
+          <div class="resetAll" style="margin-top:10px;" @click="reset">重置</div>
         </div>
       </div>
     </div>
-    <el-table row-class-name="table-row" :data="tableData">
-      <el-table-column type="selection" align="center" width="55">
+    </div>
+    <el-table :data="tableData" @row-click="rowClick" class="openTable">
+      <el-table-column width="80">
+        <template slot-scope="scope">
+          <el-radio v-model="selectRadio" :label="scope.row.id">&nbsp;</el-radio>
+        </template>
       </el-table-column>
-      <el-table-column align="center" prop="title" label="模板名称">
-      </el-table-column>
-      <el-table-column align="center" prop="title2" label="介绍">
-      </el-table-column>
-      <el-table-column align="center" prop="title3" label="模板周期">
+      <el-table-column prop="name" label="模板名称"></el-table-column>
+      <el-table-column prop="dietTemplateSortName" label="分类"></el-table-column>
+      <el-table-column prop="day" label="模版周期（天）">
       </el-table-column>
     </el-table>
     <el-pagination
       background
-      layout="prev, pager, next, jumper, total"
+      layout="prev,pager,next,jumper,total,sizes"
+      :page-sizes="[5]"
+      :pager-count="5"
       :total="total"
-      :current-page="currentPage"
       :page-size="pageSize"
+      :current-page="currentPage"
       @current-change="handleCurrentChange"
+      @size-change="handleSizeChange"
     ></el-pagination>
-    <div class="form-buttons">
-      <el-button size="small" class="cancelBtn" @click="actives = false">
-        取消
-      </el-button>
-      <el-button size="small" class="sureBtn" type="primary"
-        >确定添加</el-button
-      >
-    </div>
   </div>
 </template>
 
 <script>
 export default {
-  props: {
-    active: {
-      type: Boolean,
-      default: false,
-    },
-  },
+  name: 'MedicalHistorySelectUser',
   data() {
     return {
-      tableData: [
-        {
-          title: 345347357,
-          title2: '一般食谱100kcal',
-          title3: '疾病风险',
-          title4: '3',
-        },
-      ],
-      currentPage: 1,
+      keyword: '',
+      tableData: [],
       total: 0,
-      pageSize: 15,
-      status: '',
-      query: '',
+      currentPage: 1,
+      pageSize: 5,
+      selectRadio: '',
+      query: {
+        name: '',
+        day: '',
+        dietTemplateSortId: '',
+      },
     };
   },
-  computed: {
-    actives: {
-      get() {
-        return this.active;
-      },
-      set() {
-        this.$emit('update:active', false);
-      },
-    },
+  mounted() {
+    this.queryList();
   },
   methods: {
-    search() {},
-    reset() {},
-    handleCurrentChange() {},
+    reset() {
+    },
+    rowClick(scope) {
+      this.selectRadio = scope.id;
+      this.$emit('change', scope);
+    },
+    handleCurrentChange(page) {
+      this.currentPage = page;
+      this.queryList();
+    },
+    handleSizeChange(size) {
+      this.pageSize = size;
+      this.currentPage = 1;
+      this.queryList();
+    },
+    search() {
+      this.currentPage = 1;
+      this.queryList();
+    },
+    async queryList() {
+      this.$api.dietMenuTemplateInterface
+        .getDietMenuTemplate({
+          pageNo: this.currentPage,
+          pageSize: this.pageSize,
+          ...this.query,
+        })
+        .then((res) => {
+          const { total, data } = res.data.data;
+          this.total = total;
+          this.tableData = data;
+        });
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.el-people-select_content {
-  background-color: #ffffff;
-  padding: 25px 19px;
-  box-shadow: 0px 0px 30px 0px rgba(151, 166, 189, 0.3);
-  border-radius: 5px;
-}
-
-.el-pagination {
-  text-align: center;
-}
-.form-buttons {
-  margin-top: 23px;
-  text-align: center;
-}
-/deep/ .el-table {
-  margin: 20px 0;
-  .table-row {
-    height: 44px;
+.medical-history-select-user {
+  padding: 13px 18px 21px 18px;
+  .query {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    background: #F4F4F6;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    /deep/ .el-input {
+      flex: 1;
+      .el-input__inner {
+        background: transparent;
+        border: none;
+      }
+    }
+    .search-button {
+      width: 36px;
+      height: 36px;
+      background: #4991FD;
+      border-radius: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      i {
+        font-size: 18px;
+        color: #fff;
+      }
+    }
   }
-  .el-checkbox__inner {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    &::after {
-      top: 2px;
-      left: 5px;
+  .el-table::before {
+    background: none;
+  }
+  .el-pagination {
+    margin-top: 20px;
+    text-align: right;
+    /deep/ .el-pagination__sizes {
+      margin-right: 0;
+    }
+    /deep/ .el-input__validateIcon {
+      display: none;
     }
   }
 }
