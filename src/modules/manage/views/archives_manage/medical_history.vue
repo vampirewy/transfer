@@ -215,7 +215,7 @@
                 align="center"
                 show-overflow-tooltip>
               </el-table-column>
-              <el-table-column label="性名" prop="clientName" align="center"
+              <el-table-column label="姓名" prop="clientName" align="center"
               show-overflow-tooltip>
               <template slot-scope="scope">
                 <span class="clientName"

@@ -383,9 +383,11 @@ export default {
           });
           data.forEach((item) => {
             item.caiSortDtosName = '';
+            const reg = /、$/gi;
             item.caiSortDtos.forEach((val) => {
               item.caiSortDtosName += `${val.dietSortName}、`;
             });
+            item.caiSortDtosName = item.caiSortDtosName.replace(reg, '');
           });
           this.total = total;
           this.tableData = data;

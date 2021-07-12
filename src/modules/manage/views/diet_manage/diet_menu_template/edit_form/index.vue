@@ -51,7 +51,7 @@
                   <el-collapse-item
                     v-for="(it, inx) in item.mealTypeDtos"
                     :key="it.mealType"
-                    :name="it.mealType"
+                    :name="inx"
                   >
                     <template slot="title">
                       <div class="header">
@@ -288,6 +288,7 @@ export default {
         // };
         // this.$emit('change', json, this.TabsIndex);
         this.DataProcessing(newValue, this.TabsIndex);
+        this.Expand();
       },
       deep: true,
     },
@@ -373,6 +374,15 @@ export default {
     handleTabsEdit(e) {
       this.TabsIndex = e.index;
       this.makeIndex(e.index);
+      this.Expand();
+    },
+    Expand() {
+      this.dietCollapseActiveNames = [];
+      this.editableTabs[this.TabsIndex].mealTypeDtos.forEach((val, index) => {
+        if (val.dietTemplateConfigDtos.length !== 0) {
+          this.dietCollapseActiveNames.push(index);
+        }
+      });
     },
     back() {
       this.$parent.viewIndex = 1;

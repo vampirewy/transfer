@@ -16,9 +16,9 @@
         </template>
       </el-table-column> -->
       <el-table-column type="selection" width="40" align="center"></el-table-column>
-      <el-table-column prop="name" label="姓名"></el-table-column>
+      <el-table-column prop="name" label="项目名称"></el-table-column>
       <el-table-column prop="unit" label="单位"></el-table-column>
-      <el-table-column prop="intro" label="内容">
+      <el-table-column prop="intro" label="项目描述">
         <!-- <template slot-scope="scope">
           <span v-if="scope.row.gender === 1">男</span>
           <span v-if="scope.row.gender === 2">女</span>
