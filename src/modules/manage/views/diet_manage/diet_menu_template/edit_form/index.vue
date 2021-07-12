@@ -361,6 +361,7 @@ export default {
         arr.push(json);
       }
       this.arrList = arr;
+      console.log(this.arrList, 'klkkkllkllklkkl');
       this.makeIndex(index);
     },
     makeIndex(index) {
@@ -465,30 +466,23 @@ export default {
     },
     submit() {
       const obj = [];
+      console.log(this.editableTabs);
       this.editableTabs.forEach((item) => {
         item.mealTypeDtos.forEach((item2) => {
           item2.dietTemplateConfigDtos.forEach((item3) => {
+            const objs = {};
             if (item3.templateDietIngredientDtoList) {
-              item3.templateDietIngredientDtoList.forEach((item4) => {
-                obj.push({
-                  dietTemplateId: this.id,
-                  configType: item3.configType,
-                  day: item.day,
-                  mealType: item2.mealType,
-                  dietIngredientId: item3.dietIngredientId,
-                  weight: item4.weight,
-                });
-              });
+              // objs.dietIngredientId = item3.dietTemplateId;
+              objs.caiId = item3.caiId;
+            } else {
+              objs.dietIngredientId = item3.dietIngredientId;
             }
-            obj.push({
-              dietTemplateId: this.id,
-              configType: item3.configType,
-              day: item.day,
-              mealType: item2.mealType,
-              caiId: item3.caiId,
-              dietIngredientId: item3.dietIngredientId,
-              weight: item3.weight,
-            });
+            objs.dietTemplateId = this.id;
+            objs.configType = item3.configType;
+            objs.day = item.day;
+            objs.mealType = item2.mealType;
+            objs.weight = item3.weight;
+            obj.push(objs);
           });
         });
       });

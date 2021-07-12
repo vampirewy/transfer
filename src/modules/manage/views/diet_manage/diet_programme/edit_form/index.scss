@@ -1,6 +1,18 @@
 .diet-form{
     display: flex;
 }
+ /deep/ .in_out-put div{
+    min-width: 132px;
+    box-sizing: border-box;
+    /* padding: 10px 17px; */
+    /* background-color: #F6F8FC; */
+    border-radius: 20px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 400;
+    color: #333333;
+    cursor: pointer;
+}
 .OrLowClassA{
     color: #333333;
   }
@@ -145,7 +157,7 @@
              display: flex;
              align-items: center;
              justify-content: center;
-             width: 90px;
+            //  width: 90px;
              height: 32px;
              text-align: center;
              background-color: #EAEDF6;
@@ -159,6 +171,9 @@
                 margin-left: 8px;
                 cursor: pointer;
             }
+            span{
+                padding: 0px 20px;
+            }
          }
      }
      .diet-formulate{
@@ -171,9 +186,9 @@
                  justify-content: flex-end;
                  flex: 1;
                  div{
-                     min-width: 90px;
+                    //  min-width: 140px;
                      box-sizing: border-box;
-                     padding: 10px 17px;
+                    //  padding: 10px 17px;
                      background-color: #F6F8FC;
                      border-radius: 20px;
                      text-align: center;
@@ -184,7 +199,7 @@
                     &:hover{
                         color: #4991fd;
                         border-color: #c8defe;
-                        background-color: #edf4ff;
+                        // background-color: #edf4ff;
                     }
                     &+div{
                         margin-left: 20px;

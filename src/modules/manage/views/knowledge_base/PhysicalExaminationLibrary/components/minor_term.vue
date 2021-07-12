@@ -165,7 +165,7 @@
             </el-table-column>
             <el-table-column label="重要指标" prop="isMain" min-width="80" show-overflow-tooltip >
               <template slot-scope="scope">
-                {{ scope.row.isMain === 1 ? '是' :scope.row.isMain === 2?'否': '不限' }}
+                {{ scope.row.isMain === 1 ? '是' :scope.row.isMain === 0?'否': '不限' }}
                 <!-- <span>{{ scope.row.isMain || '-'}}</span> -->
               </template>
             </el-table-column>
