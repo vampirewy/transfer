@@ -207,7 +207,7 @@ export default {
   },
   data() {
     return {
-      isstate: false,
+      isstate: true,
       value: true,
       popoverStatus: false,
       total: 0,

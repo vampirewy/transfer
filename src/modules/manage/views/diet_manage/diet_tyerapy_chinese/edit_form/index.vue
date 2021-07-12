@@ -2,7 +2,8 @@
   <div>
     <div class="diet-form_center">
       <div class="diet-plan-box">
-        <div class="title"><span v-if="id == ''">新增</span><span v-else>编辑</span>食疗库</div>
+        <div class="title"><span v-if="id == ''" style="font-weight:600">新增</span>
+        <span v-else>编辑</span>食疗库</div>
       </div>
     </div>
     <el-form inline label-width="90px" class="form-content">
@@ -38,6 +39,7 @@
               v-model="checked1"
               :true-label="1"
               :false-label="0"
+              @change="Unlimited(1)"
             ></el-checkbox>
           </el-col>
           <el-col :span="5">
@@ -46,6 +48,7 @@
               v-model="checked2"
               :true-label="2"
               :false-label="0"
+              @change="Unlimited(2)"
             ></el-checkbox>
           </el-col>
           <el-col :span="5">
@@ -54,6 +57,7 @@
               v-model="checked3"
               :true-label="3"
               :false-label="0"
+              @change="Unlimited(3)"
             ></el-checkbox>
           </el-col>
           <el-col :span="5">
@@ -62,6 +66,7 @@
               v-model="checked4"
               :true-label="4"
               :false-label="0"
+              @change="Unlimited(4)"
             ></el-checkbox>
           </el-col>
           <el-col :span="5">
@@ -70,6 +75,7 @@
               v-model="checked5"
               :true-label="5"
               :false-label="0"
+              @change="Unlimited(5)"
             ></el-checkbox>
           </el-col>
           <el-col :span="5">
@@ -78,6 +84,7 @@
               v-model="checked6"
               :true-label="6"
               :false-label="0"
+              @change="Unlimited(6)"
             ></el-checkbox>
           </el-col>
           <el-col :span="5">
@@ -86,6 +93,7 @@
               v-model="checked7"
               :true-label="7"
               :false-label="0"
+              @change="Unlimited(7)"
             ></el-checkbox>
           </el-col>
           <el-col :span="5">
@@ -94,6 +102,7 @@
               v-model="checked8"
               :true-label="8"
               :false-label="0"
+              @change="Unlimited(8)"
             ></el-checkbox>
           </el-col>
           <el-col :span="5">
@@ -102,6 +111,7 @@
               v-model="checked9"
               :true-label="9"
               :false-label="0"
+              @change="Unlimited(9)"
             ></el-checkbox>
           </el-col>
           <el-col :span="5">
@@ -110,6 +120,7 @@
               v-model="checked10"
               :true-label="10"
               :false-label="0"
+              @change="Unlimited(10)"
             ></el-checkbox>
           </el-col>
         </el-form-item>
@@ -210,6 +221,23 @@ export default {
     console.log(this.tizhiIds);
   },
   methods: {
+    Unlimited(index) {
+      if (index !== 10) {
+        this.checked10 = 0;
+      }
+      if (this.checked10 === 10) {
+        console.log(this.checked10);
+        this.checked1 = 0;
+        this.checked2 = 0;
+        this.checked3 = 0;
+        this.checked4 = 0;
+        this.checked5 = 0;
+        this.checked6 = 0;
+        this.checked7 = 0;
+        this.checked8 = 0;
+        this.checked9 = 0;
+      }
+    },
     checkedAllFun(index) {
       console.log(index);
     },

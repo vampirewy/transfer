@@ -213,7 +213,7 @@
                 <span v-else>{{scope.row.itemUnit}}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="attention" label="是否关注指标">
+            <el-table-column prop="attention" label="重要指标">
               <template slot-scope="scope">
                 <el-select
                         v-if="scope.row.editStatus"
@@ -260,7 +260,7 @@
               <el-input v-model="item.addData.itemUnit" maxlength="200"></el-input>
             </div>
             <div>
-              <span class="label">是否关注指标：</span>
+              <span class="label">重要指标：</span>
               <el-select v-model="item.addData.attention" placeholder="请选择">
                 <el-option label="是" value="1"></el-option>
                 <el-option label="否" value="0"></el-option>
@@ -507,7 +507,7 @@ export default {
             });
             if (minsame === false) {
               valAnswer.addData = {
-                attention: '0',
+                attention: String(this.StatusCheck.isMain),
                 itemName: this.StatusCheck.itemName,
                 itemValue: '',
                 refRange: this.StatusCheck.refRange,
@@ -523,7 +523,7 @@ export default {
             itemList: [],
           };
           json.addData = {
-            attention: '0',
+            attention: String(this.StatusCheck.isMain),
             itemName: this.StatusCheck.itemName,
             itemValue: '',
             refRange: this.StatusCheck.refRange,

@@ -217,7 +217,7 @@
             </el-popover>
           </el-form-item>
           </el-col>
-                <div @click="addtemplate">
+                <div @click="addtemplate" class="preserve">
                   <img src="@/assets/images/common/export.png" alt="" />
                   保存为模板
                 </div>
@@ -243,7 +243,7 @@
             <div class="diet-formulate-head" style="margin-bottom: 20px">
               <div class="item-title">膳食原则</div>
               <div class="in_out-put" v-if="type !== 'info'">
-                <div @click="isShowDiet">
+                <div @click="isShowDiet" style="padding: 10px 20px;">
                   <img src="@/assets/images/common/addBtn.png" alt="" />
                   添加
                 </div>
@@ -251,7 +251,7 @@
                   <img src="@/assets/images/common/editBtn.png" alt="" />
                   编辑
                 </div> -->
-                <div @click="delectDietRule">
+                <div @click="delectDietRule" style="padding: 10px 20px;">
                   <img src="@/assets/images/common/delBtn.png" alt="" />
                   删除
                 </div>

@@ -45,7 +45,7 @@
       :data="tableData"
       align="center"
     >
-      <el-table-column type="selection" width="55"> </el-table-column>
+      <!-- <el-table-column type="selection" width="55"> </el-table-column> -->
       <el-table-column prop="name" label="模板名称" show-overflow-tooltip>
         <template slot-scope="scope">
           <span v-show="editIndex !== scope.$index">{{ scope.row.name }}</span>

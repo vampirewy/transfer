@@ -19,7 +19,7 @@
               </span>
         </div>
         <div class="searchInputFormItem">
-          <el-input placeholder="模版周期" v-model="query.name">
+          <el-input placeholder="模版周期" v-model="query.day">
           </el-input>
           <span class="searchBtnImgSpan" style="background:#ffffff;margin:1px"
           @click="search(1)">
@@ -86,6 +86,10 @@ export default {
   },
   methods: {
     reset() {
+      this.currentPage = 1;
+      this.query.name = '';
+      this.query.day = '';
+      this.queryList();
     },
     rowClick(scope) {
       this.selectRadio = scope.id;
