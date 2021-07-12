@@ -45,7 +45,7 @@
             collapse-tags
             class="someChoose"
                   placeholder="请选择"
-                  style="width: 120px"
+                  style="width: 150px !important;"
           >
             <el-option :label="item.realName" :value="item.id" v-for="(item, index) in doctorList"
                        :key="index"></el-option>
@@ -494,6 +494,7 @@ export default {
       this.formData.startCollectionDate = '';
       this.formData.endCollectionDate = '';
       this.formData.tag = '';
+      this.formData.doctorIdList = null;
       this.formData.startTime = '';
       this.formData.endTime = '';
       // Object.assign(this.$data, this.$options.data());
