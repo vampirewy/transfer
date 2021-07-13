@@ -9,10 +9,14 @@
         <span>{{formNew.questionLifestyle2.paramValue || '暂无数据'}}</span>
       </p>
       <p class="nameP"><img src="@/assets/images/healthPlan/lifestyle3.png"/>饮酒：
-        <span style="color:#F33D21;">{{formNew.questionLifestyle3.paramValue || '暂无数据'}}</span>
+        <span style="color:#F33D21;" v-if="formNew.questionLifestyle3.paramValue">
+          {{formNew.questionLifestyle4.paramValue}}</span>
+        <span v-else>暂无数据</span>
       </p>
       <p class="nameP"><img src="@/assets/images/healthPlan/lifestyle4.png"/>精神：
-        <span style="color:#F33D21;">{{formNew.questionLifestyle4.paramValue || '暂无数据'}}</span>
+        <span style="color:#F33D21;" v-if="formNew.questionLifestyle4.paramValue">
+          {{formNew.questionLifestyle4.paramValue}}</span>
+        <span v-else>暂无数据</span>
       </p>
       <p class="nameP"><img src="@/assets/images/healthPlan/lifestyle5.png"/>睡眠：
         <span>{{formNew.questionLifestyle5.paramValue || '暂无数据'}}</span>
