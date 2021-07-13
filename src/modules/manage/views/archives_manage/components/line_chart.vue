@@ -77,6 +77,7 @@ export default {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons');
       this.setOptions(this.chartData);
+      console.log(this.chartData, '传过来的数据');
     },
     setOptions() {
       const option = {

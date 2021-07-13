@@ -15,7 +15,7 @@
       label-width="90px"
       class="form-content"
     >
-      <el-form-item
+      <!-- <el-form-item
         prop="dietTemplateSortId"
         style="position: relative"
         label="模板类别："
@@ -28,7 +28,21 @@
         >
         </el-select>
         <div class="mask" @click="selectType"></div>
-      </el-form-item>
+      </el-form-item> -->
+      <el-form-item prop="dietTemplateSortId" label="模板分类：">
+      <el-select
+        v-model="ruleForm.dietTemplateSortId"
+        placeholder="请选择"
+        style="width: 160px"
+      >
+        <el-option
+          :label="item.name"
+          :value="item.id"
+          v-for="(item, index) in menuTypeSelectList"
+          :key="index"
+        ></el-option>
+      </el-select>
+    </el-form-item>
       <el-form-item prop="name" label="模板名称：">
         <el-input
           v-model="ruleForm.name"
@@ -114,27 +128,28 @@ export default {
         maxKcal: [{ required: true, message: '请输入最大卡路里' }],
       },
       menuTypeSelectName: '',
+      menuTypeSelectList: [],
     };
   },
   watch: {
-    value(val) {
-      if (val.id) {
-        this.ruleForm = val;
-        this.menuTypeSelectName = val.dietTemplateSortName;
-      } else {
-        this.ruleForm = {
-          id: '',
-          dietTemplateSortId: '',
-          name: '',
-          intro: '',
-          minKcal: '',
-          maxKcal: '',
-          source: 1,
-          dietTemplateConfigSaveRequestList: [],
-        };
-        this.menuTypeSelectName = '';
-      }
-    },
+    // value(val) {
+    //   if (val.id) {
+    //     this.ruleForm = val;
+    //     this.menuTypeSelectName = val.dietTemplateSortName;
+    //   } else {
+    //     this.ruleForm = {
+    //       id: '',
+    //       dietTemplateSortId: '',
+    //       name: '',
+    //       intro: '',
+    //       minKcal: '',
+    //       maxKcal: '',
+    //       source: 1,
+    //       dietTemplateConfigSaveRequestList: [],
+    //     };
+    //     this.menuTypeSelectName = '';
+    //   }
+    // },
   },
   computed: {
     visibles: {
@@ -148,9 +163,22 @@ export default {
   },
   mounted() {
     this.childMethod();
-    console.log(this.fathersList, '123123213');
+    // console.log(this.fathersList, '123123213');
+    this.loadData();
   },
   methods: {
+    loadData() {
+      this.$api.dietMenuTemplateInterface
+        .getDietMeneTemCate({
+          pageSize: 1000,
+          // keywords: this.query,
+        })
+        .then((res) => {
+          const { data } = res.data.data;
+          this.menuTypeSelectList = data;
+          // this.total = total;
+        });
+    },
     childMethod() {
       this.$emit('fatherMethod');
     },

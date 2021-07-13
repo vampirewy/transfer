@@ -306,7 +306,7 @@
                 v-if="forms.bdPercentSelectType > 3" />
             </div>
             <div v-if="tabIndex === 'weight'">
-              <span>BMI</span>
+              <span>BMI：</span>
               <el-select
                 v-model="forms.bmiSelectType"
                 placeholder="请选择"
@@ -360,7 +360,7 @@
                 v-if="forms.sportDistanceSelectType > 3" />
             </div>
             <div v-if="tabIndex === 'sport'">
-              <span>消耗卡路里：</span>
+              <span>消耗千卡：</span>
               <el-select
                 v-model="forms.sportKcalSelectType"
                 placeholder="请选择"

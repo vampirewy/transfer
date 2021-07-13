@@ -135,6 +135,7 @@ export default {
   mounted() {
     this.getList();
     this.ruleList = this.DietRule;
+    this.ingrenient = this.ruleList;
   },
   methods: {
     DetermineAdd() {
