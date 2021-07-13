@@ -171,7 +171,7 @@
     <div v-for="(item,index) in tabbor" :key="index" style="margin-top:9px">
       <span :class="Tabactive === index?'TabBarsName':'TabBarsNames'" @click="TabbarBtn(index)">
         {{item}}
-        <div class="Tabunread">{{dataSource.length}}</div>
+        <div class="Tabunread">{{totaltow}}</div>
       </span>
     </div>
   </div>

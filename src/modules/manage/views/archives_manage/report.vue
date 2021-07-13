@@ -267,7 +267,7 @@
             <div style="text-align: right">
               <el-pagination
                 style="margin-top: 15px"
-                @current-change="search"
+                @current-change="searchpage"
                 background
                 :total="total"
                 :page-size="params.pageSize"
@@ -471,11 +471,15 @@ export default {
       this.formData.maxCreateDate = null;
       this.search();
     },
-    search(current = 1) {
+    searchpage(current = 1) {
+      this.params.pageNo = current;
+      this.fetch();
+    },
+    search() {
       // if (!this.checkRangeDate()) {
       //   return false;
       // }
-      this.params.pageNo = current;
+      this.params.pageNo = 1;
       this.fetch();
     },
     handleDelete() { // 批量删除
@@ -518,6 +522,8 @@ export default {
       // if (!this.checkRangeDate()) {
       //   return false;
       // }
+      this.formData.pageNo = this.params.pageNo;
+      this.formData.pageSize = this.params.pageSize;
       const sendData = Object.assign({}, this.formData);
       // if (sendData.minReportDate) {
       //   sendData.minReportDate = `${sendData.minReportDate} 00:00:00`;
@@ -526,7 +532,7 @@ export default {
       //   sendData.maxReportDate = `${sendData.maxReportDate} 23:59:59`;
       // }
       this.$api.reportInterface
-        .fetchReportList(Object.assign(this.params, sendData))
+        .fetchReportList(sendData)
         .then(({ data }) => {
           if (data.success) {
             this.total = data.data.total;

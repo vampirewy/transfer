@@ -101,6 +101,7 @@ export default {
           if (data.success) {
             this.$message.success('操作成功');
             this.getDetail();
+            this.$emit('cancelRemove');
           }
         });
     },

@@ -146,7 +146,8 @@
         ></el-pagination>
       </div>
       <el-menu-template
-        :value="dietMenuTemDetail"
+        v-if="isShowDietMenuTemplate"
+        :id="dietMenuTemDetailid"
         ref="elMenuTemplate"
         :visible.sync="isShowDietMenuTemplate"
       ></el-menu-template>
@@ -186,7 +187,7 @@ export default {
       cateData: [],
       total: 0,
       menuTypeSelectName: '',
-      dietMenuTemDetail: {},
+      dietMenuTemDetailid: '',
       query: {
         name: '',
         day: '',
@@ -221,16 +222,13 @@ export default {
         });
     },
     add() {
+      this.dietMenuTemDetailid = '';
       this.dietMenuTemDetail = { id: '' };
       this.isShowDietMenuTemplate = true;
     },
     edit(id) {
-      this.$api.dietMenuTemplateInterface
-        .getDietMenuTemplateDetail(id)
-        .then((res) => {
-          this.dietMenuTemDetail = res.data.data;
-          this.isShowDietMenuTemplate = true;
-        });
+      this.dietMenuTemDetailid = id;
+      this.isShowDietMenuTemplate = true;
     },
     menuTemOp() {
       this.isShowDietMenuTemplateType = true;

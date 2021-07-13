@@ -208,7 +208,7 @@
                   ></el-pagination>
                 </div> -->
               </el-table-column>
-              <!-- <el-table-column type="selection" align="center" ></el-table-column> -->
+              <el-table-column type="selection" align="center" ></el-table-column>
               <el-table-column
                 label="客户编号"
                 prop="clientNo"
