@@ -22,7 +22,7 @@
                 show-overflow-tooltip
         ></el-table-column>
         <el-table-column
-                prop="itemValue"
+                prop="reportLv"
                 label="结果"
                 show-overflow-tooltip>
           <template slot-scope="scope">

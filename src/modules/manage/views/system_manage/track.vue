@@ -41,7 +41,7 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="7">
+            <!--<el-col :span="7">
               <el-form-item label="跟踪人员：" label-width="90px">
                 <el-select
                         v-model="staffForm.redLvUserList"
@@ -53,7 +53,7 @@
                              :key="index"></el-option>
                 </el-select>
               </el-form-item>
-            </el-col>
+            </el-col>-->
           </el-row>
         <div class="wltitle">
           <div class="quan"></div>
@@ -79,7 +79,7 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="7">
+            <!--<el-col :span="7">
               <el-form-item label="跟踪人员：" label-width="90px">
                 <el-select
                         v-model="staffForm.orangeLvUserList"
@@ -91,7 +91,7 @@
                              :key="index"></el-option>
                 </el-select>
               </el-form-item>
-            </el-col>
+            </el-col>-->
           </el-row>
         <div class="wltitle">
           <div class="quan"></div>

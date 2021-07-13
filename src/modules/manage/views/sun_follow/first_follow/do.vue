@@ -130,8 +130,8 @@
                         placeholder="请选择"
                         @change="changeAfterDay"
                 >
-                  <el-option label="10天后" :value="10" key="10"></el-option>
-                  <el-option label="30天后" :value="30" key="30"></el-option>
+                  <el-option v-for="item in nextTrackingDayList"
+                             :label="item.name" :value="item.value" :key="item.value"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -209,17 +209,6 @@ export default {
     medicalRecord,
     // SelectUser,
   },
-  props: {
-    detail: {
-      type: Boolean,
-      default: false,
-    },
-    id: {
-      type: [String, Number],
-      required: false,
-      default: '',
-    },
-  },
   data() {
     return {
       popoverStatus: false,
@@ -232,8 +221,8 @@ export default {
         trackingRemark: '',
         isSendMsg: 2,
         messageContent: '',
-        nextTrackingDay: 10,
-        nextTrackingDate: dayjs(new Date(new Date().getTime() + (8.64e7 * 10))).format('YYYY-MM-DD'),
+        nextTrackingDay: '',
+        nextTrackingDate: '', // dayjs(new Date(new Date().getTime() + (8.64e7 * 10))).format('YYYY-MM-DD'),
         nextTrackingWay: '',
         nextTrackingTip: '',
         contentSaveRequests: [],
@@ -245,80 +234,31 @@ export default {
       tabbor: ['跟踪记录', '体检信息', '历史阳性'], // , '就诊记录'
       Tabactive: 0,
       tabIndex: 0,
-      options: {
-        inDate: {
-          disabledDate: (cur) => {
-            // eslint-disable-next-line no-underscore-dangle
-            const _now = dayjs(new Date()).format('YYYY-MM-DD');
-            // eslint-disable-next-line no-underscore-dangle
-            const _cur = dayjs(cur);
-            if (_cur.isAfter(_now, 'day')) {
-              return true;
-            }
-            return false;
-          },
-        },
-        outDate: {
-          disabledDate: (cur) => {
-            // eslint-disable-next-line no-underscore-dangle
-            const _now = this.form.inDate
-              ? dayjs(this.form.inDate).format('YYYY-MM-DD')
-              : dayjs(new Date()).format('YYYY-MM-DD');
-            // eslint-disable-next-line no-underscore-dangle
-            const _cur = dayjs(cur);
-            if (_cur.isSameOrAfter(_now)) {
-              return false;
-            }
-            return true;
-          },
-        },
-      },
-      rules: {
-        clientInfoId: [{ required: true, message: '客户不能为空' }],
-        medicalType: [{ required: true, message: '就医类型不能为空' }],
-        hospital: [{ required: true, message: '医疗机构不能为空' }],
-        inDate: [{ required: true, message: '就医时间不能为空' }],
-        result: [{ required: true, message: '当前状态不能为空' }],
-        hpi: [{ required: true, message: '现病史不能为空' }],
-        diagnosis: [{ required: true, message: '诊断不能为空' }],
-      },
-      resultOptions: [
-        { value: 1, label: '未指定' },
-        { value: 2, label: '治疗中' },
-        { value: 3, label: '转诊' },
-        { value: 4, label: '转为慢病' },
-        { value: 5, label: '痊愈' },
-        { value: 6, label: '其他' },
-      ],
-      typeOptions: [
-        { value: 1, label: '门诊' },
-        { value: 2, label: '住院' },
-      ],
-      currentUser: {},
-      ids: this.$route.query.id,
+      reportLv: '', // 判断回访方式是红色/橙色为主
+      nextTrackingDayList: [],
     };
   },
   mounted() {
     this.getUserInfo();
     this.getPlanWayList();
-    if (this.ids) {
-      this.$api.medicalHistoryInterface.medicalInfoDetail(this.ids).then((res) => {
-        const { data } = res;
-        console.log(data, '撒打算大的');
-        this.form = Object.assign(this.form, data.data || {});
-        this.currentUser = {
-          id: this.form.clientInfoId,
-          name: this.form.clientName,
-          age: this.form.age,
-          gender: this.form.gender,
-          gridName: this.form.clientGridName,
-        };
-      });
-    }
   },
   methods: {
     changeAfterDay(val) {
       this.form.nextTrackingDate = dayjs(new Date(new Date().getTime() + (8.64e7 * val))).format('YYYY-MM-DD');
+    },
+    async getFollowDayWayDetail() {
+      const res = await this.$api.userManagerInterface.getTrackingConfigDetail(1);
+      const { data } = res.data;
+      if (this.reportLv === 1) {
+        this.form.trackingWay = this.form.nextTrackingWay = data.redLvWay;
+        this.nextTrackingDayList = [{ name: `${data.redLvDay}天后`, value: data.redLvDay }];
+        this.form.nextTrackingDay = data.redLvDay;
+      } else if (this.reportLv === 2) {
+        this.form.trackingWay = this.form.nextTrackingWay = data.orangeLvWay;
+        this.nextTrackingDayList = [{ name: `${data.orangeLvDay}天后`, value: data.orangeLvDay }];
+        this.form.nextTrackingDay = data.orangeLvDay;
+      }
+      this.changeAfterDay(this.form.nextTrackingDay);
     },
     async getUserInfo() {
       const res = await this.$api.userManagerInterface.getUserInfo();
@@ -337,8 +277,8 @@ export default {
         const { id, name } = it;
         return { id, name };
       });
-      // list.unshift({ name: '全部', value: '' });
       this.planWayList = list;
+      this.getFollowDayWayDetail(); // 获取到方式列表后再请求，防止闪显
     },
     getNextTrackingTip(val) {
       this.nextTrackingTip = val;
@@ -347,12 +287,17 @@ export default {
       console.log(list);
       this.contentSaveRequestsList = list;
       let allIsCloseCase = false;
+      let reportLv = 2; // 默认橙色
       list.forEach((val) => {
         if (val.isCloseCase === 2) { // 1 已结案 2 未结案。  如果有未结案的就展示
           allIsCloseCase = true;
         }
+        if (val.reportLv === 1) {
+          reportLv = 1;
+        }
       });
       this.allIsCloseCaseShow = allIsCloseCase;
+      this.reportLv = reportLv; // 设置回访方式以红色/橙色为主
     },
     TabbarBtn(index) {
       this.Tabactive = index;
