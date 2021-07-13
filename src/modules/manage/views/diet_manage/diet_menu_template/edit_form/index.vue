@@ -367,7 +367,6 @@ export default {
         arr.push(json);
       }
       this.arrList = arr;
-      console.log(this.arrList, 'klkkkllkllklkkl');
       this.makeIndex(index);
     },
     makeIndex(index) {
@@ -481,7 +480,6 @@ export default {
     },
     submit() {
       const obj = [];
-      console.log(this.editableTabs);
       this.editableTabs.forEach((item) => {
         item.mealTypeDtos.forEach((item2) => {
           item2.dietTemplateConfigDtos.forEach((item3) => {
