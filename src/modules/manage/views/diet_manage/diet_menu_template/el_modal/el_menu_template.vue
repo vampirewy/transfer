@@ -15,10 +15,24 @@
       label-width="90px"
       class="form-content"
     >
-      <el-form-item
+      <el-form-item prop="dietTemplateSortId" label="模板分类：">
+      <el-select
+        v-model="ruleForm.dietTemplateSortId"
+        placeholder="请选择"
+        style="width: 160px"
+      >
+        <el-option
+          :label="item.name"
+          :value="item.id"
+          v-for="(item, index) in menuTypeSelectList"
+          :key="index"
+        ></el-option>
+      </el-select>
+    </el-form-item>
+      <!-- <el-form-item
         prop="dietTemplateSortId"
         style="position: relative"
-        label="模板类别："
+        label="模板分类："
       >
         <el-select
           placeholder="请选择"
@@ -28,7 +42,7 @@
         >
         </el-select>
         <div class="mask" @click="selectType"></div>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item prop="name" label="模板名称：">
         <el-input
           v-model="ruleForm.name"
@@ -81,11 +95,8 @@ export default {
       type: Boolean,
       default: false,
     },
-    value: {
-      type: Object,
-      default() {
-        return {};
-      },
+    id: {
+      type: String,
     },
   },
   data() {
@@ -98,32 +109,61 @@ export default {
         minKcal: '',
         maxKcal: '',
       },
+      menuTypeSelectList: [],
       rules: {
-        dietTemplateSortId: [{ required: true, message: '请选择模板类别' }],
+        dietTemplateSortId: [{ required: true, message: '请选择模板分类' }],
         name: [{ required: true, message: '请输入模板名称' }],
-        minKcal: [{ required: true, message: '请输入最小卡路里' }],
-        maxKcal: [{ required: true, message: '请输入最大卡路里' }],
+        minKcal: [{ required: true, message: '请输入最小千卡' }],
+        maxKcal: [{ required: true, message: '请输入最大千卡' }],
       },
       menuTypeSelectName: '',
+      query: '',
     };
   },
   watch: {
-    value(val) {
-      if (val.id) {
-        this.ruleForm = val;
-        this.menuTypeSelectName = val.dietTemplateSortName;
-      } else {
-        this.ruleForm = {
-          id: '',
-          dietTemplateSortId: '',
-          name: '',
-          intro: '',
-          minKcal: '',
-          maxKcal: '',
-        };
-        this.menuTypeSelectName = '';
-      }
-    },
+    // value(val) {
+    //   if (val.id) {
+    //     this.ruleForm = val;
+    //     this.menuTypeSelectName = val.dietTemplateSortName;
+    //   } else {
+    //     this.ruleForm = {
+    //       id: '',
+    //       dietTemplateSortId: '',
+    //       name: '',
+    //       intro: '',
+    //       minKcal: '',
+    //       maxKcal: '',
+    //     };
+    //     this.menuTypeSelectName = '';
+    //   }
+    // },
+  },
+  mounted() {
+    this.loadData();
+    if (this.id) {
+      this.$api.dietMenuTemplateInterface
+        .getDietMenuTemplateDetail(this.id)
+        .then((res) => {
+          const { data } = res.data;
+          this.ruleForm = {
+            id: data.id,
+            dietTemplateSortId: data.dietTemplateSortId,
+            name: data.name,
+            intro: data.intro,
+            minKcal: data.minKcal,
+            maxKcal: data.maxKcal,
+          };
+        });
+    } else {
+      this.ruleForm = {
+        id: '',
+        dietTemplateSortId: '',
+        name: '',
+        intro: '',
+        minKcal: '',
+        maxKcal: '',
+      };
+    }
   },
   computed: {
     visibles: {
@@ -136,6 +176,18 @@ export default {
     },
   },
   methods: {
+    loadData() {
+      this.$api.dietMenuTemplateInterface
+        .getDietMeneTemCate({
+          pageSize: 1000,
+          // keywords: this.query,
+        })
+        .then((res) => {
+          const { data } = res.data.data;
+          this.menuTypeSelectList = data;
+          // this.total = total;
+        });
+    },
     submit() {
       this.$api.dietMenuTemplateInterface
         .saveDietMenuTemplate(this.ruleForm)

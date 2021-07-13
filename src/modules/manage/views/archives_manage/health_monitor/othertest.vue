@@ -404,6 +404,7 @@ export default {
       this.infoSource.age = data.age;
       this.infoSource.gender = data.gender;
       this.infoSource.gridName = data.gridName;
+      this.infoSource.gridName = data.clientNo;
     },
     // 选择检测项目
     detectiononSelectUser(data) {

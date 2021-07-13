@@ -21,7 +21,8 @@
     </div>
     <div class="lookPressure">
       <div><span class="lookPressureTitle">BMI：</span><span>{{queryInfo.bmi}}</span></div>
-      <div><span class="lookPressureTitle">检测时间：</span><span>{{queryInfo.testDate}}</span></div>
+      <div style="margin-left: -20px;">
+        <span class="lookPressureTitle">检测时间：</span><span>{{queryInfo.testDate}}</span></div>
     </div>
     <div class="lookPressure">
       <div style="width:100%;display: flex;">

@@ -28,9 +28,10 @@
         <follow-content @getTable="getFollowContent"></follow-content>
         <el-form
                 :model="form"
-                ref="staffForm"
+                ref="form"
                 label-width="90px"
                 label-suffix="："
+                :rules="rules"
         >
           <div class="divRightTitleDiv">
             <div class="divRightTitle" style="margin-top: 15px">跟踪结果
@@ -102,9 +103,9 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
+          <el-row v-if="form.isSendMsg === 1">
             <el-col :span="24">
-              <el-form-item label="短信小结">
+              <el-form-item label="短信小结" prop="messageContent">
                 <el-input
                         type="textarea"
                         v-model="form.messageContent"
@@ -236,6 +237,9 @@ export default {
       tabIndex: 0,
       reportLv: '', // 判断回访方式是红色/橙色为主
       nextTrackingDayList: [],
+      rules: {
+        messageContent: [{ required: true, message: '请输入短信小结' }],
+      },
     };
   },
   mounted() {
@@ -307,41 +311,46 @@ export default {
       this.$router.go(-1);
     },
     submit() {
-      console.log(dayjs(new Date()).format('YYYY-MM-DD'));
-      const sendData = Object.assign({}, this.form);
-      sendData.contentSaveRequests = [];
-      let valid = true;
-      this.contentSaveRequestsList.forEach((val) => {
-        if (val.nextTrackingDate === dayjs(new Date()).format('YYYY-MM-DD') && val.state === '') {
-          this.$message.warning('请选择今日跟踪计划的跟踪结果');
-          valid = false;
-          return;
-        }
-        sendData.contentSaveRequests.push({
-          positiveTrackingId: val.id,
-          isCloseCase: val.isCloseCase,
-          state: val.state || 1,
-        });
-      });
-      if (!valid) { // 如果验证未通过
-        return;
-      }
-      console.log(this.contentSaveRequestsList);
-      sendData.trackingDate = `${sendData.trackingDate.split(' ')[0]} 00:00:00`;
-      sendData.nextTrackingDate = `${sendData.nextTrackingDate.split(' ')[0]} 00:00:00`;
-      if (this.allIsCloseCaseShow === false) { // 如果都结案
-        sendData.nextTrackingDay = '';
-        sendData.nextTrackingDate = '';
-      }
-      this.$api.sunFollow.savePositiveReturn(sendData).then(() => {
-        this.$message.success('操作成功');
-        if (this.$route.params.sourceType === '1') {
-          this.$router.push({
-            path: '/first_follow',
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          console.log(dayjs(new Date()).format('YYYY-MM-DD'));
+          const sendData = Object.assign({}, this.form);
+          sendData.contentSaveRequests = [];
+          let validSave = true;
+          this.contentSaveRequestsList.forEach((val) => {
+            if (val.nextTrackingDate <= dayjs(new Date()).format('YYYY-MM-DD') && val.state === '') {
+              this.$message.warning('请选择今日及以前跟踪计划的跟踪结果');
+              validSave = false;
+              return;
+            }
+            sendData.contentSaveRequests.push({
+              positiveTrackingId: val.id,
+              isCloseCase: val.isCloseCase,
+              state: val.state || 1,
+            });
           });
-        } else if (this.$route.params.sourceType === '2') {
-          this.$router.push({
-            path: '/follow_task',
+          if (!validSave) { // 如果验证未通过
+            return;
+          }
+          console.log(this.contentSaveRequestsList);
+          sendData.trackingDate = `${sendData.trackingDate.split(' ')[0]} 00:00:00`;
+          sendData.nextTrackingDate = `${sendData.nextTrackingDate.split(' ')[0]} 00:00:00`;
+          if (this.allIsCloseCaseShow === false) { // 如果都结案
+            sendData.nextTrackingDay = '';
+            sendData.nextTrackingDate = '';
+          }
+          sendData.sourceType = this.$route.params.sourceType;
+          this.$api.sunFollow.savePositiveReturn(sendData).then(() => {
+            this.$message.success('操作成功');
+            if (this.$route.params.sourceType === '1') {
+              this.$router.push({
+                path: '/first_follow',
+              });
+            } else if (this.$route.params.sourceType === '2') {
+              this.$router.push({
+                path: '/follow_task',
+              });
+            }
           });
         }
       });

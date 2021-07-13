@@ -490,7 +490,7 @@ export default {
         this.infoSource.gender = data.data.gender;
         this.infoSource.age = data.data.age;
         this.infoSource.clientId = data.data.clientId;
-        this.infoSource.gridName = data.data.clientId;
+        this.infoSource.gridName = data.data.clientNo;
         this.infoSource.SBP = data.data.sbp;
         this.infoSource.DBP = data.data.dbp;
         this.infoSource.pulse = data.data.hd;
@@ -504,7 +504,7 @@ export default {
         this.infoSource.gender = data.data.gender;
         this.infoSource.age = data.data.age;
         this.infoSource.clientId = data.data.clientId;
-        this.infoSource.gridName = data.data.clientId;
+        this.infoSource.gridName = data.data.clientNo;
         this.infoSource.bloodsugarvalue = data.data.sugar;
         this.infoSource.startDate = data.data.testDate;
         this.infoSource.conclusion = data.data.result;
@@ -517,7 +517,7 @@ export default {
         this.infoSource.gender = data.data.gender;
         this.infoSource.age = data.data.age;
         this.infoSource.clientId = data.data.clientId;
-        this.infoSource.gridName = data.data.clientId;
+        this.infoSource.gridName = data.data.clientNo;
         this.infoSource.Height = data.data.height;
         this.infoSource.Weight = data.data.weight;
         this.infoSource.Waist = data.data.wc;
@@ -532,7 +532,7 @@ export default {
         this.infoSource.gender = data.data.gender;
         this.infoSource.age = data.data.age;
         this.infoSource.clientId = data.data.clientId;
-        this.infoSource.gridName = data.data.clientId;
+        this.infoSource.gridName = data.data.clientNo;
         this.infoSource.sportTime = data.data.sportTime;
         this.infoSource.sportDistance = data.data.sportDistance;
         this.infoSource.steps = data.data.steps;
@@ -564,6 +564,7 @@ export default {
       this.infoSource.gender = data.gender;
       this.infoSource.gridName = data.gridName;
       this.infoSource.clientNo = data.clientNo;
+      this.infoSource.gridName = data.clientNo;
     },
     addRecord() {
       this.$refs.form.validate((valid) => {

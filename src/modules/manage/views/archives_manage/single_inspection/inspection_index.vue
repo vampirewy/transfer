@@ -13,9 +13,9 @@
               <div class="searchLeft">
                 <div class="searchInputFormItem">
                   <el-input
-                    placeholder="姓名/客户编号/检查单号/检查机构/检查项目"
+                    placeholder="姓名/客户编号/单号/机构/项目"
                     v-model="formData.keywords"
-                    style="width: 160px"
+                    style="width: 190px"
                   >
                   </el-input>
                   <span class="searchBtnImgSpan" @click="search">
@@ -656,7 +656,7 @@ export default {
   }
 .medical-history {
   .searchCondition .searchInputFormItem{
-    width: 180px;
+    width: 220px;
   }
   background: #fff;
   /deep/ .search-button {
