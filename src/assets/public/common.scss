@@ -152,7 +152,7 @@ a {
     position: relative;
 
     /deep/ .el-input__inner {
-      padding-right: 40px;
+      // padding-right: 40px;
     }
 
     .searchBtnImgSpan {
@@ -537,7 +537,7 @@ a {
     flex-wrap: wrap;
     align-items: center;
     .el-select{
-      width: 120px !important;
+      width: 130px !important;
     }
     div {
       margin: 5px 5px 0 0;

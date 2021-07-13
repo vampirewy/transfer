@@ -30,7 +30,7 @@
       <div class="assessContent">
         <p class="assessContentOne level4"  v-for="(item, index) in assessListData.assess2"
            :key="index">
-          {{item}}1
+          {{item}}
         </p>
       </div>
     </div>

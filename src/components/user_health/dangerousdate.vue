@@ -88,7 +88,7 @@ export default {
       this.fetch();
     },
     fetch() {
-      this.$api.reportInterface.getriskListdate(this.clientId)
+      this.$api.reportInterface.getriskList(this.clientId)
         .then(({ data }) => {
           if (data) {
             data.data.forEach((item) => {
