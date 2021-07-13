@@ -185,7 +185,7 @@ export default {
       );
     },
     handleCurrentChange(current = 1) {
-      this.pageNo = current;
+      this.currentPage = current;
       this.getList();
     },
     cancel() {
@@ -207,12 +207,12 @@ export default {
       this.isShowDietPrinciple = true;
     },
     search(current = 1) {
-      this.pageNo = current;
+      this.currentPage = current;
       this.getList();
     },
     reset(current = 1) {
       this.keywords = '';
-      this.pageNo = current;
+      this.currentPage = current;
       this.getList();
     },
     upMore() {},

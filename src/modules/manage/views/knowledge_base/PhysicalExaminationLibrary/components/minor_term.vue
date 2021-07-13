@@ -143,7 +143,8 @@
                 </span>
               </template>
             </el-table-column>
-            <el-table-column label="小项名称" min-width="100"  prop="itemName">
+            <el-table-column label="小项名称" min-width="100"  prop="itemName"
+            show-overflow-tooltip>
               <template slot-scope="scope">
                 <span>
                   {{ scope.row.itemName }}
@@ -478,6 +479,7 @@ export default {
       this.getList();
     },
     onChangePage(current = 1) {
+      console.log(current);
       this.table.pageNo = current;
       // this.getUserList();
       this.getList();

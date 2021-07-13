@@ -163,48 +163,6 @@
               @selection-change="handleSelectionChange"
               :row-key="getRowKeys"
               @expand-change="handleExpandChange">
-              <!-- <el-table-column type="expand" width="1" class-name="hide-expand-column">
-                <el-table :data="expandData.list" class="expand-table">
-                  <el-table-column
-                    label="体检编号"
-                    prop="reportNo"
-                    align="center"
-                    show-overflow-tooltip></el-table-column>
-                  <el-table-column
-                    label="姓名"
-                    prop="reportDate"
-                    align="center"
-                    show-overflow-tooltip></el-table-column>
-                  <el-table-column
-                    label="性别"
-                    prop="examinationOrgan"
-                    align="center"
-                    show-overflow-tooltip>
-                  </el-table-column>
-                  <el-table-column label="操作" prop="index" width="160" align="center">
-                    <template slot-scope="scope">
-                      <el-button
-                        type="text"
-                        @click="handleDetail(scope.row.id)"
-                        v-if="getAccess('physical_examination_report_view')"
-                      >查看</el-button>
-                    </template>
-                  </el-table-column>
-                </el-table>
-                <div style="text-align: right">
-                  <el-pagination
-                    style="margin-top: 15px"
-                    @current-change="handleExpandPageChange"
-                    background
-                    :total="expandData.total"
-                    :page-size="expandData.pageSize"
-                    :current-page="expandData.pageNo"
-                    :hide-on-single-page="true"
-                    :page-sizes="[15]"
-                    layout="prev, pager, next, jumper, total, sizes"
-                  ></el-pagination>
-                </div>
-              </el-table-column> -->
               <el-table-column type="selection" width="40" align="center"></el-table-column>
               <el-table-column
                 label="体检编号"
@@ -513,11 +471,11 @@ export default {
       this.formData.maxCreateDate = null;
       this.search();
     },
-    search() {
+    search(current = 1) {
       // if (!this.checkRangeDate()) {
       //   return false;
       // }
-      this.params.pageNo = 1;
+      this.params.pageNo = current;
       this.fetch();
     },
     handleDelete() { // 批量删除

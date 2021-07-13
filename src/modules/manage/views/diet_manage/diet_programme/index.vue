@@ -193,7 +193,11 @@
           prop="gender"
           label="性别"
           show-overflow-tooltip
-        ></el-table-column>
+        >
+        <template slot-scope="scope">
+          {{scope.row.gender === 1 ? '男' : (scope.row.gender === 2 ? '女' : '')}}
+        </template>
+        </el-table-column>
         <el-table-column prop="age" label="年龄"
         show-overflow-tooltip> </el-table-column>
         <el-table-column prop="gridName" label="人员类别"
@@ -382,8 +386,8 @@ export default {
       this.id = id;
       this.viewIndex = 2;
     },
-    search() {
-      this.formData.pageNo = 1;
+    search(page = 1) {
+      this.formData.pageNo = page;
       this.loadData();
     },
     reset() {
