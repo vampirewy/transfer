@@ -39,13 +39,12 @@
             <div>
             <span>管理医生：</span>
             <el-select
-                  multiple
-                  v-model="formData.doctorIdList"
-                  clearable
-            collapse-tags
+            multiple
+            allow-create
+            default-first-option
+            v-model="formData.doctorIdList"
             class="someChoose"
-                  placeholder="请选择"
-                  style="width: 150px !important;"
+            placeholder="请选择"
           >
             <el-option :label="item.realName" :value="item.id" v-for="(item, index) in doctorList"
                        :key="index"></el-option>

@@ -22,7 +22,8 @@
     <div>
       <div><span></span><span class="outlierTitle">项目信息</span></div>
       <div class="lookPressure">
-        <div><span>系统大项：</span><span>{{expandData.itemName}}</span></div>
+        <div><span style="display: inline-block;width: 70px;white-space: nowrap;">系统大项：
+          </span><span>{{expandData.itemName}}</span></div>
         <div><span>系统小项：</span><span>{{expandData.sectionName}}</span></div>
       </div>
       <div class="lookPressure">

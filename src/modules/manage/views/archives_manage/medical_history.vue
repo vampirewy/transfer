@@ -168,7 +168,7 @@
               :row-key="getRowKeys"
               @expand-change="handleExpandChange">
               <el-table-column type="expand" width="1" class-name="hide-expand-column">
-                <el-table :data="expandData.list" class="expand-table">
+                <!-- <el-table :data="expandData.list" class="expand-table">
                   <el-table-column label="就医日期" prop="inDate" align="center"
                   show-overflow-tooltip></el-table-column>
                   <el-table-column label="医疗机构" prop="hospital" align="center"
@@ -193,8 +193,8 @@
                         v-if="getAccess('medical_history_view')">查看</el-button>
                     </template>
                   </el-table-column>
-                </el-table>
-                <div style="text-align: right">
+                </el-table> -->
+                <!-- <div style="text-align: right">
                   <el-pagination
                     style="margin-top: 15px"
                     @current-change="handleExpandPageChange"
@@ -206,9 +206,9 @@
                     :page-sizes="[15]"
                     layout="prev, pager, next, jumper, total, sizes"
                   ></el-pagination>
-                </div>
+                </div> -->
               </el-table-column>
-              <el-table-column type="selection" align="center"></el-table-column>
+              <!-- <el-table-column type="selection" align="center" ></el-table-column> -->
               <el-table-column
                 label="客户编号"
                 prop="clientNo"

@@ -231,16 +231,28 @@
         </template>
       </el-table>
       <div style="text-align: right;padding-bottom: 10px;">
-        <el-pagination
+        <!-- <el-pagination
           style="margin-top: 15px"
-          @current-change="search"
           background
           :total="total"
-          :page-size="params.pageSize"
           :current-page="params.pageNo"
-          :page-sizes="[15]"
+          :pageSizes="[10]"
+          :page-size="10"
+          @current-change="search"
+          @size-change="handleSizeChange"
           layout="prev, pager, next, jumper, total, sizes"
-        ></el-pagination>
+        ></el-pagination> -->
+        <el-pagination
+                    style="margin-top: 15px"
+                    @current-change="search"
+                    @size-change="handleSizeChange"
+                    background
+                    :current-page="params.pageNo"
+                    layout="prev, pager, next, jumper, total, sizes"
+                    :total="total"
+                    :pageSizes="[10]"
+                    :page-size="10"
+            ></el-pagination>
       </div>
   </div>
 </div>
@@ -295,6 +307,8 @@ export default {
       tabbor: ['随访任务'],
       Tabactive: 3,
       total: 0,
+      totalone: 0,
+      totaltow: 0,
       params: {
         pageSize: 10,
         pageNo: 1,
@@ -324,6 +338,7 @@ export default {
       }).then((res) => {
         const { data } = res.data;
         this.dataSourceList = data.data;
+        this.totalone = data.total;
         this.total = data.total;
       });
     },
@@ -334,22 +349,34 @@ export default {
       }).then((res) => {
         const { data } = res.data;
         this.dataSource = data.data;
-        this.total = data.total;
+        this.totaltow = data.total;
       });
     },
     TabbarBtn(index) {
       this.Tabactive = index;
       this.params.pageNo = 1;
-      // if (index === 3) {
-      //   this.PositiveClient();
-      // }
-      // if (index === 0) {
-      //   this.InterveneClient();
-      // }
+      this.total = this.totals;
+      if (index === 3) {
+        this.PositiveClient();
+        this.total = this.totalone;
+      }
+      if (index === 0) {
+        this.InterveneClient();
+        this.total = this.totaltow;
+      }
       // console.log(index);
     },
-    search() {
-      this.params.pageNo = 1;
+    search(current = 1) {
+      this.params.pageNo = current;
+      if (this.Tabactive === 3) {
+        this.PositiveClient();
+      }
+      if (this.Tabactive === 0) {
+        this.InterveneClient();
+      }
+    },
+    handleSizeChange(size) {
+      this.params.pageSize = size;
       if (this.Tabactive === 3) {
         this.PositiveClient();
       }

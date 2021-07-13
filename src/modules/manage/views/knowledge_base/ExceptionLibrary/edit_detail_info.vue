@@ -85,7 +85,6 @@ export default {
     };
   },
   mounted() {
-    console.log(this.id, '接收的数据123');
     this.getDetail();
   },
   methods: {
@@ -105,13 +104,23 @@ export default {
           }
         });
     },
+    editException(row) {
+      this.$api.interventionTemplateInterface
+        .organAbnormalAliasRemove(row.id)
+        .then(({ data }) => {
+          if (data.success) {
+            this.$message.success('操作成功');
+            this.$emit('cancelRemove');
+            this.getDetail();
+          }
+        });
+    },
     async getDetail() {
       // const reqBody = { id: this.id };
       const res = await this.$api.unusualListInterface.listByOrganAbnomalCode(
         this.id,
       );
       const { data } = res.data;
-      console.log(data);
       this.tableData = data;
     },
     cancel() {
@@ -126,7 +135,6 @@ export default {
             planWay: this.interfereform,
             planContent: this.Prompt,
           };
-          console.log('obj', obj);
           if (this.id === '') {
             this.$api.interventionTemplateInterface
               .saveInterveneTemplatePlan(obj)

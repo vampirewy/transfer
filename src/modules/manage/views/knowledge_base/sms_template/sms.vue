@@ -355,7 +355,7 @@ export default {
       // console.log(this.smsTypes);
     },
     async getList() {
-      const res = await this.$api.projectList.smsList(this.formData);
+      const res = await this.$api.projectList.smsList(Object.assign(this.formData, this.params));
       const { data } = res.data;
       this.dataSource = data.data;
       this.total = data.total;

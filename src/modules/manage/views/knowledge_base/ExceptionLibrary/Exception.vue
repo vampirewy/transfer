@@ -218,6 +218,7 @@
       :visible="modalVisibleInfo"
       :id="editdetailinfo"
       @cancel="cancel"
+      @cancelRemove="cancelRemove"
       ></edit-detail-info>
       <div style="text-align: right">
         <el-pagination
@@ -454,6 +455,9 @@ export default {
     cancel() {
       this.modalVisibleInfo = false;
     },
+    cancelRemove() {
+      this.getList();
+    },
     remove({ row }) {
       this.$confirm('改操作无法撤销, 是否删除?', '提示', {
         type: 'warning',
@@ -524,7 +528,6 @@ export default {
     },
     async getQuestionType() {
       await this.$api.health.getQuestionType().then((options) => {
-        console.log(options);
         this.types = options;
         options.forEach((val) => {
           this.options[val.paramValue] = val.name;
