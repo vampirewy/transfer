@@ -159,7 +159,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="24">
-                <el-form-item label="管理医生">
+                <el-form-item label="管理医生"  prop="userRealName">
                   <el-popover
                           ref="popover1"
                           placement="bottom"
@@ -437,6 +437,13 @@ export default {
           },
         ],
         marriage: [
+          {
+            required: true,
+            message: '请选择',
+            trigger: 'change',
+          },
+        ],
+        userRealName: [
           {
             required: true,
             message: '请选择',

@@ -651,13 +651,27 @@ textarea:-ms-input-placeholder {
   }
 }
 .someChoose{
+  .el-select__tags{
+    overflow: hidden;
+    text-overflow:ellipsis;
+      white-space: nowrap;
+    span{
+      width: 80px;
+      display: inline;
+      overflow: hidden;
+      text-overflow:ellipsis;
+      white-space: nowrap;
+    }
+  }
   .el-tag{
     &.el-tag--info:first-child{
       overflow: hidden;
       text-overflow:ellipsis;
       white-space: nowrap;
-      width: 55px;
     }
+    //   .el-tag__close{
+    //     margin-top: 2.5px;
+    // }
   }
 }
 .noneText{

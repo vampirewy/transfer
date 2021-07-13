@@ -104,7 +104,7 @@ class UserManagerInterface extends BaseModule {
   saveTrackingReturnConfig(params = {}) {
     return this.post('/tracking_return/save_tracking_return_config', params);
   }
-  // 保存回访配置
+  // 回访配置详情
   getTrackingConfigDetail(id) {
     return this.get(`/tracking_return/get_tracking_config_detail/${id}`);
   }
