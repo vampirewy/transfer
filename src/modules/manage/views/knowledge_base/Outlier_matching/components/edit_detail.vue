@@ -22,13 +22,13 @@
     <div>
       <div><span></span><span class="outlierTitle">项目信息</span></div>
       <div class="lookPressure">
-        <div><span style="display: inline-block;width: 70px;white-space: nowrap;">系统大项：
+        <div><span class="TxtName">系统大项：
           </span><span>{{expandData.itemName}}</span></div>
-        <div><span>系统小项：</span><span>{{expandData.sectionName}}</span></div>
+        <div><span class="TxtName">系统小项：</span><span>{{expandData.sectionName}}</span></div>
       </div>
       <div class="lookPressure">
-        <div><span>适宜性别：</span><span>{{expandData.genderTxt}}</span></div>
-        <div><span>正常参考：</span><span>123123</span></div>
+        <div><span class="TxtName">适宜性别：</span><span>{{expandData.genderTxt}}</span></div>
+        <div><span class="TxtName">正常参考：</span><span>{{expandData.refRange}}</span></div>
       </div>
       <div><span></span><span class="outlierTitles">匹配</span></div>
       <!-- <div class="row" style="display: flex">
@@ -372,6 +372,11 @@ export default {
   .lookPressure{
     display: flex;
     margin:20px 0 20px 0;
+    .TxtName{
+      display: inline-block;
+      width: 70px;
+      white-space: nowrap;
+    }
     div{
       width: 50%;
       padding-left: 20px;

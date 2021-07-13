@@ -206,13 +206,13 @@ export default {
       this.EditId.Look = true;
       this.isShowDietPrinciple = true;
     },
-    search(current = 1) {
-      this.currentPage = current;
+    search() {
+      this.currentPage = 1;
       this.getList();
     },
-    reset(current = 1) {
+    reset() {
       this.keywords = '';
-      this.currentPage = current;
+      this.currentPage = 1;
       this.getList();
     },
     upMore() {},

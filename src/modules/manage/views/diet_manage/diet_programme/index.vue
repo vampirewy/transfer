@@ -236,7 +236,7 @@
       </el-table>
       <el-pagination
         style="margin-top: 15px"
-        @current-change="search"
+        @current-change="searchpage"
         background
         :total="total"
         :page-size="formData.pageSize"
@@ -321,7 +321,6 @@ export default {
       if (vm.$route.query.type === 'add') {
         vm.InfoType = 'InfoType';
         vm.add();
-        console.log('个人中心新增', vm.$route.query.type, vm.$route.query.clientId);
       } else if (vm.$route.query.type === 'edit') {
         vm.deitList(vm.$route.query.clientId);
       } else if (vm.$route.query.type === 'info') {
@@ -386,8 +385,14 @@ export default {
       this.id = id;
       this.viewIndex = 2;
     },
-    search(page = 1) {
-      this.formData.pageNo = page;
+    searchpage(current = 1) {
+      // console.log(current);
+      this.formData.pageNo = current;
+      this.loadData();
+    },
+    search() {
+      // console.log(current);
+      this.formData.pageNo = 1;
       this.loadData();
     },
     reset() {
