@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import logoImg from '~/src/assets/images/logo.png';
 export default {
   name: 'SidebarLogo',
   props: {
@@ -25,8 +26,7 @@ export default {
   data() {
     return {
       title: 'Vue Element Admin',
-      // logo: 'http://health.pre.touchealth.com/logo.png',
-      logo: '',
+      logo: logoImg,
     };
   },
 };
