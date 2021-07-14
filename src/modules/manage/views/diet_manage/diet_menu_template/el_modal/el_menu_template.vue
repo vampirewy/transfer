@@ -113,8 +113,8 @@ export default {
       rules: {
         dietTemplateSortId: [{ required: true, message: '请选择模板分类' }],
         name: [{ required: true, message: '请输入模板名称' }],
-        minKcal: [{ required: true, message: '请输入最小卡路里' }],
-        maxKcal: [{ required: true, message: '请输入最大卡路里' }],
+        minKcal: [{ required: true, message: '请输入最小千卡' }],
+        maxKcal: [{ required: true, message: '请输入最大千卡' }],
       },
       menuTypeSelectName: '',
       query: '',

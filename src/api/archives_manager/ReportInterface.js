@@ -59,6 +59,9 @@ class ReportInterface extends BaseModule {
     return this.get('/intervene_template/get_tcm_list');
   }
   getriskList(id) {
+    return this.get(`/home/get_newest_question_risk_factor/${id}`);
+  }
+  getriskListdate(id) {
     return this.get(`/home/get_question_risk_factor/${id}`);
   }
 }

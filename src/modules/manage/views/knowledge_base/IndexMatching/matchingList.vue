@@ -137,16 +137,6 @@
             {{scope.row.total | getResult}}</el-button>
           </template>
         </el-table-column>
-        <!-- <el-table-column label="问卷来源" prop="sourceName" show-overflow-tooltip>
-          <template slot-scope="scope">
-            {{ scope.row.sourceName | getResult}}
-          </template>
-        </el-table-column>
-        <el-table-column prop="gender" label="份数" width="60px">
-          <template slot-scope="scope">
-            <span>{{scope.row.questionCount | getResult}}</span>
-          </template>
-        </el-table-column> -->
         <el-table-column label="操作" prop="index" min-width="150">
           <template slot-scope="scope">
             <el-button
@@ -154,13 +144,12 @@
               size="small"
               @click="addList(scope.row)"
             >添加</el-button>
-            <span style="color:#DDE0E6">|</span>
+            <!-- <span style="color:#DDE0E6">|</span>
             <el-button
               type="text"
               size="small"
               v-if="getAccess('matchingList_ignore')"
-            >忽略</el-button>
-            <!-- && scope.row.questionType !== 4 -->
+            >忽略</el-button> -->
             <span style="color:#DDE0E6">|</span>
             <el-button
               type="text"

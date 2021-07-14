@@ -247,10 +247,10 @@
                   <img src="@/assets/images/common/addBtn.png" alt="" />
                   添加
                 </div>
-                <!-- <div @click="editDietRule">
+                <div @click="editDietRule" style="padding: 10px 20px;">
                   <img src="@/assets/images/common/editBtn.png" alt="" />
                   编辑
-                </div> -->
+                </div>
                 <div @click="delectDietRule" style="padding: 10px 20px;">
                   <img src="@/assets/images/common/delBtn.png" alt="" />
                   删除
@@ -458,7 +458,6 @@ export default {
     };
   },
   mounted() {
-    console.log(this.type, this.personclientId);
     if (this.type === 'add' && this.personclientId) {
       const json = {
         id: this.personclientId,
@@ -472,17 +471,12 @@ export default {
       this.pageList.push(this.id);
       this.HealthInfo();
     }
-    console.log(this.$route.query.name);
-    // if (this.type !== 'add') {
-    //   this.HealthInfo();
-    // }
   },
   methods: {
     handlePopoperClose() {
       this.popoverStatus = false;
     },
     PopoperCloseUser(data) {
-      console.log(data);
       this.AddtemplateId = data.id;
       this.AddtemplateType = 'Addtemplate';
       this.maketime = new Date().getTime();
@@ -492,7 +486,6 @@ export default {
     fatherMethod() {
       const fathers = this.$refs.makeRecipes.editableTabs;
       this.fathersList = fathers;
-      console.log(this.fathersList, '变了');
     },
     getClientUserInfo(id) {
       this.$api.userManagerInterface.getDetail(id).then(({ data }) => {
@@ -500,7 +493,6 @@ export default {
           this.clientName = data.data.name;
           this.clientId = data.data.id;
           this.selectedData.push(data.data);
-          console.log(this.selectedData, 'asdasdd');
         }
       });
     },
@@ -523,12 +515,10 @@ export default {
           if (res.data.success) {
             this.analysisData = res.data.data.dietTemplateNutritionList;
             this.dietTemplateMaterial = res.data.data.dietTemplateMaterial;
-            // console.log(res.data.data, '右侧数据');
           }
         });
     },
     handleFoodSelect(data, index) {
-      // console.log(data, '121121');
       if (data.clientId) {
         this.pageList.push(data.clientId);
         this.stateDate = data.startDate;
@@ -581,7 +571,6 @@ export default {
       // if (this.type !== 'add') {
       this.arrListInfo = this.arrList[index].clientDietPlanConfigList;
       this.Analysis();
-      // console.log(index, 'tab选项卡切换');
       // }
     },
     addtemplate() {
@@ -616,11 +605,7 @@ export default {
       this.HealthInfo();
     },
     onSelectDietRule(data) {
-      // data.forEach((val) => {
       this.mealList = data;
-      // });
-      // console.log(this.mealList);
-      // this.mealList = data;
     },
     selectedDataDelect(index) {
       this.pageList = [];
@@ -675,8 +660,6 @@ export default {
         }
       }
       const lists = this.$refs.makeRecipes.editableTabs;
-      // console.log(lists, '12212qwwq');
-      // this.DataProcessing(lists);
       const arr = [];
       for (let i = 0; i < lists.length; i++) {
         const json = {};
