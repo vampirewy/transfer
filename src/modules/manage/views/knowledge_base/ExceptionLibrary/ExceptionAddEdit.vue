@@ -294,7 +294,6 @@ export default {
     this.getQuickList();
     this.listRecommendDepartment();
     this.listRecommendInspect();
-    console.log(this.ids, 'qqqqqqq');
     if (this.ids) {
       this.getDetail();
     }

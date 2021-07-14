@@ -598,10 +598,23 @@ export default {
       // }
     },
     onSelectUser(data) {
-      data.forEach((val) => {
-        this.selectedData.push(val);
-        this.pageList.push(val.id);
+      data.forEach((valQusOne) => {
+        let same = false;
+        this.selectedData.forEach((valAnswer) => {
+          if (valQusOne.id === valAnswer.id) { // 如果有一样 就回答过了
+            same = true;
+          }
+        });
+        if (same === false) { // 如果没有相同的则push
+          this.selectedData.push(valQusOne);
+          this.pageList.push(valQusOne.id);
+        }
       });
+      // data.forEach((val) => {
+      //   this.selectedData.push(val);
+      //   this.pageList.push(val.id);
+      // });
+      // console.log(this.pageList);
       this.HealthInfo();
     },
     onSelectDietRule(data) {

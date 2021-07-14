@@ -368,7 +368,6 @@ export default {
       const { data } = res.data;
       this.gridList = data.data;
     },
-    handleCurrentChange() {},
     add() {
       this.Type = 'add';
       this.id = '';

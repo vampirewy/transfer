@@ -212,6 +212,7 @@ export default {
       isTrue: true,
       currentValue: '',
       modalVisible: false,
+      getResult: '-',
       total: 0,
       dataSource: [],
       gridList: [],

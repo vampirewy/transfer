@@ -155,7 +155,6 @@ export default {
     },
     addBtn() {
       this.$emit('change', this.multipleSelection);
-      console.log(this.multipleSelection);
       this.actives = false;
     },
   },
