@@ -90,6 +90,30 @@
         </el-input>
       </div>
       <div>
+        <span>上报科室：</span>
+        <el-input
+                v-model="form.reportDepartment"
+                placeholder="请输入"
+                style="width: 140px">
+        </el-input>
+      </div>
+      <div>
+        <span>项目名称：</span>
+        <el-input
+                v-model="form.itemName"
+                placeholder="请输入"
+                style="width: 140px">
+        </el-input>
+      </div>
+      <div>
+        <span>上报人：</span>
+        <el-input
+                v-model="form.reportUserName"
+                placeholder="请输入"
+                style="width: 140px">
+        </el-input>
+      </div>
+      <div>
         <span>上报时间：</span>
         <el-date-picker
                 v-model="form.startTime"
@@ -270,6 +294,9 @@ export default {
         reportState: '', // 是否总检
         source: '',
         phoneNo: '', // 手机号码
+        reportDepartment: '',
+        itemName: '',
+        reportUserName: '',
         startTime: '',
         endTime: '',
       },

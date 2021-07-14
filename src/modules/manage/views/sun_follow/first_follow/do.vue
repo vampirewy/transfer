@@ -326,7 +326,7 @@ export default {
             sendData.contentSaveRequests.push({
               positiveTrackingId: val.id,
               isCloseCase: val.isCloseCase,
-              state: val.state || 1,
+              state: val.state,
             });
           });
           if (!validSave) { // 如果验证未通过
