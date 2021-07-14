@@ -10,7 +10,7 @@
       <div class="searchCondition">
       <div class="searchLeft">
         <div class="searchInputFormItem">
-          <el-input placeholder="模版名称" v-model="query.name">
+          <el-input placeholder="模板名称" v-model="query.name">
           </el-input>
           <span class="searchBtnImgSpan" style="background:#ffffff;margin:1px"
           @click="search(1)">
@@ -19,7 +19,7 @@
               </span>
         </div>
         <div class="searchInputFormItem">
-          <el-input placeholder="模版周期" v-model="query.day">
+          <el-input placeholder="模板周期" v-model="query.day">
           </el-input>
           <span class="searchBtnImgSpan" style="background:#ffffff;margin:1px"
           @click="search(1)">
@@ -46,7 +46,7 @@
       </el-table-column>
       <el-table-column prop="name" label="模板名称"></el-table-column>
       <el-table-column prop="dietTemplateSortName" label="分类"></el-table-column>
-      <el-table-column prop="day" label="模版周期（天）">
+      <el-table-column prop="day" label="模板周期（天）">
       </el-table-column>
     </el-table>
     <el-pagination
