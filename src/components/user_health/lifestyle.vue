@@ -3,23 +3,37 @@
     <div class="life-style">
       <p class="nameP">
         <img src="@/assets/images/healthPlan/lifestyle1.png"/>饮食：
-        <span>{{formNew.questionLifestyle1.paramValue || '暂无数据'}}</span>
+        <span
+        :class="formNew.questionLifestyle1.attention
+        ? 'addactive':''"
+        >{{formNew.questionLifestyle1.paramValue || '暂无数据'}}</span>
       </p>
       <p class="nameP"><img src="@/assets/images/healthPlan/lifestyle2.png"/>吸烟：
-        <span>{{formNew.questionLifestyle2.paramValue || '暂无数据'}}</span>
+        <span
+        :class="formNew.questionLifestyle2.attention
+        ? 'addactive':''">{{formNew.questionLifestyle2.paramValue || '暂无数据'}}</span>
       </p>
       <p class="nameP"><img src="@/assets/images/healthPlan/lifestyle3.png"/>饮酒：
-        <span style="color:#F33D21;" v-if="formNew.questionLifestyle3.paramValue">
-          {{formNew.questionLifestyle4.paramValue}}</span>
+        <span
+        :class="formNew.questionLifestyle3.attention
+        ? 'addactive':''"
+        v-if="formNew.questionLifestyle3.paramValue">
+          {{formNew.questionLifestyle3.paramValue}}</span>
         <span v-else>暂无数据</span>
       </p>
       <p class="nameP"><img src="@/assets/images/healthPlan/lifestyle4.png"/>精神：
-        <span style="color:#F33D21;" v-if="formNew.questionLifestyle4.paramValue">
+        <span
+        :class="formNew.questionLifestyle4.attention
+        ? 'addactive':''"
+         v-if="formNew.questionLifestyle4.paramValue">
           {{formNew.questionLifestyle4.paramValue}}</span>
         <span v-else>暂无数据</span>
       </p>
       <p class="nameP"><img src="@/assets/images/healthPlan/lifestyle5.png"/>睡眠：
-        <span>{{formNew.questionLifestyle5.paramValue || '暂无数据'}}</span>
+        <span
+        :class="formNew.questionLifestyle5.attention
+        ? 'addactive':''"
+        >{{formNew.questionLifestyle5.paramValue || '暂无数据'}}</span>
       </p>
     </div>
   </div>
@@ -32,11 +46,11 @@ export default {
   data() {
     return {
       formNew: {
-        questionLifestyle1: { paramValue: '' },
-        questionLifestyle2: { paramValue: '' },
-        questionLifestyle3: { paramValue: '' },
-        questionLifestyle4: { paramValue: '' },
-        questionLifestyle5: { paramValue: '' },
+        questionLifestyle1: { paramValue: '', attention: '' },
+        questionLifestyle2: { paramValue: '', attention: '' },
+        questionLifestyle3: { paramValue: '', attention: '' },
+        questionLifestyle4: { paramValue: '', attention: '' },
+        questionLifestyle5: { paramValue: '', attention: '' },
       },
       assessListData: [],
     };
@@ -48,6 +62,8 @@ export default {
       },
       deep: true, // 为true，表示深度监听，这时候就能监测到a值变化
     },
+  },
+  mounted() {
   },
 };
 </script>
@@ -85,5 +101,8 @@ export default {
         }*/
       }
     }
+  }
+  .addactive{
+    color: #F33D21;
   }
 </style>

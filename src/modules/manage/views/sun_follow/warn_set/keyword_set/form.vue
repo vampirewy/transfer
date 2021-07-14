@@ -24,20 +24,40 @@
         </el-col>
         <el-col :span="6">
           <el-form-item label="科室" class="form-item-sex" prop="sectionName">
-            <el-input
+            <!--<el-input
                     :disabled="detail"
                     type="text"
                     placeholder="请输入"
-                    v-model="staffForm.sectionName"></el-input>
+                    v-model="staffForm.sectionName"></el-input>-->
+            <el-select
+                    :disabled="detail"
+                    v-model="staffForm.sectionName"
+                    placeholder="请选择"
+                    @change="getItemList"
+            >
+              <el-option :label="item.sectionName" :value="item.sectionName"
+                         v-for="(item, index) in departmentList"
+                         :key="index"></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="项目" class="form-item-sex"  prop="itemName">
-            <el-input
+            <!--<el-input
                     :disabled="detail"
                     type="text"
                     placeholder="请输入"
-                    v-model="staffForm.itemName"></el-input>
+                    v-model="staffForm.itemName"></el-input>-->
+            <el-select
+                    :disabled="detail"
+                    v-model="staffForm.itemName"
+                    placeholder="请选择"
+                    @change="getItemList"
+            >
+              <el-option :label="item.itemName" :value="item.itemName"
+                         v-for="item in itemList"
+                         :key="item.id"></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="6">
@@ -146,6 +166,8 @@ export default {
   data() {
     return {
       gridList: [],
+      departmentList: [],
+      itemList: [],
       relationOptions: [{ value: 0, name: '<' }, { value: 1, name: '≤' }, { value: 2, name: '>' },
         { value: 3, name: '≥' }, { value: 4, name: '区间' }],
       staffForm: {
@@ -173,23 +195,44 @@ export default {
     };
   },
   mounted() {
-    if (this.id) {
-      // 详情
-      this.$api.sunFollow.getWarnTemplateDetail({ id: this.id }).then(async (res) => {
-        const { data } = res;
-        this.staffForm.name = data.data.name;
-        this.staffForm.sectionName = data.data.sectionName;
-        this.staffForm.itemName = data.data.itemName;
-        this.staffForm.trackingLv = data.data.trackingLv;
-        this.staffForm.gender = data.data.gender;
-        this.staffForm.minAge = data.data.minAge;
-        this.staffForm.maxAge = data.data.maxAge;
-        this.staffForm.warnTemplateItemKeywordsSaveRequests =
-          data.data.warnTemplateItemKeywordsDtos;
-      });
-    }
+    this.getSectionList();
   },
   methods: {
+    async getSectionList() {
+      const res = await this.$api.physicalProjectListInterface
+        .getSectionList({ pageNo: 1, pageSize: 999999 });
+      console.log(res.data);
+      const { data } = res.data;
+      this.departmentList = data.data || [];
+      this.getDetail();
+    },
+    async getItemList() {
+      const res = await this.$api.physicalProjectListInterface
+        .listPage({ pageNo: 1, pageSize: 999999, sectionName: this.staffForm.sectionName });
+      console.log(res.data);
+      const { data } = res.data;
+      if (data) {
+        this.itemList = data.data || [];
+      }
+    },
+    getDetail() {
+      if (this.id) {
+        // 详情
+        this.$api.sunFollow.getWarnTemplateDetail({ id: this.id }).then(async (res) => {
+          const { data } = res;
+          this.staffForm.name = data.data.name;
+          this.staffForm.sectionName = data.data.sectionName;
+          this.staffForm.itemName = data.data.itemName;
+          this.staffForm.trackingLv = data.data.trackingLv;
+          this.staffForm.gender = data.data.gender;
+          this.staffForm.minAge = data.data.minAge;
+          this.staffForm.maxAge = data.data.maxAge;
+          this.staffForm.warnTemplateItemKeywordsSaveRequests =
+            data.data.warnTemplateItemKeywordsDtos;
+          this.getItemList();
+        });
+      }
+    },
     submit() {
       this.$refs.staffForm.validate((valid) => {
         if (valid) {

@@ -8,23 +8,27 @@
           >健康问题
         </div>
         <div class="formSearchTitle" style="font-size: 14px">
-          <span class="dianLv"></span>异常信息
+          <span class="dianLv"></span>异常信息<span class="adddate">来源日期：{{form.newstReportDate}}</span>
         </div>
         <disease :reportAbnormalList="form.reportAbnormalList" :notTitle="true"></disease>
         <div class="formSearchTitle" style="font-size: 14px">
           <span class="dianLv"></span>生活方式
+          <span class="adddate">来源日期：{{datelist.newstLifeStyleQuestionDate}}</span>
         </div>
         <lift-style :questionLifestyle="form.questionLifestyle"></lift-style>
         <div class="formSearchTitle" style="font-size: 14px">
           <span class="dianLv"></span>慢性病风险评估
+          <span class="adddate">来源日期：{{datelist.newstAssessDate}}</span>
         </div>
         <risk-assess style="margin-left: 10px" :assessList="assessList"></risk-assess>
         <div class="formSearchTitle" style="font-size: 14px">
           <span class="dianLv"></span>危险因素
+          <span class="adddate">来源日期：{{datelist.newstLifeStyleQuestionDate}}</span>
         </div>
-        <dangerous :clientId="$route.params.id"></dangerous>
+        <dangerousdate :clientId="$route.params.id"></dangerousdate>
         <div class="formSearchTitle" style="font-size: 14px">
           <span class="dianLv"></span>重要指标
+          <span class="adddate">来源日期：{{form.newstReportDate}}</span>
         </div>
         <important-index :clientId="$route.params.id"></important-index>
         <!-- <div class="formSearchTitle" style="font-size: 14px">
@@ -42,7 +46,7 @@ import LiftStyle from '@/components/user_health/lifestyle.vue';
 import RiskAssess from '@/components/user_health/risk_assess.vue';
 import ImportantIndex from '@/components/user_health/important_index.vue';
 import abnormal from '@/components/user_health/abnormal.vue';
-import dangerous from '@/components/user_health/dangerous.vue';
+import dangerousdate from '@/components/user_health/dangerousdate.vue';
 import floowup from '@/components/user_health/floowup.vue';
 import Progress from '@/components/user_health/progress.vue';
 export default {
@@ -53,7 +57,7 @@ export default {
     RiskAssess,
     ImportantIndex,
     abnormal,
-    dangerous,
+    dangerousdate,
     floowup,
     Progress,
   },
@@ -78,6 +82,7 @@ export default {
       }, // 慢性病风险评估
       form: {
         templateId: '',
+        newstReportDate: '',
         templateList: [],
         reportAbnormalList: [], // 用户疾病
         questionLifestyle: {
@@ -112,6 +117,7 @@ export default {
         selectedDoctors: [],
         workUnitDepartment: '',
       },
+      datelist: {},
       total: 0,
       pageNo: 1,
     };
@@ -150,6 +156,8 @@ export default {
         reqBody,
       );
       const { data } = res.data;
+      this.datelist = data;
+      this.form.newstReportDate = data.newstReportDate;
       this.form.reportAbnormalList = data.reportAbnormalList || null;
       this.form.questionLifestyleFamilyHistory =
         data.questionLifestyleFamilyHistory || null;
@@ -160,18 +168,28 @@ export default {
           if (value.paramNo === 'j01') {
             this.form.questionLifestyle.questionLifestyle1.paramValue =
               value.valueInfo;
+            this.form.questionLifestyle.questionLifestyle1.attention =
+              value.attention;
           } else if (value.paramNo === 'j05') {
             this.form.questionLifestyle.questionLifestyle2.paramValue =
               value.valueInfo;
+            this.form.questionLifestyle.questionLifestyle2.attention =
+              value.attention;
           } else if (value.paramNo === 'f01') {
             this.form.questionLifestyle.questionLifestyle3.paramValue =
               value.valueInfo;
+            this.form.questionLifestyle.questionLifestyle3.attention =
+              value.attention;
           } else if (value.paramNo === 'g04') {
             this.form.questionLifestyle.questionLifestyle4.paramValue =
               value.valueInfo;
+            this.form.questionLifestyle.questionLifestyle4.attention =
+              value.attention;
           } else if (value.paramNo === 'j20') {
             this.form.questionLifestyle.questionLifestyle5.paramValue =
               value.valueInfo;
+            this.form.questionLifestyle.questionLifestyle5.attention =
+              value.attention;
           }
         });
       }
@@ -195,4 +213,11 @@ export default {
   },
 };
 </script>
+<style scoped>
+.adddate{
+  font-size: 12px;
+  color: #999;
+  margin-left: 10px;
+}
+</style>
 

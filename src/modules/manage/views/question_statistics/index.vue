@@ -64,7 +64,7 @@
           </span>
         </div>
       </div>
-      <div class="tabcheck">
+      <!-- <div class="tabcheck">
         <div
           class="tabcheck-conment"
           v-for="(item, index) in tabcheck"
@@ -74,9 +74,9 @@
         >
           {{ item }}
         </div>
-      </div>
+      </div> -->
       <!-- 列表 -->
-      <div v-if="tabcheckidx === 1">
+      <!-- <div v-if="tabcheckidx === 1">
         <el-table
           style="width: 100%"
           :data="table.list"
@@ -142,7 +142,7 @@
               }}</span>
             </template>
           </el-table-column>
-          <!-- <el-table-column label="操作" prop="index" width="150px">
+          <el-table-column label="操作" prop="index" width="150px">
             <template slot-scope="scope">
               <el-button
                 type="text"
@@ -159,7 +159,7 @@
                 >查看</el-button
               >
             </template>
-          </el-table-column> -->
+          </el-table-column>
         </el-table>
         <div style="text-align: right">
           <el-pagination
@@ -174,7 +174,7 @@
             @size-change="handleSizeChange"
           ></el-pagination>
         </div>
-      </div>
+      </div> -->
       <!-- 图表 -->
       <div v-if="tabcheckidx === 0">
         <div class="echarts">
