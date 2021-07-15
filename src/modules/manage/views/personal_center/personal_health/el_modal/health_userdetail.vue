@@ -135,7 +135,7 @@ export default {
         .then((res) => {
           const { data } = res;
           const result = data.data;
-          console.log(result, 111);
+          console.log(result);
           // this.tableData = result || [];
         });
     },
