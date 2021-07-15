@@ -9,11 +9,13 @@
     <section class="info-block flex align-center">
       <div class="info-block__item">
         <p class="info-block__title">负责客户数</p>
-        <p class="info-block__content">121299</p>
+        <p class="info-block__content">{{ userData.clientCount }}</p>
       </div>
       <div class="info-block__item">
         <p class="info-block__title">团队内排名</p>
-        <p class="info-block__content">2/10121212</p>
+        <p class="info-block__content">
+          {{ userData.teamCount }}/{{ userData.teamOrder }}
+        </p>
       </div>
     </section>
   </div>
@@ -27,6 +29,11 @@ export default {
   data() {
     return {
       nowTime: moment().format('HH:mm'),
+      userData: {
+        teamOrder: 0,
+        teamCount: 0,
+        clientCount: 0,
+      },
     };
   },
   computed: {
@@ -35,6 +42,16 @@ export default {
         ({ min, max }) => min <= this.nowTime && this.nowTime <= max,
       );
     },
+  },
+  methods: {
+    async getCustomerNumberAndRankRequest() {
+      const res = await this.$api.personal.getCustomerNumberAndRank();
+      const { data } = res.data;
+      this.userData = data;
+    },
+  },
+  mounted() {
+    this.getCustomerNumberAndRankRequest();
   },
 };
 </script>

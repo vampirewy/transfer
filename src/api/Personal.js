@@ -119,6 +119,16 @@ class Personal extends BaseModule {
   neardayClientCount(data = {}) {
     return this.post('/home/nearday/client_count', data);
   }
+  /**
+   * @description: 工作台 -- 获取登录用户负责客户数及团队内排名数
+   * @fileUrl http://192.168.137.12:3000/project/63/interface/api/7019
+   * @property {number} teamOrder 团队排名
+   * @property {number} teamCount 团队(医生)数量
+   * @property {number} clientCount 负责客户数
+   */
+  getCustomerNumberAndRank() {
+    return this.get('http://192.168.137.12:3000/mock/63/user/getClientData');
+  }
 }
 
 export default new Personal();
