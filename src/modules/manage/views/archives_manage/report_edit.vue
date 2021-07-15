@@ -164,19 +164,20 @@ export default {
           this.formData.clientName = data.data.name;
           this.formData.gender = data.data.gender;
           this.formData.age = data.data.age;
-          this.formData.cardNo = data.data.cardNo;
+          this.formData.cardNo = data.data.clientNo;
           this.formData.clientId = data.data.id;
         }
       });
     },
     handleSelectUser(data) {
+      console.log(data);
       this.$refs.userPopover.doClose();
       this.popoverStatus = false;
       this.formData.clientName = data.name;
       this.formData.clientId = data.id;
       this.formData.gender = data.gender;
       this.formData.age = data.age;
-      this.formData.cardNo = data.cardNo;
+      this.formData.cardNo = data.clientNo;
       this.$refs.form.validateField('clientId');
     },
     onVisibleChange(value) {
@@ -248,7 +249,7 @@ export default {
       this.$api.reportInterface.getReportDetail(id).then(({ data }) => {
         if (data.success) {
           this.formData = data.data;
-          this.formData.cardNo = data.data.clientId;
+          this.formData.cardNo = data.data.clientNo;
           if (!this.formData.sectionConclusionList) {
             this.$set(this.formData, 'sectionConclusionList', []);
           }
