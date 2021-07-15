@@ -11,7 +11,7 @@
       <div class="form-title">
         <!-- <div class="line"></div> -->
         <h3 class="name" v-if="routeType === 1">新增-用户类别<div class="titleBiao"></div></h3>
-        <h3 class="name" v-if="routeType === 2">编辑-用户类别1<div class="titleBiao"></div></h3>
+        <h3 class="name" v-if="routeType === 2">编辑-用户类别<div class="titleBiao"></div></h3>
         <h3 class="name" v-if="routeType === 3">查看-用户类别
           <div class="titleBiao"></div>
         </h3>

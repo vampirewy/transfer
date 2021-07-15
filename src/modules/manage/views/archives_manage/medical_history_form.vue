@@ -380,6 +380,7 @@ export default {
       this.popoverStatus = false;
       this.currentUser = data;
       this.form.clientInfoId = data.id;
+      this.currentUser.gridName = data.clientNo;
       this.$refs.form.validateField('clientInfoId');
     },
     replace(value) {

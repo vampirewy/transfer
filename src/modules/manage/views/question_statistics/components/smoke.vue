@@ -25,7 +25,7 @@ export default {
       // 绘制条形图
       const option = {
         title: {
-          text: '',
+          text: '吸烟情况',
           top: 5,
           right: 5,
           left: 'center',
@@ -90,15 +90,15 @@ export default {
                     color: '#4B86FF',
                   },
                 ]),
-                // label: {
-                //   show: true, // 开启显示
-                //   position: 'top', // 在上方显示
-                //   textStyle: {
-                //     // 数值样式
-                //     color: '#333',
-                //     fontSize: 14,
-                //   },
-                // },
+                label: {
+                  show: true, // 开启显示
+                  position: 'top', // 在上方显示
+                  textStyle: {
+                    // 数值样式
+                    color: '#333',
+                    fontSize: 14,
+                  },
+                },
               },
             },
           },
@@ -128,7 +128,7 @@ export default {
       };
       const optiones = {
         title: {
-          text: '',
+          text: '被动吸烟情况',
           top: 5,
           right: 5,
           left: 'center',

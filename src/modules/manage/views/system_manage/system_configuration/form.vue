@@ -25,7 +25,7 @@
             ></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="24">
+        <!-- <el-col :span="24">
           <el-form-item label="个报结束语" style="width: 100%">
             <el-input
               type="textarea"
@@ -34,7 +34,7 @@
               placeholder="请输入"
             ></el-input>
           </el-form-item>
-        </el-col>
+        </el-col> -->
       </el-row>
       <div class="wltitle">
         <div class="quan"></div>
@@ -47,7 +47,7 @@
         ></el-input>
         <span>天内离体检日期最近的一份</span>
       </div>
-      <el-row>
+      <!-- <el-row>
         <el-col :span="24">
           <el-form-item label="报告是否审核">
             <el-switch v-model="staffForm.isAudit" active-color="#13ce66"> </el-switch>
@@ -69,7 +69,7 @@
             <div class="genderGirl" @click="showpop(2)">女性</div>
           </div>
         </el-col>
-      </el-row>
+      </el-row> -->
       <div class="wltitle">
         <div class="quan"></div>
         <span>封面封底</span>
