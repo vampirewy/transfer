@@ -371,7 +371,7 @@ export default {
           this.infoSource.clientId = data.data.id;
           this.infoSource.age = data.data.age;
           this.infoSource.gender = data.data.gender;
-          this.infoSource.gridName = data.data.gridName;
+          this.infoSource.gridName = data.data.clientNo;
         }
       });
     },
@@ -460,7 +460,7 @@ export default {
       this.infoSource.clientId = data.id;
       this.infoSource.age = data.age;
       this.infoSource.gender = data.gender;
-      this.infoSource.gridName = data.gridName;
+      this.infoSource.gridName = data.clientNo;
     },
     onSelectUserCheck(data) {
       if (data) {

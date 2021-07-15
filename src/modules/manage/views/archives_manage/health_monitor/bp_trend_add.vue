@@ -27,6 +27,7 @@
               placement="bottom-start"
               width="650"
               trigger="click"
+              :disabled="!!editId"
               @show="popoverStatus = true"
               @hide="handlePopoperClose"
             >
