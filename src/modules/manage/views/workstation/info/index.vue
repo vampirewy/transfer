@@ -2,9 +2,13 @@
   <div class="info">
     <section class="info-block">
       <p class="info-block__title">
-        {{ this.timeDescribe.describe }}好，张医生，祝您开心每一天！
+        {{ this.timeDescribe.describe }}好，{{this.userData.realName}}，祝您开心每一天！
       </p>
-      <p class="info-block__content">武汉协和江南医院-医生-张三</p>
+      <p class="info-block__content">
+        {{ this.userData.orgName }}-{{ this.userData.role }}-{{
+          this.userData.realName
+        }}
+      </p>
     </section>
     <section class="info-block flex align-center">
       <div class="info-block__item">
@@ -33,6 +37,9 @@ export default {
         teamOrder: 0,
         teamCount: 0,
         clientCount: 0,
+        orgName: '',
+        realName: '',
+        role: '',
       },
     };
   },
@@ -47,11 +54,21 @@ export default {
     async getCustomerNumberAndRankRequest() {
       const res = await this.$api.personal.getCustomerNumberAndRank();
       const { data } = res.data;
-      this.userData = data;
+      this.userData.teamOrder = data.teamOrder;
+      this.userData.teamCount = data.teamCount;
+      this.userData.clientCount = data.clientCount;
+    },
+    async getUserInfo() {
+      const res = await this.$api.userManagerInterface.getUserInfo();
+      const { data } = res.data;
+      this.userData.realName = data.realName;
+      this.userData.role = data.role;
+      this.userData.orgName = data.orgName;
     },
   },
   mounted() {
     this.getCustomerNumberAndRankRequest();
+    this.getUserInfo();
   },
 };
 </script>
