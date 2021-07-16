@@ -38,10 +38,10 @@
       </el-table-column>
       <el-table-column label="角色" prop="roleName" min-width="110px" show-overflow-tooltip>
       </el-table-column>
-      <el-table-column label="简介" prop="introduction" show-overflow-tooltip>
+      <el-table-column label="科室/部门" prop="department" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span v-if="scope.row.introduction">{{ scope.row.introduction }}</span>
-          <span v-if="!scope.row.introduction">-</span>
+          <span v-if="scope.row.department">{{ scope.row.department }}</span>
+          <span v-if="!scope.row.department">-</span>
         </template>
       </el-table-column>
     </el-table>
@@ -55,7 +55,7 @@
       @size-change="handleSizeChange"
       :pager-count="4"
     ></el-pagination>
-    <div class="footer">
+    <div class="footer" style="text-align:center;">
       <el-button class="cancelBtn" size="small" @click="cancel">取消</el-button>
       <el-button type="primary" class="sureBtn" size="small" @click="submit">确定</el-button>
     </div>
