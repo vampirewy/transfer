@@ -243,11 +243,13 @@ export default {
     },
     Expand() {
       this.dietCollapseActiveNames = [];
-      this.editableTabs[this.TabsIndex].clientDietPlanConfigList.forEach((val, index) => {
-        if (val.dietTemplateConfigDtos.length !== 0) {
-          this.dietCollapseActiveNames.push(index);
-        }
-      });
+      if (this.editableTabs.length !== 0) {
+        this.editableTabs[this.TabsIndex].clientDietPlanConfigList.forEach((val, index) => {
+          if (val.dietTemplateConfigDtos.length !== 0) {
+            this.dietCollapseActiveNames.push(index);
+          }
+        });
+      }
     },
     getDetailList() {
       this.$api.dietRawMaterial

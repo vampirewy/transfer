@@ -382,11 +382,13 @@ export default {
     },
     Expand() {
       this.dietCollapseActiveNames = [];
-      this.editableTabs[this.TabsIndex].mealTypeDtos.forEach((val, index) => {
-        if (val.dietTemplateConfigDtos.length !== 0) {
-          this.dietCollapseActiveNames.push(index);
-        }
-      });
+      if (this.editableTabs.length !== 0) {
+        this.editableTabs[this.TabsIndex].mealTypeDtos.forEach((val, index) => {
+          if (val.dietTemplateConfigDtos.length !== 0) {
+            this.dietCollapseActiveNames.push(index);
+          }
+        });
+      }
     },
     back() {
       this.$parent.viewIndex = 1;

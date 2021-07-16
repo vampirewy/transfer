@@ -299,8 +299,8 @@
             <el-table-column align="center" prop="provideQuantity" label="提供量"
             show-overflow-tooltip>
               <template slot-scope="scope">
-                <span :class="scope.row.trend === 3 ? 'OrLowClassA' :
-                (scope.row.trend === 1 ? 'OrLowClassB' : 'OrLowClassC')">
+                <span :class="scope.row.trend === 2 ? 'OrLowClassA' :
+                (scope.row.trend === -1 ? 'OrLowClassB' : 'OrLowClassC')">
                 {{ scope.row.provideQuantity }}</span>
               </template>
             </el-table-column>
@@ -455,6 +455,7 @@ export default {
       maketime: '',
       Addtemplate: [],
       AddtemplateId: '',
+      isfathers: true,
     };
   },
   mounted() {
@@ -575,8 +576,20 @@ export default {
     },
     addtemplate() {
       this.fatherMethod();
+      this.isfathers = true;
       if (this.fathersList.length === 0) {
         return this.$message.warning('请添加食谱');
+      }
+      this.fathersList.forEach((val) => {
+        val.clientDietPlanConfigList.forEach((item) => {
+          if (item.dietTemplateConfigDtos.length !== 0) {
+            this.isfathers = false;
+            return false;
+          }
+        });
+      });
+      if (this.isfathers) {
+        return this.$message.warning('请添加具体食谱');
       }
       this.dietMenuTemDetail = { id: '' };
       this.isShowDietMenuTemplate = true;

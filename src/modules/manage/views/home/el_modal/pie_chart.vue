@@ -131,6 +131,9 @@ export default {
               },
             },
             // label: {
+            //   formatter: function (data) {
+            //     console.log(data);
+            //   },
             //   formatter: '{d|{d}%}',
             //   rich: {
             //     d: { fontSize: 10 },
