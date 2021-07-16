@@ -169,18 +169,42 @@
                     @click="handleSomeRemove"
                     v-if="getAccess('customer_pool_batch_delete')"
             ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
-            <!-- <el-button
-                    @click="assign({})"
-                    size="small"
-                    class="btn-new btnDel"
-                    v-if="getAccess('customer_pool_distribute')"
-            ><img src="@/assets/images/common/deliverBtn.png" />分配</el-button> -->
+            <el-popover
+              ref="popover1"
+              placement="bottom"
+              popper-class="user-edit-popper"
+              width="650"
+              trigger="manual"
+              @show="handlePopoperShow"
+              @hide="handlePopoperClose">
+              <doctor-Select
+                :isRadio="true"
+                mode="normal"
+                :visible="dialogTableVisible"
+                :clientId="clientId"
+                @cancel="$refs.popover1.showPopper = false"
+                @change="submitAssign"
+              ></doctor-Select>
+              <el-button
+                slot="reference"
+                size="small"
+                class="btn-new btnDel"
+                @click="assign({})"
+                v-if="getAccess('customer_pool_distribute')"
+              ><img src="@/assets/images/common/deliverBtn.png" />批量分配</el-button>
+            </el-popover>
             <!-- <el-button
             style="width:120px;"
                     size="small"
                     class="btn-new btnDel"
                     v-if="getAccess('customer_pool_distribute')"
             ><img src="@/assets/images/common/createReport.png" />生成报告</el-button> -->
+            <el-button
+                    @click="customerClaim({})"
+                    size="small"
+                    class="btn-new btnDel"
+                    v-if="getAccess('customer_pool_claim')"
+            ><img src="@/assets/images/common/deliverBtn.png" />客户认领</el-button>
           </div>
         </div>
         <div>
@@ -354,18 +378,26 @@
           </div>
         </div>
       <!-- </template> -->
-    <doctor-Select
+
+    <!-- <doctor-Select
       :isRadio="false"
       :visible="dialogTableVisible"
       :clientId="clientId"
       @cancel="dialogTableVisible = false"
       @change="submitAssign"
-    ></doctor-Select>
+    ></doctor-Select> -->
+
+    <client-dialog
+      :visible="customerDialogVisible"
+      @cancel="customerDialogVisible = false"
+      @change="customerChange"
+    ></client-dialog>
   </div>
 </template>
 
 <script>
 import assignDialog from './components/assign_dialog.vue';
+import clientDialog from '~/src/components/client_select/index.vue';
 import doctorSelect from '~/src/components/doctor_select/index.vue';
 import QueryPage from '~/src/components/query_page/index.vue';
 import Search from '~/src/components/query_page/search.vue';
@@ -378,6 +410,7 @@ export default {
   components: {
     'assign-dialog': assignDialog,
     'doctor-Select': doctorSelect,
+    'client-dialog': clientDialog,
     Search,
     QueryPage,
     QueryFilter,
@@ -392,6 +425,7 @@ export default {
       dataSource: [],
       chooseUserList: [],
       dialogTableVisible: false,
+      customerDialogVisible: false,
       clientId: '',
       formData: {
         keywords: '',
@@ -532,8 +566,15 @@ export default {
         this.chooseUserList = [row];
       }
       if (this.chooseUserList.length) {
+        const temp = this.chooseUserList.filter(t => t.doctorNames !== '');
+        if (temp.length) {
+          this.$message.warning(`客户【${temp[0].name}】已有管理医生`);
+          return;
+        }
+
         this.clientId = this.chooseUserList[0].id;
-        this.dialogTableVisible = true;
+        // this.dialogTableVisible = true;
+        this.$refs.popover1.showPopper = true;
       } else {
         this.$message.warning('请选择客户');
       }
@@ -543,8 +584,9 @@ export default {
         this.$message.warning('请选择医生');
         return;
       }
-      this.dialogTableVisible = false;
-      const userIdList = userList.filter(t => t.selectType === 1).map(t => t.id);
+      this.$refs.popover1.showPopper = false;
+      const userIdList = userList.filter(t => t.selectType === 1).map(
+        t => t.id) || userList.map(t => t.id);
       const workIdList = userList.filter(t => t.selectType === 2).map(t => t.id);
 
       this.submit({
@@ -553,6 +595,35 @@ export default {
         workIdList,
         type: 2, // 2-分配
       });
+    },
+    // 客户认领
+    customerClaim() {
+      this.customerDialogVisible = true;
+    },
+    customerChange(userList) {
+      if (!userList.length) {
+        this.$message.warning('请选择客户');
+        return;
+      }
+      this.customerDialogVisible = false;
+
+      this.submitCustomer(userList);
+    },
+    submitCustomer(params) {
+      this.$api.userManagerInterface.apiName(params).then(({ data }) => {
+        if (data.code === 200) {
+          this.$message.success('操作成功');
+          this.search();
+          this.chooseUserList = [];
+          this.$refs.multipleTable.clearSelection();
+        }
+      });
+    },
+    handlePopoperShow() {
+      this.dialogTableVisible = true;
+    },
+    handlePopoperClose() {
+      this.dialogTableVisible = false;
     },
     claim({ row = {} }) {
       if (!row.id) {
@@ -593,8 +664,8 @@ export default {
       });
     },
     submit(params) {
-      this.$api.userManagerInterface.claim(params).then(({ data }) => {
-        if (data.code === 200) {
+      this.$api.userManagerInterface.apiName(params).then(({ data }) => {
+        if (data.rc === 0) {
           this.$message.success('操作成功');
           this.search();
           this.chooseUserList = [];
