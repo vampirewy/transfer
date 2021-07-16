@@ -146,6 +146,7 @@ export default {
       this.$api.userManagerInterface.getDetail(id).then(({ data }) => {
         this.setData(data.data);
         this.$emit('change', this.formData.clientId);
+        this.$emit('changeGender', this.formData.gender);
       });
     },
     setData(data) {

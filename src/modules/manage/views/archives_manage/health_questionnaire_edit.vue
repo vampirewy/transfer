@@ -21,6 +21,7 @@
       </div>
     <client-info :id="$route.params.id" :propsData="formData"
                  @change="data => formData.clientId = data"
+                 @changeGender="data => formData.gender = data"
                  @changeDate="data => formData.questionDate = data"></client-info>
       <div class="editWarn" v-if="$route.params.qusType === 1">
         <img src="@/assets/images/common/editIcon.png"/>
@@ -78,6 +79,8 @@
                       v-for="val in itemList.optionList"
                       :label="val.id"
                       :key="val.id"
+                      v-if="(formData.gender === 1 && val.id !== '108') ||
+                      (formData.gender === 2 && val.id !== '107') || formData.gender === ''"
                       :disabled="val.disabled">
                       {{ val.name }}
                     </el-checkbox-button>
@@ -116,6 +119,7 @@ export default {
       formData: {
         answerList: [],
         createTime: new Date(),
+        gender: '',
         mobile: '',
       },
       templateList: [{ name: '基本信息' }, { name: '问卷内容' }],
