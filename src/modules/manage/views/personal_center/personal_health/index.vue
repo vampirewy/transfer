@@ -57,19 +57,50 @@
                   :key="index">{{item.realName}} </span></p>
                   <!-- <p>家庭成员：<span>{{userlist.age}}</span></p> -->
                 </div>
-                <div class="addUsers">
-                  <p>客户标签：</p>
-                  <!-- <div>
-                    脾气不好<img
-                      src="@/assets/images/common/remove.png"
-                      alt=""
-                    />
-                  </div> -->
-                  <div v-for="(item, index) in userlist.tagList"
-                  :key="index">
-                    {{item.tag}}
+                <div class="customerTransfer">
+                  <div class="addUsers">
+                    <p>客户标签：</p>
+                    <!-- <div>
+                      脾气不好<img
+                        src="@/assets/images/common/remove.png"
+                        alt=""
+                      />
+                    </div> -->
+                    <div v-for="(item, index) in userlist.tagList"
+                    :key="index">
+                      {{item.tag}}
+                    </div>
+                    <!-- <div class="addtags">+</div> -->
                   </div>
-                  <!-- <div class="addtags">+</div> -->
+                  <div class="transferBtn">
+                    <el-popover
+                      ref="popover1"
+                      placement="bottom"
+                      popper-class="user-edit-popper"
+                      width="650"
+                      trigger="click"
+                      @show="handlePopoperShow"
+                      @hide="handlePopoperClose">
+                      <doctor-Select
+                        :isRadio="true"
+                        mode="normal"
+                        :visible="dialogTableVisible"
+                        :clientId="clientId"
+                        @cancel="$refs.popover1.showPopper = false"
+                        @change="submitAssign"
+                      ></doctor-Select>
+                      <el-button
+                        type="primary"
+                        slot="reference"
+                        v-if="getAccess('customers_transfer')"
+                      >转交</el-button>
+                    </el-popover>
+                    <el-button
+                      type="primary"
+                      @click="removeDoct"
+                      v-if="getAccess('customers_edit')"
+                    >转入客户池</el-button>
+                  </div>
                 </div>
               </div>
               <div class="wlall-right">
@@ -247,6 +278,7 @@ import food from './el_modal/food.vue';
 import intervance from './el_modal/intervance.vue';
 import intervancerecord from './el_modal/intervancerecord.vue';
 import Monitor from './el_modal/monitor.vue';
+import doctorSelect from '~/src/components/doctor_select/index.vue';
 export default {
   name: 'index',
   components: {
@@ -271,6 +303,7 @@ export default {
     intervance, // 干预计划
     intervancerecord,
     Monitor, // 干预记录
+    'doctor-Select': doctorSelect,
   },
   data() {
     return {
@@ -344,6 +377,7 @@ export default {
         planDoctorName: [{ required: true, message: '请选择随访人' }],
         assortLevel: [{ required: true, message: '请选择依从度' }],
       },
+      dialogTableVisible: false,
     };
   },
   watch: {
@@ -518,6 +552,48 @@ export default {
         if (scrollTop >= item.offsetTop - 200) {
           this.active = index;
         }
+      });
+    },
+    // 展示转交弹窗
+    handlePopoperShow() {
+      this.dialogTableVisible = true;
+    },
+    handlePopoperClose() {
+      this.dialogTableVisible = false;
+    },
+    submitAssign(userList) {
+      if (!userList.length) {
+        this.$message.warning('请选择医生');
+        return;
+      }
+      this.$refs.popover1.showPopper = false;
+      // this.submit(userList);
+    },
+    submit(params) {
+      this.$api.userManagerInterface.apiName(params).then(({ data }) => {
+        if (data.code === 200) {
+          this.$message.success('操作成功');
+          this.getClientUserInfo(this.$route.params.id);
+        }
+      });
+    },
+    removeDoct() {
+      this.$confirm('<div class="delete-text-content"><span style="padding-left: 20px;">确定将该客户转入客户池？</span></div>', '提示', {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        customClass: 'message-box-customize',
+        showClose: true,
+        type: 'warning',
+      }).then(() => {
+        // this.$api.medicalHistoryInterface.batchDeleteMedicalInfo(params)
+        // .then((res) => {
+        //   const { data } = res;
+        //   if (data.code === 200) {
+        this.$message.success('操作成功');
+        //     this.getClientUserInfo(this.$route.params.id);
+        //   }
+        // });
       });
     },
   },
@@ -729,44 +805,54 @@ export default {
       }
     }
   }
-  .addUsers {
+  .customerTransfer {
     display: flex;
-    align-items: center;
-    height: 50px;
-    flex-wrap: wrap;
-    p {
-      font-size: 14px;
-      color: #666;
-      font-weight: 400;
-    }
-    div {
-      padding: 8px 14px;
-      background: #eef1f5;
-      border-radius: 16px;
-      font-size: 12px;
-      color: #333;
-      font-weight: 400;
+    justify-content: space-between;
+    .addUsers {
       display: flex;
       align-items: center;
-      justify-content: center;
-      margin-right: 10px;
-      img {
-        width: 16px;
-        margin-left: 2px;
+      height: 50px;
+      flex-wrap: wrap;
+      p {
+        font-size: 14px;
+        color: #666;
+        font-weight: 400;
       }
-      &:hover {
-        cursor: pointer;
+      div {
+        padding: 8px 14px;
+        background: #eef1f5;
+        border-radius: 16px;
+        font-size: 12px;
+        color: #333;
+        font-weight: 400;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+        img {
+          width: 16px;
+          margin-left: 2px;
+        }
+        &:hover {
+          cursor: pointer;
+        }
+      }
+      .addtags {
+        padding: 0px;
+        width: 24px;
+        height: 24px;
+        background: #f6f8fc;
+        border-radius: 5px;
+        font-size: 26px;
+        font-weight: 800;
+        color: forestgreen;
       }
     }
-    .addtags {
-      padding: 0px;
-      width: 24px;
-      height: 24px;
-      background: #f6f8fc;
-      border-radius: 5px;
-      font-size: 26px;
-      font-weight: 800;
-      color: forestgreen;
+    .transferBtn {
+      padding-top: 10px;
+      .el-button {
+        border-color: #3154AC;
+      }
     }
   }
 }
