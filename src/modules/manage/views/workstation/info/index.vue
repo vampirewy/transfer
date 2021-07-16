@@ -2,7 +2,9 @@
   <div class="info">
     <section class="info-block">
       <p class="info-block__title">
-        {{ this.timeDescribe.describe }}好，{{this.userData.realName}}，祝您开心每一天！
+        {{ this.timeDescribe.describe }}好，{{
+          this.userData.realName
+        }}，祝您开心每一天！
       </p>
       <p class="info-block__content">
         {{ this.userData.orgName }}-{{ this.userData.role }}-{{
@@ -75,21 +77,9 @@ export default {
 
 <style lang="scss" scoped>
 .info {
-  margin: 10px 0 20px 0;
-  padding-left: 20px;
-  padding-right: 20px;
-  height: 120px;
-  font-size: 12px;
-  position: relative;
-  overflow: hidden;
-  color: #666;
-  background: #fff;
-  box-shadow: 0px 0px 50px 0px rgba(151, 166, 189, 0.2);
-  border-color: rgba(0, 0, 0, 0.05);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-radius: 15px;
   &-block {
     &__item {
       padding: 0 10px;
