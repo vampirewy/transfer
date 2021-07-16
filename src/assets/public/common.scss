@@ -12,6 +12,10 @@ a {
     flex-direction: column;
   }
 
+  &.row-reverse {
+    flex-direction: row-reverse;
+  }
+
   &.align-center,
   &.center {
     align-items: center;
@@ -25,10 +29,10 @@ a {
     justify-content: space-between;
   }
 
-  &.space-around{
+  &.space-around {
     justify-content: space-around;
   }
-  
+
   &.justify-center,
   &.center {
     justify-content: center;
@@ -290,6 +294,7 @@ a {
   align-items: center;
   font-weight: bold;
   height: 60px;
+
   &.setTimeText {
     font-size: 14px;
     font-weight: 400;
@@ -378,10 +383,12 @@ a {
       text-align: center;
       position: relative;
       border-bottom: 1px solid #EEF1F5;
+
       &.active {
         background: rgba(36, 73, 157, 0.1);
         color: #24499D;
-        &::before{
+
+        &::before {
           width: 8px !important;
           content: url(../images/common/menuleft.png) !important;
           right: 0px;
@@ -448,13 +455,15 @@ a {
     }
   }
 }
-.labelTitle{
-  .el-form-item__label{
+
+.labelTitle {
+  .el-form-item__label {
     font-size: 14px;
-    color: #333333!important;
+    color: #333333 !important;
     font-weight: bold;
   }
 }
+
 /*tab*/
 .two-tab {
   margin-top: 20px;
@@ -536,18 +545,23 @@ a {
 
 .searchCondition {
   display: flex;
+
   .searchLeft {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    .el-select{
+
+    .el-select {
       width: 130px !important;
     }
+
     div {
       margin: 5px 5px 0 0;
+
       .timing {
         margin-right: 10px;
       }
+
       span {
         font-size: 14px;
         color: #333333;
@@ -579,6 +593,7 @@ a {
   .noMore {
     background: #7CA7FF;
     color: #fff !important;
+
     span {
       transform: rotate(-90deg);
       color: #fff !important;
@@ -597,12 +612,15 @@ a {
 
   .buttones {
     display: flex;
+
     div {
       margin: 15px 10px 0 0;
     }
-    .searchmarTop{
+
+    .searchmarTop {
       margin-top: 10px;
     }
+
     .more {
       width: 110px;
       height: 40px;
@@ -624,6 +642,7 @@ a {
   .searchInputFormItem {
     width: 220px;
     margin-right: 10px !important;
+
     .el-input {
       width: 100%;
     }
@@ -650,8 +669,9 @@ a {
     color: #333;
     font-weight: 400;
   }
-  &:hover{
-      cursor: pointer;
+
+  &:hover {
+    cursor: pointer;
   }
 }
 
@@ -666,18 +686,23 @@ a {
   /*border-right: 1px solid #DDE0E6;
   border-left: 1px solid #DDE0E6;*/
 }
-.el-card__body{
+
+.el-card__body {
   padding-top: 0;
 }
+
 /deep/ .el-input::-webkit-input-placeholder {
   color: red !important;
 }
+
 /deep/ .el-input::-moz-input-placeholder {
   color: red !important;
 }
+
 /deep/ .el-input::-ms-input-placeholder {
   color: red !important;
 }
+
 .wltitle {
   font-size: 20px;
   font-weight: 800;
@@ -888,53 +913,60 @@ a {
 .el-dialog__title {
   font-weight: 600;
 }
-.el-menu--popup-right-start{
-  .el-menu-item{
-    &.is-active{
-      &:before{
-        content: ''!important;
+
+.el-menu--popup-right-start {
+  .el-menu-item {
+    &.is-active {
+      &:before {
+        content: '' !important;
       }
     }
   }
 }
-.el-menu--collapse{
-  .el-menu-item{
-    &.is-active{
-      &:before{
+
+.el-menu--collapse {
+  .el-menu-item {
+    &.is-active {
+      &:before {
         /*content: ''!important;*/
         right: 0;
       }
     }
   }
-  .el-submenu{
-    &.is-active{
-        &:before{
-          width: 8px!important;
-          content: url("../../assets/images/body/chooseSidebarIcon.png")!important;
-          right: 0;
-          left: auto!important;
-          background-color: rgba(255,255,255,0)!important;
-          top: 16px;
-          position: absolute;
-          z-index: 1;
-        }
+
+  .el-submenu {
+    &.is-active {
+      &:before {
+        width: 8px !important;
+        content: url("../../assets/images/body/chooseSidebarIcon.png") !important;
+        right: 0;
+        left: auto !important;
+        background-color: rgba(255, 255, 255, 0) !important;
+        top: 16px;
+        position: absolute;
+        z-index: 1;
+      }
     }
   }
 }
-.lookPressure{
-  .lookPressureTitle{
+
+.lookPressure {
+  .lookPressureTitle {
     display: inline-block;
     // width: 80px;
     // text-align: right;
   }
 }
+
 .form-buttons {
   text-align: center;
   margin-top: 30px;
-  button + button {
+
+  button+button {
     margin-left: 20px;
   }
 }
-*{
+
+* {
   font-weight: 400;
 }
