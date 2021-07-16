@@ -8,8 +8,8 @@
     </div>
     <div class="scores">
       <div>异常分值：</div><el-input
-      style="width:70%;" v-model="score" placeholder="输入分值"></el-input>
-      <el-button @click="addSportTemplatess" class="addbutton">添加</el-button>
+      style="width:80%;" v-model="score" placeholder="输入分值"></el-input>
+      <!-- <el-button @click="addSportTemplatess" class="addbutton">添加</el-button> -->
     </div>
     <el-table :data="tableData">
       <el-table-column width="40">
@@ -89,6 +89,7 @@ export default {
           item.score = this.score;
         });
         this.$emit('change', this.selectedData);
+        this.$emit('cancel');
       } else {
         this.$message.error('请输入异常分值！');
       }

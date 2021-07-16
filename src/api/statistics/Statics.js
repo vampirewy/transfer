@@ -76,7 +76,7 @@ class Statics extends BaseModule {
   lifedoctorList(data = {}) {
     return this.post('/question_tcm/statistics_list', data);
   }
-  // 中医体质辨识统计图表
+  // 统计图表
   psydoctorList(data = {}) {
     return this.post('/question_psy/statistics_list', data);
   }
