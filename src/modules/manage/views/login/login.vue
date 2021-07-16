@@ -5,8 +5,8 @@
         <div class="content-main">
           <div class="content-center">
             <div class="login-header">
-              <h3>WELCOME TO</h3>
-              <h2 class="login-brand">健康管理系统</h2>
+              <!-- <h3>WELCOME TO</h3> -->
+              <h2 class="login-brand">智慧预防，健康保障！</h2>
             </div>
             <div class="login-form">
               <h2 class="login-title">Login</h2>
@@ -198,7 +198,7 @@ export default {
         justify-content: space-between;
       }
       .login-header {
-        padding: 118px 210px 0 0;
+        padding: 118px 180px 0 0;
         color: #fff;
         text-align: right;
         h3 {
@@ -208,7 +208,7 @@ export default {
           opacity: 0.4;
         }
         .login-brand {
-          font-size: 44px;
+          font-size: 48px;
           font-weight: 400;
           line-height: 62px;
         }
