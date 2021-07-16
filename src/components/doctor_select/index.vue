@@ -44,7 +44,7 @@
                   highlight-current-row
                   @select="handleSelect"
           >
-            <el-table-column v-if="isRadio" width="55">
+            <el-table-column v-if="isRadio" width="38">
               <template slot-scope="scope">
                 <el-radio
                         v-model="params.currentRow"
@@ -172,7 +172,7 @@
                   highlight-current-row
                   @select="handleSelect"
           >
-            <el-table-column v-if="isRadio" width="55">
+            <el-table-column v-if="isRadio" width="38">
               <template slot-scope="scope">
                 <el-radio
                         v-model="params.currentRow"
@@ -191,10 +191,17 @@
             </el-table-column>
             <el-table-column property="realName" label="姓名"> </el-table-column>
             <el-table-column property="roleName" label="角色"></el-table-column>
-            <el-table-column property="department" label="科室/部门">
+            <!-- <el-table-column property="department" label="科室/部门">
               <template slot-scope="scope">
                 <p class="textarea">
                   {{ scope.row.department || '-'}}
+                </p>
+              </template>
+            </el-table-column> -->
+            <el-table-column property="roleName" label="简介">
+              <template slot-scope="scope">
+                <p class="textarea">
+                  {{ scope.row.introduction }}
                 </p>
               </template>
             </el-table-column>
