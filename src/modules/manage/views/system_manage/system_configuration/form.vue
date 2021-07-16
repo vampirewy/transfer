@@ -40,12 +40,19 @@
         <div class="quan"></div>
         <span>问卷、膳食方案取前后</span>
         <el-input
+        onkeyup=
+        "if(this.value.length==1)
+        {this.value=this.value.replace(/[^1-9]/g,'')}else
+        {this.value=this.value.replace(/\D/g,'')}"
+        onafterpaste=
+        "if(this.value.length==1)
+        {this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
           type="text"
           v-model="staffForm.nearestDay"
           style="50px;"
           placeholder="请输入"
         ></el-input>
-        <span>天内离体检日期最近的一份</span>
+        <span>天内离体检日期最新的一份</span>
       </div>
       <!-- <el-row>
         <el-col :span="24">
@@ -362,7 +369,7 @@ export default {
         personReportConcludingRemark: '',
         nearestDay: '',
         isAudit: '',
-        peRecommendMode: '',
+        peRecommendMode: '1', // 暂时给默认
         manPeItem: '',
         womanPeItem: '',
         manPeItemSpecial: '',
@@ -393,7 +400,7 @@ export default {
   methods: {
     // 查看pdf
     openpdf(data) {
-      window.open(this.pdf_url + data);
+      window.open(`${this.pdf_url}/${data}`);
     },
     showpop(data) {
       this.viewIndexes = 2;
@@ -405,7 +412,7 @@ export default {
     getCommentDetail() {
       this.$api.systemManageInterface.getconfigDetail().then(({ data }) => {
         this.staffForm = data.data;
-        this.staffForm.peRecommendMode = (this.staffForm.peRecommendMode, '');
+        this.staffForm.peRecommendMode = (this.staffForm.peRecommendMode, '1');
       });
     },
     beforeUpload(file) {
@@ -427,7 +434,6 @@ export default {
     handleUploadSuccess(res, key) {
       this[`${key}Loading`] = false;
       const { data, message } = res;
-      console.log(this.staffForm[key], 123);
       if (res.rc === 0) {
         this.staffForm[key] = res.data;
         this.staffForm[`${key}Name`] = data.substring(data.lastIndexOf('/') + 1);

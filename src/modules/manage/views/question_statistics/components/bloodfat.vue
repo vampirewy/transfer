@@ -35,7 +35,7 @@ export default {
       // 绘制条形图
       const option = {
         title: {
-          text: '甘油三酯分布情况',
+          text: '总胆固醇',
           top: 5,
           left: 5,
           textStyle: {
@@ -149,49 +149,11 @@ export default {
               },
             },
           },
-          // {
-          //   name: '否',
-          //   type: 'bar',
-          //   stack: 'total',
-          //   label: {
-          //     show: true,
-          //   },
-          //   emphasis: {
-          //     focus: 'series',
-          //   },
-          //   data: [220, 182, 191, 234, 290, 330, 310],
-          //   barWidth: 25, // 柱图宽度
-          //   itemStyle: {
-          //     normal: {
-          //       // 柱形图圆角，初始化效果
-          //       barBorderRadius: [15, 15, 0, 0],
-          //       color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-          //         {
-          //           offset: 0,
-          //           color: '#F6F8FC',
-          //         },
-          //         {
-          //           offset: 1,
-          //           color: '#F6F8FC',
-          //         },
-          //       ]),
-          //       label: {
-          //         show: false, // 开启显示
-          //         position: 'top', // 在上方显示
-          //         textStyle: {
-          //           // 数值样式
-          //           color: '#333',
-          //           fontSize: 14,
-          //         },
-          //       },
-          //     },
-          //   },
-          // },
         ],
       };
       const options = {
         title: {
-          text: '低密度分布情况',
+          text: '甘油三酯',
           top: 5,
           left: 5,
           textStyle: {

@@ -169,9 +169,10 @@ export default {
       this.lifeList.forEach((element) => {
         option.yAxis.data.push(element.paramName);
         option.series[0].data.push(element.judgeResultMapList[0].yesCount);
-        option.series[1].data.push(element.judgeResultMapList[1].basicCount);
-        option.series[2].data.push(element.judgeResultMapList[2].noCount);
+        option.series[1].data.push(element.judgeResultMapList[2].basicCount);
+        option.series[2].data.push(element.judgeResultMapList[1].noCount);
       });
+      console.log(option.series[1].data);
       myChartDrawer.setOption(option);
     },
     async queryList() {
