@@ -129,6 +129,22 @@ class Personal extends BaseModule {
   getCustomerNumberAndRank() {
     return this.get('http://192.168.137.12:3000/mock/63/user/getClientData');
   }
+  /**
+   * @description: 工作台 -- 工作统计
+   * @param {string} startTime 开始时间 yyyy-MM-DD
+   * @param {string} endTime 结束时间 yyyy-MM-DD
+   * @property {number} manageCustomerCount 管理客户数
+   * @property {number} firstFollowCount 阳性追踪数
+   * @property {number} followUpCount 随访计划数
+   * @property {number} phoneCount 电话工作任务量
+   * @property {number} smsCount 短信工作任务量
+   * @property {number} inHospitalChangeCount 院内转诊数
+   */
+  getWorkStatistics(query = {}) {
+    return this.get('http://192.168.137.12:3000/mock/63/workStatistics', {
+      params: query,
+    });
+  }
 }
 
 export default new Personal();
