@@ -2,15 +2,17 @@
   <div class="station">
     <Info class="station-item"></Info>
     <QuickEntry class="station-item"></QuickEntry>
+    <Statistics class="station-item"></Statistics>
   </div>
 </template>
 
 <script>
 import Info from './info/index.vue';
 import QuickEntry from './quick_entry/index.vue';
+import Statistics from './statistics/index.vue';
 export default {
   name: 'workstation',
-  components: { Info, QuickEntry },
+  components: { Info, QuickEntry, Statistics },
   data() {
     return {};
   },
@@ -31,13 +33,11 @@ export default {
 <style lang="scss" scoped>
 .station {
   &-item {
+    box-sizing: border-box;
     margin: 10px 0 20px 0;
-    padding-left: 20px;
-    padding-right: 20px;
-    height: 160px;
+    padding: 20px;
     font-size: 12px;
     position: relative;
-    overflow: hidden;
     color: #666;
     background: #fff;
     box-shadow: 0px 0px 50px 0px rgba(151, 166, 189, 0.2);
