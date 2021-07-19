@@ -28,6 +28,17 @@ export default {
               opacity: 0,
             },
           },
+          formatter: (params) => {
+            // 获取xAxis data中的数据
+            let dataStr = `<div><p style="font-weight:bold;margin:0 8px 15px;">${params[0].name}</p></div>`;
+            dataStr += `<div>
+          <div style="margin: 0 8px;">
+            <span>${params[0].seriesName}：</span>
+            <span >${params[0].data}</span>
+          </div>
+        </div>`;
+            return dataStr;
+          },
         },
         legend: {
           data: ['男', '女'],
@@ -47,6 +58,9 @@ export default {
         xAxis: {
           type: 'category',
           data: [],
+          axisLabel: {
+            rotate: 45,
+          },
         },
         series: [
           {

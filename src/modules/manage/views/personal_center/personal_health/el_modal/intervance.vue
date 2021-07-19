@@ -106,13 +106,15 @@
           </el-table-column>
         </el-table>
         <el-pagination
-          background
-          layout="prev, pager, next, jumper, total, sizes"
-          :total="total"
-          :page-size="15"
-          @current-change="pageClick"
-          :pageSizes="[15]"
-        ></el-pagination>
+                style="margin-top: 15px"
+                @current-change="searchpage"
+                background
+                :total="total"
+                :page-size="params.pageSize"
+                :current-page="params.pageNo"
+                :page-sizes="[15]"
+                layout="prev, pager, next, jumper, total, sizes"
+              ></el-pagination>
       </div>
     </div>
   </div>
@@ -139,6 +141,10 @@ export default {
         currentPage: 1,
         pageSize: 15,
       },
+      params: {
+        pageNo: 1, // 页码
+        pageSize: 15, // 页数 默认10
+      },
       form: {
         keywords: '', // 关键字
         gender: '', // 性别
@@ -164,6 +170,10 @@ export default {
     this.getList();
   },
   methods: {
+    searchpage(current = 1) {
+      this.params.pageNo = current;
+      this.getList();
+    },
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
@@ -270,7 +280,7 @@ export default {
       const { data } = res.data;
       if (data) {
         this.table.list = data.data || [];
-        this.table.totalCount = data.total;
+        this.total = data.total;
       }
     },
   },

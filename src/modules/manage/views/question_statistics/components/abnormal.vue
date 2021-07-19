@@ -49,6 +49,9 @@ export default {
         xAxis: {
           type: 'category',
           data: [],
+          axisLabel: {
+            rotate: 45,
+          },
         },
         series: [
           {
@@ -135,6 +138,7 @@ export default {
         option.series[0].data.push(element.genderMapList[0].manCount);
         option.series[1].data.push(element.genderMapList[1].womanCount);
       });
+      console.log(option.xAxis.data, 111);
       myChartDrawer.setOption(option);
     },
     // top10数据
