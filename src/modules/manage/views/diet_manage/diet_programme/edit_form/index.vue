@@ -595,10 +595,19 @@ export default {
       this.isShowDietMenuTemplate = true;
     },
     back() {
-      this.$parent.viewIndex = 1;
-      this.$router.push({
-        path: '/diet_manage/',
-      });
+      if (this.$route.query.clientId) {
+        this.$router.go(-1);
+      } else {
+        this.$parent.viewIndex = 1;
+        this.$router.push({
+          path: '/diet_manage/',
+        });
+      }
+      console.log(this.$route.query.clientId);
+      // this.$parent.viewIndex = 1;
+      // this.$router.push({
+      //   path: '/diet_manage/',
+      // });
       // this.id = '';
     },
     handleDietMenuTypeChange(id = '', name = '') {
@@ -669,6 +678,12 @@ export default {
     },
     // 保存
     submitBtn() {
+      if (!this.stateDate) {
+        return this.$message.warning('请选择开始时间');
+      }
+      if (!this.endDate) {
+        return this.$message.warning('请选择结束时间');
+      }
       let mealtext = '';
       if (this.mealList !== '') {
         mealtext = this.mealList;

@@ -22,6 +22,7 @@ export default [
       name: 'diet_programme',
       meta: {
         title: '膳食方案',
+        keepAlive: true,
         // access: 'service_order',
       },
       component: () => import('../../views/diet_manage/diet_programme/index'),
@@ -30,6 +31,7 @@ export default [
       name: 'diet_finished_dish',
       meta: {
         title: '成品菜',
+        keepAlive: true,
       },
       component: () => import('../../views/diet_manage/diet_finished_dish/index'),
     }, {
@@ -37,6 +39,7 @@ export default [
       name: 'diet_raw_material',
       meta: {
         title: '原料库',
+        keepAlive: true,
       },
       component: () => import('../../views/diet_manage/diet_raw_material/index'),
     }, {
@@ -44,6 +47,7 @@ export default [
       name: 'diet_menu_template',
       meta: {
         title: '菜谱模板',
+        keepAlive: true,
       },
       component: () => import('../../views/diet_manage/diet_menu_template/index'),
     }, {
@@ -51,6 +55,7 @@ export default [
       name: 'diet_tyerapy_chinese',
       meta: {
         title: '中医食疗',
+        keepAlive: true,
       },
       component: () => import('../../views/diet_manage/diet_tyerapy_chinese/index'),
     }, {
@@ -67,6 +72,7 @@ export default [
       name: 'diet_principle',
       meta: {
         title: '膳食原则',
+        keepAlive: true,
       },
       component: () => import('../../views/diet_manage/diet_principle/index'),
     }],
