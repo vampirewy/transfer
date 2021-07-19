@@ -89,13 +89,15 @@
           </el-table-column>
         </el-table>
         <el-pagination
-          background
-          layout="prev, pager, next, jumper, total, sizes"
-          :total="total"
-          :page-size="15"
-          @current-change="pageClick"
-          :pageSizes="[15]"
-        ></el-pagination>
+                style="margin-top: 15px"
+                @current-change="searchpage"
+                background
+                :total="total"
+                :page-size="params.pageSize"
+                :current-page="params.pageNo"
+                :page-sizes="[15]"
+                layout="prev, pager, next, jumper, total, sizes"
+              ></el-pagination>
       </div>
       <detail
       :visible="detailModalVisible"
@@ -134,6 +136,10 @@ export default {
       multipleSelection: [],
       currentValue: {},
       detailModalVisible: false,
+      params: {
+        pageNo: 1, // 页码
+        pageSize: 15, // 页数 默认10
+      },
     };
   },
   mounted() {
@@ -141,6 +147,10 @@ export default {
     this.queryList();
   },
   methods: {
+    searchpage(current = 1) {
+      this.params.pageNo = current;
+      this.queryList();
+    },
     medication_add() {
       this.$router.push({
         path: '/medication_history_add',
@@ -224,7 +234,7 @@ export default {
         t.total = this.detailParams.total;
         t.expand = false;
       });
-      this.table.totalCount = result.total || 0;
+      this.total = result.total || 0;
       // this.setExpandColumn(result.list);
     },
   },

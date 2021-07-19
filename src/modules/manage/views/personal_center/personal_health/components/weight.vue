@@ -41,7 +41,7 @@ export default {
           { label: '体重', prop: 'weight' },
           { label: '腰围', prop: 'wc' },
           { label: '体脂率', prop: 'bdPercent' },
-          { label: '备注', prop: 'bdPercent' },
+          { label: '备注', prop: 'result' },
         ],
         list: [],
         total: 0,

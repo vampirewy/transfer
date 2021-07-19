@@ -46,7 +46,7 @@ export default {
     this.$nextTick(() => {
       this.initChart();
     });
-    // console.log(this.yList, '数据');
+    console.log(this.xList, this.yList, '数据');
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -77,12 +77,15 @@ export default {
   },
   methods: {
     initChart() {
+      this.yList.forEach((val) => {
+        val.value = ((val.value / this.centerText) * 100).toFixed(0);
+      });
       this.chart = echarts.init(this.$el, 'macarons');
       const options = {
-        /* tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b} : {c} ({d}%)',
-        }, */
+        // tooltip: {
+        //   trigger: 'item',
+        //   formatter: '{a} <br/>{b} : {c} ({d}%)',
+        // },
         /* legend: {
           left: 'center',
           bottom: '15',
@@ -121,30 +124,20 @@ export default {
             hoverAnimation: true,
             label: {
               normal: {
+                // formatter: '{d}%',
+                // formatter: function (params) {
+                //   return `${params.percent.toFixed(1)}%`;
+                // },
                 show: true,
                 position: 'inner',
                 textStyle: {
                   fontWeight: 300,
                   fontSize: 10,
                 },
-                formatter: '{d}%',
+                formatter: '{c}%',
+                // formatter: function(a){ return a.percent.toFixed(0) + '%'},
               },
             },
-            // label: {
-            //   formatter: function (data) {
-            //     console.log(data);
-            //   },
-            //   formatter: '{d|{d}%}',
-            //   rich: {
-            //     d: { fontSize: 10 },
-            //   },
-            // },
-            // label: {
-            //   normal: {
-            //   position: 'center',
-            //   show: false,
-            //   },
-            // },
             emphasis: {
               label: {
                 show: true,
@@ -162,16 +155,6 @@ export default {
                 // 每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组中的颜色
                 color(params) {
                   const colorList = [
-                    // '#FA912B',
-                    // '#806CE5',
-                    // '#3154AC',
-                    // '#36BF2F',
-                    // '#FA912B',
-                    // '#6DC8EC',
-                    // '#31C529',
-                    // '#54c9b6',
-                    // '#F53626',
-                    // '#f5c8be',
                     '#FA912B',
                     '#333333',
                     '#806CE5',
@@ -194,13 +177,6 @@ export default {
           },
         ],
       };
-      // if (this.yList.length > 1) {
-      //   options.series[0].itemStyle.normal.borderWidth = 3;
-      //   options.series[0].itemStyle.normal.borderColor = '#fff';
-      // } else {
-      //   options.series[0].itemStyle.normal.borderWidth = 0;
-      //   options.series[0].itemStyle.normal.borderColor = '#fff';
-      // }
       this.chart.setOption(options);
     },
   },

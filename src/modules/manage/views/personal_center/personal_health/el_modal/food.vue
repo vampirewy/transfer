@@ -14,13 +14,13 @@
                     size="small"
                     style="margin: 16px 0"
                     @click="handleAdd"
-                    v-if="getAccess('physical_examination_report_add')"
+                    v-if="getAccess('diet_programme_add')"
             ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
             <el-button
               size="small"
               class="btn-new btnDel"
-              @click="handleDelete"
-              v-if="getAccess('physical_examination_report_batch_delete')"
+              @click="handleSomeRemove"
+              v-if="getAccess('diet_programme_del')"
               ><img src="@/assets/images/common/delBtn.png" />删除</el-button
             >
           </div>
@@ -28,9 +28,11 @@
         <div>
             <el-table
               ref="table"
+              @selection-change="handleSelectionChange"
               class="has-expand-table"
               :data="dataSource"
             >
+            <el-table-column type="selection" width="40"></el-table-column>
               <!-- <el-table-column label="饮食相关异常" prop="state" align="center"></el-table-column>
               <el-table-column label="不良饮食习惯" prop="state" align="center"></el-table-column> -->
               <el-table-column label="周期" prop="day" align="center">
@@ -66,7 +68,7 @@
             <div style="text-align: right">
               <el-pagination
                 style="margin-top: 15px"
-                @current-change="search"
+                @current-change="searchpage"
                 background
                 :total="params.total"
                 :page-size="params.pageSize"
@@ -82,6 +84,7 @@
 </template>
 <script>
 import report from '@/components/user_health/report.vue';
+import deleteIcon from '~/src/assets/images/deleteicon.png';
 export default {
   name: 'Intervention_tab_userdetail_mdl',
   props: {
@@ -110,6 +113,7 @@ export default {
         endCreatedTime: '',
         clientId: this.$route.params.id,
       },
+      multipleSelection: [],
       total: 0,
     };
   },
@@ -122,6 +126,10 @@ export default {
     this.loadData();
   },
   methods: {
+    searchpage(current = 1) {
+      this.params.pageNo = current;
+      this.fetch();
+    },
     loadData() {
       this.$api.dietRawMaterial
         .clientDietPlanPageList({
@@ -131,7 +139,7 @@ export default {
           if (!res.data.success) return;
           const { data, total } = res.data.data;
           this.dataSource = data;
-          this.total = total;
+          this.params.total = total;
         });
     },
     handleAdd() {
@@ -163,6 +171,42 @@ export default {
           name: this.name,
         },
       });
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+    handleSomeRemove() {
+      if (this.multipleSelection.length === 0) {
+        this.$message({
+          message: '请选择要删除的记录',
+          type: 'warning',
+        });
+        return;
+      }
+      let batch = false;
+      if (this.multipleSelection.length >= 2) {
+        batch = true;
+      }
+      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认${batch ? '批量' : ''}删除！</span></div>`, '删除提示', {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        customClass: 'message-box-customize',
+        showClose: true,
+      }).then(
+        async () => {
+          const idsList = [];
+          this.multipleSelection.forEach((value) => {
+            idsList.push(value.id);
+          });
+          const reqBody = idsList;
+          await this.$api.dietRawMaterial.clientDietPlanPageRemove(
+            reqBody,
+          );
+          this.$message.success('操作成功');
+          return this.loadData();
+        },
+      );
     },
   },
 };
