@@ -145,11 +145,11 @@ export default {
                 color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                   {
                     offset: 0,
-                    color: '#F6F8FC',
+                    color: '#C7C9D1',
                   },
                   {
                     offset: 1,
-                    color: '#F6F8FC',
+                    color: '#C7C9D1',
                   },
                 ]),
                 label: {
