@@ -40,7 +40,7 @@
             label="随访日期"
             show-overflow-tooltip
           >
-            <template slot-scope="scope">
+          <template slot-scope="scope">
           <span>{{ scope.row.planDate | getResult}}</span>
         </template>
           </el-table-column>
@@ -248,7 +248,6 @@ export default {
       });
     },
     handleDetail(row) {
-      console.log(row);
       if (row.templateQuestionId) {
         this.$router.push({
           path: `/health_plan/user_follow_do/do/${row.id}`,
