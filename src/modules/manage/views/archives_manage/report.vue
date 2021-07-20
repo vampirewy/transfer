@@ -221,7 +221,7 @@
                 <template slot-scope="scope">
                   {{scope.row.reportState === 1 ?
                   '已总检' : (scope.row.reportState === 2 ?
-                  '未总检' : '未知')}}
+                  '未总检' : '')}}
                 </template>
                 </el-table-column>
               <el-table-column
