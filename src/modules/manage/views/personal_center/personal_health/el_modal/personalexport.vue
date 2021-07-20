@@ -98,7 +98,30 @@
                          slot="suffix"></i>
                     </el-input>
                   </el-popover>
-                  <span v-else>无</span>
+                  <el-popover
+                          v-else
+                          :ref="`popover-${scope.row.reportId}`"
+                          placement="bottom-start"
+                          width="570"
+                          trigger="click"
+                          @show="popoverStatusShow(scope.row)"
+                          @hide="popoverStatus = false"
+                  >
+                    <questions-open
+                      v-if="popoverStatus && popoverRefIndex === scope.row.reportId"
+                      :clientId="scope.row.clientId"
+                      :id="scope.row.lifeQuestionId"
+                      @change="handlePopoperClose"></questions-open>
+                    <el-input
+                            class="select-user-trigger disabled"
+                            slot="reference"
+                            disabled
+                            v-model="scope.row.lifeQuestionDate"
+                            placeholder="请选择">
+                      <i :class="`el-icon-arrow-${popoverStatus ? 'up' : 'down'}`"
+                         slot="suffix"></i>
+                    </el-input>
+                  </el-popover>
                 </template>
               </el-table-column>
               <el-table-column

@@ -7,18 +7,18 @@
         >随访记录
       </div>
       <div class="follow-plan">
-        <!-- <div class="divRightTitleDiv">
+        <div class="divRightTitleDiv">
           <div>
             <el-button
               style="margin: 16px 0"
               size="small"
               class="btn-new btnDel"
-              @click="handleDelete"
-              v-if="getAccess('physical_examination_report_batch_delete')"
+              @click="handleSomeRemove"
+              v-if="getAccess('visited_record_batch_delete')"
               ><img src="@/assets/images/common/delBtn.png" />删除</el-button
             >
           </div>
-        </div> -->
+        </div>
         <el-table
           :data="tableData"
           @selection-change="handleSelectionChange"
@@ -166,6 +166,35 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
+    },
+    handleSomeRemove() {
+      if (this.multipleSelection.length === 0) {
+        this.$message({
+          message: '请选择要删除的记录',
+          type: 'warning',
+        });
+        return;
+      }
+      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认删除！</span></div>`, '删除提示', {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        customClass: 'message-box-customize',
+        showClose: true,
+      }).then(
+        async () => {
+          const idsList = [];
+          this.multipleSelection.forEach((value) => {
+            idsList.push(value.id);
+          });
+          const reqBody = idsList;
+          await this.$api.userFollowInterface.deleteSomeFollowplanDel(
+            reqBody,
+          );
+          this.$message.success('操作成功');
+          return this.getList();
+        },
+      );
     },
     handleAdd() {
       this.$router.push({

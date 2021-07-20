@@ -179,10 +179,10 @@ const COLUMNS = {
   ],
   weight: [
     { label: '检测时间', prop: 'testDate' },
-    { label: '身高(cm)', prop: 'workUnitName' },
+    { label: '身高(cm)', prop: 'height' },
     { label: '体重(kg)', prop: 'weight' },
-    { label: '腰围(cm)', prop: 'weight' },
-    { label: 'BMI', prop: 'weight' },
+    { label: '腰围(cm)', prop: 'wc' },
+    { label: 'BMI', prop: 'bmi' },
     { label: '体脂率(%)', prop: 'bdPercent' },
     { label: '备注', prop: 'result' },
   ],

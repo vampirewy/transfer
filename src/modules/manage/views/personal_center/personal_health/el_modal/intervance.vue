@@ -106,13 +106,15 @@
           </el-table-column>
         </el-table>
         <el-pagination
-          background
-          layout="prev, pager, next, jumper, total, sizes"
-          :total="total"
-          :page-size="15"
-          @current-change="pageClick"
-          :pageSizes="[15]"
-        ></el-pagination>
+                style="margin-top: 15px"
+                @current-change="searchpage"
+                background
+                :total="total"
+                :page-size="params.pageSize"
+                :current-page="params.pageNo"
+                :page-sizes="[15]"
+                layout="prev, pager, next, jumper, total, sizes"
+              ></el-pagination>
       </div>
     </div>
   </div>
@@ -139,6 +141,10 @@ export default {
         currentPage: 1,
         pageSize: 15,
       },
+      params: {
+        pageNo: 1, // 页码
+        pageSize: 15, // 页数 默认10
+      },
       form: {
         keywords: '', // 关键字
         gender: '', // 性别
@@ -164,6 +170,10 @@ export default {
     this.getList();
   },
   methods: {
+    searchpage(current = 1) {
+      this.params.pageNo = current;
+      this.getList();
+    },
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
@@ -237,6 +247,35 @@ export default {
         render: h => h(InterventionAddMdl),
       });
     },
+    /**
+     * 编辑随访
+     * @return {Promise<ElMessageComponent>}
+     */
+    async editUserFollow(value) {
+      const clientIds = [value.clientId];
+      const intervenePlans = [Object.assign({}, value)];
+      intervenePlans.forEach((it) => {
+        const setIt = it;
+        setIt.ignore = false;
+        setIt.planUserId = it.planDoctor;
+        if (it.planTime.split(' ').length === 1) {
+          setIt.planDate = `${it.planTime} 00:00:00`; // 编辑重选时间要重新设
+        } else if (it.planTime.split(' ').length === 2) {
+          setIt.planDate = it.planTime;
+        }
+      });
+      const result = intervenePlans.filter(it => !it.ignore);
+      const reqBody = {
+        // id: value.id,
+        organId: '', // 区域id
+        clientIds, // 客户id
+        intervenePlans: result,
+        // executeState: '2', // 执行状态-值为1已执行，2待执行
+      };
+      await this.$api.userFollowInterface.saveIntervenePlan(reqBody);
+      this.$message.success('操作成功');
+      return this.getList();
+    },
     handleDetail(row) {
       console.log(row);
       if (row.templateQuestionId) {
@@ -270,7 +309,7 @@ export default {
       const { data } = res.data;
       if (data) {
         this.table.list = data.data || [];
-        this.table.totalCount = data.total;
+        this.total = data.total;
       }
     },
   },

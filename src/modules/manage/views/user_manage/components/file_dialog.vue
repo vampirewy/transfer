@@ -33,7 +33,7 @@
         </el-input>
       </el-form-item>
       <el-form-item label="上传时间：">
-        <el-input style="width:100%;"
+        <el-input style="width:100%;left:-15px;"
         disabled="true" v-model="formData.uploadDate"></el-input>
       </el-form-item>
       </div>
@@ -72,7 +72,7 @@ export default {
       formData: {
         title: '',
         remark: '',
-        uploadDate: dayjs(new Date()).format('YYYY-MM-DD hh:mm:ss'),
+        uploadDate: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'),
         filePath: '',
         route: '',
       },

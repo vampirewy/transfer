@@ -271,7 +271,7 @@ export default {
       };
       const optiones = {
         title: {
-          text: '高密度分布情况',
+          text: '高密度脂蛋白分布情况',
           top: 5,
           left: 5,
           textStyle: {
@@ -389,7 +389,7 @@ export default {
       };
       const optioness = {
         title: {
-          text: '低密度分布情况',
+          text: '低密度脂蛋白分布情况',
           top: 5,
           left: 5,
           textStyle: {
