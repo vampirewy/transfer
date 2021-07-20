@@ -34,6 +34,7 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           @change="switchType"
+          :clearable="false"
         >
         </el-date-picker>
       </div>
