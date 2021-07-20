@@ -122,6 +122,7 @@ class Personal extends BaseModule {
   /**
    * @description: 工作台 -- 获取登录用户负责客户数及团队内排名数
    * @fileUrl http://192.168.137.12:3000/project/63/interface/api/7019
+   * @method get
    * @property {number} teamOrder 团队排名
    * @property {number} teamCount 团队(医生)数量
    * @property {number} clientCount 负责客户数
@@ -130,7 +131,45 @@ class Personal extends BaseModule {
     return this.get('http://192.168.137.12:3000/mock/63/user/getClientData');
   }
   /**
+   * @description:  工作台 -- 今日工作任务 --采集系统跟踪
+   * @file http://192.168.137.12:3000/project/63/interface/api/7127
+   * @method post
+   * @param {string} startTime 开始时间 yyyy-MM-DD
+   * @param {string} endTime 结束时间 yyyy-MM-DD
+   * @param {number} searchType 查询类型 2|工作台 1|列表
+   * @param {string} sortType 排序类型
+   * bySex|性别  byAge|年龄  byReportDate|体检时间  byZjDate|主检时间  byCreateDate|上报时间  ByLevel|阳性分级
+   * @param {string} sortRule 1|升 2|降
+   * 返回
+   * @property {string} id 体检报告id
+   * @property {string} clientId 客户id
+   * @property {string} clientCode 客户编号
+   * @property {string} workUnitName 所属企业
+   * @property {string} doctorName 管理医生
+   * @property {string} clientName 客户姓名
+   * @property {number} positiveLevel 阳性等级
+   * @property {string} reportNo 体检编号
+   * @property {string} reportDate 体检时间
+   * @property {string} zjDate 主检时间
+   * @property {string} zjDoctor 主检医生
+   * @property {number} age 年龄
+   * @property {string} birthday 出生日期
+   * @property {number} gender 性别 0|女 1|男
+   * @property {string} abnormalResult 异常结果
+   * @property {string} visitDoctorName 回访医生姓名
+   * @property {string} visitResut 跟踪结果
+   * @property {string} createdTime 上报时间
+   * @property {string} levelName 阳性分级
+   */
+  getTaskOfSysTranking(data = {}) {
+    return this.post(
+      'http://192.168.137.12:3000/mock/63/positive_tracking_new/get_collect_data_list_page',
+      data,
+    );
+  }
+  /**
    * @description: 工作台 -- 工作统计
+   * @method get
    * @param {string} startTime 开始时间 yyyy-MM-DD
    * @param {string} endTime 结束时间 yyyy-MM-DD
    * @property {number} manageCustomerCount 管理客户数
