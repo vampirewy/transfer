@@ -103,6 +103,10 @@ class Personal extends BaseModule {
   homeInterveneClient(data = {}) {
     return this.post('/home/intervene/client', data);
   }
+  // 首页获取今日跟踪列表
+  positiveReturnTaskClient(data = {}) {
+    return this.post('/home/positive_return_task/client', data);
+  }
   // 获取不同类别客户数量饼状图
   homeGridClientCount(data = {}) {
     return this.post('/home/grid/client_count', data);
