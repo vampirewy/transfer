@@ -1,18 +1,22 @@
 <template>
   <div class="station">
-    <Info class="station-item"></Info>
-    <QuickEntry class="station-item"></QuickEntry>
-    <Statistics class="station-item"></Statistics>
+    <Info class="station-item__layout"></Info>
+    <QuickEntry class="station-item__layout"></QuickEntry>
+    <Task class="station-item"></Task>
+    <Records class="station-item"></Records>
+    <Statistics class="station-item__layout"></Statistics>
   </div>
 </template>
 
 <script>
 import Info from './info/index.vue';
 import QuickEntry from './quick_entry/index.vue';
+import Task from './task/index.vue';
+import Records from './records/index.vue';
 import Statistics from './statistics/index.vue';
 export default {
   name: 'workstation',
-  components: { Info, QuickEntry, Statistics },
+  components: { Info, QuickEntry, Task, Records, Statistics },
   data() {
     return {};
   },
@@ -31,14 +35,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.bg-fff {
+  background: #fff;
+}
 .station {
   &-item {
     box-sizing: border-box;
-    margin: 10px 0 20px 0;
-    padding: 20px;
+    margin-bottom: 20px;
     font-size: 12px;
     position: relative;
     color: #666;
+  }
+  &-item__layout {
+    box-sizing: border-box;
+    margin: 10px 0 20px 0;
+    font-size: 12px;
+    padding: 20px;
     background: #fff;
     box-shadow: 0px 0px 50px 0px rgba(151, 166, 189, 0.2);
     border-color: rgba(0, 0, 0, 0.05);
