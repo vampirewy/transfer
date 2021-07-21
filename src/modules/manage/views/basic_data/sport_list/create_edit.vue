@@ -4,196 +4,167 @@
       ref="form"
       :rules="rules"
       :inline="false"
+      label-width="90px"
       :model="form"
-      :label-position="right"
-      class="form-inline"
+          class="form-inline"
     >
-      <div class="form-title">
-        <div class="line"></div>
-        <h3 class="name" v-if="routeType === 1">新增-运动项目</h3>
-        <h3 class="name" v-if="routeType === 2">编辑-运动项目</h3>
-        <h3 class="name" v-if="routeType === 3">查看-运动项目</h3>
+      <div class="divRightTitleDiv">
+        <div class="divRightTitle" style="margin-top: 5px">
+          {{routeType === 1 ? '新增-运动项目' : routeType === 2 ? '编辑-运动项目' : ''}}
+          <div class="titleBiao"></div></div>
       </div>
-
-      <div class="mt20">
-        <div class="row">
+      <el-row>
+        <el-col :span="6">
           <el-form-item
-            label="运动名称："
-            label-width="82px"
-            style="width:25%"
-            prop="itemName"
+                  label="运动名称："
+                  prop="itemName"
           >
             <el-input
-              v-model="form.itemName"
-              :disabled="routeType === 3"
-              maxlength="30"
-              style="width: 230px"
-              placeholder="请输入"
+                    v-model="form.itemName"
+                    maxlength="30"
+                    placeholder="请输入"
             >
             </el-input>
           </el-form-item>
+        </el-col>
+        <el-col :span="6">
           <el-form-item
-            label="是否启用："
-            prop="isCompare"
-            label-width="83px"
-            style="width:25%"
+                  label="是否启用："
+                  prop="isCompare"
           >
             <el-select
-              v-model="form.isCompare"
-              :disabled="routeType === 3"
-              style="width: 230px"
-              placeholder="请选择是否启用"
+                    v-model="form.isCompare"
+                    placeholder="请选择是否启用"
+                    style="width: 100%;"
             >
               <el-option
-                v-for="it in isCompareList"
-                :label="it.name"
-                :value="it.value"
-                :key="it.id"
+                      v-for="it in isCompareList"
+                      :label="it.name"
+                      :value="it.value"
+                      :key="it.id"
               ></el-option>
             </el-select>
           </el-form-item>
-
+        </el-col>
+        <el-col :span="6">
           <el-form-item
-            label="代谢当量："
-            label-width="82px"
-            style="width:25%"
-            prop="met"
+                  label="代谢当量："
+                  prop="met"
           >
             <el-input
-              class="numberinput"
-              type="number"
-              @input="oninput()"
-              v-model="form.met"
-              :disabled="routeType === 3"
-              maxlength="30"
-              style="width: 230px"
-              placeholder="请输入"
+                    class="numberinput"
+                    type="number"
+                    @input="oninput()"
+                    v-model="form.met"
+                    maxlength="30"
+                    placeholder="请输入"
             >
             </el-input>
           </el-form-item>
+        </el-col>
+        <el-col :span="6">
           <el-form-item
-            label="运动强度："
-            prop="strengthDegree"
-            label-width="83px"
-            style="width:25%"
+                  label="运动强度："
+                  prop="strengthDegree"
           >
             <el-select
-              v-model="form.strengthDegree"
-              :disabled="routeType === 3"
-              style="width: 230px"
-              placeholder="请选择"
+                    v-model="form.strengthDegree"
+                    placeholder="请选择"
+                    style="width: 100%;"
             >
               <el-option
-                v-for="it in sportlist"
-                :label="it.name"
-                :value="it.paramValue"
-                :key="it.id"
+                      v-for="it in sportlist"
+                      :label="it.name"
+                      :value="it.paramValue"
+                      :key="it.id"
               ></el-option>
             </el-select>
           </el-form-item>
-        </div>
-        <div class="row">
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="6">
           <el-form-item
-            label="运动分类："
-            prop="isMain"
-            label-width="83px"
-            style="width:25%"
+                  label="运动分类："
+                  prop="isMain"
           >
             <el-select
-              v-model="form.isMain"
-              :disabled="routeType === 3"
-              style="width: 230px"
-              placeholder="请选择"
+                    v-model="form.isMain"
+                    placeholder="请选择"
+                    style="width: 100%;"
             >
               <el-option
-                v-for="it in sportclasslist"
-                :label="it.name"
-                :value="it.paramValue"
-                :key="it.id"
+                      v-for="it in sportclasslist"
+                      :label="it.name"
+                      :value="it.paramValue"
+                      :key="it.id"
               ></el-option>
             </el-select>
           </el-form-item>
+        </el-col>
+        <el-col :span="6">
           <el-form-item
-            label="运动类型："
-            prop="sporttype"
-            label-width="83px"
-            style="width:25%"
+                  label="运动类型："
+                  prop="sporttype"
           >
             <el-select
-              v-model="form.sporttype"
-              :disabled="routeType === 3"
-              style="width: 230px"
-              placeholder="请选择"
+                    v-model="form.sporttype"
+                    placeholder="请选择"
+                    style="width: 100%;"
             >
               <el-option
-                v-for="it in sporttypelist"
-                :label="it.name"
-                :value="it.paramValue"
-                :key="it.id"
+                      v-for="it in sporttypelist"
+                      :label="it.name"
+                      :value="it.paramValue"
+                      :key="it.id"
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="适宜年龄：" label-width="83px" style="width:25%;">
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="适宜年龄：">
             <div style="display:flex">
-            <el-input
-              :disabled="routeType === 3"
-              v-model="form.minAge"
-              number
-              clearable
-              placeholder="请输入"
-              style="width: 105px;margin-right: 6px"
-            ></el-input>
-            -
-            <el-input
-              :disabled="routeType === 3"
-              v-model="form.maxAge"
-              number
-              clearable
-              placeholder="请输入"
-              style="width: 105px;margin-left: 5px"
-            ></el-input>
+              <el-input
+                      v-model="form.minAge"
+                      number
+                      clearable
+                      placeholder="请输入"
+              ></el-input>
+              &nbsp;-&nbsp;
+              <el-input
+                      v-model="form.maxAge"
+                      number
+                      clearable
+                      placeholder="请输入"
+              ></el-input>
             </div>
           </el-form-item>
-
-          <el-form-item label="适宜性别：" label-width="83px" style="width:25%">
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="适宜性别：">
             <template slot="label">
               &nbsp;适宜性别：
             </template>
             <el-select
-              :disabled="routeType === 3"
-              v-model="form.gender"
-              placeholder="请选择"
-              style="width: 230px"
+                    v-model="form.gender"
+                    placeholder="请选择"
+                    style="width: 100%;"
             >
               <el-option
-                :label="it.name"
-                :value="it.value"
-                :key="i"
-                v-for="(it, i) in genderList"
+                      :label="it.name"
+                      :value="it.value"
+                      :key="i"
+                      v-for="(it, i) in genderList"
               ></el-option>
             </el-select>
           </el-form-item>
-        </div>
-
-        <div class="handle-btn mt10 mb30">
-          <el-button class="reset-btn" size="small" @click="cancel"
-            >返回</el-button
-          >
-          <el-button
-            class="add-btn"
-            type="primary"
-            size="small"
-            @click="save"
-            v-if="routeType === 1"
-            >保存</el-button
-          >
-          <el-button
-            class="add-btn"
-            type="primary"
-            size="small"
-            @click="save"
-            v-if="routeType === 2"
-            >修改</el-button
+        </el-col>
+      </el-row>
+      <div class="mt20">
+        <div class="handle-btn mt20 mb30">
+          <el-button size="small" class="cancelBtn" @click="cancel">取消</el-button>
+          <el-button size="small" class="sureBtn" type="primary" @click="save"
+          >保存</el-button
           >
         </div>
       </div>
@@ -205,7 +176,7 @@
 import selectSection from './components/select_section.vue';
 
 export default {
-  name: 'create_edit',
+  name: 'sport_list_create_edit',
   components: {
     selectSection,
   },
@@ -359,7 +330,7 @@ export default {
      */
     cancel() {
       this.$router.push({
-        path: '/plan_center/sport_list',
+        path: '/basic_data/sport_list',
       });
     },
     // 根据id获取详情
@@ -451,12 +422,6 @@ export default {
   }
   .mb30 {
     margin-bottom: 30px;
-  }
-  .el-input__inner,
-  .el-textarea__inner {
-    background-color: #f4f4f6;
-    border: 0;
-    color: #333333;
   }
   .select-user-input {
     .el-input__inner {

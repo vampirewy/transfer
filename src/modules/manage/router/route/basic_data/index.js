@@ -11,7 +11,7 @@ import physicalProjectTemplate from './physical_project_template';
 import physicalProjectList from './physical_project_list';
 import unusualList from './unusual_list';
 import projectList from './project_list';
-
+import sportList from './sport_list';
 export default [
   {
     path: '/basic_data',
@@ -26,6 +26,7 @@ export default [
       ...physicalProjectList,
       ...unusualList,
       ...projectList,
+      ...sportList,
     ],
   },
 ];

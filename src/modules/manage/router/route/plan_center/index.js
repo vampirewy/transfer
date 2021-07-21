@@ -9,7 +9,6 @@
 import Main from '../../../views/main.vue';
 import lifeStyle from './life_style';
 import interventionTemplate from './intervention_template';
-import sportList from './sport_list';
 
 export default [
   {
@@ -20,6 +19,6 @@ export default [
       access: 'plan_center',
     },
     component: Main,
-    children: [...lifeStyle, ...interventionTemplate, ...sportList],
+    children: [...lifeStyle, ...interventionTemplate],
   },
 ];
