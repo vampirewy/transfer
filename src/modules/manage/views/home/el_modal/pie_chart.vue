@@ -7,10 +7,10 @@ import echarts from 'echarts';
 
 require('echarts/theme/macarons');
 // echarts theme
-import resize from './mixins/resize';
+// import resize from './mixins/resize';
 
 export default {
-  mixins: [resize],
+  // mixins: [resize],
   props: {
     className: {
       type: String,
@@ -18,7 +18,7 @@ export default {
     },
     width: {
       type: String,
-      default: '100%',
+      default: '220px',
     },
     height: {
       type: String,
@@ -46,7 +46,7 @@ export default {
     this.$nextTick(() => {
       this.initChart();
     });
-    console.log(this.xList, this.yList, '数据');
+    console.log(this.width, this.height, '数据');
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -93,7 +93,7 @@ export default {
         },*/
         graphic: {
           type: 'text',
-          left: '40%',
+          left: '47%',
           top: '45%',
           style: {
             text: this.centerText, // 圈中的文字值
@@ -105,7 +105,7 @@ export default {
         },
         title: {
           text: '总人数',
-          left: '34%',
+          left: '42%',
           top: '60%',
           textStyle: {
             color: '#999999',
@@ -120,7 +120,7 @@ export default {
             type: 'pie',
             // roseType: 'radius', //可以根据大小控制长短
             radius: [50, 75], // 中间可设置空心
-            center: ['45%', '55%'],
+            center: ['53%', '55%'],
             hoverAnimation: true,
             label: {
               normal: {

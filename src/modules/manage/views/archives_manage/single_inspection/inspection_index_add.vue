@@ -299,6 +299,7 @@
 import detail from '../components/detail.vue';
 import selectUser from '../components/select_user.vue';
 import selectExamination from '../components/select_examination.vue';
+import * as dayjs from 'dayjs';
 
 export default {
   name: 'medication_history_add',
@@ -544,6 +545,9 @@ export default {
       if (!this.infoSource.endDate) {
         return this.$message.warning('请填写检查时间');
       }
+      this.infoSource.endDate = dayjs(this.infoSource.endDate).format(
+        'YYYY-MM-DD HH:mm:ss',
+      );
       // if (!this.drugsList.length) {
       //   return this.$message.warning('请添加检查项目');
       // }

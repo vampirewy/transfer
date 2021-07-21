@@ -138,7 +138,7 @@
               <span>暂无数据</span>
             </div>
             <div class="chart-wrapper" v-else>
-              <div class="pieDiv" style="margin:0 3% 0 9%;">
+              <div class="pieDiv" style="margin:0 3% 0 4%;">
                 <pie-chart :xList="intervenePlanPieXList"
                 :yList="intervenePlanPieYList"
                 :centerText="checkAfterFeeTotal"/>
@@ -510,22 +510,23 @@ export default {
       this.getEchartIntervenePlanPie(sendData);
     },
     toRouterPage(type) { // 点击客户总数 跳转我的客户
-      localStorage.setItem('homeSearchData', JSON.stringify({
-        startDate: this.searchData.startDate.split(' ')[0].replace(/\//g, '-'),
-        lastDate: this.searchData.lastDate.split(' ')[0].replace(/\//g, '-'),
-        searchRange: this.searchData.searchRange,
-      }));
+      // localStorage.setItem('homeSearchData', JSON.stringify({
+      //   startDate: this.searchData.startDate.split(' ')[0].replace(/\//g, '-'),
+      //   lastDate: this.searchData.lastDate.split(' ')[0].replace(/\//g, '-'),
+      //   searchRange: this.searchData.searchRange,
+      // }));
       if (type === 1) {
-        this.$router.push('user_duty');
+        this.$router.push('customer_pool');
       } else if (type === 2) {
-        this.$router.push('report');
+        this.$router.push('physical_examination_report');
       } else if (type === 3) {
         this.$router.push('life_style_questionnaire');
       } else if (type === 4) {
-        this.$router.push('estimate_report');
-      } else if (type === 5) {
-        this.$router.push('service_order');
+        this.$router.push('assessment_report');
       }
+      //  else if (type === 5) {
+      //   this.$router.push('service_order');
+      // }
     },
     // 查询五数据
     getHomeFindCount() {

@@ -62,9 +62,14 @@
         <el-col :span="9">
           <el-form-item label="年龄范围">
             <div style="display: flex;">
-            <el-input v-model="form.minAge" placeholder="请输入"></el-input>
+            <el-input v-model="form.minAge" placeholder="请输入"
+            onkeyup="this.value=this.value.replace(/\D/g,'')"
+            onafterpaste="this.value=this.value.replace(/\D/g,'')" :maxlength="3"></el-input>
             <span style="margin:0 10px 0 10px;color:#333333">—</span>
-            <el-input v-model="form.maxAge" placeholder="请输入"></el-input>
+            <el-input v-model="form.maxAge" placeholder="请输入"
+            maxlength="3"
+            onkeyup="this.value=this.value.replace(/\D/g,'')"
+            onafterpaste="this.value=this.value.replace(/\D/g,'')"></el-input>
             </div>
           </el-form-item>
         </el-col>

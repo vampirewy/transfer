@@ -996,10 +996,12 @@ export default {
       this.queryPageList();
     },
     editGray() {
+      this.otherType = '';
       this.isGetinfo = false;
       this.isAddInfo = true;
     },
     add() {
+      this.otherType = '';
       this.editId = '';
       this.isGetinfo = false;
       this.isAddInfo = false;
@@ -1007,6 +1009,7 @@ export default {
     },
     handleEdit(row) {
       console.log(row);
+      this.otherType = '';
       if (row.healthDataOtherId) {
         this.editId = row.healthDataOtherId;
       } else {
@@ -1193,11 +1196,10 @@ export default {
       this.search();
     },
     handleTrendClick(row, type) {
+      this.otherType = '';
       if (this.tabIndex === 'other') {
         this.otherType = type;
         this.editId = row.healthDataOtherId;
-      } else {
-        this.otherType = '';
       }
       console.log(row);
       this.currentId = row.clientId;

@@ -97,9 +97,9 @@ export default {
     };
   },
   methods: {
-    // toRouterPage(type) {
-    //   this.$emit('toRouterPage', type);
-    // },
+    toRouterPage(type) {
+      this.$emit('toRouterPage', type);
+    },
   },
 };
 </script>
