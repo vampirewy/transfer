@@ -188,9 +188,9 @@ const COLUMNS = {
   ],
   sport: [
     { label: '检测时间', prop: 'testDate' },
-    { label: '运动时长(min)', prop: 'workUnitName' },
-    { label: '运动路程(km)', prop: 'workUnitName' },
-    { label: '运动消耗(Kcal)', prop: 'workUnitName' },
+    { label: '运动时长(min)', prop: 'sportTime' },
+    { label: '运动路程(km)', prop: 'sportDistance' },
+    { label: '运动消耗(Kcal)', prop: 'kcal' },
     { label: '运动步数(步)', prop: 'steps' },
     { label: '备注', prop: 'result' },
   ],
