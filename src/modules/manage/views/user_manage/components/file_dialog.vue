@@ -37,7 +37,7 @@
         disabled="true" v-model="formData.uploadDate"></el-input>
       </el-form-item>
       </div>
-      <el-form-item label="备注：">
+      <el-form-item label="附件说明：">
         <el-input
           type="textarea"
           :rows="4"

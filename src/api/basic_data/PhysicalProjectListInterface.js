@@ -85,5 +85,21 @@ class PhysicalProjectListInterface extends BaseModule {
   Exceptionmatch(data = {}) {
     return this.post('/report_abnormal_temp/match', data);
   }
+  // 列表异常组合
+  listabnormal(data = {}) {
+    return this.post('/group_abnormal/list_page', data);
+  }
+  // 详情异常
+  abnormaldetail(data = {}) {
+    return this.get(`/group_abnormal/get_detail/${data}`);
+  }
+  // 列表异常组合中的异常
+  grouplistabnormal(data = {}) {
+    return this.post('/group_abnormal/abnormal_list_page', data);
+  }
+  // 保存组合异常
+  savegroupabnormal(data = {}) {
+    return this.post('/group_abnormal/save_group_abnormal_config', data);
+  }
 }
 export default new PhysicalProjectListInterface();

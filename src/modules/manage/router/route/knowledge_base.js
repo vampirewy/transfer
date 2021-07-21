@@ -190,6 +190,15 @@ export default [
         },
         component: () => import('../../views/knowledge_base/Intervention_template/InterventionEdit.vue'),
       },
+      {
+        path: '/musterUnusual',
+        name: 'musterUnusual',
+        meta: {
+          title: '组合异常',
+          keepAlive: true,
+        },
+        component: () => import('../../views/knowledge_base/musterUnusual/index.vue'),
+      },
     ],
   },
 ];
