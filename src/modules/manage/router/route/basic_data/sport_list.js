@@ -8,18 +8,18 @@
 
 export default [
   {
-    path: '/plan_center/sport_list',
+    path: '/basic_data/sport_list',
     name: 'sport_list',
     meta: {
       title: '运动库',
       access: 'sport_list',
       keepAlive: true,
     },
-    component: () => import('../../../views/plan_center/sport_list'),
+    component: () => import('../../../views/basic_data/sport_list'),
   },
   {
-    path: '/plan_center/sport_list/create',
-    name: 'sport_list',
+    path: '/basic_data/sport_list/create',
+    name: 'sport_list_create_edit',
     meta: {
       title: '运动库新增',
       access: 'sport_list_add',
@@ -28,11 +28,11 @@ export default [
       hideInTag: true,
     },
     component: () =>
-      import('../../../views/plan_center/sport_list/create_edit'),
+      import('../../../views/basic_data/sport_list/create_edit'),
   },
   {
-    path: '/plan_center/sport_list/edit/:id',
-    name: 'sport_list',
+    path: '/basic_data/sport_list/edit/:id',
+    name: 'sport_list_create_edit',
     meta: {
       title: '运动库编辑',
       access: 'sport_list_edit',
@@ -41,11 +41,11 @@ export default [
       hideInTag: true,
     },
     component: () =>
-      import('../../../views/plan_center/sport_list/create_edit'),
+      import('../../../views/basic_data/sport_list/create_edit'),
   },
   {
-    path: '/plan_center/sport_list/detail/:id',
-    name: 'sport_list',
+    path: '/basic_data/sport_list/detail/:id',
+    name: 'sport_list_detail',
     meta: {
       title: '运动库明细',
       access: 'sport_list_view',
@@ -53,6 +53,6 @@ export default [
       hideInMenu: true,
       hideInTag: true,
     },
-    component: () => import('../../../views/plan_center/sport_list/create_edit'),
+    component: () => import('../../../views/basic_data/sport_list/detail'),
   },
 ];

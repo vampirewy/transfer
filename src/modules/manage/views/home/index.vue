@@ -167,34 +167,48 @@
 <div style="margin-left:-5px">
   <div class="TabBars">
     <div  :class="Tabactive === 3?'TabBarsNameone':'TabBarsNamesone'"
-    @click="TabbarBtn(3)">阳性跟踪</div>
+    @click="TabbarBtn(3)">阳性预警</div>
     <div v-for="(item,index) in tabbor" :key="index" style="margin-top:9px">
       <span :class="Tabactive === index?'TabBarsName':'TabBarsNames'" @click="TabbarBtn(index)">
         {{item}}
-        <div class="Tabunread">{{totaltow}}</div>
+        <div class="Tabunread" v-if="index === 0">{{totaTask}}</div>
+        <div class="Tabunread" v-if="index === 1">{{totaltow}}</div>
       </span>
     </div>
   </div>
   <div class="TabListcss">
-    <!-- <tab-list></tab-list> -->
       <el-table style="width: 100%;text-align: center" align="center"
       class="openTable"
                :data="dataSourceList" v-if="Tabactive === 3">
+        <el-table-column label="体检编号" prop="reportNo" max-width="180" show-overflow-tooltip>
+        </el-table-column>
         <el-table-column label="姓名" prop="clientName" max-width="200" show-overflow-tooltip>
-        </el-table-column>
-        <el-table-column label="客户编号" prop="clientNo" max-width="180" show-overflow-tooltip>
-        </el-table-column>
-        <el-table-column prop="gender" label="性别" max-width="180px">
           <template slot-scope="scope">
-                  {{scope.row.gender === 1 ? '男' : (scope.row.gender === 2 ? '女' : '')}}
-                </template>
+            <span class="clientName"
+                  @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
+            {{ scope.row.clientName }}</span>
+          </template>
         </el-table-column>
-        <el-table-column label="年龄" prop="age" max-width="180">
+        <el-table-column label="项目名称" prop="itemName" max-width="200" show-overflow-tooltip>
         </el-table-column>
-        <!-- <el-table-column label="任务名称" prop="itemName" max-width="180" show-overflow-tooltip>
+        <el-table-column label="项目结果" prop="itemValue" max-width="200" show-overflow-tooltip>
         </el-table-column>
-        <el-table-column label="任务提示" prop="sectionName" max-width="200">
-        </el-table-column> -->
+        <el-table-column label="上报时间" prop="reportDate" max-width="200" show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column label="上报科室" prop="reportDepartment" max-width="180">
+          <template slot-scope="scope">
+            <span>{{scope.row.reportDepartment}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" prop="index" width="120">
+          <template slot-scope="scope">
+            <el-button
+              type="text"
+              size="small"
+              @click="handleView(scope.row)"
+            >处理</el-button>
+          </template>
+        </el-table-column>
         <template>
           <div slot="empty">
             <p>
@@ -205,22 +219,74 @@
       </el-table>
       <el-table style="width: 100%;text-align: center" align="center"
       class="openTable"
-               :data="dataSource" v-if="Tabactive === 0">
-        <el-table-column label="姓名" prop="clientName" max-width="200" show-overflow-tooltip>
-        </el-table-column>
+               :data="dataTaskList" v-if="Tabactive === 0">
         <el-table-column label="客户编号" prop="clientNo" max-width="180" show-overflow-tooltip>
         </el-table-column>
-        <el-table-column prop="gender" label="性别" max-width="180px">
+        <el-table-column label="姓名" prop="clientName" max-width="200" show-overflow-tooltip>
           <template slot-scope="scope">
-                  {{scope.row.gender === 1 ? '男' : (scope.row.gender === 2 ? '女' : '')}}
-                </template>
+            <span class="clientName"
+                  @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
+            {{ scope.row.clientName }}</span>
+          </template>
         </el-table-column>
-        <el-table-column label="年龄" prop="age" max-width="180">
+        <el-table-column label="待跟踪项目" prop="isTrackingNum"
+        max-width="200" show-overflow-tooltip>
         </el-table-column>
-        <el-table-column label="任务名称" prop="planTitle" max-width="180" show-overflow-tooltip>
+        <el-table-column label="跟踪方式" prop="nextTrackingWayName"
+        max-width="200" show-overflow-tooltip>
         </el-table-column>
-        <el-table-column label="任务提示" prop="planContent" max-width="200"
-        show-overflow-tooltip>
+        <el-table-column label="跟踪提示" prop="nextTrackingTip"
+        max-width="200" show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column label="操作" prop="index" width="120">
+          <template slot-scope="scope">
+            <el-button
+              type="text"
+              size="small"
+              @click="handleTask(scope.row)"
+            >处理</el-button>
+          </template>
+        </el-table-column>
+        <template>
+          <div slot="empty">
+            <p>
+              <img style="width:200px" src="@/assets/images/noDataLine.png"/>
+            </p>
+          </div>
+        </template>
+      </el-table>
+      <el-table style="width: 100%;text-align: center" align="center"
+      class="openTable"
+               :data="dataSource" v-if="Tabactive === 1">
+        <el-table-column label="客户编号" prop="clientNo" max-width="180" show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column label="姓名" prop="clientName" max-width="200" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span class="clientName"
+                  @click="commonHref.toPersonalHealth(scope.row.clientId, $router)">
+            {{ scope.row.clientName }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="随访方式" prop="planWayName" max-width="200" show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column label="主要内容" prop="planContent" max-width="200" show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column label="随访提示" prop="planTitle" max-width="200" show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column label="随访问卷" prop="templateQuestionName"
+        max-width="200" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span>{{scope.row.templateQuestionName}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" prop="index" width="120">
+          <template slot-scope="scope">
+            <el-button
+              type="text"
+              size="small"
+              @click="doiFollowPlanDetail(scope.row)"
+            >执行</el-button>
+          </template>
         </el-table-column>
         <template>
           <div slot="empty">
@@ -231,17 +297,6 @@
         </template>
       </el-table>
       <div style="text-align: right;padding-bottom: 10px;">
-        <!-- <el-pagination
-          style="margin-top: 15px"
-          background
-          :total="total"
-          :current-page="params.pageNo"
-          :pageSizes="[10]"
-          :page-size="10"
-          @current-change="search"
-          @size-change="handleSizeChange"
-          layout="prev, pager, next, jumper, total, sizes"
-        ></el-pagination> -->
         <el-pagination
                     style="margin-top: 15px"
                     @current-change="search"
@@ -304,7 +359,7 @@ export default {
       intervenePlanXList: ['04/07', '04/08', '04/09', '04/10', '04/11', '04/12', '04/13', '04/14', '04/15', '04/16', '04/17', '04/18', '04/19', '04/20', '04/21'],
       dianPieList: [],
       dianColorList: ['#FA912B', '#333333', '#806CE5', '#3154AC', '#36BF2F', '#6DC8EC', '#31C529', '#54c9b6', '#F53626', '#f5c8be'],
-      tabbor: ['随访任务'],
+      tabbor: ['今日跟踪', '今日随访'],
       Tabactive: 3,
       total: 0,
       totalone: 0,
@@ -313,12 +368,15 @@ export default {
         pageSize: 10,
         pageNo: 1,
       },
+      dataTaskList: [],
+      totaTask: 0,
     };
   },
   mounted() {
     document.querySelector('.main-content-con').style = 'top: 97px';
     document.querySelector('.content-wrapper').style = 'height: calc(100% - 30px);margin: 0;background: #F6F8FC;padding:10px 20px 20px 19px';
     this.PositiveClient();
+    this.PostTaskClient();
     this.InterveneClient();
   },
   activated() {
@@ -342,6 +400,17 @@ export default {
         this.total = data.total;
       });
     },
+    PostTaskClient() {
+      this.$api.personal.positiveReturnTaskClient({
+        pageNo: this.params.pageNo,
+        pageSize: this.params.pageSize,
+      }).then((res) => {
+        const { data } = res.data;
+        this.dataTaskList = data.data;
+        this.totaTask = data.total;
+        this.total = data.total;
+      });
+    },
     InterveneClient() {
       this.$api.personal.homeInterveneClient({
         pageNo: this.params.pageNo,
@@ -352,15 +421,53 @@ export default {
         this.totaltow = data.total;
       });
     },
+    handleView(row) {
+      this.$router.push({
+        path: `/first_follow_do/${row.clientId}/1`,
+      });
+    },
+    handleTask(row) {
+      this.$router.push({
+        path: `/first_follow_do/${row.clientId}/2`,
+      });
+    },
+    doiFollowPlanDetail(row) {
+      if (row.templateQuestionId) { // 有问卷跳原来
+        this.viewFollowPlanDetail(row);
+      } else {
+        this.clientCenterFollowPlanDetail(row); // 没问卷去个人管理中心执行
+      }
+    },
+    viewFollowPlanDetail(row) {
+      this.$router.push({
+        path: `/health_plan/user_follow_do/do/${row.id}`,
+      });
+    },
+    clientCenterFollowPlanDetail(row) {
+      const routeData = this.$router.resolve({
+        name: 'personal_health',
+        params: {
+          id: row.clientId,
+          waitVisitId: row.id,
+        },
+      });
+      window.open(routeData.href, '_blank');
+    },
     TabbarBtn(index) {
       this.Tabactive = index;
       this.params.pageNo = 1;
       this.total = this.totals;
+      this.dataSource = [];
+      this.dataSourceList = [];
       if (index === 3) {
         this.PositiveClient();
         this.total = this.totalone;
       }
-      if (index === 0) {
+      if (this.Tabactive === 0) {
+        this.PostTaskClient();
+        this.total = this.totaTask;
+      }
+      if (index === 1) {
         this.InterveneClient();
         this.total = this.totaltow;
       }
@@ -372,6 +479,9 @@ export default {
         this.PositiveClient();
       }
       if (this.Tabactive === 0) {
+        this.PostTaskClient();
+      }
+      if (this.Tabactive === 1) {
         this.InterveneClient();
       }
     },
@@ -381,6 +491,9 @@ export default {
         this.PositiveClient();
       }
       if (this.Tabactive === 0) {
+        this.PostTaskClient();
+      }
+      if (this.Tabactive === 1) {
         this.InterveneClient();
       }
     },

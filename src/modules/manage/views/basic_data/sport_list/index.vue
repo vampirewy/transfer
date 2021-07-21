@@ -1,133 +1,100 @@
 <template>
-  <div class="intervention-plan">
-    <transition name="mybox">
-      <el-form
-        :inline="true"
-        :model="form"
-        class="form-inline form"
-        v-show="boxshow"
-      >
-        <div class="formLeft">
-          <div class="formSearchTitle"><span class="dianBlue"></span>搜索</div>
-          <el-form-item label="" class="searchInputFormItem">
-            <el-input
-              v-model="form.keywords"
-              placeholder="输入运动名称搜索"
-              style="width: 180px"
-            >
-              <!--<el-button slot="append" icon="el-icon-search" @click="onSearch"></el-button>-->
+  <div>
+    <div class="divTop">
+      <div class="divTitle">
+        <span><img src="@/assets/images/common/titleLeft.png" alt=""></span>
+        运动库
+      </div>
+      <div class="searchCondition">
+        <div class="searchLeft">
+          <div class="searchInputFormItem">
+            <el-input placeholder="运动名称" v-model="form.keywords">
             </el-input>
-            <span
-              class="searchBtnImgSpan"
-              @click="onSearch"
-              style="top: 3px;line-height: 40px"
-            >
-              <img
-                class="searchBtnImg"
-                src="@/assets/images/common/search.png"
-              />
-            </span>
-          </el-form-item>
-          <div class="ge"></div>
-          <div class="formSearchTitle">
-            <span class="dianLv"></span>筛选条件
+            <span class="searchBtnImgSpan" @click="onSearch">
+                  <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
+              </span>
           </div>
-          <el-form-item label="">
+          <div>
+            <span>运动类型：</span>
             <el-select
-              placeholder="运动类型"
-              style="width: 180px"
-              v-model="forms.sporttype"
-              clearable
+                    v-model="forms.sporttype"
+                    placeholder="请选择"
+                    style="width: 140px"
+                    clearable
             >
               <el-option
-                v-for="(item, index) in sporttypelist"
-                :key="index"
-                :label="item.name"
-                :value="item.paramValue"
+                      v-for="(item, index) in sporttypelist"
+                      :key="index"
+                      :label="item.name"
+                      :value="item.paramValue"
               >
               </el-option>
             </el-select>
-          </el-form-item>
-          <el-form-item label="">
+          </div>
+          <div>
+            <span>运动分类：</span>
             <el-select
-              placeholder="运动分类"
-              style="width: 180px"
-              v-model="forms.sportclass"
-              clearable
+                    v-model="forms.sportclass"
+                    placeholder="请选择"
+                    style="width: 140px"
+                    clearable
             >
               <el-option
-                v-for="(item, index) in sportclasslist"
-                :key="index"
-                :label="item.name"
-                :value="item.paramValue"
+                      v-for="(item, index) in sportclasslist"
+                      :key="index"
+                      :label="item.name"
+                      :value="item.paramValue"
               >
               </el-option>
             </el-select>
-          </el-form-item>
-          <el-form-item label="">
+          </div>
+          <div>
+            <span>运动强度：</span>
             <el-select
-              placeholder="运动强度"
-              style="width: 180px"
-              v-model="forms.sportstr"
-              clearable
+                    v-model="forms.sportstr"
+                    placeholder="请选择"
+                    style="width: 140px"
+                    clearable
             >
               <el-option
-                v-for="(item, index) in sportlist"
-                :key="index"
-                :label="item.name"
-                :value="item.paramValue"
+                      v-for="(item, index) in sportlist"
+                      :key="index"
+                      :label="item.name"
+                      :value="item.paramValue"
               >
               </el-option>
             </el-select>
-          </el-form-item>
-          <el-form-item class="search-btn">
-            <el-button size="small" class="resetBtn" @click="onReset"
-              >重置</el-button
-            >
-            <el-button
-              type="primary"
-              class="sureBtn"
-              size="small"
-              @click="onSearch"
-              style="margin-left: 15px"
-              >搜索</el-button
-            >
-          </el-form-item>
+          </div>
         </div>
-      </el-form>
-    </transition>
-    <div class="putAway" :class="{ 'query-hide': !boxshow }" @click="togglebox">
-      {{ boxshow === true ? '收起' : '展开' }}
-    </div>
-    <div class="divRight">
-      <div class="divRightTitleDiv">
-        <div class="divRightTitle"><span>|</span>运动库</div>
-        <div>
-          <div class="tool-button">
-            <el-button
-              size="small"
-              class="btn-new btnAdd"
-              @click="handleCreate"
-              v-if="getAccess('sport_list_add')"
-              ><img src="@/assets/images/common/addBtn.png" />新增</el-button
-            >
-            <!-- <el-button
-              size="small"
-              class="btn-new btnReset"
-              @click="handleEditCheck"
-              v-if="getAccess('intervention_plan_edit')"
-              ><img src="@/assets/images/common/resetBtn.png" />编辑</el-button
-            > -->
-            <el-button
-              size="small"
-              class="btn-new btnDel"
-              @click="handleSomeRemove()"
-              v-if="getAccess('sport_list_batch_delete')"
-              ><img src="@/assets/images/common/delBtn.png" />删除</el-button
-            >
+        <div class="searchRight">
+          <div class="buttones">
+            <div class="searchFor" @click="onSearch">
+              <img src="@/assets/images/common/topsearchblue.png" alt="">
+            </div>
+            <div class="resetAll" @click="onReset">重置</div>
           </div>
         </div>
       </div>
+    </div>
+    <div class="topbottomborder"></div>
+    <div class="divRightTitleDiv">
+      <!-- <div class="divRightTitle"><span>|</span>客户池</div> -->
+      <div style="margin: 16px 0">
+          <el-button
+                  class="btn-new btnAdd"
+                  size="small"
+                  @click="handleCreate"
+                  v-if="getAccess('sport_list_add')"
+          ><img src="@/assets/images/common/addBtn.png" />新增</el-button>
+        <el-button
+                size="small"
+                class="btn-new btnDel"
+                style="margin-left: 12px"
+                @click="handleSomeRemove()"
+                v-if="getAccess('sport_list_batch_delete')"
+        ><img src="@/assets/images/common/delBtn.png" />删除</el-button>
+      </div>
+    </div>
     <div>
     <el-table :data="table.list" style="width: 100%" align="center"
               @selection-change="chooseCheckBox">
@@ -169,7 +136,6 @@
             <template slot-scope="scope">
               <span v-if="scope.row.state === 1">是</span>
               <span v-if="scope.row.state === 0">否</span>
-              <!-- <span>{{ scope.row.name }}</span> -->
             </template>
           </el-table-column>
           <el-table-column label="操作" width="140">
@@ -188,13 +154,6 @@
                 v-if="getAccess('sport_list_view')"
                 >查看</el-button
               >
-              <el-button
-                type="text"
-                size="small"
-                @click="handleSomeRemove(scope.row)"
-                v-if="getAccess('sport_list_delete')"
-                >删除</el-button
-              >
             </template>
           </el-table-column>
         </el-table>
@@ -209,16 +168,14 @@
         >
         </el-pagination>
       </div>
-    </div>
   </div>
 </template>
 
 <script>
-// import { genderList } from '~/src/constant/health_plan';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
 
 export default {
-  name: 'intervention_plan',
+  name: 'sport_list',
   data() {
     return {
       sportlist: [],
@@ -255,8 +212,10 @@ export default {
       }
     },
   },
-  mounted() {
-    this.onLoad();
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.onLoad();
+    });
   },
   methods: {
     togglebox() {
@@ -304,7 +263,7 @@ export default {
       const res = await this.$api.sportLibrary.sportlistPage(reqBody);
       const { data } = res.data;
       if (data) {
-        this.table.list = data.list || [];
+        this.table.list = data.data || [];
         this.table.totalCount = data.total;
       }
     },
@@ -313,7 +272,7 @@ export default {
      */
     handleCreate() {
       this.$router.push({
-        path: '/plan_center/sport_list/create',
+        path: '/basic_data/sport_list/create',
       });
     },
     /**
@@ -338,7 +297,7 @@ export default {
      */
     handleEdit(scope) {
       this.$router.push({
-        path: `/plan_center/sport_list/edit/${scope.id}`,
+        path: `/basic_data/sport_list/edit/${scope.id}`,
       });
     },
     /**
@@ -354,7 +313,7 @@ export default {
         return;
       }
       this.$router.push({
-        path: `/plan_center/sport_list/edit/${this.checkSelection[0].id}`,
+        path: `/basic_data/sport_list/edit/${this.checkSelection[0].id}`,
       });
     },
     chooseCheckBox(val) {
@@ -366,7 +325,7 @@ export default {
      */
     handleDetail(scope) {
       this.$router.push({
-        path: `/plan_center/sport_list/detail/${scope.id}`,
+        path: `/basic_data/sport_list/detail/${scope.id}`,
       });
     },
     /**
