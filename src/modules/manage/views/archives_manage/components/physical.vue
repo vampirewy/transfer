@@ -280,6 +280,9 @@
           ></el-input>
         </div>
       </div>
+       <div class="divRightTitleDiv">
+        <div class="divRightTitle" style="margin-top: 0">总检建议<div class="titleBiao"></div></div>
+      </div>
       <div class="wltitle">
         <div class="quan"></div>
         <span>异常信息</span>
@@ -298,10 +301,27 @@
             @change="handleAbnormalSelectChange"
             @cancel="handleAbnormalClose"
           ></abnormal>
-          <span class="button-add-abnormal" slot="reference">添加异常</span>
+          <span class="button-add-abnormal" slot="reference">新增</span>
         </el-popover>
       </div>
-      <div class="abnormal-level">
+      <div class="section-conclusion-item">
+        <div class="center" v-if="formData.abnormalList.length > 0">
+          <el-table :data="formData.abnormalList">
+            <el-table-column type="index" label="序号" show-overflow-tooltip width="120">
+            </el-table-column>
+            <el-table-column prop="abnormalName" label="异常" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="abnormalCode" label="建议" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column label="操作" width="190">
+              <template slot-scope="scope">
+                <el-button type="text"  @click="removeAbnormal(scope.$index)">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+        <div class="text-add-abnormal" v-else>点击右上角添加体检异常信息</div>
+      </div>
+      <!-- <div class="abnormal-level">
         <span class="level1">一般</span>
         <span class="level2">轻度</span>
         <span class="level3">中度</span>
@@ -334,7 +354,6 @@
           <i class="el-icon-error" @click="removeUnMatchAbnormal(index)"></i>
         </div>
       </div>
-      <div class="text-add-abnormal" v-else>点击右上角添加体检异常信息</div>
       <div class="wltitle">
         <div class="quan"></div>
         <span>总检建议</span>
@@ -358,7 +377,7 @@
           placeholder="请输入建议"
           rows="4">
         </el-input>
-      </div>
+      </div> -->
       <div class="buttons">
         <el-button class="cancelBtn" @click="black('close')">取消</el-button>
         <el-button type="primary" class="sureBtn" @click="submit">保存</el-button>
@@ -371,6 +390,7 @@
 import abnormal from './abnormal.vue';
 import { MAX_PAGESIZE } from '~/src/libs/util/index';
 import physicalExamination from './physicalExamination.vue';
+import deleteIcon from '~/src/assets/images/deleteicon.png';
 
 export default {
   name: 'Physical',
@@ -715,8 +735,17 @@ export default {
         this.$emit('submit', this.formData, valid);
       });
     },
+    // 删除异常信息
     removeAbnormal(index) {
-      this.formData.abnormalList.splice(index, 1);
+      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认删除！</span></div>`, '删除提示', {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        customClass: 'message-box-customize',
+        showClose: true,
+      }).then(() => {
+        this.formData.abnormalList.splice(index, 1);
+      });
     },
     removeUnMatchAbnormal(index) {
       this.formData.notMatchAbnormalList.splice(index, 1);
