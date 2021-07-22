@@ -93,5 +93,42 @@ class SunFollow extends BaseModule {
   deletedWarnTemplate(data = {}) {
     return this.post('/warn_template/deleted', data);
   }
+  /**
+   * @description: 首次跟踪手动上报 -- 跟踪弹窗
+   * @method post
+   * @file http://192.168.137.12:3000/project/63/interface/api/7091
+   * @param {string} trackingId 跟踪记录id
+   * @param {number} result 跟踪结果（1|已回访 2|拒接 3|关机 4|通话中 5|号码错误）
+   * @param {string} trackRecord 跟踪记录
+   */
+  saveTranking(data = {}) {
+    return this.post(
+      'http://192.168.137.12:3000/mock/63/positive_tracking_new/save_result',
+      data,
+    );
+  }
+  /**
+   * @description: 跟踪记录列表
+   * @method post
+   * @file http://192.168.137.12:3000/project/63/interface/api/7151
+   * @param {string} reportId 体检id
+   * @param {number} recordType 记录类型 1|采集记录 2|手动上报记录
+   * @param {number} pageSize
+   * @param {number} pageNo
+   * 返回
+   * @property {number} total 总条数
+   * @property {string} trackDate 跟踪时间
+   * @property {string} visitDoctorName 跟踪人
+   * @property {string} trackWay 跟踪方式
+   * @property {string} result 跟踪结果
+   * @property {string} remark 跟踪记录
+   */
+
+  getTrankingRecord(data = {}) {
+    return this.post(
+      'http://192.168.137.12:3000/mock/63/positive_tracking_new/get_track_record_list_page',
+      data,
+    );
+  }
 }
 export default new SunFollow();
