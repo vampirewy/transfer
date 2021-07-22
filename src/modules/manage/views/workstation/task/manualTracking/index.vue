@@ -21,16 +21,22 @@
             scope.row.levelName
           }}</span>
         </template>
-        <template slot="operation">
-          <span class="cursor c-3154ac">跟踪</span>
+        <template slot="operation" slot-scope="scope">
+          <span class="cursor c-3154ac" @click="openPop(scope.row)">跟踪</span>
         </template>
       </BaseTable>
     </section>
+    <TrackPop
+      :isShowTrackPop="isShowTrackPop"
+      :trackingId="trackingId"
+      @cancel="cancel"
+    ></TrackPop>
   </div>
 </template>
 
 <script>
 import BaseTable from '~/src/components/base_table/index.vue';
+import TrackPop from '~/src/components/track_pop/index.vue';
 import { REPORT_STATE } from '../../constant/base_data';
 
 const SORT_TYPE = {
@@ -40,7 +46,7 @@ const SORT_TYPE = {
 
 export default {
   name: 'manualTracking',
-  components: { BaseTable },
+  components: { BaseTable, TrackPop },
   data() {
     return {
       pageParams: {
@@ -70,6 +76,8 @@ export default {
         { label: '跟踪时间', prop: 'trackingTime' },
         { label: '操作', prop: 'operation' },
       ],
+      isShowTrackPop: false,
+      trackingId: '',
     };
   },
   methods: {
@@ -88,6 +96,15 @@ export default {
       this.pageParams.pageNo = 1;
       this.getManualTrackingRequest();
     },
+    openPop(current) {
+      this.isShowTrackPop = true;
+      this.trackingId = current.id;
+    },
+    cancel(isSuccess) {
+      this.isShowTrackPop = false;
+      this.trackingId = '';
+      if (isSuccess) this.$emit('updateTaskCount', true);
+    },
     async getManualTrackingRequest() {
       const params = {
         ...this.pageParams,
@@ -97,11 +114,9 @@ export default {
       const res = await this.$api.personal.getManualTracking(params);
       const { data } = res.data;
       this.pageParams.total = data.total;
-      if (data.data && data.data.length) {
-        data.data.forEach((item) => {
-          item.reportState = REPORT_STATE[item.reportState];
-        });
-      }
+      (data.data || []).map(
+        item => (item.reportState = REPORT_STATE[item.reportState]),
+      );
       this.list = data.data;
     },
   },

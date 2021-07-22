@@ -18,6 +18,7 @@
           ref="systemTracking"
         ></SystemTracking>
         <ManualTracking
+          @updateTaskCount="getTaskCountRequest"
           v-show="active === 1"
           ref="manualTracking"
         ></ManualTracking>
