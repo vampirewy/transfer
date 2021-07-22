@@ -23,7 +23,11 @@
           ref="manualTracking"
         ></ManualTracking>
         <FollowUpPlan v-show="active === 2" ref="followupPlan"></FollowUpPlan>
-        <TrankingPlan v-show="active === 3" ref="trankingPlan"></TrankingPlan>
+        <TrankingPlan
+          v-show="active === 3"
+          ref="trankingPlan"
+          @updateTaskCount="getTaskCountRequest"
+        ></TrankingPlan>
       </div>
     </section>
   </div>
