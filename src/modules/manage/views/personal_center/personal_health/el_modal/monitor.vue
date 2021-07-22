@@ -134,7 +134,7 @@
             <el-button
               type="text"
               size="small"
-              @click="handleTrendClick(scope.row.clientId, scope.row.id)"
+              @click="handleTrendClick(scope.row.clientId, scope.row.id)
               v-if="getAccess('physical_examination_report_view')"
               >查看</el-button
             >
