@@ -112,5 +112,28 @@ class SunFollow extends BaseModule {
       data,
     );
   }
+  /**
+   * @description: 跟踪记录列表
+   * @method post
+   * @file http://192.168.137.12:3000/project/63/interface/api/7151
+   * @param {string} reportId 体检id
+   * @param {number} recordType 记录类型 1|采集记录 2|手动上报记录
+   * @param {number} pageSize
+   * @param {number} pageNo
+   * 返回
+   * @property {number} total 总条数
+   * @property {string} trackDate 跟踪时间
+   * @property {string} visitDoctorName 跟踪人
+   * @property {string} trackWay 跟踪方式
+   * @property {string} result 跟踪结果
+   * @property {string} remark 跟踪记录
+   */
+
+  getTrankingRecord(data = {}) {
+    return this.post(
+      'http://192.168.137.12:3000/mock/63/positive_tracking_new/get_track_record_list_page',
+      data,
+    );
+  }
 }
 export default new SunFollow();
