@@ -65,6 +65,10 @@ export default {
   name: 'client-dialog',
   props: {
     visible: Boolean,
+    hasManageDoctor: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -74,6 +78,7 @@ export default {
         pageSize: 15,
         total: 0,
         currentRow: {},
+        hasManageDoctor: this.hasManageDoctor ? 1 : 0,
       },
       dataSource: [],
       currentRow: {},
@@ -88,7 +93,6 @@ export default {
           if (data.success) {
             this.params.total = data.data.total;
             this.dataSource = data.data.data; // 确定一下是否是list，以及total
-            console.log(data);
           }
         });
     },
