@@ -197,7 +197,7 @@
                     <doctor-select
                             v-if="popoverStatus"
                             mode="normal"
-                            :isRadio="false"
+                            :isRadio="true"
                             :clientId="$route.params.userId"
                             :selectedDoctor="formData.selectedDoctors"
                             :selectedDoctorIds="selectedDoctorIds"
