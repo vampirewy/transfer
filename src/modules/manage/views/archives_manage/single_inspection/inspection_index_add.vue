@@ -405,7 +405,9 @@ export default {
           this.infoSource.clientName = data.data.clientName;
           this.infoSource.age = data.data.age;
           this.id = data.data.id;
-          this.infoSource.endDate = data.data.inspectionDate;
+          this.infoSource.endDate = dayjs(data.data.inspectionDate).format(
+            'YYYY-MM-DD HH:mm:ss',
+          );
           this.infoSource.drugsName = data.data.inspectionNo;
           this.infoSource.specification = data.data.inspectionOrg;
           this.infoSource.ingrenient = data.data.intro;
@@ -545,9 +547,9 @@ export default {
       if (!this.infoSource.endDate) {
         return this.$message.warning('请填写检查时间');
       }
-      this.infoSource.endDate = dayjs(this.infoSource.endDate).format(
-        'YYYY-MM-DD HH:mm:ss',
-      );
+      // this.infoSource.endDate = dayjs(this.infoSource.endDate).format(
+      //   'YYYY-MM-DD HH:mm:ss',
+      // );
       // if (!this.drugsList.length) {
       //   return this.$message.warning('请添加检查项目');
       // }
