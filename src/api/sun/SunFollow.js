@@ -35,7 +35,9 @@ class SunFollow extends BaseModule {
   }
   // 首次跟踪列表 - 客户既往史和家族疾病史
   getClientFamilyDisease(data = {}) {
-    return this.get(`/client_info/get_client_past_his_and_family_disease/${data.clientId}`);
+    return this.get(
+      `/client_info/get_client_past_his_and_family_disease/${data.clientId}`,
+    );
   }
   // 首次跟踪列表 - 客户体检信息比较
   getClientReportCompareList(data = {}) {
@@ -55,7 +57,10 @@ class SunFollow extends BaseModule {
   }
   // 跟踪计划列表
   getPositiveTaskdListPage(data = {}) {
-    return this.post('/positive_tracking/get_positive_return_task_list_page', data);
+    return this.post(
+      '/positive_tracking/get_positive_return_task_list_page',
+      data,
+    );
   }
   // 跟踪计划列表 - 客户待跟踪项目列表
   getWaitingTrackingItemList(data = {}) {
@@ -92,6 +97,20 @@ class SunFollow extends BaseModule {
   // 预警配置模板删除
   deletedWarnTemplate(data = {}) {
     return this.post('/warn_template/deleted', data);
+  }
+  /**
+   * @description: 首次跟踪手动上报 -- 跟踪弹窗
+   * @method post
+   * @file http://192.168.137.12:3000/project/63/interface/api/7091
+   * @param {string} trackingId 跟踪记录id
+   * @param {number} result 跟踪结果（1|已回访 2|拒接 3|关机 4|通话中 5|号码错误）
+   * @param {string} trackRecord 跟踪记录
+   */
+  saveTranking(data = {}) {
+    return this.post(
+      'http://192.168.137.12:3000/mock/63/positive_tracking_new/save_result',
+      data,
+    );
   }
 }
 export default new SunFollow();
