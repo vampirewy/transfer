@@ -91,7 +91,7 @@ export default {
                   },
                 ]),
                 label: {
-                  show: true, // 开启显示
+                  show: false, // 开启显示
                   position: 'top', // 在上方显示
                   textStyle: {
                     // 数值样式
