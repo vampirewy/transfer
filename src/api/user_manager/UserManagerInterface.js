@@ -54,6 +54,10 @@ class UserManagerInterface extends BaseModule {
   claim(params = {}) {
     return this.post('/client_info/assignation_client_info', params);
   }
+  // 批量分配
+  batchAllocation(params = {}) {
+    return this.post('/client_info/batchAllocation', params);
+  }
 
   getDoctorList(params = {}) {
     return this.get(
