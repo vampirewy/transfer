@@ -185,7 +185,7 @@ export default {
               value.valueInfo;
             this.form.questionLifestyle.questionLifestyle4.attention =
               value.attention;
-          } else if (value.paramNo === 'j20') {
+          } else if (value.paramNo === 'h01') {
             this.form.questionLifestyle.questionLifestyle5.paramValue =
               value.valueInfo;
             this.form.questionLifestyle.questionLifestyle5.attention =

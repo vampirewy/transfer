@@ -62,6 +62,8 @@ export default {
       deep: true, // 为true，表示深度监听，这时候就能监测到a值变化
     },
   },
+  mounted() {
+  },
 };
 </script>
 
