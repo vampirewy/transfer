@@ -177,6 +177,7 @@
                 <el-radio
                         v-model="params.currentRow"
                         :label="scope.row"
+                         @change="ev => onChange(1, scope.row, ev)"
                 ></el-radio>
               </template>
             </el-table-column>
@@ -343,6 +344,8 @@ export default {
           const val = row;
           if (this.userList.map(it => it.id).includes(val.id)) {
             val.selected = true;
+            // 单选
+            this.params.currentRow = val;
           } else {
             val.selected = false;
           }
@@ -405,7 +408,11 @@ export default {
           s.realName = scope.name;
           s.selectType = 2;
         }
-        this.userList.push(scope);
+        if (this.isRadio) {
+          this.userList = [scope];
+        } else {
+          this.userList.push(scope);
+        }
       } else {
         const idx = this.userList.findIndex(it => it.id === scope.id);
         this.userList.splice(idx, 1);
