@@ -64,7 +64,7 @@ export default {
       if (isSuccess) {
         this.$message.success('操作成功');
       }
-      this.$emit('cancel');
+      this.$emit('cancel', true);
     },
     cancel() {
       this.$emit('cancel');
