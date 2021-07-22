@@ -389,6 +389,7 @@
 
     <client-dialog
       :visible="customerDialogVisible"
+      :hasManageDoctor="false"
       @cancel="customerDialogVisible = false"
       @change="customerChange"
     ></client-dialog>
@@ -461,6 +462,7 @@ export default {
           id: '2',
         },
       ],
+      userId: '',
     };
   },
   methods: {
@@ -585,15 +587,10 @@ export default {
         return;
       }
       this.$refs.popover1.showPopper = false;
-      const userIdList = userList.filter(t => t.selectType === 1).map(
-        t => t.id) || userList.map(t => t.id);
-      const workIdList = userList.filter(t => t.selectType === 2).map(t => t.id);
 
       this.submit({
-        clientIdList: this.chooseUserList.map(val => val.id),
-        userIdList,
-        workIdList,
-        type: 2, // 2-分配
+        doctorIds: userList.map(t => t.id),
+        clientIds: this.chooseUserList.map(val => val.id),
       });
     },
     // 客户认领
@@ -607,16 +604,20 @@ export default {
       }
       this.customerDialogVisible = false;
 
-      this.submitCustomer(userList);
+      this.submitCustomer({
+        clientIdList: userList,
+        userIdList: [this.userId],
+        type: 1, // 1-认领 2-分配 3-转交 4-转入用户池
+      });
     },
     submitCustomer(params) {
-      this.$api.userManagerInterface.apiName(params).then(({ data }) => {
-        if (data.code === 200) {
-          this.$message.success('操作成功');
-          this.search();
-          this.chooseUserList = [];
-          this.$refs.multipleTable.clearSelection();
-        }
+      this.$api.userManagerInterface.claim(params).then(() => {
+        // if (data.code === 200) {
+        this.$message.success('操作成功');
+        this.search();
+        this.chooseUserList = [];
+        this.$refs.multipleTable.clearSelection();
+        // }
       });
     },
     handlePopoperShow() {
@@ -664,14 +665,18 @@ export default {
       });
     },
     submit(params) {
-      this.$api.userManagerInterface.apiName(params).then(({ data }) => {
-        if (data.rc === 0) {
-          this.$message.success('操作成功');
-          this.search();
-          this.chooseUserList = [];
-          this.$refs.multipleTable.clearSelection();
-        }
-      });
+      this.$api.userManagerInterface.batchAllocation(params).then(() => {
+        // console.log(data);
+        // if (data.rc === 0) {
+        this.$message.success('操作成功');
+        this.search();
+        this.chooseUserList = [];
+        this.$refs.multipleTable.clearSelection();
+        // }
+      })
+        .catch(() => {
+          this.$message.success('操作失败');
+        });
     },
 
     // changeStatus({ row = {} }, status) {
@@ -720,12 +725,20 @@ export default {
           }
         });
     },
+    // 获取用户id
+    getUserInfo() {
+      this.$api.userManagerInterface.getUserInfo()
+        .then(({ data }) => {
+          this.userId = data.data.userId;
+        });
+    },
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       vm.getUserList();
       vm.getGridList();
       vm.getDoctor();
+      vm.getUserInfo();
     });
   },
 };
