@@ -3,8 +3,8 @@
     <div class="diet-form_center">
       <div class="diet-plan-box">
         <div class="title">
-          <span v-if="mode === 'look'">查看</span>
-          <span v-else>{{ id ? '编辑' : '新增' }}</span>菜名
+          <span v-if="mode === 'look'" style="font-weight:600">查看</span>
+          <span v-else style="font-weight:600">{{ id ? '编辑' : '新增' }}</span>菜名
         </div>
       </div>
     </div>
@@ -79,8 +79,8 @@
     <div class="diet-form_center">
       <div class="diet-plan-box">
         <div class="title">
-          <span v-if="mode === 'look'">查看</span>
-          <span v-else>{{ id ? '编辑' : '新增' }}</span>菜品
+          <span v-if="mode === 'look'" style="font-weight:600">查看</span>
+          <span v-else style="font-weight:600">{{ id ? '编辑' : '新增' }}</span>菜品
           <!-- {{ id ? '编辑' : '新增' }}菜品 -->
         </div>
       </div>
@@ -147,6 +147,7 @@
       >
     </div>
     <el-dish-raw-material
+    v-if="isShowDishRawMaterial"
       :visible.sync="isShowDishRawMaterial"
       @change="handleDishRawMaterialSelect"
     ></el-dish-raw-material>

@@ -35,10 +35,16 @@
       <div class="divRightTitle">趋势
         <div class="titleBiao"></div></div>
     </div>
-    <div class="chart-legend">
+    <div class="trendTitle">
+      <div @click="Fasting()"
+      :class="trendIndex === 0?'Fasting':'Fastings'">空腹血糖</div>
+      <div @click.stop="afterDinner()"
+      :class="trendIndex === 1?'afterDinner':'afterDinners'">餐后血糖</div>
+    </div>
+    <!-- <div class="chart-legend">
       <span>空腹血糖</span>
       <span>餐后血糖</span>
-    </div>
+    </div> -->
     <div class="noDataLine" v-if="xData.length === 0 && yData.length === 0">
       <img src="@/assets/images/noDataLine.png"/>
       <span>暂无数据</span>
@@ -47,7 +53,8 @@
       v-else
       :chart-data="yData"
       :sectionName="['空腹血糖', '餐后血糖']"
-      :sectionXList="xData">
+      :sectionXList="xData"
+      :key="timer">
     </line-chart>
     <!-- <div class="title">数据列表</div> -->
     <div class="divRightTitleDiv">
@@ -122,8 +129,14 @@ export default {
         pageSize: 15,
       },
       xData: [],
+      xDatas: [], // 空腹血糖日期
       yData: [],
       queryInfo: {},
+      FPG: [], // 空腹血糖
+      PBG: [], // 餐后血糖
+      xDataDinner: [], // 餐后血糖日期
+      timer: '',
+      trendIndex: 0,
     };
   },
   mounted() {
@@ -135,9 +148,9 @@ export default {
   methods: {
     queryChartData() {
       this.$api.healthMonitorInterface.getBGChart(this.id).then(({ data }) => {
-        const xData = [];
-        const FPG = []; // 空腹血糖
-        const PBG = []; // 餐后血糖
+        // const xData = [];
+        // const FPG = []; // 空腹血糖
+        // const PBG = []; // 餐后血糖
         console.log(data.data['空腹血糖'], '空腹血糖');
         (data.data['空腹血糖'] || []).forEach((item) => {
           let dateStr;
@@ -146,8 +159,8 @@ export default {
           } else {
             dateStr = dayjs(item.testDate).format('YY/MM/DD');
           }
-          xData.push(dateStr);
-          FPG.push(item.sugar);
+          this.xDatas.push(dateStr);
+          this.FPG.push(item.sugar);
         });
         console.log(data.data['餐后血糖'], '餐后血糖');
         (data.data['餐后血糖'] || []).forEach((item) => {
@@ -157,16 +170,29 @@ export default {
           } else {
             dateStr = dayjs(item.testDate).format('YY/MM/DD');
           }
-          if (xData.length === 0) {
-            xData.push(dateStr);
-          }
-          PBG.push(item.sugar);
+          // if (xData.length === 0) {
+          this.xDataDinner.push(dateStr);
+          // }
+          this.PBG.push(item.sugar);
         });
-        this.xData = xData;
-        this.yData = [FPG, PBG];
-        console.log(this.xData);
-        console.log(this.yData);
+        this.xData = this.xDatas;
+        // this.yData = [FPG, PBG];
+        this.yData = [this.FPG, []];
       });
+    },
+    Fasting() {
+      this.trendIndex = 0;
+      this.xData = this.xDatas;
+      this.yData[1] = [];
+      this.yData[0] = this.FPG;
+      this.timer = new Date().getTime();
+    },
+    afterDinner() {
+      this.trendIndex = 1;
+      this.xData = this.xDataDinner;
+      this.yData[0] = [];
+      this.yData[1] = this.PBG;
+      this.timer = new Date().getTime();
     },
     queryPageList() {
       this.$api.healthMonitorInterface.getBGList({
@@ -181,7 +207,6 @@ export default {
     queryChartInfo() {
       this.$api.healthMonitorInterface.getDetailHealthBloodSugar(this.ids).then(({ data }) => {
         this.queryInfo = data.data;
-        console.log(this.queryInfo, '12313123123');
       });
     },
     handlePageChange(page) {
@@ -200,6 +225,40 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .trendTitle{
+    display: flex;
+    // float: right;
+    margin-right: 20px;
+    div{
+      width: 90px;
+      height: 38px;
+      line-height: 38px;
+      text-align: center;
+      font-size: 14px;
+      color: #ffffff;
+      cursor: pointer;
+    }
+    .Fasting{
+      background: #3154AC;
+      border-radius: 20px 0 0 20px;
+      margin-left:auto;
+    }
+    .Fastings{
+      background: #f6f8fc;
+      border-radius: 20px 0 0 20px;
+      color: #333333;
+      margin-left:auto;
+    }
+    .afterDinner{
+      background: #3154AC;
+      border-radius:0 20px 20px 0;
+    }
+    .afterDinners{
+      background: #f6f8fc;
+      border-radius:0 20px 20px 0;
+      color: #333333;
+    }
+  }
   .OrLowClassA{
     color: #333333;
   }

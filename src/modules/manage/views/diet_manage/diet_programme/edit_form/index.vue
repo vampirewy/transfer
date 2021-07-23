@@ -1,6 +1,6 @@
 <template>
   <div class="diet-form">
-    <div class="diet-form_left">
+    <div class="diet-form_left" v-if="selectedData.length !==0 || clientName !== ''">
       <div class="diet-form_left-item">
         <p class="item-title">推荐摄入</p>
         <div class="table" v-if="leftList.cientDietIntake">
