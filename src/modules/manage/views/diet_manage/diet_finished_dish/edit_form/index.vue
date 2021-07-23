@@ -245,11 +245,14 @@ export default {
       this.ruleForms.dietSortIds = ids;
     },
     handleDishRawMaterialSelect(items) {
+      // this.tableData
+      // let DataList = [];
       this.tableData = [...items].map(item => ({
         weight: '0',
         dietIngredientId: item.id,
         dietIngredientName: item.names,
       }));
+      // console.log(DataList);
     },
     submit() {
       this.$refs.dietFinishedDishForm.validate((e) => {

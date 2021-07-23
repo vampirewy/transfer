@@ -239,6 +239,9 @@
         </el-table-column>
         <el-table-column label="跟踪提示" prop="nextTrackingTip"
         max-width="200" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{scope.row.nextTrackingTip || '-'}}</span>
+        </template>
         </el-table-column>
         <el-table-column label="操作" prop="index" width="120">
           <template slot-scope="scope">
