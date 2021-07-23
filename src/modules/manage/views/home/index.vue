@@ -239,6 +239,9 @@
         </el-table-column>
         <el-table-column label="跟踪提示" prop="nextTrackingTip"
         max-width="200" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{scope.row.nextTrackingTip || '-'}}</span>
+        </template>
         </el-table-column>
         <el-table-column label="操作" prop="index" width="120">
           <template slot-scope="scope">
@@ -271,7 +274,7 @@
         </el-table-column>
         <el-table-column label="随访方式" prop="planWayName" max-width="200" show-overflow-tooltip>
         </el-table-column>
-        <el-table-column label="主要内容" prop="planContent" max-width="200" show-overflow-tooltip>
+        <el-table-column label="随访标题" prop="planContent" max-width="200" show-overflow-tooltip>
         </el-table-column>
         <el-table-column label="随访提示" prop="planTitle" max-width="200" show-overflow-tooltip>
         </el-table-column>

@@ -245,11 +245,24 @@ export default {
       this.ruleForms.dietSortIds = ids;
     },
     handleDishRawMaterialSelect(items) {
-      this.tableData = [...items].map(item => ({
+      // this.tableData
+      let DataList = [];
+      DataList = [...items].map(item => ({
         weight: '0',
         dietIngredientId: item.id,
         dietIngredientName: item.names,
       }));
+      DataList.forEach((valQusOne) => {
+        let same = false;
+        this.tableData.forEach((valAnswer) => {
+          if (valQusOne.dietIngredientId === valAnswer.dietIngredientId) {
+            same = true;
+          }
+        });
+        if (same === false) {
+          this.tableData.push(valQusOne);
+        }
+      });
     },
     submit() {
       this.$refs.dietFinishedDishForm.validate((e) => {

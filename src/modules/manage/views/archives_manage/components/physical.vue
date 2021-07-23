@@ -52,6 +52,7 @@
                     v-model="formData.reportState"
                     placeholder="请选择"
                     style="width: 100%"
+                    @change="isreportState"
             >
             <!-- <el-option label="未知" :value="0" key="0"></el-option> -->
             <el-option label="已总检" :value="1" key="1"></el-option>
@@ -75,6 +76,7 @@
                 v-model="formData.zjDate"
                 :max-date="new Date()"
                 type="date"
+                :disabled="formData.reportState === 2"
                 value-format="yyyy-MM-dd HH:mm:ss"
                 placeholder="请选择"
                 style="width: 100%"
@@ -399,7 +401,7 @@ export default {
         examinationOrgan: '', // 检查机构
         reportNo: '', // 检查编号
         reportDate: '', // 体检时间
-        reportState: '', // 是否总检
+        reportState: 1, // 是否总检
         workUnitName: '', // 参检团队
         zjDate: '', // 总检日期
       },
@@ -468,6 +470,11 @@ export default {
     this.queryLibrary();
   },
   methods: {
+    isreportState() {
+      if (this.formData.reportState === 2) {
+        this.formData.zjDate = '';
+      }
+    },
     handlePopoperCloseCheck() {
       this.popoverStatusCheck = false;
     },

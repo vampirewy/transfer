@@ -11,7 +11,7 @@ import BaseModule from '../BaseModule';
 class UnusualListInterface extends BaseModule {
   // 获取异常列表
   listPage(data = {}) {
-    return this.get('/organ_abnormal/list_page', { params: data });
+    return this.post('/organ_abnormal/list_page', data);
   }
   // 批量删除异常列表
   organBatchDelete(data = {}) {
