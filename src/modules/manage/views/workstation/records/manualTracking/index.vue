@@ -6,11 +6,13 @@
     ></StationSearch>
     <section style="margin-top:15px;">
       <BaseTable
+        ref="table"
         :data="manualList"
         :columns="columns"
         :isShowPagination="true"
         :pagination="pageParams"
         @change="pageNoChange"
+        @fromTableExpands="fromTableExpands"
       >
         <template slot-scope="scope" slot="clientName">
           <span
@@ -20,7 +22,18 @@
           >
         </template>
         <template slot-scope="scope" slot="recordNum">
-          <span class="cursor c-3154ac">{{ scope.row.recordNum }}</span>
+          <span class="cursor c-3154ac" @click="watchRecords(scope.row)">{{
+            scope.row.recordNum
+          }}</span>
+        </template>
+        <template slot="expand">
+          <BaseTable
+            :data="expandsData"
+            :columns="expandColumns"
+            :isShowPagination="true"
+            :pagination="expandsPageParams"
+            @change="expandPageNoChange"
+          ></BaseTable>
         </template>
       </BaseTable>
     </section>
@@ -47,6 +60,7 @@ export default {
       },
       manualList: [],
       columns: [
+        { type: 'expand', prop: 'expand' },
         { label: '体检编号', prop: 'reportNo' },
         { label: '姓名', prop: 'clientName' },
         { label: '手机号', prop: 'mobile' },
@@ -63,6 +77,22 @@ export default {
         { label: '跟踪时间', prop: 'trackingTime' },
         { label: '跟踪记录', prop: 'recordNum' },
       ],
+      expandsList: [],
+      // 展开数据
+      expandsData: [],
+      expandsPageParams: {
+        total: 0,
+        pageSize: 15,
+        pageNo: 1,
+      },
+      expandColumns: [
+        { label: '跟踪时间', prop: 'trackDate' },
+        { label: '跟踪人', prop: 'visitDoctorName' },
+        { label: '跟踪方式', prop: 'trackWay' },
+        { label: '跟踪结果', prop: 'result' },
+        { label: '跟踪记录', prop: 'remark' },
+      ],
+      expandId: '',
     };
   },
   methods: {
@@ -73,9 +103,33 @@ export default {
       this.pageParams.pageNo = 1;
       this.getManualTrackingRequest();
     },
+    fromTableExpands(val) {
+      this.expandsList = val;
+    },
     pageNoChange(pageNo) {
       this.pageParams.pageNo = pageNo;
       this.getManualTrackingRequest();
+    },
+    async watchRecords(row) {
+      this.expandId = row.id;
+      this.expandsList.forEach((item) => {
+        if (item.clientId !== row.clientId) {
+          this.$refs.table.$refs.table.toggleRowExpansion(item);
+        }
+      });
+      if (this.expandsList.includes(row)) {
+        this.$refs.table.$refs.table.toggleRowExpansion(row);
+      } else {
+        this.expandsPageParams.pageNo = 1;
+        const result = await this.getTrankRecordsRequest();
+        if (result) {
+          this.$refs.table.$refs.table.toggleRowExpansion(row);
+        }
+      }
+    },
+    expandPageNoChange(pageNo) {
+      this.expandsPageParams.pageNo = pageNo;
+      this.getTrankRecordsRequest();
     },
     async getManualTrackingRequest() {
       const params = {
@@ -92,6 +146,20 @@ export default {
         });
       }
       this.manualList = data.data;
+    },
+    async getTrankRecordsRequest() {
+      const params = {
+        reportId: this.expandId,
+        recordType: 2,
+        ...this.expandsPageParams,
+      };
+      const res = await this.$api.sunFollow.getTrankingRecord(params);
+      const { data } = res.data;
+      this.expandsData = data.data;
+      this.expandsPageParams.total = data.total;
+      if (data.data && data.data.length) {
+        return data;
+      }
     },
   },
 };

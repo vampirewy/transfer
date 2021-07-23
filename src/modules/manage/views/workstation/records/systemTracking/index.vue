@@ -6,21 +6,35 @@
     ></StationSearch>
     <section style="margin-top:15px;">
       <BaseTable
+        ref="table"
         :data="sysList"
         :columns="columns"
         :isShowPagination="true"
         :pagination="pageParams"
         @change="pageNoChange"
+        @fromTableExpands="fromTableExpands"
       >
         <template slot-scope="scope" slot="clientName">
           <span
             class="cursor c-3154ac"
             @click="commonHref.toPersonalHealth(scope.row.clientId, $router)"
-            >{{ scope.row.clientName }}</span
           >
+            {{ scope.row.clientName }}
+          </span>
         </template>
         <template slot-scope="scope" slot="recordNum">
-          <span class="cursor c-3154ac">{{ scope.row.recordNum }}</span>
+          <span class="cursor c-3154ac" @click="watchRecords(scope.row)">{{
+            scope.row.recordNum
+          }}</span>
+        </template>
+        <template slot="expand">
+          <BaseTable
+            :data="expandsData"
+            :columns="expandColumns"
+            :isShowPagination="true"
+            :pagination="expandsPageParams"
+            @change="expandPageNoChange"
+          ></BaseTable>
         </template>
       </BaseTable>
     </section>
@@ -45,8 +59,10 @@ export default {
         searchStartTime: '',
         searchEndTime: '',
       },
+      // 列表数据
       sysList: [],
       columns: [
+        { type: 'expand', prop: 'expand' },
         { label: '客户编号', prop: 'clientCode' },
         { label: '体检编号', prop: 'reportNo' },
         { label: '姓名', prop: 'clientName' },
@@ -63,6 +79,22 @@ export default {
         { label: '回访医生', prop: 'visitDoctorName' },
         { label: '跟踪记录', prop: 'recordNum' },
       ],
+      expandsList: [],
+      // 展开数据
+      expandsData: [],
+      expandsPageParams: {
+        total: 0,
+        pageSize: 15,
+        pageNo: 1,
+      },
+      expandColumns: [
+        { label: '跟踪时间', prop: 'trackDate' },
+        { label: '跟踪人', prop: 'visitDoctorName' },
+        { label: '跟踪方式', prop: 'trackWay' },
+        { label: '跟踪结果', prop: 'result' },
+        { label: '跟踪记录', prop: 'remark' },
+      ],
+      expandId: '',
     };
   },
   methods: {
@@ -72,9 +104,33 @@ export default {
       this.pageParams.pageNo = 1;
       this.getSysTrankingRequest();
     },
+    fromTableExpands(val) {
+      this.expandsList = val;
+    },
+    async watchRecords(row) {
+      this.expandId = row.id;
+      this.expandsList.forEach((item) => {
+        if (item.clientId !== row.clientId) {
+          this.$refs.table.$refs.table.toggleRowExpansion(item);
+        }
+      });
+      if (this.expandsList.includes(row)) {
+        this.$refs.table.$refs.table.toggleRowExpansion(row);
+      } else {
+        this.expandsPageParams.pageNo = 1;
+        const result = await this.getTrankRecordsRequest();
+        if (result) {
+          this.$refs.table.$refs.table.toggleRowExpansion(row);
+        }
+      }
+    },
     pageNoChange(pageNo) {
       this.pageParams.pageNo = pageNo;
       this.getSysTrankingRequest();
+    },
+    expandPageNoChange(pageNo) {
+      this.expandsPageParams.pageNo = pageNo;
+      this.getTrankRecordsRequest();
     },
     async getSysTrankingRequest() {
       const params = {
@@ -87,6 +143,21 @@ export default {
       this.pageParams.total = data.total;
       (data.data || []).map(item => (item.gender = GENDER[item.gender]));
       this.sysList = data.data;
+    },
+    async getTrankRecordsRequest() {
+      const params = {
+        reportId: this.expandId,
+        recordType: 1,
+        ...this.expandsPageParams,
+      };
+      const res = await this.$api.sunFollow.getTrankingRecord(params);
+      const { data } = res.data;
+      console.log(data);
+      this.expandsData = data.data;
+      this.expandsPageParams.total = data.total;
+      if (data.data && data.data.length) {
+        return data;
+      }
     },
   },
 };
