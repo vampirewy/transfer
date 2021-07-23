@@ -1,3 +1,4 @@
+<!-- 工作记录 -- 跟踪计划 -->
 <template>
   <div>
     <StationSearch
@@ -18,9 +19,6 @@
             @click="commonHref.toPersonalHealth(scope.row.clientId, $router)"
             >{{ scope.row.clientName }}</span
           >
-        </template>
-        <template slot-scope="scope" slot="trackRecord">
-          <span class="cursor c-3154ac">{{ scope.row.trackRecord }}</span>
         </template>
         <template slot-scope="scope" slot="operation">
           <span
