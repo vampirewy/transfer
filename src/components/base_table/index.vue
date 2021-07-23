@@ -5,7 +5,10 @@
       v-bind="$attrs"
       v-on="$listeners"
       @sort-change="sortChange"
+      @expand-change="handleExpandChange"
+      ref="table"
     >
+
       <template v-for="column in finalColumns">
         <el-table-column
           v-if="$scopedSlots[column.prop]"
@@ -70,12 +73,18 @@ export default {
     pageChange(pageNo) {
       this.$emit('change', pageNo);
     },
-    sortChange({ column, prop, order }) {
-      console.log(column, prop, order);
+    sortChange({ prop, order }) {
       this.$emit('sortChange', { prop, order });
+    },
+    handleExpandChange(row, expandedRows) {
+      this.$emit('fromTableExpands', expandedRows);
     },
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+/deep/ .el-table__expand-column .el-icon {
+  visibility: hidden;
+}
+</style>
