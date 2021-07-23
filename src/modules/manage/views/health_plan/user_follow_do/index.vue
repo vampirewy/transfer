@@ -383,12 +383,11 @@
                 <el-button
                         type="text"
                         size="small"
-                        @click="handleEditPlan(scope.row)"
+                        @click="handleEditPlan(scope.row) && scope.row.self === true"
                         v-if="getAccess('wait_visit_plan_edit')"
-                >编辑</el-button
-                >
+                >编辑</el-button>
                 <el-button type="text" size="small"
-                           v-if="getAccess('wait_visit_plan_exec')"
+                           v-if="getAccess('wait_visit_plan_exec') && scope.row.self === true"
                            @click="doiFollowPlanDetail(scope.row)">执行</el-button>
               </template>
             </el-table-column>

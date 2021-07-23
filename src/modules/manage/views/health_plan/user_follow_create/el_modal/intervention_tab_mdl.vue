@@ -73,13 +73,20 @@ export default {
       multipleSelectionAll: [], // 所有选中的数据包含跨页数据
       multipleSelection: [], // 当前页选中的数据
       idKey: 'id', // 标识列表数据中每一行的唯一键的名称(需要按自己的数据改一下)
+      checkClintIds: [],
+      gender: '',
     };
   },
   mounted() {
-    this.getTemplateList();// 获取干预模板名
-    this.getUserInfo();
+    this.checkClintIds = this.$store.state.intervention.checkUserList.map(it => it.clientId);
+    this.onLoad();
   },
   methods: {
+    async onLoad() {
+      await this.getClientUserInfo();
+      await this.getTemplateList();// 获取干预模板名
+      this.getUserInfo();
+    },
     clickMenu(index, id) {
       this.changePageCoreRecordData();
       this.total = 0;
@@ -87,6 +94,11 @@ export default {
       this.form.templateId = id;
       this.pageNo = 1;
       this.getList();
+    },
+    async getClientUserInfo() {
+      const res = await this.$api.userManagerInterface.getDetail(this.checkClintIds[0]);
+      const { data } = res.data;
+      this.gender = data.gender;
     },
     async getUserInfo() {
       const res = await this.$api.userManagerInterface.getUserInfo();
@@ -189,8 +201,9 @@ export default {
         clientId: this.$store.state.intervention.checkUserList.map(it => it.clientId)[0],
         state: 1, // 已启用
         keywords: '',
+        matchGender: this.gender,
         pageNo: 1,
-        pageSize: 10000,
+        pageSize: 999999,
       };
       const res = await this.$api.interventionTemplateInterface.getInterveneTemplateListPage(
         reqBody,
