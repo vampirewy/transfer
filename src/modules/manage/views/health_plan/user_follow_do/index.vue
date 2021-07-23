@@ -672,7 +672,7 @@ export default {
         component: 'InterventionAddMdl',
         data: {
           modalType: 2,
-          addType: '2', // 个人创建 / 批量创建
+          addType: '1', // 个人创建 / 批量创建
           editType: 2, // 计划重新编辑
           modalTitle: '编辑',
           // planId: this.multipleSelection[0].planId,

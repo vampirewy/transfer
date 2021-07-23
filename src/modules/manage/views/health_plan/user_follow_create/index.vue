@@ -307,10 +307,20 @@
               <span>{{ scope.row.planContent | getResult}}</span>
             </template>
           </el-table-column>
+          <el-table-column label="操作" width="100">
+            <template slot-scope="scope">
+              <el-button type="text" size="small"
+                         v-if="getAccess('wait_visit_plan_exec') && excuteType === 2"
+                         @click="doiFollowPlanDetail(scope.row)">执行</el-button>
+              <el-button type="text" size="small"
+                         v-if="getAccess('visited_record_view') && excuteType === 1"
+                         @click="viewiFollowPlanDetail(scope.row)">查看</el-button>
+            </template>
+          </el-table-column>
         </el-table>
         <div style="text-align: right">
           <el-pagination
-                  style="padding-top: 15px;background-color: #f7f7fd"
+                  style="margin-top: 10px!important;margin-right:0;background-color: #f7f7fd"
                   @current-change="handleExpandPageChange"
                   background
                   layout="prev,pager,next,jumper,total,sizes"
@@ -851,6 +861,33 @@ export default {
         },
       );
     },
+    doiFollowPlanDetail(row) {
+      if (row.templateQuestionId) { // 有问卷跳原来
+        this.doFollowPlanDetail(row);
+      } else {
+        this.clientCenterFollowPlanDetail(row); // 没问卷去个人管理中心执行
+      }
+    },
+    doFollowPlanDetail(row) {
+      this.$router.push({
+        path: `/health_plan/user_follow_do/do/${row.id}`,
+      });
+    },
+    clientCenterFollowPlanDetail(row) {
+      const routeData = this.$router.resolve({
+        name: 'personal_health',
+        params: {
+          id: row.clientId,
+          waitVisitId: row.id,
+        },
+      });
+      window.open(routeData.href, '_blank');
+    },
+    viewiFollowPlanDetail(row) {
+      this.$router.push({
+        path: `/health_plan/user_follow_do/view/${row.id}`,
+      });
+    },
     /**
      * 分页
      * @param target
@@ -898,7 +935,7 @@ export default {
   .tablePlanColumn{
       background: #f7f7fd;
   }
-  /deep/ .el-table td{
+  /deep/ .el-table{
     padding: 6px 0;
   }
   /deep/ .el-table__expand-column .el-icon{
@@ -911,7 +948,7 @@ export default {
     }
     .el-table .el-table__body td {
       // background-color: #f7f7fd;
-      padding: 11.5px 0;
+      // padding: 11.5px 0;
     }
   }
   /*padding: 20px 32px 15px 32px;*/
