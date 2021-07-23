@@ -246,13 +246,23 @@ export default {
     },
     handleDishRawMaterialSelect(items) {
       // this.tableData
-      // let DataList = [];
-      this.tableData = [...items].map(item => ({
+      let DataList = [];
+      DataList = [...items].map(item => ({
         weight: '0',
         dietIngredientId: item.id,
         dietIngredientName: item.names,
       }));
-      // console.log(DataList);
+      DataList.forEach((valQusOne) => {
+        let same = false;
+        this.tableData.forEach((valAnswer) => {
+          if (valQusOne.dietIngredientId === valAnswer.dietIngredientId) {
+            same = true;
+          }
+        });
+        if (same === false) {
+          this.tableData.push(valQusOne);
+        }
+      });
     },
     submit() {
       this.$refs.dietFinishedDishForm.validate((e) => {
