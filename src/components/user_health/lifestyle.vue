@@ -31,9 +31,11 @@
       </p>
       <p class="nameP"><img src="@/assets/images/healthPlan/lifestyle5.png"/>睡眠：
         <span
+        v-if="formNew.questionLifestyle5.paramValue"
         :class="formNew.questionLifestyle5.attention
         ? 'addactive':''"
-        >{{formNew.questionLifestyle5.paramValue || '暂无数据'}}</span>
+        >{{formNew.questionLifestyle5.paramValue}}</span>
+        <span v-else>暂无数据</span>
       </p>
     </div>
   </div>

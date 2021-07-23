@@ -167,12 +167,14 @@
 <div style="margin-left:-5px">
   <div class="TabBars">
     <div  :class="Tabactive === 3?'TabBarsNameone':'TabBarsNamesone'"
-    @click="TabbarBtn(3)">阳性预警</div>
+    @click="TabbarBtn(3)">阳性预警
+    <div class="Tabunread" v-if="totalone !== 0">{{totalone}}</div>
+    </div>
     <div v-for="(item,index) in tabbor" :key="index" style="margin-top:9px">
       <span :class="Tabactive === index?'TabBarsName':'TabBarsNames'" @click="TabbarBtn(index)">
         {{item}}
         <div class="Tabunread" v-if="index === 0">{{totaTask}}</div>
-        <div class="Tabunread" v-if="index === 1">{{totaltow}}</div>
+        <div class="Tabunread" v-if="index === 1 && totaltow !== 0">{{totaltow}}</div>
       </span>
     </div>
   </div>
@@ -276,7 +278,7 @@
         <el-table-column label="随访问卷" prop="templateQuestionName"
         max-width="200" show-overflow-tooltip>
           <template slot-scope="scope">
-            <span>{{scope.row.templateQuestionName}}</span>
+            <span>{{scope.row.templateQuestionName || '-'}}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作" prop="index" width="120">
@@ -432,6 +434,7 @@ export default {
       });
     },
     doiFollowPlanDetail(row) {
+      console.log(row);
       if (row.templateQuestionId) { // 有问卷跳原来
         this.viewFollowPlanDetail(row);
       } else {
@@ -440,7 +443,7 @@ export default {
     },
     viewFollowPlanDetail(row) {
       this.$router.push({
-        path: `/health_plan/user_follow_do/do/${row.id}`,
+        path: `/health_plan/user_follow_do/do/${row.intervenePlanId}`,
       });
     },
     clientCenterFollowPlanDetail(row) {

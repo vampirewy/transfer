@@ -76,15 +76,19 @@
         <el-col :span="9">
           <el-form-item label="正常范围" >
             <div style="display: flex;">
-            <el-input v-model="form.minnormal" placeholder="请输入"></el-input>
+            <el-input v-model="form.minnormal" placeholder="请输入"
+            onkeyup = "value=value.replace(/[^\d.]/g,'')"></el-input>
             <span style="margin:0 10px 0 10px;color:#333333">—</span>
-            <el-input v-model="form.maxnormal" placeholder="请输入"></el-input>
+            <el-input v-model="form.maxnormal" placeholder="请输入"
+            onkeyup = "value=value.replace(/[^\d.]/g,'')"></el-input>
             </div>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="正常参考" >
-            <el-input v-model="form.Reference" placeholder="请输入" :maxlength="300"></el-input>
+            <el-input v-model="form.Reference" placeholder="请输入"
+            onkeyup = "value=value.replace(/[^\d.]/g,'')"
+            ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="24">

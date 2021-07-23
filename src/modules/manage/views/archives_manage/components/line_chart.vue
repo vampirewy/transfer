@@ -77,7 +77,6 @@ export default {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons');
       this.setOptions(this.chartData);
-      console.log(this.chartData, '传过来的数据');
     },
     setOptions() {
       const option = {
@@ -114,14 +113,14 @@ export default {
           },
           padding: [5, 10],
         },
-        dataZoom: [
-          {
-            type: 'inside',
-            realtime: true,
-            startValue: this.sectionXList.length - 20,
-            endValue: this.sectionXList.length - 1,
-          },
-        ],
+        // dataZoom: [
+        //   {
+        //     type: 'inside',
+        //     realtime: true,
+        //     startValue: this.sectionXList.length - 20,
+        //     endValue: this.sectionXList.length - 1,
+        //   },
+        // ],
         yAxis: {
           type: 'value',
           axisLine: {
