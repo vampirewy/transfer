@@ -12,7 +12,7 @@
           v-for="(item, index) in entryList"
           :key="index"
           class="entry-item"
-          @click="jumpTo(item.path)"
+          @click="$router.push(item.path)"
         >
           <img :src="item.icon" alt="" />
           <p class="f-s-14">{{ item.name }}</p>
@@ -50,11 +50,6 @@ export default {
         { icon: matchingList, name: '异常匹配', path: 'matchingList' },
       ],
     };
-  },
-  methods: {
-    jumpTo(path) {
-      this.$router.push(path);
-    },
   },
 };
 </script>
