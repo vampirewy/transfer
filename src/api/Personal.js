@@ -150,7 +150,7 @@ class Personal extends BaseModule {
    * @description:  工作台（今日工作任务/工作记录） --采集系统跟踪
    * @file http://192.168.137.12:3000/project/63/interface/api/7127
    * @method post
-   * @param {number} searchType 查询类型  1|列表 -- 默认 2|工作台 3|跟踪记录 4|工作台记录
+   * @param {number} searchType 查询类型  1|列表 -- 默认 2|工作台首次 3|跟踪记录 4|工作台记录
    * @param {string} sortType 排序类型
    * bySex|性别  byAge|年龄  byReportDate|体检时间  byZjDate|主检时间  byCreateDate|上报时间  ByLevel|阳性分级
    * @param {string} sortRule 1|升 2|降
