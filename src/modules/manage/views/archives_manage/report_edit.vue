@@ -213,6 +213,9 @@ export default {
               arr.push(item);
             }
           });
+          if (arr.length === 0) {
+            return this.$message.warning('请选择体检项目');
+          }
           formData.sectionConclusionList = arr;
           let request;
           if (this.id) {

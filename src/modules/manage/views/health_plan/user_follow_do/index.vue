@@ -384,11 +384,10 @@
                         type="text"
                         size="small"
                         @click="handleEditPlan(scope.row)"
-                        v-if="getAccess('wait_visit_plan_edit')"
-                >编辑</el-button
-                >
+                        v-if="getAccess('wait_visit_plan_edit') && scope.row.self === true"
+                >编辑</el-button>
                 <el-button type="text" size="small"
-                           v-if="getAccess('wait_visit_plan_exec')"
+                           v-if="getAccess('wait_visit_plan_exec') && scope.row.self === true"
                            @click="doiFollowPlanDetail(scope.row)">执行</el-button>
               </template>
             </el-table-column>
@@ -672,7 +671,7 @@ export default {
         component: 'InterventionAddMdl',
         data: {
           modalType: 2,
-          addType: '2', // 个人创建 / 批量创建
+          addType: '1', // 个人创建 / 批量创建
           editType: 2, // 计划重新编辑
           modalTitle: '编辑',
           // planId: this.multipleSelection[0].planId,

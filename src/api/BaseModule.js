@@ -38,10 +38,13 @@ class BaseModule {
             // Cookies.remove('token'); // token过期,清除
             // window.localStorage.removeItem('USER_INFO');
             window.location.href = '/#/login';
+            if (document.getElementsByClassName('el-message').length === 0) {
+              CapsuleUI.Message.warning(response.data.msg);
+            }
           } else {
-            // CapsuleUI.Message.warning(response.data.message);
+            CapsuleUI.Message.warning(response.data.msg);
           }
-          CapsuleUI.Message.warning(response.data.msg);
+          // CapsuleUI.Message.warning(response.data.msg);
           // return response;
           return Promise.reject(response);
         }

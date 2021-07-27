@@ -44,9 +44,9 @@
         </template>
       </el-table-column>
       <el-table-column label="姓名" prop="realName"></el-table-column>
-      <el-table-column label="启用状态" prop="">
+      <el-table-column label="角色" prop="roleName">
         <template slot-scope="scope">
-          <span>{{propsType === 'doctor' ? '启用' : scope.row.state === 1 ? '启用' : '未启用'}}</span>
+          <span>{{scope.row.roleName | getResult}}</span>
         </template>
       </el-table-column>
     </el-table>

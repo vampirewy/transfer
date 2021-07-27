@@ -22,9 +22,9 @@
     <div>
       <div><span></span><span class="outlierTitle">项目信息</span></div>
       <div class="lookPressure">
-        <div><span class="TxtName">系统大项：
+        <div><span class="TxtName">项目名称：
           </span><span>{{expandData.itemName}}</span></div>
-        <div><span class="TxtName">系统小项：</span><span>{{expandData.sectionName}}</span></div>
+        <div><span class="TxtName">科室名称：</span><span>{{expandData.sectionName}}</span></div>
       </div>
       <div class="lookPressure">
         <div><span class="TxtName">适宜性别：</span><span>{{expandData.genderTxt}}</span></div>
@@ -386,7 +386,8 @@ export default {
         color: #666666;
       }
       span:nth-child(2){
-        white-space: nowrap;
+        // white-space: nowrap;
+        display: inline-block;
       }
     }
   }

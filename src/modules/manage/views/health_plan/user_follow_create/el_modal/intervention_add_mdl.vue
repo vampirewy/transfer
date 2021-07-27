@@ -195,13 +195,14 @@ export default {
           this.getDetailTogether();
         }
         if (this.addType === '2') {
-          this.getUserInfo(); // 获取用户id和name，原本是存储，现在接口实时请求
+          await this.getUserInfo(); // 获取用户id和name，原本是存储，现在接口实时请求
           // this.form.planDoctor = this.$store.state.user.userId;
           // this.form.planDoctorName = this.$store.state.user.userName;
         }
         if (this.editType === 2) { // 待随访计划直接编辑，不让修改随访人;
           this.form.planDoctor = this.propsData.planUserId;
           this.form.planDoctorName = this.propsData.planUserName;
+          this.checkClintIds = [this.propsData.clientId]; // 为了改成编辑时也可以重选随访人
           const reqBody = { id: this.propsData.id };
           const res = await this.$api.userFollowInterface.getIntervenePlan(
             reqBody,
@@ -270,7 +271,7 @@ export default {
       this.form.planTime = planTime;
       this.form.planWay = planWay;
       this.form.planDoctor = planDoctor;
-      this.form.planDoctorName = planDoctorName;
+      this.form.planDoctorName = planDoctorName; // 创建计划编辑时是planDoctorName
       this.form.planTitle = planTitle;
       // const way = this.form.planWayList.find(it => it.id === data.planWay);
       // if (way) {

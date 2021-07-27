@@ -139,17 +139,17 @@
                 <el-button
                   type="text"
                   size="small"
-                  @click="detail(scope.row)"
-                  v-if="getAccess('staff_list_view')
-                  "
-                  >查看</el-button
-                >
-                <el-button
-                  type="text"
-                  size="small"
                   @click="edit(scope.row)"
                   v-if="getAccess('staff_list_edit')"
                   >编辑</el-button
+                >
+                <el-button
+                        type="text"
+                        size="small"
+                        @click="detail(scope.row)"
+                        v-if="getAccess('staff_list_view')
+                  "
+                >查看</el-button
                 >
               </template>
             </el-table-column>
