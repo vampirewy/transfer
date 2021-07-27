@@ -8,7 +8,7 @@
 
 const build = {
     static_url: '/', // 静态资源路径
-    common_url: '/api',
+    common_url: 'http://health.pre.touchealth.com/api',
     upload_url: 'http://health.pre.touchealth.com/',
     pdf_url: 'http://health.pre.touchealth.com/download',
 };
