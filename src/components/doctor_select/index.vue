@@ -304,6 +304,10 @@ export default {
     },
     visible: Boolean,
     clientId: String,
+    type: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {
@@ -335,6 +339,7 @@ export default {
       const res = await this.$api.userManagerInterface.searchDoctor({
         ...this.params,
         selectedUserIds: selectedUserIdsStr,
+        type: this.type,
       });
       const { data } = res.data;
       this.dataSource = data.data || [];
