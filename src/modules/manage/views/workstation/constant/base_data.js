@@ -1,6 +1,6 @@
 export const GENDER = {
-  0: '女',
   1: '男',
+  2: '女',
 };
 
 export const REPORT_STATE = {

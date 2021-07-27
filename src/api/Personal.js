@@ -170,7 +170,7 @@ class Personal extends BaseModule {
    * @property {string} zjDoctor 主检医生
    * @property {number} age 年龄
    * @property {string} birthday 出生日期
-   * @property {number} gender 性别 0|女 1|男
+   * @property {number} gender 性别  1|男 2|女
    * @property {string} abnormalResult 异常结果
    * @property {string} visitDoctorName 回访医生姓名
    * @property {string} visitResut 跟踪结果
