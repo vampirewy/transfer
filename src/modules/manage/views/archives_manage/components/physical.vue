@@ -314,14 +314,16 @@
             </el-table-column>
             <el-table-column prop="abnormalName" label="异常" show-overflow-tooltip></el-table-column>
             <el-table-column prop="advice" label="建议" show-overflow-tooltip>
-              <el-input
-                type="textarea"
-                v-model="formData.advice"
-                :maxlength="300"
-                placeholder="请输入建议"
-                show-word-limit
-                rows="4">
-              </el-input>
+              <template slot-scope="scope">
+                <el-input
+                  type="textarea"
+                  v-model="scope.row.advice"
+                  :maxlength="300"
+                  placeholder="请输入建议"
+                  show-word-limit
+                  rows="4">
+                </el-input>
+              </template>
             </el-table-column>
             <el-table-column label="操作" width="190">
               <template slot-scope="scope">
