@@ -85,7 +85,8 @@
                         :isRadio="true"
                         mode="normal"
                         :visible="dialogTableVisible"
-                        :clientId="clientId"
+                        :type="1"
+                        :selectedDoctorIds="selectedDoctorIds"
                         @cancel="$refs.popover1.showPopper = false"
                         @change="submitAssign"
                       ></doctor-Select>
@@ -378,6 +379,7 @@ export default {
         assortLevel: [{ required: true, message: '请选择依从度' }],
       },
       dialogTableVisible: false,
+      selectedDoctorIds: [],
     };
   },
   watch: {
@@ -401,6 +403,7 @@ export default {
       this.$api.userManagerInterface.getDetail(id).then(({ data }) => {
         if (data.rc === 0) {
           this.userlist = data.data;
+          this.selectedDoctorIds = data.data.userList.map(item => item.id);
         }
       });
     },
@@ -567,14 +570,20 @@ export default {
         return;
       }
       this.$refs.popover1.showPopper = false;
-      // this.submit(userList);
+      const userIdList = userList.map(t => t.id);
+      this.submit({
+        clientIdList: [this.userlist.id],
+        userIdList,
+        type: 3,
+      });
     },
-    submit(params) {
-      this.$api.userManagerInterface.apiName(params).then(({ data }) => {
-        if (data.code === 200) {
-          this.$message.success('操作成功');
-          this.getClientUserInfo(this.$route.params.id);
-        }
+    submit(userList) {
+      this.$api.userManagerInterface.claim(userList).then(({ data }) => {
+        // if (data.code === 200) {
+        console.log(data);
+        this.$message.success('操作成功');
+        this.getClientUserInfo(this.$route.params.id);
+        // }
       });
     },
     removeDoct() {
@@ -586,14 +595,15 @@ export default {
         showClose: true,
         type: 'warning',
       }).then(() => {
-        // this.$api.medicalHistoryInterface.batchDeleteMedicalInfo(params)
-        // .then((res) => {
-        //   const { data } = res;
-        //   if (data.code === 200) {
-        this.$message.success('操作成功');
-        //     this.getClientUserInfo(this.$route.params.id);
-        //   }
-        // });
+        this.$api.medicalHistoryInterface.claim({
+          clientIdList: [this.userlist.id],
+          type: 4,
+        })
+          .then((res) => {
+            console.log(res);
+            this.$message.success('操作成功');
+            this.getClientUserInfo(this.$route.params.id);
+          });
       });
     },
   },
