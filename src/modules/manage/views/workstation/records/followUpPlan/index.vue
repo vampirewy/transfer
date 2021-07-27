@@ -23,7 +23,7 @@
         <template slot-scope="scope" slot="operation">
           <span
             class="cursor c-3154ac"
-            @click="$router.push(`/first_follow_do/${scope.row.clientId}/1`)"
+            @click="$router.push(`/first_follow_do/${scope.row.clientId}/2`)"
             >跟踪</span
           >
         </template>
