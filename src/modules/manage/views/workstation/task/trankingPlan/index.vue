@@ -116,7 +116,7 @@ export default {
       this.$message.success('操作成功');
       this.pageParams.pageNo = 1;
       this.getTrankingPlanRequest();
-      this.$emit('updateTaskCount');
+      this.$emit('updateTaskCount', { isRefresh: 'recordTrankingPlan' });
     },
     pageNoChange(pageNo) {
       this.pageParams.pageNo = pageNo;

@@ -82,7 +82,8 @@ export default {
       this.pageParams.pageNo = pageNo;
       this.getTankingRequest();
     },
-    async getTankingRequest() {
+    async getTankingRequest(pageNo) {
+      this.pageParams.pageNo = pageNo || this.pageParams.pageNo;
       const params = {
         ...this.date,
         ...this.pageParams,

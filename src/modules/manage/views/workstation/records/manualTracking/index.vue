@@ -97,7 +97,6 @@ export default {
   },
   methods: {
     switchType(query) {
-      console.log('手动上报跟踪选择的时间----->', query);
       this.date.searchStartTime = query.startTime;
       this.date.searchEndTime = query.endTime;
       this.pageParams.pageNo = 1;
@@ -131,7 +130,8 @@ export default {
       this.expandsPageParams.pageNo = pageNo;
       this.getTrankRecordsRequest();
     },
-    async getManualTrackingRequest() {
+    async getManualTrackingRequest(pageNo) {
+      this.pageParams.pageNo = pageNo || this.pageParams.pageNo;
       const params = {
         searchType: 4,
         ...this.pageParams,
@@ -140,11 +140,7 @@ export default {
       const res = await this.$api.personal.getManualTracking(params);
       const { data } = res.data;
       this.pageParams.total = data.total;
-      if (data.data && data.data.length) {
-        data.data.forEach((item) => {
-          item.reportState = REPORT_STATE[item.reportState];
-        });
-      }
+      (data.data || []).map(item => (item.reportState = REPORT_STATE[item.reportState]));
       this.manualList = data.data;
     },
     async getTrankRecordsRequest() {

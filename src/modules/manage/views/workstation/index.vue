@@ -2,8 +2,11 @@
   <div class="station">
     <Info class="station-item__layout"></Info>
     <QuickEntry class="station-item__layout"></QuickEntry>
-    <Task class="station-item"></Task>
-    <Records class="station-item"></Records>
+    <Task
+      class="station-item"
+      @recordsManualTracking="recordsManualTracking"
+    ></Task>
+    <Records class="station-item" ref="records"></Records>
     <Statistics class="station-item__layout"></Statistics>
   </div>
 </template>
@@ -19,6 +22,17 @@ export default {
   components: { Info, QuickEntry, Task, Records, Statistics },
   data() {
     return {};
+  },
+  methods: {
+    recordsManualTracking({ isRefresh }) {
+      const pageNo = 1;
+      if (isRefresh === 'recordManualTacking') {
+        return this.$refs.records.$refs.manualTacking.getManualTrackingRequest(
+          pageNo,
+        );
+      }
+      this.$refs.records.$refs.trankingPlan.getTankingRequest(pageNo);
+    },
   },
   mounted() {
     document.querySelector('.main-content-con').style = 'top: 97px';

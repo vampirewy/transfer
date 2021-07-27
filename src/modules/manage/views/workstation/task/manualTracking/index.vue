@@ -103,7 +103,11 @@ export default {
     cancel(isSuccess) {
       this.isShowTrackPop = false;
       this.trackingId = '';
-      if (isSuccess) this.$emit('updateTaskCount', true);
+      if (isSuccess) {
+        this.pageParams.pageNo = 1;
+        this.getManualTrackingRequest();
+        this.$emit('updateTaskCount', { isRefresh: 'recordManualTacking' });
+      }
     },
     async getManualTrackingRequest() {
       const params = {

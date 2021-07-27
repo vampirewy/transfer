@@ -18,7 +18,7 @@
           ref="systemTracking"
         ></SystemTracking>
         <ManualTracking
-          @updateTaskCount="getTaskCountRequest"
+          @updateTaskCount="updateTaskCount"
           v-show="active === 1"
           ref="manualTracking"
         ></ManualTracking>
@@ -26,7 +26,7 @@
         <TrankingPlan
           v-show="active === 3"
           ref="trankingPlan"
-          @updateTaskCount="getTaskCountRequest"
+          @updateTaskCount="updateTaskCount"
         ></TrankingPlan>
       </div>
     </section>
@@ -77,6 +77,10 @@ export default {
     updateList(curIndex) {
       this.active = curIndex;
       this.methodsMap[curIndex]();
+    },
+    updateTaskCount(val) {
+      this.getTaskCountRequest();
+      this.$emit('recordsManualTracking', val);
     },
     async getTaskCountRequest() {
       const res = await this.$api.personal.getTaskCount();
