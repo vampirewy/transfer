@@ -51,7 +51,7 @@
                 <el-form-item label="联系方式" prop="mobile">
                   <el-input
                     v-model="formData.mobile"
-                    :format="/^(1\d{0,10}){0,1}$/"
+                    maxlength=11
                   ></el-input>
                 </el-form-item>
               </el-col>
@@ -278,7 +278,7 @@
               <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column prop="title" label="标题"></el-table-column>
             <el-table-column prop="remark" label="附件说明"></el-table-column>
-            <el-table-column prop="createdTime" label="上传时间"></el-table-column>
+            <el-table-column prop="createTime" label="上传时间"></el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <el-button type="text" @click="open(scope)">查看</el-button>
@@ -535,8 +535,13 @@ export default {
     submit() {},
     handleClick() {},
     onSubmit() {
+      const reg = /^1[3|4|5|7|8|6|9][0-9]\d{8}$/;
       this.$refs.form.validate((valid) => {
-        if (valid) {
+        if (!reg.test(this.formData.mobile)) {
+          this.$message.error('手机号错误！');
+        } else if (!this.getAge(this.formData.cardNo)) {
+          this.$message.error('身份证号错误！');
+        } else if (valid) {
           if (this.$route.query.owner && !this.$route.params.userId) {
             this.formData.userIdList.push(this.$store.state.user.userId);
             // this.formData.userIdList = [this.$route.query.owner];
@@ -556,9 +561,6 @@ export default {
 
           this.formData.annexIdList =
               this.dataSource.filter(t => t.id && t.deleted === 1).map(t => t.id);
-
-          console.log('formData', this.formData);
-
           this.$api.userManagerInterface
             .saveOrEditUser(this.formData)
             .then(({ data }) => {
@@ -591,10 +593,14 @@ export default {
       if ((len !== 15) && (len !== 18)) {
         return 0;
       }
-
       let strBirthday = '';
       if (len === 18) { // 处理18位的身份证号码从号码中得到生日和性别代码
         strBirthday = `${identityCard.substr(6, 4)}/${identityCard.substr(10, 2)}/${identityCard.substr(12, 2)}`;
+        if (identityCard.substring(16, 17) % 2 === 0) {
+          this.formData.gender = 2;
+        } else {
+          this.formData.gender = 1;
+        }
       }
       if (len === 15) {
         strBirthday = `19${identityCard.substr(6, 2)}/${identityCard.substr(8, 2)}/${identityCard.substr(10, 2)}`;
