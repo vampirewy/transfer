@@ -335,25 +335,6 @@ export default {
           this.form.trackingDate = dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss');
           const sendData = Object.assign({}, this.form);
           sendData.contentSaveRequests = [];
-          let validSave = true;
-          this.contentSaveRequestsList.forEach((val) => {
-            if (val.nextTrackingDate <= dayjs(new Date()).format('YYYY-MM-DD') && val.state === '') {
-              this.$message.warning('请选择今日及以前跟踪计划的跟踪结果');
-              validSave = false;
-              return;
-            }
-            sendData.contentSaveRequests.push({
-              positiveTrackingId: val.id,
-              isCloseCase: val.isCloseCase,
-              state: val.state,
-            });
-          });
-          if (!validSave) { // 如果验证未通过
-            return;
-          }
-          console.log(this.contentSaveRequestsList);
-          sendData.trackingDate = `${sendData.trackingDate.split(' ')[0]} 00:00:00`;
-          sendData.nextTrackingDate = `${sendData.nextTrackingDate.split(' ')[0]} 00:00:00`;
           // let validSave = true;
           // this.contentSaveRequestsList.forEach((val) => {
           //   if (val.nextTrackingDate <= dayjs(new Date()).format('YYYY-MM-DD')
