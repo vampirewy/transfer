@@ -160,6 +160,9 @@ export default {
       }
     },
   },
+  mounted() {
+    this.getSysTrankingRequest();
+  },
 };
 </script>
 

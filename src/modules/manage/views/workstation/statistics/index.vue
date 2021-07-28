@@ -150,6 +150,9 @@ export default {
       });
     },
   },
+  mounted() {
+    this.getWorkStatisticsRequest({ startTime: '', endTime: '' });
+  },
 };
 </script>
 

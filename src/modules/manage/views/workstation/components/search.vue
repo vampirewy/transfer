@@ -106,9 +106,6 @@ export default {
       this.$emit('fromChildDate', this.date);
     },
   },
-  mounted() {
-    this.switchType(this.selectType);
-  },
 };
 </script>
 
