@@ -85,7 +85,7 @@
             ></el-pagination>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="工作室" name="second">
+        <el-tab-pane label="工作室" name="second" v-if="isSunEnter">
           <el-table
                   @select="handleSelect"
                   :data="dataSourceWork"
@@ -296,6 +296,7 @@ export default {
     },
     visible: Boolean,
     clientId: String,
+    isSunEnter: Boolean,
   },
   data() {
     return {
@@ -391,6 +392,15 @@ export default {
     onChange(type, scope, ev) {
       const s = scope;
       if (ev) {
+        if (!this.isSunEnter) {
+          this.userList = [scope];
+          this.dataSource.forEach((item) => {
+            if (item.id !== scope.id) {
+              item.selected = false;
+            }
+          });
+          return;
+        }
         if (type === 1) {
           s.selectType = 1;
         }
