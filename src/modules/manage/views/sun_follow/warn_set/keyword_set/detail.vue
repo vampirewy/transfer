@@ -28,9 +28,9 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="预警分类">
+          <el-form-item label="阳性等级">
             <span>
-              {{staffForm.trackingLv === 1 ? '红色预警' : '橙色预警' }}
+              {{staffForm.levelName | getResult}}
             </span>
           </el-form-item>
         </el-col>
