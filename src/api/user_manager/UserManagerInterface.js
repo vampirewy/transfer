@@ -16,8 +16,7 @@ class UserManagerInterface extends BaseModule {
    */
   // 获取当前登陆者信息
   getUserInfo() {
-    return this.get('http://192.168.137.12:3000/mock/63/user/info');
-    // return this.get('/user/info');
+    return this.get('/user/info');
   }
   getSystemParamByCode(code) {
     return this.get(`/system_param_value/${code}`);
