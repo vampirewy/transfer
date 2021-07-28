@@ -7,62 +7,34 @@
     </div>
     <div class="searchCondition">
       <div class="searchLeft">
-        <div class="searchInputFormItem">
-          <el-input placeholder="姓名/编号" v-model="form.keywords">
+        <div>
+          <span>体检编号：</span>
+          <el-input
+                  v-model="form.reportNo"
+                  placeholder="请输入"
+                  style="width: 200px">
           </el-input>
-          <span class="searchBtnImgSpan" @click="onSearch">
-                  <img class="searchBtnImg" src="@/assets/images/common/topsearch.png"/>
-              </span>
         </div>
         <div>
-          <span>阳性分级：</span>
+          <span>姓名：</span>
+          <el-input
+                  v-model="form.clientName"
+                  placeholder="请输入"
+                  style="width: 200px">
+          </el-input>
+        </div>
+        <div v-if="dataRange">
+          <span>回访医生：</span>
           <el-select
-                  v-model="form.gender"
+                  v-model="form.recieveUserName"
                   placeholder="请选择"
-                  style="width: 140px"
+                  style="width: 200px"
                   clearable
           >
-            <el-option label="阳性一级" value="1" key="1"></el-option>
-            <el-option label="阳性二级" value="2" key="2"></el-option>
-            <el-option label="阳性三级" value="3" key="3"></el-option>
-            <el-option label="阳性四级" value="4" key="4"></el-option>
+            <el-option :label="item.realName" :value="item.id" v-for="(item, index) in doctorList"
+                     :key="index"></el-option>
           </el-select>
         </div>
-        <div>
-          <span>异常结果：</span>
-          <el-select
-                  v-model="form.gridId"
-                  placeholder="请选择"
-                  style="width: 140px"
-                  clearable
-          >
-            <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
-                       :key="index"></el-option>
-          </el-select>
-        </div>
-         <div>
-        <span>主检时间：</span>
-        <el-date-picker
-                v-model="form.startTime"
-                type="date"
-                value-format="yyyy-MM-dd"
-                :max-date="form.endTime || new Date()"
-                placeholder="开始时间"
-                style="width: 140px"
-        >
-        </el-date-picker>
-        <span class="timing">-</span>
-        <el-date-picker
-                v-model="form.endTime"
-                type="date"
-                value-format="yyyy-MM-dd"
-                :min-date="form.startTime"
-                :max-date="new Date()"
-                placeholder="结束时间"
-                style="width: 140px"
-        >
-        </el-date-picker>
-      </div>
       </div>
       <div class="searchRight">
         <div class="buttones">
@@ -73,71 +45,9 @@
           <div class="more" v-if="isTrue"  @click="upMore">
             <span>></span>
             展开更多</div>
-          <div class="more noMore" v-else @click="upMore">
-            <span>></span>收起筛选</div>
+          <!-- <div class="more noMore" v-else @click="upMore">
+            <span>></span>收起筛选</div> -->
         </div>
-      </div>
-    </div>
-  </div>
-  <div v-if="!isTrue" class="searchCondition">
-    <div class="searchLeft" style="padding-left:5px;">
-      <div>
-        <span>管理医生：</span>
-        <el-select
-                v-model="form.source"
-                placeholder="请选择"
-                style="width: 140px"
-                clearable
-        >
-          <el-option :label="item.name" :value="item.value" v-for="(item, index) in sourceList"
-                     :key="index"></el-option>
-        </el-select>
-      </div>
-      <div>
-        <span>回访医生：</span>
-        <el-select
-                v-model="form.source"
-                placeholder="请选择"
-                style="width: 140px"
-                clearable
-        >
-          <el-option :label="item.name" :value="item.value" v-for="(item, index) in sourceList"
-                     :key="index"></el-option>
-        </el-select>
-      </div>
-      <div>
-        <span>体检时间：</span>
-        <el-date-picker
-                v-model="form.startTime"
-                type="date"
-                value-format="yyyy-MM-dd"
-                :max-date="form.endTime || new Date()"
-                placeholder="开始时间"
-                style="width: 140px"
-        >
-        </el-date-picker>
-        <span class="timing">-</span>
-        <el-date-picker
-                v-model="form.endTime"
-                type="date"
-                value-format="yyyy-MM-dd"
-                :min-date="form.startTime"
-                :max-date="new Date()"
-                placeholder="结束时间"
-                style="width: 140px"
-        >
-        </el-date-picker>
-      </div>
-      <div>
-        <span>所属企业</span>
-        <el-select
-                v-model="form.source"
-                placeholder="请选择"
-                style="width: 140px"
-                clearable>
-          <el-option :label="item.name" :value="item.value" v-for="(item, index) in sourceList"
-                :key="index"></el-option>
-        </el-select>
       </div>
     </div>
   </div>
@@ -172,26 +82,26 @@
         <el-table :data="expandData.list" class="expand-table" align="center">
           <el-table-column
           label="跟踪时间"
-          prop="nearestTrackingDate"
+          prop="trackDate"
           min-width="90px"
           show-overflow-tooltip
           >
             <template slot-scope="scope">
-              <span>{{ scope.row.nearestTrackingDate | getResult}}</span>
+              <span>{{ scope.row.trackDate | getResult}}</span>
             </template>
           </el-table-column>
           <el-table-column
             label="跟踪人"
-            prop="reportUserName"
+            prop="visitDoctorName"
             min-width="80px">
             <template slot-scope="scope">
-              <span>{{ scope.row.reportUserName | getResult }}</span>
+              <span>{{ scope.row.visitDoctorName | getResult }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="跟踪方式" prop="nextTrackingDate"
+         <el-table-column label="跟踪方式" prop="trackWay"
                            width="90px" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{ scope.row.trackingWayName | getResult}}</span>
+              <span>{{ scope.row.trackWay | getResult}}</span>
             </template>
           </el-table-column>
            <el-table-column
@@ -200,7 +110,7 @@
             min-width="80px">
             <template slot-scope="scope">
               <span>
-                {{ scope.row.state | getResult }}
+                {{ scope.row.result | getResult }}
               </span>
             </template>
           </el-table-column>
@@ -223,26 +133,26 @@
         <el-table :data="expandData.list" class="expand-table" align="center">
           <el-table-column
           label="跟踪时间"
-          prop="nearestTrackingDate"
+          prop="trackDate"
           min-width="90px"
           show-overflow-tooltip
           >
             <template slot-scope="scope">
-              <span>{{ scope.row.nearestTrackingDate | getResult}}</span>
+              <span>{{ scope.row.trackDate | getResult}}</span>
             </template>
           </el-table-column>
           <el-table-column
             label="跟踪人"
-            prop="reportUserName"
+            prop="visitDoctorName"
             min-width="80px">
             <template slot-scope="scope">
-              <span>{{ scope.row.reportUserName | getResult }}</span>
+              <span>{{ scope.row.visitDoctorName | getResult }}</span>
             </template>
           </el-table-column>
           <el-table-column label="跟踪方式" prop="nextTrackingDate"
-                           width="90px" show-overflow-tooltip>
+                           show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{ scope.row.trackingWayName | getResult}}</span>
+              <span>{{ scope.row.trackWay | getResult}}</span>
             </template>
           </el-table-column>
            <el-table-column
@@ -251,7 +161,7 @@
             min-width="80px">
             <template slot-scope="scope">
               <span>
-                {{ scope.row.state | getResult }}
+                {{ scope.row.result | getResult }}
               </span>
             </template>
           </el-table-column>
@@ -277,7 +187,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="clientName"
         label="姓名"
         width="90"
       >
@@ -288,14 +198,14 @@
              </span>
         </template>
       </el-table-column>
-      <el-table-column prop="telephoneNum" label="手机号">
+      <el-table-column prop="mobile" label="手机号">
         <template slot-scope="scope">
-          <span>{{ '手机号码' }}</span>
+          <span>{{ scope.row.mobile | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="idCard" label="身份证号">
+      <el-table-column prop="cardNo" label="身份证号">
         <template slot-scope="scope">
-          <span>{{ '身份证号码' }}</span>
+          <span>{{ scope.row.cardNo | getResult }}</span>
         </template>
       </el-table-column>
       <el-table-column label="上报科室" prop="reportDepartment" show-overflow-tooltip>
@@ -303,19 +213,21 @@
           <span>{{ scope.row.reportDepartment | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="itemName" label="项目名称" min-width="80px">
+      <el-table-column prop="itemName" label="项目名称" min-width="80px" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{ scope.row.itemName | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="abnormalResult" label="异常结果" show-overflow-tooltip>
+      <el-table-column prop="itemValue" label="异常结果" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ '异常结果' }}</span>
+          <span>{{ scope.row.itemValue | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="abnormalRank" label="异常等级" show-overflow-tooltip>
+      <el-table-column prop="levelName" label="异常等级" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ '阳性1-4级' }}</span>
+          <span
+          :class="{warnRed : scope.row.positiveLevel === 1}"
+          >{{ scope.row.levelName | getResult }}</span>
         </template>
       </el-table-column>
       <!-- <el-table-column label="结果" prop="result" min-width="100px">
@@ -340,27 +252,27 @@
           <span>{{ scope.row.reportDate | getResult}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="是否主检" prop="isMainCheckup" min-width="100px">
+      <el-table-column label="是否主检" prop="reportState" min-width="100px">
         <template slot-scope="scope">
-              <span>{{ '是/否' }}</span>
+              <span>{{ scope.row.reportState | getReportState }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="备注说明" prop="markInfo" min-width="100px">
+      <el-table-column label="备注说明" prop="remark" min-width="100px">
         <template slot-scope="scope">
-              <span>{{ '备注备注' }}</span>
+              <span>{{ scope.row.remark | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="returnDoctor" label="回访医生" show-overflow-tooltip>
+      <el-table-column prop="recieveUserName" label="回访医生" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ '回访医生' }}</span>
+          <span>{{ scope.row.recieveUserName | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="trackingRecordNum" label="跟踪记录" width="90px" show-overflow-tooltip>
+      <el-table-column prop="recordNum" label="跟踪记录" width="80">
         <template slot-scope="scope">
           <el-button type="text"
                      @click="expandsHandle(scope.row, 2)"
                      style="color: #3154AC;font-size: 14px"
-                     >{{scope.row.trackingRecordNum | getResult}}</el-button>
+                     >{{scope.row.recordNum | getResult}}</el-button>
         </template>
       </el-table-column>
       <!--<el-table-column prop="recieveUserName" label="接收人" show-overflow-tooltip>
@@ -414,20 +326,28 @@ export default {
       upload_url: process.env.api.upload_url,
       isTrue: true,
       form: {
-        reportLv: '',
         keywords: '', // 关键字
-        gender: '', // 性别
         gridId: '', // 人员类别
         reportState: '', // 是否总检
         source: '',
-        phoneNo: '', // 手机号码
+        phoneNo: '',
         startTime: '',
         endTime: '',
+        reportLv: '',
+        clientName: '',
+        reportNo: '',
+        reportUserId: '',
+        reportUserName: '',
+        recieveUserName: '',
+        recieveUserId: '',
+        searchType: 3,
+        searchStartTime: '',
+        searchEndTime: '',
       },
       gridList: [], // 人员类别下拉框
       sourceList: [{ value: 1, name: '采集系统' }, { value: 2, name: '手动上报' }, { value: 3, name: '后台预警' }], // 上报来源下拉框
       expands: [],
-      getRowKeys: row => row.clientId,
+      getRowKeys: row => row.id,
       expandData: {
         clientId: '',
         pageNo: 1,
@@ -461,6 +381,7 @@ export default {
       },
       multipleSelectionAll: [], // 所有选中的数据包含跨页数据
       multipleSelection: [], // 当前页选中的数据
+      doctorList: [],
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -470,8 +391,20 @@ export default {
   },
   mounted() {
     this.getList();
+    this.getDoctorList();
+  },
+  computed: {
+    dataRange() {
+      if (localStorage.getItem('dataRange') === 4) return false;
+    },
   },
   methods: {
+    // 回访医生列表
+    async getDoctorList() {
+      const res = await this.$api.doctorInterface.getDoctorList({});
+      const { data } = res;
+      this.doctorList = data.data.data || [];
+    },
     handleSelectionChange(val) {
       // table组件选中事件,
       this.multipleSelection = val;
@@ -479,6 +412,7 @@ export default {
     onLoad() {
       this.getList();
       this.getGridList(); // 获取人员列类别
+      this.getDoctorList();
       /* const StringList = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
       const quanzhongList = [7, 5, 3, 2, 6, 1, 4, 9];
       const addList = [];
@@ -516,7 +450,7 @@ export default {
       if (this.form.endTime) {
         sendData.endTime = `${this.form.endTime} 23:59:59`;
       }
-      const res = await this.$api.sunFollow.getPositiveRecordListPage(sendData);
+      const res = await this.$api.sunFollow.getHandReportList(sendData);
       const { data } = res.data;
       console.log(data);
       if (data) {
@@ -556,27 +490,35 @@ export default {
         this.expandData.clientId = row.clientId;
         this.expandData.pageNo = 1;
         this.excuteType = type;
-        this.getReoprtList(type).then(() => {
+        this.getReoprtList(type, row).then(() => {
           this.$refs.table.toggleRowExpansion(row);
         });
       }
     },
-    getReoprtList(type) { // 真实接口
+    getReoprtList(type, row) { // 真实接口
       this.expandData.list = [];
       this.loading = true;
       let Type = '';
       let fn = '';
+      let params;
       if (type) { Type = type; } else { Type = this.excuteType; }
       if (Type === 1) {
         fn = 'getWaitingTrackingItemList';
+        params = {
+          pageNo: this.expandData.pageNo,
+          pageSize: this.expandData.pageSize,
+          clientId: this.expandData.clientId,
+        };
       } else if (Type === 2) {
-        fn = 'getRecordTrackingItemList';
+        fn = 'getTrankingRecord';
+        params = {
+          reportId: row.id,
+          recordType: 2,
+          pageNo: this.expandData.pageNo,
+          pageSize: this.expandData.pageSize,
+        };
       }
-      return this.$api.sunFollow[fn]({
-        pageNo: this.expandData.pageNo,
-        pageSize: this.expandData.pageSize,
-        clientId: this.expandData.clientId,
-      }).then(({ data }) => {
+      return this.$api.sunFollow[fn](params).then(({ data }) => {
         console.log(data);
         /* if (Type === 2) {
           this.expandData.list = data.data.data;
@@ -779,10 +721,7 @@ export default {
   }
 }
   .warnRed{
-    border: 1px solid #F33D21;
-    border-radius: 50px;color: #F33D21;
-    font-size: 12px;
-    padding: 2px 9px;
+    color: #F33D21;
   }
   .warnYellow{
     border: 1px solid #FA912B;
