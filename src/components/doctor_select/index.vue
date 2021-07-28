@@ -305,6 +305,10 @@ export default {
     visible: Boolean,
     clientId: String,
     isSunEnter: Boolean,
+    type: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {
