@@ -90,7 +90,7 @@
                   <img class="qushi" style="width:24px;height:24px;vertical-align: bottom;"
                   v-if="scope.row.judageValue === 1" src="@/assets/images/wrise.png" alt="">
                   <img class="qushi" style="width:24px;height:24px;vertical-align: bottom;"
-                  v-if="scope.row.judageValue === -1" src="@/assets/images/wrise.png" alt="">
+                  v-if="scope.row.judageValue === -1" src="@/assets/images/wdecline.png" alt="">
                 </span>
               </template>
             </el-table-column>

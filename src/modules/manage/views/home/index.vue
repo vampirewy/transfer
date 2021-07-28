@@ -278,11 +278,11 @@
             {{ scope.row.clientName }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="随访方式" prop="planWayName" max-width="200" show-overflow-tooltip>
+        <el-table-column label="随访形式" prop="planWayName" max-width="200" show-overflow-tooltip>
         </el-table-column>
-        <el-table-column label="随访标题" prop="planContent" max-width="200" show-overflow-tooltip>
+        <el-table-column label="随访提示" prop="planContent" max-width="200" show-overflow-tooltip>
         </el-table-column>
-        <el-table-column label="随访提示" prop="planTitle" max-width="200" show-overflow-tooltip>
+        <el-table-column label="随访标题" prop="planTitle" max-width="200" show-overflow-tooltip>
         </el-table-column>
         <el-table-column label="随访问卷" prop="templateQuestionName"
         max-width="200" show-overflow-tooltip>

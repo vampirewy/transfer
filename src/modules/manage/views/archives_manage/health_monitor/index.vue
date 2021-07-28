@@ -815,7 +815,7 @@ const COLUMNS = {
     { label: '检测项目', prop: 'projectName' },
     { label: '检测结果', prop: 'result' },
     { label: '计量单位', prop: 'unit' },
-    { label: '备注', prop: 'result' },
+    { label: '备注', prop: 'remark' },
   ],
 };
 

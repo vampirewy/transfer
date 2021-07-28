@@ -43,6 +43,7 @@
                 value-format="yyyy-MM-dd"
                 placeholder="请选择"
                 style="width: 100%"
+                @change="reportTime"
               ></el-date-picker>
             </el-form-item>
         </el-col>
@@ -61,7 +62,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-            <el-form-item label="参检团队" prop="workUnitName">
+            <el-form-item label="参检团队" >
               <el-input
                 v-model="formData.workUnitName"
                 placeholder="请输入"
@@ -77,7 +78,7 @@
                 :max-date="new Date()"
                 type="date"
                 :disabled="formData.reportState === 2"
-                value-format="yyyy-MM-dd HH:mm:ss"
+                value-format="yyyy-MM-dd"
                 placeholder="请选择"
                 style="width: 100%"
               ></el-date-picker>
@@ -291,7 +292,7 @@
         <el-popover
           ref="abnormalPopover"
           placement="bottom-end"
-          width="650"
+          width="720"
           trigger="click"
           @show="abnormalModalVisible = true"
           @hide="handleAbnormalClose">
@@ -373,6 +374,7 @@
 import abnormal from './abnormal.vue';
 import { MAX_PAGESIZE } from '~/src/libs/util/index';
 import physicalExamination from './physicalExamination.vue';
+import * as dayjs from 'dayjs';
 
 export default {
   name: 'Physical',
@@ -429,9 +431,9 @@ export default {
         zjDate: [
           { required: true, message: '请选择总检日期', trigger: 'blur' },
         ],
-        workUnitName: [
-          { required: true, message: '请选择填写参检团队', trigger: 'blur' },
-        ],
+        // workUnitName: [
+        //   { required: true, message: '请选择填写参检团队', trigger: 'blur' },
+        // ],
       },
       infoSource: {
         clientNameCheck: '',
@@ -461,6 +463,10 @@ export default {
             });
           }
         });
+        if (this.formData.reportState === 2) {
+          this.rules.zjDate[0].required = false;
+          this.formData.zjDate = '';
+        }
       },
       deep: true,
     },
@@ -470,8 +476,19 @@ export default {
     this.queryLibrary();
   },
   methods: {
+    reportTime() {
+      // console.log(this.formData.reportDate);
+      if (this.formData.reportState !== 2) {
+        this.formData.zjDate = dayjs(this.formData.reportDate).format('YYYY-MM-DD HH:mm:ss');
+        // dayjs(this.formData.reportDate).format(
+        //   'yyyy-MM-dd',
+        // );
+        // console.log(this.formData.zjDate);
+      }
+    },
     isreportState() {
       if (this.formData.reportState === 2) {
+        this.rules.zjDate[0].required = false;
         this.formData.zjDate = '';
       }
     },

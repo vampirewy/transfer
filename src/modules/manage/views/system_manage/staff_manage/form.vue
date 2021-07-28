@@ -187,6 +187,19 @@ export default {
     },
   },
   data() {
+    const validateMobile = (rule, value, callback) => {
+      if (value !== '') {
+        const MOBILE_REG = /^1[3|4|5|6|7|8|9][0-9]{9}$/;
+        if (!MOBILE_REG.test(value)) {
+          callback(new Error('请输入正确的手机号码'));
+          return;
+        }
+      } else if (value === '') {
+        callback(new Error('手机号码不能为空'));
+        return;
+      }
+      callback();
+    };
     return {
       staffForm: {
         id: this.id,
@@ -209,7 +222,12 @@ export default {
         sex: [{ required: true, message: '性别不能为空' }],
         roleId: [{ required: true, message: '角色不能为空' }],
         password: [{ required: true, message: '登录不能为空' }],
-        contact: [{ required: true, message: '手机号码不能为空' }],
+        contact: [
+          { required: true,
+            trigger: 'blur',
+            validator: validateMobile,
+          },
+        ],
         dataRange: [{ required: true, message: '数据范围不能为空' }],
         department: [{ required: true, message: '科室/部门不能为空' }],
         workUnitIdList: [{ required: true, message: '单位不能为空' }],
