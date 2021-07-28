@@ -61,14 +61,16 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="预警分类" prop="trackingLv">
+          <el-form-item label="阳性分级" prop="trackingLv">
             <el-select
                     :disabled="detail"
-                    v-model="staffForm.trackingLv"
+                    v-model="staffForm.positiveLevel"
                     placeholder="请选择"
             >
-              <el-option label="红色预警" :value="1"></el-option>
-              <el-option label="橙色预警" :value="2"></el-option>
+              <el-option label="阳性一级" :value="1"></el-option>
+              <el-option label="阳性二级" :value="2"></el-option>
+              <el-option label="阳性三级" :value="3"></el-option>
+              <el-option label="阳性四级" :value="4"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
