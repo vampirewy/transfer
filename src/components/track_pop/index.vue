@@ -65,9 +65,15 @@ export default {
         this.$message.success('操作成功');
       }
       this.$emit('cancel', true);
+      this.resetParams();
     },
     cancel() {
       this.$emit('cancel');
+      this.resetParams();
+    },
+    resetParams() {
+      this.form.result = 1;
+      this.form.trackRecord = '';
     },
     async getTrankingRequest() {
       const params = {
