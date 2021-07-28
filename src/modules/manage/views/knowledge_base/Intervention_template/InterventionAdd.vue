@@ -319,6 +319,7 @@ export default {
       if (TabTitle === 'Constitution') {
         this.Constitution = data;
       }
+      console.log(this.Minterm);
     },
     TabbarBtn(index) {
       this.Tabactive = index;
@@ -384,6 +385,23 @@ export default {
       };
       if (this.Minterm.length !== 0) {
         for (let i = 0; i < this.Minterm.length; i++) {
+          if (this.Minterm[i].judgeRelation) {
+            if (this.Minterm[i].judgeRelation < 5) {
+              console.log(this.Minterm[i].itemValue);
+              if (!this.Minterm[i].itemValue) {
+                return this.$message.warning('请填写条件的值');
+              }
+            } else {
+              if (!this.Minterm[i].minValue) {
+                return this.$message.warning('请填写低值');
+              }
+              if (!this.Minterm[i].maxValue) {
+                return this.$message.warning('请填写高值');
+              }
+            }
+          } else {
+            return this.$message.warning('请补全小项名称');
+          }
           const prms = {
             sectionName: this.Minterm[i].sectionName,
             itemName: this.Minterm[i].itemName,
@@ -396,7 +414,6 @@ export default {
           jsons.interveneTemplateItemRequestList.push(prms);
         }
       }
-      console.log(jsons.interveneTemplateItemRequestList, '小项123123213');
       if (this.Category.length !== 0) {
         for (let i = 0; i < this.Category.length; i++) {
           const prms = {

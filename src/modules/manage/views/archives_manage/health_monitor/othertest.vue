@@ -121,7 +121,7 @@
 
       <div class="medicate-info mt20" style="margin-top:0">
         <div class="row">
-            <el-form-item label="检查描述" prop="ingrenient" style="width:100%">
+            <el-form-item label="备注" prop="ingrenient" style="width:100%">
               <el-input
                 type="textarea"
                 :rows="5"
@@ -504,6 +504,7 @@ export default {
           json.result = val.consequences;
           json.healthDataItemId = val.id;
           json.detectDate = this.infoSource.startDate;
+          json.remark = this.infoSource.ingrenient;
           arrars.push(json);
         } else {
           iscss = false;

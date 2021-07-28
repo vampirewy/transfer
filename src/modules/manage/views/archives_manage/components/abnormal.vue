@@ -170,7 +170,7 @@ export default {
     }
   }
   .buttons {
-    text-align: right;
+    text-align: center;
     margin-top: 20px;
     .el-button {
       width: 80px;

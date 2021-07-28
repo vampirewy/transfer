@@ -204,9 +204,13 @@ export default {
           formData.reportDate = dayjs(formData.reportDate).format(
             'YYYY-MM-DD HH:mm:ss',
           );
-          formData.zjDate = dayjs(formData.zjDate).format(
-            'YYYY-MM-DD HH:mm:ss',
-          );
+          console.log(formData.zjDate);
+          if (formData.zjDate) {
+            formData.zjDate = dayjs(formData.zjDate).format(
+              'YYYY-MM-DD HH:mm:ss',
+            );
+          }
+          console.log(formData.zjDate);
           const arr = [];
           formData.sectionConclusionList.forEach((item) => {
             if (item.itemList.length > 0) {

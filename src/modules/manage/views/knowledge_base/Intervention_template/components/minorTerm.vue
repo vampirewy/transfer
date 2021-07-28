@@ -127,10 +127,17 @@
                   <span v-else-if="item.label === '条件的值'">
                     <el-input placeholder=""
                     v-model="scope.row[item.prop]"
-                    :disabled="dataSource.list[scope.$index].judgeRelation > 4 ? true:false"
+                    :disabled="dataSource.list[scope.$index].judgeRelation === null ||
+                    dataSource.list[scope.$index].judgeRelation > 4 ? true:false"
                     onkeyup = "value=value.replace(/[^\d.]/g,'')"
                     >
                     </el-input>
+                    <!-- <el-input v-else placeholder=""
+                    v-model="scope.row[item.prop]"
+                    :disabled="false"
+                    onkeyup = "value=value.replace(/[^\d.]/g,'')"
+                    >
+                    </el-input> -->
                   </span>
                   <span v-else-if="item.label === '低值'">
                     <el-input placeholder=""
@@ -419,6 +426,7 @@ export default {
       this.$forceUpdate();
     },
     ChangeestatesJudg(index) {
+      console.log(this.dataSource.list[index].judgeRelation);
       if (this.dataSource.list[index].judgeRelation > 4) {
         this.dataSource.list[index].itemValue = '';
       } else {
@@ -552,7 +560,7 @@ export default {
         for (let i = 0; i < this.detectionInfo.length; i++) {
           this.detectionInfo[i].conditionRelation = this.formData.state;
           if (NameType === 'Minterm') {
-            this.detectionInfo[i].judgeRelation = '';
+            this.detectionInfo[i].judgeRelation = null;
           }
         }
         this.$refs.userPopovers.doClose();

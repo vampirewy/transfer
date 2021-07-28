@@ -287,20 +287,20 @@ export default {
     back() {
       this.$parent.viewIndex = 1;
     },
-    addressChange(v) {
-      if (v) {
-        const params = {
-          name: v,
-        };
-        console.log(v);
-        this.$api.dietProgrammeInterface.judgmentNameRepeat(params).then((res) => {
-          const { data } = res;
-          if (data.success) {
-            this.$message.success('操作成功');
-          }
-        });
-      }
-    },
+    // addressChange(v) {
+    //   if (v) {
+    //     const params = {
+    //       name: v,
+    //     };
+    //     console.log(v);
+    //     this.$api.dietProgrammeInterface.judgmentNameRepeat(params).then((res) => {
+    //       const { data } = res;
+    //       if (data.success) {
+    //         // this.$message.success('操作成功');
+    //       }
+    //     });
+    //   }
+    // },
     preserve() {
       // for (let i = 1; i < 8; i++) {
       //   console.log(['this.checked' + i]);
