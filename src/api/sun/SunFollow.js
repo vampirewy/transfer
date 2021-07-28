@@ -29,6 +29,50 @@ class SunFollow extends BaseModule {
   getClientRecordList(data = {}) {
     return this.post('/tracking_record/get_tracking_record_list', data);
   }
+  // (二开)采集系统 - 首次跟踪/跟踪记录
+  getSystemCollectList(data = {}) {
+    return this.post('/positive_tracking_new/get_collect_data_list_page', data);
+  }
+  // (二开)手动录入 - 首次跟踪/跟踪记录
+  getHandReportList(data = {}) {
+    return this.post('/positive_tracking_new/get_first_positive_list_page', data);
+  }
+  // (二开）首次跟踪-手动录入-新增
+  addResult(data = {}) {
+    return this.post('/positive_tracking_new/save', data);
+  }
+  // (二开) 保存跟踪回访
+  saveVisitRecard(data = {}) {
+    return this.post('/positive_tracking_new/save_positive_return', data);
+  }
+  // (二开)分配任务
+  taskAssignment(data = {}) {
+    return this.post('/positive_tracking_new/task_assignment', data);
+  }
+  // (二开)跟踪计划
+  getPositiveTaskList(data = {}) {
+    return this.post('/positive_tracking_new/get_positive_return_task_list_page', data);
+  }
+  // (二开)跟踪-获取异常指标信息
+  getAbnolmalIndex(data = {}) {
+    return this.post('/positive_tracking_new/getAbnormalIndex', data);
+  }
+  // (二开)跟踪-获取主检异常信息
+  getAbnormalInfo(data = {}) {
+    return this.post('/positive_tracking_new/getAbnormalInfo', data);
+  }
+  // (二开)跟踪-历史阳性
+  getPastYearsAbnormalInfo(data = {}) {
+    return this.post('/positive_tracking_new/getPastYearsAbnormalInfo', data);
+  }
+  // (二开)阳性分级
+  getPositiveLevel() {
+    return this.get('/system_param_value/POSITIVE');
+  }
+  // (二开)跟踪方式
+  getTrackMethod() {
+    return this.get('/system_param_value/TRACKMETHOD');
+  }
   // 首次跟踪列表 - 跟踪记录切换阳性等级
   updateReportLv(data = {}) {
     return this.post('/positive_tracking/update_report_lv', data);
@@ -103,7 +147,7 @@ class SunFollow extends BaseModule {
    */
   saveTranking(data = {}) {
     return this.post(
-      'http://192.168.137.12:3000/mock/63/positive_tracking_new/save_result',
+      '/positive_tracking_new/save_result',
       data,
     );
   }
@@ -126,7 +170,7 @@ class SunFollow extends BaseModule {
 
   getTrankingRecord(data = {}) {
     return this.post(
-      'http://192.168.137.12:3000/mock/63/positive_tracking_new/get_track_record_list_page',
+      '/positive_tracking_new/get_track_record_list_page',
       data,
     );
   }
