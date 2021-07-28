@@ -363,15 +363,7 @@ export default {
           sendData.isCloseCase = ev; // 是否结案
           this.$api.sunFollow.saveVisitRecard(sendData).then(() => {
             this.$message.success('操作成功');
-            if (this.$route.params.sourceType === '1') {
-              this.$router.push({
-                path: '/first_follow',
-              });
-            } else if (this.$route.params.sourceType === '2') {
-              this.$router.push({
-                path: '/follow_task',
-              });
-            }
+            this.$router.go(-1);
           });
         }
       });
