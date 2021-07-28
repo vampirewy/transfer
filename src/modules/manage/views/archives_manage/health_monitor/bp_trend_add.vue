@@ -694,18 +694,18 @@ export default {
         });
       }
       if (this.id === 3) {
-        if (!this.infoSource.sportTime) {
-          return this.$message.warning('运动时间不能为空');
-        }
-        if (!this.infoSource.sportDistance) {
-          return this.$message.warning('运动路程不能为空');
-        }
+        // if (!this.infoSource.sportTime) {
+        //   return this.$message.warning('运动时间不能为空');
+        // }
+        // if (!this.infoSource.sportDistance) {
+        //   return this.$message.warning('运动路程不能为空');
+        // }
         if (!this.infoSource.steps) {
           return this.$message.warning('运动步数不能为空');
         }
-        if (!this.infoSource.kcal) {
-          return this.$message.warning('运动消耗不能为空');
-        }
+        // if (!this.infoSource.kcal) {
+        //   return this.$message.warning('运动消耗不能为空');
+        // }
         if (!this.infoSource.startDate) {
           return this.$message.warning('请填写时间');
         }

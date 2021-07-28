@@ -194,6 +194,12 @@
         <el-table-column label="项目名称" prop="itemName" max-width="200" show-overflow-tooltip>
         </el-table-column>
         <el-table-column label="项目结果" prop="itemValue" max-width="200" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span v-if="scope.row.reportLv === 1"
+            style="color:red">{{scope.row.itemValue}}</span>
+            <span v-if="scope.row.reportLv === 2"
+            style="color:#fa912b">{{scope.row.itemValue}}</span>
+          </template>
         </el-table-column>
         <el-table-column label="上报时间" prop="reportDate" max-width="200" show-overflow-tooltip>
         </el-table-column>
