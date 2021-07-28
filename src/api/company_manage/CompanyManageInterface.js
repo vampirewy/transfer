@@ -27,6 +27,11 @@ class CompanyManageInterface extends BaseModule {
   updateWorkUnit(data = {}) {
     return this.post('/work_unit/save', data);
   }
+
+  // 所有企业
+  getWorkUnitList(data = {}) {
+    return this.get('/work_unit/get_work_unit_list', data);
+  }
 }
 
 export default new CompanyManageInterface();
