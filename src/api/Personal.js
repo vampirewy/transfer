@@ -144,7 +144,7 @@ class Personal extends BaseModule {
    * @property {number} clientCount 负责客户数
    */
   getCustomerNumberAndRank() {
-    return this.get('http://192.168.137.12:3000/mock/63/user/getClientData');
+    return this.get('/user/getClientData');
   }
   /**
    * @description:  工作台（今日工作任务/工作记录） --采集系统跟踪

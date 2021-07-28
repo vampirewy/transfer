@@ -20,7 +20,7 @@
       <div class="info-block__item">
         <p class="info-block__title">团队内排名</p>
         <p class="info-block__content">
-          {{ userData.teamCount }}/{{ userData.teamOrder }}
+          {{ userData.teamOrder }}/{{ userData.teamCount }}
         </p>
       </div>
     </section>
