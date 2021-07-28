@@ -72,11 +72,6 @@
                 v-if="getAccess('first_follow_export')"
         ><img src="@/assets/images/common/export.png" />导出</el-button> -->
         </div>
-        <el-radio-group v-model="form.reportLv" @change="onSearch" style="margin: 16px 0">
-          <el-radio :label="''">全部</el-radio>
-          <el-radio :label="1">红色预警</el-radio>
-          <el-radio :label="2">橙色预警</el-radio>
-        </el-radio-group>
       </div>
     </div>
   <div class="user-follow">
