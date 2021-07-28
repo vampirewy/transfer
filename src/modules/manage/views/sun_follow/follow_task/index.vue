@@ -15,34 +15,34 @@
               </span>
         </div>
         <div>
-          <span>客户性别：</span>
+          <span>阳性分级：</span>
           <el-select
-                  v-model="form.gender"
+                  v-model="form.positiveLevel"
                   placeholder="请选择"
                   style="width: 140px"
                   clearable
           >
-            <el-option label="男" value="1" key="1"></el-option>
-            <el-option label="女" value="2" key="2"></el-option>
+            <el-option :label="item.name"
+            :value="item.paramValue" :key="index" v-for="(item, index) in levelList"></el-option>
           </el-select>
         </div>
         <div>
-          <span>上报时间：</span>
+          <span>计划时间：</span>
           <el-date-picker
-                  v-model="form.startReportDate"
+                  v-model="form.minPlanDate"
                   type="date"
                   value-format="yyyy-MM-dd"
-                  :max-date="form.endReportDate || new Date()"
+                  :max-date="form.maxPlanDate || new Date()"
                   placeholder="开始时间"
                   style="width: 140px"
           >
           </el-date-picker>
           <span class="timing">-</span>
           <el-date-picker
-                  v-model="form.endReportDate"
+                  v-model="form.maxPlanDate"
                   type="date"
                   value-format="yyyy-MM-dd"
-                  :min-date="form.startReportDate"
+                  :min-date="form.minPlanDate"
                   :max-date="new Date()"
                   placeholder="结束时间"
                   style="width: 140px"
@@ -68,34 +68,22 @@
   <div v-if="!isTrue" class="searchCondition">
     <div class="searchLeft" style="padding-left:5px;">
       <div>
-        <span>人员类别：</span>
-        <el-select
-                v-model="form.gridId"
-                placeholder="请选择"
-                style="width: 140px"
-                clearable
-        >
-          <el-option :label="item.gridName" :value="item.id" v-for="(item, index) in gridList"
-                     :key="index"></el-option>
-        </el-select>
-      </div>
-      <div>
-        <span>跟踪时间：</span>
+        <span>主检时间：</span>
         <el-date-picker
-                v-model="form.startTrackingDate"
+                v-model="form.minReportDate"
                 type="date"
                 value-format="yyyy-MM-dd"
-                :max-date="form.endTrackingDate"
+                :max-date="form.maxReportDate"
                 placeholder="开始时间"
                 style="width: 140px"
         >
         </el-date-picker>
         <span class="timing">-</span>
         <el-date-picker
-                v-model="form.endTrackingDate"
+                v-model="form.maxReportDate"
                 type="date"
                 value-format="yyyy-MM-dd"
-                :min-date="form.startTrackingDate"
+                :min-date="form.minReportDate"
                 placeholder="结束时间"
                 style="width: 140px"
         >
@@ -139,19 +127,21 @@
               @expand-change="handleExpandChange">
       <el-table-column type="expand" width="1" class-name="hide-expand-column">
         <el-table :data="expandData.list" class="expand-table" align="center">
-          <el-table-column label="跟踪项目" prop="itemName" min-width="90px" show-overflow-tooltip>
+          <el-table-column
+          label="跟踪时间"
+          prop="trackDate"
+          min-width="90px"
+          show-overflow-tooltip
+          >
             <template slot-scope="scope">
-              <span>{{ scope.row.itemName | getResult}}</span>
+              <span>{{ scope.row.trackDate | getResult}}</span>
             </template>
           </el-table-column>
           <el-table-column
-            label="结果"
-            prop="result"
-            min-width="80px">
+            label="跟踪人"
+            prop="visitDoctorName">
             <template slot-scope="scope">
-              <span :class="scope.row.reportLv === 1 ? 'warnRed' : 'warnYellow'">
-                {{ scope.row.itemValue | getResult }}
-              </span>
+              <span>{{ scope.row.visitDoctorName | getResult }}</span>
             </template>
           </el-table-column>
           <!--<el-table-column label="上报科室" prop="reportDepartment" show-overflow-tooltip>
@@ -164,54 +154,20 @@
               <span>{{ scope.row.reportUserName | getResult}}</span>
             </template>
           </el-table-column>-->
-          <el-table-column label="上报时间" prop="reportDate" min-width="90px" show-overflow-tooltip>
+          <el-table-column label="跟踪方式" prop="trackWay"
+                           width="90px" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{ scope.row.reportDate | getResult}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="最近跟踪" prop="nearestTrackingDate"
-                           min-width="90px" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <span>{{ scope.row.nearestTrackingDate | getResult}}</span>
+              <span>{{ scope.row.trackWay | getResult}}</span>
             </template>
           </el-table-column>
            <el-table-column
-            label="最近结果"
+            label="跟踪结果"
             prop="result"
             min-width="80px">
             <template slot-scope="scope">
               <span>
-                {{ scope.row.stateName | getResult }}
+                {{ scope.row.result | getResult }}
               </span>
-            </template>
-          </el-table-column>
-          <el-table-column label="下次跟踪" prop="nextTrackingDate"
-                           min-width="90px" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <span>{{ scope.row.nextTrackingDate | getResult}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="跟踪方式" prop="nextTrackingDate"
-                           width="90px" show-overflow-tooltip>
-            <template slot-scope="scope">
-              <span>{{ scope.row.trackingWayName | getResult}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="操作"
-            prop="planContent"
-            min-width="80">
-            <template slot-scope="scope">
-              <el-button v-if="excuteType === 1 && getAccess('follow_task_follow')"
-                      @click="handleTask(scope.row)"
-                      type="text"
-                      size="small"
-              >跟踪</el-button>
-              <el-button v-if="excuteType === 2 && getAccess('follow_record_view')"
-                      @click="handleView(scope.row)"
-                      type="text"
-                      size="small"
-              >查看</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -231,9 +187,14 @@
       </el-table-column>
 
       <!--<el-table-column type="selection" width="40"></el-table-column>-->
-      <el-table-column prop="clientNo" label="客户编号" min-width="110px" show-overflow-tooltip>
+      <el-table-column prop="clientCode" label="客户编号" min-width="110px" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{scope.row.clientNo | getResult}}</span>
+          <span>{{scope.row.clientCode | getResult}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="reportNo" label="体检编号" min-width="110px" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{ scope.row.reportNo | getResult }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -258,14 +219,14 @@
           <span>{{ scope.row.age | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="isTrackingNum" label="待跟踪项目" show-overflow-tooltip>
+      <!--<el-table-column prop="isTrackingNum" label="待跟踪项目" show-overflow-tooltip>
         <template slot-scope="scope">
           <el-button type="text"
                      @click="expandsHandle(scope.row, 1)" style="color: #3154AC;font-size: 14px">
             {{scope.row.isTrackingNum | getResult}}</el-button>
         </template>
       </el-table-column>
-      <!--<el-table-column prop="earliestReportDate" label="最早上报"
+      <el-table-column prop="earliestReportDate" label="最早上报"
       min-width="105px" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{ scope.row.earliestReportDate | getResult}}</span>
@@ -276,44 +237,64 @@
         <template slot-scope="scope">
           <span>{{ scope.row.nearestReportDate | getResult}}</span>
         </template>
-      </el-table-column>
-      <el-table-column prop="nearestTrackingDate" label="最近跟踪" show-overflow-tooltip>
-        <template slot-scope="scope">
-          <span>{{ scope.row.nearestTrackingDate | getResult}}</span>
-        </template>
       </el-table-column>-->
-      <el-table-column prop="nextTrackingDate" label="下次跟踪" show-overflow-tooltip>
+      <el-table-column prop="compony" label="所属企业" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.nextTrackingDate | getResult}}</span>
+          <span>{{ scope.row.workUnitName | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="nextTrackingWayName" label="下次跟踪方式" show-overflow-tooltip>
+      <el-table-column prop="result" label="异常结果" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.nextTrackingWayName | getResult}}</span>
+          <span>{{ scope.row.abnormalResult | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="nextTrackingTip" label="下次跟踪提示" show-overflow-tooltip>
+      <el-table-column prop="levelName" label="阳性分级" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.nextTrackingTip | getResult}}</span>
+          <span>{{ scope.row.levelName | getResult }}</span>
         </template>
       </el-table-column>
-      <!--<el-table-column prop="nextTrackingDate" label="*跟踪方式" show-overflow-tooltip>
+      <el-table-column prop="zjDate" label="主检时间" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.nextTrackingDate | getResult}}</span>
+          <span>{{ scope.row.zjDate | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="nextTrackingDate" label="*跟踪提示" show-overflow-tooltip>
+      <el-table-column prop="createdTime" label="上报时间" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ scope.row.nextTrackingDate | getResult}}</span>
+          <span>{{ scope.row.createdTime | getResult}}</span>
         </template>
-      </el-table-column>-->
-      <!--<el-table-column prop="trackingRecordNum" label="跟踪记录" width="90px" show-overflow-tooltip>
+      </el-table-column>
+      <el-table-column prop="trackDate" label="最近跟踪" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{ scope.row.trackDate | getResult}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="doctorName" label="计划创建人" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{ scope.row.doctorName | getResult }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="nextTrackDate" label="跟踪计划" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{ scope.row.nextTrackDate | getResult}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="trackWay" label="跟踪方式" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{ scope.row.trackWay | getResult }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="trackTip" label="跟踪提示" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span>{{ scope.row.trackTip | getResult }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="trackRecord" label="跟踪记录" width="90px" show-overflow-tooltip>
         <template slot-scope="scope">
           <el-button type="text"
                      @click="expandsHandle(scope.row, 2)" style="color: #36BF2F;font-size: 14px">
-            {{scope.row.trackingRecordNum | getResult}}</el-button>
+            {{scope.row.trackRecord | getResult}}</el-button>
         </template>
-      </el-table-column>-->
+      </el-table-column>
       <el-table-column label="操作" width="80">
         <template slot-scope="scope">
           <el-button
@@ -350,13 +331,12 @@ export default {
       isTrue: true,
       form: {
         keywords: '', // 关键字
-        gender: '', // 性别
-        startReportDate: '',
-        endReportDate: '',
-        gridId: '', // 人员类别
-        startTrackingDate: '',
-        endTrackingDate: '',
-        reportLv: '',
+        minPlanDate: '',
+        maxPlanDate: '',
+        minReportDate: '',
+        maxReportDate: '',
+        searchType: 1,
+        positiveLevel: '',
       },
       abnormalModalVisible: false, // 异常列表弹窗
       selectPlanuser: [],
@@ -364,7 +344,7 @@ export default {
       selectAbnormal: [],
       gridList: [], // 人员类别下拉框
       expands: [],
-      getRowKeys: row => row.clientId,
+      getRowKeys: row => row.id,
       expandData: {
         clientId: '',
         pageNo: 1,
@@ -397,6 +377,7 @@ export default {
         pageSize: 1,
       },
       multipleSelection: [], // 当前页选中的数据
+      levelList: [],
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -405,6 +386,11 @@ export default {
     });
   },
   methods: {
+    async getLevelList() {
+      const res = await this.$api.sunFollow.getPositiveLevel();
+      const { data } = res;
+      this.levelList = data.data || [];
+    },
     // 设置选中的方法
     handleSelectionChange(val) {
       // table组件选中事件,
@@ -413,6 +399,7 @@ export default {
     onLoad() {
       this.getList();
       this.getGridList(); // 获取人员列类别
+      this.getLevelList();
     },
     // 关闭异常列表
     handleAbnormalSelectChange(dataList) {
@@ -452,19 +439,19 @@ export default {
     async getList() {
       const sendData = Object.assign({}, this.form, { pageNo: this.table.pageNo,
         pageSize: this.table.pageSize });
-      if (this.form.startReportDate) {
-        sendData.startReportDate = `${this.form.startReportDate} 00:00:00`;
+      if (this.form.minPlanDate) {
+        sendData.minPlanDate = `${this.form.minPlanDate} 00:00:00`;
       }
-      if (this.form.endReportDate) {
-        sendData.endReportDate = `${this.form.endReportDate} 23:59:59`;
+      if (this.form.maxPlanDate) {
+        sendData.maxPlanDate = `${this.form.maxPlanDate} 23:59:59`;
       }
-      if (this.form.startTrackingDate) {
-        sendData.startTrackingDate = `${this.form.startTrackingDate} 00:00:00`;
+      if (this.form.minReportDate) {
+        sendData.minReportDate = `${this.form.minReportDate} 00:00:00`;
       }
-      if (this.form.endTrackingDate) {
-        sendData.endTrackingDate = `${this.form.endTrackingDate} 23:59:59`;
+      if (this.form.maxReportDate) {
+        sendData.maxReportDate = `${this.form.maxReportDate} 23:59:59`;
       }
-      const res = await this.$api.sunFollow.getPositiveTaskdListPage(sendData);
+      const res = await this.$api.sunFollow.getPositiveTaskList(sendData);
       const { data } = res.data;
       console.log(data);
       if (data) {
@@ -498,14 +485,13 @@ export default {
           this.$refs.table.toggleRowExpansion(data);
         }
       });
-      console.log(row);
       if (this.expands.includes(row)) {
         this.$refs.table.toggleRowExpansion(row);
       } else {
         this.expandData.clientId = row.clientId;
         this.expandData.pageNo = 1;
         this.excuteType = type;
-        this.getReoprtList(type).then(() => {
+        this.getReoprtList(type, row).then(() => {
           this.$refs.table.toggleRowExpansion(row);
         });
       }
@@ -553,22 +539,31 @@ export default {
       this.table.list = [...this.table.list];
       this.$forceUpdate();
     },*/
-    getReoprtList(type) { // 真实接口
+    getReoprtList(type, row) { // 真实接口
       this.expandData.list = [];
       this.loading = true;
       let Type = '';
       let fn = '';
+      let params;
       if (type) { Type = type; } else { Type = this.excuteType; }
       if (Type === 1) {
         fn = 'getWaitingTrackingItemList';
+        params = {
+          pageNo: this.expandData.pageNo,
+          pageSize: this.expandData.pageSize,
+          clientId: this.expandData.clientId,
+        };
       } else if (Type === 2) {
-        fn = 'getRecordTrackingItemList';
+        // fn = 'getRecordTrackingItemList';
+        fn = 'getTrankingRecord';
+        params = {
+          reportId: row.id,
+          recordType: 1,
+          pageNo: this.expandData.pageNo,
+          pageSize: this.expandData.pageSize,
+        };
       }
-      return this.$api.sunFollow[fn]({
-        pageNo: this.expandData.pageNo,
-        pageSize: this.expandData.pageSize,
-        clientId: this.expandData.clientId,
-      }).then(({ data }) => {
+      return this.$api.sunFollow[fn](params).then(({ data }) => {
         console.log(data);
         /* if (Type === 2) {
           this.expandData.list = data.data.data;
@@ -597,6 +592,10 @@ export default {
     handleTask(row) {
       this.$router.push({
         path: `/first_follow_do/${row.clientId}/2`,
+        query: {
+          from: 'task',
+          reportId: row.id,
+        },
       });
     },
     // 查看
