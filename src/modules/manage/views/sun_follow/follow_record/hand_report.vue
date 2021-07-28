@@ -42,11 +42,6 @@
             <img src="@/assets/images/common/topsearchblue.png" alt="">
           </div>
           <div class="resetAll" @click="onReset">重置</div>
-          <div class="more" v-if="isTrue"  @click="upMore">
-            <span>></span>
-            展开更多</div>
-          <!-- <div class="more noMore" v-else @click="upMore">
-            <span>></span>收起筛选</div> -->
         </div>
       </div>
     </div>
@@ -65,11 +60,6 @@
         ><img src="@/assets/images/common/export.png" />导出</el-button>-->
         </div>
         <div style="margin: 16px 0">
-        <el-radio-group v-model="form.reportLv" @change="onSearch">
-          <el-radio :label="''">全部</el-radio>
-          <el-radio :label="1">红色预警</el-radio>
-          <el-radio :label="2">橙色预警</el-radio>
-        </el-radio-group>
         </div>
       </div>
     </div>

@@ -94,12 +94,9 @@
     <div class="topbottomborder"></div>
     <div class="divRightTitleDiv">
       <!-- <div class="divRightTitle"><span>|</span>客户池</div> -->
-      <div style="text-align: right;margin: 16px 0">
-        <el-radio-group v-model="form.reportLv" @change="onSearch">
-          <el-radio :label="''">全部</el-radio>
-          <el-radio :label="1">红色预警</el-radio>
-          <el-radio :label="2">橙色预警</el-radio>
-        </el-radio-group>
+      <div style="display: flex;justify-content: space-between;align-items: center;">
+        <div style="margin: 16px 0">
+        </div>
       </div>
     </div>
   <div class="user-follow">
