@@ -12,7 +12,7 @@
       <div class="history" v-for="item in formList" :key="item.id">
         <div class="history-top">
           <div class="slot"></div>
-          <p><span>{{item.trackingDate ? item.trackingDate.split(' ')[0] : '' }}</span></p>
+          <p><span>{{item.trackingDate ? item.trackingDate : '' }}</span></p>
         </div>
         <div class="keywords">
           <p v-for="(itemChild, itemIndex) in item.keywords" :key="itemIndex">
@@ -40,11 +40,11 @@
           </div>
         </div>
         <div class="history-bottom">
-          <div>【跟踪记录】{{item.trackingRemark}}</div>
+          <div>【跟踪记录】{{item.trackingRemark | getResult}}</div>
         </div>
         <div class="history-bottom">
           <div>【下次回访】{{item.nextTrackingDate ? item.nextTrackingDate.split(' ')[0] : '' }}
-            ({{item.nextTrackingDay | getResult}}天后)
+            <!-- ({{item.nextTrackingDay | getResult}}天后) -->
             ({{item.nextTrackingWayName | getResult}}回访)</div>
           <img @click="viewNextFollow(item)" src="@/assets/images/sunFollow/followRight.png"/>
         </div>
