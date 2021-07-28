@@ -81,3 +81,13 @@ export const getResultDataRange = (val) => {
   }
   return val;
 };
+
+export const getReportState = (val) => {
+  if (val === null) {
+    return '-';
+  } else if (val === 1) {
+    return '已主检';
+  } else if (val === 2) {
+    return '未主检';
+  }
+};
