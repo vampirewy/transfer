@@ -1,114 +1,106 @@
 <template>
   <div class="staff-page">
-    <div><el-button
+    <div>
+      <!-- <el-button
             class="btn-new btnAdd"
             size="small"
             style="margin: 2px 0 12px 0"
             @click="registerOpenFunc"
-    ><img src="@/assets/images/common/addBtn.png" />挂号</el-button>
+    ><img src="@/assets/images/common/addBtn.png" />挂号</el-button> -->
       <el-button
               class="btn-new btnAdd"
               size="small"
               @click="handleSomeCloseCase"
+              :disabled="noFinish"
+              v-if="!isTask"
       ><img src="@/assets/images/common/over.png" />结案</el-button>
     </div>
+    <p class="abnormal">主检异常：</p>
       <el-table :data="tableData" align="center" class="openTable"
                 @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="35"></el-table-column>
         <el-table-column
-                prop="itemName"
-                label="项目名称"
-                width="80px"
-                show-overflow-tooltip
-        ></el-table-column>
-        <el-table-column
-                prop="reportLv"
-                label="结果"
+                prop="abnormalName"
+                label="异常结果"
                 show-overflow-tooltip>
           <template slot-scope="scope">
-                <span :class="scope.row.reportLv === 1 ? 'warnRed' : 'warnYellow'">
-                  {{scope.row.itemValue}}
+                <span>
+                  {{scope.row.abnormalName | getResult}}
                 </span>
           </template>
         </el-table-column>
         <el-table-column
-                prop="reportDate"
-                label="上报时间"
-                show-overflow-tooltip
-        ></el-table-column>
-        <el-table-column
-                 v-if="$route.params.sourceType === '2'"
-                prop="nextTrackingDate"
-                label="计划跟踪"
-                 width="98px"
+                prop="levelName"
+                label="阳性分级"
                 show-overflow-tooltip
         >
+        <template slot-scope="scope">
+                <span>
+                  {{scope.row.levelName | getResult}}
+                </span>
+          </template></el-table-column>
+        <el-table-column prop="advice" label="就诊建议">
           <template slot-scope="scope">
-                <span :style="{'color': nowDate === scope.row.nextTrackingDate ?
-                '#F33D21' : '#333333'}">
-                  {{scope.row.nextTrackingDate}}
+                <span>
+                  {{scope.row.advice | getResult}}
                 </span>
           </template>
         </el-table-column>
-        <el-table-column
-                prop="createTime"
-                label="跟踪结果"
-                min-width="120px"
-        >
-          <template slot-scope="scope">
-            <el-select
-                    v-model="scope.row.state"
-                    placeholder="请选择"
-                    style="width: 110px"
-                    @change="changeState(scope.row)"
-            >
-              <el-option :label="item.name" :value="item.paramValue"  :key="index"
-                         v-for="(item, index) in stateList"
-              ></el-option>
-            </el-select>
+        <!-- <el-table-column prop="state" label="状态设置为空">
+          <template>
+            <div :class="stateColor" @click="isRegister">{{stateShow}}</div>
           </template>
-        </el-table-column>
-        <el-table-column
-                prop="createTime"
-                label="跟踪结案"
-                show-overflow-tooltip
-                min-width="75"
-        >
-          <template slot-scope="scope">
-            <el-switch v-model="scope.row.isCloseCase"
-                       @change="emitTable"
-                       :active-value="1"
-                       :inactive-value="2"
-                       active-color="#13ce66">
-            </el-switch>
-            <!--<el-button
-                    type="text"
-                    size="small"
-            >挂号</el-button>-->
-            <!--<el-button
-                    v-if="scope.row.isCloseCase === 1"
-                    type="text"
-                    size="small"
-                    @click="toCloseCase(scope.row)"
-            >取消结案</el-button> &lt;!&ndash;已结案数据&ndash;&gt;
-            <el-button
-                    v-if="scope.row.isCloseCase === 2"
-                    type="text"
-                    size="small"
-                    @click="toCloseCase(scope.row)"
-            >结案</el-button> &lt;!&ndash;未结案数据&ndash;&gt;-->
-          </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
       <el-pagination
               background
               layout="prev, pager, next, jumper, total, sizes"
               :total="total"
-              :page-sizes="[15]"
+              :page-sizes="[5]"
               :current-page="currentPage"
               :page-size="pageSize"
               @current-change="handleCurrentChange"
       ></el-pagination>
+      <div>
+        <p class="abnormal">异常指标：</p>
+         <el-table :data="tableList" align="center" class="openTable">
+           <template v-if="abnormalTable.length === 0">
+             <el-table-column
+                  prop="itemName"
+                  label="项目"
+                  show-overflow-tooltip
+                  align="center"
+            ></el-table-column>
+            <el-table-column
+                    prop="itemValue"
+                    label="数值/说明"
+                    show-overflow-tooltip
+                    align="center"
+            >
+            <template slot-scope="scope">
+              <span>{{scope.itemValue}}</span>
+              <img v-if="scope.itemState === 1" class="iconStyle"
+              src="@/assets/images/wdecline.png" alt="">
+              <img v-if="scope.itemState === 2" class="iconStyle"
+              src="@/assets/images/wrise.png" alt="">
+            </template>
+            </el-table-column>
+           </template>
+           <!-- eslint-disable -->
+          <template v-else v-for="(val,index) in abnormalTable.length>3?3:abnormalTable.length">
+                <el-table-column label="项目" align="center" prop="itemName" show-overflow-tooltip :key="index">
+                    <template slot-scope="scope" v-if="scope.$index*3+index<abnormalTable.length">{{abnormalTable[scope.$index*3+index].itemName}}</template>
+                </el-table-column>
+                <el-table-column label="数值/说明" align="center" prop="itemValue" show-overflow-tooltip :key="index">
+                    <template slot-scope="scope" v-if="scope.$index*3+index<abnormalTable.length">
+                      <span>{{abnormalTable[scope.$index*3+index].itemValue}}</span>
+                      <img v-if="abnormalTable[scope.$index*3+index].itemState === 1" class="iconStyle" src="@/assets/images/wdecline.png" alt="">
+                      <img v-if="abnormalTable[scope.$index*3+index].itemState === 2" class="iconStyle" src="@/assets/images/wrise.png" alt="">
+                    </template>
+                </el-table-column>
+            </template>
+            <!-- eslint-enable -->
+         </el-table>
+      </div>
       <!--</template>
     </query-page>-->
     <el-dialog
@@ -140,17 +132,25 @@ export default {
   components: {
     registerOpen,
   },
+  props: {
+    noFinish: {
+      default: false,
+      type: Boolean,
+    },
+    isTask: Boolean,
+  },
   data() {
     return {
+      abnormalTable: [],
+      tableList: [],
       viewIndex: 1, // 1:列表页，2:新增，3:编辑，4:详情
       status: '',
       role: '',
       query: '',
-      stateList: [],
       tableData: [],
       total: 0,
       currentPage: 1,
-      pageSize: 15,
+      pageSize: 5,
       multipleSelection: [], // 当前页选中的数据
       userForm: {
         clientId: '',
@@ -166,23 +166,36 @@ export default {
       nowDate: dayjs(new Date()).format('YYYY-MM-DD'),
       reservationForm: {},
       reservationSuccessShow: false, // 挂号成功
+      stateColor: '',
+      stateShow: '',
     };
   },
   mounted() {
-    this.getSystemParamBySC002();
     // 员工列表
     this.queryList();
     this.getClientUserInfo(this.$route.params.clientId);
+    this.getAbnormal();
   },
   methods: {
+    isRegister() {
+      console.log('分别有挂号、已预约、已就诊、挂号');
+      if (this.tableData.state === 1) {
+        this.stateColor = 'registerBtn';
+        this.registerOpenFunc();
+      }
+    },
+    handleTable() {
+      if (this.abnormalTable.length > 0) {
+        const num = Math.ceil(this.abnormalTable.length / 3);
+        for (let i = 0; i < num; i++) {
+          this.tableList.push({});
+        }
+      }
+      console.log(this.tableList, 'this.tableList');
+    },
     handleSelectionChange(val) {
       // table组件选中事件,
       this.multipleSelection = val;
-    },
-    async getSystemParamBySC002() {
-      const res = await this.$api.userManagerInterface.getSystemParamByCode('SC002');
-      const { data } = res.data;
-      this.stateList = data;
     },
     getClientUserInfo(id) {
       this.$api.userManagerInterface.getDetail(id).then(({ data }) => {
@@ -199,20 +212,41 @@ export default {
       this.currentPage = 1;
       this.queryList();
     },
+    getAbnormal() {
+      this.$api.sunFollow.getAbnolmalIndex({
+        reportId: this.$route.query.reportId,
+      }).then((res) => {
+        const { data } = res;
+        const result = data.data || {};
+        this.abnormalTable = result || [];
+        this.handleTable();
+      });
+    },
     queryList() {
       // 列表
-      this.$api.sunFollow.getClientPositiveContent({
-        clientId: this.$route.params.clientId,
-        sourceType: this.$route.params.sourceType, // 请求来源 1-首次跟踪列表进入 2-跟踪回访任务列表进入
+      this.$api.sunFollow.getAbnormalInfo({
+        // clientId: this.$route.params.clientId,
+        // sourceType: this.$route.params.sourceType, // 请求来源 1-首次跟踪列表进入 2-跟踪回访任务列表进入
+        reportId: this.$route.query.reportId,
+        pageSize: this.pageSize,
+        pageNo: this.currentPage,
       }).then((res) => {
         const { data } = res;
         const result = data.data || {};
         this.total = data.data.length;
-        result.forEach((val) => {
-          val.state = '';
-        });
         this.tableData = result || [];
-        this.emitTable();
+        // this.tableData.state = 1;
+        // if (this.tableData.state === 1) {
+        //   this.stateColor = 'registerBtn';
+        //   this.stateShow = '挂号';
+        // } else if (this.tableData.state === 2) {
+        //   this.stateColor = 'appointState';
+        //   this.stateShow = '已预约';
+        // } else if (this.tableData.state === 3) {
+        //   this.stateColor = 'visitState';
+        //   this.stateShow = '已就诊';
+        // }
+        // this.emitTable();
       });
     },
     /* toCloseCase(row) {
@@ -250,16 +284,16 @@ export default {
      * 批量结案
      */
     handleSomeCloseCase() {
-      if (this.multipleSelection.length === 0) {
-        this.$message({
-          message: '请选择要结案的数据',
-          type: 'warning',
-        });
-        return;
-      }
-      this.multipleSelection.forEach((value) => {
-        value.isCloseCase = 1;
-      });
+      // if (this.multipleSelection.length === 0) {
+      //   this.$message({
+      //     message: '请选择要结案的数据',
+      //     type: 'warning',
+      //   });
+      //   return;
+      // }
+      // this.multipleSelection.forEach((value) => {
+      //   value.isCloseCase = 1;
+      // });
       this.emitTable();
     },
     changeState(row) {
@@ -271,7 +305,7 @@ export default {
       this.emitTable();
     },
     emitTable() {
-      this.$emit('getTable', this.tableData);
+      this.$emit('getTable', 2);
     },
     /**
      * 查看
@@ -354,6 +388,28 @@ export default {
     }
     .sureBtn{
       margin-top: 24px;
+    }
+  }
+  .abnormal{
+    color: #333;
+    font-size: 14px;
+    margin: 5px 0;
+  }
+  .registerBtn{
+    cursor: pointer;
+    color: #02A7F0;
+  }
+  .appointState{
+    color: #7F7F7F;
+  }
+  .visitState{
+    color: #AAAAAA;
+  }
+  /deep/ .el-table .cell {
+    display: flex;
+    .iconStyle{
+      width: 18px;
+      margin-left: 5px;
     }
   }
 </style>
