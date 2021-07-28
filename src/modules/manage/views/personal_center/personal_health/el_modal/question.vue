@@ -6,6 +6,33 @@
           ><img src="@/assets/images/common/titleLeft.png" alt="" /></span
         >问卷量表
       </div>
+      <div class="searchCondition">
+        <div class="searchLeft">
+          <div>
+            <span>问卷类型：</span>
+            <el-select
+              v-model="formData.questionType"
+              placeholder="请选择"
+              style="width: 140px"
+            >
+              <el-option
+                :label="item.name"
+                :value="item.paramValue"
+                v-for="item in sortTypeList"
+                :key="item.paramValue"
+              ></el-option>
+            </el-select>
+          </div>
+        </div>
+        <div class="searchRight">
+            <div class="buttones">
+              <div class="searchFor" @click="search">
+                <img src="@/assets/images/common/topsearchblue.png" alt="" />
+              </div>
+              <div class="resetAll" @click="reset">重置</div>
+            </div>
+          </div>
+      </div>
       <div class="follow-plan">
         <div class="divRightTitleDiv">
           <div>
@@ -30,9 +57,9 @@
             label="问卷名称"
             show-overflow-tooltip
           >
-          <template slot-scope="scope">
-          <span>{{ scope.row.questionTypeName}}</span>
-        </template>
+            <template slot-scope="scope">
+              <span>{{ scope.row.questionTypeName }}</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="questionDate"
@@ -52,11 +79,7 @@
           <span>{{ scope.row.refRange | getResult }}</span>
         </template> -->
           </el-table-column>
-          <el-table-column
-            prop="index"
-            label="操作"
-            show-overflow-tooltip
-          >
+          <el-table-column prop="index" label="操作" show-overflow-tooltip>
             <template slot-scope="scope">
               <!-- <el-button
                 type="text"
@@ -66,19 +89,20 @@
                 >编辑</el-button
               > -->
               <el-button
-              type="text"
-              size="small"
-              @click="
-                $router.push({
-                  name: 'health_questionnaire_edit',
-                  params: {
-                    type: 'edit',
-                    qusType: scope.row.questionType,
-                    id: scope.row.id,
-                  },
-                })
-              "
-            >编辑</el-button>
+                type="text"
+                size="small"
+                @click="
+                  $router.push({
+                    name: 'health_questionnaire_edit',
+                    params: {
+                      type: 'edit',
+                      qusType: scope.row.questionType,
+                      id: scope.row.id,
+                    },
+                  })
+                "
+                >编辑</el-button
+              >
               <el-button type="text" size="small">|</el-button>
               <!-- <el-button
                 type="text"
@@ -88,20 +112,20 @@
                 >查看</el-button
               > -->
               <el-button
-              type="text"
-              size="small"
-              @click="
-                $router.push({
-                  name: 'health_questionnaire_detail',
-                  params: {
-                    qusType: scope.row.questionType,
-                    id: scope.row.id,
-                  },
-                })
-              "
-              v-if="getAccess('life_style_questionnaire_view')
-              "
-            >查看</el-button>
+                type="text"
+                size="small"
+                @click="
+                  $router.push({
+                    name: 'health_questionnaire_detail',
+                    params: {
+                      qusType: scope.row.questionType,
+                      id: scope.row.id,
+                    },
+                  })
+                "
+                v-if="getAccess('life_style_questionnaire_view')"
+                >查看</el-button
+              >
             </template>
           </el-table-column>
         </el-table>
@@ -124,10 +148,11 @@ export default {
   props: ['clientId'],
   data() {
     return {
-      tableData: [
-      ],
+      sortTypeList: [],
+      tableData: [],
       formData: {
-        keyWord: '',
+        name: '',
+        questionType: '',
         gender: '',
         clientGrid: '',
         lifeStyleLv: '',
@@ -146,9 +171,17 @@ export default {
     };
   },
   mounted() {
+    this.getSystemParamByCode('HM004');
     this.fetch();
   },
   methods: {
+    search() {
+      this.fetch();
+    },
+    reset() {
+      this.formData.questionType = '';
+      this.fetch();
+    },
     fetch() {
       this.$api.health
         .fetch(Object.assign(this.params, this.formData))
@@ -156,6 +189,13 @@ export default {
           this.total = data.data.total;
           this.tableData = data.data.data;
         });
+    },
+    async getSystemParamByCode(code) {
+      const res = await this.$api.userManagerInterface.getSystemParamByCode(
+        code,
+      );
+      const { data } = res.data;
+      this.sortTypeList = data;
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
@@ -229,7 +269,19 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.divRightTitleDiv{
+.divRightTitleDiv {
+  margin-top: 10px;
   margin-bottom: 15px;
 }
+// .searchCondition {
+//   .searchLeft {
+//     .searchBtnImgSpan {
+//       top: 16px;
+//       right: -35px;
+//       .searchBtnImg {
+//         width: 36px !important;
+//       }
+//     }
+//   }
+// }
 </style>
