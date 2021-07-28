@@ -17,30 +17,19 @@
         <div>
           <span>阳性分级：</span>
           <el-select
-                  v-model="form.gender"
+                  v-model="form.positiveLevel"
                   placeholder="请选择"
                   style="width: 140px"
                   clearable
           >
-            <el-option label="阳性一级" value="1" key="1"></el-option>
-            <el-option label="阳性二级" value="2" key="2"></el-option>
-            <el-option label="阳性三级" value="3" key="3"></el-option>
-            <el-option label="阳性四级" value="4" key="4"></el-option>
+            <el-option :label="item.name"
+            :value="item.paramValue" :key="index" v-for="(item, index) in levelList"></el-option>
           </el-select>
         </div>
-        <div>
+        <div class="abnormalStyle">
           <span>异常结果：</span>
-          <el-select
-                  v-model="form.gridId"
-                  placeholder="请选择"
-                  style="width: 140px"
-                  clearable
-          >
-            <!-- <el-option
-            :label="item.gridName"
-            :value="item.id" v-for="(item, index) in gridList"
-                       :key="index"></el-option> -->
-          </el-select>
+          <el-input placeholder="请输入" v-model="form.abnormalResult">
+          </el-input>
         </div>
          <div>
         <span>主检时间：</span>
@@ -86,41 +75,41 @@
       <div>
         <span>管理医生：</span>
         <el-select
-                v-model="form.source"
+                v-model="form.manageDoctorId"
                 placeholder="请选择"
                 style="width: 140px"
                 clearable
         >
-          <!-- <el-option :label="item.name" :value="item.value" v-for="(item, index) in sourceList"
-                     :key="index"></el-option> -->
+          <el-option :label="item.realName" :value="item.id" v-for="(item, index) in doctorList"
+                     :key="index"></el-option>
         </el-select>
       </div>
-      <div>
+      <div v-if="dataRange">
         <span>回访医生：</span>
         <el-select
-                v-model="form.source"
+                v-model="form.visitDoctorId"
                 placeholder="请选择"
                 style="width: 140px"
                 clearable
         >
-          <!-- <el-option :label="item.name" :value="item.value" v-for="(item, index) in sourceList"
-                     :key="index"></el-option> -->
+          <el-option :label="item.realName" :value="item.id" v-for="(item, index) in doctorList"
+                     :key="index"></el-option>
         </el-select>
       </div>
       <div>
         <span>体检时间：</span>
         <el-date-picker
-                v-model="form.startTime"
+                v-model="form.minReportDate"
                 type="date"
                 value-format="yyyy-MM-dd"
-                :max-date="form.endTime || new Date()"
+                :max-date="form.maxReportDate || new Date()"
                 placeholder="开始时间"
                 style="width: 140px"
         >
         </el-date-picker>
         <span class="timing">-</span>
         <el-date-picker
-                v-model="form.endTime"
+                v-model="form.minReportDate"
                 type="date"
                 value-format="yyyy-MM-dd"
                 :min-date="form.startTime"
@@ -133,12 +122,12 @@
       <div>
         <span>所属企业</span>
         <el-select
-                v-model="form.source"
+                v-model="form.workUnitId"
                 placeholder="请选择"
                 style="width: 140px"
                 clearable>
-          <!-- <el-option :label="item.name" :value="item.value" v-for="(item, index) in sourceList"
-                :key="index"></el-option> -->
+          <el-option :label="item.unitName" :value="item.unitId" v-for="(item, index) in unitList"
+                :key="index"></el-option>
         </el-select>
       </div>
     </div>
@@ -175,26 +164,26 @@
         <el-table :data="expandData.list" class="expand-table" align="center">
           <el-table-column
           label="跟踪时间"
-          prop="nearestTrackingDate"
+          prop="trackDate"
           min-width="90px"
           show-overflow-tooltip
           >
             <template slot-scope="scope">
-              <span>{{ scope.row.nearestTrackingDate | getResult}}</span>
+              <span>{{ scope.row.trackDate | getResult}}</span>
             </template>
           </el-table-column>
           <el-table-column
             label="跟踪人"
-            prop="reportUserName"
+            prop="visitDoctorName"
             min-width="80px">
             <template slot-scope="scope">
-              <span>{{ scope.row.reportUserName | getResult }}</span>
+              <span>{{ scope.row.visitDoctorName | getResult }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="跟踪方式" prop="nextTrackingDate"
+         <el-table-column label="跟踪方式" prop="trackWay"
                            width="90px" show-overflow-tooltip>
             <template slot-scope="scope">
-              <span>{{ scope.row.trackingWayName | getResult}}</span>
+              <span>{{ scope.row.trackWay | getResult}}</span>
             </template>
           </el-table-column>
            <el-table-column
@@ -203,7 +192,7 @@
             min-width="80px">
             <template slot-scope="scope">
               <span>
-                {{ scope.row.state | getResult }}
+                {{ scope.row.result | getResult }}
               </span>
             </template>
           </el-table-column>
@@ -250,24 +239,24 @@
           <span>{{scope.row.gender | getResultGender}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="所属企业" prop="compony" show-overflow-tooltip>
+      <el-table-column label="所属企业" prop="workUnitName" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ '所属企业' }}</span>
+          <span>{{ scope.row.workUnitName | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="体检时间" prop="checkupDate" show-overflow-tooltip>
+      <el-table-column label="体检时间" prop="reportDate" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ '体检时间' }}</span>
+          <span>{{ scope.row.reportDate | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="主检医生" prop="checkupDoctor" show-overflow-tooltip>
+      <el-table-column label="主检医生" prop="zjDoctor" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ '主检医生' }}</span>
+          <span>{{ scope.row.zjDoctor | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="主检时间" prop="mainCheckupDate" min-width="115px" show-overflow-tooltip>
+      <el-table-column label="主检时间" prop="zjDate" min-width="115px" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ '主检时间' }}</span>
+          <span>{{ scope.row.zjDate | getResult }}</span>
         </template>
       </el-table-column>
       <el-table-column label="上报时间" prop="reportDate" min-width="115px" show-overflow-tooltip>
@@ -277,30 +266,32 @@
       </el-table-column>
       <el-table-column prop="abnormalResult" label="异常结果" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ '异常结果' }}</span>
+          <span>{{ scope.row.abnormalResult | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="sunRank" label="阳性分级" show-overflow-tooltip>
+      <el-table-column prop="levelName" label="阳性分级" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ '阳性等级' }}</span>
+          <span
+          :class="{warnRed : scope.row.positiveLevel === 1}"
+          >{{ scope.row.levelName | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="manageDoctor" label="管理医生" show-overflow-tooltip>
+      <el-table-column prop="doctorName" label="管理医生" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ '管理医生名' }}</span>
+          <span>{{ scope.row.doctorName | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="doctorName" label="回访医生" show-overflow-tooltip>
+      <el-table-column prop="visitDoctorName" label="回访医生" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span>{{ '回访医生名' }}</span>
+          <span>{{ scope.row.visitDoctorName | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="trackingRecordNum" label="跟踪记录" width="80">
+      <el-table-column prop="recordNum" label="跟踪记录" width="80">
         <template slot-scope="scope">
           <el-button type="text"
                      @click="expandsHandle(scope.row, 2)"
                      style="color: #3154AC;font-size: 14px"
-                     >{{scope.row.trackingRecordNum | getResult}}</el-button>
+                     >{{scope.row.recordNum | getResult}}</el-button>
         </template>
       </el-table-column>
       <!-- <el-table-column label="操作" width="80">
@@ -339,20 +330,26 @@ export default {
       upload_url: process.env.api.upload_url,
       isTrue: true,
       form: {
-        reportLv: '',
         keywords: '', // 关键字
-        gender: '', // 性别
         gridId: '', // 人员类别
-        reportState: '', // 是否总检
-        source: '',
-        phoneNo: '', // 手机号码
         startTime: '',
         endTime: '',
+        reportLv: '',
+        reportId: '', // 体检编号
+        positiveLevel: '', // 阳性等级
+        abnormalResult: '', // 异常结果
+        manageDoctorId: '', // 管理医生
+        visitDoctorId: '', // 回访医生
+        minReportDate: '', // 体检开始时间
+        maxReportDate: '', // 体检结束时间
+        searchType: 3, // 首次跟踪列表
+        searchStartTime: '', // 工作台开始查询时间
+        searchEndTime: '', // 工作台结束查询时间
       },
       gridList: [], // 人员类别下拉框
       sourceList: [{ value: 1, name: '采集系统' }, { value: 2, name: '手动上报' }, { value: 3, name: '后台预警' }], // 上报来源下拉框
       expands: [],
-      getRowKeys: row => row.clientId,
+      getRowKeys: row => row.id,
       expandData: {
         clientId: '',
         pageNo: 1,
@@ -386,6 +383,9 @@ export default {
       },
       multipleSelectionAll: [], // 所有选中的数据包含跨页数据
       multipleSelection: [], // 当前页选中的数据
+      unitList: [],
+      doctorList: [],
+      levelList: [],
     };
   },
   beforeRouteEnter(to, from, next) {
@@ -395,8 +395,21 @@ export default {
   },
   mounted() {
     this.getList();
+    this.getUnitList();
+    this.getDoctorList();
+    this.getLevelList();
+  },
+  computed: {
+    dataRange() {
+      if (localStorage.getItem('dataRange') === 4) return false;
+    },
   },
   methods: {
+    async getLevelList() {
+      const res = await this.$api.sunFollow.getPositiveLevel();
+      const { data } = res;
+      this.levelList = data.data || [];
+    },
     handleSelectionChange(val) {
       // table组件选中事件,
       this.multipleSelection = val;
@@ -404,6 +417,9 @@ export default {
     onLoad() {
       this.getList();
       this.getGridList(); // 获取人员列类别
+      this.getUnitList();
+      this.getDoctorList();
+      this.getLevelList();
       /* const StringList = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
       const quanzhongList = [7, 5, 3, 2, 6, 1, 4, 9];
       const addList = [];
@@ -441,14 +457,25 @@ export default {
       if (this.form.endTime) {
         sendData.endTime = `${this.form.endTime} 23:59:59`;
       }
-      const res = await this.$api.sunFollow.getPositiveRecordListPage(sendData);
+      sendData.searchType = 3;
+      const res = await this.$api.sunFollow.getSystemCollectList(sendData);
       const { data } = res.data;
-      console.log(data);
       if (data) {
         this.table.list = data.data || [];
         this.table.totalCount = data.total;
       }
-      console.log(this.table, 'this.table');
+    },
+    // 获取企业列表
+    async getUnitList() {
+      const res = await this.$api.companyManageInterface.getWorkUnitList({});
+      const { data } = res;
+      this.unitList = data.data || [];
+    },
+    // 管理医生/回访医生列表
+    async getDoctorList() {
+      const res = await this.$api.doctorInterface.getDoctorList({});
+      const { data } = res;
+      this.doctorList = data.data.data || [];
     },
     /**
      * 获取人员类别
@@ -471,38 +498,47 @@ export default {
         return false;
       }
       this.expands.forEach((data) => {
+        console.log(this.expands, 'expands');
         // 其他展开的行收起
-        if (data.clientId !== row.clientId) {
+        if (data.id !== row.id) {
           this.$refs.table.toggleRowExpansion(data);
         }
       });
       if (this.expands.includes(row)) {
         this.$refs.table.toggleRowExpansion(row);
       } else {
-        this.expandData.clientId = row.clientId;
+        this.expandData.id = row.id;
         this.expandData.pageNo = 1;
         this.excuteType = type;
-        this.getReoprtList(type).then(() => {
+        this.getReoprtList(type, row).then(() => {
           this.$refs.table.toggleRowExpansion(row);
         });
       }
     },
-    getReoprtList(type) { // 真实接口
+    getReoprtList(type, row) { // 真实接口
       this.expandData.list = [];
       this.loading = true;
       let Type = '';
       let fn = '';
+      let params;
       if (type) { Type = type; } else { Type = this.excuteType; }
       if (Type === 1) {
         fn = 'getWaitingTrackingItemList';
+        params = {
+          pageNo: this.expandData.pageNo,
+          pageSize: this.expandData.pageSize,
+          clientId: this.expandData.clientId,
+        };
       } else if (Type === 2) {
-        fn = 'getRecordTrackingItemList';
+        fn = 'getTrankingRecord';
+        params = {
+          reportId: row.id,
+          recordType: 1,
+          pageNo: this.expandData.pageNo,
+          pageSize: this.expandData.pageSize,
+        };
       }
-      return this.$api.sunFollow[fn]({
-        pageNo: this.expandData.pageNo,
-        pageSize: this.expandData.pageSize,
-        clientId: this.expandData.clientId,
-      }).then(({ data }) => {
+      return this.$api.sunFollow[fn](params).then(({ data }) => {
         console.log(data);
         /* if (Type === 2) {
           this.expandData.list = data.data.data;
@@ -656,6 +692,9 @@ export default {
       width: 25px;
     }
   }
+  /deep/ .abnormalStyle .el-input {
+    width: 65%;
+  }
   /deep/ .el-input.is-disabled .el-input__inner{
     background-color: white;
     border-color: white;
@@ -705,10 +744,7 @@ export default {
   }
 }
   .warnRed{
-    border: 1px solid #F33D21;
-    border-radius: 50px;color: #F33D21;
-    font-size: 12px;
-    padding: 2px 9px;
+    color: #F33D21;
   }
   .warnYellow{
     border: 1px solid #FA912B;
