@@ -131,9 +131,7 @@ class Personal extends BaseModule {
    */
 
   getTaskCount() {
-    return this.get(
-      'http://192.168.137.12:3000/mock/63/workbench/getWorkTasks',
-    );
+    return this.get('/workbench/getWorkTasks');
   }
   /**
    * @description: 工作台 -- 获取登录用户负责客户数及团队内排名数
@@ -180,10 +178,7 @@ class Personal extends BaseModule {
    * @property {number} total 总条数
    */
   getSysTranking(data = {}) {
-    return this.post(
-      'http://192.168.137.12:3000/mock/63/positive_tracking_new/get_collect_data_list_page',
-      data,
-    );
+    return this.post('/positive_tracking_new/get_collect_data_list_page', data);
   }
   /**
    * @description: 工作台 -- 今日工作任务/工作记录 -- 手动上报
@@ -220,7 +215,7 @@ class Personal extends BaseModule {
 
   getManualTracking(data = {}) {
     return this.post(
-      'http://192.168.137.12:3000/mock/63/positive_tracking_new/get_first_positive_list_page',
+      '/positive_tracking_new/get_first_positive_list_page',
       data,
     );
   }
@@ -255,7 +250,7 @@ class Personal extends BaseModule {
 
   getFollowupPlan(data = {}) {
     return this.post(
-      'http://192.168.137.12:3000/mock/63/positive_tracking_new/get_positive_return_task_list_page',
+      '/positive_tracking_new/get_positive_return_task_list_page',
       data,
     );
   }

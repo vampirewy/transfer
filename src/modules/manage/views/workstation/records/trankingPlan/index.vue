@@ -87,6 +87,7 @@ export default {
       const params = {
         ...this.date,
         ...this.pageParams,
+        searchType: 2,
       };
       const res = await this.$api.userFollowInterface.getInterveneRecordListPage(
         params,

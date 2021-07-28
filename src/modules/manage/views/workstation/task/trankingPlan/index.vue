@@ -34,6 +34,7 @@
 import BaseTable from '~/src/components/base_table/index.vue';
 import InterventionAddMdl from '~/src/modules/manage/views/health_plan/user_follow_create/el_modal/intervention_add_mdl.vue';
 import { GENDER } from '../../constant/base_data';
+import moment from 'moment';
 export default {
   name: 'trankingPlan',
   components: {
@@ -125,6 +126,10 @@ export default {
     async getTrankingPlanRequest() {
       const res = await this.$api.userFollowInterface.getIntervenePlanListPage({
         ...this.pageParams,
+        // 工作台专用
+        startPlanTime: moment(new Date()).format('yyyy-MM-DD'),
+        endPlanTime: moment(new Date()).format('yyyy-MM-DD'),
+        searchType: 2,
       });
       const { data } = res.data;
       this.pageParams.total = data.total;
