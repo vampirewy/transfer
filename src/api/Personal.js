@@ -272,7 +272,7 @@ class Personal extends BaseModule {
    * @property {number} inHospitalChangeCount 院内转诊数
    */
   getWorkStatistics(query = {}) {
-    return this.get('http://192.168.137.12:3000/mock/63/workbench/getWorkRecord', {
+    return this.get('/workbench/getWorkRecord', {
       params: query,
     });
   }
