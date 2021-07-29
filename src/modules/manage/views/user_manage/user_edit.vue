@@ -278,7 +278,7 @@
               <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column prop="title" label="标题"></el-table-column>
             <el-table-column prop="remark" label="附件说明"></el-table-column>
-            <el-table-column prop="createTime" label="上传时间"></el-table-column>
+            <el-table-column prop="createdTime" label="上传时间"></el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <el-button type="text" @click="open(scope)">查看</el-button>
@@ -471,6 +471,11 @@ export default {
     };
   },
   methods: {
+    async getUserInfo() {
+      const res = await this.$api.userManagerInterface.getUserInfo();
+      const { data } = res.data;
+      this.formData.userRealName = data.realName;
+    },
     async searchDoctor(selectedUserIds) {
       const selectedUserIdsStr = selectedUserIds.join(',');
       const res = await this.$api.userManagerInterface.searchDoctor({
@@ -620,7 +625,7 @@ export default {
       this.dataSource.push({
         title: val.title,
         remark: val.remark,
-        createTime: val.createTime,
+        createdTime: val.createTime,
         filePath: val.filePath,
         time: new Date().getTime(),
         deleted: 0,
@@ -724,11 +729,11 @@ export default {
   },
   mounted() {
     this.getGridList();
+    this.getUserInfo();
     this.getSystemParamByCode('HM009', 'educationLevel');
     this.getSystemParamByCode('HM005', 'ethnicGroup');
     this.getSystemParamByCode('HM007', 'marriage');
     this.getSystemParamByCode('HM008', 'profession');
-
     if (this.$route.query.owner && !this.$route.params.userId) {
       const userName = this.$store.state.user.userName;
       const userId = this.$store.state.user.userId;
@@ -738,6 +743,7 @@ export default {
         id: userId,
       }];
     }
+    console.log(this.filterTableList, '附件列表');
   },
   beforeRouteEnter(to, from, next) {
     // ...

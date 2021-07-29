@@ -106,7 +106,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="就医时间" >
+          <el-form-item label="就医时间"  prop="inDate">
             <el-date-picker
               v-model="form.inDate"
               type="date"
@@ -268,42 +268,42 @@ export default {
         orgCode: '', // 组织code
         organId: '', // 组织id
       },
-      options: {
-        inDate: {
-          disabledDate: (cur) => {
-            // eslint-disable-next-line no-underscore-dangle
-            const _now = dayjs(new Date()).format('YYYY-MM-DD');
-            // eslint-disable-next-line no-underscore-dangle
-            const _cur = dayjs(cur);
-            if (_cur.isAfter(_now, 'day')) {
-              return true;
-            }
-            return false;
-          },
-        },
-        outDate: {
-          disabledDate: (cur) => {
-            // // eslint-disable-next-line no-underscore-dangle
-            // const _now = this.form.inDate
-            //   ? dayjs(this.form.inDate).format('YYYY-MM-DD')
-            //   : dayjs(new Date()).format('YYYY-MM-DD');
-            // // eslint-disable-next-line no-underscore-dangle
-            // const _cur = dayjs(cur);
-            // if (_cur.isSameOrAfter(_now)) {
-            //   return false;
-            // }
-            // return true;
-            // eslint-disable-next-line no-underscore-dangle
-            const _now = dayjs(new Date()).format('YYYY-MM-DD');
-            // eslint-disable-next-line no-underscore-dangle
-            const _cur = dayjs(cur);
-            if (_cur.isAfter(_now, 'day')) {
-              return true;
-            }
-            return false;
-          },
-        },
-      },
+      // options: {
+      //   inDate: {
+      //     disabledDate: (cur) => {
+      //       // eslint-disable-next-line no-underscore-dangle
+      //       const _now = dayjs(new Date()).format('YYYY-MM-DD');
+      //       // eslint-disable-next-line no-underscore-dangle
+      //       const _cur = dayjs(cur);
+      //       if (_cur.isAfter(_now, 'day')) {
+      //         return true;
+      //       }
+      //       return false;
+      //     },
+      //   },
+      //   outDate: {
+      //     disabledDate: (cur) => {
+      //       // // eslint-disable-next-line no-underscore-dangle
+      //       // const _now = this.form.inDate
+      //       //   ? dayjs(this.form.inDate).format('YYYY-MM-DD')
+      //       //   : dayjs(new Date()).format('YYYY-MM-DD');
+      //       // // eslint-disable-next-line no-underscore-dangle
+      //       // const _cur = dayjs(cur);
+      //       // if (_cur.isSameOrAfter(_now)) {
+      //       //   return false;
+      //       // }
+      //       // return true;
+      //       // eslint-disable-next-line no-underscore-dangle
+      //       const _now = dayjs(new Date()).format('YYYY-MM-DD');
+      //       // eslint-disable-next-line no-underscore-dangle
+      //       const _cur = dayjs(cur);
+      //       if (_cur.isAfter(_now, 'day')) {
+      //         return true;
+      //       }
+      //       return false;
+      //     },
+      //   },
+      // },
       rules: {
         medicalType: [{ required: true, message: '就医类型不能为空' }],
         department: [{ required: true, message: '就医科室不能为空' }],
@@ -315,6 +315,7 @@ export default {
         caseNo: [{ required: true, message: '就医编号不能为空' }],
         name: [{ required: true, message: '客户不能为空' }],
         result: [{ required: true, message: '请选择当前状态' }],
+        inDate: [{ required: true, message: '就医时间不能为空' }],
       },
       resultOptions: [
         { value: 1, label: '未指定' },

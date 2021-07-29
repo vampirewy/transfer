@@ -95,7 +95,9 @@
       <div class="diet-plan-box">
         <div class="title">新增膳食方案</div>
         <el-form label-position="left">
-          <el-form-item label="日期范围: " label-width="80px" v-if="type !== 'info'">
+          <el-form-item label="日期范围: "
+          label-width="80px" v-if="type !== 'info'">
+            <!-- <span>*</span> -->
             <el-date-picker
               v-model="stateDate"
               type="date"
