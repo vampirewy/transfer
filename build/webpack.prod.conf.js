@@ -47,10 +47,12 @@ function resolve(dir) {
  */
 const actions = () => {
     const functionA = () => env.api = JSON.stringify(api.build)
-    const functionB = () => env.api = JSON.stringify(api.build_dev)
+    // const functionB = () => env.api = JSON.stringify(api.build_dev)
+    const functionC = ()=> env.api = JSON.stringify(api.test)
     return new Map([
         ['prod', functionA],
-        ['prod_dev', functionB]
+        // ['prod_dev', functionB],
+        ['test',functionC]
     ])
 }
 
