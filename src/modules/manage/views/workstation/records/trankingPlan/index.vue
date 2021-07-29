@@ -21,6 +21,9 @@
             {{ scope.row.clientName }}
           </span>
         </template>
+        <template slot-scope="scope" slot="gender">
+          <span>{{scope.row.gender | getResultGender}}</span>
+        </template>
         <template slot="operation" slot-scope="scope">
           <span class="cursor c-3154ac"
           @click="$router.push(`health_plan/user_follow_do/view/${scope.row.id}`)"
@@ -36,7 +39,7 @@
 <script>
 import StationSearch from '../../components/search.vue';
 import BaseTable from '~/src/components/base_table/index.vue';
-import { GENDER } from '../../constant/base_data';
+
 export default {
   name: 'trankingPlan',
   components: {
@@ -94,7 +97,6 @@ export default {
       );
       const { data } = res.data;
       this.pageParams.total = data.total;
-      (data.data || []).map(item => (item.gender = GENDER[item.gender]));
       this.trankingList = data.data;
     },
   },

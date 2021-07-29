@@ -16,6 +16,9 @@
             >{{ scope.row.clientName }}</span
           >
         </template>
+        <template slot-scope="scope" slot="gender">
+          <span>{{scope.row.gender | getResultGender}}</span>
+        </template>
         <template slot-scope="scope" slot="operation">
           <span
             class="cursor c-3154ac"
@@ -33,7 +36,6 @@
 
 <script>
 import BaseTable from '~/src/components/base_table/index.vue';
-import { GENDER } from '../../constant/base_data';
 export default {
   name: 'followUpPlan',
   components: { BaseTable },
@@ -79,7 +81,6 @@ export default {
       const res = await this.$api.personal.getFollowupPlan(params);
       const { data } = res.data;
       this.pageParams.total = data.total;
-      (data.data || []).map(item => (item.gender = GENDER[item.gender]));
       this.followupList = data.data;
     },
   },

@@ -16,6 +16,9 @@
             >{{ scope.row.clientName }}</span
           >
         </template>
+        <template slot-scope="scope" slot="gender">
+          <span>{{scope.row.gender | getResultGender}}</span>
+        </template>
         <template slot-scope="scope" slot="operation">
           <span
             class="cursor c-3154ac"
@@ -38,7 +41,6 @@
 
 <script>
 import BaseTable from '~/src/components/base_table/index.vue';
-import { GENDER } from '../../constant/base_data';
 
 const SORT_TYPE = {
   gender: 'bySex',
@@ -106,7 +108,6 @@ export default {
       const res = await this.$api.personal.getSysTranking(params);
       const { data } = res.data;
       this.pageParams.total = data.total;
-      (data.data || []).map(item => (item.gender = GENDER[item.gender]));
       this.sysList = data.data;
     },
     resetParmas() {

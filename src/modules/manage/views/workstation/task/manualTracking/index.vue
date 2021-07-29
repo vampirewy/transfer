@@ -16,6 +16,9 @@
             >{{ scope.row.clientName }}</span
           >
         </template>
+        <template slot-scope="scope" slot="reportState">
+          <span>{{scope.row.reportState | getReportState}}</span>
+        </template>
         <template slot-scope="scope" slot="levelName">
           <span :class="scope.row.levelName === '阳性一级' ? 'c-fe2b2a' : ''">{{
             scope.row.levelName
@@ -37,7 +40,6 @@
 <script>
 import BaseTable from '~/src/components/base_table/index.vue';
 import TrackPop from '~/src/components/track_pop/index.vue';
-import { REPORT_STATE } from '../../constant/base_data';
 
 const SORT_TYPE = {
   levelName: 'byLevel',
@@ -118,9 +120,6 @@ export default {
       const res = await this.$api.personal.getManualTracking(params);
       const { data } = res.data;
       this.pageParams.total = data.total;
-      (data.data || []).map(
-        item => (item.reportState = REPORT_STATE[item.reportState]),
-      );
       this.list = data.data;
     },
   },

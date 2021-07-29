@@ -21,6 +21,9 @@
             >{{ scope.row.clientName }}</span
           >
         </template>
+        <template slot-scope="scope" slot="reportState">
+          <span>{{scope.row.reportState | getReportState}}</span>
+        </template>
         <template slot-scope="scope" slot="recordNum">
           <span class="cursor c-3154ac" @click="watchRecords(scope.row)">{{
             scope.row.recordNum
@@ -43,7 +46,7 @@
 <script>
 import StationSearch from '../../components/search.vue';
 import BaseTable from '~/src/components/base_table/index.vue';
-import { REPORT_STATE } from '../../constant/base_data';
+
 export default {
   name: 'manualTracking',
   components: { StationSearch, BaseTable },
@@ -140,7 +143,6 @@ export default {
       const res = await this.$api.personal.getManualTracking(params);
       const { data } = res.data;
       this.pageParams.total = data.total;
-      (data.data || []).map(item => (item.reportState = REPORT_STATE[item.reportState]));
       this.manualList = data.data;
     },
     async getTrankRecordsRequest() {

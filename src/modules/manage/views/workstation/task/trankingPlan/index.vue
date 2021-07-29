@@ -16,6 +16,9 @@
             >{{ scope.row.clientName }}</span
           >
         </template>
+        <template slot-scope="scope" slot="gender">
+          <span>{{scope.row.gender | getResultGender}}</span>
+        </template>
         <template slot-scope="scope" slot="operation">
           <span class="cursor c-3154ac" @click="editPlan(scope.row)">编辑</span>
           <span
@@ -33,7 +36,6 @@
 <script>
 import BaseTable from '~/src/components/base_table/index.vue';
 import InterventionAddMdl from '~/src/modules/manage/views/health_plan/user_follow_create/el_modal/intervention_add_mdl.vue';
-import { GENDER } from '../../constant/base_data';
 import moment from 'moment';
 export default {
   name: 'trankingPlan',
@@ -133,7 +135,6 @@ export default {
       });
       const { data } = res.data;
       this.pageParams.total = data.total;
-      (data.data || []).map(item => (item.gender = GENDER[item.gender]));
       this.list = data.data;
     },
   },

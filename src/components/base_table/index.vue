@@ -28,7 +28,11 @@
           v-else
           :key="column.prop"
           v-bind="column"
-        ></el-table-column>
+        >
+          <template slot-scope="scope">
+            <span>{{scope.row[column.prop] | getResult}}</span>
+          </template>
+        </el-table-column>
       </template>
     </el-table>
     <BasePagination
