@@ -34,20 +34,20 @@
          <div>
         <span>主检时间：</span>
         <el-date-picker
-                v-model="form.startTime"
+                v-model="form.zjStartTime"
                 type="date"
                 value-format="yyyy-MM-dd"
-                :max-date="form.endTime || new Date()"
+                :max-date="form.zjEndTime || new Date()"
                 placeholder="开始时间"
                 style="width: 140px"
         >
         </el-date-picker>
         <span class="timing">-</span>
         <el-date-picker
-                v-model="form.endTime"
+                v-model="form.zjEndTime"
                 type="date"
                 value-format="yyyy-MM-dd"
-                :min-date="form.startTime"
+                :min-date="form.zjStartTime"
                 :max-date="new Date()"
                 placeholder="结束时间"
                 style="width: 140px"
@@ -344,8 +344,8 @@ export default {
       form: {
         keywords: '', // 关键字
         gridId: '', // 人员类别
-        startTime: '',
-        endTime: '',
+        zjStartTime: '',
+        zjEndTime: '',
         reportLv: '',
         reportId: '', // 体检编号
         positiveLevel: '', // 阳性等级
@@ -593,11 +593,17 @@ export default {
     async getList() {
       const sendData = Object.assign({}, this.form, { pageNo: this.table.pageNo,
         pageSize: this.table.pageSize });
-      if (this.form.startTime) {
-        sendData.startTime = `${this.form.startTime} 00:00:00`;
+      if (this.form.minReportDate) {
+        sendData.minReportDate = this.form.minReportDate;
       }
-      if (this.form.endTime) {
-        sendData.endTime = `${this.form.endTime} 23:59:59`;
+      if (this.form.maxReportDate) {
+        sendData.maxReportDate = this.form.maxReportDate;
+      }
+      if (this.form.zjStartTime) {
+        sendData.zjStartTime = this.form.zjStartTime;
+      }
+      if (this.form.zjEndTime) {
+        sendData.zjEndTime = this.form.zjEndTime;
       }
       sendData.searchType = 1;
       const res = await this.$api.sunFollow.getSystemCollectList(sendData);

@@ -437,16 +437,16 @@ export default {
       const sendData = Object.assign({}, this.form, { pageNo: this.table.pageNo,
         pageSize: this.table.pageSize });
       if (this.form.minPlanDate) {
-        sendData.minPlanDate = `${this.form.minPlanDate} 00:00:00`;
+        sendData.minPlanDate = this.form.minPlanDate;
       }
       if (this.form.maxPlanDate) {
-        sendData.maxPlanDate = `${this.form.maxPlanDate} 23:59:59`;
+        sendData.maxPlanDate = this.form.maxPlanDate;
       }
       if (this.form.minReportDate) {
-        sendData.minReportDate = `${this.form.minReportDate} 00:00:00`;
+        sendData.minReportDate = this.form.minReportDate;
       }
       if (this.form.maxReportDate) {
-        sendData.maxReportDate = `${this.form.maxReportDate} 23:59:59`;
+        sendData.maxReportDate = this.form.maxReportDate;
       }
       const res = await this.$api.sunFollow.getPositiveTaskList(sendData);
       const { data } = res.data;
