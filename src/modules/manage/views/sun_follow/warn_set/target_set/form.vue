@@ -233,7 +233,7 @@ export default {
         id: this.id,
         templateType: 1,
         name: '',
-        trackingLv: '',
+        positiveLevel: '',
         conditionRelation: '',
         gender: '',
         minAge: '',
@@ -241,7 +241,7 @@ export default {
       },
       staffRules: {
         name: [{ required: true, message: '请输入模板名称' }],
-        trackingLv: [{ required: true, message: '请选择预警分类' }],
+        positiveLevel: [{ required: true, message: '请选择阳性等级' }],
         conditionRelation: [{ required: true, message: '请选择条件关系' }],
         sectionName: [{ required: true, message: '请输入科室名称' }],
         itemName: [{ required: true, message: '请输入小项名称' }],
@@ -257,7 +257,7 @@ export default {
       this.$api.sunFollow.getWarnTemplateDetail({ id: this.id }).then(async (res) => {
         const { data } = res;
         this.staffForm.name = data.data.name;
-        this.staffForm.trackingLv = data.data.trackingLv;
+        this.staffForm.positiveLevel = data.data.positiveLevel;
         this.staffForm.gender = data.data.gender;
         this.staffForm.minAge = data.data.minAge;
         this.staffForm.maxAge = data.data.maxAge;
