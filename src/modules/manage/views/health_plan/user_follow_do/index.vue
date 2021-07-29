@@ -135,7 +135,7 @@
     <div v-if="!isTrue" class="searchCondition">
       <div class="searchLeft" style="padding-left:5px;">
         <div>
-          <span>随访医生：</span>
+          <span>随访人：</span>
           <el-popover
                   ref="userPopover"
                   placement="top-start"
