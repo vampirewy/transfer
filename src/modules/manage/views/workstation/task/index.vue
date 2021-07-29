@@ -51,10 +51,10 @@ export default {
   data() {
     return {
       navList: [
-        { title: '首次采集系统跟踪', count: 1 },
-        { title: '首次手动上报跟踪', count: 4 },
-        { title: '待跟踪计划', count: 2 },
-        { title: '待随访计划', count: 3 },
+        { title: '首次采集系统跟踪', count: 0 },
+        { title: '首次手动上报跟踪', count: 0 },
+        { title: '待跟踪计划', count: 0 },
+        { title: '待随访计划', count: 0 },
       ],
       active: 0,
       methodsMap: {

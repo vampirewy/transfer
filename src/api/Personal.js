@@ -150,7 +150,7 @@ class Personal extends BaseModule {
    * @method post
    * @param {number} searchType 查询类型  1|列表 -- 默认 2|工作台首次 3|跟踪记录 4|工作台记录
    * @param {string} sortType 排序类型
-   * bySex|性别  byAge|年龄  byReportDate|体检时间  byZjDate|主检时间  byCreateDate|上报时间  ByLevel|阳性分级
+   * bySex|性别  byAge|年龄  byReportDate|体检时间  byZjDate|主检时间  byCreateDate|上报时间  byLevel|阳性分级
    * @param {string} sortRule 1|升 2|降
    * @param {string} searchStartTime 工作台开始时间
    * @param {string} searchEndTime 工作台结束时间

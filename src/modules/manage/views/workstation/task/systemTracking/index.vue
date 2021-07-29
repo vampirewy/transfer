@@ -46,7 +46,7 @@ const SORT_TYPE = {
   reportDate: 'byReportDate',
   zjDate: 'byZjDate',
   createdTime: 'byCreateDate',
-  levelName: 'ByLevel',
+  levelName: 'byLevel',
 };
 export default {
   name: 'systemTracking',
