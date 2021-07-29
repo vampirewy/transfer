@@ -358,24 +358,25 @@ export default {
     },
     check(idx) {
       this.tabcheckidx = idx;
-      this.queryList();
+      this.queryList(this.typeindex);
     },
     // 搜索
     onSearch() {
       this.table.currentPage = 1;
+      this.times = new Date().getTime();
+      this.queryList(this.typeindex);
       if (this.Tabactive === 7) {
         this.tcmqueryList();
       } else if (this.Tabactive === 8) {
         this.psyqueryList();
       }
-      this.queryList(this.typeindex);
       // 调取子组件的方法
       this.TabbarBtn(this.Tabactive);
     },
     onReset() {
       this.form = [];
       this.table.currentPage = 1;
-      this.queryList();
+      this.queryList(this.typeindex);
     },
     async queryList(types) {
       const res = await this.$api.statics.getlifeclientList({
