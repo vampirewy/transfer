@@ -269,6 +269,7 @@ export default {
           if (data.success) {
             this.total = data.total;
             data.data.forEach((val) => {
+              val.monthdays = val.month;
               val.month = `第${val.month}月 第${val.day}日`;
             });
             this.dataSource = data.data;
@@ -296,6 +297,7 @@ export default {
       this.modalVisible = true;
     },
     edits(row) {
+      console.log(row);
       this.currentValue = row;
       this.valueid = row.id;
       this.modalVisible = true;

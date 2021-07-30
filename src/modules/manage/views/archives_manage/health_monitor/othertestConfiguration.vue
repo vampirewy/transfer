@@ -280,8 +280,9 @@ export default {
         this.isstate = false;
         this.infoSource.ingrenient = '';
         this.queryList();
+        // this.rules.specification[0].required = false;
+        this.$refs.form.resetFields();
         this.$refs.isstate.resetFields();
-        this.$refs.specification.resetFields();
       }
     },
     async queryList() {
