@@ -331,7 +331,7 @@ export default {
     },
     // 回访医生列表
     async getDoctorList() {
-      const res = await this.$api.doctorInterface.getDoctorList({});
+      const res = await this.$api.sunFollow.doctorSearch({});
       const { data } = res;
       this.doctorList = data.data.data || [];
     },
