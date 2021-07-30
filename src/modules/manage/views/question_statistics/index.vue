@@ -195,6 +195,7 @@
             @cancel="cancel"
           ></smoke>
           <drink
+          :key="times"
             v-if="Tabactive === 2"
             :data="form"
             :visible="modalVisible"
@@ -202,6 +203,7 @@
             @cancel="cancel"
           ></drink>
           <food
+          :key="times"
             v-if="Tabactive === 3"
             :data="form"
             :visible="modalVisible"
@@ -209,6 +211,7 @@
             @cancel="cancel"
           ></food>
           <sport
+          :key="times"
             v-if="Tabactive === 4"
             :data="form"
             :visible="modalVisible"
@@ -216,6 +219,7 @@
             @cancel="cancel"
           ></sport>
           <sleep
+          :key="times"
             v-if="Tabactive === 5"
             :data="form"
             :visible="modalVisible"
@@ -223,6 +227,7 @@
             @cancel="cancel"
           ></sleep>
           <spirit
+          :key="times"
             v-if="Tabactive === 6"
             :data="form"
             :visible="modalVisible"
@@ -230,6 +235,7 @@
             @cancel="cancel"
           ></spirit>
           <physique
+          :key="times"
             v-if="Tabactive === 7"
             :data="form"
             :visible="modalVisible"
@@ -237,6 +243,7 @@
             @cancel="cancel"
           ></physique>
           <psychology
+          :key="times"
             v-if="Tabactive === 8"
             :data="form"
             :visible="modalVisible"
