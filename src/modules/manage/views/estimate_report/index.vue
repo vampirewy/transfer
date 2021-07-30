@@ -475,7 +475,7 @@
                 min-width="90"
                 show-overflow-tooltip>
               </el-table-column>
-              <el-table-column label="点评" align="center" width="55" show-overflow-tooltip>
+              <!-- <el-table-column label="点评" align="center" width="55" show-overflow-tooltip>
                 <template slot-scope="scope">
                   <img
                     @click="handleComment(scope.row)"
@@ -483,7 +483,7 @@
                     v-if="getAccess('assessment_report_comment')"
                     src="../../../../assets/images/comment.png"/>
                 </template>
-              </el-table-column>
+              </el-table-column> -->
               <el-table-column label="操作" align="center" width="60">
                 <template slot-scope="scope">
                   <el-button
