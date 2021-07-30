@@ -35,7 +35,7 @@ class ReportInterface extends BaseModule {
     return this.post('/report_info/list_page', params);
   }
   getAbnormalList(params) {
-    return this.get(`/organ_abnormal/list_page?${convertObj(params)}`);
+    return this.post('/organ_abnormal/list_page', params);
   }
   abnormalListPages(params) {
     return this.post('/group_abnormal/list_page', params);
