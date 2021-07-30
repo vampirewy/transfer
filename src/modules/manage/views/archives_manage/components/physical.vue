@@ -490,6 +490,9 @@ export default {
       if (this.formData.reportState === 2) {
         this.rules.zjDate[0].required = false;
         this.formData.zjDate = '';
+      } else {
+        this.rules.zjDate[0].required = true;
+        this.formData.zjDate = dayjs(this.formData.reportDate).format('YYYY-MM-DD HH:mm:ss');
       }
     },
     handlePopoperCloseCheck() {

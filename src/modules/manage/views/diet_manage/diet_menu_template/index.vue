@@ -122,7 +122,11 @@
             label="分类"
             show-overflow-tooltip
           ></el-table-column>
-          <el-table-column prop="day" label="模板周期 (天)"> </el-table-column>
+          <el-table-column prop="day" label="模板周期 (天)">
+            <template slot-scope="scope">
+              <span>{{scope.row.day || 0}}</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="intro" label="介绍"> </el-table-column>
           <el-table-column label="操作" width="160px">
             <template slot-scope="scope">

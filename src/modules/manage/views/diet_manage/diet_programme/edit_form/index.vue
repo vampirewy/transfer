@@ -308,29 +308,32 @@
             </el-table-column>
           </el-table>
         </el-tab-pane>
-        <el-tab-pane lazy name="2" label="物质及能量分配">
+        <!-- <el-tab-pane lazy name="2" label="物质及能量分配">
           <div class="chart-box">
             <p class="item-title">三大营养素供能比</p>
-            <diet-proportion-chart :list="dietTemplateMaterial"></diet-proportion-chart>
+            <diet-proportion-chart :list="dietTemplateMaterial" :key="timer">
+            </diet-proportion-chart>
             <p class="chart-desc">
               三大营养素推荐比值：蛋白质10%~15%，脂肪20%~30%，碳水化合物55%~65%
             </p>
           </div>
           <div class="chart-box">
             <p class="item-title">动物性及豆类蛋白质占总蛋白质比例</p>
-            <diet-proteinroportion-chart :list="dietTemplateMaterial"></diet-proteinroportion-chart>
+            <diet-proteinroportion-chart :list="dietTemplateMaterial" :key="timer">
+            </diet-proteinroportion-chart>
             <p class="chart-desc">
               一般推荐动物性蛋白质和豆类蛋白质占膳食蛋白质总量30%~50%。
             </p>
           </div>
           <div class="chart-box">
             <p class="item-title">三餐能量分配比</p>
-            <diet-distribution-chart :list="dietTemplateMaterial"></diet-distribution-chart>
+            <diet-distribution-chart :list="dietTemplateMaterial" :key="timer">
+            </diet-distribution-chart>
             <p class="chart-desc">
               三餐推荐分配比：早餐30%，午餐40%，晚餐30%。
             </p>
           </div>
-        </el-tab-pane>
+        </el-tab-pane> -->
       </el-tabs>
     </div>
     <!-- <el-template-save :visible.sync="isShowTmplateSave"></el-template-save> -->
@@ -415,6 +418,7 @@ export default {
   },
   data() {
     return {
+      timer: '',
       popoverStatus: false,
       isShowDietMenuTemplate: false,
       isShowDietMenuTemplateType: false,
@@ -509,17 +513,20 @@ export default {
         });
     },
     async Analysis() {
-      await this.$api.dietRawMaterial
-        .clientDietTemplateAnalysis({
-          dietTemplateMealList: this.arrListInfo,
-          clientIdList: this.pageList,
-        })
-        .then((res) => {
-          if (res.data.success) {
-            this.analysisData = res.data.data.dietTemplateNutritionList;
-            this.dietTemplateMaterial = res.data.data.dietTemplateMaterial;
-          }
-        });
+      if (this.arrListInfo.length !== 0 || this.pageList.length !== 0) {
+        await this.$api.dietRawMaterial
+          .clientDietTemplateAnalysis({
+            dietTemplateMealList: this.arrListInfo,
+            clientIdList: this.pageList,
+          })
+          .then((res) => {
+            if (res.data.success) {
+              this.analysisData = res.data.data.dietTemplateNutritionList;
+              this.dietTemplateMaterial = res.data.data.dietTemplateMaterial;
+              this.timer = new Date().getTime();
+            }
+          });
+      }
     },
     handleFoodSelect(data, index) {
       if (data.clientId) {
@@ -769,4 +776,7 @@ export default {
 
 <style lang="scss" scoped>
 @import './index.scss';
+.diet-form_right /deep/ .el-tabs__content{
+  overflow:visible !important;
+}
 </style>
