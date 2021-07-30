@@ -10,11 +10,11 @@
           </div>
           <div class="table-column">
             <div>中</div>
-            <div>{{leftList.cientDietIntake.low || 0}}人</div>
+            <div>{{leftList.cientDietIntake.mid || 0}}人</div>
           </div>
           <div class="table-column">
             <div>低</div>
-            <div>{{leftList.cientDietIntake.mid || 0}}人</div>
+            <div>{{leftList.cientDietIntake.low || 0}}人</div>
           </div>
         </div>
       </div>
