@@ -73,6 +73,10 @@ class SunFollow extends BaseModule {
   getTrackMethod() {
     return this.get('/system_param_value/TRACKMETHOD');
   }
+  // (二开)医生列表
+  doctorSearch() {
+    return this.get('/user/doctor/search');
+  }
   // 首次跟踪列表 - 跟踪记录切换阳性等级
   updateReportLv(data = {}) {
     return this.post('/positive_tracking/update_report_lv', data);
