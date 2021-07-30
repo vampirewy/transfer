@@ -100,7 +100,7 @@
         </el-table-column>
         <el-table-column label="操作" prop="index">
           <template slot-scope="scope">
-            <el-button type="text" @click="remove(scope.$index,)">
+            <el-button type="text" @click="remove(scope.$index,scope.row)">
               <img
                 class="icon-delete"
                 src="@/assets/images/service/deletes.png"
@@ -143,6 +143,7 @@ export default {
   },
   data() {
     return {
+      gropcode: '',
       show: true,
       urrentValue: '',
       detectionpopoverStatus: false,
@@ -206,6 +207,7 @@ export default {
         pageSize: this.params.pageSize,
       }).then((res) => {
         this.total = res.data.data.total;
+        console.log(res.data.data.data);
         res.data.data.data.forEach((val) => {
           const json = {};
           json.abnormalName = val.abnormalName;
@@ -213,11 +215,14 @@ export default {
           json.gender = val.gender;
           json.dangerLevelName = val.dangerLevelName;
           json.medicalLimitName = val.medicalLimitName;
+          json.id = val.id;
+          json.groupCode = val.groupCode;
           this.addProject.push(json);
         });
       });
     },
-    remove(index) {
+    remove(index, data) {
+      const arrids = [];
       this.$confirm(`<div class="delete-text-content"><img
         class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认删除！</span></div>`, '删除提示', {
         dangerouslyUseHTMLString: true,
@@ -226,8 +231,17 @@ export default {
         customClass: 'message-box-customize',
         showClose: true,
       }).then(() => {
+        arrids.push(data.id);
         this.addProject.splice(index, 1);
+        this.removeids(arrids);
       });
+    },
+    async removeids(ids) {
+      const res = await this.$api.physicalProjectListInterface.removegroupabnormal(ids);
+      const { data } = res.data;
+      if (data) {
+        this.$message.success('操作成功');
+      }
     },
     detectionhandlePopoperClose() {
       this.detectionpopoverStatus = false;
@@ -254,6 +268,18 @@ export default {
           vm.addProject.push(valQusOne);
         }
       });
+      const arr = [];
+      vm.MatchingInfo.forEach((val) => {
+        const json = {};
+        json.groupCode = vm.urrentValue.code;
+        json.abnormalCode = val.abnormalCode;
+        json.groupId = val.id;
+        arr.push(json);
+      });
+      const data = vm.$api.physicalProjectListInterface.savegroupabnormal(arr);
+      if (data) {
+        vm.$message.success('操作成功');
+      }
       vm.MatchingInfo = [];
       vm.detectioninfoSource.abnormalName = '';
     },
@@ -264,7 +290,6 @@ export default {
           this.detectioninfoSource.abnormalName += `${val.abnormalName}、`;
           this.MatchingInfo.push(val);
         });
-        console.log(this.MatchingInfo, '选择检测项目');
         this.$refs.userPopovers.doClose();
         this.detectionpopoverStatus = false;
       } else {
@@ -272,19 +297,6 @@ export default {
       }
     },
     async submit() {
-      if (this.addProject.length === 0) {
-        return this.$message.warning('请选择检测项目');
-      }
-      const arr = [];
-      this.addProject.forEach((val) => {
-        const json = {};
-        json.groupCode = val.groupCode;
-        json.abnormalCode = val.abnormalCode;
-        json.groupId = val.id;
-        arr.push(json);
-      });
-      await this.$api.physicalProjectListInterface.savegroupabnormal(arr);
-      this.$message.success('操作成功');
       this.cancel();
       this.confirmfunc.call(this, '123');// 回调父组件列表刷新
       this.$emit('cancel');
