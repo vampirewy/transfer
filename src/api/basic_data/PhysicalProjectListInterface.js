@@ -101,5 +101,9 @@ class PhysicalProjectListInterface extends BaseModule {
   savegroupabnormal(data = {}) {
     return this.post('/group_abnormal/save_group_abnormal_config', data);
   }
+  // 删除组合异常
+  removegroupabnormal(data = {}) {
+    return this.post('/group_abnormal/deleted_abnormal_config', data);
+  }
 }
 export default new PhysicalProjectListInterface();
