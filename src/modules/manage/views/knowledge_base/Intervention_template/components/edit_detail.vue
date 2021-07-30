@@ -104,7 +104,7 @@
           </el-select>
         </el-form-item>
         <el-col :span="6">
-          <el-form-item label="主要内容：" >
+          <el-form-item label="随访标题：" >
             <el-input v-model="results" style="width:160px" placeholder="请输入" ></el-input>
           </el-form-item>
         </el-col>

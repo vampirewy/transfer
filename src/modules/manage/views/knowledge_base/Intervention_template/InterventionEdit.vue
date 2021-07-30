@@ -73,7 +73,7 @@
               </template>
             </el-table-column>
             <el-table-column label="随访形式" prop="planWayTxt" min-width="80" show-overflow-tooltip />
-            <el-table-column label="主要内容" prop="planContent" min-width="80" show-overflow-tooltip />
+            <el-table-column label="随访标题" prop="planContent" min-width="80" show-overflow-tooltip />
             <el-table-column label="随访提示" prop="title" min-width="80" show-overflow-tooltip />
             <!-- <el-table-column label="附件" prop="attachment">
               <template slot-scope="scope">
