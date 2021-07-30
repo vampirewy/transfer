@@ -27,8 +27,8 @@ module.exports = {
         poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
         proxyTable: {
             '/api': {
-                // target: "http://182.61.43.226:9002/api",  // 测试环境
-                target: "http://health.pre.touchealth.com/api",
+                // target: "http://192.168.16.71:12010",  // 测试环境
+                target: "http://health.dev.touchealth.com/api",
                 // target: 'http://182.61.43.226:9002/api',//'http://116.62.9.135:5124', // nginx测试环境，配置了/api转发及图片访问 //'http://admin.ngrok.ggithub.cn',//
                 changeOrigin: true,
                 pathRewrite: {

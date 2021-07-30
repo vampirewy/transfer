@@ -18,18 +18,21 @@ const build = {
 //     upload_url: 'http://health.pre.touchealth.com/', //'/uploadFiles/'
 //     pdf_url: 'http://health.pre.touchealth.com/download',
 // };
+
+const dev = {
+    static_url: '/', // 静态资源路径
+    common_url: '/api',
+    upload_url: 'http://health.dev.touchealth.com/',
+    pdf_url: 'http://health.dev.touchealth.com/download',
+};
+
 const test = {
     static_url:'/',
     common_url:'http://health.dev.touchealth.com/api',
     upload_url:'http://health.dev.touchealth.com/',
     pdf_url:'http://health.dev.touchealth.com/download'
-}
-const dev = {
-    static_url: '/', // 静态资源路径
-    common_url: '/api',
-    upload_url: 'http://health.pre.touchealth.com/',
-    pdf_url: 'http://health.pre.touchealth.com/download',
 };
 
-module.exports = { build, test, dev };
+
+module.exports = { build, dev, test };
 
