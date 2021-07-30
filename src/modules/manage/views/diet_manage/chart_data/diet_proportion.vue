@@ -50,10 +50,22 @@ export default {
             type: 'pie',
             radius: ['45%', '70%'],
             avoidLabelOverlap: false,
+            hoverAnimation: true,
+            // label: {
+            //   show: true,
+            //   position: 'inside',
+            //   formatter: '{c}',
+            // },
             label: {
-              show: true,
-              position: 'inside',
-              formatter: '{c}',
+              normal: {
+                show: true,
+                position: 'inner',
+                textStyle: {
+                  fontWeight: 300,
+                  fontSize: 10,
+                },
+                formatter: '{d}%',
+              },
             },
             emphasis: {
               label: {

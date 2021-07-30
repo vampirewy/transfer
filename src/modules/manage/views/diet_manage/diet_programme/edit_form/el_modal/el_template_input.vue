@@ -113,6 +113,7 @@ export default {
         .getDietMenuTemplate({
           pageNo: this.currentPage,
           pageSize: this.pageSize,
+          minDay: 0,
           ...this.query,
         })
         .then((res) => {

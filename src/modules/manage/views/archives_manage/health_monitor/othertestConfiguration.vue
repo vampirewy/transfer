@@ -281,6 +281,7 @@ export default {
         this.infoSource.ingrenient = '';
         this.queryList();
         // this.rules.specification[0].required = false;
+        this.isstate = true;
         this.$refs.form.resetFields();
         this.$refs.isstate.resetFields();
       }

@@ -49,11 +49,12 @@
     </el-table>
     <el-pagination
           style="margin-top: 15px"
-          @current-change="search"
+          @current-change="handleCurrentChange"
           background
           layout="prev, pager, next, jumper, total, sizes"
           :total="total"
           :page-size="params.pageSize"
+          @size-change="handleSizeChange"
           :pageSizes="[15]"
         ></el-pagination>
     <div>
@@ -104,22 +105,26 @@ export default {
       // this.$emit('change', scope);
       this.$emit('change', this.multipleSelection);
     },
-    handleCurrentChange(page) {
-      this.currentPage = page;
-      this.queryList();
-    },
+    // handleCurrentChange(page) {
+    //   this.currentPage = page;
+    //   this.queryList();
+    // },
     handleSizeChange(size) {
-      this.pageSize = size;
-      this.currentPage = 1;
+      this.params.pageNo = size;
+      // this.currentPage = 1;
       this.queryList();
     },
     search() {
-      this.currentPage = 1;
+      this.params.pageNo = 1;
+      this.queryList();
+    },
+    handleCurrentChange(page) {
+      this.params.pageNo = page;
       this.queryList();
     },
     reset() {
       this.formData.name = '';
-      this.currentPage = 1;
+      this.params.pageNo = 1;
       this.queryList();
     },
     async queryList() {

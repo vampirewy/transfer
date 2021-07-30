@@ -313,9 +313,9 @@ export default {
             month: this.form.monthsModel,
             day: this.form.daysModel,
             remarik: '',
-            title: this.results,
+            title: this.Prompt,
             planWay: this.interfereform,
-            planContent: this.Prompt,
+            planContent: this.results,
           };
           if (!this.form.monthsModel) {
             return this.$message.warning('请选择月份');
@@ -383,7 +383,7 @@ export default {
   .form-content {
     margin-top: 20px;
     .el-input__inner {
-      background-color: #f4f4f6;
+      background-color: #ffffff;
       border: 0;
     }
     .tel {
