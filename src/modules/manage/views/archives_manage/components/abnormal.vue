@@ -133,6 +133,9 @@ export default {
   /deep/ .el-table__header-wrapper th{
     padding: 3px 0;
   }
+  /deep/ li.active {
+    width: 40px !important;
+  }
 .abnormal-popoper {
   padding: 13px 18px 21px 18px;
   .un-match {
