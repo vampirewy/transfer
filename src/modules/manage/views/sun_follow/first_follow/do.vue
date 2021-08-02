@@ -125,7 +125,7 @@
           </div>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="下次跟踪时间">
+              <el-form-item class="nextDate" label="下次跟踪时间">
                 <el-date-picker
                         clearable
                         style="width: 100%"
@@ -632,5 +632,14 @@ export default {
 }
 .nextTrack{
   width: 100px;
+}
+/deep/.nextDate {
+  display: flex;
+  .el-form-item__label {
+    width: 120px !important;
+  }
+  .el-form-item__content {
+    margin-left: 0 !important;
+  }
 }
 </style>

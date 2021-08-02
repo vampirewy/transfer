@@ -191,7 +191,6 @@ export default {
           this.tableList.push({});
         }
       }
-      console.log(this.tableList, 'this.tableList');
     },
     handleSelectionChange(val) {
       // table组件选中事件,
