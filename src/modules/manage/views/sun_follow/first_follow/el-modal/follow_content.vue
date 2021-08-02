@@ -1,6 +1,6 @@
 <template>
   <div class="staff-page">
-    <div>
+    <div style="margin-bottom:20px;">
       <!-- <el-button
             class="btn-new btnAdd"
             size="small"
@@ -12,8 +12,9 @@
               size="small"
               @click="handleSomeCloseCase"
               :disabled="noFinish"
+              style="color:#fff;background:orange;border:none;"
               v-if="!isTask"
-      ><img src="@/assets/images/common/over.png" />结案</el-button>
+      >结案</el-button>
     </div>
     <p class="abnormal">主检异常：</p>
       <el-table :data="tableData" align="center" class="openTable"
@@ -51,7 +52,7 @@
           </template>
         </el-table-column> -->
       </el-table>
-      <el-pagination
+      <!-- <el-pagination
               background
               layout="prev, pager, next, jumper, total, sizes"
               :total="total"
@@ -59,8 +60,8 @@
               :current-page="currentPage"
               :page-size="pageSize"
               @current-change="handleCurrentChange"
-      ></el-pagination>
-      <div>
+      ></el-pagination> -->
+      <div style="margin-top:20px;">
         <p class="abnormal">异常指标：</p>
          <el-table :data="tableList" align="center" class="openTable">
            <template v-if="abnormalTable.length === 0">
@@ -150,7 +151,7 @@ export default {
       tableData: [],
       total: 0,
       currentPage: 1,
-      pageSize: 5,
+      pageSize: 100000,
       multipleSelection: [], // 当前页选中的数据
       userForm: {
         clientId: '',
@@ -325,10 +326,10 @@ export default {
         render: h => h(registerOpen),
       });
     },
-    handleCurrentChange(page) {
-      this.currentPage = page;
-      this.queryList();
-    },
+    // handleCurrentChange(page) {
+    //   this.currentPage = page;
+    //   this.queryList();
+    // },
   },
 };
 </script>
