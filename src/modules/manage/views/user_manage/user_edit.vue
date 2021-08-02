@@ -349,7 +349,7 @@ import File from './components/file_dialog.vue';
 import FileDetail from './components/file_detail.vue';
 import doctorSelect from '@/components/doctor_select/index.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
-import * as dayjs from 'dayjs';
+// import * as dayjs from 'dayjs';
 
 export default {
   name: 'ClientEdit',
@@ -390,7 +390,7 @@ export default {
         name: '',
       },
       formData: {
-        birth: '', // 1992-01-04
+        // birth: '', // 1992-01-04
         gridId: '',
         userRealName: '',
         profession: '',
@@ -593,7 +593,7 @@ export default {
           // this.formData.birthday = dayjs(this.formData.birthday).format('YYYY-MM-DD');
           this.formData = {
             ...this.formData,
-            birth: dayjs(this.formData.birth).format('YYYY-MM-DD'),
+            // birth: dayjs(this.formData.birth).format('YYYY-MM-DD'),
           };
           this.formData.annexParams =
               this.dataSource.filter(t => t.time && t.deleted === 0).map(t => ({
@@ -701,9 +701,9 @@ export default {
         if (data) {
           let result = data.data;
           // eslint-disable-next-line no-param-reassign
-          const { birthDate, age } = this.getAge(this.formData.cardNo);
-          result.birth = result.birth || birthDate;
-          result.age = result.age || age;
+          // const { birthDate, age } = this.getAge(this.formData.cardNo);
+          // result.birth = result.birth || birthDate;
+          // result.age = result.age || age;
           result = {
             ...result,
             gridId: result.gridId === '0' ? '' : result.gridId,
