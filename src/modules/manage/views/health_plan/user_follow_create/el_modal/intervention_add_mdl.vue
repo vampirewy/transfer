@@ -194,11 +194,11 @@ export default {
         } else if (this.modalType === 3) {
           this.getDetailTogether();
         }
-        if (this.addType === '2') {
-          await this.getUserInfo(); // 获取用户id和name，原本是存储，现在接口实时请求
-          // this.form.planDoctor = this.$store.state.user.userId;
-          // this.form.planDoctorName = this.$store.state.user.userName;
-        }
+        // if (this.addType === '2') {
+        await this.getUserInfo(); // 获取用户id和name，原本是存储，现在接口实时请求
+        // this.form.planDoctor = this.$store.state.user.userId;
+        // this.form.planDoctorName = this.$store.state.user.userName;
+        // }
         if (this.editType === 2) { // 待随访计划直接编辑，不让修改随访人;
           this.form.planDoctor = this.propsData.planUserId;
           this.form.planDoctorName = this.propsData.planUserName;

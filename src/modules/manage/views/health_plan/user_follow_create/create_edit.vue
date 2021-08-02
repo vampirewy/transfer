@@ -316,7 +316,7 @@ export default {
         component: 'InterventionAddMdl',
         data: {
           modalType: 1,
-          addType: this.$route.params.type, // 个人创建 / 批量创建
+          addType: this.$route.params.type, // 个人创建1 / 批量创建2
           modalTitle: '新增',
           confirmfunc: async (value) => {
             const getStateTplList = this.$store.state.intervention.tplList;
