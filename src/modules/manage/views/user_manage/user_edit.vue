@@ -562,8 +562,9 @@ export default {
     },
     submitAssign(rows) {
       this.$refs.popover1.showPopper = false;
-      this.formData.userIdList = rows.filter(t => t.selectType === 1).map(t => t.id);
-      this.formData.workIdList = rows.filter(t => t.selectType === 2).map(t => t.id);
+      // this.formData.userIdList = rows.filter(t => t.selectType === 1).map(t => t.id);
+      // this.formData.workIdList = rows.filter(t => t.selectType === 2).map(t => t.id);
+      this.formData.userIdList = rows.map(t => t.id);
 
       this.formData.userRealName = rows
         .map(item => item.realName)
