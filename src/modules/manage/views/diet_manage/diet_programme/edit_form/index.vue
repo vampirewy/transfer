@@ -301,8 +301,8 @@
             <el-table-column align="center" prop="provideQuantity" label="提供量"
             show-overflow-tooltip>
               <template slot-scope="scope">
-                <span :class="scope.row.trend === 2 ? 'OrLowClassA' :
-                (scope.row.trend === -1 ? 'OrLowClassB' : 'OrLowClassC')">
+                <span :class="scope.row.trend === 0 ? 'OrLowClassA' :
+                (scope.row.trend === 1 ? 'OrLowClassB' : 'OrLowClassC')">
                 {{ scope.row.provideQuantity }}</span>
               </template>
             </el-table-column>

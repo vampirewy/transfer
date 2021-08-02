@@ -136,7 +136,7 @@ export default {
       list: [
         { key: 'eatPercent', title: '可食部分', value: '', Units: '%' },
         { key: 'water', title: '水分', value: '', Units: 'g' },
-        { key: 'kcal', title: '能量', value: '', Units: 'KJ' },
+        { key: 'kcal', title: '能量', value: '', Units: 'kcal' },
         { key: 'protein', title: '蛋白质', value: '', Units: 'g' },
         { key: 'fat', title: '脂肪', value: '', Units: 'g' },
         { key: 'cho', title: '碳水化合物', value: '', Units: 'g' },

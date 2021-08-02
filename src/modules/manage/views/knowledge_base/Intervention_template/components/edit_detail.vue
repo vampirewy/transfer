@@ -213,6 +213,7 @@ export default {
     //   this.form.interfereform = '';
     //   this.form.Prompt = '';
     // }
+    console.log(this.value);
     const date = new Date();
     const year = date.getFullYear(); // 获取当前年
     this.yearsModel = year;
@@ -223,7 +224,7 @@ export default {
       this.form.daysModel = this.value.day;
       this.results = this.value.planContent;
       this.interfereform = this.value.planWay;
-      this.Prompt = this.value.planWay;
+      this.Prompt = this.value.title;
     }
     this.getPlanWayList();
   },
@@ -241,7 +242,7 @@ export default {
       this.months = [];
       this.months.push({ value: '', label: '请选择' });
       for (let i = 1; i <= 12; i++) {
-        this.months.push({ value: i, label: `${i}月` });
+        this.months.push({ value: i, label: `第${i}月` });
       }
     },
     initSelectDay(year, month) {
@@ -249,7 +250,7 @@ export default {
       this.days = [];
       this.days.push({ value: '', label: '请选择' });
       for (let i = 1; i <= maxDay; i++) {
-        this.days.push({ value: i, label: `${i}日` });
+        this.days.push({ value: i, label: `第${i}日` });
       }
     },
     getMaxDay(year, month) {

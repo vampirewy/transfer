@@ -40,13 +40,13 @@
       </el-form-item> -->
       <div style="display: flex;">
         <el-form-item label="选择月份：" >
-          <el-select v-model="id.month" disabled placeholder="请选择">
+          <el-select v-model="monthdays" disabled placeholder="请选择">
             <!-- <el-option label="男" value="1" key="1"></el-option>
             <el-option label="女" value="2" key="2"></el-option> -->
           </el-select>
         </el-form-item>
         <el-form-item label="选择日期：" >
-          <el-select v-model="id.day" disabled placeholder="请选择">
+          <el-select v-model="day" disabled placeholder="请选择">
             <!-- <el-option label="是" value="1" key="1"></el-option>
             <el-option label="否" value="2" key="2"></el-option> -->
           </el-select>
@@ -86,7 +86,7 @@
           <el-form-item label="干预提示：" prop="result">
             <el-input
               type="textarea"
-              v-model="id.planWay"
+              v-model="id.title"
               :rows="5"
               disabled
               placeholder="请输入"
@@ -134,6 +134,8 @@ export default {
       interfereform: '', // 干预形式
       results: '', // 内容
       Prompt: '', // 提示
+      monthdays: '',
+      day: '',
       // resultOptions: [
       //   { value: 1, label: '未指定' },
       //   { value: 2, label: '治疗中' },
@@ -149,6 +151,8 @@ export default {
   },
   mounted() {
     console.log(this.id, '接收的数据123');
+    this.monthdays = `第${this.id.monthdays}月`;
+    this.day = `第${this.id.day}天`;
     // this.getDetail();
   },
   methods: {
