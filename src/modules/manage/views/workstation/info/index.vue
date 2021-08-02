@@ -7,7 +7,7 @@
         }}，祝您开心每一天！
       </p>
       <p class="info-block__content">
-        {{ this.userData.orgName }}-{{ this.userData.role }}-{{
+        {{ this.userData.orgName }} - {{ this.userData.role }} - {{
           this.userData.realName
         }}
       </p>
@@ -97,7 +97,7 @@ export default {
       }
     }
     &__content {
-      font-size: 18px;
+      font-size: 16px;
     }
   }
 }
