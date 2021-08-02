@@ -595,7 +595,7 @@ export default {
         showClose: true,
         type: 'warning',
       }).then(() => {
-        this.$api.medicalHistoryInterface.claim({
+        this.$api.userManagerInterface.claim({
           clientIdList: [this.userlist.id],
           type: 4,
         })
