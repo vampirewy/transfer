@@ -130,6 +130,13 @@ export default {
   mounted() {
     this.getUserList();
   },
+  watch: {
+    visible(next) {
+      if (next) {
+        this.getUserList();
+      }
+    },
+  },
 };
 </script>
 
