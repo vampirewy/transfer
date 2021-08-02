@@ -271,7 +271,7 @@
             </el-table-column>
             <el-table-column label="管理医生" prop="doctorNames" show-overflow-tooltip>
               <template slot-scope="scope">
-                <span>{{ scope.row.doctorNames || '0'}}</span>
+                <span>{{ scope.row.doctorNames || '-'}}</span>
               </template>
             </el-table-column>
             <el-table-column label="干预计划" prop="unExecutePlanTotal" width="80">
