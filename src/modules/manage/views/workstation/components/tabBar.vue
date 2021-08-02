@@ -10,7 +10,7 @@
         :class="tabActive === index ? 'active' : 'unactive'"
         @click="tabBarBtn(index)"
         >{{ item.title }}
-        <div class="badge" v-if="isShowBadge">{{ item.count }}</div>
+        <div class="badge" v-if="isShowBadge && item.count">{{ item.count }}</div>
       </span>
     </nav>
   </div>
