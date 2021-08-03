@@ -67,6 +67,24 @@
         </el-col>
       </el-row>
     </el-form>
+    <template v-if="formData.abnormalList.length > 0">
+      <div class="divRightTitleDiv">
+        <div class="divRightTitle" style="margin-top: 0">总检建议<div class="titleBiao"></div></div>
+      </div>
+      <div class="sub-title">
+        <span>异常信息</span>
+      </div>
+      <div class="section-conclusion-item">
+        <div class="center">
+          <el-table :data="formData.abnormalList">
+            <el-table-column type="index" label="序号" show-overflow-tooltip width="120">
+            </el-table-column>
+            <el-table-column prop="abnormalName" label="异常" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="advice" label="建议" show-overflow-tooltip></el-table-column>
+          </el-table>
+        </div>
+      </div>
+    </template>
     <template v-if="formData.sectionConclusionList.length > 0">
       <!-- <div class="title physical-examination-info">体检信息</div> -->
       <div class="divRightTitleDiv">
@@ -111,7 +129,8 @@
         </div>
       </div>
     </template>
-    <template v-if="formData.abnormalList.length > 0 || formData.notMatchAbnormalList.length > 0">
+    <!--
+      <template v-if="formData.abnormalList.length > 0 || formData.notMatchAbnormalList.length > 0">
       <div class="sub-title">
         <span>异常信息</span>
       </div>
@@ -153,7 +172,7 @@
         <div class="label">建议</div>
         <div class="conter">{{formData.advice}}</div>
       </div>
-    </template>
+    </template> -->
     <div class="buttons">
       <el-button @click="back('close')">返回</el-button>
     </div>
