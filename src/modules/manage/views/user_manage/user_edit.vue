@@ -485,13 +485,13 @@ export default {
             trigger: 'change',
           },
         ],
-        userRealName: [
-          {
-            required: true,
-            message: '请选择',
-            trigger: 'change',
-          },
-        ],
+        // userRealName: [
+        //   {
+        //     required: true,
+        //     message: '请选择',
+        //     trigger: 'change',
+        //   },
+        // ],
       },
       popoverStatus: false,
       dialogFormVisible: false,
