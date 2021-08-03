@@ -83,6 +83,57 @@
         </el-col>
       </el-row>
       <div class="divRightTitleDiv">
+        <div class="divRightTitle" style="margin-top: 0">总检建议<div class="titleBiao"></div></div>
+      </div>
+      <div class="wltitle">
+        <div class="quan"></div>
+        <span>异常信息</span>
+      </div>
+      <div class="sub-title">
+        <span>异常信息</span>
+        <el-popover
+          ref="abnormalPopover"
+          placement="bottom-end"
+          width="650"
+          trigger="click"
+          @show="abnormalModalVisible = true"
+          @hide="handleAbnormalClose">
+          <abnormal
+            v-if="abnormalModalVisible"
+            @change="handleAbnormalSelectChange"
+            @cancel="handleAbnormalClose"
+          ></abnormal>
+          <span class="button-add-abnormal" slot="reference">新增</span>
+        </el-popover>
+      </div>
+      <div class="section-conclusion-item">
+        <div class="center" v-if="formData.abnormalList.length > 0">
+          <el-table :data="formData.abnormalList">
+            <el-table-column type="index" label="序号" show-overflow-tooltip width="120">
+            </el-table-column>
+            <el-table-column prop="abnormalName" label="异常" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="advice" label="建议" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <el-input
+                  type="textarea"
+                  v-model="scope.row.advice"
+                  :maxlength="300"
+                  placeholder="请输入建议"
+                  show-word-limit
+                  rows="4">
+                </el-input>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="190">
+              <template slot-scope="scope">
+                <el-button type="text"  @click="removeAbnormal(scope.$index)">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+        <div class="text-add-abnormal" v-else>点击右上角添加体检异常信息</div>
+      </div>
+      <div class="divRightTitleDiv">
         <div class="divRightTitle" style="margin-top: 0">体检信息<div class="titleBiao"></div></div>
       </div>
       <div class="wltitle">
@@ -279,57 +330,6 @@
             placeholder="请输入科室小结"
           ></el-input>
         </div>
-      </div>
-       <div class="divRightTitleDiv">
-        <div class="divRightTitle" style="margin-top: 0">总检建议<div class="titleBiao"></div></div>
-      </div>
-      <div class="wltitle">
-        <div class="quan"></div>
-        <span>异常信息</span>
-      </div>
-      <div class="sub-title">
-        <span>异常信息</span>
-        <el-popover
-          ref="abnormalPopover"
-          placement="bottom-end"
-          width="650"
-          trigger="click"
-          @show="abnormalModalVisible = true"
-          @hide="handleAbnormalClose">
-          <abnormal
-            v-if="abnormalModalVisible"
-            @change="handleAbnormalSelectChange"
-            @cancel="handleAbnormalClose"
-          ></abnormal>
-          <span class="button-add-abnormal" slot="reference">新增</span>
-        </el-popover>
-      </div>
-      <div class="section-conclusion-item">
-        <div class="center" v-if="formData.abnormalList.length > 0">
-          <el-table :data="formData.abnormalList">
-            <el-table-column type="index" label="序号" show-overflow-tooltip width="120">
-            </el-table-column>
-            <el-table-column prop="abnormalName" label="异常" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="advice" label="建议" show-overflow-tooltip>
-              <template slot-scope="scope">
-                <el-input
-                  type="textarea"
-                  v-model="scope.row.advice"
-                  :maxlength="300"
-                  placeholder="请输入建议"
-                  show-word-limit
-                  rows="4">
-                </el-input>
-              </template>
-            </el-table-column>
-            <el-table-column label="操作" width="190">
-              <template slot-scope="scope">
-                <el-button type="text"  @click="removeAbnormal(scope.$index)">删除</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
-        <div class="text-add-abnormal" v-else>点击右上角添加体检异常信息</div>
       </div>
       <!-- <div class="abnormal-level">
         <span class="level1">一般</span>
