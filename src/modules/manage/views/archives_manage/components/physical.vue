@@ -110,8 +110,8 @@
         </el-popover>
       </div>
       <div class="section-conclusion-item">
-        <div class="center" v-if="formData.abnormalList.length > 0">
-          <el-table :data="formData.abnormalList">
+        <div class="center" v-if="combinedList.length > 0">
+          <el-table :data="combinedList">
             <el-table-column type="index" label="序号" show-overflow-tooltip width="120">
             </el-table-column>
             <el-table-column prop="abnormalName" label="异常" show-overflow-tooltip></el-table-column>
@@ -129,7 +129,7 @@
             </el-table-column>
             <el-table-column label="操作" width="190">
               <template slot-scope="scope">
-                <el-button type="text"  @click="removeAbnormal(scope.$index)">删除</el-button>
+                <el-button type="text" @click="handleRemove(scope.row, scope.$index)">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -470,6 +470,7 @@ export default {
       },
       StatusCheck: {},
       drugsList: [],
+      combinedList: [],
     };
   },
   watch: {
@@ -485,6 +486,17 @@ export default {
         if (!this.formData.notMatchAbnormalList) {
           this.$set(this.formData, 'notMatchAbnormalList', []);
         }
+        // 组成一个list
+        this.formData.abnormalList.forEach((e) => {
+          e.type = 1;
+        });
+        this.formData.notMatchAbnormalList.forEach((e) => {
+          e.type = 2;
+        });
+        this.combinedList = [
+          ...this.formData.abnormalList,
+          ...this.formData.notMatchAbnormalList,
+        ];
         this.formData.sectionConclusionList.forEach((val) => {
           this.$set(val, 'addData', {});
           if (val.itemList && val.itemList.length > 0) {
@@ -612,6 +624,10 @@ export default {
       this.abnormalModalVisible = false;
       this.onAbnormalChange(abnormalList);
       this.onUnMatchAbnormalChange(notMatchAbnormalList);
+      this.combinedList = [
+        ...this.formData.abnormalList,
+        ...this.formData.notMatchAbnormalList,
+      ];
     },
     saveProject(data) {
       if (this.checkProjectData(data, true)) {
@@ -739,14 +755,27 @@ export default {
             abnormalCode: row.abnormalCode,
             abnormalName: row.itemName,
             ...row,
+            type: 1,
           });
         }
       });
     },
     onUnMatchAbnormalChange(list) {
-      list.forEach((val) => {
-        if (!this.formData.notMatchAbnormalList.includes(val)) {
-          this.formData.notMatchAbnormalList.push(val);
+      list.forEach((row) => {
+        // if (!this.formData.notMatchAbnormalList.includes(val)) {
+        //   this.formData.notMatchAbnormalList.push({
+        //     ...val,
+        //     type: 2,
+        //   });
+        // }
+        if (!this.formData.notMatchAbnormalList.find(val =>
+          val.abnormalName === row,
+        )) {
+          this.formData.notMatchAbnormalList.push({
+            abnormalName: row,
+            advice: '',
+            type: 2,
+          });
         }
       });
     },
@@ -772,8 +801,16 @@ export default {
         this.$emit('submit', this.formData, valid);
       });
     },
+    // 删除
+    handleRemove(row, index) {
+      if (row.type === 1) {
+        this.removeAbnormal(row.abnormalCode, index);
+      } else {
+        this.removeUnMatchAbnormal(row, index);
+      }
+    },
     // 删除异常信息
-    removeAbnormal(index) {
+    removeAbnormal(item, num) {
       this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认删除！</span></div>`, '删除提示', {
         dangerouslyUseHTMLString: true,
         confirmButtonText: '确定',
@@ -781,11 +818,23 @@ export default {
         customClass: 'message-box-customize',
         showClose: true,
       }).then(() => {
+        const index = this.formData.abnormalList.indexOf(item);
         this.formData.abnormalList.splice(index, 1);
+        this.combinedList.splice(num, 1);
       });
     },
-    removeUnMatchAbnormal(index) {
-      this.formData.notMatchAbnormalList.splice(index, 1);
+    removeUnMatchAbnormal(row, num) {
+      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认删除！</span></div>`, '删除提示', {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        customClass: 'message-box-customize',
+        showClose: true,
+      }).then(() => {
+        const index = this.formData.notMatchAbnormalList.indexOf(row);
+        this.formData.notMatchAbnormalList.splice(index, 1);
+        this.combinedList.splice(num, 1);
+      });
     },
     onTemplateChange(row) {
       const sections = [];

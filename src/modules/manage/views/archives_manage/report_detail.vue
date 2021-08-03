@@ -67,7 +67,7 @@
         </el-col>
       </el-row>
     </el-form>
-    <template v-if="formData.abnormalList.length > 0">
+    <template v-if="combinedList.length > 0">
       <div class="divRightTitleDiv">
         <div class="divRightTitle" style="margin-top: 0">总检建议<div class="titleBiao"></div></div>
       </div>
@@ -76,7 +76,7 @@
       </div>
       <div class="section-conclusion-item">
         <div class="center">
-          <el-table :data="formData.abnormalList">
+          <el-table :data="combinedList">
             <el-table-column type="index" label="序号" show-overflow-tooltip width="120">
             </el-table-column>
             <el-table-column prop="abnormalName" label="异常" show-overflow-tooltip></el-table-column>
@@ -201,6 +201,7 @@ export default {
         5: 'V',
       },
       id: this.$route.query.id || '',
+      combinedList: [], // 总检建议
     };
   },
   mounted() {
@@ -220,6 +221,10 @@ export default {
           if (!this.formData.notMatchAbnormalList) {
             this.$set(this.formData, 'notMatchAbnormalList', []);
           }
+          this.combinedList = [
+            ...this.formData.abnormalList,
+            ...this.formData.notMatchAbnormalList,
+          ];
           this.queryTemplate();
           this.queryLibrary();
         }
