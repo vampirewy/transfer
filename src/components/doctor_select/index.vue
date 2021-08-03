@@ -364,6 +364,7 @@ export default {
       const item1 = this.dataSourceWork.find(t => t.id === rowId);
       if (item) {
         item.selected = false;
+        this.params.currentRow = {};
       }
       if (item1) {
         item1.selected = false;
