@@ -82,7 +82,6 @@ export default {
       },
       dataSource: [],
       currentRow: {},
-      userList: [],
     };
   },
   methods: {
@@ -97,24 +96,23 @@ export default {
         });
     },
     choose() {
-      if (this.userList.length) {
-        this.$emit('change', this.userList);
+      if (this.currentRow.length) {
+        this.$emit('change', this.currentRow);
+        this.currentRow = {};
+        this.$refs.multiTable.clearSelection();
       } else {
         this.$message('请选择客户');
       }
-      // this.$emit('change', Object.assign({}, this.currentRow));
-      // this.currentRow = {};
-      // this.$refs.multiTable.setCurrentRow({});
     },
     handleCurrentChange(val) {
       this.currentRow = val;
     },
     // 勾选事件
     handleSelect(value) {
-      this.userList = value.map(item => item.id);
+      this.currentRow = value.map(item => item.id);
     },
     search(current = 1) {
-      this.params.current = current;
+      this.params.pageNo = current;
       this.getUserList();
     },
     // 重置搜索框
