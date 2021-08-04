@@ -594,7 +594,7 @@ export default {
       this.$refs.form.validate((valid) => {
         if (!reg.test(this.formData.mobile)) {
           this.$message.error('手机号错误！');
-        } else if (!this.getAge(this.formData.cardNo)) {
+        } else if (this.formData.cardType === 1 && !this.getAge(this.formData.cardNo)) {
           this.$message.error('身份证号错误！');
         } else if (valid) {
           if (this.$route.query.owner && !this.$route.params.userId) {
