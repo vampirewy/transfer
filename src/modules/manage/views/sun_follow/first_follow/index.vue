@@ -1,6 +1,6 @@
 <template>
   <div class="health-monitor">
-    <tab-bars @messageData='TabbarBtn'></tab-bars>
+    <tab-bars @messageData='TabbarBtn' :selectTab="tabIndex"></tab-bars>
     <system-collect v-if="tabIndex === 0" ref="systemSet"></system-collect>
     <hand-report v-if="tabIndex === 1" ref="handSet"></hand-report>
   </div>
@@ -28,12 +28,19 @@ export default {
       tabIndex: 0,
     };
   },
+  mounted() {
+    if (this.$route.query.tabIndex) {
+      this.tabIndex = Number(this.$route.query.tabIndex);
+    }
+  },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       console.log(vm);
       if (vm.tabIndex === 0) {
         // systemSet列表
         vm.$refs.systemSet.getList();
+      } else {
+        vm.$refs.handSet.onSearch();
       }
     });
   },
@@ -42,7 +49,6 @@ export default {
       this.tabIndex = index;
       if (this.tabIndex === 0) {
         setTimeout(() => {
-          console.log(this.$refs.systemSet, 'this.$refs.systemSet');
           this.$refs.systemSet.onSearch();
         }, 50);
       }
