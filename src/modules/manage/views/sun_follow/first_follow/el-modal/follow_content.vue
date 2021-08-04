@@ -80,9 +80,9 @@
             <template slot-scope="scope">
               <span>{{scope.itemValue}}</span>
               <img v-if="scope.itemState === 1" class="iconStyle"
-              src="@/assets/images/wdecline.png" alt="">
-              <img v-if="scope.itemState === 2" class="iconStyle"
               src="@/assets/images/wrise.png" alt="">
+              <img v-if="scope.itemState === 2" class="iconStyle"
+              src="@/assets/images/wdecline.png" alt="">
             </template>
             </el-table-column>
            </template>
