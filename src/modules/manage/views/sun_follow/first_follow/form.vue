@@ -290,6 +290,9 @@ export default {
             this.$message.success('操作成功');
             this.$router.push({
               path: '/first_follow',
+              query: {
+                tabIndex: 1,
+              },
             });
           });
         }

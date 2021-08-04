@@ -13,6 +13,20 @@
 <script>
 export default {
   name: 'tabbar',
+  props: {
+    selectTab: {
+      type: Number,
+      default: 0,
+    },
+  },
+  watch: {
+    selectTab(val) {
+      this.Tabactive = val;
+    },
+  },
+  mounted() {
+    this.Tabactive = this.selectTab;
+  },
   data() {
     return {
       tabbor: ['系统采集', '手动上报'],
@@ -29,6 +43,9 @@ export default {
       if (index === 1) {
         this.tabIndex = 1;
       }
+      this.$router.push({
+        path: '/first_follow',
+      });
       this.$emit('messageData', this.tabIndex);
     },
   },
