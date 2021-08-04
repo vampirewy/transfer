@@ -585,8 +585,13 @@ export default {
       }
     },
     onSubmit() {
+      const reg = /^1[3|4|5|7|8|6|9][0-9]\d{8}$/;
       this.$refs.form.validate((valid) => {
-        if (valid) {
+        if (!reg.test(this.formData.mobile)) {
+          this.$message.error('手机号错误！');
+        } else if (this.formData.cardType === 1 && !this.getAge(this.formData.cardNo)) {
+          this.$message.error('身份证号错误！');
+        } else if (valid) {
           if (this.$route.query.owner && !this.$route.params.userId) {
             this.formData.userIdList.push(this.$store.state.user.userId);
             // this.formData.userIdList = [this.$route.query.owner];
