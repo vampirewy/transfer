@@ -776,38 +776,29 @@ export default {
     },
     // 删除
     handleRemove(row, index) {
-      if (row.type === 1) {
-        this.removeAbnormal(row.abnormalCode, index);
-      } else {
-        this.removeUnMatchAbnormal(row, index);
-      }
+      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认删除！</span></div>`, '删除提示', {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        customClass: 'message-box-customize',
+        showClose: true,
+      }).then(() => {
+        if (row.type === 1) {
+          this.removeAbnormal(row.abnormalCode);
+        } else {
+          this.removeUnMatchAbnormal(row);
+        }
+        this.combinedList.splice(index, 1);
+      });
     },
     // 删除异常信息
-    removeAbnormal(item, num) {
-      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认删除！</span></div>`, '删除提示', {
-        dangerouslyUseHTMLString: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        customClass: 'message-box-customize',
-        showClose: true,
-      }).then(() => {
-        const index = this.formData.abnormalList.indexOf(item);
-        this.formData.abnormalList.splice(index, 1);
-        this.combinedList.splice(num, 1);
-      });
+    removeAbnormal(item) {
+      const index = this.formData.abnormalList.indexOf(item);
+      this.formData.abnormalList.splice(index, 1);
     },
-    removeUnMatchAbnormal(row, num) {
-      this.$confirm(`<div class="delete-text-content"><img class="delete-icon" src="${deleteIcon}"/><span>该操作无法撤销，是否确认删除！</span></div>`, '删除提示', {
-        dangerouslyUseHTMLString: true,
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        customClass: 'message-box-customize',
-        showClose: true,
-      }).then(() => {
-        const index = this.formData.notMatchAbnormalList.indexOf(row);
-        this.formData.notMatchAbnormalList.splice(index, 1);
-        this.combinedList.splice(num, 1);
-      });
+    removeUnMatchAbnormal(row) {
+      const index = this.formData.notMatchAbnormalList.indexOf(row);
+      this.formData.notMatchAbnormalList.splice(index, 1);
     },
     onTemplateChange(row) {
       const sections = [];
