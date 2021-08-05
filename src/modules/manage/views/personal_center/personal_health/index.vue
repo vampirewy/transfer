@@ -99,7 +99,7 @@
                     <el-button
                       type="primary"
                       @click="removeDoct"
-                      v-if="getAccess('customers_edit')"
+                      v-if="getAccess('customers_switch_user_pool')"
                     >转入客户池</el-button>
                   </div>
                 </div>
