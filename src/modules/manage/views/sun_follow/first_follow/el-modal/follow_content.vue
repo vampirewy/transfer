@@ -79,9 +79,9 @@
             >
             <template slot-scope="scope">
               <span>{{scope.itemValue}}</span>
-              <img v-if="scope.itemState === 1" class="iconStyle"
+              <img v-if="scope.itemState === '1'" class="iconStyle"
               src="@/assets/images/wrise.png" alt="">
-              <img v-if="scope.itemState === 2" class="iconStyle"
+              <img v-if="scope.itemState === '2'" class="iconStyle"
               src="@/assets/images/wdecline.png" alt="">
             </template>
             </el-table-column>
@@ -94,8 +94,8 @@
                 <el-table-column label="数值/说明" align="center" prop="itemValue" show-overflow-tooltip :key="index">
                     <template slot-scope="scope" v-if="scope.$index*3+index<abnormalTable.length">
                       <span>{{abnormalTable[scope.$index*3+index].itemValue}}</span>
-                      <img v-if="abnormalTable[scope.$index*3+index].itemState === 1" class="iconStyle" src="@/assets/images/wdecline.png" alt="">
-                      <img v-if="abnormalTable[scope.$index*3+index].itemState === 2" class="iconStyle" src="@/assets/images/wrise.png" alt="">
+                      <img v-if="abnormalTable[scope.$index*3+index].itemState === '1'" class="iconStyle" src="@/assets/images/wrise.png" alt="">
+                      <img v-if="abnormalTable[scope.$index*3+index].itemState === '2'" class="iconStyle" src="@/assets/images/wdecline.png" alt="">
                     </template>
                 </el-table-column>
             </template>
