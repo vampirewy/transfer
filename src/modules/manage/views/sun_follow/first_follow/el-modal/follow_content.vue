@@ -39,11 +39,9 @@
                   {{scope.row.levelName | getResult}}
                 </span>
           </template></el-table-column>
-        <el-table-column prop="advice" label="就诊建议">
+        <el-table-column label="就诊建议" min-width="200px" prop="advice" show-overflow-tooltip>
           <template slot-scope="scope">
-                <span>
-                  {{scope.row.advice | getResult}}
-                </span>
+            <span>{{ scope.row.advice | getResult }}</span>
           </template>
         </el-table-column>
         <!-- <el-table-column prop="state" label="状态设置为空">

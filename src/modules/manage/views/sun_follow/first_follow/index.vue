@@ -29,18 +29,17 @@ export default {
     };
   },
   mounted() {
-    if (this.$route.query.tabIndex) {
-      this.tabIndex = Number(this.$route.query.tabIndex);
+    if (localStorage.getItem('tabIndex')) {
+      this.tabIndex = Number(localStorage.getItem('tabIndex'));
     }
+    localStorage.setItem('tabIndex', '');
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
       console.log(vm);
       if (vm.tabIndex === 0) {
         // systemSet列表
-        vm.$refs.systemSet.getList();
-      } else {
-        vm.$refs.handSet.onSearch();
+        vm.$refs.systemSet.onSearch();
       }
     });
   },
