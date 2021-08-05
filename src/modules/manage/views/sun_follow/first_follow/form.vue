@@ -281,6 +281,7 @@ export default {
         this.userList.filter(res => res.id === this.staffForm.reportUserId)[0].realName;
     },
     cancel() {
+      localStorage.setItem('tabIndex', 1);
       this.$router.go(-1);
     },
     submit() {
@@ -288,12 +289,8 @@ export default {
         if (valid) {
           this.$api.sunFollow.addResult(this.staffForm).then(() => {
             this.$message.success('操作成功');
-            this.$router.push({
-              path: '/first_follow',
-              query: {
-                tabIndex: 1,
-              },
-            });
+            localStorage.setItem('tabIndex', 1);
+            this.$router.go(-1);
           });
         }
       });

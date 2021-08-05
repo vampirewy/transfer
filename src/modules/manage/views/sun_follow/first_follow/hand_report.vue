@@ -114,12 +114,12 @@
              </span>
         </template>
       </el-table-column>
-      <el-table-column prop="mobile" label="手机号">
+      <el-table-column prop="mobile" label="手机号" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{ scope.row.mobile | getResult }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="cardNo" label="身份证号">
+      <el-table-column prop="cardNo" label="身份证号" show-overflow-tooltip>
         <template slot-scope="scope">
           <span>{{ scope.row.cardNo | getResult }}</span>
         </template>
@@ -161,7 +161,7 @@
               <span>{{ scope.row.reportState | getReportState }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="备注说明" prop="remark" min-width="100px">
+      <el-table-column label="备注说明" prop="remark" min-width="100px" show-overflow-tooltip>
         <template slot-scope="scope">
               <span>{{ scope.row.remark | getResult }}</span>
         </template>
