@@ -3,12 +3,12 @@
     <div>
       <el-input
         placeholder="客户姓名、手机号、客户编号"
-        v-model="formData.keywords"
+        v-model="params.keywords"
         style="width: 320px; margin: 0 12px 12px 0;"
       >
       </el-input>
-      <el-button type="primary" @click="search">搜索</el-button>
-      <el-button class="reset" style="border-radius: 20px;" @click="reset">重置</el-button>
+      <el-button type="primary" @click="search()">搜索</el-button>
+      <el-button class="reset" style="border-radius: 20px;" @click="reset()">重置</el-button>
     </div>
     <!-- @current-change="handleCurrentChange" -->
     <el-table
@@ -72,12 +72,12 @@ export default {
   },
   data() {
     return {
-      formData: {},
       params: {
         pageNo: 1,
         pageSize: 15,
         total: 0,
         currentRow: {},
+        keywords: '',
         hasManageDoctor: this.hasManageDoctor ? 1 : 0,
       },
       dataSource: [],
@@ -87,7 +87,7 @@ export default {
   methods: {
     getUserList() {
       this.$api.userManagerInterface
-        .fetchUserList(Object.assign(this.params, this.formData))
+        .fetchUserList(Object.assign(this.params))
         .then(({ data }) => {
           if (data.success) {
             this.params.total = data.data.total;
@@ -118,7 +118,7 @@ export default {
     // 重置搜索框
     reset() {
       this.params.current = 1;
-      this.formData = {};
+      this.params.keywords = '';
       this.getUserList();
     },
     cancel() {
