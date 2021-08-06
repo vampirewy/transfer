@@ -122,9 +122,9 @@
       <div>
         <span>所属企业</span>
         <el-select
+                filterable
                 v-model="form.workUnitId"
                 placeholder="请选择"
-                style="width: 140px"
                 clearable>
           <el-option :label="item.unitName" :value="item.unitId" v-for="(item, index) in unitList"
                 :key="index"></el-option>
