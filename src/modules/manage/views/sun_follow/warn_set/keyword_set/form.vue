@@ -67,10 +67,8 @@
                     v-model="staffForm.positiveLevel"
                     placeholder="请选择"
             >
-              <el-option label="阳性一级" :value="1"></el-option>
-              <el-option label="阳性二级" :value="2"></el-option>
-              <el-option label="阳性三级" :value="3"></el-option>
-              <el-option label="阳性四级" :value="4"></el-option>
+              <el-option :label="item.name"
+          :value="item.paramValue" :key="index" v-for="(item, index) in levelList"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -167,6 +165,7 @@ export default {
   },
   data() {
     return {
+      levelList: [],
       gridList: [],
       departmentList: [],
       itemList: [],
@@ -198,8 +197,14 @@ export default {
   },
   mounted() {
     this.getSectionList();
+    this.getLevelList();
   },
   methods: {
+    async getLevelList() {
+      const res = await this.$api.sunFollow.getPositiveLevel();
+      const { data } = res;
+      this.levelList = data.data || [];
+    },
     async getSectionList() {
       const res = await this.$api.physicalProjectListInterface
         .getSectionList({ pageNo: 1, pageSize: 999999 });
