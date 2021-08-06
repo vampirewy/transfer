@@ -121,9 +121,9 @@
             >
               <el-option
                       v-for="item in workUnitList"
-                      :key="item.id"
-                      :label="item.workUnitName"
-                      :value="item.id"
+                      :key="item.unitId"
+                      :label="item.unitName"
+                      :value="item.unitId"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -258,10 +258,9 @@ export default {
       });
     },
     async getWorkUnitList() {
-      const res = await this.$api.companyManageInterface.getWorkUnitPage(
-        { pageNo: 1, pageSize: 100000 });
-      const { data } = res.data;
-      this.workUnitList = data.data;
+      const res = await this.$api.companyManageInterface.getWorkUnitList({});
+      const { data } = res;
+      this.workUnitList = data.data || [];
       this.getDetail();
     },
     async getGridList() {
