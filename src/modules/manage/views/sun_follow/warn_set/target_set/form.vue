@@ -25,14 +25,9 @@
         <el-col :span="6">
           <el-form-item label="阳性分级" prop="positiveLevel">
             <el-select
-                    :disabled="detail"
-                    v-model="staffForm.positiveLevel"
-                    placeholder="请选择"
-            >
-              <el-option label="阳性一级" :value="1"></el-option>
-              <el-option label="阳性二级" :value="2"></el-option>
-              <el-option label="阳性三级" :value="3"></el-option>
-              <el-option label="阳性四级" :value="4"></el-option>
+            v-model="staffForm.positiveLevel" placeholder="请选择" clearable>
+              <el-option :label="item.name"
+          :value="item.paramValue" :key="index" v-for="(item, index) in levelList"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -214,6 +209,7 @@ export default {
   },
   data() {
     return {
+      levelList: [],
       planUserName: '',
       planuserModalVisible: false, // 随访人人列表弹窗
       detectionpopoverStatus: false,
@@ -253,6 +249,7 @@ export default {
     };
   },
   mounted() {
+    this.getLevelList();
     if (this.id) {
       this.$api.sunFollow.getWarnTemplateDetail({ id: this.id }).then(async (res) => {
         const { data } = res;
@@ -267,6 +264,11 @@ export default {
     }
   },
   methods: {
+    async getLevelList() {
+      const res = await this.$api.sunFollow.getPositiveLevel();
+      const { data } = res;
+      this.levelList = data.data || [];
+    },
     // 关闭小项列表
     handlePlanuserSelectChange(dataList) {
       this.$refs.userPopover.doClose();
