@@ -76,7 +76,7 @@ export default {
         { label: '主检医生', prop: 'zjDoctor' },
         { label: '主检时间', prop: 'zjDate' },
         { label: '上报时间', prop: 'createdTime' },
-        { label: '异常结果', prop: 'visitResut' },
+        { label: '异常结果', prop: 'abnormalResult' },
         { label: '阳性分级', prop: 'levelName' },
         { label: '管理医生', prop: 'doctorName' },
         { label: '回访医生', prop: 'visitDoctorName' },
