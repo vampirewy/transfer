@@ -396,7 +396,7 @@ export default {
   },
   computed: {
     dataRange() {
-      if (localStorage.getItem('dataRange') === 4) return false;
+      return localStorage.getItem('dataRange') !== 4;
     },
   },
   methods: {
@@ -474,7 +474,7 @@ export default {
     },
     // 管理医生/回访医生列表
     async getDoctorList() {
-      const res = await this.$api.sunFollow.doctorSearch({});
+      const res = await this.$api.doctorInterface.getDoctorList({ pageNo: 1, pageSize: 10000 });
       const { data } = res;
       this.doctorList = data.data.data || [];
     },
