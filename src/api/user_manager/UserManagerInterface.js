@@ -8,6 +8,12 @@ class UserManagerInterface extends BaseModule {
   getDetail(userId) {
     return this.get(`/client_info/get_client_info_detail/${userId}`);
   }
+  /**
+   * @description: 获取当前登陆者信息
+   * @property {string} realName 姓名
+   * @property {string} orgName 机构名
+   * @property {string} role 角色
+   */
   // 获取当前登陆者信息
   getUserInfo() {
     return this.get('/user/info');
@@ -43,16 +49,17 @@ class UserManagerInterface extends BaseModule {
   }
 
   fetchFileList(params = {}) {
-    return this.post(
-      '/client_info/get_client_info_annex__list_page',
-      params,
-    );
+    return this.post('/client_info/get_client_info_annex__list_page', params);
   }
   saveNewFile(params = {}) {
     return this.post('/client_info/save_client_info_annex', params);
   }
   claim(params = {}) {
     return this.post('/client_info/assignation_client_info', params);
+  }
+  // 批量分配
+  batchAllocation(params = {}) {
+    return this.post('/client_info/batchAllocation', params);
   }
 
   getDoctorList(params = {}) {
@@ -86,7 +93,10 @@ class UserManagerInterface extends BaseModule {
   // }
   // 短信平台 - 客户列表
   getclientMsgList(params = {}) {
-    return this.post('/client_info/get_client_info_create_msg_list_page', params);
+    return this.post(
+      '/client_info/get_client_info_create_msg_list_page',
+      params,
+    );
   }
   // 短信平台 - 创建短信 - 短信模板
   getMessageTemplate(params = {}) {

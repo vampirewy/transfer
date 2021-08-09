@@ -26,28 +26,6 @@
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="出生日期" prop="birth">
-                  <el-date-picker
-                          v-model="formData.birth"
-                          type="date"
-                          placeholder="选择出生日期"
-                          style="width: 100%"
-                          :picker-options="pickerOptions0"
-                  >
-                  </el-date-picker>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="性别" prop="gender">
-                  <el-radio-group v-model="formData.gender">
-                    <el-radio :label="1" value="1">男</el-radio>
-                    <el-radio :label="2" value="2">女</el-radio>
-                  </el-radio-group>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
                 <el-form-item label="联系方式" prop="mobile">
                   <el-input
                     v-model="formData.mobile"
@@ -118,10 +96,58 @@
             </el-row>
             <el-row>
               <el-col :span="12">
-                <el-form-item label="身份证" prop="cardNo">
-                  <el-input @blur="synchronousAge()" v-model="formData.cardNo"></el-input>
+                <el-form-item label="证件类型" prop="cardType">
+                  <el-select
+                          v-model="formData.cardType"
+                          placeholder="请选择"
+                          style="width: 100%;"
+                          @change="cardTypeChange"
+                  >
+                    <el-option :label="item.name"
+                               :value="item.paramValue"
+                               v-for="(item, index) in cardTypeList"
+                               :key="index"></el-option>
+                  </el-select>
                 </el-form-item>
               </el-col>
+              <el-col :span="12">
+                <el-form-item label="证件号码" prop="cardNo">
+                  <el-input
+                    @blur="formData.cardType===1?synchronousAge():''"
+                    v-model="formData.cardNo"
+                    :maxlength="formData.cardType===1?18:20">
+                  </el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="年龄" prop="age">
+                  <el-input v-model="formData.age" :readonly="formData.cardType===1"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="性别" prop="gender">
+                  <el-radio-group v-model="formData.gender" :disabled="formData.cardType===1">
+                    <el-radio :label="1" value="1">男</el-radio>
+                    <el-radio :label="2" value="2">女</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+              </el-col>
+              <!-- <el-col :span="12">
+                <el-form-item label="出生日期" prop="birth">
+                  <el-date-picker
+                          v-model="formData.birth"
+                          type="date"
+                          placeholder="选择出生日期"
+                          style="width: 100%"
+                          :picker-options="pickerOptions0"
+                  >
+                  </el-date-picker>
+                </el-form-item>
+              </el-col> -->
+            </el-row>
+            <el-row>
               <el-col :span="12">
                 <el-form-item label="婚姻状况">
                   <el-select
@@ -171,7 +197,7 @@
                     <doctor-select
                             v-if="popoverStatus"
                             mode="normal"
-                            :isRadio="false"
+                            :isRadio="true"
                             :clientId="$route.params.userId"
                             :selectedDoctor="formData.selectedDoctors"
                             :selectedDoctorIds="selectedDoctorIds"
@@ -323,7 +349,7 @@ import File from './components/file_dialog.vue';
 import FileDetail from './components/file_detail.vue';
 import doctorSelect from '@/components/doctor_select/index.vue';
 import deleteIcon from '~/src/assets/images/deleteicon.png';
-import * as dayjs from 'dayjs';
+// import * as dayjs from 'dayjs';
 
 export default {
   name: 'ClientEdit',
@@ -339,16 +365,17 @@ export default {
   },
   data() {
     const validateIDCard = (rule, value, callback) => {
-      // if (value === '') {
-      //   callback(new Error('请输入身份证'));
-      //   return;
-      // }
-      const IDCARD_REG = /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}$)/;
-      if (!IDCARD_REG.test(value)) {
-        callback(new Error('请输入合理身份证号'));
+      if (value === '') {
+        callback(new Error());
         return;
       }
-
+      if (this.formData.cardType === 1) {
+        const IDCARD_REG = /(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}$)/;
+        if (!IDCARD_REG.test(value)) {
+          callback(new Error('请输入合理身份证号'));
+          return;
+        }
+      }
       callback();
     };
 
@@ -363,7 +390,7 @@ export default {
         name: '',
       },
       formData: {
-        birth: '', // 1992-01-04
+        // birth: '', // 1992-01-04
         gridId: '',
         userRealName: '',
         profession: '',
@@ -373,6 +400,7 @@ export default {
         name: '',
         age: '',
         gender: '',
+        cardType: 1,
         cardNo: '',
         marriage: '',
         ethnicGroup: '',
@@ -428,12 +456,26 @@ export default {
             trigger: 'change',
           },
         ],
+        cardType: [
+          {
+            required: true,
+            message: '请选择证件类型',
+            trigger: 'change',
+          },
+        ],
         cardNo: [
           {
             required: true,
-            message: '请输入正确的身份证',
+            message: '请输入正确的证件号码',
             trigger: 'blur',
             validator: validateIDCard,
+          },
+        ],
+        age: [
+          {
+            required: true,
+            message: '请输入年龄',
+            trigger: 'blur',
           },
         ],
         marriage: [
@@ -443,13 +485,13 @@ export default {
             trigger: 'change',
           },
         ],
-        userRealName: [
-          {
-            required: true,
-            message: '请选择',
-            trigger: 'change',
-          },
-        ],
+        // userRealName: [
+        //   {
+        //     required: true,
+        //     message: '请选择',
+        //     trigger: 'change',
+        //   },
+        // ],
       },
       popoverStatus: false,
       dialogFormVisible: false,
@@ -463,6 +505,7 @@ export default {
       educationLevelList: [],
       professionList: [],
       chooseFileList: [],
+      cardTypeList: [],
       params: {
         pageNo: 1,
         pageSize: 15,
@@ -524,8 +567,9 @@ export default {
     },
     submitAssign(rows) {
       this.$refs.popover1.showPopper = false;
-      this.formData.userIdList = rows.filter(t => t.selectType === 1).map(t => t.id);
-      this.formData.workIdList = rows.filter(t => t.selectType === 2).map(t => t.id);
+      // this.formData.userIdList = rows.filter(t => t.selectType === 1).map(t => t.id);
+      // this.formData.workIdList = rows.filter(t => t.selectType === 2).map(t => t.id);
+      this.formData.userIdList = rows.map(t => t.id);
 
       this.formData.userRealName = rows
         .map(item => item.realName)
@@ -539,12 +583,18 @@ export default {
     },
     submit() {},
     handleClick() {},
+    // 操作证件类型
+    cardTypeChange(val) {
+      if (val === 1) {
+        this.synchronousAge();
+      }
+    },
     onSubmit() {
       const reg = /^1[3|4|5|7|8|6|9][0-9]\d{8}$/;
       this.$refs.form.validate((valid) => {
         if (!reg.test(this.formData.mobile)) {
           this.$message.error('手机号错误！');
-        } else if (!this.getAge(this.formData.cardNo)) {
+        } else if (this.formData.cardType === 1 && !this.getAge(this.formData.cardNo)) {
           this.$message.error('身份证号错误！');
         } else if (valid) {
           if (this.$route.query.owner && !this.$route.params.userId) {
@@ -554,7 +604,7 @@ export default {
           // this.formData.birthday = dayjs(this.formData.birthday).format('YYYY-MM-DD');
           this.formData = {
             ...this.formData,
-            birth: dayjs(this.formData.birth).format('YYYY-MM-DD'),
+            // birth: dayjs(this.formData.birth).format('YYYY-MM-DD'),
           };
           this.formData.annexParams =
               this.dataSource.filter(t => t.time && t.deleted === 0).map(t => ({
@@ -611,15 +661,17 @@ export default {
         strBirthday = `19${identityCard.substr(6, 2)}/${identityCard.substr(8, 2)}/${identityCard.substr(10, 2)}`;
       }
       // 时间字符串里，必须是“/”
-      return new Date(strBirthday); // const birthDate = new Date(strBirthday);
-      // const nowDateTime = new Date();
-      // let age = nowDateTime.getFullYear() - birthDate.getFullYear();
+      // return new Date(strBirthday);
+      const birthDate = new Date(strBirthday);
+      const nowDateTime = new Date();
+      let age = nowDateTime.getFullYear() - birthDate.getFullYear();
       // 再考虑月、天的因素;.getMonth()获取的是从0开始的，这里进行比较，不需要加1
       // eslint-disable-next-line max-len
-      // if (nowDateTime.getMonth() < birthDate.getMonth() || (nowDateTime.getMonth() === birthDate.getMonth() && nowDateTime.getDate() < birthDate.getDate())) {
-      //   age--;
-      // }
-      // return age;
+      if (nowDateTime.getMonth() < birthDate.getMonth() || (nowDateTime.getMonth() === birthDate.getMonth() && nowDateTime.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      const sex = identityCard.toString().substr(16, 1) % 2 === 0 ? 2 : 1;
+      return { birthDate, age, sex };
     },
     uploadSuccess(val) {
       this.dataSource.push({
@@ -647,7 +699,10 @@ export default {
       });
     },
     synchronousAge() {
-      this.formData.birth = this.getAge(this.formData.cardNo);
+      // this.formData.birth = this.getAge(this.formData.cardNo);
+      const { age, sex } = this.getAge(this.formData.cardNo);
+      this.formData.age = age || 0;
+      this.formData.gender = sex;
     },
     search(current = 1) {
       this.params.pageNo = current;
@@ -658,7 +713,9 @@ export default {
         if (data) {
           let result = data.data;
           // eslint-disable-next-line no-param-reassign
-          result.birth = result.birth || this.getAge(result.cardNo);
+          // const { birthDate, age } = this.getAge(this.formData.cardNo);
+          // result.birth = result.birth || birthDate;
+          // result.age = result.age || age;
           result = {
             ...result,
             gridId: result.gridId === '0' ? '' : result.gridId,
@@ -734,6 +791,8 @@ export default {
     this.getSystemParamByCode('HM005', 'ethnicGroup');
     this.getSystemParamByCode('HM007', 'marriage');
     this.getSystemParamByCode('HM008', 'profession');
+    this.getSystemParamByCode('CARDTYPE', 'cardType');
+
     if (this.$route.query.owner && !this.$route.params.userId) {
       const userName = this.$store.state.user.userName;
       const userId = this.$store.state.user.userId;

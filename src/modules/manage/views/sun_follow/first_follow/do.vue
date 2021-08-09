@@ -25,7 +25,10 @@
           <div class="divRightTitle" style="margin-top: 0">跟踪内容
             <div class="titleBiao"></div></div>
         </div>
-        <follow-content @getTable="getFollowContent"></follow-content>
+        <follow-content
+        @getTable="submit"
+        :noFinish="noFinish"
+        :isTask="isTask"></follow-content>
         <el-form
                 :model="form"
                 ref="form"
@@ -39,45 +42,42 @@
           </div>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="跟踪时间">
-                <el-date-picker
-                        style="width: 100%"
-                        v-model="form.trackingDate"
-                        type="date"
-                        format="yyyy-MM-dd"
-                        value-format="yyyy-MM-dd"
-                        placeholder="请选择">
-                </el-date-picker>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="跟踪人员" prop="trackingUserName">
-                <el-input
-                        type="text"
-                        disabled
-                        placeholder="请输入"
-                        v-model="form.trackingUserName"></el-input>
+              <el-form-item
+                prop="trackingResult"
+                label="跟踪结果"
+                min-width="120px"
+              >
+                  <el-select
+                    v-model="form.trackingResult"
+                    placeholder="请选择"
+                    style="width: 210px"
+                    clearable
+                  >
+                    <el-option :label="item.name" :value="item.paramValue"  :key="index"
+                              v-for="(item, index) in stateList"
+                    ></el-option>
+                  </el-select>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="跟踪方式">
-                <el-select v-model="form.trackingWay" placeholder="请选择">
-                  <el-option :label="it.name" :value="it.id" :key="it.id"
-                             v-for="it in planWayList">
-                  </el-option>
+              <el-form-item label="跟踪方式" prop="trackingWay">
+                <el-select v-model="form.trackingWay" placeholder="请选择" clearable>
+                  <el-option :label="item.name" :value="item.paramValue"  :key="index"
+                              v-for="(item, index) in planWayList"
+                    ></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row v-if="$route.params.sourceType === '2'">
+          <!-- <el-row v-if="$route.params.sourceType === '2'">
             <el-col :span="24">
               <el-form-item label="跟踪提示">
                 {{nextTrackingTip | getResult}}
               </el-form-item>
             </el-col>
-          </el-row>
+          </el-row> -->
           <el-row>
             <el-col :span="24">
               <el-form-item label="跟踪记录" prop="trackingRemark">
@@ -125,20 +125,9 @@
           </div>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="回访时间">
-                <el-select
-                        v-model="form.nextTrackingDay"
-                        placeholder="请选择"
-                        @change="changeAfterDay"
-                >
-                  <el-option v-for="item in nextTrackingDayList"
-                             :label="item.name" :value="item.value" :key="item.value"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="对应日期">
+              <el-form-item class="nextDate" label="下次跟踪时间">
                 <el-date-picker
+                        clearable
                         style="width: 100%"
                         v-model="form.nextTrackingDate"
                         type="date"
@@ -152,18 +141,18 @@
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="回访方式">
-                <el-select v-model="form.nextTrackingWay" placeholder="请选择">
-                  <el-option :label="it.name" :value="it.id" :key="it.id"
-                             v-for="it in planWayList">
-                  </el-option>
+              <el-form-item label="跟踪方式">
+                <el-select v-model="form.nextTrackingWay" placeholder="请选择" clearable>
+                  <el-option :label="item.name" :value="item.paramValue"  :key="index"
+                              v-for="(item, index) in planWayList"
+                    ></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="回访提示">
+              <el-form-item label="跟踪提示">
                 <el-input
                         type="textarea"
                         v-model="form.nextTrackingTip"
@@ -180,7 +169,7 @@
         </el-form>
         <div class="handle-btn">
           <el-button class="reset-btn" size="small" @click="goBack">返回</el-button>
-          <el-button size="small" class="sureBtn" type="primary" @click="submit">保存</el-button>
+          <el-button size="small" class="sureBtn" type="primary" @click="submit(1)">保存</el-button>
         </div>
       </el-col>
     </el-row>
@@ -214,8 +203,9 @@ export default {
     return {
       popoverStatus: false,
       form: {
+        reportId: this.$route.query.reportId,
         clientId: this.$route.params.clientId,
-        trackingDate: dayjs(new Date()).format('YYYY-MM-DD'),
+        trackingDate: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'),
         trackingUserId: '',
         trackingUserName: '',
         trackingWay: '',
@@ -227,9 +217,10 @@ export default {
         nextTrackingWay: '',
         nextTrackingTip: '',
         contentSaveRequests: [],
+        trackingResult: '',
       },
       nextTrackingTip: '', // 下次回访的提示 取记录里面最后一条的提示
-      allIsCloseCaseShow: false, // 是否全部都结案，全部结案的不下次回访
+      allIsCloseCaseShow: true, // 是否全部都结案，全部结案的不下次回访
       contentSaveRequestsList: [],
       planWayList: [],
       tabbor: ['跟踪记录', '体检信息', '历史阳性'], // , '就诊记录'
@@ -239,20 +230,48 @@ export default {
       nextTrackingDayList: [],
       rules: {
         messageContent: [{ required: true, message: '请输入短信小结' }],
+        trackState: [{ required: true, message: '请选中跟踪结果' }],
+        trackingResult: [{ required: true, message: '请选择跟踪结果' }],
+        trackingWay: [{ required: true, message: '请选择跟踪方式' }],
       },
+      stateList: [],
     };
   },
   mounted() {
     this.getUserInfo();
     this.getPlanWayList();
+    this.getSystemParamBySC002();
+  },
+  computed: {
+    isTask() {
+      return this.$route.query.from === 'task';
+    },
+    // 结案按钮
+    noFinish() {
+      if (this.form.nextTrackingDate) return true;
+    },
+  },
+  updated() {
+    this.form.trackingDate = dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss');
   },
   methods: {
+    async getSystemParamBySC002() {
+      const res = await this.$api.userManagerInterface.getSystemParamByCode('TRACKRESULTS');
+      const { data } = res.data;
+      this.stateList = data;
+    },
     changeAfterDay(val) {
       this.form.nextTrackingDate = dayjs(new Date(new Date().getTime() + (8.64e7 * val))).format('YYYY-MM-DD');
     },
     async getFollowDayWayDetail() {
       const res = await this.$api.userManagerInterface.getTrackingConfigDetail(1);
       const { data } = res.data;
+      // if (data.redLvDay) {
+      //   // 判断是否已经制定下次跟踪计划
+      //   this.noFinish = true;
+      // } else {
+      //   this.noFinish = false;
+      // }
       if (this.reportLv === 1) {
         this.form.trackingWay = this.form.nextTrackingWay = data.redLvWay;
         this.nextTrackingDayList = [{ name: `${data.redLvDay}天后`, value: data.redLvDay }];
@@ -262,7 +281,7 @@ export default {
         this.nextTrackingDayList = [{ name: `${data.orangeLvDay}天后`, value: data.orangeLvDay }];
         this.form.nextTrackingDay = data.orangeLvDay;
       }
-      this.changeAfterDay(this.form.nextTrackingDay);
+      // this.changeAfterDay(this.form.nextTrackingDay);
     },
     async getUserInfo() {
       const res = await this.$api.userManagerInterface.getUserInfo();
@@ -275,33 +294,32 @@ export default {
      * @return {Promise<void>}
      */
     async getPlanWayList() {
-      const res = await this.$api.userFollowInterface.getIntervenePlanWayList();
+      const res = await this.$api.sunFollow.getTrackMethod();
       const { data } = res.data;
-      const list = data.map((it) => {
-        const { id, name } = it;
-        return { id, name };
-      });
-      this.planWayList = list;
+      // const list = data.map((it) => {
+      //   const { id, name } = it;
+      //   return { id, name };
+      // });
+      this.planWayList = data;
       this.getFollowDayWayDetail(); // 获取到方式列表后再请求，防止闪显
     },
     getNextTrackingTip(val) {
       this.nextTrackingTip = val;
     },
-    getFollowContent(list) {
-      console.log(list);
-      this.contentSaveRequestsList = list;
-      let allIsCloseCase = false;
-      let reportLv = 2; // 默认橙色
-      list.forEach((val) => {
-        if (val.isCloseCase === 2) { // 1 已结案 2 未结案。  如果有未结案的就展示
-          allIsCloseCase = true;
-        }
-        if (val.reportLv === 1) {
-          reportLv = 1;
-        }
-      });
-      this.allIsCloseCaseShow = allIsCloseCase;
-      this.reportLv = reportLv; // 设置回访方式以红色/橙色为主
+    getFollowContent() {
+      // this.contentSaveRequestsList = list;
+      // let allIsCloseCase = false;
+      // let reportLv = 2; // 默认橙色
+      // list.forEach((val) => {
+      //   if (val.isCloseCase === 2) { // 1 已结案 2 未结案。  如果有未结案的就展示
+      //     allIsCloseCase = true;
+      //   }
+      //   if (val.reportLv === 1) {
+      //     reportLv = 1;
+      //   }
+      // });
+      // this.allIsCloseCaseShow = allIsCloseCase;
+      // this.reportLv = reportLv; // 设置回访方式以红色/橙色为主
     },
     TabbarBtn(index) {
       this.Tabactive = index;
@@ -310,47 +328,42 @@ export default {
     goBack() {
       this.$router.go(-1);
     },
-    submit() {
+    submit(ev) {
       this.$refs.form.validate((valid) => {
         if (valid) {
-          console.log(dayjs(new Date()).format('YYYY-MM-DD'));
+          // console.log(dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'), 'dayjs');
+          this.form.trackingDate = dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss');
           const sendData = Object.assign({}, this.form);
           sendData.contentSaveRequests = [];
-          let validSave = true;
-          this.contentSaveRequestsList.forEach((val) => {
-            if (val.nextTrackingDate <= dayjs(new Date()).format('YYYY-MM-DD') && val.state === '') {
-              this.$message.warning('请选择今日及以前跟踪计划的跟踪结果');
-              validSave = false;
-              return;
-            }
-            sendData.contentSaveRequests.push({
-              positiveTrackingId: val.id,
-              isCloseCase: val.isCloseCase,
-              state: val.state,
-            });
-          });
-          if (!validSave) { // 如果验证未通过
-            return;
-          }
-          console.log(this.contentSaveRequestsList);
-          sendData.trackingDate = `${sendData.trackingDate.split(' ')[0]} 00:00:00`;
-          sendData.nextTrackingDate = `${sendData.nextTrackingDate.split(' ')[0]} 00:00:00`;
+          // let validSave = true;
+          // this.contentSaveRequestsList.forEach((val) => {
+          //   if (val.nextTrackingDate <= dayjs(new Date()).format('YYYY-MM-DD')
+          // && val.state === '') {
+          //     this.$message.warning('请选择今日及以前跟踪计划的跟踪结果');
+          //     validSave = false;
+          //     return;
+          //   }
+          //   sendData.contentSaveRequests.push({
+          //     positiveTrackingId: val.id,
+          //     isCloseCase: val.isCloseCase,
+          //     state: val.state || 1,
+          //   });
+          // });
+          // if (!validSave) { // 如果验证未通过
+          //   return;
+          // }
+          // console.log(this.contentSaveRequestsList);
+          // sendData.trackingDate = `${sendData.trackingDate.split(' ')[0]} 00:00:00`;
+          sendData.nextTrackingDate = `${sendData.nextTrackingDate.split(' ')[0]}`;
           if (this.allIsCloseCaseShow === false) { // 如果都结案
             sendData.nextTrackingDay = '';
             sendData.nextTrackingDate = '';
           }
           sendData.sourceType = this.$route.params.sourceType;
-          this.$api.sunFollow.savePositiveReturn(sendData).then(() => {
+          sendData.isCloseCase = ev; // 是否结案
+          this.$api.sunFollow.saveVisitRecard(sendData).then(() => {
             this.$message.success('操作成功');
-            if (this.$route.params.sourceType === '1') {
-              this.$router.push({
-                path: '/first_follow',
-              });
-            } else if (this.$route.params.sourceType === '2') {
-              this.$router.push({
-                path: '/follow_task',
-              });
-            }
+            this.$router.go(-1);
           });
         }
       });
@@ -470,6 +483,9 @@ export default {
       color: #fff;
     }
   }
+}
+/deep/.el-row {
+  margin-bottom: 10px;
 }
  .handle-btn {
     text-align: center;
@@ -613,5 +629,17 @@ export default {
   border-radius: 50px;color: #FA912B;
   font-size: 12px;
   padding: 5px 12px;
+}
+.nextTrack{
+  width: 100px;
+}
+/deep/.nextDate {
+  display: flex;
+  .el-form-item__label {
+    width: 120px !important;
+  }
+  .el-form-item__content {
+    margin-left: 0 !important;
+  }
 }
 </style>

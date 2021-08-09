@@ -11,7 +11,7 @@ import CapsuleUI from '~/plugins/@zyf2e/capsule-ui/lib';
 import { getToken } from '~/src/libs/util';
 class BaseModule {
   constructor() {
-    this.$http = axios.create();
+    this.$http = axios.create({ baseURL: process.env.api.common_url });
     this.dataMethodDefaults = {
       headers: {
         'Content-Type': 'application/json',
@@ -23,7 +23,7 @@ class BaseModule {
       (request) => {
         const opt = request;
         opt.headers.token = getToken();
-        opt.url = `${process.env.api.common_url}${opt.url}`;
+        // opt.url = `${process.env.api.common_url}${opt.url}`;
         return opt;
       },
       error => Promise.reject(error),

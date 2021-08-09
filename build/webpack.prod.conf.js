@@ -22,6 +22,7 @@ const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin') // 压缩css
 const InsertScriptPlugin = require('./insert.script.plugin') // 注入脚本文件
 const TerserPlugin = require('terser-webpack-plugin'); // 编译加速
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 // api配置
 const api = require('../config/api')
@@ -46,10 +47,12 @@ function resolve(dir) {
  */
 const actions = () => {
     const functionA = () => env.api = JSON.stringify(api.build)
-    const functionB = () => env.api = JSON.stringify(api.build_dev)
+    // const functionB = () => env.api = JSON.stringify(api.build_dev)
+    const functionTest = ()=> env.api = JSON.stringify(api.test)
     return new Map([
         ['prod', functionA],
-        ['prod_dev', functionB]
+        // ['prod_dev', functionB],
+        ['test',functionTest],
     ])
 }
 
@@ -172,6 +175,18 @@ const webpackConfig = merge(baseWebpackConfig, {
         }),
         // copy custom static assets param array [url1,url2]
         new CopyWebpackPlugin(new ProdCopy().insert()), // 拷贝资源
+        new UglifyJsPlugin({
+            cache:true,
+            uglifyOptions:{
+                compress:{
+                    drop_console:true,
+                    drop_debugger:true
+                },
+                output:{
+                    beautify:false
+                }
+            }
+        })
     ]
 })
 

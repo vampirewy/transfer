@@ -19,6 +19,7 @@ module.exports = class InsertCopyWebpackPlugin {
 
         this.copyPath[`${src}/assets/images`] = 'static/images';
         this.copyPath[`${src}/assets/fonts`] = 'static/css/fonts';
+        this.copyPath[`${src}/images`] = 'images'
 
         this.copyPath[`${dll}/css/common.min.css`] = 'static/css';
         this.copyPath[`${dll}/js/common.min.js`] = 'static/js';

@@ -44,7 +44,7 @@
                   highlight-current-row
                   @select="handleSelect"
           >
-            <el-table-column v-if="isRadio" width="55">
+            <el-table-column v-if="isRadio" width="38">
               <template slot-scope="scope">
                 <el-radio
                         v-model="params.currentRow"
@@ -85,7 +85,7 @@
             ></el-pagination>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="工作室" name="second">
+        <el-tab-pane label="工作室" name="second" v-if="isSunEnter">
           <el-table
                   @select="handleSelect"
                   :data="dataSourceWork"
@@ -172,11 +172,12 @@
                   highlight-current-row
                   @select="handleSelect"
           >
-            <el-table-column v-if="isRadio" width="55">
+            <el-table-column v-if="isRadio" width="38">
               <template slot-scope="scope">
                 <el-radio
                         v-model="params.currentRow"
                         :label="scope.row"
+                         @change="ev => onChange(1, scope.row, ev)"
                 ></el-radio>
               </template>
             </el-table-column>
@@ -191,10 +192,17 @@
             </el-table-column>
             <el-table-column property="realName" label="姓名"> </el-table-column>
             <el-table-column property="roleName" label="角色"></el-table-column>
-            <el-table-column property="department" label="科室/部门">
+            <!-- <el-table-column property="department" label="科室/部门">
               <template slot-scope="scope">
                 <p class="textarea">
                   {{ scope.row.department || '-'}}
+                </p>
+              </template>
+            </el-table-column> -->
+            <el-table-column property="roleName" label="简介">
+              <template slot-scope="scope">
+                <p class="textarea">
+                  {{ scope.row.introduction }}
                 </p>
               </template>
             </el-table-column>
@@ -296,6 +304,11 @@ export default {
     },
     visible: Boolean,
     clientId: String,
+    isSunEnter: Boolean,
+    type: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {
@@ -327,6 +340,7 @@ export default {
       const res = await this.$api.userManagerInterface.searchDoctor({
         ...this.params,
         selectedUserIds: selectedUserIdsStr,
+        type: this.type,
       });
       const { data } = res.data;
       this.dataSource = data.data || [];
@@ -336,6 +350,8 @@ export default {
           const val = row;
           if (this.userList.map(it => it.id).includes(val.id)) {
             val.selected = true;
+            // 单选
+            this.params.currentRow = val;
           } else {
             val.selected = false;
           }
@@ -349,6 +365,7 @@ export default {
       const item1 = this.dataSourceWork.find(t => t.id === rowId);
       if (item) {
         item.selected = false;
+        this.params.currentRow = {};
       }
       if (item1) {
         item1.selected = false;
@@ -391,6 +408,15 @@ export default {
     onChange(type, scope, ev) {
       const s = scope;
       if (ev) {
+        if (!this.isSunEnter) {
+          this.userList = [scope];
+          this.dataSource.forEach((item) => {
+            if (item.id !== scope.id) {
+              item.selected = false;
+            }
+          });
+          return;
+        }
         if (type === 1) {
           s.selectType = 1;
         }
@@ -398,7 +424,11 @@ export default {
           s.realName = scope.name;
           s.selectType = 2;
         }
-        this.userList.push(scope);
+        if (this.isRadio) {
+          this.userList = [scope];
+        } else {
+          this.userList.push(scope);
+        }
       } else {
         const idx = this.userList.findIndex(it => it.id === scope.id);
         this.userList.splice(idx, 1);

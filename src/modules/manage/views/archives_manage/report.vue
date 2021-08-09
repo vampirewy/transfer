@@ -246,8 +246,8 @@
                     type="text"
                     size="small"
                     @click="handleEdit(scope.row.id)"
-                    v-if="getAccess('physical_examination_report_edit')
-                    "
+                    v-if="getAccess('physical_examination_report_edit')"
+                    :disabled="scope.row.source===1"
                   >编辑</el-button>
                   <el-button
                     type="text"
@@ -485,6 +485,11 @@ export default {
     handleDelete() { // 批量删除
       if (this.multipleSelection.length === 0) {
         this.$message.error('请先选择数据');
+        return false;
+      }
+      const source = this.multipleSelection.filter(item => item.source === 1);
+      if (source.length > 0) {
+        this.$message.error(`【${source[0].clientName}】的体检报告来自检中，不可删除`);
         return false;
       }
       let batch = false;

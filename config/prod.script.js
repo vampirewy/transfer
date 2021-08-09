@@ -15,9 +15,9 @@ module.exports = class ProdScript {
 
   compiler() {
     let manage = this.manage(); // 管理系统
-    let admin = this.admin(); // 后台管理
-
-    return [manage, admin];
+    // let admin = this.admin(); // 后台管理
+    return [manage];
+    // return [manage, admin];
   }
 
   manage() {

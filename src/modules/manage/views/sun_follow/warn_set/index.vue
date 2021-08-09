@@ -42,7 +42,7 @@ export default {
       this.tabIndex = index;
       if (this.tabIndex === 0) {
         setTimeout(() => {
-          console.log(this.$refs.targetSet);
+          console.log(this.$refs.targetSet, 'this.$refs.targetSet');
           this.$refs.targetSet.search();
         }, 50);
       }
