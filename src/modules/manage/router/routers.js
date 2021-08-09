@@ -32,6 +32,7 @@ import knowledgeBase from './route/knowledge_base';
 import statistics from './route/statistics';
 import sunFollow from './route/sun_follow';
 import inhospitalChange from './route/in_hospital_change';
+import workstationRoute from './route/workstation';
 export default [
   ...loginRoute,
   ...homeRoute,
@@ -51,4 +52,5 @@ export default [
   ...statistics,
   ...sunFollow,
   ...inhospitalChange,
+  ...workstationRoute,
 ];

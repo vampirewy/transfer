@@ -23,11 +23,19 @@
                 <el-option label="女" :value="2"></el-option>
               </el-select>
             </div>
-            <div>
+            <!-- <div>
               <span>预警分类：</span>
               <el-select v-model="form.trackingLv" placeholder="请选择" clearable style="width: 150px">
                 <el-option label="红色预警" :value="1"></el-option>
                 <el-option label="橙色预警" :value="2"></el-option>
+              </el-select>
+            </div> -->
+            <div>
+              <span>阳性分级：</span>
+              <el-select
+              v-model="form.positiveLevel" placeholder="请选择" clearable style="width: 150px">
+                <el-option :label="item.name"
+            :value="item.paramValue" :key="index" v-for="(item, index) in levelList"></el-option>
               </el-select>
             </div>
           </div>
@@ -92,7 +100,7 @@
                 </span>
               </template>
             </el-table-column>
-            <el-table-column
+            <!-- <el-table-column
               prop="trackingLv"
               label="预警分类"
               show-overflow-tooltip>
@@ -100,6 +108,14 @@
                 <span :class="scope.row.trackingLv === 1 ? 'warnRed' : 'warnYellow'">
                   {{scope.row.trackingLv === 1 ? '红色预警' : '橙色预警' }}
                 </span>
+              </template>
+            </el-table-column> -->
+            <el-table-column
+              prop="levelName"
+              label="阳性分级"
+              show-overflow-tooltip>
+              <template slot-scope="scope">
+                <span>{{ scope.row.levelName | getResult }}</span>
               </template>
             </el-table-column>
             <el-table-column
@@ -188,6 +204,7 @@ export default {
         gender: '',
         trackingLv: '',
         templateType: 1,
+        positiveLevel: '',
       },
       tableData: [],
       total: 0,
@@ -198,9 +215,18 @@ export default {
       currentId: '',
       roleOptions: [],
       multipleSelection: [], // 当前页选中的数据
+      levelList: [],
     };
   },
+  mounted() {
+    this.getLevelList();
+  },
   methods: {
+    async getLevelList() {
+      const res = await this.$api.sunFollow.getPositiveLevel();
+      const { data } = res;
+      this.levelList = data.data || [];
+    },
     handleSelectionChange(val) {
       // table组件选中事件,
       this.multipleSelection = val;
@@ -213,6 +239,7 @@ export default {
       this.currentPage = 1;
       Object.assign(this.$data, this.$options.data());
       this.queryList();
+      this.getLevelList();
     },
     queryList() {
       // 获取列表

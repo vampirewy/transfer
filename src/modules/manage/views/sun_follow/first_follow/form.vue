@@ -58,6 +58,20 @@
       </el-row>
       <el-row>
         <el-col :span="6">
+          <el-form-item label="阳性分级" prop="positiveLevel">
+            <el-select
+                    v-model="staffForm.positiveLevel"
+                    placeholder="请选择"
+                    @change="getUserName"
+            >
+              <el-option label="阳性一级" :value="1"></el-option>
+              <el-option label="阳性二级" :value="2"></el-option>
+              <el-option label="阳性三级" :value="3"></el-option>
+              <el-option label="阳性四级" :value="4"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <!-- <el-col :span="6">
           <el-form-item label="上报等级" prop="reportLv">
             <el-select
                     v-model="staffForm.reportLv"
@@ -67,7 +81,7 @@
               <el-option label="橙色预警" :value="2"></el-option>
             </el-select>
           </el-form-item>
-        </el-col>
+        </el-col> -->
         <el-col :span="6">
           <el-form-item label="项目名称" prop="itemName">
             <el-input
@@ -84,14 +98,14 @@
                     v-model="staffForm.itemValue"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
+        <!-- <el-col :span="6">
           <el-form-item label="是否总检">
             <el-radio-group v-model="staffForm.reportState">
               <el-radio :label="1">是</el-radio>
               <el-radio :label="2">否</el-radio>
             </el-radio-group>
           </el-form-item>
-        </el-col>
+        </el-col> -->
       </el-row>
       <el-row>
         <el-col :span="6">
@@ -200,6 +214,7 @@ export default {
         remark: '',
         gender: 1,
         source: 2,
+        positiveLevel: '',
       },
       staffRules: {
         clientName: [{ required: true, message: '请输入客户姓名' }],
@@ -208,7 +223,7 @@ export default {
         reportDepartment: [{ required: true, message: '请选择上报科室' }],
         itemValue: [{ required: true, message: '请输入结果' }],
         reportLv: [{ required: true, message: '请选择上报等级' }],
-        reportUserId: [{ required: true, message: '请输入上报医生' }],
+        // reportUserId: [{ required: true, message: '请输入上报医生' }],
         reportDate: [{ required: true, message: '请选择上报时间' }],
         mobile: [
           { required: false,
@@ -266,16 +281,16 @@ export default {
         this.userList.filter(res => res.id === this.staffForm.reportUserId)[0].realName;
     },
     cancel() {
+      localStorage.setItem('tabIndex', 1);
       this.$router.go(-1);
     },
     submit() {
       this.$refs.staffForm.validate((valid) => {
         if (valid) {
-          this.$api.sunFollow.savePositiveTracking(this.staffForm).then(() => {
+          this.$api.sunFollow.addResult(this.staffForm).then(() => {
             this.$message.success('操作成功');
-            this.$router.push({
-              path: '/first_follow',
-            });
+            localStorage.setItem('tabIndex', 1);
+            this.$router.go(-1);
           });
         }
       });

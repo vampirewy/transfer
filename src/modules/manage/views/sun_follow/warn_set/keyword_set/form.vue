@@ -61,14 +61,14 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-form-item label="预警分类" prop="trackingLv">
+          <el-form-item label="阳性分级" prop="positiveLevel">
             <el-select
                     :disabled="detail"
-                    v-model="staffForm.trackingLv"
+                    v-model="staffForm.positiveLevel"
                     placeholder="请选择"
             >
-              <el-option label="红色预警" :value="1"></el-option>
-              <el-option label="橙色预警" :value="2"></el-option>
+              <el-option :label="item.name"
+          :value="item.paramValue" :key="index" v-for="(item, index) in levelList"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -165,6 +165,7 @@ export default {
   },
   data() {
     return {
+      levelList: [],
       gridList: [],
       departmentList: [],
       itemList: [],
@@ -176,7 +177,7 @@ export default {
         name: '',
         sectionName: '',
         itemName: '',
-        trackingLv: '',
+        positiveLevel: '',
         gender: '',
         minAge: '',
         maxAge: '',
@@ -190,14 +191,20 @@ export default {
         name: [{ required: true, message: '请输入模板名称' }],
         sectionName: [{ required: true, message: '请输入科室名称' }],
         itemName: [{ required: true, message: '请输入项目名称' }],
-        trackingLv: [{ required: true, message: '请选择预警分类' }],
+        positiveLevel: [{ required: true, message: '请选择阳性等级' }],
       },
     };
   },
   mounted() {
     this.getSectionList();
+    this.getLevelList();
   },
   methods: {
+    async getLevelList() {
+      const res = await this.$api.sunFollow.getPositiveLevel();
+      const { data } = res;
+      this.levelList = data.data || [];
+    },
     async getSectionList() {
       const res = await this.$api.physicalProjectListInterface
         .getSectionList({ pageNo: 1, pageSize: 999999 });
@@ -223,7 +230,7 @@ export default {
           this.staffForm.name = data.data.name;
           this.staffForm.sectionName = data.data.sectionName;
           this.staffForm.itemName = data.data.itemName;
-          this.staffForm.trackingLv = data.data.trackingLv;
+          this.staffForm.positiveLevel = data.data.positiveLevel;
           this.staffForm.gender = data.data.gender;
           this.staffForm.minAge = data.data.minAge;
           this.staffForm.maxAge = data.data.maxAge;

@@ -12,7 +12,7 @@
       <div class="history" v-for="item in formList" :key="item.id">
         <div class="history-top">
           <div class="slot"></div>
-          <p><span>{{item.trackingDate ? item.trackingDate.split(' ')[0] : '' }}</span></p>
+          <p><span>{{item.trackingDate ? item.trackingDate : '' }}</span></p>
         </div>
         <div class="keywords">
           <p v-for="(itemChild, itemIndex) in item.keywords" :key="itemIndex">
@@ -40,12 +40,20 @@
           </div>
         </div>
         <div class="history-bottom">
-          <div>【跟踪记录】{{item.trackingRemark}}</div>
+          <div>【跟踪结果】{{item.trackingStateName || '无'}}</div>
         </div>
         <div class="history-bottom">
-          <div>【下次回访】{{item.nextTrackingDate ? item.nextTrackingDate.split(' ')[0] : '' }}
-            ({{item.nextTrackingDay | getResult}}天后)
+          <div>【跟踪记录】{{item.trackingRemark || '无'}}</div>
+        </div>
+        <div class="history-bottom">
+          <div>【短信内容】{{item.messageRecordContent || '无'}}</div>
+        </div>
+        <div class="history-bottom">
+          <div v-if="item.nextTrackingDate">【下次回访】{{
+            item.nextTrackingDate ? item.nextTrackingDate.split(' ')[0] : '' }}
+            <!-- ({{item.nextTrackingDay | getResult}}天后) -->
             ({{item.nextTrackingWayName | getResult}}回访)</div>
+            <div v-else>【下次回访】无</div>
           <img @click="viewNextFollow(item)" src="@/assets/images/sunFollow/followRight.png"/>
         </div>
       </div>
@@ -70,7 +78,7 @@ export default {
       now: dayjs(new Date()).format('YYYY-MM-DD'),
       formList: [],
       form: {
-        clientId: this.$route.params.clientId,
+        reportId: this.$route.query.reportId,
       },
       planWayList: [],
       table: {
@@ -96,9 +104,11 @@ export default {
     async getList() {
       const res = await this.$api.sunFollow.getClientRecordList(this.form);
       const { data } = res.data;
-      console.log(data);
+      console.log(data, 'datalist');
       data.forEach((it) => {
-        const list = this.planWayList.filter(resWay => resWay.id === it.trackingWay);
+        const list = this.planWayList.filter(
+          resWay => resWay.paramValue === Number(it.trackingWay),
+        );
         if (list.length > 0) {
           it.trackingWayName = list[0].name;
         }
@@ -114,14 +124,15 @@ export default {
      * @return {Promise<void>}
      */
     async getPlanWayList() {
-      const res = await this.$api.userFollowInterface.getIntervenePlanWayList();
+      const res = await this.$api.sunFollow.getTrackMethod();
       const { data } = res.data;
       const list = data.map((it) => {
-        const { id, name } = it;
-        return { id, name };
+        const { paramValue, name } = it;
+        return { paramValue, name };
       });
       // list.unshift({ name: '全部', value: '' });
       this.planWayList = list;
+      console.log(this.planWayList, 'this.planwaylist');
     },
     /**
      * 修改预警等级
@@ -170,19 +181,19 @@ export default {
 
 <style lang="scss" scoped>
 .user-follow {
-  .redcolor{
-    color: #FF4032;
+  .redcolor {
+    color: #ff4032;
   }
-  .greencolor{
-    color:#3154AC;
+  .greencolor {
+    color: #3154ac;
   }
-  .yellowColor{
-    color: #FA912B;
+  .yellowColor {
+    color: #fa912b;
   }
-  .nowFollow{
+  .nowFollow {
     .history {
       margin-left: 10px;
-      border-left: 1px dashed #DDE0E6;
+      border-left: 1px dashed #dde0e6;
       padding-left: 15px;
       padding-bottom: 15px;
       .history-top {
@@ -192,16 +203,20 @@ export default {
           width: 14px;
           height: 14px;
           border-radius: 50%;
-          background: -webkit-radial-gradient( circle closest-side,#3154AC 50%, #ffffff 60%);
+          background: -webkit-radial-gradient(
+            circle closest-side,
+            #3154ac 50%,
+            #ffffff 60%
+          );
           position: absolute;
           top: -1px;
           left: -24px;
-          border: 1px solid #3154AC;
+          border: 1px solid #3154ac;
         }
         p {
           font-size: 14px;
           font-weight: 400;
-          color: #3154AC;
+          color: #3154ac;
           position: absolute;
           top: -4px;
         }
@@ -211,7 +226,7 @@ export default {
   .timeaxis {
     .history {
       margin-left: 10px;
-      border-left: 1px dashed #DDE0E6;
+      border-left: 1px dashed #dde0e6;
       padding-left: 15px;
       padding-bottom: 20px;
       .history-top {
@@ -233,28 +248,28 @@ export default {
           position: absolute;
           top: -4px;
           span {
-            color: #B4BBC9;
+            color: #b4bbc9;
             margin-right: 20px;
           }
         }
       }
-      .keywords{
+      .keywords {
         display: flex;
         flex-wrap: wrap;
-        p{
+        p {
           color: #666666;
           font-size: 12px;
           padding: 3px 10px;
           border-radius: 50px;
-          border: 1px solid #DDE0E6;
+          border: 1px solid #dde0e6;
           margin-right: 10px;
         }
       }
-      .medicalList{
-        .medicalListOne{
+      .medicalList {
+        .medicalListOne {
           display: flex;
           margin-top: 10px;
-          .medicalType{
+          .medicalType {
             width: 70px;
             min-height: 20px;
             padding: 8px 0 8px 0;
@@ -265,16 +280,16 @@ export default {
             display: flex;
             align-items: center;
             justify-content: center;
-            &.medicalType1{
-              color: #FA912B;
-              background-color: #FEF4E9;
+            &.medicalType1 {
+              color: #fa912b;
+              background-color: #fef4e9;
             }
-            &.medicalType2{
-              color: #36BF2F;
-              background-color: #E9F8EF;
+            &.medicalType2 {
+              color: #36bf2f;
+              background-color: #e9f8ef;
             }
           }
-          .medicalDetailAll{
+          .medicalDetailAll {
             flex: 1;
             min-height: 24px;
             padding: 8px 10px 8px 10px;
@@ -284,21 +299,21 @@ export default {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            .medicalDetail{
+            .medicalDetail {
               color: #333333;
             }
-            .medicalDetailRight{
+            .medicalDetailRight {
               display: flex;
               align-items: center;
-              .overZi{
+              .overZi {
                 display: inline-block;
                 padding: 3px 10px;
                 border-radius: 50px;
-                border: 1px solid #DDE0E6;
+                border: 1px solid #dde0e6;
                 color: #666666;
                 margin-right: 10px;
               }
-              img{
+              img {
                 cursor: pointer;
               }
             }
@@ -310,13 +325,13 @@ export default {
         padding: 8px 10px 8px 10px;
         background: #f6f8fc;
         border-radius: 8px;
-        margin:10px 0px 0px 0;
+        margin: 10px 0px 0px 0;
         font-size: 12px;
         color: #333333;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        img{
+        img {
           cursor: pointer;
         }
       }

@@ -91,6 +91,7 @@ export default {
       } else if (data.sex === '女') {
         this.doUserAvatar = avatarImg2;
       }
+      localStorage.setItem('dataRange', data.dataRange);
     },
     /* handleAvatar(val) {
       if (!val) { // 没头像时显示默认头像，有头像加入路径

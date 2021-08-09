@@ -8,6 +8,7 @@
     "dev": "cross-env node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server --host 0.0.0.0 --inline --config build/webpack.dev.conf.js",
     "build": "cross-env env_config=prod node --max_old_space_size=4096 build/build.js",
     "build:dev": "cross-env env_config=prod_dev node --max_old_space_size=4096 build/build.js",
+    "build:test":"cross-env env_config=test node --max_old_space_size=4096 build/build.js",
     "dll": "cross-env NODE_ENV=production webpack --config build/webpack.dll.conf.js",
     "lint": "eslint --ext .js,.vue src/",
     "lint-fix": "eslint --fix --ext .js,.vue src/"
@@ -20,6 +21,7 @@
     "file-saver": "^2.0.2",
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.15",
+    "moment": "^2.29.1",
     "query-string": "^6.1.0",
     "vue": "^2.5.2",
     "vue-photo-preview": "^1.1.3",

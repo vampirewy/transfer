@@ -31,6 +31,8 @@ export default [
           { name: '编辑', access: 'customer_pool_edit' },
           { name: '认领', access: 'customer_pool_claim' },
           { name: '启用/禁用', access: 'customer_pool_on_off' },
+          { name: '转交', access: 'customers_transfer' },
+          { name: '转入用户池', access: 'customers_switch_user_pool' },
         ],
       },
       {
@@ -41,9 +43,9 @@ export default [
           { name: '批量转交', access: 'customers_batch_transfer' },
           { name: '批量转入用户池', access: 'customers_batch_switch_user_pool' },
           { name: '编辑', access: 'customers_edit' },
-          { name: '转交', access: 'customers_transfer' },
+          // { name: '转交', access: 'customers_transfer' },
           { name: '查看', access: 'customers_view' },
-          { name: '转入用户池', access: 'customers_switch_user_pool' },
+          // { name: '转入用户池', access: 'customers_switch_user_pool' },
         ],
       },
       {
